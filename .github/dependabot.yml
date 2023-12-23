@@ -15,10 +15,6 @@ updates:
       day: "monday"
       time: "07:00"
       timezone: "Asia/Tokyo"
-    labels:
-      - "go"
-      - "system"
-      - "api"
     groups:
       dependencies:
         patterns:
@@ -32,27 +28,6 @@ updates:
       time: "07:00"
       timezone: "Asia/Tokyo"
     open-pull-requests-limit: 1
-    labels:
-      - "javascript"
-      - "system"
-      - "client"
-    groups:
-      dependencies:
-        patterns:
-          - "*"
-
-  - package-ecosystem: "npm"
-    directory: "/apps/system/test"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "07:00"
-      timezone: "Asia/Tokyo"
-    open-pull-requests-limit: 1
-    labels:
-      - "javascript"
-      - "system"
-      - "test"
     groups:
       dependencies:
         patterns:

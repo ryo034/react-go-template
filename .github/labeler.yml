@@ -7,6 +7,9 @@ client:
 api:
   - "apps/system/api/**/*"
 
+test:
+  - "apps/system/test/**/*"
+
 shared-packages:
   - "packages/**/*"
 
@@ -23,7 +26,7 @@ container:
   - "container/**/*"
 
 e2e:
-  - "test/e2e/**/*"
+  - "apps/system/test/e2e/**/*"
 
 dependencies:
   - "**/package.json"
