@@ -1,0 +1,29 @@
+system:
+  - "apps/system/**/*"
+
+client:
+  - "apps/system/client/**/*"
+
+api:
+  - "apps/system/api/**/*"
+
+shared-packages:
+  - "packages/**/*"
+
+client-shared-packages:
+  - "packages/typescript/**/*"
+
+workflow:
+  - ".github/**/*"
+
+infrastructure:
+  - "iac/**/*"
+
+container:
+  - "container/**/*"
+
+e2e:
+  - "test/e2e/**/*"
+
+dependencies:
+  - "**/package.json"

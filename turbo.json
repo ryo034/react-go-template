@@ -1,0 +1,22 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "clean": {
+      "cache": false
+    },
+    "lint": {
+      "outputs": []
+    },
+    "dev": {},
+    "test": {
+      "outputs": ["coverage/**"]
+    },
+    "test-coverage": {
+      "outputs": ["coverage/**"]
+    }
+  }
+}

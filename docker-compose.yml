@@ -1,0 +1,117 @@
+version: "3.9"
+services:
+  system_client:
+    container_name: system-client
+    build:
+      context: typescript
+      dockerfile: Dockerfile.local
+      target: system
+    ports:
+      - "5173:5173"
+    labels:
+      logging: "promtail"
+    command: sh -c "pnpm install -r && pnpm dev"
+    volumes:
+      - ./apps/system/client:/app/apps/system
+      - /app/apps/system/node_modules/ # exclude node_modules
+    tty: true
+    stdin_open: true
+    cap_add:
+      - SYS_PTRACE
+
+  firebase:
+    container_name: firebase
+    env_file: .env
+    build:
+      context: .
+      dockerfile: container/firebase/Dockerfile
+    labels:
+      logging: "promtail"
+    volumes:
+      - ./container/firebase/:/opt/workspace:cached
+    ports:
+      - "9099:9099"
+      - "9199:9199"
+      - "4400:4400"
+      - "4500:4500"
+      - "4000:4000"
+    working_dir: /opt/workspace
+    command: ['firebase', 'emulators:start', '--import=./.emulator']
+    # command: ['firebase', 'emulators:start', '--export-on-exit', './.emulator']
+    # command: ['firebase', 'emulators:start', '--export-on-exit', './.emulator', '--import=./.emulator']
+    tty: true
+
+  main_db_primary:
+    image: postgres:16.0
+    container_name: main-db-primary
+    command: -c 'config_file=/etc/postgresql/postgresql.conf' -c 'hba_file=/etc/postgresql/pg_hba.conf'
+    environment:
+      - TZ=Asia/Tokyo
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=main
+    ports:
+      - 15432:5432
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
+    volumes:
+      - ./container/database/postgresql/primary/data:/var/lib/postgresql/data
+      - ./container/database/postgresql/primary/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./container/database/postgresql/primary/pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - ./container/database/postgresql/primary/init.sh:/docker-entrypoint-initdb.d/init.sh
+      - ./container/database/postgresql/sql/001-create-tables.sql:/docker-entrypoint-initdb.d/001-create-tables.sql
+      - ./container/database/postgresql/sql/099-initialize-data.sql:/docker-entrypoint-initdb.d/099-initialize-data.sql
+    healthcheck:
+      test: pg_isready -d main
+      interval: 1s
+      timeout: 1s
+      retries: 5
+      start_period: 30s
+
+  main_db_replica:
+    image: postgres:16.0
+    container_name: main-db-replica
+    entrypoint: /entrypoint.sh
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=main
+    ports:
+      - 25432:5432
+    labels:
+      logging: "promtail"
+    volumes:
+      - ./container/database/postgresql/replica/data:/var/lib/postgresql/data
+      - ./container/database/postgresql/replica/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./container/database/postgresql/replica/pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - ./container/database/postgresql/replica/entrypoint.sh:/entrypoint.sh
+    depends_on:
+      main_db_primary:
+        condition: service_healthy
+
+  api:
+    depends_on:
+      - firebase
+      - main_db_primary
+      - main_db_replica
+    container_name: api-server
+    env_file: .env
+    build:
+      context: apps/system/api
+      dockerfile: Dockerfile.local
+      args:
+        - GITHUB_TOKEN=$GITHUB_TOKEN
+    ports:
+      - "19004:19004"
+      - "2345:2345"
+    labels:
+      logging: "promtail"
+    volumes:
+      - ./apps/system/api:/app
+    tty: true
+    stdin_open: true
+    security_opt:
+      - apparmor:unconfined
+    cap_add:
+      - SYS_PTRACE

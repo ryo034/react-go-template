@@ -1,0 +1,7 @@
+packages:
+  - "packages/typescript/**"
+  - "apps/content/client/**"
+  - "apps/service-site/client/**"
+  - "apps/system/client/**"
+  - "apps/system/test/e2e/**"
+  - "apps/system/test/api/**"
