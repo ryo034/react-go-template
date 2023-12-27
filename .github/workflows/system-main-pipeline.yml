@@ -16,15 +16,15 @@ jobs:
   pnpm-version:
     uses: ./.github/workflows/__pnpm-version.yml
 
-  go-version:
-    uses: ./.github/workflows/__go-version.yml
+  # go-version:
+  #   uses: ./.github/workflows/__go-version.yml
 
   client-unit-test:
     needs: [ node-version, pnpm-version ]
     uses: ./.github/workflows/__js-unit-test.yml
     with:
       directory: ./apps/system/client
-      node-version: ${{ needs.node-version.outputs.node-version }}
+      node-version: ${{ needs.node-version.outputs.major-version }}
       pnpm-version: ${{ needs.pnpm-version.outputs.pnpm-version }}
 
   # api-unit-test:
