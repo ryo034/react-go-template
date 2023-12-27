@@ -4,13 +4,12 @@ name: Lint and fix javascript code
 
 on:
   push:
+    branches: [ main ]
     paths:
     # biomeの対象ファイル
       - '**/*.{ts,tsx,js,jsx,json}'
     paths-ignore:
       - '**/generated/**'
-    branches:
-      - main
 
 jobs:
   eslint:

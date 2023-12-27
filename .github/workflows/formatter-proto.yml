@@ -2,12 +2,11 @@ name: Format proto
 
 on:
   push:
+    branches: [ main ]
     paths:
-      - '**/*.{proto}'
+      - '**/*.proto'
     paths-ignore:
       - '**/generated/**'
-    branches:
-      - main
 
 jobs:
   format-proto:
