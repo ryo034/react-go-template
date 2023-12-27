@@ -8,6 +8,9 @@ on:
       - .github/workflows/formatter-proto.yml
       - '!**/generated/**'
 
+permissions:
+  contents: write
+
 jobs:
   format-proto:
     runs-on: ubuntu-latest

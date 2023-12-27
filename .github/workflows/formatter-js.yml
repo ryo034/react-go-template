@@ -11,6 +11,9 @@ on:
       - .github/workflows/formatter-js.yml
       - '!**/generated/**'
 
+permissions:
+  contents: write
+
 jobs:
   node-version:
     uses: ./.github/workflows/__node-version.yml
