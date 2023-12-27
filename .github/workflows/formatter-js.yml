@@ -51,29 +51,32 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: lint and fix
         run: pnpm run lint:fix
 
-      - name: Check for changes
-        id: check_changes
+      - name: Check diff
+        id: diff
         shell: bash
+        continue-on-error: true
         run: |
-          echo "changes_exist=true" >> "$GITHUB_OUTPUT"
-          if git diff --quiet; then
-            echo "changes_exist=false" >> "$GITHUB_OUTPUT"
-          else
+          git add -N .
+          git diff --name-only --exit-code
 
       - name: Commit changes
-        if: steps.check_changes.outputs.changes_exist == 'true'
+        if: steps.diff.outcome == 'failure'
         shell: bash
         run: |
-          git config --global user.name "${GITHUB_ACTOR}"
-          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git add -A
+          set -x
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add .
           git commit -m "👕 lint and fix javascript code by github-actions"
 
       - name: Push changes
-        if: steps.check_changes.outputs.changes_exist == 'true'
+        if: steps.diff.outcome == 'failure'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
