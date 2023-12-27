@@ -10,19 +10,22 @@ on:
       - .github/workflows/system-main-pipeline.yml
 
 jobs:
-  node-and-pnpm-version:
-    uses: ./.github/workflows/__node-and-pnpm-version.yml
+  node-version:
+    uses: ./.github/workflows/__node-version.yml
+
+  pnpm-version:
+    uses: ./.github/workflows/__pnpm-version.yml
 
   go-version:
     uses: ./.github/workflows/__go-version.yml
 
-  frontend-unit-test:
-    needs: [ node-and-pnpm-version ]
+  client-unit-test:
+    needs: [ node-version, pnpm-version ]
     uses: ./.github/workflows/__js-unit-test.yml
     with:
       directory: apps/system/client
-      node-version: ${{ needs.node-and-pnpm-version.outputs.node-version }}
-      pnpm-version: ${{ needs.node-and-pnpm-version.outputs.pnpm-version }}
+      node-version: ${{ needs.node-version.outputs.node-version }}
+      pnpm-version: ${{ needs.pnpm-version.outputs.pnpm-version }}
 
   # api-unit-test:
   #   needs: [ go-version ]

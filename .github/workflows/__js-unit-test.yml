@@ -1,4 +1,4 @@
-name: __ test frontend app
+name: __ unit test js
 
 on:
   workflow_call:
