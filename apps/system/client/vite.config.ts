@@ -33,7 +33,7 @@ export default ({ mode }: { mode: Mode }) => {
             utility: ["clsx", "immer", "true-myth", "class-variance-authority"],
             state: ["zustand"],
             validation: ["zod"],
-            tracking: ["@sentry/react", "react-ga4"]
+            tracking: ["react-ga4"]
           }
         }
       }
