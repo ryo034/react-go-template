@@ -12,7 +12,7 @@ on:
       - '!**/generated/**'
 
 jobs:
-  eslint:
+  formatter:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,20 +20,24 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get node and pnpm version
-        id: node-and-pnpm-version
-        uses: ./.github/workflows/__node-and-pnpm-version.yml
+      - name: Get node version
+        id: node-version
+        uses: ./.github/workflows/__node-version.yml
+
+      - name: Get pnpm version
+        id: pnpm-version
+        uses: ./.github/workflows/__pnpm-version.yml
 
       - name: Setup Node.js
         id: setup-node
         uses: actions/setup-node@v3
         with:
-          node-version-file: ${{ steps.node-and-pnpm-version.outputs.node-version }}
+          node-version: ${{ steps.node-version.outputs.node-version }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: ${{ steps.node-and-pnpm-version.outputs.pnpm-version }}
+          version: ${{ steps.pnpm-version.outputs.pnpm-version }}
 
       - name: Get pnpm store directory
         shell: bash
@@ -53,6 +57,7 @@ jobs:
 
       - name: Check for changes
         id: check_changes
+        shell: bash
         run: |
           if git diff --quiet; then
             echo "changes_exist=false" >> "$GITHUB_OUTPUT"
@@ -61,6 +66,7 @@ jobs:
 
       - name: Commit changes
         if: steps.check_changes.outputs.changes_exist == 'true'
+        shell: bash
         run: |
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"

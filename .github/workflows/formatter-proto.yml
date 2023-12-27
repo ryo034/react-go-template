@@ -17,11 +17,11 @@ jobs:
       - uses: bufbuild/buf-setup-action@v1.26.1
 
       - name: Proto format
-        run: |
-          buf format -w --diff
+        run: buf format -w --diff
 
-     - name: Check for changes
+      - name: Check for changes
         id: check_changes
+        shell: bash
         run: |
           if git diff --quiet; then
             echo "changes_exist=false" >> "$GITHUB_OUTPUT"
@@ -30,6 +30,7 @@ jobs:
 
       - name: Commit changes
         if: steps.check_changes.outputs.changes_exist == 'true'
+        shell: bash
         run: |
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
