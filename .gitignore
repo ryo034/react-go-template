@@ -3,7 +3,7 @@ logs
 .idea
 *.log
 .env
-generated
+generated/*
 dumps
 data.ms
 .data

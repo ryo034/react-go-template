@@ -1,4 +1,4 @@
-name: Biome main pipeline
+name: Lint and fix javascript code
 
 # Lint all target files of all biome and commit & push.
 
@@ -7,6 +7,8 @@ on:
     paths:
     # biomeの対象ファイル
       - '**/*.{ts,tsx,js,jsx,json}'
+    paths-ignore:
+      - '**/generated/**'
     branches:
       - main
 

@@ -1,0 +1,35 @@
+name: Format proto
+
+on:
+  push:
+    paths:
+      - '**/*.{proto}'
+    paths-ignore:
+      - '**/generated/**'
+    branches:
+      - main
+
+jobs:
+  format-proto:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: bufbuild/buf-setup-action@v1.26.1
+
+      - name: Proto format
+        run: |
+          buf format -w --diff
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git add -A
+          git commit -m "👕 format proto file by github-actions"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.head_ref }}

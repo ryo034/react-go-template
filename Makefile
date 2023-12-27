@@ -41,6 +41,10 @@ restart-db:
 	rm -rf container/database/postgresql/replica/.data
 	docker-compose up -d main_db_replica
 
+# ====================
+#  Update packages
+# ====================
+
 .PHONY: update-all-typescript-package
 update-all-typescript-package:
 	@cd ./packages/typescript/ui && ncu -u
@@ -50,3 +54,17 @@ update-all-typescript-package:
 .PHONY: update-all-go-package
 update-all-go-package:
 	@cd ./apps/system/api && make update-private-package
+
+# ============
+#  Protobuf
+# ============
+
+.PHONY: proto-fmt
+proto-fmt:
+	@buf format -w --diff
+
+.PHONY: proto-gen
+proto-gen:
+	@make proto-fmt
+	@rm -rf ./apps/system/client/src/generated/schema/api
+	@buf generate
