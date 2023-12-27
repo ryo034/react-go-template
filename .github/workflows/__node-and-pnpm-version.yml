@@ -9,7 +9,7 @@ on:
         default: '.'
 
 jobs:
-  setup:
+  get-node-and-pnpm-version:
     runs-on: ubuntu-latest
     outputs:
       node-version: ${{ steps.node-version.outputs.version }}

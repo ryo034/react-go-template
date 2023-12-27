@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       go-version:
-        description: 'PNPM version'
+        description: 'Go version'
         required: true
         type: string
       directory:
@@ -13,40 +13,28 @@ on:
         type: string
 
 jobs:
-  test:
+  go-unit-test:
     runs-on: ubuntu-latest
     steps:
       - name: actions/checkout@v4
 
-      - name: Setup Node.js
-        id: setup-node
-        uses: actions/setup-node@v3
+      - name: Setup Go
+        uses: actions/setup-go@v4
         with:
-          node-version: ${{ inputs.node-version }}
+          go-version: ${{ inputs.go-version }}
+          cache: true
+          cache-dependency-path: go.sum
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ inputs.pnpm-version }}
+      - name: Get dependencies
+        shell: bash
+        run: go get -v -t -d ./...
 
-      - name: Get pnpm store directory
+      - name: Go Build
         shell: bash
         run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+          go build -v ./...
 
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build packages
-        run: pnpm package:build
-
-      - name: Run unit test
-        run: pnpm test-coverage --filter ${{ inputs.directory }}
+      - name: Go Test
+        shell: bash
+        run: |
+          go test -short -bench . -benchmem ./...

@@ -9,7 +9,7 @@ on:
         default: '.'
 
 jobs:
-  setup:
+  get-go-version:
     runs-on: ubuntu-latest
     outputs:
       go-version: ${{ steps.go-version.outputs.version }}
