@@ -1,0 +1,7 @@
+export { Address } from "~/domain/shared/address/address"
+export { AddressCity } from "~/domain/shared/address/city"
+export { AddressCountry } from "~/domain/shared/address/country"
+export { AddressPrefecture } from "~/domain/shared/address/prefecture"
+export { AddressStreet } from "~/domain/shared/address/street"
+export { AddressZipCode } from "~/domain/shared/address/zipCode"
+export { AddressBuilding } from "~/domain/shared/address/building"

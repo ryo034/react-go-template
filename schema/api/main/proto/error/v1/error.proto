@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package error.v1;
+
+option go_package = "github.com/ryo034/react-go-template/apps/system/api/schema/pb/error/v1";
+
+enum ErrorCode {
+}

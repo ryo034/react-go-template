@@ -1,0 +1,13 @@
+{
+  "action": {
+    "submit": "submit",
+    "back": "back",
+    "cancel": "cancel",
+    "login": "login",
+    "signUp": "sign up",
+    "showItem": "show {{field}}",
+    "inputField": "input {{field}}",
+    "submitField": "submit {{field}}",
+    "doAction": "{{action}}"
+  }
+}

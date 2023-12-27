@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package health.v1;
+
+option go_package = "github.com/ryo034/react-go-template/apps/system/api/schema/pb/health/v1";
+
+service HealthService {
+  rpc Check(CheckRequest) returns (CheckResponse);
+}
+
+message CheckRequest {
+  string service = 1;
+}
+
+enum ServingStatus {
+  SERVING_STATUS_UNSPECIFIED = 0;
+  SERVING_STATUS_SERVING = 1;
+  SERVING_STATUS_NOT_SERVING = 2;
+}
+
+message CheckResponse {
+  ServingStatus status = 1;
+}

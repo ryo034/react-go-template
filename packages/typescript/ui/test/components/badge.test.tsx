@@ -20,9 +20,9 @@ describe("Badge Component", () => {
   ])("renders %s variant badge with correct classes", (variant, ...expectedClasses) => {
     render(<Badge variant={variant as any}>Test</Badge>)
     const badge = screen.getByText("Test")
-    expectedClasses.forEach((expectedClass) => {
-      expect(badge).toHaveClass(expectedClass)
-    })
+    for (const ec of expectedClasses) {
+      expect(badge).toHaveClass(ec)
+    }
   })
 
   it("can accept and apply additional classes", () => {
