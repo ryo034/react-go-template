@@ -1,0 +1,23 @@
+name: __ get go version from target directory
+
+on:
+  workflow_call:
+    inputs:
+      directory:
+        required: false
+        type: string
+        default: '.'
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      go-version: ${{ steps.go-version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read Go version from go.mod
+        id: go-version
+        run: |
+          go_version=$(grep 'go ' ${{ inputs.directory }}/go.mod | awk '{print $2}')
+          echo "version=$go_version" >> "$GITHUB_OUTPUT"

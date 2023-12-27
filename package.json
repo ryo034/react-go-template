@@ -8,7 +8,9 @@
     "package:build": "turbo build --filter='./packages/typescript/*'",
     "package:test": "turbo test --filter='./packages/typescript/*'",
     "lint": "biome check --apply-unsafe ./",
-    "lint-detail": "biome check --verbose ./",
+    "lint:detail": "biome check --verbose ./",
+    "lint:fix": "biome check --apply ./",
+    "lint:fix-unsafe": "biome check --apply-unsafe ./",
     "format": "biome format --verbose --write --skip-errors ./apps",
     "test": "turbo run test",
     "test-coverage": "turbo run test-coverage",
@@ -20,15 +22,15 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@8.10.2",
+  "packageManager": "pnpm@8.12.1",
   "engines": {
     "npm": "use pnpm please!",
     "yarn": "use pnpm please!",
-    "pnpm": "8.10.2"
+    "pnpm": "8.12.1"
   },
   "devDependencies": {
     "@biomejs/biome": "1.4.1",
     "@changesets/cli": "^2.27.1",
-    "turbo": "^1.11.1"
+    "turbo": "^1.11.2"
   }
 }

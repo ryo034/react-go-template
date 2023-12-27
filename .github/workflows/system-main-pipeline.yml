@@ -1,0 +1,32 @@
+name: System main pipeline
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - apps/system/**
+      - .github/workflows/__js-unit-test.yml
+      - .github/workflows/__go-unit-test.yml
+      - .github/workflows/system-main-pipeline.yml
+
+jobs:
+  node-and-pnpm-version:
+    uses: ./.github/workflows/__node-and-pnpm-version.yml
+
+  go-version:
+    uses: ./.github/workflows/__go-version.yml
+
+  frontend-unit-test:
+    needs: [ node-and-pnpm-version ]
+    uses: ./.github/workflows/__js-unit-test.yml
+    with:
+      directory: apps/system/client
+      node-version: ${{ needs.node-and-pnpm-version.outputs.node-version }}
+      pnpm-version: ${{ needs.node-and-pnpm-version.outputs.pnpm-version }}
+
+  api-unit-test:
+    needs: [ go-version ]
+    uses: ./.github/workflows/__go-unit-test.yml
+    with:
+      directory: apps/system/api
+      go-version: ${{ needs.go-version.outputs.go-version }}

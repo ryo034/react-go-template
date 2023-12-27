@@ -1,0 +1,30 @@
+name: __ get node and pnpm version from target directory
+
+on:
+  workflow_call:
+    inputs:
+      directory:
+        required: false
+        type: string
+        default: '.'
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      node-version: ${{ steps.node-version.outputs.version }}
+      pnpm-version: ${{ steps.pnpm-version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read Node.js version from .tool-versions
+        id: node-version
+        run: |
+          node_version=$(grep nodejs ${{ inputs.directory }}/.tool-versions | cut -d ' ' -f2)
+          echo "version=$node_version" >> "$GITHUB_OUTPUT"
+
+      - name: Read pnpm version from package.json
+        id: pnpm-version
+        run: |
+          pnpm_version=$(cat ${{ inputs.directory }}/package.json | jq -r .engines.pnpm)
+          echo "version=$pnpm_version" >> "$GITHUB_OUTPUT"

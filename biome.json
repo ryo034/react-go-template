@@ -1,0 +1,81 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
+  "files": {
+    "ignoreUnknown": true,
+    "ignore": [
+      "dist",
+      "lib",
+      "build",
+      "generated",
+      "storybook-static",
+      "coverage",
+      ".turbo",
+      "node_modules",
+      ".next",
+      "*.log",
+      "*.d.ts",
+      "assets",
+      "static",
+      "public",
+      "out",
+      ".DS_Store",
+      "reports",
+      ".vscode",
+      "./container",
+      "./iac",
+      "./schema"
+    ]
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "all": true,
+      "suspicious": {
+        "noExplicitAny": "off"
+      },
+      "a11y": {
+        "noSvgWithoutTitle": "off"
+      },
+      "style": {
+        "noParameterProperties": "off"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "off"
+      },
+      "nursery": {
+        "useImportRestrictions": "off"
+      },
+      "complexity": {
+        "noBannedTypes": "off",
+        "noStaticOnlyClass": "off"
+      }
+    }
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": false,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 120
+  },
+  "javascript": {
+    "formatter": {
+      "semicolons": "asNeeded",
+      "trailingComma": "none"
+    }
+  },
+  "json": {
+    "parser": {
+      "allowComments": true
+    },
+    "formatter": {
+      "enabled": true,
+      "indentStyle": "space",
+      "indentWidth": 2,
+      "lineWidth": 120
+    }
+  }
+}
