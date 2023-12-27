@@ -24,6 +24,7 @@
   "license": "ISC",
   "packageManager": "pnpm@8.12.1",
   "engines": {
+    "node": "20.10.0",
     "npm": "use pnpm please!",
     "yarn": "use pnpm please!",
     "pnpm": "8.12.1"

@@ -75,9 +75,5 @@
     "yarn": "use pnpm please!",
     "pnpm": "8.12.1"
   },
-  "browserslist": [
-    "> 0.2%, not dead",
-    "not IE 11",
-    "Safari > 11, iOS > 11"
-  ]
+  "browserslist": ["> 0.2%, not dead", "not IE 11", "Safari > 11, iOS > 11"]
 }

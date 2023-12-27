@@ -21,3 +21,6 @@ jobs:
         run: |
           pnpm_version=$(cat ${{ inputs.directory }}/package.json | jq -r .engines.pnpm)
           echo "version=$pnpm_version" >> "$GITHUB_OUTPUT"
+
+      - name: Echo pnpm version
+        run: echo "pnpm version is ${{ steps.pnpm-version.outputs.version }}"

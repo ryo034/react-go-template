@@ -21,3 +21,6 @@ jobs:
         run: |
           node_version=$(grep nodejs ${{ inputs.directory }}/.tool-versions | cut -d ' ' -f2)
           echo "version=$node_version" >> "$GITHUB_OUTPUT"
+
+      - name: Echo Node.js version
+        run: echo "Node.js version is ${{ steps.node-version.outputs.version }}"
