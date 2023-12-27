@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - '**/*.proto'
+      - .github/workflows/formatter-proto.yml
       - '!**/generated/**'
 
 jobs:

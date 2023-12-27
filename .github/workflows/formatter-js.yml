@@ -8,6 +8,7 @@ on:
     paths:
     # biomeの対象ファイル
       - '**/*.{ts,tsx,js,jsx,json}'
+      - .github/workflows/formatter-js.yml
       - '!**/generated/**'
 
 jobs:
