@@ -16,7 +16,7 @@ jobs:
   go-unit-test:
     runs-on: ubuntu-latest
     steps:
-      - name: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Go
         uses: actions/setup-go@v4
