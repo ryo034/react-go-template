@@ -23,7 +23,7 @@ jobs:
     needs: [ node-version, pnpm-version ]
     uses: ./.github/workflows/__js-unit-test.yml
     with:
-      directory: apps/system/client
+      directory: ./apps/system/client
       node-version: ${{ needs.node-version.outputs.node-version }}
       pnpm-version: ${{ needs.pnpm-version.outputs.pnpm-version }}
 
