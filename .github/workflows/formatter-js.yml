@@ -8,8 +8,7 @@ on:
     paths:
     # biomeの対象ファイル
       - '**/*.{ts,tsx,js,jsx,json}'
-    paths-ignore:
-      - '**/generated/**'
+      - '!**/generated/**'
 
 jobs:
   eslint:

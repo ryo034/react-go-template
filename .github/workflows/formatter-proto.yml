@@ -5,8 +5,7 @@ on:
     branches: [ main ]
     paths:
       - '**/*.proto'
-    paths-ignore:
-      - '**/generated/**'
+      - '!**/generated/**'
 
 jobs:
   format-proto:
