@@ -23,23 +23,4 @@ const Checkbox = forwardRef<
 ))
 Checkbox.displayName = CheckboxPrimitive.Root.displayName
 
-interface CheckboxWithLabelProps extends ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> {
-  label: string
-}
-
-const CheckboxWithLabel = forwardRef<ElementRef<typeof CheckboxPrimitive.Root>, CheckboxWithLabelProps>(
-  ({ id, className, label, ...props }, ref) => (
-    <div className="flex items-center space-x-2 mt-2">
-      <Checkbox id={id} className={className} {...props} ref={ref} />
-      <label
-        htmlFor={id}
-        className="text-sm font-medium text-gray-900 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-gray-300"
-      >
-        {label}
-      </label>
-    </div>
-  )
-)
-CheckboxWithLabel.displayName = "CheckboxWithLabel"
-
-export { Checkbox, CheckboxWithLabel }
+export { Checkbox }

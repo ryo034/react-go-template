@@ -12,7 +12,6 @@ import { ReactI18nextProvider } from "~/infrastructure/i18n"
 import { DriverAuthMiddleware } from "~/infrastructure/middleware/driver"
 import { MeController, ThemeController } from "~/interface/controller"
 import { MeGateway, MeGatewayAdapter } from "~/interface/gateway"
-import { SharedGatewayAdapter } from "~/interface/gateway/shared/adapter"
 import { MePresenter } from "~/interface/presenter/me/presenter"
 import { ThemePresenter } from "~/interface/presenter/theme/presenter"
 import { meStore } from "~/store/me/store"
@@ -49,7 +48,6 @@ const setupDriver = () => {
 const driver = setupDriver()
 
 const setupGatewayAdapter = () => {
-  const shared = new SharedGatewayAdapter()
   return {
     me: new MeGatewayAdapter()
   }

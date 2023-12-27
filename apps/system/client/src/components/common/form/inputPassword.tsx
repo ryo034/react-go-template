@@ -42,6 +42,7 @@ export const FormPasswordInputSection = ({
           id={`${id}-togglePasswordVisibility`}
           data-testid={`${id}-togglePasswordVisibility`}
           label={message.action.showPassword}
+          aria-label={message.action.showPassword}
         />
       )}
       <FormErrorMessage dataTestId={`${id}-errorMessage`} message={errorMessage} />

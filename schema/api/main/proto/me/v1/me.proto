@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package me.v1;
+
+option go_package = "github.com/ryo034/react-go-template/apps/system/api/schema/pb/me/v1";
+
+service MeService {
+  rpc Login(LoginRequest) returns (LoginResponse) {}
+  rpc SignUp(SignUpRequest) returns (SignUpResponse) {}
+  rpc RegisterComplete(RegisterCompleteRequest) returns (RegisterCompleteResponse) {}
+  rpc Find(FindRequest) returns (FindResponse) {}
+  rpc UpdateName(UpdateNameRequest) returns (UpdateNameResponse) {}
+  rpc UpdateEmail(UpdateEmailRequest) returns (UpdateEmailResponse) {}
+  rpc UpdatePhoneNumber(UpdatePhoneNumberRequest) returns (UpdatePhoneNumberResponse) {}
+}
+
+message MultiFactor {
+  string factor_id = 1;
+  string phone_number = 2;
+}
+
+message Me {
+  bool email_verified = 1;
+  optional MultiFactor multi_factor = 2;
+}
+
+message LoginRequest {}
+
+message LoginResponse {
+  Me me = 1;
+}
+
+message SignUpRequest {
+  string first_name = 1;
+  string last_name = 2;
+}
+
+message SignUpResponse {
+  Me me = 1;
+}
+
+message RegisterCompleteRequest {}
+
+message RegisterCompleteResponse {
+  Me me = 1;
+}
+
+message FindRequest {}
+
+message FindResponse {
+  Me me = 1;
+}
+
+message UpdateNameRequest {
+  string firstName = 1;
+  string lastName = 2;
+}
+
+message UpdateNameResponse {
+  Me me = 1;
+}
+
+message UpdateEmailRequest {
+  string email = 1;
+}
+message UpdateEmailResponse {
+  Me me = 1;
+}
+
+message UpdatePhoneNumberRequest {
+  string phone_number = 1;
+}
+message UpdatePhoneNumberResponse {
+  Me me = 1;
+}
