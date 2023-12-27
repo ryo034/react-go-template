@@ -20,7 +20,16 @@ jobs:
         run: |
           buf format -w --diff
 
+     - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet; then
+            echo "changes_exist=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changes_exist=true" >> "$GITHUB_OUTPUT"
+
       - name: Commit changes
+        if: steps.check_changes.outputs.changes_exist == 'true'
         run: |
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
@@ -28,6 +37,7 @@ jobs:
           git commit -m "👕 format proto file by github-actions"
 
       - name: Push changes
+        if: steps.check_changes.outputs.changes_exist == 'true'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
