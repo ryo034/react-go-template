@@ -12,7 +12,14 @@ on:
       - '!**/generated/**'
 
 jobs:
+  node-version:
+    uses: ./.github/workflows/__node-version.yml
+
+  pnpm-version:
+    uses: ./.github/workflows/__pnpm-version.yml
+
   formatter:
+    needs: [ node-version, pnpm-version ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,24 +27,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get node version
-        id: node-version
-        uses: ./.github/workflows/__node-version.yml
-
-      - name: Get pnpm version
-        id: pnpm-version
-        uses: ./.github/workflows/__pnpm-version.yml
-
       - name: Setup Node.js
         id: setup-node
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ steps.node-version.outputs.node-version }}
+          node-version: ${{ needs.node-version.outputs.node-version }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: ${{ steps.pnpm-version.outputs.pnpm-version }}
+          version: ${{ needs.pnpm-version.outputs.pnpm-version }}
 
       - name: Get pnpm store directory
         shell: bash
@@ -59,10 +58,10 @@ jobs:
         id: check_changes
         shell: bash
         run: |
+          echo "changes_exist=true" >> "$GITHUB_OUTPUT"
           if git diff --quiet; then
             echo "changes_exist=false" >> "$GITHUB_OUTPUT"
           else
-            echo "changes_exist=true" >> "$GITHUB_OUTPUT"
 
       - name: Commit changes
         if: steps.check_changes.outputs.changes_exist == 'true'
