@@ -45,8 +45,6 @@ restart-db:
 update-all-typescript-package:
 	@cd ./packages/typescript/ui && ncu -u
 	@cd ./apps/system/client && ncu -u
-	@cd ./apps/system/test/e2e && ncu -u
-	@cd ./apps/system/test/api && ncu -u
 	@pnpm install -r
 
 .PHONY: update-all-go-package
