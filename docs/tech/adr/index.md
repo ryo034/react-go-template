@@ -37,3 +37,4 @@ ex.
 ## References
 
 * https://github.com/joelparkerhenderson/architecture-decision-record
+* https://www.ozimmer.ch/practices/2023/04/03/ADRCreation.html
