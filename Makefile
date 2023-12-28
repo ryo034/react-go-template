@@ -68,3 +68,56 @@ proto-gen:
 	@make proto-fmt
 	@rm -rf ./apps/system/client/src/generated/schema/api
 	@buf generate
+
+# ====================
+#  Technical document
+# ====================
+
+# Function to convert string to kebab-case
+define to_kebab_case
+$(shell echo '$1' | sed -E 's/([a-z])([A-Z])/\1-\2/g' | tr A-Z a-z | sed -E 's/[^a-z0-9-]+/-/g' | sed -E 's/^-+|-+$$//g')
+endef
+
+# Command to generate a new ADR
+# Usage: make gen-adr TARGET=path/to/directory TITLE=title-of-document
+.PHONY: gen-adr
+gen-adr:
+	@if [ -z "$(TARGET)" ]; then \
+		echo "Error: TARGET is not specified. Usage: make gen-adr TARGET=path/to/directory TITLE=title-of-document"; \
+		exit 1; \
+	fi
+	@if [ -z "$(TITLE)" ]; then \
+		echo "Error: TITLE is not specified. Usage: make gen-adr TARGET=path/to/directory TITLE=title-of-document"; \
+		exit 1; \
+	fi
+	$(eval SUGGESTED_TITLE := $(call to_kebab_case,$(TITLE)))
+	@if ! echo "$(TITLE)" | grep -qE '^[a-z]+(-[a-z]+)*$$'; then \
+		echo "Error: TITLE must be in kebab-case (e.g., this-is-kebab-case)."; \
+		echo "Suggested command: \n\n> make adr TARGET=$(TARGET) TITLE=$(SUGGESTED_TITLE)\n"; \
+		exit 1; \
+	fi
+	@mkdir -p $(TARGET)
+	@cp ./docs/tech/adr/template.md $(TARGET)/$(shell date +%Y%m%d)-$(TITLE).md
+	@echo "ADR created at $(TARGET)/$(shell date +%Y%m%d)-$(TITLE).md"
+
+# Command to generate a new Design Doc
+# Usage: make gen-design-doc TARGET=path/to/directory TITLE=title-of-document
+.PHONY: gen-design-doc
+gen-design-doc:
+	@if [ -z "$(TARGET)" ]; then \
+		echo "Error: TARGET is not specified. Usage: make gen-design-doc TARGET=path/to/directory TITLE=title-of-document"; \
+		exit 1; \
+	fi
+	@if [ -z "$(TITLE)" ]; then \
+		echo "Error: TITLE is not specified. Usage: make gen-design-doc TARGET=path/to/directory TITLE=title-of-document"; \
+		exit 1; \
+	fi
+	$(eval SUGGESTED_TITLE := $(call to_kebab_case,$(TITLE)))
+	@if ! echo "$(TITLE)" | grep -qE '^[a-z]+(-[a-z]+)*$$'; then \
+		echo "Error: TITLE must be in kebab-case (e.g., this-is-kebab-case)."; \
+		echo "Suggested command: \n\n> make gen-design-doc TARGET=$(TARGET) TITLE=$(SUGGESTED_TITLE)\n"; \
+		exit 1; \
+	fi
+	@mkdir -p $(TARGET)
+	@cp ./docs/tech/design-doc/template.md $(TARGET)/$(shell date +%Y%m%d)-$(TITLE).md
+	@echo "Design document created at $(TARGET)/$(shell date +%Y%m%d)-$(TITLE).md"
