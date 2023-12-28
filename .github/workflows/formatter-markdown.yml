@@ -1,14 +1,11 @@
-name: Lint and fix javascript code
-
-# Lint all target files of all biome and commit & push.
+name: Format markdown
 
 on:
   push:
     branches: [ main ]
     paths:
-    # biomeの対象ファイル
-      - '**/*.{ts,tsx,js,jsx,json}'
-      - .github/workflows/formatter-js.yml
+      - '**/*.md'
+      - .github/workflows/formatter-markdown.yml
       - '!**/generated/**'
 
 permissions:
@@ -54,8 +51,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: lint and fix
-        run: pnpm run lint:fix
+      - name: format markdown
+        run: pnpm format-markdown
 
       - name: Check diff
         id: diff
@@ -73,7 +70,7 @@ jobs:
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add .
-          git commit -m "💁 lint and fix javascript code by github-actions"
+          git commit -m "📃 format markdown file by github-actions"
 
       - name: Push changes
         if: steps.diff.outcome == 'failure'
