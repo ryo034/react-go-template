@@ -56,7 +56,7 @@ Milestone 2 – Retire old system: July 4th, 2018
 
 End Date: Add feature X, Y, Z to new system: July 14th, 2018
 
-Add an [Update] subsection here if the ETA of some of these milestone changes, so the stakeholders can easily see the most up-to-date estimates.
+Add an \[Update] subsection here if the ETA of some of these milestone changes, so the stakeholders can easily see the most up-to-date estimates.
 
 # Concerns
 
