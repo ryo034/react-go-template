@@ -2,8 +2,6 @@
 
 In each ADR file, write these sections:
 
-# Title
-
 ## Status
 
 proposed
