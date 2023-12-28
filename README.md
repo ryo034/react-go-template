@@ -1,15 +1,20 @@
 # Service
+
 ## Platform
-- GCP
+
+* GCP
 
 ## Analytics
-- [Google Analytics](https://analytics.google.com/analytics/web)
+
+* [Google Analytics](https://analytics.google.com/analytics/web)
 
 ## Auth
-- [Firebase](https://console.firebase.google.com)
+
+* [Firebase](https://console.firebase.google.com)
 
 ## Secret & env management
-- [Doppler](https://dashboard.doppler.com)
+
+* [Doppler](https://dashboard.doppler.com)
 
 ## Feature Flag
 

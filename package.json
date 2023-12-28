@@ -14,7 +14,8 @@
     "format": "biome format --verbose --write --skip-errors ./apps",
     "test": "turbo run test",
     "test-coverage": "turbo run test-coverage",
-    "dev": "turbo run dev"
+    "dev": "turbo run dev",
+    "format-markdown": "remark . --frail --quiet --output"
   },
   "release": {
     "extends": "semantic-release-monorepo"
@@ -31,7 +32,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.4.1",
-    "@changesets/cli": "^2.27.1",
+    "remark-cli": "^12.0.0",
     "turbo": "^1.11.2"
   }
 }
