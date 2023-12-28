@@ -9,6 +9,7 @@ on:
       - '!**/generated/**'
 
 permissions:
+  id-token: write
   contents: write
 
 jobs:
