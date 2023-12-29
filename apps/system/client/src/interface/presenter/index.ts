@@ -1,2 +1,2 @@
-export { MePresenter } from "./me/presenter"
-export { ThemePresenter } from "./theme/presenter"
+export * from "./me/presenter"
+export * from "./theme/presenter"

@@ -13,17 +13,17 @@ export class MeGatewayAdapter {
       return Result.err(new AuthProviderCurrentUserNotFoundError("User is not found"))
     }
 
-    if (me.role.value === undefined || me.role.value === null) {
-      console.error(new AdapterError(MeGatewayAdapter.name, this.adapt.name, "me.role.value is invalid"))
+    if (me.info === undefined || me.info === null) {
+      console.error(new AdapterError(MeGatewayAdapter.name, this.adapt.name, "me.info is required"))
       return Result.err(new AuthProviderCurrentUserNotFoundError("User is not found"))
     }
 
-    if (me.role.value.user === undefined || me.role.value.user === null) {
-      console.error(new AdapterError(MeGatewayAdapter.name, this.adapt.name, "me.role.value.user is invalid"))
+    if (me.info.user === undefined || me.info.user === null) {
+      console.error(new AdapterError(MeGatewayAdapter.name, this.adapt.name, "me.info.user is required"))
       return Result.err(new AuthProviderCurrentUserNotFoundError("User is not found"))
     }
 
-    const { firstName, lastName, email, userId } = me.role.value.user
+    const { firstName, lastName, email, userId } = me.info.user
 
     const id = AccountId.fromString(userId)
     if (id.isErr) {

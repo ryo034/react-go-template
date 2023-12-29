@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package me.v1;
 
+import "user/v1/user.proto";
+
 option go_package = "github.com/ryo034/react-go-template/apps/system/api/schema/pb/me/v1";
 
 service MeService {
@@ -19,9 +21,15 @@ message MultiFactor {
   string phone_number = 2;
 }
 
+message Info {
+  string id = 1;
+  user.v1.User user = 2;
+}
+
 message Me {
   bool email_verified = 1;
   optional MultiFactor multi_factor = 2;
+  Info info = 3;
 }
 
 message LoginRequest {}

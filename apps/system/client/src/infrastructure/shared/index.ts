@@ -1,1 +1,1 @@
-export type { PromiseResult } from "./result"
+export * from "./result"

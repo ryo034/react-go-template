@@ -1,1 +1,1 @@
-export { ContainerProvider } from "~/infrastructure/provider/container"
+export * from "~/infrastructure/provider/container"

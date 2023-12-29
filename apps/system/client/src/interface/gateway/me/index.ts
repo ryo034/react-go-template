@@ -1,2 +1,2 @@
-export { MeGatewayAdapter } from "./adapter"
-export { MeGateway } from "./gateway"
+export * from "./adapter"
+export * from "./gateway"

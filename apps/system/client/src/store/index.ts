@@ -1,2 +1,2 @@
-export * from "./me"
-export * from "./theme"
+export * from "./me/store"
+export * from "./theme/store"

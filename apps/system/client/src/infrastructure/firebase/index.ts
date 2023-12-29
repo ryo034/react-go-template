@@ -1,1 +1,1 @@
-export { firebaseAuth, firebaseStorage } from "./setup"
+export * from "./setup"

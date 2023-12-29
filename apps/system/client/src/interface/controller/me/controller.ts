@@ -13,7 +13,7 @@ export class MeController {
     if (passwordObj.isErr) {
       return passwordObj.error
     }
-    return await this.useCase.login(emailObj.value, passwordObj.value)
+    return await this.useCase.login({ email: emailObj.value, password: passwordObj.value })
   }
 
   async signOut(): Promise<null | Error> {

@@ -1,1 +1,1 @@
-export { MyCustomGA, usePageTracking } from "./ga"
+export * from "./ga"

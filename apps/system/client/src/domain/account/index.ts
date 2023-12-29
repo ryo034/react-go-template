@@ -1,2 +1,2 @@
-export { AccountId } from "./id"
-export { AccountName } from "./name"
+export * from "./id"
+export * from "./name"

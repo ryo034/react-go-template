@@ -1,3 +1,3 @@
-export type { ThemeUseCaseInput } from "./input"
-export type { ThemeUseCaseOutput } from "./output"
-export { ThemeInteractor } from "./interactor"
+export * from "./input"
+export * from "./output"
+export * from "./interactor"

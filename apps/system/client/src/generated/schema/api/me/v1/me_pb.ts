@@ -5,6 +5,7 @@
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
 import { Message, proto3 } from "@bufbuild/protobuf";
+import { User } from "../../user/v1/user_pb.js";
 
 /**
  * @generated from message me.v1.MultiFactor
@@ -50,6 +51,49 @@ export class MultiFactor extends Message<MultiFactor> {
 }
 
 /**
+ * @generated from message me.v1.Info
+ */
+export class Info extends Message<Info> {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id = "";
+
+  /**
+   * @generated from field: user.v1.User user = 2;
+   */
+  user?: User;
+
+  constructor(data?: PartialMessage<Info>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "me.v1.Info";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "user", kind: "message", T: User },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Info {
+    return new Info().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Info {
+    return new Info().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Info {
+    return new Info().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: Info | PlainMessage<Info> | undefined, b: Info | PlainMessage<Info> | undefined): boolean {
+    return proto3.util.equals(Info, a, b);
+  }
+}
+
+/**
  * @generated from message me.v1.Me
  */
 export class Me extends Message<Me> {
@@ -63,6 +107,11 @@ export class Me extends Message<Me> {
    */
   multiFactor?: MultiFactor;
 
+  /**
+   * @generated from field: me.v1.Info info = 3;
+   */
+  info?: Info;
+
   constructor(data?: PartialMessage<Me>) {
     super();
     proto3.util.initPartial(data, this);
@@ -73,6 +122,7 @@ export class Me extends Message<Me> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "email_verified", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 2, name: "multi_factor", kind: "message", T: MultiFactor, opt: true },
+    { no: 3, name: "info", kind: "message", T: Info },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Me {

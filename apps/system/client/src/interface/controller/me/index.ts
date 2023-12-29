@@ -1,1 +1,0 @@
-export { MeController } from "./controller"

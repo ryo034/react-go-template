@@ -1,5 +1,5 @@
-import { Email, MeRepository, Password } from "~/domain"
-import { MeUseCaseInput, MeUseCaseOutput } from "~/usecase"
+import { MeRepository } from "~/domain"
+import { MeUseCaseInput, MeUseCaseLoginInputData, MeUseCaseOutput } from "~/usecase"
 
 export class MeInteractor implements MeUseCaseInput {
   constructor(private readonly repository: MeRepository, private readonly presenter: MeUseCaseOutput) {}
@@ -19,9 +19,9 @@ export class MeInteractor implements MeUseCaseInput {
     return null
   }
 
-  async login(email: Email, password: Password): Promise<Error | null> {
+  async login(data: MeUseCaseLoginInputData): Promise<Error | null> {
     this.presenter.setIsLoading(true)
-    const fbRes = await this.repository.signInWithEmailAndPassword(email, password)
+    const fbRes = await this.repository.signInWithEmailAndPassword(data.email, data.password)
     if (fbRes.isErr) {
       this.presenter.setIsLoading(false)
       return fbRes.error
