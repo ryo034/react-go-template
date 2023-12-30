@@ -36,8 +36,7 @@ services:
       - "4500:4500"
       - "4000:4000"
     working_dir: /opt/workspace
-    command: ['firebase', 'emulators:start']
-    # command: ['firebase', 'emulators:start', '--import=./.emulator']
+    command: ['firebase', 'emulators:start', '--import=./.emulator']
     # command: ['firebase', 'emulators:start', '--export-on-exit', './.emulator']
     # command: ['firebase', 'emulators:start', '--export-on-exit', './.emulator', '--import=./.emulator']
     tty: true
