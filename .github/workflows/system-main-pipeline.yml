@@ -13,12 +13,8 @@ on:
 jobs:
   lint-api-dockerfile:
     uses: ./.github/workflows/__lint-docker.yml
-    strategy:
-      matrix:
-        dockerfile:
-          - './apps/system/api'
     with:
-      directory: ${{ matrix.dockerfile }}
+      directory: './apps/system/api'
 
   ci-go:
     uses: ./.github/workflows/__ci-go.yml
