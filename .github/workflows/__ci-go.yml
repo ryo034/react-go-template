@@ -34,8 +34,6 @@ jobs:
         with:
           go-version: ${{ matrix.go }}
 
-      - run: "go test ./..."
-
       - run: "go vet ./..."
 
       - uses: dominikh/staticcheck-action@v1.2.0
@@ -43,3 +41,18 @@ jobs:
           version: "2022.1.1"
           install-go: false
           cache-key: ${{ matrix.go }}
+
+      - name: Install tparse
+        run: go install github.com/mfridman/tparse@latest
+
+      - name: Test
+        shell: bash
+        run: |
+          set -o pipefail
+          go test ./... -json | tee ./go-test.out | tparse -all
+
+      - name: Add job summary
+        shell: bash
+        if: always()
+        run: |
+          tparse -file ./go-test.out -format markdown >> $GITHUB_STEP_SUMMARY
