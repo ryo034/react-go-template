@@ -32,7 +32,7 @@ jobs:
         with:
           fetch-depth: 1
 
-      - uses: WillAbides/setup-go-faster@v1.7.0
+      - uses: WillAbides/setup-go-faster@v1.13.0
         with:
           go-version: ${{ matrix.go }}
 
