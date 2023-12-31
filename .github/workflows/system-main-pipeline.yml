@@ -11,11 +11,6 @@ on:
       - .github/workflows/__lint-docker.yml
 
 jobs:
-  # lint-api-dockerfile:
-  #   uses: ./.github/workflows/__lint-docker.yml
-  #   with:
-  #     directory: ./apps/system/api
-
   ci-go:
     uses: ./.github/workflows/__ci-go.yml
     with:
