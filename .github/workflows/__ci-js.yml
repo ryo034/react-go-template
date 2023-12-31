@@ -54,5 +54,8 @@ jobs:
       - name: lint on CI
         run: pnpm run ci --filter ${{ inputs.directory }}
 
+      - name: Build packages
+        run: pnpm run package:build
+
       - name: test on CI
         run: pnpm run test --filter ${{ inputs.directory }}

@@ -50,7 +50,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build packages
-        run: pnpm package:build
+        run: pnpm run package:build
 
       - name: Run unit test
         run: pnpm run test --filter ${{ inputs.directory }}
