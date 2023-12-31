@@ -50,4 +50,4 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: lint on CI
-        run: pnpm ci --filter ${{ inputs.directory }}
+        run: pnpm run ci --filter ${{ inputs.directory }}

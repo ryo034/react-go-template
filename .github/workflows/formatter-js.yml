@@ -56,7 +56,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: lint and fix
-        run: pnpm lint:fix
+        run: pnpm run lint:fix
 
       - name: Check diff
         id: diff

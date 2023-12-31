@@ -53,7 +53,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: format markdown
-        run: pnpm format-markdown
+        run: pnpm run format-markdown
 
       - name: Check diff
         id: diff
