@@ -11,18 +11,14 @@ on:
       - .github/workflows/__lint-docker.yml
 
 jobs:
-  trigger:
+  lint-api-dockerfile:
     uses: ./.github/workflows/__lint-docker.yml
     strategy:
       matrix:
         dockerfile:
           - './apps/system/api'
     with:
-      dockerfile: ${{ matrix.dockerfile }}
-
-  lint-api-dockerfile:
-    with:
-      directory: ./apps/system/api
+      directory: ${{ matrix.dockerfile }}
 
   ci-go:
     uses: ./.github/workflows/__ci-go.yml
