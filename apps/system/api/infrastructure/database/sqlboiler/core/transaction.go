@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/ryo034/react-go-template/packages/go/util/reflect/function"
+	"github.com/ryo034/react-go-template/apps/system/api/util/reflect/function"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 

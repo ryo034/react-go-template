@@ -2,10 +2,10 @@ package media
 
 import (
 	"fmt"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/media"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/cloudinary"
 	mediaPb "github.com/ryo034/react-go-template/apps/system/api/schema/pb/shared/media/v1"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/account"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/media"
-	"github.com/ryo034/react-go-template/packages/go/infrastructure/cloudinary"
 )
 
 type Adapter interface {

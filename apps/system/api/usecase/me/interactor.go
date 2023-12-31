@@ -3,10 +3,10 @@ package me
 import (
 	"context"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/account"
-	domainErr "github.com/ryo034/react-go-template/packages/go/domain/shared/error"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/phone"
-	"github.com/ryo034/react-go-template/packages/go/infrastructure/database/sqlboiler/core"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/sqlboiler/core"
 )
 
 type UseCase interface {

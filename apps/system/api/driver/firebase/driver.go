@@ -3,14 +3,14 @@ package firebase
 
 import (
 	"context"
-	domainErr "github.com/ryo034/react-go-template/packages/go/domain/shared/error"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/phone"
+	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
 	"log"
 
 	"firebase.google.com/go/v4/auth"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/firebase"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/account"
 )
 
 type Driver interface {

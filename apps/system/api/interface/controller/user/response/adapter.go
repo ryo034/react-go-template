@@ -1,10 +1,10 @@
 package response
 
 import (
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 	accountPb "github.com/ryo034/react-go-template/apps/system/api/schema/pb/account/v1"
 	userPb "github.com/ryo034/react-go-template/apps/system/api/schema/pb/user/v1"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/account"
 )
 
 type Adapter interface {

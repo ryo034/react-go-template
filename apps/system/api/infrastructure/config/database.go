@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/ryo034/react-go-template/packages/go/infrastructure/database/datasource"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/datasource"
 )
 
 const (

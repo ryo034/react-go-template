@@ -2,10 +2,10 @@ package user
 
 import (
 	"fmt"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/account"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/phone"
-	models "github.com/ryo034/react-go-template/packages/go/infrastructure/database/sqlboiler/api"
+	models "github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/sqlboiler/api"
 )
 
 type Adapter interface {

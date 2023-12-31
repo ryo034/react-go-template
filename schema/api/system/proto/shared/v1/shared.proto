@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package shared.v1;
+
+option go_package = "github.com/ryo034/react-go-template/apps/system/api/schema/pb/shared/v1";
+
+message Address {
+  string zip_code = 1;
+  string country = 2;
+  string prefecture = 3;
+  string city = 4;
+  string street = 5;
+  string building = 6;
+}

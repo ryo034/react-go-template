@@ -1,6 +1,6 @@
 package address
 
-import "github.com/ryo034/react-go-template/packages/go/domain/shared/id"
+import "github.com/ryo034/react-go-template/apps/system/api/domain/shared/id"
 
 type ID struct {
 	id.SortableID

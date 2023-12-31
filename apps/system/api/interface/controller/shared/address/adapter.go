@@ -1,8 +1,8 @@
 package address
 
 import (
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/address"
 	sharedPb "github.com/ryo034/react-go-template/apps/system/api/schema/pb/shared/v1"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/address"
 )
 
 type Adapter interface {

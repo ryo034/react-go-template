@@ -1,8 +1,8 @@
 package address
 
 import (
-	domainError "github.com/ryo034/react-go-template/packages/go/domain/shared/error"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/validation"
+	domainError "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/validation"
 )
 
 type City struct {

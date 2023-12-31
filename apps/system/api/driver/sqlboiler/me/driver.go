@@ -3,12 +3,12 @@ package me
 import (
 	"context"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/store"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/account"
-	domainErr "github.com/ryo034/react-go-template/packages/go/domain/shared/error"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/phone"
-	models "github.com/ryo034/react-go-template/packages/go/infrastructure/database/sqlboiler/api"
-	dbErr "github.com/ryo034/react-go-template/packages/go/infrastructure/database/sqlboiler/error"
+	models "github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/sqlboiler/api"
+	dbErr "github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/sqlboiler/error"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )

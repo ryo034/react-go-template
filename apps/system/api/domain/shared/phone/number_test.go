@@ -1,8 +1,8 @@
 package phone
 
 import (
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/validation"
-	"github.com/ryo034/react-go-template/packages/go/util/test"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/validation"
+	"github.com/ryo034/react-go-template/apps/system/api/util/test"
 	"reflect"
 	"testing"
 )

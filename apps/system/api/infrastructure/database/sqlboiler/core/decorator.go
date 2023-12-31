@@ -4,7 +4,7 @@ import (
 	"database/sql/driver"
 	"fmt"
 
-	"github.com/ryo034/react-go-template/packages/go/util/reflect/function"
+	"github.com/ryo034/react-go-template/apps/system/api/util/reflect/function"
 
 	"github.com/pkg/errors"
 )

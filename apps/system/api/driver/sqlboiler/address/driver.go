@@ -2,9 +2,9 @@ package address
 
 import (
 	"context"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/address"
-	models "github.com/ryo034/react-go-template/packages/go/infrastructure/database/sqlboiler/api"
-	dbErr "github.com/ryo034/react-go-template/packages/go/infrastructure/database/sqlboiler/error"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/address"
+	models "github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/sqlboiler/api"
+	dbErr "github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/sqlboiler/error"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 

@@ -1,12 +1,12 @@
 package response
 
 import (
+	domainError "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
+	domainValidation "github.com/ryo034/react-go-template/apps/system/api/domain/shared/validation"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/message"
 	languageAdapter "github.com/ryo034/react-go-template/apps/system/api/interface/controller/shared/language"
 	requestValidation "github.com/ryo034/react-go-template/apps/system/api/interface/controller/shared/request/validation"
 	errorPb "github.com/ryo034/react-go-template/apps/system/api/schema/pb/error/v1"
-	domainError "github.com/ryo034/react-go-template/packages/go/domain/shared/error"
-	domainValidation "github.com/ryo034/react-go-template/packages/go/domain/shared/validation"
-	"github.com/ryo034/react-go-template/packages/go/infrastructure/message"
 	"github.com/spf13/cast"
 	"golang.org/x/net/context"
 	"golang.org/x/text/language"

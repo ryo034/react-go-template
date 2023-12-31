@@ -1,7 +1,7 @@
 package account
 
 import (
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/id"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/id"
 )
 
 // ID used by external SaaS such as Firebase

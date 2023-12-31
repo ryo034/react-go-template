@@ -1,0 +1,26 @@
+name: __ get latest go versions
+
+on:
+  workflow_call:
+    inputs:
+      directory:
+        description: 'Target directory'
+        required: true
+        type: string
+
+jobs:
+  get-go-versions:
+    runs-on: ubuntu-latest
+    outputs:
+      go-versions: ${{ steps.go-versions.outputs.versions }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read Go versions
+        id: go-versions
+        run: |
+          versions=$(curl -s 'https://go.dev/dl/?mode=json' | jq -c 'map(.version[2:])')
+          echo "versions=$versions" >> "$GITHUB_OUTPUT"
+
+      - name: Echo Go version
+        run: echo "Go version is ${{ steps.go-versions.outputs.versions }}"

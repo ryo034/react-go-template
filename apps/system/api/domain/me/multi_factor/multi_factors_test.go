@@ -1,8 +1,8 @@
 package multi_factor
 
 import (
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/datetime"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/phone"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/datetime"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
 	"reflect"
 	"testing"
 )

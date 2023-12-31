@@ -1,8 +1,8 @@
 package shared
 
 import (
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/address"
-	models "github.com/ryo034/react-go-template/packages/go/infrastructure/database/sqlboiler/api"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/address"
+	models "github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/sqlboiler/api"
 	"github.com/spf13/cast"
 )
 

@@ -3,8 +3,8 @@ package shared
 import (
 	"context"
 
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/account"
-	domainErr "github.com/ryo034/react-go-template/packages/go/domain/shared/error"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/spf13/cast"
 	"golang.org/x/text/language"
 	"google.golang.org/grpc/metadata"

@@ -1,8 +1,8 @@
 package media
 
 import (
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/media"
-	models "github.com/ryo034/react-go-template/packages/go/infrastructure/database/sqlboiler/api"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/media"
+	models "github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/sqlboiler/api"
 )
 
 type Adapter interface {

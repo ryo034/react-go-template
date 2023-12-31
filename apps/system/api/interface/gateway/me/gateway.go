@@ -3,14 +3,12 @@ package me
 import (
 	"context"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/store"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
 	firebaseDriver "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	meDriver "github.com/ryo034/react-go-template/apps/system/api/driver/sqlboiler/me"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/sqlboiler/core"
 	businessEntityGateway "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/business_entity"
-	storeGateway "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/store"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/account"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/phone"
-	"github.com/ryo034/react-go-template/packages/go/infrastructure/database/sqlboiler/core"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
@@ -18,12 +16,11 @@ type repository struct {
 	ud  meDriver.Driver
 	fd  firebaseDriver.Driver
 	a   Adapter
-	sa  storeGateway.Adapter
 	bea businessEntityGateway.Adapter
 }
 
-func NewRepository(ud meDriver.Driver, fd firebaseDriver.Driver, a Adapter, sa storeGateway.Adapter, bea businessEntityGateway.Adapter) me.Repository {
-	return &repository{ud, fd, a, sa, bea}
+func NewRepository(ud meDriver.Driver, fd firebaseDriver.Driver, a Adapter) me.Repository {
+	return &repository{ud, fd, a}
 }
 
 func (r *repository) SaveFromTemporary(ctx context.Context, aID account.ID, firstName account.FirstName, lastName account.LastName) (*me.Me, error) {
@@ -63,10 +60,6 @@ func (r *repository) Find(ctx context.Context, exec boil.ContextExecutor, aID ac
 
 func (r *repository) Update(ctx context.Context, me *me.Me) error {
 	return r.ud.Update(ctx, core.ToExec(ctx, false), me)
-}
-
-func (r *repository) ExistOnStore(ctx context.Context, aID account.ID, lID store.ID) (bool, error) {
-	return r.ud.ExistOnLibrary(ctx, core.ToExec(ctx, true), aID, lID)
 }
 
 func (r *repository) EmailVerified(ctx context.Context, aID account.ID) (bool, string, error) {

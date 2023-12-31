@@ -10,7 +10,7 @@ import (
 	"time"
 
 	md "github.com/go-sql-driver/mysql"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/datetime"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/datetime"
 )
 
 type DataSource interface {

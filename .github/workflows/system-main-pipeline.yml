@@ -6,56 +6,22 @@ on:
     paths:
       - apps/system/**
       - .github/workflows/system-main-pipeline.yml
-      - .github/workflows/__node-version.yml
-      - .github/workflows/__pnpm-version.yml
-      - .github/workflows/__go-version.yml
-      - .github/workflows/__lint-js.yml
-      - .github/workflows/__lint-go.yml
+      - .github/workflows/__ci-js.yml
+      - .github/workflows/__ci-go.yml
       - .github/workflows/__lint-docker.yml
-      - .github/workflows/__js-unit-test.yml
-      - .github/workflows/__go-unit-test.yml
 
 jobs:
-  node-version:
-    uses: ./.github/workflows/__node-version.yml
-
-  pnpm-version:
-    uses: ./.github/workflows/__pnpm-version.yml
-
-  # go-version:
-  #   uses: ./.github/workflows/__go-version.yml
-
   # lint-docker:
   #   uses: ./.github/workflows/__lint-docker.yml
   #   with:
   #     directory: ./apps/system/api
 
-  # lint-go:
-  #   needs: [ go-version ]
-  #   uses: ./.github/workflows/__lint-go.yml
+  # ci-go:
+  #   uses: ./.github/workflows/__ci-go.yml
   #   with:
   #     directory: ./apps/system/api
-  #     go-version: ${{ needs.go-version.outputs.go-version }}
 
-  lint-js:
-    needs: [ node-version, pnpm-version ]
-    uses: ./.github/workflows/__lint-js.yml
-    with:
-      directory: ./apps/system/api
-      node-version: ${{ needs.node-version.outputs.node-version }}
-      pnpm-version: ${{ needs.pnpm-version.outputs.pnpm-version }}
-
-  client-unit-test:
-    needs: [ node-version, pnpm-version, lint-js ]
-    uses: ./.github/workflows/__js-unit-test.yml
+  ci-js:
+    uses: ./.github/workflows/__ci-js.yml
     with:
       directory: ./apps/system/client
-      node-version: ${{ needs.node-version.outputs.node-version }}
-      pnpm-version: ${{ needs.pnpm-version.outputs.pnpm-version }}
-
-  # api-unit-test:
-  #   needs: [ go-version, lint-go ]
-  #   uses: ./.github/workflows/__go-unit-test.yml
-  #   with:
-  #     directory: apps/system/api
-  #     go-version: ${{ needs.go-version.outputs.go-version }}

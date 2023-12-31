@@ -2,9 +2,9 @@ package request
 
 import (
 	"fmt"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/pagination"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/pagination/offset"
 	paginationPb "github.com/ryo034/react-go-template/apps/system/api/schema/pb/pagination/v1"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/pagination"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/pagination/offset"
 )
 
 type Adapter interface {

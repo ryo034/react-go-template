@@ -1,8 +1,8 @@
 package user
 
 import (
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/account"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/phone"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
 )
 
 type User struct {

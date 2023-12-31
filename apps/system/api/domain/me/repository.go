@@ -3,9 +3,8 @@ package me
 
 import (
 	"context"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/store"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/account"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/phone"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
@@ -15,7 +14,6 @@ type Repository interface {
 	SaveFromTemporary(ctx context.Context, aID account.ID, firstName account.FirstName, lastName account.LastName) (*Me, error)
 	Update(ctx context.Context, me *Me) error
 	EmailVerified(ctx context.Context, aID account.ID) (bool, string, error)
-	ExistOnStore(ctx context.Context, aID account.ID, sID store.ID) (bool, error)
 	UpdateEmail(ctx context.Context, aID account.ID, em account.Email) (*Me, error)
 	UpdateName(ctx context.Context, aID account.ID, fin account.FirstName, ln account.LastName) (*Me, error)
 	UpdatePhoneNumber(ctx context.Context, aID account.ID, ph phone.Number) (*Me, error)

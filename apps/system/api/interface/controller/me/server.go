@@ -2,18 +2,16 @@ package me
 
 import (
 	"context"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
 	firebaseDriver "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/grpc/response"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
-	businessEntityResponse "github.com/ryo034/react-go-template/apps/system/api/interface/controller/business_entity/response"
 	meRequest "github.com/ryo034/react-go-template/apps/system/api/interface/controller/me/request"
 	meResponse "github.com/ryo034/react-go-template/apps/system/api/interface/controller/me/response"
-	storeResponse "github.com/ryo034/react-go-template/apps/system/api/interface/controller/store/response"
 	mePb "github.com/ryo034/react-go-template/apps/system/api/schema/pb/me/v1"
 	meconnect "github.com/ryo034/react-go-template/apps/system/api/schema/pb/me/v1/v1connect"
 	meUseCase "github.com/ryo034/react-go-template/apps/system/api/usecase/me"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/account"
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/phone"
 )
 
 type Server struct {
@@ -24,8 +22,6 @@ type Server struct {
 	sharedResResolver response.Resolver
 	meRequestAdapter  meRequest.Adapter
 	meResponseAdapter meResponse.Adapter
-	beResponseAdapter businessEntityResponse.Adapter
-	stResponseAdapter storeResponse.Adapter
 }
 
 func NewServer(
@@ -35,8 +31,6 @@ func NewServer(
 	resolver response.Resolver,
 	meRequestAdapter meRequest.Adapter,
 	meResponseAdapter meResponse.Adapter,
-	beResponseAdapter businessEntityResponse.Adapter,
-	stResponseAdapter storeResponse.Adapter,
 ) meconnect.MeServiceHandler {
 	return &Server{
 		meconnect.UnimplementedMeServiceHandler{},
@@ -46,8 +40,6 @@ func NewServer(
 		resolver,
 		meRequestAdapter,
 		meResponseAdapter,
-		beResponseAdapter,
-		stResponseAdapter,
 	}
 }
 

@@ -1,8 +1,8 @@
 package message
 
 import (
-	"github.com/ryo034/react-go-template/packages/go/domain/shared/datetime"
-	domainError "github.com/ryo034/react-go-template/packages/go/domain/shared/error"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/datetime"
+	domainError "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"golang.org/x/text/language"
 )
 
