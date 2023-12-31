@@ -1,15 +1,10 @@
 package media
 
 import (
-	"fmt"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/media"
-	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/cloudinary"
 	mediaPb "github.com/ryo034/react-go-template/apps/system/api/schema/pb/shared/media/v1"
 )
 
 type Adapter interface {
-	Adapt(meID account.ID, m *mediaPb.MediaBaseInfo) media.Media
 }
 
 type adapter struct {
@@ -28,35 +23,4 @@ func (a *adapter) isVideo(t mediaPb.MediaType) bool {
 		return true
 	}
 	return false
-}
-
-func (a *adapter) AdaptVideo(meID account.ID, m *mediaPb.MediaBaseInfo) media.Media {
-	path := fmt.Sprintf("/%s/%s", cloudinary.UsersPath, meID.ToString())
-	if a.isLocal {
-		path = fmt.Sprintf("/%s%s", cloudinary.LocalPath, path)
-	}
-	p, err := media.NewPath(path)
-	if err != nil {
-		return nil
-	}
-	return media.NewVideo(media.GenID(), m.GetName(), "", p, 0, 0, 0, m.GetOrder())
-}
-
-func (a *adapter) AdaptAsPhoto(meID account.ID, m *mediaPb.MediaBaseInfo) media.Media {
-	path := fmt.Sprintf("/%s/%s", cloudinary.UsersPath, meID.ToString())
-	if a.isLocal {
-		path = fmt.Sprintf("/%s%s", cloudinary.LocalPath, path)
-	}
-	p, err := media.NewPath(path)
-	if err != nil {
-		return nil
-	}
-	return media.NewPhoto(media.GenID(), m.GetName(), "", p, 0, 0, m.GetOrder())
-}
-
-func (a *adapter) Adapt(meID account.ID, m *mediaPb.MediaBaseInfo) media.Media {
-	if a.isVideo(m.GetMediaType()) {
-		return a.AdaptVideo(meID, m)
-	}
-	return a.AdaptAsPhoto(meID, m)
 }

@@ -4,18 +4,13 @@ import (
 	"fmt"
 	grpcreflect "github.com/bufbuild/connect-grpcreflect-go"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/config"
-	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/sqlboiler/core"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/grpc/interceptor"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/injector"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/middleware"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
-	beConnect "github.com/ryo034/react-go-template/apps/system/api/schema/pb/business_entity/v1/v1connect"
 	healthConnect "github.com/ryo034/react-go-template/apps/system/api/schema/pb/health/v1/v1connect"
 	meConnect "github.com/ryo034/react-go-template/apps/system/api/schema/pb/me/v1/v1connect"
-	itemConnect "github.com/ryo034/react-go-template/apps/system/api/schema/pb/store/item/v1/v1connect"
-	traConnect "github.com/ryo034/react-go-template/apps/system/api/schema/pb/store/transaction/v1/v1connect"
-	stConnect "github.com/ryo034/react-go-template/apps/system/api/schema/pb/store/v1/v1connect"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"log"
@@ -45,11 +40,10 @@ func Start(conf config.Reader) {
 
 	auth := middleware.NewAuthentication(fb, co)
 
-	dbCloseFn := core.Initialize(conf.SourceDataSource(), conf.ReplicaDataSource(), conf.IsDebug())
-	defer dbCloseFn()
+	//dbCloseFn := core.Initialize(conf.SourceDataSource(), conf.ReplicaDataSource(), conf.IsDebug())
+	//defer dbCloseFn()
 
 	inj, err := injector.NewInjector(
-		core.NewTransactionProvider(),
 		fb,
 		co,
 		conf,
@@ -64,14 +58,6 @@ func Start(conf config.Reader) {
 	path, handler := healthConnect.NewHealthServiceHandler(inj.HealthServiceServer())
 	mux.Handle(path, handler)
 	path, handler = meConnect.NewMeServiceHandler(inj.MeServiceServer(), interceptors)
-	mux.Handle(path, handler)
-	path, handler = beConnect.NewBusinessEntityServiceHandler(inj.BusinessEntityServiceServer(), interceptors)
-	mux.Handle(path, handler)
-	path, handler = stConnect.NewStoreServiceHandler(inj.StoreServiceServer(), interceptors)
-	mux.Handle(path, handler)
-	path, handler = itemConnect.NewItemServiceHandler(inj.ItemServiceServer(), interceptors)
-	mux.Handle(path, handler)
-	path, handler = traConnect.NewTransactionServiceHandler(inj.TransactionServiceServer(), interceptors)
 	mux.Handle(path, handler)
 
 	log.Printf("Listening on port %s", conf.ServerPort())

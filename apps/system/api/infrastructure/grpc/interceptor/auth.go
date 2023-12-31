@@ -2,6 +2,7 @@ package interceptor
 
 import (
 	"context"
+	"github.com/bufbuild/connect-go"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/middleware"
 )
 

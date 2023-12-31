@@ -60,21 +60,6 @@ func (d *driver) EmailVerified(ctx context.Context, aID account.ID) (bool, strin
 }
 
 func (d *driver) UpdateMe(ctx context.Context, me *me.Me) error {
-	u := me.User()
-	params := (&auth.UserToUpdate{}).DisplayName(u.Name())
-	if u.HasPhoneNumber() {
-		params = params.PhoneNumber(u.PhoneNumber().ToString())
-	}
-	_, err := d.f.Auth.UpdateUser(ctx, u.AccountID().ToString(), params)
-	if err != nil {
-		if auth.IsPhoneNumberAlreadyExists(err) {
-			return domainErr.NewPhoneNumberAlreadyInUse(u.PhoneNumber().ToString())
-		}
-		if auth.IsEmailAlreadyExists(err) {
-			return domainErr.NewEmailAlreadyInUse(u.Email().ToString())
-		}
-		return err
-	}
 	return nil
 }
 

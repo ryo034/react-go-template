@@ -3,13 +3,13 @@ package middleware
 import (
 	"context"
 	"fmt"
-	"strings"
-
+	"github.com/bufbuild/connect-go"
 	ga "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	fb "github.com/ryo034/react-go-template/apps/system/api/infrastructure/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"strings"
 )
 
 type Authentication struct {

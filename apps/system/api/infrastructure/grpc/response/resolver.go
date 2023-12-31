@@ -1,6 +1,7 @@
 package response
 
 import (
+	"github.com/bufbuild/connect-go"
 	domainError "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	domainValidation "github.com/ryo034/react-go-template/apps/system/api/domain/shared/validation"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/message"

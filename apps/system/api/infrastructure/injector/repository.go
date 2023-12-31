@@ -10,8 +10,7 @@ type RepositoryInjector struct {
 }
 
 func newRepositoryInjector(di driverInjector) RepositoryInjector {
-	gai := newGatewayAdapterInjector()
 	return RepositoryInjector{
-		Me: meGateway.NewRepository(di.Me, di.Firebase, gai.Me),
+		Me: meGateway.NewRepository(di.Firebase),
 	}
 }

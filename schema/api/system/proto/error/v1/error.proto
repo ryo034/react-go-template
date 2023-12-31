@@ -6,4 +6,10 @@ option go_package = "github.com/ryo034/react-go-template/apps/system/api/schema/
 
 enum ErrorCode {
   ERROR_CODE_UNSPECIFIED = 0;
+  ERROR_CODE_NOT_BELONG_GROUP = 1;
+  ERROR_CODE_EMAIL_ALREADY_IN_USE = 2;
+  ERROR_CODE_INVALID_EMAIL = 3;
+  ERROR_CODE_PHONE_NUMBER_ALREADY_IN_USE = 4;
+  ERROR_CODE_INVALID_ADDRESS = 5;
+  ERROR_CODE_EMAIL_NOT_VERIFIED = 6;
 }

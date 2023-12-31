@@ -1,7 +1,6 @@
 package request
 
 import (
-	"github.com/ryo034/react-go-template/apps/system/api/domain/business_entity/employee/permission"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me/multi_factor"
 	userRequest "github.com/ryo034/react-go-template/apps/system/api/interface/controller/user/request"
@@ -18,15 +17,6 @@ func NewAdapter(userAdapter userRequest.Adapter) Adapter {
 
 type adapter struct {
 	userAdapter userRequest.Adapter
-}
-
-func (a *adapter) genDefaultPermission() *permission.Permission {
-	return permission.NewPermission(
-		permission.AnalyticsUnable,
-		permission.EmployeeRead,
-		permission.StoreRead,
-		permission.TransactionHistoryUnable,
-	)
 }
 
 func (a *adapter) Adapt(m *mePb.Me) (*me.Me, error) {
