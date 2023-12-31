@@ -18,13 +18,15 @@ jobs:
   ci:
     needs: [ go-versions ]
     name: "Run CI"
+    defaults:
+      run:
+        working-directory: ${{ inputs.directory }}
     strategy:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest"]
         go-version: ${{fromJson(needs.go-versions.outputs.versions)}}
     runs-on: ${{ matrix.os }}
-    working-directory: ${{ inputs.directory }}
     steps:
       - uses: actions/checkout@v4
         with:
