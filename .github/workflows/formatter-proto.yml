@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: bufbuild/buf-setup-action@v1.26.1
+      - uses: bufbuild/buf-setup-action@v1.28.1
 
       - name: Proto format
         run: buf format -w --diff
