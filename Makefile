@@ -67,6 +67,7 @@ proto-fmt:
 proto-gen:
 	@make proto-fmt
 	@rm -rf ./apps/system/client/src/generated/schema/api
+	@rm -rf ./apps/system/api/schema/pb
 	@buf generate
 
 # ====================

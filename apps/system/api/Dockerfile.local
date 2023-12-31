@@ -1,0 +1,33 @@
+FROM golang:1.21.5-alpine as builder
+
+WORKDIR /app
+
+ARG GITHUB_TOKEN
+
+RUN apk update && \
+    apk add --no-cache git ca-certificates && \
+    git config --global url."https://${GITHUB_TOKEN}:x-oauth-basic@github.com/ryo034/".insteadOf "https://github.com/ryo034/"
+
+COPY . .
+
+# For Hot Reload & Debug
+ARG CGO_ENABLED=0
+ARG GOOS=linux
+ARG GOARCH=amd64
+RUN go mod tidy && \
+    go install github.com/cosmtrek/air@latest && \
+    go get github.com/uudashr/gopkgs/v2/cmd/gopkgs \
+        github.com/ramya-rao-a/go-outline \
+        github.com/nsf/gocode \
+        github.com/acroca/go-symbols \
+        github.com/fatih/gomodifytags \
+        github.com/josharian/impl \
+        github.com/haya14busa/goplay/cmd/goplay \
+        golang.org/x/lint/golint \
+        golang.org/x/tools/gopls \
+        github.com/go-delve/delve/cmd/dlv@v1.21.0 && \
+    go build -buildvcs=false -o /go/bin/dlv github.com/go-delve/delve/cmd/dlv
+
+EXPOSE 19004
+
+CMD ["air", "-c", ".air.toml"]

@@ -16,12 +16,12 @@ plugins:
     path: apps/system/client/node_modules/.bin/protoc-gen-connect-es
     out: apps/system/test/api/generated/schema/api
     opt: target=ts
-  # - name: go
-  #   out: apps/system/api/schema/pb
-  #   opt: paths=source_relative
-  # - plugin: buf.build/bufbuild/validate-go
-  #   out: apps/system/api/schema/pb
-  #   opt: paths=source_relative
-  # - name: connect-go
-  #   out: apps/system/api/schema/pb
-  #   opt: paths=source_relative
+  - name: go
+    out: apps/system/api/schema/pb
+    opt: paths=source_relative
+  - plugin: buf.build/bufbuild/validate-go
+    out: apps/system/api/schema/pb
+    opt: paths=source_relative
+  - name: connect-go
+    out: apps/system/api/schema/pb
+    opt: paths=source_relative
