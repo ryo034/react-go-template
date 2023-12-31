@@ -1,0 +1,19 @@
+name: __ Lint Dockerfile
+
+on:
+  workflow_call:
+    inputs:
+      directory:
+        description: 'Target directory'
+        required: true
+        type: string
+
+jobs:
+  go-unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hadolint/hadolint-action@v2.1.0
+        with:
+          dockerfile: ${{ inputs.directory }}/Dockerfile
