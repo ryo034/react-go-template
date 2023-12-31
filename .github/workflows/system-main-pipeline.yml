@@ -14,9 +14,9 @@ jobs:
   ci-go:
     uses: ./.github/workflows/__ci-go.yml
     with:
-      directory: ./apps/system/api
+      directory: './apps/system/api'
 
   ci-js:
     uses: ./.github/workflows/__ci-js.yml
     with:
-      directory: ./apps/system/client
+      directory: './apps/system/client'
