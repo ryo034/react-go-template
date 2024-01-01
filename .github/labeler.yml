@@ -13,8 +13,8 @@ test:
 shared-packages:
   - "packages/**/*"
 
-client-shared-packages:
-  - "packages/typescript/**/*"
+ui-shared-packages:
+  - "packages/typescript/ui/**/*"
 
 workflow:
   - ".github/**/*"

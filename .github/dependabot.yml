@@ -32,3 +32,16 @@ updates:
       dependencies:
         patterns:
           - "*"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/typescript/ui"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "07:00"
+      timezone: "Asia/Tokyo"
+    open-pull-requests-limit: 1
+    groups:
+      dependencies:
+        patterns:
+          - "*"
