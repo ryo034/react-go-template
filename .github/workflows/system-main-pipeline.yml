@@ -16,10 +16,10 @@ jobs:
     with:
       directory: './apps/system/api'
 
-  # ci-go:
-  #   uses: ./.github/workflows/__ci-go.yml
-  #   with:
-  #     directory: './apps/system/api'
+  ci-go:
+    uses: ./.github/workflows/__ci-go.yml
+    with:
+      directory: './apps/system/api'
 
   ci-js:
     uses: ./.github/workflows/__ci-js.yml
