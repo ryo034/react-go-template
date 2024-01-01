@@ -12,6 +12,7 @@
       "outputs": []
     },
     "ci": {},
+    "lint:fix": {},
     "dev": {},
     "test": {
       "outputs": ["coverage/**"]
