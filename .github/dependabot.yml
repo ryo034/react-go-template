@@ -38,7 +38,7 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "07:00"
+      time: "06:00"
       timezone: "Asia/Tokyo"
     open-pull-requests-limit: 1
     groups:
