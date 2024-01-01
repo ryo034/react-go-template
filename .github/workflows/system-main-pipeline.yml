@@ -11,6 +11,11 @@ on:
       - .github/workflows/__lint-docker.yml
 
 jobs:
+  ci-docker:
+    uses: ./.github/workflows/__lint-docker.yml
+    with:
+      directory: './apps/system/api'
+
   ci-go:
     uses: ./.github/workflows/__ci-go.yml
     with:
