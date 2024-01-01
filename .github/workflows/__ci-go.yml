@@ -12,30 +12,21 @@ permissions:
   contents: read
 
 jobs:
-  go-versions:
-    uses: ./.github/workflows/__go-latest-versions.yml
+  go-version:
+    uses: ./.github/workflows/__go-version-from-mod.yml
 
   ci:
-    needs: [ go-versions ]
-    name: "Run CI"
+    needs: [ go-version ]
     defaults:
       run:
         working-directory: ${{ inputs.directory }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: ["ubuntu-latest"]
-        # go-version: ${{ fromJson( needs.go-versions.outputs.go-versions ) }}
-        go-version: ["1.21.5"]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
 
       - uses: WillAbides/setup-go-faster@v1.13.0
         with:
-          go-version: ${{ matrix.go-version }}
+          go-version: ${{ needs.go-version.outputs.go-version }}
 
       - name: go vet
         shell: bash
@@ -46,7 +37,7 @@ jobs:
         with:
           version: "2022.1.1"
           install-go: false
-          cache-key: ${{ matrix.go-version }}
+          cache-key: ${{ runner.os }}-staticcheck-${{ hashFiles(format('{0}/go.mod', inputs.directory)) }}
 
       - name: Install tparse
         run: go install github.com/mfridman/tparse@latest
