@@ -19,7 +19,7 @@ jobs:
       - name: Read go version from go.mod
         id: go-version
         run: |
-          go_version=$(cat go.mod | grep -Eo 'go [0-9]+\.[0-9]+' | awk '{print $2}')
+          go_version=$(cat ${{ inputs.directory }}/go.mod | grep -Eo 'go [0-9]+\.[0-9]+' | awk '{print $2}')
           echo "version=$go_version" >> "$GITHUB_OUTPUT"
 
       - name: Echo Go version
