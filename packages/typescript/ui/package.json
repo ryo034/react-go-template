@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc && vite build",
-    "build-dev": "tsc && vite build --mode development",
+    "build:dev": "tsc && vite build --mode development",
     "test": "vitest run --reporter verbose"
   },
   "keywords": [],

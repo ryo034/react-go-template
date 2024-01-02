@@ -13,6 +13,7 @@
     },
     "ci": {},
     "lint:fix": {},
+    "build:dev": {},
     "dev": {},
     "test": {
       "outputs": ["coverage/**"]

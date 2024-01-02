@@ -7,6 +7,7 @@
     "build-local": "turbo build --global-deps='.env.local'",
     "package:build": "turbo build --filter='./packages/typescript/*'",
     "package:test": "turbo test --filter='./packages/typescript/*'",
+    "build:dev": "turbo run build:dev",
     "ci": "turbo run ci",
     "lint": "turbo run lint ./",
     "lint:detail": "biome check --verbose ./",

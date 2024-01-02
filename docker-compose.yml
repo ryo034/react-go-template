@@ -4,12 +4,10 @@ services:
     container_name: system-client
     build:
       context: typescript
-      dockerfile: Dockerfile.local
+      dockerfile: Dockerfile_local
       target: system
     ports:
       - "5173:5173"
-    labels:
-      logging: "promtail"
     command: sh -c "pnpm install -r && pnpm dev"
     volumes:
       - ./apps/system/client:/app/apps/system
@@ -25,8 +23,6 @@ services:
     build:
       context: .
       dockerfile: container/firebase/Dockerfile
-    labels:
-      logging: "promtail"
     volumes:
       - ./container/firebase/:/opt/workspace:cached
     ports:
@@ -52,9 +48,6 @@ services:
       - POSTGRES_DB=main
     ports:
       - 15432:5432
-    labels:
-      logging: "promtail"
-      logging_jobname: "containerlogs"
     volumes:
       - ./container/database/postgresql/primary/data:/var/lib/postgresql/data
       - ./container/database/postgresql/primary/postgresql.conf:/etc/postgresql/postgresql.conf
@@ -79,8 +72,6 @@ services:
       - POSTGRES_DB=main
     ports:
       - 25432:5432
-    labels:
-      logging: "promtail"
     volumes:
       - ./container/database/postgresql/replica/data:/var/lib/postgresql/data
       - ./container/database/postgresql/replica/postgresql.conf:/etc/postgresql/postgresql.conf
@@ -91,22 +82,20 @@ services:
         condition: service_healthy
 
   api:
-    depends_on:
-      - firebase
-      - main_db_primary
-      - main_db_replica
+    # depends_on:
+    #   - firebase
+    #   - main_db_primary
+    #   - main_db_replica
     container_name: api-server
     env_file: .env
     build:
       context: apps/system/api
-      dockerfile: Dockerfile.local
+      dockerfile: Dockerfile_local
       args:
         - GITHUB_TOKEN=$GITHUB_TOKEN
     ports:
       - "19004:19004"
       - "2345:2345"
-    labels:
-      logging: "promtail"
     volumes:
       - ./apps/system/api:/app
     tty: true
