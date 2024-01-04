@@ -56,6 +56,22 @@ update-all-go-package:
 	@cd ./apps/system/api && make update-private-package
 
 # ============
+#  Schema
+# ============
+
+# ============
+#  OpenAPI
+# ============
+
+.PHONY: gen-system-openapi
+gen-system-openapi:
+	docker run --rm --volume ".:/workspace" ghcr.io/ogen-go/ogen:latest -package openapi -target workspace/apps/system/api/schema/openapi -clean workspace/schema/api/system/openapi/openapi.yaml
+
+.PHONY: gen-openapi
+gen-openapi:
+	@make gen-system-openapi
+
+# ============
 #  Protobuf
 # ============
 

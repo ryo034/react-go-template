@@ -43,11 +43,7 @@ func Start(conf config.Reader) {
 	//dbCloseFn := core.Initialize(conf.SourceDataSource(), conf.ReplicaDataSource(), conf.IsDebug())
 	//defer dbCloseFn()
 
-	inj, err := injector.NewInjector(
-		fb,
-		co,
-		conf,
-	)
+	inj, err := injector.NewInjector(fb, co, conf)
 	if err != nil {
 		log.Fatalln(err)
 	}

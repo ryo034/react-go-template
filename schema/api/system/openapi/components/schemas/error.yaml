@@ -1,0 +1,32 @@
+Base:
+  type: object
+  required:
+    - code
+    - message
+  properties:
+    code:
+      type: integer
+      format: int32
+    message:
+      type: string
+
+NotFound:
+  description: Resource not found
+  content:
+    application/json:
+      schema:
+        $ref: '#/Base'
+
+InternalServerError:
+  description: Internal server error
+  content:
+    application/json:
+      schema:
+        $ref: '#/Base'
+
+BadRequest:
+  description: Bad request
+  content:
+    application/json:
+      schema:
+        $ref: '#/Base'

@@ -1,0 +1,91 @@
+openapi: 3.0.2
+info:
+  title: System API
+  description: System API
+  version: 1.0.0
+tags:
+  - name: Health
+    description: Health Check
+paths:
+  /health:
+    get:
+      summary: Health Check
+      description: Returns the health status of the system
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/health"
+        "500":
+          description: Unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/InternalServerError"
+  /hoge:
+    get:
+      summary: Health Check
+      description: Returns the health status of the system
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/health"
+        "500":
+          description: Unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/InternalServerError"
+
+components:
+  schemas:
+    health:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - healthy
+            - unhealthy
+
+    GeneralError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+
+  responses:
+    GeneralError:
+      description: General Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GeneralError"
+    NotFound:
+      description: Entity not found.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GeneralError"
+    BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GeneralError"
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GeneralError"

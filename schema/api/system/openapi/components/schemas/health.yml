@@ -1,0 +1,6 @@
+health:
+  type: object
+  properties:
+    status:
+      type: string
+      example: "Healthy"

@@ -8,9 +8,7 @@ service HealthService {
   rpc Check(CheckRequest) returns (CheckResponse);
 }
 
-message CheckRequest {
-  string service = 1;
-}
+message CheckRequest {}
 
 enum ServingStatus {
   SERVING_STATUS_UNSPECIFIED = 0;

@@ -5,7 +5,7 @@ import (
 	meUseCase "github.com/ryo034/react-go-template/apps/system/api/usecase/me"
 )
 
-type useCaseInjector struct {
+type UseCaseInjector struct {
 	Me meUseCase.UseCase
 }
 
@@ -14,8 +14,8 @@ func newUseCaseInjector(
 	co shared.ContextOperator,
 	ri RepositoryInjector,
 	di driverInjector,
-) useCaseInjector {
-	return useCaseInjector{
+) UseCaseInjector {
+	return UseCaseInjector{
 		Me: meUseCase.NewUseCase(isLocal, ri.Me),
 	}
 }

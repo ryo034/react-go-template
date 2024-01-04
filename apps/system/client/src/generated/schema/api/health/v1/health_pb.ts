@@ -36,11 +36,6 @@ proto3.util.setEnumType(ServingStatus, "health.v1.ServingStatus", [
  * @generated from message health.v1.CheckRequest
  */
 export class CheckRequest extends Message<CheckRequest> {
-  /**
-   * @generated from field: string service = 1;
-   */
-  service = "";
-
   constructor(data?: PartialMessage<CheckRequest>) {
     super();
     proto3.util.initPartial(data, this);
@@ -49,7 +44,6 @@ export class CheckRequest extends Message<CheckRequest> {
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "health.v1.CheckRequest";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "service", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CheckRequest {

@@ -36,5 +36,8 @@
             "quickfix.biome": "explicit",
             "source.organizeImports.biome": "explicit"
         }
+    },
+    "[yaml]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml"
     }
 }

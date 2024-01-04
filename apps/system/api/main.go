@@ -1,15 +1,14 @@
 package main
 
 import (
-	"os"
-
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/config"
-	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/grpc"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/openapi"
+	"os"
 )
 
 func main() {
 	conf := config.NewReader(env())
-	grpc.Start(conf)
+	openapi.Start(conf)
 }
 
 func env() config.Env {
