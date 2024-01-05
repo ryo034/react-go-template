@@ -8,6 +8,12 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// Login implements login operation.
+	//
+	// Login.
+	//
+	// POST /login
+	Login(ctx context.Context) (LoginRes, error)
 	// MeGet implements GET /me operation.
 	//
 	// Returns the admin user.
@@ -16,10 +22,16 @@ type Handler interface {
 	MeGet(ctx context.Context) (MeGetRes, error)
 	// PingGet implements GET /ping operation.
 	//
-	// Returns a simple ping response.
+	// Checks if the server is running.
 	//
 	// GET /ping
 	PingGet(ctx context.Context) (PingGetRes, error)
+	// SignUp implements sign_up operation.
+	//
+	// Sign Up.
+	//
+	// POST /sign_up
+	SignUp(ctx context.Context, req OptSignUpReq) (SignUpRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

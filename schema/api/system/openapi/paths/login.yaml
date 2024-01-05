@@ -1,0 +1,14 @@
+login:
+  post:
+    summary: Login
+    description: Login
+    operationId: login
+    responses:
+      "200":
+        description: Login response
+        content:
+          application/json:
+            schema:
+              $ref: "../components/schemas/me.yml#/me"
+      "500":
+        $ref: "../components/responses/error.yaml#/components/responses/InternalServerError"

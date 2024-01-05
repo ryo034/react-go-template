@@ -11,6 +11,10 @@ paths:
     $ref: "./paths/ping.yaml#/ping"
   /me:
     $ref: "./paths/me.yaml#/me"
+  /sign_up:
+    $ref: "./paths/sign_up.yaml#/sign_up"
+  /login:
+    $ref: "./paths/login.yaml#/login"
 
 components:
   securitySchemes:

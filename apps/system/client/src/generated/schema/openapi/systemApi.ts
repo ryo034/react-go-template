@@ -30,3 +30,48 @@ export const getMeResponse = zod.object({
 })
 
 
+/**
+ * Sign Up
+ * @summary Sign Up
+ */
+export const signUpBody = zod.object({
+  "first_name": zod.string().optional(),
+  "last_name": zod.string().optional()
+})
+
+export const signUpResponse = zod.object({
+  "email_verified": zod.boolean().optional(),
+  "multi_factor":  zod.object({
+  "factor_id": zod.string(),
+  "phone_number": zod.string()
+}).optional(),
+  "user":  zod.object({
+  "user_id": zod.string(),
+  "email": zod.string(),
+  "first_name": zod.string(),
+  "last_name": zod.string(),
+  "phone_number": zod.string().optional()
+})
+})
+
+
+/**
+ * Login
+ * @summary Login
+ */
+export const loginResponse = zod.object({
+  "email_verified": zod.boolean().optional(),
+  "multi_factor":  zod.object({
+  "factor_id": zod.string(),
+  "phone_number": zod.string()
+}).optional(),
+  "user":  zod.object({
+  "user_id": zod.string(),
+  "email": zod.string(),
+  "first_name": zod.string(),
+  "last_name": zod.string(),
+  "phone_number": zod.string().optional()
+})
+})
+
+

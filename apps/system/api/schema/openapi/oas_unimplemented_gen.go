@@ -13,6 +13,15 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// Login implements login operation.
+//
+// Login.
+//
+// POST /login
+func (UnimplementedHandler) Login(ctx context.Context) (r LoginRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // MeGet implements GET /me operation.
 //
 // Returns the admin user.
@@ -24,9 +33,18 @@ func (UnimplementedHandler) MeGet(ctx context.Context) (r MeGetRes, _ error) {
 
 // PingGet implements GET /ping operation.
 //
-// Returns a simple ping response.
+// Checks if the server is running.
 //
 // GET /ping
 func (UnimplementedHandler) PingGet(ctx context.Context) (r PingGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// SignUp implements sign_up operation.
+//
+// Sign Up.
+//
+// POST /sign_up
+func (UnimplementedHandler) SignUp(ctx context.Context, req OptSignUpReq) (r SignUpRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

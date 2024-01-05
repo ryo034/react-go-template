@@ -6,6 +6,12 @@ components:
         application/json:
           schema:
             $ref: "../schemas/error.yaml#/components/schemas/GeneralError"
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/error.yaml#/components/schemas/GeneralError"
     NotFound:
       description: Entity not found.
       content:
@@ -13,7 +19,7 @@ components:
           schema:
             $ref: "../schemas/error.yaml#/components/schemas/GeneralError"
     BadRequest:
-      description: Bad request.
+      description: Bad request
       content:
         application/json:
           schema:

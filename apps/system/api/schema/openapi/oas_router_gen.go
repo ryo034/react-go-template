@@ -59,6 +59,24 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
+			case 'l': // Prefix: "login"
+				if l := len("login"); len(elem) >= l && elem[0:l] == "login" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "POST":
+						s.handleLoginRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "POST")
+					}
+
+					return
+				}
 			case 'm': // Prefix: "me"
 				if l := len("me"); len(elem) >= l && elem[0:l] == "me" {
 					elem = elem[l:]
@@ -91,6 +109,24 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						s.handlePingGetRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET")
+					}
+
+					return
+				}
+			case 's': // Prefix: "sign_up"
+				if l := len("sign_up"); len(elem) >= l && elem[0:l] == "sign_up" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "POST":
+						s.handleSignUpRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "POST")
 					}
 
 					return
@@ -187,6 +223,28 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
+			case 'l': // Prefix: "login"
+				if l := len("login"); len(elem) >= l && elem[0:l] == "login" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch method {
+					case "POST":
+						// Leaf: Login
+						r.name = "Login"
+						r.summary = "Login"
+						r.operationID = "login"
+						r.pathPattern = "/login"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
 			case 'm': // Prefix: "me"
 				if l := len("me"); len(elem) >= l && elem[0:l] == "me" {
 					elem = elem[l:]
@@ -221,9 +279,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					case "GET":
 						// Leaf: PingGet
 						r.name = "PingGet"
-						r.summary = "Ping"
+						r.summary = "Checks if the server is running"
 						r.operationID = ""
 						r.pathPattern = "/ping"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+			case 's': // Prefix: "sign_up"
+				if l := len("sign_up"); len(elem) >= l && elem[0:l] == "sign_up" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch method {
+					case "POST":
+						// Leaf: SignUp
+						r.name = "SignUp"
+						r.summary = "Sign Up"
+						r.operationID = "sign_up"
+						r.pathPattern = "/sign_up"
 						r.args = args
 						r.count = 0
 						return r, true
