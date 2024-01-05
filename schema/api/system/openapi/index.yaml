@@ -11,3 +11,7 @@ paths:
     $ref: "./paths/health.yaml#/health"
   /me:
     $ref: "./paths/me.yaml#/me"
+
+components:
+  securitySchemes:
+    $ref: "./components/securitySchemes/index.yaml#/securitySchemes"

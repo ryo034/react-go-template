@@ -42,6 +42,8 @@ paths:
     get:
       summary: Get Admin User
       description: Returns the admin user
+      security:
+        - bearer: []
       responses:
         '200':
           description: Admin User
@@ -96,3 +98,10 @@ paths:
                     format: int32
                   message:
                     type: string
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      description: JWT Token Authentication
+      scheme: bearer
+      bearerFormat: JWT

@@ -5,6 +5,8 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/config"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/injector"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/openapi/middleware"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/openapi/service"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 	"log"
@@ -25,7 +27,8 @@ func Start(conf config.Reader) {
 		log.Fatalln(err)
 	}
 
-	srv, err := openapi.NewServer(NewService(inj))
+	secHandler := middleware.NewMiddleware()
+	srv, err := openapi.NewServer(service.NewService(inj), secHandler)
 	if err != nil {
 		log.Fatal(err)
 	}

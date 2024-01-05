@@ -6,6 +6,20 @@ import (
 	"github.com/go-faster/errors"
 )
 
+type Bearer struct {
+	Token string
+}
+
+// GetToken returns the value of Token.
+func (s *Bearer) GetToken() string {
+	return s.Token
+}
+
+// SetToken sets the value of Token.
+func (s *Bearer) SetToken(val string) {
+	s.Token = val
+}
+
 type HealthGetInternalServerError struct {
 	Code    OptInt32  `json:"code"`
 	Message OptString `json:"message"`

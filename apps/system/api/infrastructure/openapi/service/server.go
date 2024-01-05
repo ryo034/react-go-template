@@ -1,4 +1,4 @@
-package openapi
+package service
 
 import (
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/injector"
