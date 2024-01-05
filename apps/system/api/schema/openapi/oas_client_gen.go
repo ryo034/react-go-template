@@ -27,12 +27,12 @@ type Invoker interface {
 	//
 	// GET /health
 	HealthGet(ctx context.Context) (HealthGetRes, error)
-	// HogeGet invokes GET /hoge operation.
+	// MeGet invokes GET /me operation.
 	//
-	// Returns the health status of the system.
+	// Returns the admin user.
 	//
-	// GET /hoge
-	HogeGet(ctx context.Context) (HogeGetRes, error)
+	// GET /me
+	MeGet(ctx context.Context) (MeGetRes, error)
 }
 
 // Client implements OAS client.
@@ -154,20 +154,20 @@ func (c *Client) sendHealthGet(ctx context.Context) (res HealthGetRes, err error
 	return result, nil
 }
 
-// HogeGet invokes GET /hoge operation.
+// MeGet invokes GET /me operation.
 //
-// Returns the health status of the system.
+// Returns the admin user.
 //
-// GET /hoge
-func (c *Client) HogeGet(ctx context.Context) (HogeGetRes, error) {
-	res, err := c.sendHogeGet(ctx)
+// GET /me
+func (c *Client) MeGet(ctx context.Context) (MeGetRes, error) {
+	res, err := c.sendMeGet(ctx)
 	return res, err
 }
 
-func (c *Client) sendHogeGet(ctx context.Context) (res HogeGetRes, err error) {
+func (c *Client) sendMeGet(ctx context.Context) (res MeGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/hoge"),
+		semconv.HTTPRouteKey.String("/me"),
 	}
 
 	// Run stopwatch.
@@ -182,7 +182,7 @@ func (c *Client) sendHogeGet(ctx context.Context) (res HogeGetRes, err error) {
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "HogeGet",
+	ctx, span := c.cfg.Tracer.Start(ctx, "MeGet",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -200,7 +200,7 @@ func (c *Client) sendHogeGet(ctx context.Context) (res HogeGetRes, err error) {
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
-	pathParts[0] = "/hoge"
+	pathParts[0] = "/me"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
@@ -217,7 +217,7 @@ func (c *Client) sendHogeGet(ctx context.Context) (res HogeGetRes, err error) {
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeHogeGetResponse(resp)
+	result, err := decodeMeGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

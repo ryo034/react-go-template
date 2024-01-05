@@ -1,0 +1,13 @@
+openapi: 3.0.2
+info:
+  title: System API
+  description: System API
+  version: 1.0.0
+tags:
+  - name: Health
+    description: Health Check
+paths:
+  /health:
+    $ref: "./paths/health.yaml#/health"
+  /me:
+    $ref: "./paths/me.yaml#/me"

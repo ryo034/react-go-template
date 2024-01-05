@@ -104,3 +104,22 @@ services:
       - apparmor:unconfined
     cap_add:
       - SYS_PTRACE
+
+  system_api_schema_web:
+    container_name: system-api-schema-web
+    image: redocly/redoc
+    environment:
+      - SPEC_URL=/openapi/openapi.yml
+    volumes:
+      - ./schema/api/system/openapi/openapi.yaml:/usr/share/nginx/html/openapi/openapi.yml
+    ports:
+      - "3032:80"
+
+  # system_api_openapi_merger:
+  #   build:
+  #     context: container/schema/openapi
+  #     dockerfile: Dockerfile
+  #   command: >
+  #     watch 'swagger-merger -i /swagger/index.yaml -o /swagger/dist/openapi.yaml' /swagger
+  #   volumes:
+  #     - ./schema/api/system/openapi:/swagger

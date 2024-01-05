@@ -14,12 +14,12 @@ type Handler interface {
 	//
 	// GET /health
 	HealthGet(ctx context.Context) (HealthGetRes, error)
-	// HogeGet implements GET /hoge operation.
+	// MeGet implements GET /me operation.
 	//
-	// Returns the health status of the system.
+	// Returns the admin user.
 	//
-	// GET /hoge
-	HogeGet(ctx context.Context) (HogeGetRes, error)
+	// GET /me
+	MeGet(ctx context.Context) (MeGetRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

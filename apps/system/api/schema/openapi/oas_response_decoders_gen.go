@@ -30,7 +30,7 @@ func decodeHealthGetResponse(resp *http.Response) (res HealthGetRes, _ error) {
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response Health
+			var response HealthGetOK
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
@@ -74,7 +74,7 @@ func decodeHealthGetResponse(resp *http.Response) (res HealthGetRes, _ error) {
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response InternalServerError
+			var response HealthGetInternalServerError
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
@@ -99,7 +99,7 @@ func decodeHealthGetResponse(resp *http.Response) (res HealthGetRes, _ error) {
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeHogeGetResponse(resp *http.Response) (res HogeGetRes, _ error) {
+func decodeMeGetResponse(resp *http.Response) (res MeGetRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -115,7 +115,7 @@ func decodeHogeGetResponse(resp *http.Response) (res HogeGetRes, _ error) {
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response Health
+			var response MeGetOK
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
@@ -131,15 +131,6 @@ func decodeHogeGetResponse(resp *http.Response) (res HogeGetRes, _ error) {
 					Err:         err,
 				}
 				return res, err
-			}
-			// Validate response.
-			if err := func() error {
-				if err := response.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return res, errors.Wrap(err, "validate")
 			}
 			return &response, nil
 		default:
@@ -159,7 +150,7 @@ func decodeHogeGetResponse(resp *http.Response) (res HogeGetRes, _ error) {
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response InternalServerError
+			var response MeGetInternalServerError
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err

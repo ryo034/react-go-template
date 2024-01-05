@@ -48,8 +48,8 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/h"
-			if l := len("/h"); len(elem) >= l && elem[0:l] == "/h" {
+		case '/': // Prefix: "/"
+			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -59,8 +59,8 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
-			case 'e': // Prefix: "ealth"
-				if l := len("ealth"); len(elem) >= l && elem[0:l] == "ealth" {
+			case 'h': // Prefix: "health"
+				if l := len("health"); len(elem) >= l && elem[0:l] == "health" {
 					elem = elem[l:]
 				} else {
 					break
@@ -77,8 +77,8 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 					return
 				}
-			case 'o': // Prefix: "oge"
-				if l := len("oge"); len(elem) >= l && elem[0:l] == "oge" {
+			case 'm': // Prefix: "me"
+				if l := len("me"); len(elem) >= l && elem[0:l] == "me" {
 					elem = elem[l:]
 				} else {
 					break
@@ -88,7 +88,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					// Leaf node.
 					switch r.Method {
 					case "GET":
-						s.handleHogeGetRequest([0]string{}, elemIsEscaped, w, r)
+						s.handleMeGetRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET")
 					}
@@ -176,8 +176,8 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/h"
-			if l := len("/h"); len(elem) >= l && elem[0:l] == "/h" {
+		case '/': // Prefix: "/"
+			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -187,8 +187,8 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
-			case 'e': // Prefix: "ealth"
-				if l := len("ealth"); len(elem) >= l && elem[0:l] == "ealth" {
+			case 'h': // Prefix: "health"
+				if l := len("health"); len(elem) >= l && elem[0:l] == "health" {
 					elem = elem[l:]
 				} else {
 					break
@@ -209,8 +209,8 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						return
 					}
 				}
-			case 'o': // Prefix: "oge"
-				if l := len("oge"); len(elem) >= l && elem[0:l] == "oge" {
+			case 'm': // Prefix: "me"
+				if l := len("me"); len(elem) >= l && elem[0:l] == "me" {
 					elem = elem[l:]
 				} else {
 					break
@@ -219,11 +219,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						// Leaf: HogeGet
-						r.name = "HogeGet"
-						r.summary = "Health Check"
+						// Leaf: MeGet
+						r.name = "MeGet"
+						r.summary = "Get Admin User"
 						r.operationID = ""
-						r.pathPattern = "/hoge"
+						r.pathPattern = "/me"
 						r.args = args
 						r.count = 0
 						return r, true

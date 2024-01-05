@@ -5,6 +5,6 @@ type HealthGetRes interface {
 	healthGetRes()
 }
 
-type HogeGetRes interface {
-	hogeGetRes()
+type MeGetRes interface {
+	meGetRes()
 }

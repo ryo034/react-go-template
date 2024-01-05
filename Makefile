@@ -63,9 +63,16 @@ update-all-go-package:
 #  OpenAPI
 # ============
 
+.PHONY: merge-system-openapi
+merge-system-openapi:
+	@rm -rf ./schema/api/system/openapi/openapi.yaml
+	@docker build -f ./container/schema/openapi/Dockerfile -t swagger-merger-image .
+	@docker run --rm -v ./schema/api/system/openapi:/swagger swagger-merger-image swagger-merger -i /swagger/index.yaml -o /swagger/dist/openapi.yaml
+
 .PHONY: gen-system-openapi
 gen-system-openapi:
-	docker run --rm --volume ".:/workspace" ghcr.io/ogen-go/ogen:latest -package openapi -target workspace/apps/system/api/schema/openapi -clean workspace/schema/api/system/openapi/openapi.yaml
+	@make merge-system-openapi
+	@docker run --rm -v ".:/workspace" ghcr.io/ogen-go/ogen:latest -package openapi -target workspace/apps/system/api/schema/openapi -clean workspace/schema/api/system/openapi/dist/openapi.yaml
 
 .PHONY: gen-openapi
 gen-openapi:

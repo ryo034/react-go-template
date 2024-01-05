@@ -1,0 +1,26 @@
+components:
+  responses:
+    GeneralError:
+      description: General Error
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/error.yaml#/components/schemas/GeneralError"
+    NotFound:
+      description: Entity not found.
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/error.yaml#/components/schemas/GeneralError"
+    BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/error.yaml#/components/schemas/GeneralError"
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/error.yaml#/components/schemas/GeneralError"

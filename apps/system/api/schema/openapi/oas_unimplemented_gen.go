@@ -22,11 +22,11 @@ func (UnimplementedHandler) HealthGet(ctx context.Context) (r HealthGetRes, _ er
 	return r, ht.ErrNotImplemented
 }
 
-// HogeGet implements GET /hoge operation.
+// MeGet implements GET /me operation.
 //
-// Returns the health status of the system.
+// Returns the admin user.
 //
-// GET /hoge
-func (UnimplementedHandler) HogeGet(ctx context.Context) (r HogeGetRes, _ error) {
+// GET /me
+func (UnimplementedHandler) MeGet(ctx context.Context) (r MeGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

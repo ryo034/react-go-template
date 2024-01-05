@@ -4,48 +4,72 @@ package openapi
 
 import (
 	"github.com/go-faster/errors"
-	"github.com/go-faster/jx"
 )
 
-// Ref: #/components/schemas/health
-type Health struct {
-	Status HealthStatus `json:"status"`
+type HealthGetInternalServerError struct {
+	Code    OptInt32  `json:"code"`
+	Message OptString `json:"message"`
+}
+
+// GetCode returns the value of Code.
+func (s *HealthGetInternalServerError) GetCode() OptInt32 {
+	return s.Code
+}
+
+// GetMessage returns the value of Message.
+func (s *HealthGetInternalServerError) GetMessage() OptString {
+	return s.Message
+}
+
+// SetCode sets the value of Code.
+func (s *HealthGetInternalServerError) SetCode(val OptInt32) {
+	s.Code = val
+}
+
+// SetMessage sets the value of Message.
+func (s *HealthGetInternalServerError) SetMessage(val OptString) {
+	s.Message = val
+}
+
+func (*HealthGetInternalServerError) healthGetRes() {}
+
+type HealthGetOK struct {
+	Status HealthGetOKStatus `json:"status"`
 }
 
 // GetStatus returns the value of Status.
-func (s *Health) GetStatus() HealthStatus {
+func (s *HealthGetOK) GetStatus() HealthGetOKStatus {
 	return s.Status
 }
 
 // SetStatus sets the value of Status.
-func (s *Health) SetStatus(val HealthStatus) {
+func (s *HealthGetOK) SetStatus(val HealthGetOKStatus) {
 	s.Status = val
 }
 
-func (*Health) healthGetRes() {}
-func (*Health) hogeGetRes()   {}
+func (*HealthGetOK) healthGetRes() {}
 
-type HealthStatus string
+type HealthGetOKStatus string
 
 const (
-	HealthStatusHealthy   HealthStatus = "healthy"
-	HealthStatusUnhealthy HealthStatus = "unhealthy"
+	HealthGetOKStatusHealthy   HealthGetOKStatus = "healthy"
+	HealthGetOKStatusUnhealthy HealthGetOKStatus = "unhealthy"
 )
 
-// AllValues returns all HealthStatus values.
-func (HealthStatus) AllValues() []HealthStatus {
-	return []HealthStatus{
-		HealthStatusHealthy,
-		HealthStatusUnhealthy,
+// AllValues returns all HealthGetOKStatus values.
+func (HealthGetOKStatus) AllValues() []HealthGetOKStatus {
+	return []HealthGetOKStatus{
+		HealthGetOKStatusHealthy,
+		HealthGetOKStatusUnhealthy,
 	}
 }
 
 // MarshalText implements encoding.TextMarshaler.
-func (s HealthStatus) MarshalText() ([]byte, error) {
+func (s HealthGetOKStatus) MarshalText() ([]byte, error) {
 	switch s {
-	case HealthStatusHealthy:
+	case HealthGetOKStatusHealthy:
 		return []byte(s), nil
-	case HealthStatusUnhealthy:
+	case HealthGetOKStatusUnhealthy:
 		return []byte(s), nil
 	default:
 		return nil, errors.Errorf("invalid value: %q", s)
@@ -53,20 +77,301 @@ func (s HealthStatus) MarshalText() ([]byte, error) {
 }
 
 // UnmarshalText implements encoding.TextUnmarshaler.
-func (s *HealthStatus) UnmarshalText(data []byte) error {
-	switch HealthStatus(data) {
-	case HealthStatusHealthy:
-		*s = HealthStatusHealthy
+func (s *HealthGetOKStatus) UnmarshalText(data []byte) error {
+	switch HealthGetOKStatus(data) {
+	case HealthGetOKStatusHealthy:
+		*s = HealthGetOKStatusHealthy
 		return nil
-	case HealthStatusUnhealthy:
-		*s = HealthStatusUnhealthy
+	case HealthGetOKStatusUnhealthy:
+		*s = HealthGetOKStatusUnhealthy
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
 	}
 }
 
-type InternalServerError jx.Raw
+type MeGetInternalServerError struct {
+	Code    OptInt32  `json:"code"`
+	Message OptString `json:"message"`
+}
 
-func (*InternalServerError) healthGetRes() {}
-func (*InternalServerError) hogeGetRes()   {}
+// GetCode returns the value of Code.
+func (s *MeGetInternalServerError) GetCode() OptInt32 {
+	return s.Code
+}
+
+// GetMessage returns the value of Message.
+func (s *MeGetInternalServerError) GetMessage() OptString {
+	return s.Message
+}
+
+// SetCode sets the value of Code.
+func (s *MeGetInternalServerError) SetCode(val OptInt32) {
+	s.Code = val
+}
+
+// SetMessage sets the value of Message.
+func (s *MeGetInternalServerError) SetMessage(val OptString) {
+	s.Message = val
+}
+
+func (*MeGetInternalServerError) meGetRes() {}
+
+type MeGetOK struct {
+	EmailVerified bool                  `json:"email_verified"`
+	MultiFactor   OptMeGetOKMultiFactor `json:"multi_factor"`
+	User          MeGetOKUser           `json:"user"`
+}
+
+// GetEmailVerified returns the value of EmailVerified.
+func (s *MeGetOK) GetEmailVerified() bool {
+	return s.EmailVerified
+}
+
+// GetMultiFactor returns the value of MultiFactor.
+func (s *MeGetOK) GetMultiFactor() OptMeGetOKMultiFactor {
+	return s.MultiFactor
+}
+
+// GetUser returns the value of User.
+func (s *MeGetOK) GetUser() MeGetOKUser {
+	return s.User
+}
+
+// SetEmailVerified sets the value of EmailVerified.
+func (s *MeGetOK) SetEmailVerified(val bool) {
+	s.EmailVerified = val
+}
+
+// SetMultiFactor sets the value of MultiFactor.
+func (s *MeGetOK) SetMultiFactor(val OptMeGetOKMultiFactor) {
+	s.MultiFactor = val
+}
+
+// SetUser sets the value of User.
+func (s *MeGetOK) SetUser(val MeGetOKUser) {
+	s.User = val
+}
+
+func (*MeGetOK) meGetRes() {}
+
+type MeGetOKMultiFactor struct {
+	FactorID    string `json:"factor_id"`
+	PhoneNumber string `json:"phone_number"`
+}
+
+// GetFactorID returns the value of FactorID.
+func (s *MeGetOKMultiFactor) GetFactorID() string {
+	return s.FactorID
+}
+
+// GetPhoneNumber returns the value of PhoneNumber.
+func (s *MeGetOKMultiFactor) GetPhoneNumber() string {
+	return s.PhoneNumber
+}
+
+// SetFactorID sets the value of FactorID.
+func (s *MeGetOKMultiFactor) SetFactorID(val string) {
+	s.FactorID = val
+}
+
+// SetPhoneNumber sets the value of PhoneNumber.
+func (s *MeGetOKMultiFactor) SetPhoneNumber(val string) {
+	s.PhoneNumber = val
+}
+
+type MeGetOKUser struct {
+	UserID      string    `json:"user_id"`
+	Email       string    `json:"email"`
+	FirstName   string    `json:"first_name"`
+	LastName    string    `json:"last_name"`
+	PhoneNumber OptString `json:"phone_number"`
+}
+
+// GetUserID returns the value of UserID.
+func (s *MeGetOKUser) GetUserID() string {
+	return s.UserID
+}
+
+// GetEmail returns the value of Email.
+func (s *MeGetOKUser) GetEmail() string {
+	return s.Email
+}
+
+// GetFirstName returns the value of FirstName.
+func (s *MeGetOKUser) GetFirstName() string {
+	return s.FirstName
+}
+
+// GetLastName returns the value of LastName.
+func (s *MeGetOKUser) GetLastName() string {
+	return s.LastName
+}
+
+// GetPhoneNumber returns the value of PhoneNumber.
+func (s *MeGetOKUser) GetPhoneNumber() OptString {
+	return s.PhoneNumber
+}
+
+// SetUserID sets the value of UserID.
+func (s *MeGetOKUser) SetUserID(val string) {
+	s.UserID = val
+}
+
+// SetEmail sets the value of Email.
+func (s *MeGetOKUser) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetFirstName sets the value of FirstName.
+func (s *MeGetOKUser) SetFirstName(val string) {
+	s.FirstName = val
+}
+
+// SetLastName sets the value of LastName.
+func (s *MeGetOKUser) SetLastName(val string) {
+	s.LastName = val
+}
+
+// SetPhoneNumber sets the value of PhoneNumber.
+func (s *MeGetOKUser) SetPhoneNumber(val OptString) {
+	s.PhoneNumber = val
+}
+
+// NewOptInt32 returns new OptInt32 with value set to v.
+func NewOptInt32(v int32) OptInt32 {
+	return OptInt32{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptInt32 is optional int32.
+type OptInt32 struct {
+	Value int32
+	Set   bool
+}
+
+// IsSet returns true if OptInt32 was set.
+func (o OptInt32) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptInt32) Reset() {
+	var v int32
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptInt32) SetTo(v int32) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptInt32) Get() (v int32, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInt32) Or(d int32) int32 {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptMeGetOKMultiFactor returns new OptMeGetOKMultiFactor with value set to v.
+func NewOptMeGetOKMultiFactor(v MeGetOKMultiFactor) OptMeGetOKMultiFactor {
+	return OptMeGetOKMultiFactor{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptMeGetOKMultiFactor is optional MeGetOKMultiFactor.
+type OptMeGetOKMultiFactor struct {
+	Value MeGetOKMultiFactor
+	Set   bool
+}
+
+// IsSet returns true if OptMeGetOKMultiFactor was set.
+func (o OptMeGetOKMultiFactor) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptMeGetOKMultiFactor) Reset() {
+	var v MeGetOKMultiFactor
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptMeGetOKMultiFactor) SetTo(v MeGetOKMultiFactor) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptMeGetOKMultiFactor) Get() (v MeGetOKMultiFactor, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptMeGetOKMultiFactor) Or(d MeGetOKMultiFactor) MeGetOKMultiFactor {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptString returns new OptString with value set to v.
+func NewOptString(v string) OptString {
+	return OptString{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptString is optional string.
+type OptString struct {
+	Value string
+	Set   bool
+}
+
+// IsSet returns true if OptString was set.
+func (o OptString) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptString) Reset() {
+	var v string
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptString) SetTo(v string) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptString) Get() (v string, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptString) Or(d string) string {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}

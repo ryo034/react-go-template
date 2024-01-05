@@ -1,6 +1,10 @@
 health:
   type: object
+  required:
+    - status
   properties:
     status:
       type: string
-      example: "Healthy"
+      enum:
+        - healthy
+        - unhealthy

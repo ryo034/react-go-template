@@ -1,13 +1,13 @@
-health:
+me:
   get:
-    summary: Health Check
-    description: Returns the health status of the system
+    summary: Get Admin User
+    description: Returns the admin user
     responses:
       "200":
-        description: Healthy
+        description: Admin User
         content:
           application/json:
             schema:
-              $ref: "../components/schemas/health.yml#/health"
+              $ref: "../components/schemas/me.yml#/me"
       "500":
         $ref: "../components/responses/error.yaml#/components/responses/InternalServerError"

@@ -1,0 +1,98 @@
+openapi: 3.0.2
+info:
+  title: System API
+  description: System API
+  version: 1.0.0
+tags:
+  - name: Health
+    description: Health Check
+paths:
+  /health:
+    get:
+      summary: Health Check
+      description: Returns the health status of the system
+      responses:
+        '200':
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - healthy
+                      - unhealthy
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+  /me:
+    get:
+      summary: Get Admin User
+      description: Returns the admin user
+      responses:
+        '200':
+          description: Admin User
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - email_verified
+                  - user
+                properties:
+                  email_verified:
+                    type: boolean
+                    default: false
+                  multi_factor:
+                    type: object
+                    required:
+                      - factor_id
+                      - phone_number
+                    properties:
+                      factor_id:
+                        type: string
+                      phone_number:
+                        type: string
+                  user:
+                    type: object
+                    required:
+                      - user_id
+                      - email
+                      - first_name
+                      - last_name
+                    properties:
+                      user_id:
+                        type: string
+                      email:
+                        type: string
+                      first_name:
+                        type: string
+                      last_name:
+                        type: string
+                      phone_number:
+                        type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string

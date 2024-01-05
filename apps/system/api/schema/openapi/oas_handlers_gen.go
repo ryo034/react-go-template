@@ -104,19 +104,19 @@ func (s *Server) handleHealthGetRequest(args [0]string, argsEscaped bool, w http
 	}
 }
 
-// handleHogeGetRequest handles GET /hoge operation.
+// handleMeGetRequest handles GET /me operation.
 //
-// Returns the health status of the system.
+// Returns the admin user.
 //
-// GET /hoge
-func (s *Server) handleHogeGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// GET /me
+func (s *Server) handleMeGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/hoge"),
+		semconv.HTTPRouteKey.String("/me"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "HogeGet",
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "MeGet",
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -142,12 +142,12 @@ func (s *Server) handleHogeGetRequest(args [0]string, argsEscaped bool, w http.R
 		err error
 	)
 
-	var response HogeGetRes
+	var response MeGetRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    "HogeGet",
-			OperationSummary: "Health Check",
+			OperationName:    "MeGet",
+			OperationSummary: "Get Admin User",
 			OperationID:      "",
 			Body:             nil,
 			Params:           middleware.Parameters{},
@@ -157,7 +157,7 @@ func (s *Server) handleHogeGetRequest(args [0]string, argsEscaped bool, w http.R
 		type (
 			Request  = struct{}
 			Params   = struct{}
-			Response = HogeGetRes
+			Response = MeGetRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -168,12 +168,12 @@ func (s *Server) handleHogeGetRequest(args [0]string, argsEscaped bool, w http.R
 			mreq,
 			nil,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.HogeGet(ctx)
+				response, err = s.h.MeGet(ctx)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.HogeGet(ctx)
+		response, err = s.h.MeGet(ctx)
 	}
 	if err != nil {
 		recordError("Internal", err)
@@ -181,7 +181,7 @@ func (s *Server) handleHogeGetRequest(args [0]string, argsEscaped bool, w http.R
 		return
 	}
 
-	if err := encodeHogeGetResponse(response, w, span); err != nil {
+	if err := encodeMeGetResponse(response, w, span); err != nil {
 		recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

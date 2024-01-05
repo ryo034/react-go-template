@@ -13,7 +13,7 @@ import (
 
 func encodeHealthGetResponse(response HealthGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *Health:
+	case *HealthGetOK:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
@@ -26,7 +26,7 @@ func encodeHealthGetResponse(response HealthGetRes, w http.ResponseWriter, span 
 
 		return nil
 
-	case *InternalServerError:
+	case *HealthGetInternalServerError:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
@@ -44,9 +44,9 @@ func encodeHealthGetResponse(response HealthGetRes, w http.ResponseWriter, span 
 	}
 }
 
-func encodeHogeGetResponse(response HogeGetRes, w http.ResponseWriter, span trace.Span) error {
+func encodeMeGetResponse(response MeGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *Health:
+	case *MeGetOK:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
@@ -59,7 +59,7 @@ func encodeHogeGetResponse(response HogeGetRes, w http.ResponseWriter, span trac
 
 		return nil
 
-	case *InternalServerError:
+	case *MeGetInternalServerError:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
