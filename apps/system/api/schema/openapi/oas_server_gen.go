@@ -8,18 +8,18 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// HealthGet implements GET /health operation.
-	//
-	// Returns the health status of the system.
-	//
-	// GET /health
-	HealthGet(ctx context.Context) (HealthGetRes, error)
 	// MeGet implements GET /me operation.
 	//
 	// Returns the admin user.
 	//
 	// GET /me
 	MeGet(ctx context.Context) (MeGetRes, error)
+	// PingGet implements GET /ping operation.
+	//
+	// Returns a simple ping response.
+	//
+	// GET /ping
+	PingGet(ctx context.Context) (PingGetRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

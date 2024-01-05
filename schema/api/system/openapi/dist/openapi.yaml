@@ -7,25 +7,12 @@ tags:
   - name: Health
     description: Health Check
 paths:
-  /health:
+  /ping:
     get:
-      summary: Health Check
-      description: Returns the health status of the system
+      summary: Checks if the server is running
       responses:
         '200':
-          description: Healthy
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - status
-                properties:
-                  status:
-                    type: string
-                    enum:
-                      - healthy
-                      - unhealthy
+          description: Ping response
         '500':
           description: Internal server error
           content:

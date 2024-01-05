@@ -59,6 +59,9 @@ importers:
       immer:
         specifier: ^10.0.3
         version: 10.0.3
+      ky:
+        specifier: ^1.1.3
+        version: 1.1.3
       lucide-react:
         specifier: ^0.303.0
         version: 0.303.0(react@18.2.0)
@@ -4535,6 +4538,11 @@ packages:
     optionalDependencies:
       graceful-fs: 4.2.11
     dev: true
+
+  /ky@1.1.3:
+    resolution: {integrity: sha512-t7q8sJfazzHbfYxiCtuLIH4P+pWoCgunDll17O/GBZBqMt2vHjGSx5HzSxhOc2BDEg3YN/EmeA7VKrHnwuWDag==}
+    engines: {node: '>=18'}
+    dev: false
 
   /libphonenumber-js@1.10.52:
     resolution: {integrity: sha512-6vCuCHgem+OW1/VCAKgkasfegItCea8zIT7s9/CG/QxdCMIM7GfzbEBG5d7lGO3rzipjt5woOQL3DiHa8Fy78Q==}

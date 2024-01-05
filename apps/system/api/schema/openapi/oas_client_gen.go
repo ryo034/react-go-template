@@ -22,18 +22,18 @@ import (
 
 // Invoker invokes operations described by OpenAPI v3 specification.
 type Invoker interface {
-	// HealthGet invokes GET /health operation.
-	//
-	// Returns the health status of the system.
-	//
-	// GET /health
-	HealthGet(ctx context.Context) (HealthGetRes, error)
 	// MeGet invokes GET /me operation.
 	//
 	// Returns the admin user.
 	//
 	// GET /me
 	MeGet(ctx context.Context) (MeGetRes, error)
+	// PingGet invokes GET /ping operation.
+	//
+	// Returns a simple ping response.
+	//
+	// GET /ping
+	PingGet(ctx context.Context) (PingGetRes, error)
 }
 
 // Client implements OAS client.
@@ -84,77 +84,6 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 		return c.serverURL
 	}
 	return u
-}
-
-// HealthGet invokes GET /health operation.
-//
-// Returns the health status of the system.
-//
-// GET /health
-func (c *Client) HealthGet(ctx context.Context) (HealthGetRes, error) {
-	res, err := c.sendHealthGet(ctx)
-	return res, err
-}
-
-func (c *Client) sendHealthGet(ctx context.Context) (res HealthGetRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/health"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "HealthGet",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/health"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeHealthGetResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
 }
 
 // MeGet invokes GET /me operation.
@@ -254,6 +183,77 @@ func (c *Client) sendMeGet(ctx context.Context) (res MeGetRes, err error) {
 
 	stage = "DecodeResponse"
 	result, err := decodeMeGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// PingGet invokes GET /ping operation.
+//
+// Returns a simple ping response.
+//
+// GET /ping
+func (c *Client) PingGet(ctx context.Context) (PingGetRes, error) {
+	res, err := c.sendPingGet(ctx)
+	return res, err
+}
+
+func (c *Client) sendPingGet(ctx context.Context) (res PingGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/ping"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "PingGet",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/ping"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodePingGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

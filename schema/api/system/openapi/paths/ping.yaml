@@ -1,0 +1,8 @@
+ping:
+  get:
+    summary: Checks if the server is running
+    responses:
+      "200":
+        description: Ping response
+      "500":
+        $ref: "../components/responses/error.yaml#/components/responses/InternalServerError"

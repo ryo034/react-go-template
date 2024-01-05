@@ -7,8 +7,8 @@ tags:
   - name: Health
     description: Health Check
 paths:
-  /health:
-    $ref: "./paths/health.yaml#/health"
+  /ping:
+    $ref: "./paths/ping.yaml#/ping"
   /me:
     $ref: "./paths/me.yaml#/me"
 

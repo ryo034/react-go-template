@@ -65,14 +65,31 @@ update-all-go-package:
 
 .PHONY: merge-system-openapi
 merge-system-openapi:
-	@rm -rf ./schema/api/system/openapi/openapi.yaml
-	@docker build -f ./container/schema/openapi/Dockerfile -t swagger-merger-image .
+	@rm -rf ./schema/api/system/openapi/dist/openapi.yaml
+	@docker build -f ./container/schema/openapi/swagger-merger/Dockerfile -t swagger-merger-image .
 	@docker run --rm -v ./schema/api/system/openapi:/swagger swagger-merger-image swagger-merger -i /swagger/index.yaml -o /swagger/dist/openapi.yaml
+
+.PHONY: gen-system-api-openapi
+gen-system-api-openapi:
+	@docker run --rm \
+		-v ".:/workspace" ghcr.io/ogen-go/ogen:latest \
+		-package openapi \
+		-target workspace/apps/system/api/schema/openapi \
+		-clean workspace/schema/api/system/openapi/dist/openapi.yaml
+
+.PHONY: gen-system-client-openapi
+gen-system-client-openapi:
+	@rm -rf ./apps/system/client/src/generated/schema/openapi
+	@docker build -f ./container/schema/openapi/orval/Dockerfile -t openapi-typescript-codegen .
+	@docker run --rm -v .:/app \
+		openapi-typescript-codegen \
+		orval --config /app/apps/system/client/src/infrastructure/openapi/orval.config.ts
 
 .PHONY: gen-system-openapi
 gen-system-openapi:
 	@make merge-system-openapi
-	@docker run --rm -v ".:/workspace" ghcr.io/ogen-go/ogen:latest -package openapi -target workspace/apps/system/api/schema/openapi -clean workspace/schema/api/system/openapi/dist/openapi.yaml
+	@make gen-system-client-openapi
+	@make gen-system-api-openapi
 
 .PHONY: gen-openapi
 gen-openapi:

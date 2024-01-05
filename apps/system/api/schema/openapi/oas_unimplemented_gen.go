@@ -13,20 +13,20 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// HealthGet implements GET /health operation.
-//
-// Returns the health status of the system.
-//
-// GET /health
-func (UnimplementedHandler) HealthGet(ctx context.Context) (r HealthGetRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
 // MeGet implements GET /me operation.
 //
 // Returns the admin user.
 //
 // GET /me
 func (UnimplementedHandler) MeGet(ctx context.Context) (r MeGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// PingGet implements GET /ping operation.
+//
+// Returns a simple ping response.
+//
+// GET /ping
+func (UnimplementedHandler) PingGet(ctx context.Context) (r PingGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

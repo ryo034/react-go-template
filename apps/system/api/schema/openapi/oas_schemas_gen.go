@@ -2,10 +2,6 @@
 
 package openapi
 
-import (
-	"github.com/go-faster/errors"
-)
-
 type Bearer struct {
 	Token string
 }
@@ -18,90 +14,6 @@ func (s *Bearer) GetToken() string {
 // SetToken sets the value of Token.
 func (s *Bearer) SetToken(val string) {
 	s.Token = val
-}
-
-type HealthGetInternalServerError struct {
-	Code    OptInt32  `json:"code"`
-	Message OptString `json:"message"`
-}
-
-// GetCode returns the value of Code.
-func (s *HealthGetInternalServerError) GetCode() OptInt32 {
-	return s.Code
-}
-
-// GetMessage returns the value of Message.
-func (s *HealthGetInternalServerError) GetMessage() OptString {
-	return s.Message
-}
-
-// SetCode sets the value of Code.
-func (s *HealthGetInternalServerError) SetCode(val OptInt32) {
-	s.Code = val
-}
-
-// SetMessage sets the value of Message.
-func (s *HealthGetInternalServerError) SetMessage(val OptString) {
-	s.Message = val
-}
-
-func (*HealthGetInternalServerError) healthGetRes() {}
-
-type HealthGetOK struct {
-	Status HealthGetOKStatus `json:"status"`
-}
-
-// GetStatus returns the value of Status.
-func (s *HealthGetOK) GetStatus() HealthGetOKStatus {
-	return s.Status
-}
-
-// SetStatus sets the value of Status.
-func (s *HealthGetOK) SetStatus(val HealthGetOKStatus) {
-	s.Status = val
-}
-
-func (*HealthGetOK) healthGetRes() {}
-
-type HealthGetOKStatus string
-
-const (
-	HealthGetOKStatusHealthy   HealthGetOKStatus = "healthy"
-	HealthGetOKStatusUnhealthy HealthGetOKStatus = "unhealthy"
-)
-
-// AllValues returns all HealthGetOKStatus values.
-func (HealthGetOKStatus) AllValues() []HealthGetOKStatus {
-	return []HealthGetOKStatus{
-		HealthGetOKStatusHealthy,
-		HealthGetOKStatusUnhealthy,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s HealthGetOKStatus) MarshalText() ([]byte, error) {
-	switch s {
-	case HealthGetOKStatusHealthy:
-		return []byte(s), nil
-	case HealthGetOKStatusUnhealthy:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *HealthGetOKStatus) UnmarshalText(data []byte) error {
-	switch HealthGetOKStatus(data) {
-	case HealthGetOKStatusHealthy:
-		*s = HealthGetOKStatusHealthy
-		return nil
-	case HealthGetOKStatusUnhealthy:
-		*s = HealthGetOKStatusUnhealthy
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
 }
 
 type MeGetInternalServerError struct {
@@ -389,3 +301,35 @@ func (o OptString) Or(d string) string {
 	}
 	return d
 }
+
+type PingGetInternalServerError struct {
+	Code    OptInt32  `json:"code"`
+	Message OptString `json:"message"`
+}
+
+// GetCode returns the value of Code.
+func (s *PingGetInternalServerError) GetCode() OptInt32 {
+	return s.Code
+}
+
+// GetMessage returns the value of Message.
+func (s *PingGetInternalServerError) GetMessage() OptString {
+	return s.Message
+}
+
+// SetCode sets the value of Code.
+func (s *PingGetInternalServerError) SetCode(val OptInt32) {
+	s.Code = val
+}
+
+// SetMessage sets the value of Message.
+func (s *PingGetInternalServerError) SetMessage(val OptString) {
+	s.Message = val
+}
+
+func (*PingGetInternalServerError) pingGetRes() {}
+
+// PingGetOK is response for PingGet operation.
+type PingGetOK struct{}
+
+func (*PingGetOK) pingGetRes() {}

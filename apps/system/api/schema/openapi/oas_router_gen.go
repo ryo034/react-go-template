@@ -59,24 +59,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
-			case 'h': // Prefix: "health"
-				if l := len("health"); len(elem) >= l && elem[0:l] == "health" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "GET":
-						s.handleHealthGetRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "GET")
-					}
-
-					return
-				}
 			case 'm': // Prefix: "me"
 				if l := len("me"); len(elem) >= l && elem[0:l] == "me" {
 					elem = elem[l:]
@@ -89,6 +71,24 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					switch r.Method {
 					case "GET":
 						s.handleMeGetRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET")
+					}
+
+					return
+				}
+			case 'p': // Prefix: "ping"
+				if l := len("ping"); len(elem) >= l && elem[0:l] == "ping" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "GET":
+						s.handlePingGetRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET")
 					}
@@ -187,28 +187,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
-			case 'h': // Prefix: "health"
-				if l := len("health"); len(elem) >= l && elem[0:l] == "health" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					switch method {
-					case "GET":
-						// Leaf: HealthGet
-						r.name = "HealthGet"
-						r.summary = "Health Check"
-						r.operationID = ""
-						r.pathPattern = "/health"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
-					}
-				}
 			case 'm': // Prefix: "me"
 				if l := len("me"); len(elem) >= l && elem[0:l] == "me" {
 					elem = elem[l:]
@@ -224,6 +202,28 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.summary = "Get Admin User"
 						r.operationID = ""
 						r.pathPattern = "/me"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+			case 'p': // Prefix: "ping"
+				if l := len("ping"); len(elem) >= l && elem[0:l] == "ping" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch method {
+					case "GET":
+						// Leaf: PingGet
+						r.name = "PingGet"
+						r.summary = "Ping"
+						r.operationID = ""
+						r.pathPattern = "/ping"
 						r.args = args
 						r.count = 0
 						return r, true

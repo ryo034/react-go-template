@@ -11,9 +11,9 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-func encodeHealthGetResponse(response HealthGetRes, w http.ResponseWriter, span trace.Span) error {
+func encodeMeGetResponse(response MeGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *HealthGetOK:
+	case *MeGetOK:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
@@ -26,7 +26,7 @@ func encodeHealthGetResponse(response HealthGetRes, w http.ResponseWriter, span 
 
 		return nil
 
-	case *HealthGetInternalServerError:
+	case *MeGetInternalServerError:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
@@ -44,22 +44,15 @@ func encodeHealthGetResponse(response HealthGetRes, w http.ResponseWriter, span 
 	}
 }
 
-func encodeMeGetResponse(response MeGetRes, w http.ResponseWriter, span trace.Span) error {
+func encodePingGetResponse(response PingGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *MeGetOK:
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	case *PingGetOK:
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
 
-		e := new(jx.Encoder)
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
 		return nil
 
-	case *MeGetInternalServerError:
+	case *PingGetInternalServerError:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
