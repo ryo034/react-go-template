@@ -14,6 +14,8 @@ permissions:
 jobs:
   go-version:
     uses: ./.github/workflows/__go-version-from-mod.yml
+    with:
+      directory: ${{ inputs.directory }}
 
   ci:
     needs: [ go-version ]
