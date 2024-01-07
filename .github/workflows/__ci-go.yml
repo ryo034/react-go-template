@@ -26,9 +26,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: WillAbides/setup-go-faster@v1.13.0
+      - uses: actions/setup-go@v4
         with:
-          go-version: ${{ needs.go-version.outputs.go-version }}
+          go-version: '${{ needs.go-version.outputs.go-version }}'
+
+      # - uses: WillAbides/setup-go-faster@v1.13.0
+      #   with:
+      #     go-version: ${{ needs.go-version.outputs.go-version }}
 
       - name: go vet
         shell: bash
@@ -52,6 +56,5 @@ jobs:
 
       - name: Add job summary
         shell: bash
-        if: always()
         run: |
           tparse -file ./go-test.out -format markdown >> $GITHUB_STEP_SUMMARY
