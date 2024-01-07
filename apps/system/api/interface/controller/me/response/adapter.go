@@ -19,12 +19,12 @@ func NewAdapter(ua userResponse.Adapter) Adapter {
 }
 
 func (a *adapter) Adapt(m *me.Me) (*openapi.Me, error) {
-	mfs := make([]*openapi.MultiFactor, 0, m.MultiFactors().Size())
-	for _, mf := range m.MultiFactors().AsSlice() {
-		mfs = append(mfs, &openapi.MultiFactor{
-			PhoneNumber: mf.PhoneNumber().ToString(),
-		})
-	}
+	//mfs := make([]*openapi.MultiFactor, 0, m.MultiFactors().Size())
+	//for _, mf := range m.MultiFactors().AsSlice() {
+	//	mfs = append(mfs, &openapi.MultiFactor{
+	//		PhoneNumber: mf.PhoneNumber().ToString(),
+	//	})
+	//}
 	var mf = openapi.OptMultiFactor{
 		Value: openapi.MultiFactor{},
 		Set:   false,
