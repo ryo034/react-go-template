@@ -18,7 +18,7 @@ jobs:
       directory: ${{ inputs.directory }}
 
   ci:
-    needs: [ go-version ]
+    needs: [go-version]
     defaults:
       run:
         working-directory: ${{ inputs.directory }}

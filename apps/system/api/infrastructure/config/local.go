@@ -10,7 +10,7 @@ var localValues = map[Key]string{
 	dbReplicaHost: "host.docker.internal",
 	dbReplicaPort: "25432",
 	// gRPC
-	grpcPort: "19004",
+	serverPort: "19004",
 	// firebase
 	firebaseStorageBucket: "",
 	// cors

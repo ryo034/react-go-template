@@ -3,23 +3,7 @@
 package openapi
 
 // setDefaults set default value of fields.
-func (s *LoginOK) setDefaults() {
-	{
-		val := bool(false)
-		s.EmailVerified = val
-	}
-}
-
-// setDefaults set default value of fields.
-func (s *MeGetOK) setDefaults() {
-	{
-		val := bool(false)
-		s.EmailVerified = val
-	}
-}
-
-// setDefaults set default value of fields.
-func (s *SignUpOK) setDefaults() {
+func (s *Me) setDefaults() {
 	{
 		val := bool(false)
 		s.EmailVerified = val

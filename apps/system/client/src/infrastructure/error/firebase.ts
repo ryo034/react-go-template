@@ -1,4 +1,5 @@
 import { FirebaseError } from "firebase/app"
+import { HttpStatusCode } from "shared-network"
 import {
   AuthProviderEmailAlreadyInUseError,
   AuthProviderIdTokenExpiredError,
@@ -11,7 +12,6 @@ import {
   AuthProviderWrongPasswordError
 } from "~/infrastructure/error"
 import { InternalServerError } from "~/infrastructure/error/network"
-import { HttpStatusCode } from "~/infrastructure/error/statusCode"
 
 const firebaseErrorCode = {
   missingEmailError: "auth/missing-email",

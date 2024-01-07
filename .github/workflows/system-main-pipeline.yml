@@ -2,7 +2,7 @@ name: System main pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - apps/system/**
       - .github/workflows/system-main-pipeline.yml

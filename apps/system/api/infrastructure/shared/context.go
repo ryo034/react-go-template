@@ -2,12 +2,10 @@ package shared
 
 import (
 	"context"
-
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/spf13/cast"
 	"golang.org/x/text/language"
-	"google.golang.org/grpc/metadata"
 )
 
 type ContextOperator interface {
@@ -56,26 +54,27 @@ func (co contextOperator) GetLang(ctx context.Context) (language.Tag, error) {
 }
 
 func SetLang(ctx context.Context) context.Context {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		panic("metadata.FromIncomingContext(ctx)")
-	}
-	langKey := md.Get(string(ContextLanguageKey))
-	if len(langKey) == 0 {
-		// Return Japanese if lang is not included in the request
-		return context.WithValue(ctx, ContextLanguageKey, language.Japanese.String())
-	}
-	la := langKey[0]
-	if la == "" {
-		return context.WithValue(ctx, ContextLanguageKey, language.Japanese.String())
-	}
-
-	// Accept only Japanese / English
-	switch la {
-	case language.Japanese.String():
-		la = language.Japanese.String()
-	case language.English.String():
-		la = language.English.String()
-	}
-	return context.WithValue(ctx, ContextLanguageKey, la)
+	//md, ok := metadata.FromIncomingContext(ctx)
+	//if !ok {
+	//	panic("metadata.FromIncomingContext(ctx)")
+	//}
+	//langKey := md.Get(string(ContextLanguageKey))
+	//if len(langKey) == 0 {
+	//	// Return Japanese if lang is not included in the request
+	//	return context.WithValue(ctx, ContextLanguageKey, language.Japanese.String())
+	//}
+	//la := langKey[0]
+	//if la == "" {
+	//	return context.WithValue(ctx, ContextLanguageKey, language.Japanese.String())
+	//}
+	//
+	//// Accept only Japanese / English
+	//switch la {
+	//case language.Japanese.String():
+	//	la = language.Japanese.String()
+	//case language.English.String():
+	//	la = language.English.String()
+	//}
+	//return context.WithValue(ctx, ContextLanguageKey, la)
+	return ctx
 }

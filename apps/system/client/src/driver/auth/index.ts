@@ -1,4 +1,3 @@
-import { Email, Password } from "~/domain"
 import { PromiseResult } from "~/infrastructure/shared"
 
 export interface AuthProviderUser {
@@ -16,7 +15,6 @@ export interface UserCredential {
 export interface AuthProviderDriver {
   readonly currentUser: AuthProviderUser | null
   reload(): PromiseResult<null, Error>
-  sendEmailVerification(): PromiseResult<null, Error>
-  signInWithEmailAndPassword(email: Email, password: Password): PromiseResult<UserCredential, Error>
+  signUp(): PromiseResult<null, Error>
   signOut(): PromiseResult<null, Error>
 }

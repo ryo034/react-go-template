@@ -120,6 +120,6 @@ services:
   #     context: container/schema/openapi
   #     dockerfile: Dockerfile
   #   command: >
-  #     watch 'swagger-merger -i /swagger/index.yaml -o /swagger/dist/openapi.yaml' /swagger
+  #     watch 'swagger-merger -i /swagger/index.yaml -o /swagger/openapi.yaml' /swagger
   #   volumes:
   #     - ./schema/api/system/openapi:/swagger

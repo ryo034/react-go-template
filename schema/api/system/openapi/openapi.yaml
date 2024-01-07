@@ -1,0 +1,188 @@
+openapi: 3.0.2
+info:
+  title: System API
+  description: System API
+  version: 1.0.0
+tags:
+  - name: Health
+    description: Health Check
+paths:
+  /ping:
+    get:
+      summary: Checks if the server is running
+      responses:
+        '200':
+          description: Ping response
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /me:
+    get:
+      summary: Get Admin User
+      description: Returns the admin user
+      security:
+        - bearer: []
+      responses:
+        '200':
+          description: Admin User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /sign_up:
+    post:
+      summary: Sign Up
+      description: Sign Up
+      operationId: sign_up
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  description: First Name
+                  example: John
+                last_name:
+                  type: string
+                  description: Last Name
+                  example: Doe
+      responses:
+        '200':
+          description: Sign Up
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /login:
+    post:
+      summary: Login
+      description: Login
+      operationId: login
+      responses:
+        '200':
+          description: Login response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      description: JWT Token Authentication
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      required:
+        - userId
+        - email
+        - firstName
+        - lastName
+      properties:
+        userId:
+          type: string
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phoneNumber:
+          type: string
+    MultiFactor:
+      type: object
+      required:
+        - factorId
+        - phoneNumber
+      properties:
+        factorId:
+          type: string
+        phoneNumber:
+          type: string
+    Me:
+      type: object
+      required:
+        - emailVerified
+        - user
+      properties:
+        emailVerified:
+          type: boolean
+          default: false
+        multiFactor:
+          $ref: '#/components/schemas/MultiFactor'
+        user:
+          $ref: '#/components/schemas/User'
+  responses:
+    GeneralError:
+      description: General Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+    NotFound:
+      description: Entity not found.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string

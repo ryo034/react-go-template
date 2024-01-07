@@ -1,15 +1,13 @@
-import { createPromiseClient } from "@connectrpc/connect"
-import { createConnectTransport } from "@connectrpc/connect-web"
 import ga4 from "react-ga4"
 import { ThemeDriver } from "~/driver"
+import { FirebaseDriver } from "~/driver"
 import { GoogleAnalyticsDriver } from "~/driver/analytics/ga/driver"
-import { FirebaseDriver } from "~/driver/firebase"
 import { MeDriver } from "~/driver/me/driver"
-import { MeService } from "~/generated/schema/api/me/v1/me_connect"
 import { MessageProvider } from "~/infrastructure/error/message"
 import { firebaseAuth } from "~/infrastructure/firebase"
 import { ReactI18nextProvider } from "~/infrastructure/i18n"
 import { DriverAuthMiddleware } from "~/infrastructure/middleware/driver"
+import { openapiFetchClient } from "~/infrastructure/openapi/client"
 import { MeController, ThemeController } from "~/interface/controller"
 import { MeGateway, MeGatewayAdapter } from "~/interface/gateway"
 import { MePresenter } from "~/interface/presenter/me/presenter"
@@ -19,11 +17,6 @@ import { themeStore } from "~/store/theme/store"
 import { MeInteractor, ThemeInteractor } from "~/usecase"
 
 const driverAuthInterceptor = new DriverAuthMiddleware(firebaseAuth)
-
-const transport = createConnectTransport({
-  baseUrl: import.meta.env.VITE_API_BASE_URL,
-  interceptors: [driverAuthInterceptor.intercept]
-})
 
 const setupStore = () => {
   return {
@@ -40,7 +33,7 @@ const setupDriver = () => {
   return {
     firebase,
     ga: new GoogleAnalyticsDriver(ga4),
-    me: new MeDriver(createPromiseClient(MeService, transport)),
+    me: new MeDriver(openapiFetchClient),
     theme: new ThemeDriver(ls)
   }
 }

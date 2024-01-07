@@ -9,6 +9,6 @@ login:
         content:
           application/json:
             schema:
-              $ref: "../components/schemas/me.yml#/me"
+              $ref: "#/components/schemas/Me"
       "500":
-        $ref: "../components/responses/error.yaml#/components/responses/InternalServerError"
+        $ref: "#/components/responses/InternalServerError"

@@ -2,6 +2,33 @@
 
 package openapi
 
+type BadRequest struct {
+	Code    OptInt32  `json:"code"`
+	Message OptString `json:"message"`
+}
+
+// GetCode returns the value of Code.
+func (s *BadRequest) GetCode() OptInt32 {
+	return s.Code
+}
+
+// GetMessage returns the value of Message.
+func (s *BadRequest) GetMessage() OptString {
+	return s.Message
+}
+
+// SetCode sets the value of Code.
+func (s *BadRequest) SetCode(val OptInt32) {
+	s.Code = val
+}
+
+// SetMessage sets the value of Message.
+func (s *BadRequest) SetMessage(val OptString) {
+	s.Message = val
+}
+
+func (*BadRequest) signUpRes() {}
+
 type Bearer struct {
 	Token string
 }
@@ -16,299 +43,100 @@ func (s *Bearer) SetToken(val string) {
 	s.Token = val
 }
 
-type LoginInternalServerError struct {
+type InternalServerError struct {
 	Code    OptInt32  `json:"code"`
 	Message OptString `json:"message"`
 }
 
 // GetCode returns the value of Code.
-func (s *LoginInternalServerError) GetCode() OptInt32 {
+func (s *InternalServerError) GetCode() OptInt32 {
 	return s.Code
 }
 
 // GetMessage returns the value of Message.
-func (s *LoginInternalServerError) GetMessage() OptString {
+func (s *InternalServerError) GetMessage() OptString {
 	return s.Message
 }
 
 // SetCode sets the value of Code.
-func (s *LoginInternalServerError) SetCode(val OptInt32) {
+func (s *InternalServerError) SetCode(val OptInt32) {
 	s.Code = val
 }
 
 // SetMessage sets the value of Message.
-func (s *LoginInternalServerError) SetMessage(val OptString) {
+func (s *InternalServerError) SetMessage(val OptString) {
 	s.Message = val
 }
 
-func (*LoginInternalServerError) loginRes() {}
+func (*InternalServerError) loginRes()   {}
+func (*InternalServerError) meGetRes()   {}
+func (*InternalServerError) pingGetRes() {}
+func (*InternalServerError) signUpRes()  {}
 
-type LoginOK struct {
-	EmailVerified bool                  `json:"email_verified"`
-	MultiFactor   OptLoginOKMultiFactor `json:"multi_factor"`
-	User          LoginOKUser           `json:"user"`
+// Ref: #/components/schemas/Me
+type Me struct {
+	EmailVerified bool           `json:"emailVerified"`
+	MultiFactor   OptMultiFactor `json:"multiFactor"`
+	User          User           `json:"user"`
 }
 
 // GetEmailVerified returns the value of EmailVerified.
-func (s *LoginOK) GetEmailVerified() bool {
+func (s *Me) GetEmailVerified() bool {
 	return s.EmailVerified
 }
 
 // GetMultiFactor returns the value of MultiFactor.
-func (s *LoginOK) GetMultiFactor() OptLoginOKMultiFactor {
+func (s *Me) GetMultiFactor() OptMultiFactor {
 	return s.MultiFactor
 }
 
 // GetUser returns the value of User.
-func (s *LoginOK) GetUser() LoginOKUser {
+func (s *Me) GetUser() User {
 	return s.User
 }
 
 // SetEmailVerified sets the value of EmailVerified.
-func (s *LoginOK) SetEmailVerified(val bool) {
+func (s *Me) SetEmailVerified(val bool) {
 	s.EmailVerified = val
 }
 
 // SetMultiFactor sets the value of MultiFactor.
-func (s *LoginOK) SetMultiFactor(val OptLoginOKMultiFactor) {
+func (s *Me) SetMultiFactor(val OptMultiFactor) {
 	s.MultiFactor = val
 }
 
 // SetUser sets the value of User.
-func (s *LoginOK) SetUser(val LoginOKUser) {
+func (s *Me) SetUser(val User) {
 	s.User = val
 }
 
-func (*LoginOK) loginRes() {}
+func (*Me) loginRes()  {}
+func (*Me) meGetRes()  {}
+func (*Me) signUpRes() {}
 
-type LoginOKMultiFactor struct {
-	FactorID    string `json:"factor_id"`
-	PhoneNumber string `json:"phone_number"`
+// Ref: #/components/schemas/MultiFactor
+type MultiFactor struct {
+	FactorId    string `json:"factorId"`
+	PhoneNumber string `json:"phoneNumber"`
 }
 
-// GetFactorID returns the value of FactorID.
-func (s *LoginOKMultiFactor) GetFactorID() string {
-	return s.FactorID
-}
-
-// GetPhoneNumber returns the value of PhoneNumber.
-func (s *LoginOKMultiFactor) GetPhoneNumber() string {
-	return s.PhoneNumber
-}
-
-// SetFactorID sets the value of FactorID.
-func (s *LoginOKMultiFactor) SetFactorID(val string) {
-	s.FactorID = val
-}
-
-// SetPhoneNumber sets the value of PhoneNumber.
-func (s *LoginOKMultiFactor) SetPhoneNumber(val string) {
-	s.PhoneNumber = val
-}
-
-type LoginOKUser struct {
-	UserID      string    `json:"user_id"`
-	Email       string    `json:"email"`
-	FirstName   string    `json:"first_name"`
-	LastName    string    `json:"last_name"`
-	PhoneNumber OptString `json:"phone_number"`
-}
-
-// GetUserID returns the value of UserID.
-func (s *LoginOKUser) GetUserID() string {
-	return s.UserID
-}
-
-// GetEmail returns the value of Email.
-func (s *LoginOKUser) GetEmail() string {
-	return s.Email
-}
-
-// GetFirstName returns the value of FirstName.
-func (s *LoginOKUser) GetFirstName() string {
-	return s.FirstName
-}
-
-// GetLastName returns the value of LastName.
-func (s *LoginOKUser) GetLastName() string {
-	return s.LastName
+// GetFactorId returns the value of FactorId.
+func (s *MultiFactor) GetFactorId() string {
+	return s.FactorId
 }
 
 // GetPhoneNumber returns the value of PhoneNumber.
-func (s *LoginOKUser) GetPhoneNumber() OptString {
+func (s *MultiFactor) GetPhoneNumber() string {
 	return s.PhoneNumber
 }
 
-// SetUserID sets the value of UserID.
-func (s *LoginOKUser) SetUserID(val string) {
-	s.UserID = val
-}
-
-// SetEmail sets the value of Email.
-func (s *LoginOKUser) SetEmail(val string) {
-	s.Email = val
-}
-
-// SetFirstName sets the value of FirstName.
-func (s *LoginOKUser) SetFirstName(val string) {
-	s.FirstName = val
-}
-
-// SetLastName sets the value of LastName.
-func (s *LoginOKUser) SetLastName(val string) {
-	s.LastName = val
+// SetFactorId sets the value of FactorId.
+func (s *MultiFactor) SetFactorId(val string) {
+	s.FactorId = val
 }
 
 // SetPhoneNumber sets the value of PhoneNumber.
-func (s *LoginOKUser) SetPhoneNumber(val OptString) {
-	s.PhoneNumber = val
-}
-
-type MeGetInternalServerError struct {
-	Code    OptInt32  `json:"code"`
-	Message OptString `json:"message"`
-}
-
-// GetCode returns the value of Code.
-func (s *MeGetInternalServerError) GetCode() OptInt32 {
-	return s.Code
-}
-
-// GetMessage returns the value of Message.
-func (s *MeGetInternalServerError) GetMessage() OptString {
-	return s.Message
-}
-
-// SetCode sets the value of Code.
-func (s *MeGetInternalServerError) SetCode(val OptInt32) {
-	s.Code = val
-}
-
-// SetMessage sets the value of Message.
-func (s *MeGetInternalServerError) SetMessage(val OptString) {
-	s.Message = val
-}
-
-func (*MeGetInternalServerError) meGetRes() {}
-
-type MeGetOK struct {
-	EmailVerified bool                  `json:"email_verified"`
-	MultiFactor   OptMeGetOKMultiFactor `json:"multi_factor"`
-	User          MeGetOKUser           `json:"user"`
-}
-
-// GetEmailVerified returns the value of EmailVerified.
-func (s *MeGetOK) GetEmailVerified() bool {
-	return s.EmailVerified
-}
-
-// GetMultiFactor returns the value of MultiFactor.
-func (s *MeGetOK) GetMultiFactor() OptMeGetOKMultiFactor {
-	return s.MultiFactor
-}
-
-// GetUser returns the value of User.
-func (s *MeGetOK) GetUser() MeGetOKUser {
-	return s.User
-}
-
-// SetEmailVerified sets the value of EmailVerified.
-func (s *MeGetOK) SetEmailVerified(val bool) {
-	s.EmailVerified = val
-}
-
-// SetMultiFactor sets the value of MultiFactor.
-func (s *MeGetOK) SetMultiFactor(val OptMeGetOKMultiFactor) {
-	s.MultiFactor = val
-}
-
-// SetUser sets the value of User.
-func (s *MeGetOK) SetUser(val MeGetOKUser) {
-	s.User = val
-}
-
-func (*MeGetOK) meGetRes() {}
-
-type MeGetOKMultiFactor struct {
-	FactorID    string `json:"factor_id"`
-	PhoneNumber string `json:"phone_number"`
-}
-
-// GetFactorID returns the value of FactorID.
-func (s *MeGetOKMultiFactor) GetFactorID() string {
-	return s.FactorID
-}
-
-// GetPhoneNumber returns the value of PhoneNumber.
-func (s *MeGetOKMultiFactor) GetPhoneNumber() string {
-	return s.PhoneNumber
-}
-
-// SetFactorID sets the value of FactorID.
-func (s *MeGetOKMultiFactor) SetFactorID(val string) {
-	s.FactorID = val
-}
-
-// SetPhoneNumber sets the value of PhoneNumber.
-func (s *MeGetOKMultiFactor) SetPhoneNumber(val string) {
-	s.PhoneNumber = val
-}
-
-type MeGetOKUser struct {
-	UserID      string    `json:"user_id"`
-	Email       string    `json:"email"`
-	FirstName   string    `json:"first_name"`
-	LastName    string    `json:"last_name"`
-	PhoneNumber OptString `json:"phone_number"`
-}
-
-// GetUserID returns the value of UserID.
-func (s *MeGetOKUser) GetUserID() string {
-	return s.UserID
-}
-
-// GetEmail returns the value of Email.
-func (s *MeGetOKUser) GetEmail() string {
-	return s.Email
-}
-
-// GetFirstName returns the value of FirstName.
-func (s *MeGetOKUser) GetFirstName() string {
-	return s.FirstName
-}
-
-// GetLastName returns the value of LastName.
-func (s *MeGetOKUser) GetLastName() string {
-	return s.LastName
-}
-
-// GetPhoneNumber returns the value of PhoneNumber.
-func (s *MeGetOKUser) GetPhoneNumber() OptString {
-	return s.PhoneNumber
-}
-
-// SetUserID sets the value of UserID.
-func (s *MeGetOKUser) SetUserID(val string) {
-	s.UserID = val
-}
-
-// SetEmail sets the value of Email.
-func (s *MeGetOKUser) SetEmail(val string) {
-	s.Email = val
-}
-
-// SetFirstName sets the value of FirstName.
-func (s *MeGetOKUser) SetFirstName(val string) {
-	s.FirstName = val
-}
-
-// SetLastName sets the value of LastName.
-func (s *MeGetOKUser) SetLastName(val string) {
-	s.LastName = val
-}
-
-// SetPhoneNumber sets the value of PhoneNumber.
-func (s *MeGetOKUser) SetPhoneNumber(val OptString) {
+func (s *MultiFactor) SetPhoneNumber(val string) {
 	s.PhoneNumber = val
 }
 
@@ -358,38 +186,38 @@ func (o OptInt32) Or(d int32) int32 {
 	return d
 }
 
-// NewOptLoginOKMultiFactor returns new OptLoginOKMultiFactor with value set to v.
-func NewOptLoginOKMultiFactor(v LoginOKMultiFactor) OptLoginOKMultiFactor {
-	return OptLoginOKMultiFactor{
+// NewOptMultiFactor returns new OptMultiFactor with value set to v.
+func NewOptMultiFactor(v MultiFactor) OptMultiFactor {
+	return OptMultiFactor{
 		Value: v,
 		Set:   true,
 	}
 }
 
-// OptLoginOKMultiFactor is optional LoginOKMultiFactor.
-type OptLoginOKMultiFactor struct {
-	Value LoginOKMultiFactor
+// OptMultiFactor is optional MultiFactor.
+type OptMultiFactor struct {
+	Value MultiFactor
 	Set   bool
 }
 
-// IsSet returns true if OptLoginOKMultiFactor was set.
-func (o OptLoginOKMultiFactor) IsSet() bool { return o.Set }
+// IsSet returns true if OptMultiFactor was set.
+func (o OptMultiFactor) IsSet() bool { return o.Set }
 
 // Reset unsets value.
-func (o *OptLoginOKMultiFactor) Reset() {
-	var v LoginOKMultiFactor
+func (o *OptMultiFactor) Reset() {
+	var v MultiFactor
 	o.Value = v
 	o.Set = false
 }
 
 // SetTo sets value to v.
-func (o *OptLoginOKMultiFactor) SetTo(v LoginOKMultiFactor) {
+func (o *OptMultiFactor) SetTo(v MultiFactor) {
 	o.Set = true
 	o.Value = v
 }
 
 // Get returns value and boolean that denotes whether value was set.
-func (o OptLoginOKMultiFactor) Get() (v LoginOKMultiFactor, ok bool) {
+func (o OptMultiFactor) Get() (v MultiFactor, ok bool) {
 	if !o.Set {
 		return v, false
 	}
@@ -397,99 +225,7 @@ func (o OptLoginOKMultiFactor) Get() (v LoginOKMultiFactor, ok bool) {
 }
 
 // Or returns value if set, or given parameter if does not.
-func (o OptLoginOKMultiFactor) Or(d LoginOKMultiFactor) LoginOKMultiFactor {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptMeGetOKMultiFactor returns new OptMeGetOKMultiFactor with value set to v.
-func NewOptMeGetOKMultiFactor(v MeGetOKMultiFactor) OptMeGetOKMultiFactor {
-	return OptMeGetOKMultiFactor{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptMeGetOKMultiFactor is optional MeGetOKMultiFactor.
-type OptMeGetOKMultiFactor struct {
-	Value MeGetOKMultiFactor
-	Set   bool
-}
-
-// IsSet returns true if OptMeGetOKMultiFactor was set.
-func (o OptMeGetOKMultiFactor) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptMeGetOKMultiFactor) Reset() {
-	var v MeGetOKMultiFactor
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptMeGetOKMultiFactor) SetTo(v MeGetOKMultiFactor) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptMeGetOKMultiFactor) Get() (v MeGetOKMultiFactor, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptMeGetOKMultiFactor) Or(d MeGetOKMultiFactor) MeGetOKMultiFactor {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptSignUpOKMultiFactor returns new OptSignUpOKMultiFactor with value set to v.
-func NewOptSignUpOKMultiFactor(v SignUpOKMultiFactor) OptSignUpOKMultiFactor {
-	return OptSignUpOKMultiFactor{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptSignUpOKMultiFactor is optional SignUpOKMultiFactor.
-type OptSignUpOKMultiFactor struct {
-	Value SignUpOKMultiFactor
-	Set   bool
-}
-
-// IsSet returns true if OptSignUpOKMultiFactor was set.
-func (o OptSignUpOKMultiFactor) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptSignUpOKMultiFactor) Reset() {
-	var v SignUpOKMultiFactor
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptSignUpOKMultiFactor) SetTo(v SignUpOKMultiFactor) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptSignUpOKMultiFactor) Get() (v SignUpOKMultiFactor, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptSignUpOKMultiFactor) Or(d SignUpOKMultiFactor) SignUpOKMultiFactor {
+func (o OptMultiFactor) Or(d MultiFactor) MultiFactor {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -588,212 +324,10 @@ func (o OptString) Or(d string) string {
 	return d
 }
 
-type PingGetInternalServerError struct {
-	Code    OptInt32  `json:"code"`
-	Message OptString `json:"message"`
-}
-
-// GetCode returns the value of Code.
-func (s *PingGetInternalServerError) GetCode() OptInt32 {
-	return s.Code
-}
-
-// GetMessage returns the value of Message.
-func (s *PingGetInternalServerError) GetMessage() OptString {
-	return s.Message
-}
-
-// SetCode sets the value of Code.
-func (s *PingGetInternalServerError) SetCode(val OptInt32) {
-	s.Code = val
-}
-
-// SetMessage sets the value of Message.
-func (s *PingGetInternalServerError) SetMessage(val OptString) {
-	s.Message = val
-}
-
-func (*PingGetInternalServerError) pingGetRes() {}
-
 // PingGetOK is response for PingGet operation.
 type PingGetOK struct{}
 
 func (*PingGetOK) pingGetRes() {}
-
-type SignUpBadRequest struct {
-	Code    OptInt32  `json:"code"`
-	Message OptString `json:"message"`
-}
-
-// GetCode returns the value of Code.
-func (s *SignUpBadRequest) GetCode() OptInt32 {
-	return s.Code
-}
-
-// GetMessage returns the value of Message.
-func (s *SignUpBadRequest) GetMessage() OptString {
-	return s.Message
-}
-
-// SetCode sets the value of Code.
-func (s *SignUpBadRequest) SetCode(val OptInt32) {
-	s.Code = val
-}
-
-// SetMessage sets the value of Message.
-func (s *SignUpBadRequest) SetMessage(val OptString) {
-	s.Message = val
-}
-
-func (*SignUpBadRequest) signUpRes() {}
-
-type SignUpInternalServerError struct {
-	Code    OptInt32  `json:"code"`
-	Message OptString `json:"message"`
-}
-
-// GetCode returns the value of Code.
-func (s *SignUpInternalServerError) GetCode() OptInt32 {
-	return s.Code
-}
-
-// GetMessage returns the value of Message.
-func (s *SignUpInternalServerError) GetMessage() OptString {
-	return s.Message
-}
-
-// SetCode sets the value of Code.
-func (s *SignUpInternalServerError) SetCode(val OptInt32) {
-	s.Code = val
-}
-
-// SetMessage sets the value of Message.
-func (s *SignUpInternalServerError) SetMessage(val OptString) {
-	s.Message = val
-}
-
-func (*SignUpInternalServerError) signUpRes() {}
-
-type SignUpOK struct {
-	EmailVerified bool                   `json:"email_verified"`
-	MultiFactor   OptSignUpOKMultiFactor `json:"multi_factor"`
-	User          SignUpOKUser           `json:"user"`
-}
-
-// GetEmailVerified returns the value of EmailVerified.
-func (s *SignUpOK) GetEmailVerified() bool {
-	return s.EmailVerified
-}
-
-// GetMultiFactor returns the value of MultiFactor.
-func (s *SignUpOK) GetMultiFactor() OptSignUpOKMultiFactor {
-	return s.MultiFactor
-}
-
-// GetUser returns the value of User.
-func (s *SignUpOK) GetUser() SignUpOKUser {
-	return s.User
-}
-
-// SetEmailVerified sets the value of EmailVerified.
-func (s *SignUpOK) SetEmailVerified(val bool) {
-	s.EmailVerified = val
-}
-
-// SetMultiFactor sets the value of MultiFactor.
-func (s *SignUpOK) SetMultiFactor(val OptSignUpOKMultiFactor) {
-	s.MultiFactor = val
-}
-
-// SetUser sets the value of User.
-func (s *SignUpOK) SetUser(val SignUpOKUser) {
-	s.User = val
-}
-
-func (*SignUpOK) signUpRes() {}
-
-type SignUpOKMultiFactor struct {
-	FactorID    string `json:"factor_id"`
-	PhoneNumber string `json:"phone_number"`
-}
-
-// GetFactorID returns the value of FactorID.
-func (s *SignUpOKMultiFactor) GetFactorID() string {
-	return s.FactorID
-}
-
-// GetPhoneNumber returns the value of PhoneNumber.
-func (s *SignUpOKMultiFactor) GetPhoneNumber() string {
-	return s.PhoneNumber
-}
-
-// SetFactorID sets the value of FactorID.
-func (s *SignUpOKMultiFactor) SetFactorID(val string) {
-	s.FactorID = val
-}
-
-// SetPhoneNumber sets the value of PhoneNumber.
-func (s *SignUpOKMultiFactor) SetPhoneNumber(val string) {
-	s.PhoneNumber = val
-}
-
-type SignUpOKUser struct {
-	UserID      string    `json:"user_id"`
-	Email       string    `json:"email"`
-	FirstName   string    `json:"first_name"`
-	LastName    string    `json:"last_name"`
-	PhoneNumber OptString `json:"phone_number"`
-}
-
-// GetUserID returns the value of UserID.
-func (s *SignUpOKUser) GetUserID() string {
-	return s.UserID
-}
-
-// GetEmail returns the value of Email.
-func (s *SignUpOKUser) GetEmail() string {
-	return s.Email
-}
-
-// GetFirstName returns the value of FirstName.
-func (s *SignUpOKUser) GetFirstName() string {
-	return s.FirstName
-}
-
-// GetLastName returns the value of LastName.
-func (s *SignUpOKUser) GetLastName() string {
-	return s.LastName
-}
-
-// GetPhoneNumber returns the value of PhoneNumber.
-func (s *SignUpOKUser) GetPhoneNumber() OptString {
-	return s.PhoneNumber
-}
-
-// SetUserID sets the value of UserID.
-func (s *SignUpOKUser) SetUserID(val string) {
-	s.UserID = val
-}
-
-// SetEmail sets the value of Email.
-func (s *SignUpOKUser) SetEmail(val string) {
-	s.Email = val
-}
-
-// SetFirstName sets the value of FirstName.
-func (s *SignUpOKUser) SetFirstName(val string) {
-	s.FirstName = val
-}
-
-// SetLastName sets the value of LastName.
-func (s *SignUpOKUser) SetLastName(val string) {
-	s.LastName = val
-}
-
-// SetPhoneNumber sets the value of PhoneNumber.
-func (s *SignUpOKUser) SetPhoneNumber(val OptString) {
-	s.PhoneNumber = val
-}
 
 type SignUpReq struct {
 	// First Name.
@@ -822,29 +356,88 @@ func (s *SignUpReq) SetLastName(val OptString) {
 	s.LastName = val
 }
 
-type SignUpUnauthorized struct {
+type Unauthorized struct {
 	Code    OptInt32  `json:"code"`
 	Message OptString `json:"message"`
 }
 
 // GetCode returns the value of Code.
-func (s *SignUpUnauthorized) GetCode() OptInt32 {
+func (s *Unauthorized) GetCode() OptInt32 {
 	return s.Code
 }
 
 // GetMessage returns the value of Message.
-func (s *SignUpUnauthorized) GetMessage() OptString {
+func (s *Unauthorized) GetMessage() OptString {
 	return s.Message
 }
 
 // SetCode sets the value of Code.
-func (s *SignUpUnauthorized) SetCode(val OptInt32) {
+func (s *Unauthorized) SetCode(val OptInt32) {
 	s.Code = val
 }
 
 // SetMessage sets the value of Message.
-func (s *SignUpUnauthorized) SetMessage(val OptString) {
+func (s *Unauthorized) SetMessage(val OptString) {
 	s.Message = val
 }
 
-func (*SignUpUnauthorized) signUpRes() {}
+func (*Unauthorized) signUpRes() {}
+
+// Ref: #/components/schemas/User
+type User struct {
+	UserId      string    `json:"userId"`
+	Email       string    `json:"email"`
+	FirstName   string    `json:"firstName"`
+	LastName    string    `json:"lastName"`
+	PhoneNumber OptString `json:"phoneNumber"`
+}
+
+// GetUserId returns the value of UserId.
+func (s *User) GetUserId() string {
+	return s.UserId
+}
+
+// GetEmail returns the value of Email.
+func (s *User) GetEmail() string {
+	return s.Email
+}
+
+// GetFirstName returns the value of FirstName.
+func (s *User) GetFirstName() string {
+	return s.FirstName
+}
+
+// GetLastName returns the value of LastName.
+func (s *User) GetLastName() string {
+	return s.LastName
+}
+
+// GetPhoneNumber returns the value of PhoneNumber.
+func (s *User) GetPhoneNumber() OptString {
+	return s.PhoneNumber
+}
+
+// SetUserId sets the value of UserId.
+func (s *User) SetUserId(val string) {
+	s.UserId = val
+}
+
+// SetEmail sets the value of Email.
+func (s *User) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetFirstName sets the value of FirstName.
+func (s *User) SetFirstName(val string) {
+	s.FirstName = val
+}
+
+// SetLastName sets the value of LastName.
+func (s *User) SetLastName(val string) {
+	s.LastName = val
+}
+
+// SetPhoneNumber sets the value of PhoneNumber.
+func (s *User) SetPhoneNumber(val OptString) {
+	s.PhoneNumber = val
+}

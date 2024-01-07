@@ -19,7 +19,7 @@ jobs:
     uses: ./.github/workflows/__pnpm-version.yml
 
   ci:
-    needs: [ node-version, pnpm-version ]
+    needs: [node-version, pnpm-version]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

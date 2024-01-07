@@ -27,12 +27,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@8.12.1",
+  "packageManager": "pnpm@8.14.0+sha256.9cebf61abd83f68177b29484da72da9751390eaad46dfc3072d266bfbb1ba7bf",
   "engines": {
     "node": "20.10.0",
     "npm": "use pnpm please!",
     "yarn": "use pnpm please!",
-    "pnpm": "8.12.1"
+    "pnpm": "8.14.0"
   },
   "devDependencies": {
     "@biomejs/biome": "1.4.1",

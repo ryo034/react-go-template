@@ -23,10 +23,10 @@ sign_up:
         content:
           application/json:
             schema:
-              $ref: "../components/schemas/me.yml#/me"
+              $ref: "#/components/schemas/Me"
       "400":
-        $ref: "../components/responses/error.yaml#/components/responses/BadRequest"
+        $ref: "#/components/responses/BadRequest"
       "401":
-        $ref: "../components/responses/error.yaml#/components/responses/Unauthorized"
+        $ref: "#/components/responses/Unauthorized"
       "500":
-        $ref: "../components/responses/error.yaml#/components/responses/InternalServerError"
+        $ref: "#/components/responses/InternalServerError"

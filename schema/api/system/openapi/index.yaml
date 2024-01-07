@@ -19,3 +19,21 @@ paths:
 components:
   securitySchemes:
     $ref: "./components/securitySchemes/index.yaml#/securitySchemes"
+  schemas:
+    User:
+      $ref: "./components/schemas/me.yaml#/User"
+    MultiFactor:
+      $ref: "./components/schemas/me.yaml#/MultiFactor"
+    Me:
+      $ref: "./components/schemas/me.yaml#/Me"
+  responses:
+    GeneralError:
+      $ref: "./components/responses/error.yaml#/components/responses/GeneralError"
+    Unauthorized:
+      $ref: "./components/responses/error.yaml#/components/responses/Unauthorized"
+    NotFound:
+      $ref: "./components/responses/error.yaml#/components/responses/NotFound"
+    BadRequest:
+      $ref: "./components/responses/error.yaml#/components/responses/BadRequest"
+    InternalServerError:
+      $ref: "./components/responses/error.yaml#/components/responses/InternalServerError"

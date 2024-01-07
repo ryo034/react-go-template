@@ -3,11 +3,7 @@ package injector
 import (
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/config"
 	fb "github.com/ryo034/react-go-template/apps/system/api/infrastructure/firebase"
-	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/grpc/response"
-	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/message"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
-	languageAdapter "github.com/ryo034/react-go-template/apps/system/api/interface/controller/shared/language"
-	"golang.org/x/text/language"
 )
 
 type Injector struct {
@@ -18,7 +14,6 @@ type Injector struct {
 	useCaseInj UseCaseInjector
 	resi       ResponseInjector
 	reqi       RequestInjector
-	reslv      response.Resolver
 }
 
 func NewInjector(
@@ -31,7 +26,6 @@ func NewInjector(
 	ui := newUseCaseInjector(conf.IsLocal(), co, ri, di)
 	resi := newResponseInjector()
 	reqi := newRequestInjector()
-	reslv := response.NewResolver(message.NewResource(conf.DefaultLanguage()), languageAdapter.NewAdapter(language.Japanese, co))
 	return &Injector{
 		f,
 		conf,
@@ -40,7 +34,6 @@ func NewInjector(
 		ui,
 		resi,
 		reqi,
-		reslv,
 	}, nil
 }
 

@@ -1,8 +1,6 @@
-import { ConnectError } from "@connectrpc/connect"
 import { FirebaseError } from "firebase/app"
 import { DomainError } from "~/domain"
 import { AdapterError, FirebaseErrorAdapter } from "~/infrastructure/error"
-import { ConnectNetworkError } from "./connect"
 
 export class UnknownError extends Error {}
 
@@ -12,9 +10,7 @@ export class ErrorHandler extends Error {
     console.error(err)
 
     let error: Error
-    if (err instanceof ConnectError) {
-      error = ConnectNetworkError.create(err)
-    } else if (err instanceof FirebaseError) {
+    if (err instanceof FirebaseError) {
       error = FirebaseErrorAdapter.create(err)
     } else if (err instanceof DomainError) {
       error = err

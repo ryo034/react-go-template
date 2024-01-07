@@ -4,9 +4,9 @@ name: Lint and fix javascript code
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
-    # biomeの対象ファイル
+      # biomeの対象ファイル
       - '**/*.{ts,tsx,js,jsx,json}'
       - .github/workflows/formatter-js.yml
       - '!**/generated/**'
@@ -23,7 +23,7 @@ jobs:
     uses: ./.github/workflows/__pnpm-version.yml
 
   format:
-    needs: [ node-version, pnpm-version ]
+    needs: [node-version, pnpm-version]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

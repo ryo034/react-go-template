@@ -1,0 +1,43 @@
+User:
+  type: object
+  required:
+    - userId
+    - email
+    - firstName
+    - lastName
+  properties:
+    userId:
+      type: string
+    email:
+      type: string
+    firstName:
+      type: string
+    lastName:
+      type: string
+    phoneNumber:
+      type: string
+
+MultiFactor:
+  type: object
+  required:
+    - factorId
+    - phoneNumber
+  properties:
+    factorId:
+      type: string
+    phoneNumber:
+      type: string
+
+Me:
+  type: object
+  required:
+    - emailVerified
+    - user
+  properties:
+    emailVerified:
+      type: boolean
+      default: false
+    multiFactor:
+      $ref: "#/components/schemas/MultiFactor"
+    user:
+      $ref: "#/components/schemas/User"

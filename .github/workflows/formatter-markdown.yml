@@ -2,7 +2,7 @@ name: Format markdown
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - '**/*.md'
       - .github/workflows/formatter-markdown.yml
@@ -20,7 +20,7 @@ jobs:
     uses: ./.github/workflows/__pnpm-version.yml
 
   format:
-    needs: [ node-version, pnpm-version ]
+    needs: [node-version, pnpm-version]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

@@ -5,28 +5,28 @@ components:
       content:
         application/json:
           schema:
-            $ref: "../schemas/error.yaml#/components/schemas/GeneralError"
+            $ref: "../schemas/error.yaml#/GeneralError"
     Unauthorized:
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: "../schemas/error.yaml#/components/schemas/GeneralError"
+            $ref: "../schemas/error.yaml#/GeneralError"
     NotFound:
       description: Entity not found.
       content:
         application/json:
           schema:
-            $ref: "../schemas/error.yaml#/components/schemas/GeneralError"
+            $ref: "../schemas/error.yaml#/GeneralError"
     BadRequest:
       description: Bad request
       content:
         application/json:
           schema:
-            $ref: "../schemas/error.yaml#/components/schemas/GeneralError"
+            $ref: "../schemas/error.yaml#/GeneralError"
     InternalServerError:
       description: Internal server error
       content:
         application/json:
           schema:
-            $ref: "../schemas/error.yaml#/components/schemas/GeneralError"
+            $ref: "../schemas/error.yaml#/GeneralError"

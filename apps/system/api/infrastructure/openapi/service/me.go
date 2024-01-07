@@ -6,14 +6,14 @@ import (
 )
 
 func (s *service) MeGet(ctx context.Context) (openapi.MeGetRes, error) {
-	return &openapi.MeGetOK{
+	return &openapi.Me{
 		EmailVerified: false,
-		MultiFactor: openapi.OptMeGetOKMultiFactor{
-			Value: openapi.MeGetOKMultiFactor{},
+		MultiFactor: openapi.OptMultiFactor{
+			Value: openapi.MultiFactor{},
 			Set:   false,
 		},
-		User: openapi.MeGetOKUser{
-			UserID:      "",
+		User: openapi.User{
+			UserId:      "",
 			Email:       "",
 			FirstName:   "",
 			LastName:    "",

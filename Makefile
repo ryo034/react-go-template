@@ -65,9 +65,9 @@ update-all-go-package:
 
 .PHONY: merge-system-openapi
 merge-system-openapi:
-	@rm -rf ./schema/api/system/openapi/dist/openapi.yaml
+	@rm -rf ./schema/api/system/openapi/openapi.yaml
 	@docker build -f ./container/schema/openapi/swagger-merger/Dockerfile -t swagger-merger-image .
-	@docker run --rm -v ./schema/api/system/openapi:/swagger swagger-merger-image swagger-merger -i /swagger/index.yaml -o /swagger/dist/openapi.yaml
+	@docker run --rm -v ./schema/api/system/openapi:/swagger swagger-merger-image swagger-merger -i /swagger/index.yaml -o /swagger/openapi.yaml
 
 .PHONY: gen-system-api-openapi
 gen-system-api-openapi:
@@ -75,15 +75,15 @@ gen-system-api-openapi:
 		-v ".:/workspace" ghcr.io/ogen-go/ogen:latest \
 		-package openapi \
 		-target workspace/apps/system/api/schema/openapi \
-		-clean workspace/schema/api/system/openapi/dist/openapi.yaml
+		-clean workspace/schema/api/system/openapi/openapi.yaml
 
 .PHONY: gen-system-client-openapi
 gen-system-client-openapi:
 	@rm -rf ./apps/system/client/src/generated/schema/openapi
-	@docker build -f ./container/schema/openapi/orval/Dockerfile -t openapi-typescript-codegen .
+	@docker build -f ./container/schema/openapi/openapi-typescript/Dockerfile -t openapi-typescript-codegen-tmp .
 	@docker run --rm -v .:/app \
-		openapi-typescript-codegen \
-		orval --config /app/apps/system/client/src/infrastructure/openapi/orval.config.ts
+		openapi-typescript-codegen-tmp \
+		/app/schema/api/system/openapi/openapi.yaml -o /app/apps/system/client/src/generated/schema/openapi/systemApi.ts
 
 .PHONY: gen-system-openapi
 gen-system-openapi:
@@ -94,21 +94,6 @@ gen-system-openapi:
 .PHONY: gen-openapi
 gen-openapi:
 	@make gen-system-openapi
-
-# ============
-#  Protobuf
-# ============
-
-.PHONY: proto-fmt
-proto-fmt:
-	@buf format -w --diff
-
-.PHONY: proto-gen
-proto-gen:
-	@make proto-fmt
-	@rm -rf ./apps/system/client/src/generated/schema/api
-	@rm -rf ./apps/system/api/schema/pb
-	@buf generate
 
 # ====================
 #  Technical document

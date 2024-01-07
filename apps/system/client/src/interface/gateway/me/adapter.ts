@@ -3,27 +3,17 @@ import { AccountId, AccountName } from "~/domain/account"
 import { Me } from "~/domain/me"
 import { Email } from "~/domain/shared"
 import { User } from "~/domain/user"
-import * as mePb from "~/generated/schema/api/me/v1/me_pb"
+import { components } from "~/generated/schema/openapi/systemApi"
 import { AdapterError, AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
 
 export class MeGatewayAdapter {
-  adapt(me?: mePb.Me): Result<Me, Error> {
+  adapt(me: components["schemas"]["Me"]): Result<Me, Error> {
     if (me === undefined || me === null) {
       console.error(new AdapterError(MeGatewayAdapter.name, this.adapt.name, "me is required"))
       return Result.err(new AuthProviderCurrentUserNotFoundError("User is not found"))
     }
 
-    if (me.info === undefined || me.info === null) {
-      console.error(new AdapterError(MeGatewayAdapter.name, this.adapt.name, "me.info is required"))
-      return Result.err(new AuthProviderCurrentUserNotFoundError("User is not found"))
-    }
-
-    if (me.info.user === undefined || me.info.user === null) {
-      console.error(new AdapterError(MeGatewayAdapter.name, this.adapt.name, "me.info.user is required"))
-      return Result.err(new AuthProviderCurrentUserNotFoundError("User is not found"))
-    }
-
-    const { firstName, lastName, email, userId } = me.info.user
+    const { userId, email, firstName, lastName } = me.user
 
     const id = AccountId.fromString(userId)
     if (id.isErr) {
