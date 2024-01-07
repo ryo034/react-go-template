@@ -45,7 +45,7 @@ jobs:
       #     working-directory: ${{ inputs.directory }}
 
       - name: Install Staticcheck
-        run: go get -u honnef.co/go/tools/cmd/staticcheck
+        run: go install honnef.co/go/tools/cmd/staticcheck@latest
 
       - name: Run Staticcheck
         run: staticcheck ./...
