@@ -1,6 +1,6 @@
 module github.com/ryo034/react-go-template/apps/system/api
 
-go 1.21.5
+go 1.21
 
 require (
 	firebase.google.com/go/v4 v4.13.0
