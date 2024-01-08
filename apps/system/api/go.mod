@@ -10,6 +10,7 @@ require (
 	github.com/go-faster/jx v1.1.0
 	github.com/go-playground/validator/v10 v10.16.0
 	github.com/go-sql-driver/mysql v1.7.1
+	github.com/golang/mock v1.1.1
 	github.com/jackc/pgx/v4 v4.18.1
 	github.com/ogen-go/ogen v0.81.1
 	github.com/oklog/ulid v1.3.1

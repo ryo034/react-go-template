@@ -38,7 +38,7 @@ services:
     tty: true
 
   main_db_primary:
-    image: postgres:16.0
+    image: postgres:16.1
     container_name: main-db-primary
     command: -c 'config_file=/etc/postgresql/postgresql.conf' -c 'hba_file=/etc/postgresql/pg_hba.conf'
     environment:
@@ -63,7 +63,7 @@ services:
       start_period: 30s
 
   main_db_replica:
-    image: postgres:16.0
+    image: postgres:16.1
     container_name: main-db-replica
     entrypoint: /entrypoint.sh
     environment:

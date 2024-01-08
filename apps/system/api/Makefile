@@ -17,10 +17,9 @@ update-private-package:
 	@go get -v github.com/ryo034/react-go-template/packages/go
 	@go mod tidy
 
-# gomockでモックを生成
-.PHONY: mock
-mock:
-	go generate ./...
+.PHONY: generate
+generate:
+	@go generate ./...
 
 .PHONY: format
 format:
