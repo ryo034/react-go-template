@@ -48,8 +48,9 @@ restart-db:
 .PHONY: update-all-typescript-package
 update-all-typescript-package:
 	@cd ./packages/typescript/ui && ncu -u
+	@cd ./packages/typescript/network && ncu -u
 	@cd ./apps/system/client && ncu -u
-	@pnpm install -r
+	@corepack pnpm install -r
 
 .PHONY: update-all-go-package
 update-all-go-package:

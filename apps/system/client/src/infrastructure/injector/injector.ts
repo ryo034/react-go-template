@@ -1,4 +1,5 @@
 import ga4 from "react-ga4"
+import { ApiErrorHandler } from "shared-network"
 import { ThemeDriver } from "~/driver"
 import { FirebaseDriver } from "~/driver"
 import { GoogleAnalyticsDriver } from "~/driver/analytics/ga/driver"
@@ -15,6 +16,7 @@ import { ThemePresenter } from "~/interface/presenter/theme/presenter"
 import { meStore } from "~/store/me/store"
 import { themeStore } from "~/store/theme/store"
 import { MeInteractor, ThemeInteractor } from "~/usecase"
+import { SystemNetworkErrorInterpreter } from "../error"
 
 const driverAuthInterceptor = new DriverAuthMiddleware(firebaseAuth)
 
@@ -28,12 +30,15 @@ const setupStore = () => {
 const store = setupStore()
 
 const ls = localStorage
+
+const apiErrorHandler = new ApiErrorHandler(new SystemNetworkErrorInterpreter().convertToSpecificError)
+
 const setupDriver = () => {
-  const firebase = new FirebaseDriver(firebaseAuth)
+  const firebase = new FirebaseDriver(firebaseAuth, apiErrorHandler)
   return {
     firebase,
     ga: new GoogleAnalyticsDriver(ga4),
-    me: new MeDriver(openapiFetchClient),
+    me: new MeDriver(openapiFetchClient, apiErrorHandler),
     theme: new ThemeDriver(ls)
   }
 }

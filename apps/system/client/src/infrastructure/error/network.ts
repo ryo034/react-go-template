@@ -1,36 +1,29 @@
-export class NetworkBaseError extends Error {
-  statusCode: number
-  constructor(statusCode: number, message: string) {
-    super(message)
-    Object.setPrototypeOf(this, new.target.prototype)
-    this.name = Error.name
-    this.statusCode = statusCode
-    if (Error.captureStackTrace !== undefined) {
-      Error.captureStackTrace(this)
-    }
-  }
-}
+import { NetworkBaseError, NetworkErrorInterpreter, convertToErrorByStatusCode } from "shared-network"
 
-export class CannotConnectNetworkError extends Error {
-  constructor(message: string) {
-    super(message)
-    Object.setPrototypeOf(this, new.target.prototype)
-    this.name = Error.name
-    if (Error.captureStackTrace !== undefined) {
-      Error.captureStackTrace(this)
-    }
-  }
-}
-
-export class BadRequestError extends NetworkBaseError {}
-export class ForbiddenError extends NetworkBaseError {}
-export class AuthenticationError extends NetworkBaseError {}
-export class NotFoundError extends NetworkBaseError {}
-export class AlreadyExistError extends NetworkBaseError {}
-export class InternalServerError extends NetworkBaseError {}
-
-// custom error
 export class EmailAlreadyInUseError extends NetworkBaseError {}
 export class InvalidEmailUseError extends NetworkBaseError {}
 export class InvalidAddressError extends NetworkBaseError {}
 export class EmailNotVerifiedError extends NetworkBaseError {}
+
+export const openapiFetchErrorInterpreter = (res: unknown): Error | null => {
+  if (res !== null && typeof res === "object" && "response" in res && (res as any).response instanceof Response) {
+    const r = res as {
+      data?: undefined
+      error?: { code?: number; message?: string }
+      response: Response
+    }
+    return convertToErrorByStatusCode(r.response.status, r.error?.message)
+  }
+  return null
+}
+
+export class SystemNetworkErrorInterpreter extends NetworkErrorInterpreter {
+  convertToSpecificError(err: unknown): Error | null {
+    if (this.isValidGenericError(err)) {
+      return convertToErrorByStatusCode(err.statusCode, err.message)
+    }
+    // Firebaseのエラーをここに追加する
+
+    return openapiFetchErrorInterpreter(err)
+  }
+}

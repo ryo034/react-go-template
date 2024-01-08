@@ -1,6 +1,5 @@
 export * from "./adapter"
 export * from "./authProvider"
 export * from "./firebase"
-export * from "./handler"
 export * from "./message"
 export * from "./network"

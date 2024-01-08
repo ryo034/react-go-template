@@ -11,43 +11,42 @@ export class UnknownError extends Error {
   }
 }
 
+export interface ApiErrorHandlerInterface {
+  adapt(e: unknown): Error
+}
+
 /**
  * ApiErrorHandler
  * @param customErrorChecker
  *
  * If this function returns null, UnknownError is returned.
- * Used for error handling in libraries such as Axios and ky
  * Pass the implementation that returns a custom error according to the error code defined in each service to customErrorChecker
  *
  * example:
  * ```ts
  * const apiErrorHandler = new ApiErrorHandler(err => {
- *   const res = NetworkErrorInterpreter.adapt(err)
- *   if (res) {
- *     return res
- *   }
- *   return AxiosNetworkError.create(err)
+ *   return CustomCodeNetworkError.create(err)
  * })
  * ```
  */
 export class ApiErrorHandler {
   constructor(readonly customErrorChecker: (err: unknown) => Error | null) {}
 
-  adapt(origError: unknown) {
+  adapt(e: unknown) {
     if (navigator !== undefined && navigator.onLine !== undefined && navigator.onLine === false) {
       return new CannotConnectNetworkError("")
     }
 
-    const customError = this.customErrorChecker(origError)
+    const customError = this.customErrorChecker(e)
     if (customError) {
       return customError
     }
 
-    if (origError instanceof Error) {
-      return origError
+    if (e instanceof Error) {
+      return e
     }
-    if (typeof origError === "string") {
-      return new UnknownError(origError)
+    if (typeof e === "string") {
+      return new UnknownError(e)
     }
     return new UnknownError("unknown error")
   }

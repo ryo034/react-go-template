@@ -1,7 +1,6 @@
 import { Result } from "true-myth"
 import { Me, MeRepository } from "~/domain"
-import { AuthProviderDriver } from "~/driver"
-import { MeDriver } from "~/driver/me/driver"
+import { AuthProviderDriver, MeDriver } from "~/driver"
 import { PromiseResult } from "~/infrastructure/shared/result"
 import { MeGatewayAdapter } from "~/interface/gateway/me/adapter"
 
