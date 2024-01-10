@@ -19,7 +19,7 @@ type Driver interface {
 	EmailVerified(ctx context.Context, aID account.ID) (bool, string, error)
 	UpdateMe(ctx context.Context, me *me.Me) error
 	UpdateEmail(ctx context.Context, aID account.ID, em account.Email) error
-	UpdateName(ctx context.Context, aID account.ID, fn account.FirstName, ln account.LastName) error
+	UpdateName(ctx context.Context, aID account.ID, n account.Name) error
 	UpdatePhoneNumber(ctx context.Context, aID account.ID, ph phone.Number) error
 }
 
@@ -74,8 +74,8 @@ func (d *driver) UpdateEmail(ctx context.Context, aID account.ID, em account.Ema
 	return nil
 }
 
-func (d *driver) UpdateName(ctx context.Context, aID account.ID, fn account.FirstName, ln account.LastName) error {
-	params := (&auth.UserToUpdate{}).DisplayName(fn.ToString() + " " + ln.ToString())
+func (d *driver) UpdateName(ctx context.Context, aID account.ID, n account.Name) error {
+	params := (&auth.UserToUpdate{}).DisplayName(n.ToString())
 	_, err := d.f.Auth.UpdateUser(ctx, aID.ToString(), params)
 	return err
 }

@@ -30,13 +30,9 @@ func (a *adapter) Adapt(u *openapi.User) (*user.User, error) {
 	}
 	var phoneNumber *phone.Number = nil
 
-	fn, err := account.NewFirstName(u.FirstName)
+	n, err := account.NewName(u.Name)
 	if err != nil {
 		return nil, err
 	}
-	ln, err := account.NewLastName(u.LastName)
-	if err != nil {
-		return nil, err
-	}
-	return user.NewUser(aID, email, phoneNumber, fn, ln), nil
+	return user.NewUser(aID, email, n, phoneNumber), nil
 }

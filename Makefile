@@ -19,27 +19,27 @@ init:
 
 .PHONY: start
 start:
-	docker-compose up -d api
+	@docker-compose up -d api
 
 .PHONY: restart
 restart:
-	docker-compose down
-	docker-compose up -d api
+	@docker-compose down
+	@docker-compose up -d api
 
 .PHONY: restart-statefull
 restart-statefull:
-	docker-compose down
-	rm -rf container/database/postgresql/write/.data
-	rm -rf container/database/postgresql/read/.data
-	docker-compose up -d api
+	@docker-compose down
+	@rm -rf container/database/postgresql/primary/data
+	@rm -rf container/database/postgresql/replica/data
+	@docker-compose up -d api
 
 .PHONY: restart-db
 restart-db:
-	docker-compose rm -fsv main_db_replica
-	docker-compose rm -fsv main_db_primary
-	rm -rf container/database/postgresql/primary/.data
-	rm -rf container/database/postgresql/replica/.data
-	docker-compose up -d main_db_replica
+	@docker-compose rm -fsv main_db_replica
+	@docker-compose rm -fsv main_db_primary
+	@rm -rf container/database/postgresql/primary/data
+	@rm -rf container/database/postgresql/replica/data
+	@docker-compose up -d main_db_replica
 
 # ====================
 #  Update packages

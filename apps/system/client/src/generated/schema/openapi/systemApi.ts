@@ -57,8 +57,7 @@ export interface components {
     User: {
       userId: string;
       email: string;
-      firstName: string;
-      lastName: string;
+      name: string;
       phoneNumber?: string;
     };
     MultiFactor: {

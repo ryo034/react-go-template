@@ -728,12 +728,8 @@ func (s *User) encodeFields(e *jx.Encoder) {
 		e.Str(s.Email)
 	}
 	{
-		e.FieldStart("firstName")
-		e.Str(s.FirstName)
-	}
-	{
-		e.FieldStart("lastName")
-		e.Str(s.LastName)
+		e.FieldStart("name")
+		e.Str(s.Name)
 	}
 	{
 		if s.PhoneNumber.Set {
@@ -743,12 +739,11 @@ func (s *User) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfUser = [5]string{
+var jsonFieldsNameOfUser = [4]string{
 	0: "userId",
 	1: "email",
-	2: "firstName",
-	3: "lastName",
-	4: "phoneNumber",
+	2: "name",
+	3: "phoneNumber",
 }
 
 // Decode decodes User from json.
@@ -784,29 +779,17 @@ func (s *User) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"email\"")
 			}
-		case "firstName":
+		case "name":
 			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
 				v, err := d.Str()
-				s.FirstName = string(v)
+				s.Name = string(v)
 				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"firstName\"")
-			}
-		case "lastName":
-			requiredBitSet[0] |= 1 << 3
-			if err := func() error {
-				v, err := d.Str()
-				s.LastName = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"lastName\"")
+				return errors.Wrap(err, "decode field \"name\"")
 			}
 		case "phoneNumber":
 			if err := func() error {
@@ -828,7 +811,7 @@ func (s *User) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001111,
+		0b00000111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

@@ -8,51 +8,40 @@ import (
 type User struct {
 	accountId   account.ID
 	email       account.Email
+	name        account.Name
 	phoneNumber *phone.Number
-	firstName   account.FirstName
-	lastName    account.LastName
 }
 
 func NewUser(
 	accountId account.ID,
 	email account.Email,
+	name account.Name,
 	phoneNumber *phone.Number,
-	firstName account.FirstName,
-	lastName account.LastName,
 ) *User {
 	return &User{
 		accountId,
 		email,
+		name,
 		phoneNumber,
-		firstName,
-		lastName,
 	}
 }
 
-func (s *User) AccountID() account.ID {
-	return s.accountId
+func (u *User) AccountID() account.ID {
+	return u.accountId
 }
 
-func (s *User) Email() account.Email {
-	return s.email
+func (u *User) Email() account.Email {
+	return u.email
 }
 
-func (s *User) PhoneNumber() *phone.Number {
-	return s.phoneNumber
+func (u *User) Name() account.Name {
+	return u.name
 }
 
-func (s *User) HasPhoneNumber() bool {
-	return s.phoneNumber != nil
+func (u *User) PhoneNumber() *phone.Number {
+	return u.phoneNumber
 }
 
-func (s *User) Name() string {
-	return s.LastName().ToString() + " " + s.FirstName().ToString()
-}
-
-func (s *User) FirstName() account.FirstName {
-	return s.firstName
-}
-
-func (s *User) LastName() account.LastName {
-	return s.lastName
+func (u *User) HasPhoneNumber() bool {
+	return u.phoneNumber != nil
 }

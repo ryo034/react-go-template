@@ -5,23 +5,23 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/validation"
 )
 
-type LastName string
+type Name string
 
 const (
-	InvalidAccountLastName domainError.MessageKey = "invalid.account.last_name"
+	InvalidAccountName domainError.MessageKey = "invalid.account.name"
 )
 
-func NewLastName(v string) (LastName, error) {
+func NewName(v string) (Name, error) {
 	errs := validation.NewErrors()
 	if v == "" {
-		errs.Append(InvalidAccountLastName, v)
+		errs.Append(InvalidAccountName, v)
 	}
 	if errs.IsNotEmpty() {
 		return "", errs
 	}
-	return LastName(v), nil
+	return Name(v), nil
 }
 
-func (v LastName) ToString() string {
+func (v Name) ToString() string {
 	return string(v)
 }

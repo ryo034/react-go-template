@@ -22,10 +22,9 @@ func (a *adapter) Adapt(u *user.User) *openapi.User {
 		ph = u.PhoneNumber().ToString()
 	}
 	return &openapi.User{
-		UserId:    u.AccountID().ToString(),
-		Email:     u.Email().ToString(),
-		FirstName: u.FirstName().ToString(),
-		LastName:  u.LastName().ToString(),
+		UserId: u.AccountID().ToString(),
+		Email:  u.Email().ToString(),
+		Name:   u.Name().ToString(),
 		PhoneNumber: openapi.OptString{
 			Value: ph,
 			Set:   false,

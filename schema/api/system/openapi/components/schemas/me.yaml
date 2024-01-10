@@ -3,16 +3,13 @@ User:
   required:
     - userId
     - email
-    - firstName
-    - lastName
+    - name
   properties:
     userId:
       type: string
     email:
       type: string
-    firstName:
-      type: string
-    lastName:
+    name:
       type: string
     phoneNumber:
       type: string

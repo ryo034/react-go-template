@@ -15,8 +15,7 @@ func (s *service) MeGet(ctx context.Context) (openapi.MeGetRes, error) {
 		User: openapi.User{
 			UserId:      "",
 			Email:       "",
-			FirstName:   "",
-			LastName:    "",
+			Name:        "",
 			PhoneNumber: openapi.OptString{},
 		},
 	}, nil

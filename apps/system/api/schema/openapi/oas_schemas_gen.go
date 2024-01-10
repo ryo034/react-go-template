@@ -387,8 +387,7 @@ func (*Unauthorized) signUpRes() {}
 type User struct {
 	UserId      string    `json:"userId"`
 	Email       string    `json:"email"`
-	FirstName   string    `json:"firstName"`
-	LastName    string    `json:"lastName"`
+	Name        string    `json:"name"`
 	PhoneNumber OptString `json:"phoneNumber"`
 }
 
@@ -402,14 +401,9 @@ func (s *User) GetEmail() string {
 	return s.Email
 }
 
-// GetFirstName returns the value of FirstName.
-func (s *User) GetFirstName() string {
-	return s.FirstName
-}
-
-// GetLastName returns the value of LastName.
-func (s *User) GetLastName() string {
-	return s.LastName
+// GetName returns the value of Name.
+func (s *User) GetName() string {
+	return s.Name
 }
 
 // GetPhoneNumber returns the value of PhoneNumber.
@@ -427,14 +421,9 @@ func (s *User) SetEmail(val string) {
 	s.Email = val
 }
 
-// SetFirstName sets the value of FirstName.
-func (s *User) SetFirstName(val string) {
-	s.FirstName = val
-}
-
-// SetLastName sets the value of LastName.
-func (s *User) SetLastName(val string) {
-	s.LastName = val
+// SetName sets the value of Name.
+func (s *User) SetName(val string) {
+	s.Name = val
 }
 
 // SetPhoneNumber sets the value of PhoneNumber.

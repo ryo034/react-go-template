@@ -53,8 +53,8 @@ services:
       - ./container/database/postgresql/primary/postgresql.conf:/etc/postgresql/postgresql.conf
       - ./container/database/postgresql/primary/pg_hba.conf:/etc/postgresql/pg_hba.conf
       - ./container/database/postgresql/primary/init.sh:/docker-entrypoint-initdb.d/init.sh
-      - ./container/database/postgresql/sql/001-create-tables.sql:/docker-entrypoint-initdb.d/001-create-tables.sql
-      - ./container/database/postgresql/sql/099-initialize-data.sql:/docker-entrypoint-initdb.d/099-initialize-data.sql
+      - ./container/database/postgresql/sql/001_create_tables.sql:/docker-entrypoint-initdb.d/001_create_tables.sql
+      - ./container/database/postgresql/sql/099_initialize_data.sql:/docker-entrypoint-initdb.d/099_initialize_data.sql
     healthcheck:
       test: pg_isready -d main
       interval: 1s
