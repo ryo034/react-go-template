@@ -77,7 +77,7 @@ func (*InternalServerError) signUpRes()  {}
 type Me struct {
 	EmailVerified bool           `json:"emailVerified"`
 	MultiFactor   OptMultiFactor `json:"multiFactor"`
-	User          User           `json:"user"`
+	Member        Member         `json:"member"`
 }
 
 // GetEmailVerified returns the value of EmailVerified.
@@ -90,9 +90,9 @@ func (s *Me) GetMultiFactor() OptMultiFactor {
 	return s.MultiFactor
 }
 
-// GetUser returns the value of User.
-func (s *Me) GetUser() User {
-	return s.User
+// GetMember returns the value of Member.
+func (s *Me) GetMember() Member {
+	return s.Member
 }
 
 // SetEmailVerified sets the value of EmailVerified.
@@ -105,14 +105,40 @@ func (s *Me) SetMultiFactor(val OptMultiFactor) {
 	s.MultiFactor = val
 }
 
-// SetUser sets the value of User.
-func (s *Me) SetUser(val User) {
-	s.User = val
+// SetMember sets the value of Member.
+func (s *Me) SetMember(val Member) {
+	s.Member = val
 }
 
 func (*Me) loginRes()  {}
 func (*Me) meGetRes()  {}
 func (*Me) signUpRes() {}
+
+// Ref: #/components/schemas/Member
+type Member struct {
+	IdNumber OptString `json:"idNumber"`
+	User     User      `json:"user"`
+}
+
+// GetIdNumber returns the value of IdNumber.
+func (s *Member) GetIdNumber() OptString {
+	return s.IdNumber
+}
+
+// GetUser returns the value of User.
+func (s *Member) GetUser() User {
+	return s.User
+}
+
+// SetIdNumber sets the value of IdNumber.
+func (s *Member) SetIdNumber(val OptString) {
+	s.IdNumber = val
+}
+
+// SetUser sets the value of User.
+func (s *Member) SetUser(val User) {
+	s.User = val
+}
 
 // Ref: #/components/schemas/MultiFactor
 type MultiFactor struct {

@@ -29,4 +29,8 @@ format:
 
 .PHONY: test
 test:
-	@go test ./infrastructure/... ./interface/... ./domain/... ./usecase/... ./util/...
+	go test $(go list ./... | grep -v /driver/)
+
+.PHONY: test-integration
+test-integration:
+	go test ./driver/...

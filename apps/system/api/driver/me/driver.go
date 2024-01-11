@@ -8,27 +8,27 @@ import (
 )
 
 type Driver interface {
-	Find(ctx context.Context, aID account.ID) (*models.Employee, error)
+	Find(ctx context.Context, aID account.ID) (*models.Member, error)
 }
 
 type driver struct {
 	db *bun.DB
 }
 
-func (d *driver) Find(ctx context.Context, aID account.ID) (*models.Employee, error) {
-	emp := &models.Employee{}
+func (d *driver) Find(ctx context.Context, aID account.ID) (*models.Member, error) {
+	mem := &models.Member{}
 	err := d.db.NewSelect().
-		Model(emp).
+		Model(mem).
 		Relation("Profile").
 		Relation("SystemAccount").
 		Relation("SystemAccount.Profile").
 		Relation("SystemAccount.PhoneNumber").
-		Where("e.system_account_id = ?", aID.ToString()).
+		Where("m.system_account_id = ?", aID.ToString()).
 		Scan(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return emp, nil
+	return mem, nil
 }
 
 func NewDriver(db *bun.DB) Driver {

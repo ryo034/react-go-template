@@ -1,0 +1,10 @@
+Workspace:
+  type: object
+  required:
+    - workspaceId
+    - name
+  properties:
+    workspaceId:
+      type: string
+    name:
+      type: string

@@ -33,10 +33,10 @@ func Test_driver_Find_OK(t *testing.T) {
 	accountID, _ := account.NewID(systemAccountID)
 	employeeID := uuid.MustParse("377eba35-5560-4f48-a99d-19cbd6a82b0d")
 
-	want := &models.Employee{
-		EmployeeID:      employeeID,
+	want := &models.Member{
+		MemberID:        employeeID,
 		SystemAccountID: systemAccountIDUUID,
-		OrganizationID:  uuid.MustParse("c1bd2603-b9cd-4f84-8b83-3548f6ae150b"),
+		WorkspaceID:     uuid.MustParse("c1bd2603-b9cd-4f84-8b83-3548f6ae150b"),
 		CreatedAt:       defaultTime,
 		SystemAccount: &models.SystemAccount{
 			SystemAccountID: systemAccountIDUUID,
@@ -55,15 +55,13 @@ func Test_driver_Find_OK(t *testing.T) {
 				UpdatedAt:       defaultTime,
 			},
 		},
-		Profile: &models.EmployeeProfile{
-			EmployeeID:       employeeID,
-			EmployeeIDNumber: "EMP-12345",
-			Name:             "John Doe",
-			CreatedAt:        defaultTime,
-			UpdatedAt:        defaultTime,
+		Profile: &models.MemberProfile{
+			MemberID:       employeeID,
+			MemberIDNumber: "EMP-12345",
+			Name:           "John Doe",
+			CreatedAt:      defaultTime,
+			UpdatedAt:      defaultTime,
 		},
-		Hires:       nil,
-		Separations: nil,
 	}
 	wantErr := false
 	ctx := context.Background()

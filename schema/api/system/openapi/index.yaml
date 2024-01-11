@@ -21,9 +21,13 @@ components:
     $ref: "./components/securitySchemes/index.yaml#/securitySchemes"
   schemas:
     User:
-      $ref: "./components/schemas/me.yaml#/User"
+      $ref: "./components/schemas/user.yaml#/User"
     MultiFactor:
       $ref: "./components/schemas/me.yaml#/MultiFactor"
+    Workspace:
+      $ref: "./components/schemas/workspace.yaml#/Workspace"
+    Member:
+      $ref: "./components/schemas/member.yaml#/Member"
     Me:
       $ref: "./components/schemas/me.yaml#/Me"
   responses:

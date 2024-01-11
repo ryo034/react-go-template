@@ -6,10 +6,10 @@ import (
 	"time"
 )
 
-type EmployeeAddress struct {
-	bun.BaseModel `bun:"table:employee_addresses,alias:ea"`
+type MemberAddress struct {
+	bun.BaseModel `bun:"table:member_addresses,alias:ma"`
 
-	EmployeeID               uuid.UUID `bun:"employee_id,pk"`
+	MemberID                 uuid.UUID `bun:"member_id,pk"`
 	PostalCode               string    `bun:"postal_code"`
 	BuildingComponentID      uuid.UUID `bun:"building_component_id"`
 	StreetAddressComponentID uuid.UUID `bun:"street_address_component_id,notnull"`
@@ -18,7 +18,7 @@ type EmployeeAddress struct {
 	CountryComponentID       uuid.UUID `bun:"country_component_id,notnull"`
 	CreatedAt                time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	Employee *Employee         `bun:"rel:belongs-to"`
+	Member   *Member           `bun:"rel:belongs-to"`
 	Country  *AddressComponent `bun:"rel:belongs-to,join:country_component_id=component_id"`
 	State    *AddressComponent `bun:"rel:belongs-to,join:state_component_id=component_id"`
 	City     *AddressComponent `bun:"rel:belongs-to,join:city_component_id=component_id"`

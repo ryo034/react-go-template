@@ -35,47 +35,46 @@ CREATE TABLE system_account_phone_numbers (
 );
 COMMENT ON TABLE system_account_phone_numbers IS 'システム利用者の電話番号';
 
-CREATE TABLE organizations (
-  organization_id uuid NOT NULL,
+CREATE TABLE workspaces (
+  workspace_id uuid NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (organization_id)
+  PRIMARY KEY (workspace_id)
 );
-COMMENT ON TABLE organizations IS '組織';
+COMMENT ON TABLE workspaces IS '組織';
 
-CREATE TABLE organization_details (
-  organization_id uuid NOT NULL,
+CREATE TABLE workspace_details (
+  workspace_id uuid NOT NULL,
   name VARCHAR(100) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (organization_id),
-  CONSTRAINT fk_organization_details_organizations_organization_id FOREIGN KEY (organization_id) REFERENCES organizations(organization_id)
+  PRIMARY KEY (workspace_id),
+  CONSTRAINT fk_workspace_details_workspaces_workspace_id FOREIGN KEY (workspace_id) REFERENCES workspaces(workspace_id)
 );
-COMMENT ON TABLE organization_details IS '組織の基本情報';
+COMMENT ON TABLE workspace_details IS '組織の基本情報';
 
-CREATE TABLE employees (
-  employee_id uuid NOT NULL,
+CREATE TABLE members (
+  member_id uuid NOT NULL,
   system_account_id uuid NOT NULL,
-  organization_id uuid NOT NULL,
+  workspace_id uuid NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (employee_id),
-  CONSTRAINT fk_employees_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id),
-  CONSTRAINT fk_employees_organizations_organization_id FOREIGN KEY (organization_id) REFERENCES organizations(organization_id)
+  PRIMARY KEY (member_id),
+  CONSTRAINT fk_members_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id),
+  CONSTRAINT fk_members_workspaces_workspace_id FOREIGN KEY (workspace_id) REFERENCES workspaces(workspace_id)
 );
-COMMENT ON TABLE employees IS '従業員';
+COMMENT ON TABLE members IS 'メンバー';
 
-CREATE TABLE employee_profiles (
-  employee_id uuid NOT NULL,
-  employee_id_number VARCHAR(255) NOT NULL,
+CREATE TABLE member_profiles (
+  member_id uuid NOT NULL,
+  member_id_number VARCHAR(255) NOT NULL,
   name VARCHAR(50) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (employee_id),
-  CONSTRAINT fk_employee_profiles_employees_employee_id FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
+  PRIMARY KEY (member_id),
+  CONSTRAINT fk_member_profiles_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id)
 );
-COMMENT ON TABLE employee_profiles IS '従業員のプロフィール';
 
-CREATE TABLE employee_addresses (
-  employee_id uuid NOT NULL,
+CREATE TABLE member_addresses (
+  member_id uuid NOT NULL,
   postal_code VARCHAR(20),
   building_component_id uuid,
   street_address_component_id uuid NOT NULL,
@@ -83,34 +82,21 @@ CREATE TABLE employee_addresses (
   state_component_id uuid NOT NULL,
   country_component_id uuid NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (employee_id),
-  CONSTRAINT fk_employee_addresses_employees_employee_id FOREIGN KEY (employee_id) REFERENCES employees(employee_id),
-  CONSTRAINT fk_employee_addresses_building_component_id FOREIGN KEY (building_component_id) REFERENCES address_components(component_id),
-  CONSTRAINT fk_employee_addresses_street_address_component_id FOREIGN KEY (street_address_component_id) REFERENCES address_components(component_id),
-  CONSTRAINT fk_employee_addresses_city_component_id FOREIGN KEY (city_component_id) REFERENCES address_components(component_id),
-  CONSTRAINT fk_employee_addresses_state_component_id FOREIGN KEY (state_component_id) REFERENCES address_components(component_id),
-  CONSTRAINT fk_employee_addresses_country_component_id FOREIGN KEY (country_component_id) REFERENCES address_components(component_id)
+  PRIMARY KEY (member_id),
+  CONSTRAINT fk_member_addresses_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id),
+  CONSTRAINT fk_member_addresses_building_component_id FOREIGN KEY (building_component_id) REFERENCES address_components(component_id),
+  CONSTRAINT fk_member_addresses_street_address_component_id FOREIGN KEY (street_address_component_id) REFERENCES address_components(component_id),
+  CONSTRAINT fk_member_addresses_city_component_id FOREIGN KEY (city_component_id) REFERENCES address_components(component_id),
+  CONSTRAINT fk_member_addresses_state_component_id FOREIGN KEY (state_component_id) REFERENCES address_components(component_id),
+  CONSTRAINT fk_member_addresses_country_component_id FOREIGN KEY (country_component_id) REFERENCES address_components(component_id)
 );
-COMMENT ON TABLE employee_addresses IS '従業員の住所';
 
-CREATE TABLE employee_hires (
-  hire_id uuid NOT NULL,
-  employee_id uuid NOT NULL,
-  organization_id uuid NOT NULL,
-  hire_date TIMESTAMP NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_employee_hires_employees_employee_id FOREIGN KEY (employee_id) REFERENCES employees(employee_id),
-  CONSTRAINT fk_employee_hires_organizations_organization_id FOREIGN KEY (organization_id) REFERENCES organizations(organization_id)
+CREATE TABLE membership_periods (
+    member_id uuid NOT NULL,
+    workspace_id uuid NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (member_id, workspace_id, start_date)
 );
-COMMENT ON TABLE employee_hires IS '従業員の入社履歴';
-
-CREATE TABLE employee_separations (
-  separation_id uuid NOT NULL,
-  employee_id uuid NOT NULL,
-  organization_id uuid NOT NULL,
-  separation_date TIMESTAMP NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_employee_separations_employees_employee_id FOREIGN KEY (employee_id) REFERENCES employees(employee_id),
-  CONSTRAINT fk_employee_separations_organizations_organization_id FOREIGN KEY (organization_id) REFERENCES organizations(organization_id)
-);
-COMMENT ON TABLE employee_separations IS '従業員の退社履歴';
+COMMENT ON TABLE membership_periods IS 'メンバーの組織所属期間';

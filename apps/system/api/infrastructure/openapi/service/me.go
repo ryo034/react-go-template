@@ -12,11 +12,9 @@ func (s *service) MeGet(ctx context.Context) (openapi.MeGetRes, error) {
 			Value: openapi.MultiFactor{},
 			Set:   false,
 		},
-		User: openapi.User{
-			UserId:      "",
-			Email:       "",
-			Name:        "",
-			PhoneNumber: openapi.OptString{},
+		Member: openapi.Member{
+			IdNumber: openapi.OptString{},
+			User:     openapi.User{},
 		},
 	}, nil
 }

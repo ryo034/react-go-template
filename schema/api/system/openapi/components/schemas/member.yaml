@@ -1,0 +1,9 @@
+Member:
+  type: object
+  required:
+    - user
+  properties:
+    idNumber:
+      type: string
+    user:
+      $ref: "#/components/schemas/User"

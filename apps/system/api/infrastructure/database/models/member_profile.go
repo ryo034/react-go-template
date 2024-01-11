@@ -6,10 +6,11 @@ import (
 	"time"
 )
 
-type OrganizationDetail struct {
-	bun.BaseModel `bun:"table:organization_details,alias:od"`
+type MemberProfile struct {
+	bun.BaseModel `bun:"table:member_profiles,alias:mp"`
 
-	OrganizationID uuid.UUID `bun:"organization_id,pk"`
+	MemberID       uuid.UUID `bun:"member_id,pk"`
+	MemberIDNumber string    `bun:"member_id_number,notnull"`
 	Name           string    `bun:"name,notnull"`
 	CreatedAt      time.Time `bun:"created_at,notnull,default:current_timestamp"`
 	UpdatedAt      time.Time `bun:"updated_at,notnull,default:current_timestamp"`

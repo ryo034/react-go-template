@@ -109,19 +109,38 @@ components:
           type: string
         phoneNumber:
           type: string
+    Workspace:
+      type: object
+      required:
+        - workspaceId
+        - name
+      properties:
+        workspaceId:
+          type: string
+        name:
+          type: string
+    Member:
+      type: object
+      required:
+        - user
+      properties:
+        idNumber:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
     Me:
       type: object
       required:
         - emailVerified
-        - user
+        - member
       properties:
         emailVerified:
           type: boolean
           default: false
         multiFactor:
           $ref: '#/components/schemas/MultiFactor'
-        user:
-          $ref: '#/components/schemas/User'
+        member:
+          $ref: '#/components/schemas/Member'
   responses:
     GeneralError:
       description: General Error

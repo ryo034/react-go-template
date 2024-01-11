@@ -64,11 +64,19 @@ export interface components {
       factorId: string;
       phoneNumber: string;
     };
+    Workspace: {
+      workspaceId: string;
+      name: string;
+    };
+    Member: {
+      idNumber?: string;
+      user: components["schemas"]["User"];
+    };
     Me: {
       /** @default false */
       emailVerified: boolean;
       multiFactor?: components["schemas"]["MultiFactor"];
-      user: components["schemas"]["User"];
+      member: components["schemas"]["Member"];
     };
   };
   responses: {
