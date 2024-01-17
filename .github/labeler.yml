@@ -1,32 +1,54 @@
 system:
-  - "apps/system/**/*"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "apps/system/**/*"
 
 client:
-  - "apps/system/client/**/*"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "apps/system/client/**/*"
 
 api:
-  - "apps/system/api/**/*"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "apps/system/api/**/*"
 
 test:
-  - "apps/system/test/**/*"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "apps/system/test/**/*"
 
 shared-packages:
-  - "packages/**/*"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "packages/**/*"
 
 ui-shared-packages:
-  - "packages/typescript/ui/**/*"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "packages/typescript/ui/**/*"
 
 workflow:
-  - ".github/**/*"
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**/*"
 
 infrastructure:
-  - "iac/**/*"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "iac/**/*"
 
 container:
-  - "container/**/*"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "container/**/*"
 
 e2e:
-  - "apps/system/test/e2e/**/*"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "apps/system/test/e2e/**/*"
 
 dependencies:
-  - "**/package.json"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/package.json"
