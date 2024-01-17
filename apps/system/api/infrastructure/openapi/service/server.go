@@ -6,13 +6,13 @@ import (
 )
 
 type service struct {
-	openapi.UnimplementedHandler // automatically implement all methods
-	inj                          *injector.Injector
+	openapi.UnimplementedHandler
+	ctrl injector.Controller
 }
 
 func NewService(inj *injector.Injector) openapi.Handler {
 	return &service{
 		openapi.UnimplementedHandler{},
-		inj,
+		inj.Controller(),
 	}
 }

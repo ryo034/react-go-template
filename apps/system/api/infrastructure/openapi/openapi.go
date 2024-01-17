@@ -3,6 +3,7 @@ package openapi
 import (
 	"fmt"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/config"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/injector"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/openapi/middleware"
@@ -22,17 +23,24 @@ func Start(conf config.Reader) {
 	}
 	co := shared.NewContextOperator()
 
-	inj, err := injector.NewInjector(fb, co, conf)
+	dbCloseFn, p, txp := core.Initialize(conf.SourceDataSource(), conf.ReplicaDataSource(), conf.IsDebug())
+	defer dbCloseFn()
+
+	inj, err := injector.NewInjector(fb, p, txp, co, conf)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	secHandler := middleware.NewMiddleware()
-	srv, err := openapi.NewServer(service.NewService(inj), secHandler)
+	srv, err := openapi.NewServer(
+		service.NewService(inj),
+		middleware.NewSecMiddleware(),
+		openapi.WithMiddleware(middleware.NewMiddlewares().Global(conf)...),
+	)
 	if err != nil {
 		log.Fatal(err)
 	}
-	if err = http.ListenAndServe(endpoint, srv); err != nil {
+	corsHandler := conf.Cors().Handler(srv)
+	if err = http.ListenAndServe(endpoint, corsHandler); err != nil {
 		log.Fatal(err)
 	}
 }

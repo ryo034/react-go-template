@@ -6,7 +6,8 @@ import (
 	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
-	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/models"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
+	models2 "github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	"github.com/ryo034/react-go-template/apps/system/api/util/test"
 	"github.com/stretchr/testify/assert"
 	"github.com/uptrace/bun"
@@ -33,29 +34,30 @@ func Test_driver_Find_OK(t *testing.T) {
 	accountID, _ := account.NewID(systemAccountID)
 	employeeID := uuid.MustParse("377eba35-5560-4f48-a99d-19cbd6a82b0d")
 
-	want := &models.Member{
+	want := &models2.Member{
 		MemberID:        employeeID,
 		SystemAccountID: systemAccountIDUUID,
 		WorkspaceID:     uuid.MustParse("c1bd2603-b9cd-4f84-8b83-3548f6ae150b"),
 		CreatedAt:       defaultTime,
-		SystemAccount: &models.SystemAccount{
+		SystemAccount: &models2.SystemAccount{
 			SystemAccountID: systemAccountIDUUID,
 			CreatedAt:       defaultTime,
-			PhoneNumber: &models.SystemAccountPhoneNumber{
+			PhoneNumber: &models2.SystemAccountPhoneNumber{
 				SystemAccountID: systemAccountIDUUID,
 				PhoneNumber:     "09012345678",
 				CreatedAt:       defaultTime,
 				UpdatedAt:       defaultTime,
 			},
-			Profile: &models.SystemAccountProfile{
+			Profile: &models2.SystemAccountProfile{
 				SystemAccountID: systemAccountIDUUID,
+				Name:            "鈴木 太郎",
 				Email:           "system_account@example.com",
 				EmailVerified:   true,
 				CreatedAt:       defaultTime,
 				UpdatedAt:       defaultTime,
 			},
 		},
-		Profile: &models.MemberProfile{
+		Profile: &models2.MemberProfile{
 			MemberID:       employeeID,
 			MemberIDNumber: "EMP-12345",
 			Name:           "John Doe",
@@ -88,7 +90,8 @@ func Test_driver_Find_OK(t *testing.T) {
 			}
 		})
 
-		got, err := NewDriver(db).Find(ctx, accountID)
+		pr := core.NewDatabaseProvider(db, db)
+		got, err := NewDriver().Find(ctx, pr.GetExecutor(ctx, true), accountID)
 		if (err != nil) != wantErr {
 			t.Errorf("Find() error = %v, wantErr %v", err, wantErr)
 			return

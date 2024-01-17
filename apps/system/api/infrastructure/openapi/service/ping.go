@@ -6,5 +6,11 @@ import (
 )
 
 func (s *service) PingGet(ctx context.Context) (openapi.PingGetRes, error) {
-	return &openapi.PingGetOK{}, nil
+	//return &openapi.PingGetOK{}, nil
+	return &openapi.InternalServerError{
+		Status: openapi.OptInt{
+			Value: 500,
+			Set:   true,
+		},
+	}, nil
 }

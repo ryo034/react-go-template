@@ -10,6 +10,7 @@ type SystemAccountProfile struct {
 	bun.BaseModel `bun:"table:system_account_profiles,alias:saps"`
 
 	SystemAccountID uuid.UUID `bun:"system_account_id,pk"`
+	Name            string    `bun:"name,notnull"`
 	Email           string    `bun:"email,notnull"`
 	EmailVerified   bool      `bun:"email_verified,notnull"`
 	CreatedAt       time.Time `bun:"created_at,notnull,default:current_timestamp"`

@@ -2,32 +2,71 @@
 
 package openapi
 
-type BadRequest struct {
-	Code    OptInt32  `json:"code"`
-	Message OptString `json:"message"`
+// RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
+type BadRequestError struct {
+	// The HTTP status code generated for this occurrence of the problem.
+	Status OptInt `json:"status"`
+	// Error type.
+	Type OptString `json:"type"`
+	// A short, human-readable summary of the problem type.
+	Title OptString `json:"title"`
+	// A human-readable explanation specific to this occurrence of the problem.
+	Detail OptString `json:"detail"`
+	// Error code.
+	Code OptString `json:"code"`
+}
+
+// GetStatus returns the value of Status.
+func (s *BadRequestError) GetStatus() OptInt {
+	return s.Status
+}
+
+// GetType returns the value of Type.
+func (s *BadRequestError) GetType() OptString {
+	return s.Type
+}
+
+// GetTitle returns the value of Title.
+func (s *BadRequestError) GetTitle() OptString {
+	return s.Title
+}
+
+// GetDetail returns the value of Detail.
+func (s *BadRequestError) GetDetail() OptString {
+	return s.Detail
 }
 
 // GetCode returns the value of Code.
-func (s *BadRequest) GetCode() OptInt32 {
+func (s *BadRequestError) GetCode() OptString {
 	return s.Code
 }
 
-// GetMessage returns the value of Message.
-func (s *BadRequest) GetMessage() OptString {
-	return s.Message
+// SetStatus sets the value of Status.
+func (s *BadRequestError) SetStatus(val OptInt) {
+	s.Status = val
+}
+
+// SetType sets the value of Type.
+func (s *BadRequestError) SetType(val OptString) {
+	s.Type = val
+}
+
+// SetTitle sets the value of Title.
+func (s *BadRequestError) SetTitle(val OptString) {
+	s.Title = val
+}
+
+// SetDetail sets the value of Detail.
+func (s *BadRequestError) SetDetail(val OptString) {
+	s.Detail = val
 }
 
 // SetCode sets the value of Code.
-func (s *BadRequest) SetCode(val OptInt32) {
+func (s *BadRequestError) SetCode(val OptString) {
 	s.Code = val
 }
 
-// SetMessage sets the value of Message.
-func (s *BadRequest) SetMessage(val OptString) {
-	s.Message = val
-}
-
-func (*BadRequest) signUpRes() {}
+func (*BadRequestError) signUpRes() {}
 
 type Bearer struct {
 	Token string
@@ -43,29 +82,68 @@ func (s *Bearer) SetToken(val string) {
 	s.Token = val
 }
 
+// RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type InternalServerError struct {
-	Code    OptInt32  `json:"code"`
-	Message OptString `json:"message"`
+	// The HTTP status code generated for this occurrence of the problem.
+	Status OptInt `json:"status"`
+	// Error type.
+	Type OptString `json:"type"`
+	// A short, human-readable summary of the problem type.
+	Title OptString `json:"title"`
+	// A human-readable explanation specific to this occurrence of the problem.
+	Detail OptString `json:"detail"`
+	// Error code.
+	Code OptString `json:"code"`
+}
+
+// GetStatus returns the value of Status.
+func (s *InternalServerError) GetStatus() OptInt {
+	return s.Status
+}
+
+// GetType returns the value of Type.
+func (s *InternalServerError) GetType() OptString {
+	return s.Type
+}
+
+// GetTitle returns the value of Title.
+func (s *InternalServerError) GetTitle() OptString {
+	return s.Title
+}
+
+// GetDetail returns the value of Detail.
+func (s *InternalServerError) GetDetail() OptString {
+	return s.Detail
 }
 
 // GetCode returns the value of Code.
-func (s *InternalServerError) GetCode() OptInt32 {
+func (s *InternalServerError) GetCode() OptString {
 	return s.Code
 }
 
-// GetMessage returns the value of Message.
-func (s *InternalServerError) GetMessage() OptString {
-	return s.Message
+// SetStatus sets the value of Status.
+func (s *InternalServerError) SetStatus(val OptInt) {
+	s.Status = val
+}
+
+// SetType sets the value of Type.
+func (s *InternalServerError) SetType(val OptString) {
+	s.Type = val
+}
+
+// SetTitle sets the value of Title.
+func (s *InternalServerError) SetTitle(val OptString) {
+	s.Title = val
+}
+
+// SetDetail sets the value of Detail.
+func (s *InternalServerError) SetDetail(val OptString) {
+	s.Detail = val
 }
 
 // SetCode sets the value of Code.
-func (s *InternalServerError) SetCode(val OptInt32) {
+func (s *InternalServerError) SetCode(val OptString) {
 	s.Code = val
-}
-
-// SetMessage sets the value of Message.
-func (s *InternalServerError) SetMessage(val OptString) {
-	s.Message = val
 }
 
 func (*InternalServerError) loginRes()   {}
@@ -166,38 +244,38 @@ func (s *MultiFactor) SetPhoneNumber(val string) {
 	s.PhoneNumber = val
 }
 
-// NewOptInt32 returns new OptInt32 with value set to v.
-func NewOptInt32(v int32) OptInt32 {
-	return OptInt32{
+// NewOptInt returns new OptInt with value set to v.
+func NewOptInt(v int) OptInt {
+	return OptInt{
 		Value: v,
 		Set:   true,
 	}
 }
 
-// OptInt32 is optional int32.
-type OptInt32 struct {
-	Value int32
+// OptInt is optional int.
+type OptInt struct {
+	Value int
 	Set   bool
 }
 
-// IsSet returns true if OptInt32 was set.
-func (o OptInt32) IsSet() bool { return o.Set }
+// IsSet returns true if OptInt was set.
+func (o OptInt) IsSet() bool { return o.Set }
 
 // Reset unsets value.
-func (o *OptInt32) Reset() {
-	var v int32
+func (o *OptInt) Reset() {
+	var v int
 	o.Value = v
 	o.Set = false
 }
 
 // SetTo sets value to v.
-func (o *OptInt32) SetTo(v int32) {
+func (o *OptInt) SetTo(v int) {
 	o.Set = true
 	o.Value = v
 }
 
 // Get returns value and boolean that denotes whether value was set.
-func (o OptInt32) Get() (v int32, ok bool) {
+func (o OptInt) Get() (v int, ok bool) {
 	if !o.Set {
 		return v, false
 	}
@@ -205,7 +283,7 @@ func (o OptInt32) Get() (v int32, ok bool) {
 }
 
 // Or returns value if set, or given parameter if does not.
-func (o OptInt32) Or(d int32) int32 {
+func (o OptInt) Or(d int) int {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -382,32 +460,71 @@ func (s *SignUpReq) SetLastName(val OptString) {
 	s.LastName = val
 }
 
-type Unauthorized struct {
-	Code    OptInt32  `json:"code"`
-	Message OptString `json:"message"`
+// RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
+type UnauthorizedError struct {
+	// The HTTP status code generated for this occurrence of the problem.
+	Status OptInt `json:"status"`
+	// Error type.
+	Type OptString `json:"type"`
+	// A short, human-readable summary of the problem type.
+	Title OptString `json:"title"`
+	// A human-readable explanation specific to this occurrence of the problem.
+	Detail OptString `json:"detail"`
+	// Error code.
+	Code OptString `json:"code"`
+}
+
+// GetStatus returns the value of Status.
+func (s *UnauthorizedError) GetStatus() OptInt {
+	return s.Status
+}
+
+// GetType returns the value of Type.
+func (s *UnauthorizedError) GetType() OptString {
+	return s.Type
+}
+
+// GetTitle returns the value of Title.
+func (s *UnauthorizedError) GetTitle() OptString {
+	return s.Title
+}
+
+// GetDetail returns the value of Detail.
+func (s *UnauthorizedError) GetDetail() OptString {
+	return s.Detail
 }
 
 // GetCode returns the value of Code.
-func (s *Unauthorized) GetCode() OptInt32 {
+func (s *UnauthorizedError) GetCode() OptString {
 	return s.Code
 }
 
-// GetMessage returns the value of Message.
-func (s *Unauthorized) GetMessage() OptString {
-	return s.Message
+// SetStatus sets the value of Status.
+func (s *UnauthorizedError) SetStatus(val OptInt) {
+	s.Status = val
+}
+
+// SetType sets the value of Type.
+func (s *UnauthorizedError) SetType(val OptString) {
+	s.Type = val
+}
+
+// SetTitle sets the value of Title.
+func (s *UnauthorizedError) SetTitle(val OptString) {
+	s.Title = val
+}
+
+// SetDetail sets the value of Detail.
+func (s *UnauthorizedError) SetDetail(val OptString) {
+	s.Detail = val
 }
 
 // SetCode sets the value of Code.
-func (s *Unauthorized) SetCode(val OptInt32) {
+func (s *UnauthorizedError) SetCode(val OptString) {
 	s.Code = val
 }
 
-// SetMessage sets the value of Message.
-func (s *Unauthorized) SetMessage(val OptString) {
-	s.Message = val
-}
-
-func (*Unauthorized) signUpRes() {}
+func (*UnauthorizedError) signUpRes() {}
 
 // Ref: #/components/schemas/User
 type User struct {

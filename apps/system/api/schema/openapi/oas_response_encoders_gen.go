@@ -118,7 +118,7 @@ func encodeSignUpResponse(response SignUpRes, w http.ResponseWriter, span trace.
 
 		return nil
 
-	case *BadRequest:
+	case *BadRequestError:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
@@ -131,7 +131,7 @@ func encodeSignUpResponse(response SignUpRes, w http.ResponseWriter, span trace.
 
 		return nil
 
-	case *Unauthorized:
+	case *UnauthorizedError:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(401)
 		span.SetStatus(codes.Error, http.StatusText(401))

@@ -6,15 +6,6 @@ import (
 )
 
 func (s *service) MeGet(ctx context.Context) (openapi.MeGetRes, error) {
-	return &openapi.Me{
-		EmailVerified: false,
-		MultiFactor: openapi.OptMultiFactor{
-			Value: openapi.MultiFactor{},
-			Set:   false,
-		},
-		Member: openapi.Member{
-			IdNumber: openapi.OptString{},
-			User:     openapi.User{},
-		},
-	}, nil
+	aID := ""
+	return s.ctrl.Me.Find(ctx, aID)
 }

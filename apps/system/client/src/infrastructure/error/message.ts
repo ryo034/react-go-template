@@ -1,3 +1,4 @@
+import { BadRequestError, NetworkBaseError } from "shared-network"
 import {
   AuthProviderCustomError,
   AuthProviderEmailAlreadyInUseError,
@@ -11,12 +12,10 @@ import {
   AuthProviderWrongPasswordError
 } from "~/infrastructure/error/authProvider"
 import {
-  BadRequestError,
   EmailAlreadyInUseError,
   EmailNotVerifiedError,
   InvalidAddressError,
-  InvalidEmailUseError,
-  NetworkBaseError
+  InvalidEmailUseError
 } from "~/infrastructure/error/network"
 import { ReactI18nextProvider, i18nKeys } from "~/infrastructure/i18n"
 

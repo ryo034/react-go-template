@@ -25,8 +25,8 @@ sign_up:
             schema:
               $ref: "#/components/schemas/Me"
       "400":
-        $ref: "#/components/responses/BadRequest"
+        $ref: "#/components/responses/BadRequestError"
       "401":
-        $ref: "#/components/responses/Unauthorized"
+        $ref: "#/components/responses/UnauthorizedError"
       "500":
         $ref: "#/components/responses/InternalServerError"

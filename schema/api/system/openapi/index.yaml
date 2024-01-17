@@ -33,11 +33,11 @@ components:
   responses:
     GeneralError:
       $ref: "./components/responses/error.yaml#/components/responses/GeneralError"
-    Unauthorized:
-      $ref: "./components/responses/error.yaml#/components/responses/Unauthorized"
-    NotFound:
-      $ref: "./components/responses/error.yaml#/components/responses/NotFound"
-    BadRequest:
-      $ref: "./components/responses/error.yaml#/components/responses/BadRequest"
+    UnauthorizedError:
+      $ref: "./components/responses/error.yaml#/components/responses/UnauthorizedError"
+    NotFoundError:
+      $ref: "./components/responses/error.yaml#/components/responses/NotFoundError"
+    BadRequestError:
+      $ref: "./components/responses/error.yaml#/components/responses/BadRequestError"
     InternalServerError:
       $ref: "./components/responses/error.yaml#/components/responses/InternalServerError"

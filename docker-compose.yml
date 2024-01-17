@@ -82,10 +82,10 @@ services:
         condition: service_healthy
 
   api:
-    # depends_on:
-    #   - firebase
-    #   - main_db_primary
-    #   - main_db_replica
+    depends_on:
+      # - firebase
+      - main_db_primary
+      - main_db_replica
     container_name: api-server
     env_file: .env
     build:

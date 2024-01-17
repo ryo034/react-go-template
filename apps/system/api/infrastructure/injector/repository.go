@@ -9,8 +9,8 @@ type RepositoryInjector struct {
 	Me meDomain.Repository
 }
 
-func newRepositoryInjector(di driverInjector) RepositoryInjector {
+func newRepositoryInjector(di driver, gw GatewayAdapter) RepositoryInjector {
 	return RepositoryInjector{
-		Me: meGateway.NewRepository(di.Firebase),
+		Me: meGateway.NewGateway(di.Me, di.Firebase, gw.Me),
 	}
 }

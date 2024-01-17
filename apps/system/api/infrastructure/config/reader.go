@@ -8,11 +8,11 @@ import (
 	"time"
 
 	"github.com/spf13/cast"
-	"go.uber.org/zap/zapcore"
 	"golang.org/x/text/language"
 )
 
 type Reader interface {
+	ServiceName() string
 	IsLocal() bool
 	IsDebug() bool
 	TimeLocation() *time.Location
@@ -20,7 +20,6 @@ type Reader interface {
 	AllowOrigins() []string
 	Cors() *cors.Cors
 	DefaultLanguage() language.Tag
-	LogLevel() zapcore.Level
 	SourceDataSource() datasource.DataSource
 	ReplicaDataSource() datasource.DataSource
 	FirebaseStorageBucket() string
@@ -44,10 +43,15 @@ const (
 	defaultLanguage Key = "DEFAULT_LANGUAGE"
 	nowOrToday      Key = "NOW_OR_TODAY"
 	isDebug         Key = "IS_DEBUG"
+	serviceName     Key = "SERVICE_NAME"
 )
 
 type reader struct {
 	env Env
+}
+
+func (r *reader) ServiceName() string {
+	return r.fromEnv(serviceName)
 }
 
 func (r *reader) IsLocal() bool {
@@ -56,13 +60,6 @@ func (r *reader) IsLocal() bool {
 
 func (r *reader) IsNotLocal() bool {
 	return !r.IsLocal()
-}
-
-func (r *reader) LogLevel() zapcore.Level {
-	if r.IsDebug() {
-		return zapcore.DebugLevel
-	}
-	return zapcore.InfoLevel
 }
 
 func (r *reader) IsDebug() bool {

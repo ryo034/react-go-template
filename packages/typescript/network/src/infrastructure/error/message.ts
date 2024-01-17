@@ -60,7 +60,7 @@ export class ErrorHandlingServiceMessageProvider {
     if (customErrorMessage) {
       return customErrorMessage
     }
-    // SpecificErrorNameMapにあるエラーではなかった場合にUnknownErrorを返す
+    // If the error is not in SpecificErrorNameMap, return "Unknown Error" message.
     if (err instanceof Error && !(err.constructor.name in SpecificErrorNameMap)) {
       return "Unknown Error"
     }

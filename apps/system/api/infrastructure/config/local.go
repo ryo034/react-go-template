@@ -1,6 +1,7 @@
 package config
 
 var localValues = map[Key]string{
+	serviceName: "system",
 	// Database Setting
 	dbUser:        "root",
 	dbPass:        "password",

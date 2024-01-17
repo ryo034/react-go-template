@@ -1,8 +1,22 @@
 GeneralError:
   type: object
+  description: RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807
   properties:
-    code:
+    status:
       type: integer
-      format: int32
-    message:
+      example: 400
+      description: The HTTP status code generated for this occurrence of the problem.
+    type:
       type: string
+      example: "invalid_item_id"
+      description: error type
+    title:
+      type: string
+      description: A short, human-readable summary of the problem type
+    detail:
+      type: string
+      description: A human-readable explanation specific to this occurrence of the problem.
+    code:
+      type: string
+      example: "invalid_item_id"
+      description: error code

@@ -12,6 +12,6 @@ func (m *Middleware) HandleBearer(ctx context.Context, operationName string, t o
 	return ctx, nil
 }
 
-func NewMiddleware() *Middleware {
+func NewSecMiddleware() *Middleware {
 	return &Middleware{}
 }

@@ -7,7 +7,11 @@ import (
 )
 
 type Resource interface {
+	TypeMessage(key string) Message
+	TitleMessage(key string) Message
+	DetailMessage(key string) Message
 	ErrorMessage(key string) Message
+	SuccessMessage(key string) Message
 	FieldName(key string) Message
 	FieldNameFromTag(tag FieldNameTag) Message
 }
@@ -34,8 +38,13 @@ func (m message) WithLang(tag language.Tag, args ...interface{}) string {
 }
 
 type resource struct {
-	errorMessages map[string]Message
-	fieldNames    map[string]Message
+	errorMessages    map[string]Message
+	successMessages  map[string]Message
+	titleMessages    map[string]Message
+	detailMessages   map[string]Message
+	typeMessages     map[string]Message
+	instanceMessages map[string]Message
+	fieldNames       map[string]Message
 }
 
 func NewResource(defaultLang language.Tag) Resource {
@@ -54,11 +63,39 @@ func NewResource(defaultLang language.Tag) Resource {
 		}
 		return result
 	}
-	return &resource{toMassages(errorMessages), toMassages(filedNames)}
+	return &resource{
+		toMassages(errorMessages),
+		toMassages(successMessages),
+		toMassages(titleMessages),
+		toMassages(detailMessages),
+		toMassages(typeMessages),
+		toMassages(instanceMessages),
+		toMassages(filedNames),
+	}
+}
+
+func (m *resource) TypeMessage(key string) Message {
+	return m.typeMessages[key]
+}
+
+func (m *resource) InstanceMessage(key string) Message {
+	return m.instanceMessages[key]
+}
+
+func (m *resource) TitleMessage(key string) Message {
+	return m.titleMessages[key]
+}
+
+func (m *resource) DetailMessage(key string) Message {
+	return m.detailMessages[key]
 }
 
 func (m *resource) ErrorMessage(key string) Message {
 	return m.errorMessages[key]
+}
+
+func (m *resource) SuccessMessage(key string) Message {
+	return m.successMessages[key]
 }
 
 func (m *resource) FieldName(key string) Message {

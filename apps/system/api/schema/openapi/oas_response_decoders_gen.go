@@ -261,7 +261,7 @@ func decodeSignUpResponse(resp *http.Response) (res SignUpRes, _ error) {
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response BadRequest
+			var response BadRequestError
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
@@ -296,7 +296,7 @@ func decodeSignUpResponse(resp *http.Response) (res SignUpRes, _ error) {
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response Unauthorized
+			var response UnauthorizedError
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err

@@ -84,39 +84,103 @@ export interface components {
     GeneralError: {
       content: {
         "application/json": {
-          /** Format: int32 */
-          code?: number;
-          message?: string;
+          /**
+           * @description The HTTP status code generated for this occurrence of the problem.
+           * @example 400
+           */
+          status?: number;
+          /**
+           * @description error type
+           * @example invalid_item_id
+           */
+          type?: string;
+          /** @description A short, human-readable summary of the problem type */
+          title?: string;
+          /** @description A human-readable explanation specific to this occurrence of the problem. */
+          detail?: string;
+          /**
+           * @description error code
+           * @example invalid_item_id
+           */
+          code?: string;
         };
       };
     };
     /** @description Unauthorized */
-    Unauthorized: {
+    UnauthorizedError: {
       content: {
         "application/json": {
-          /** Format: int32 */
-          code?: number;
-          message?: string;
+          /**
+           * @description The HTTP status code generated for this occurrence of the problem.
+           * @example 400
+           */
+          status?: number;
+          /**
+           * @description error type
+           * @example invalid_item_id
+           */
+          type?: string;
+          /** @description A short, human-readable summary of the problem type */
+          title?: string;
+          /** @description A human-readable explanation specific to this occurrence of the problem. */
+          detail?: string;
+          /**
+           * @description error code
+           * @example invalid_item_id
+           */
+          code?: string;
         };
       };
     };
     /** @description Entity not found. */
-    NotFound: {
+    NotFoundError: {
       content: {
         "application/json": {
-          /** Format: int32 */
-          code?: number;
-          message?: string;
+          /**
+           * @description The HTTP status code generated for this occurrence of the problem.
+           * @example 400
+           */
+          status?: number;
+          /**
+           * @description error type
+           * @example invalid_item_id
+           */
+          type?: string;
+          /** @description A short, human-readable summary of the problem type */
+          title?: string;
+          /** @description A human-readable explanation specific to this occurrence of the problem. */
+          detail?: string;
+          /**
+           * @description error code
+           * @example invalid_item_id
+           */
+          code?: string;
         };
       };
     };
     /** @description Bad request */
-    BadRequest: {
+    BadRequestError: {
       content: {
         "application/json": {
-          /** Format: int32 */
-          code?: number;
-          message?: string;
+          /**
+           * @description The HTTP status code generated for this occurrence of the problem.
+           * @example 400
+           */
+          status?: number;
+          /**
+           * @description error type
+           * @example invalid_item_id
+           */
+          type?: string;
+          /** @description A short, human-readable summary of the problem type */
+          title?: string;
+          /** @description A human-readable explanation specific to this occurrence of the problem. */
+          detail?: string;
+          /**
+           * @description error code
+           * @example invalid_item_id
+           */
+          code?: string;
         };
       };
     };
@@ -124,9 +188,25 @@ export interface components {
     InternalServerError: {
       content: {
         "application/json": {
-          /** Format: int32 */
-          code?: number;
-          message?: string;
+          /**
+           * @description The HTTP status code generated for this occurrence of the problem.
+           * @example 400
+           */
+          status?: number;
+          /**
+           * @description error type
+           * @example invalid_item_id
+           */
+          type?: string;
+          /** @description A short, human-readable summary of the problem type */
+          title?: string;
+          /** @description A human-readable explanation specific to this occurrence of the problem. */
+          detail?: string;
+          /**
+           * @description error code
+           * @example invalid_item_id
+           */
+          code?: string;
         };
       };
     };
@@ -171,8 +251,8 @@ export interface operations {
           "application/json": components["schemas"]["Me"];
         };
       };
-      400: components["responses"]["BadRequest"];
-      401: components["responses"]["Unauthorized"];
+      400: components["responses"]["BadRequestError"];
+      401: components["responses"]["UnauthorizedError"];
       500: components["responses"]["InternalServerError"];
     };
   };
