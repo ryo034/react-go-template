@@ -5,14 +5,12 @@ CREATE TABLE address_components (
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (component_id)
 );
-COMMENT ON TABLE address_components IS '住所の各構成要素';
 
 CREATE TABLE system_accounts (
   system_account_id uuid NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (system_account_id)
 );
-COMMENT ON TABLE system_accounts IS 'システム利用者';
 
 CREATE TABLE system_account_profiles (
   system_account_id uuid NOT NULL,
@@ -24,7 +22,6 @@ CREATE TABLE system_account_profiles (
   PRIMARY KEY (system_account_id),
   CONSTRAINT fk_system_account_profiles_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
 );
-COMMENT ON TABLE system_account_profiles IS 'システム利用者のプロフィール';
 
 CREATE TABLE system_account_phone_numbers (
   system_account_id uuid NOT NULL,
@@ -34,14 +31,12 @@ CREATE TABLE system_account_phone_numbers (
   PRIMARY KEY (system_account_id),
   CONSTRAINT fk_system_account_phone_numbers_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
 );
-COMMENT ON TABLE system_account_phone_numbers IS 'システム利用者の電話番号';
 
 CREATE TABLE workspaces (
   workspace_id uuid NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (workspace_id)
 );
-COMMENT ON TABLE workspaces IS '組織';
 
 CREATE TABLE workspace_details (
   workspace_id uuid NOT NULL,
@@ -51,7 +46,6 @@ CREATE TABLE workspace_details (
   PRIMARY KEY (workspace_id),
   CONSTRAINT fk_workspace_details_workspaces_workspace_id FOREIGN KEY (workspace_id) REFERENCES workspaces(workspace_id)
 );
-COMMENT ON TABLE workspace_details IS '組織の基本情報';
 
 CREATE TABLE members (
   member_id uuid NOT NULL,
@@ -62,7 +56,6 @@ CREATE TABLE members (
   CONSTRAINT fk_members_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id),
   CONSTRAINT fk_members_workspaces_workspace_id FOREIGN KEY (workspace_id) REFERENCES workspaces(workspace_id)
 );
-COMMENT ON TABLE members IS 'メンバー';
 
 CREATE TABLE member_profiles (
   member_id uuid NOT NULL,
@@ -93,11 +86,10 @@ CREATE TABLE member_addresses (
 );
 
 CREATE TABLE membership_periods (
-    member_id uuid NOT NULL,
-    workspace_id uuid NOT NULL,
-    start_date DATE NOT NULL,
-    end_date DATE,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (member_id, workspace_id, start_date)
+  member_id uuid NOT NULL,
+  start_date DATE NOT NULL,
+  end_date DATE,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (member_id, start_date),
+  CONSTRAINT fk_membership_periods_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id)
 );
-COMMENT ON TABLE membership_periods IS 'メンバーの組織所属期間';

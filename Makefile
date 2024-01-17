@@ -148,3 +148,16 @@ gen-design-doc:
 	@mkdir -p $(TARGET)
 	@cp ./docs/tech/design-doc/template.md $(TARGET)/$(shell date +%Y%m%d)-$(TITLE).md
 	@echo "Design document created at $(TARGET)/$(shell date +%Y%m%d)-$(TITLE).md"
+
+# ====================
+#  Database
+# ====================
+
+.PHONY: inspect-database
+inspect-database:
+	@docker run --rm -it \
+		--network=container:main-db-primary \
+		-v .:/work \
+		arigaio/atlas schema inspect \
+		-u "postgres://root:password@localhost:5432/main?sslmode=disable" \
+		--format '{{ mermaid . }}'

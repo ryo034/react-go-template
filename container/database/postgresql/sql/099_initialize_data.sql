@@ -29,5 +29,5 @@ VALUES ('377eba35-5560-4f48-a99d-19cbd6a82b0d', 'EMP-12345', 'John Doe', '2024-0
 INSERT INTO member_addresses (member_id, postal_code, building_component_id, street_address_component_id, city_component_id, state_component_id, country_component_id, created_at)
 VALUES ('377eba35-5560-4f48-a99d-19cbd6a82b0d', '150-0002', null, '44002c51-cc57-489f-bcf7-4f2abc6ddeb8', '0f40229e-dc58-4111-b709-b9a5266f587f', '90c3287b-2ff8-46b4-bfb5-332a979a199a', '10269b87-98ce-490e-aeab-2a5230a48d4f', '2024-01-10 12:00:00');
 
-INSERT INTO membership_periods (member_id, workspace_id, start_date, end_date, created_at)
-VALUES ('377eba35-5560-4f48-a99d-19cbd6a82b0d', 'c1bd2603-b9cd-4f84-8b83-3548f6ae150b', '2024-01-01', NULL, '2024-01-10 12:00:00');
+INSERT INTO membership_periods (member_id, start_date, end_date, created_at)
+VALUES ('377eba35-5560-4f48-a99d-19cbd6a82b0d', '2024-01-01', NULL, '2024-01-10 12:00:00');
