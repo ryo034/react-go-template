@@ -149,19 +149,44 @@ components:
           type: string
         user:
           $ref: '#/components/schemas/User'
+    Membership:
+      type: object
+      required:
+        - member
+        - workspace
+        - period
+      properties:
+        member:
+          $ref: '#/components/schemas/Member'
+        workspace:
+          $ref: '#/components/schemas/Workspace'
+        period:
+          $ref: '#/components/schemas/MembershipPeriod'
+    MembershipPeriod:
+      type: object
+      required:
+        - start
+        - end
+      properties:
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
     Me:
       type: object
       required:
         - emailVerified
-        - member
+        - membership
       properties:
         emailVerified:
           type: boolean
           default: false
         multiFactor:
           $ref: '#/components/schemas/MultiFactor'
-        member:
-          $ref: '#/components/schemas/Member'
+        membership:
+          $ref: '#/components/schemas/Membership'
   responses:
     GeneralError:
       description: General Error

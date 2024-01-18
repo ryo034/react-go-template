@@ -28,6 +28,10 @@ components:
       $ref: "./components/schemas/workspace.yaml#/Workspace"
     Member:
       $ref: "./components/schemas/member.yaml#/Member"
+    Membership:
+      $ref: "./components/schemas/membership.yaml#/Membership"
+    MembershipPeriod:
+      $ref: "./components/schemas/membership.yaml#/MembershipPeriod"
     Me:
       $ref: "./components/schemas/me.yaml#/Me"
   responses:

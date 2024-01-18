@@ -43,7 +43,7 @@ func (d *driver) Update(ctx context.Context, exec bun.IDB, m *me.Me) (*models.Me
 		NewUpdate().
 		Model(mem).
 		Set("updated_at = now()").
-		Where("id = ?", m.Member().User().AccountID().ToString()).
+		Where("id = ?", m.Membership().Member().ID().ToString()).
 		Exec(ctx)
 	if err != nil {
 		return nil, err

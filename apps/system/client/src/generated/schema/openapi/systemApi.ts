@@ -96,11 +96,22 @@ export interface components {
       idNumber?: string;
       user: components["schemas"]["User"];
     };
+    Membership: {
+      member: components["schemas"]["Member"];
+      workspace: components["schemas"]["Workspace"];
+      period: components["schemas"]["MembershipPeriod"];
+    };
+    MembershipPeriod: {
+      /** Format: date-time */
+      start: string;
+      /** Format: date-time */
+      end: string;
+    };
     Me: {
       /** @default false */
       emailVerified: boolean;
       multiFactor?: components["schemas"]["MultiFactor"];
-      member: components["schemas"]["Member"];
+      membership: components["schemas"]["Membership"];
     };
   };
   responses: {

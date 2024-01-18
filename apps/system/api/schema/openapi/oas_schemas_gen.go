@@ -3,6 +3,8 @@
 package openapi
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 )
 
@@ -160,7 +162,7 @@ func (*InternalServerError) signUpRes()   {}
 type Me struct {
 	EmailVerified bool           `json:"emailVerified"`
 	MultiFactor   OptMultiFactor `json:"multiFactor"`
-	Member        Member         `json:"member"`
+	Membership    Membership     `json:"membership"`
 }
 
 // GetEmailVerified returns the value of EmailVerified.
@@ -173,9 +175,9 @@ func (s *Me) GetMultiFactor() OptMultiFactor {
 	return s.MultiFactor
 }
 
-// GetMember returns the value of Member.
-func (s *Me) GetMember() Member {
-	return s.Member
+// GetMembership returns the value of Membership.
+func (s *Me) GetMembership() Membership {
+	return s.Membership
 }
 
 // SetEmailVerified sets the value of EmailVerified.
@@ -188,9 +190,9 @@ func (s *Me) SetMultiFactor(val OptMultiFactor) {
 	s.MultiFactor = val
 }
 
-// SetMember sets the value of Member.
-func (s *Me) SetMember(val Member) {
-	s.Member = val
+// SetMembership sets the value of Membership.
+func (s *Me) SetMembership(val Membership) {
+	s.Membership = val
 }
 
 func (*Me) loginRes()  {}
@@ -221,6 +223,69 @@ func (s *Member) SetIdNumber(val OptString) {
 // SetUser sets the value of User.
 func (s *Member) SetUser(val User) {
 	s.User = val
+}
+
+// Ref: #/components/schemas/Membership
+type Membership struct {
+	Member    Member           `json:"member"`
+	Workspace Workspace        `json:"workspace"`
+	Period    MembershipPeriod `json:"period"`
+}
+
+// GetMember returns the value of Member.
+func (s *Membership) GetMember() Member {
+	return s.Member
+}
+
+// GetWorkspace returns the value of Workspace.
+func (s *Membership) GetWorkspace() Workspace {
+	return s.Workspace
+}
+
+// GetPeriod returns the value of Period.
+func (s *Membership) GetPeriod() MembershipPeriod {
+	return s.Period
+}
+
+// SetMember sets the value of Member.
+func (s *Membership) SetMember(val Member) {
+	s.Member = val
+}
+
+// SetWorkspace sets the value of Workspace.
+func (s *Membership) SetWorkspace(val Workspace) {
+	s.Workspace = val
+}
+
+// SetPeriod sets the value of Period.
+func (s *Membership) SetPeriod(val MembershipPeriod) {
+	s.Period = val
+}
+
+// Ref: #/components/schemas/MembershipPeriod
+type MembershipPeriod struct {
+	Start time.Time `json:"start"`
+	End   time.Time `json:"end"`
+}
+
+// GetStart returns the value of Start.
+func (s *MembershipPeriod) GetStart() time.Time {
+	return s.Start
+}
+
+// GetEnd returns the value of End.
+func (s *MembershipPeriod) GetEnd() time.Time {
+	return s.End
+}
+
+// SetStart sets the value of Start.
+func (s *MembershipPeriod) SetStart(val time.Time) {
+	s.Start = val
+}
+
+// SetEnd sets the value of End.
+func (s *MembershipPeriod) SetEnd(val time.Time) {
+	s.End = val
 }
 
 // Ref: #/components/schemas/MultiFactor
@@ -585,4 +650,30 @@ func (s *User) SetName(val string) {
 // SetPhoneNumber sets the value of PhoneNumber.
 func (s *User) SetPhoneNumber(val OptString) {
 	s.PhoneNumber = val
+}
+
+// Ref: #/components/schemas/Workspace
+type Workspace struct {
+	WorkspaceId uuid.UUID `json:"workspaceId"`
+	Name        string    `json:"name"`
+}
+
+// GetWorkspaceId returns the value of WorkspaceId.
+func (s *Workspace) GetWorkspaceId() uuid.UUID {
+	return s.WorkspaceId
+}
+
+// GetName returns the value of Name.
+func (s *Workspace) GetName() string {
+	return s.Name
+}
+
+// SetWorkspaceId sets the value of WorkspaceId.
+func (s *Workspace) SetWorkspaceId(val uuid.UUID) {
+	s.WorkspaceId = val
+}
+
+// SetName sets the value of Name.
+func (s *Workspace) SetName(val string) {
+	s.Name = val
 }
