@@ -1,17 +1,3 @@
-Membership:
-  type: object
-  required:
-    - member
-    - workspace
-    - period
-  properties:
-    member:
-      $ref: "#/components/schemas/Member"
-    workspace:
-      $ref: "#/components/schemas/Workspace"
-    period:
-      $ref: "#/components/schemas/MembershipPeriod"
-
 MembershipPeriod:
   type: object
   required:

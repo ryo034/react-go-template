@@ -4,12 +4,13 @@ import (
 	"context"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	"github.com/uptrace/bun"
 )
 
 type Driver interface {
-	Find(ctx context.Context, exec bun.IDB, aID account.ID) (*models.Member, error)
+	Find(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error)
 	Update(ctx context.Context, exec bun.IDB, m *me.Me) (*models.Member, error)
 }
 
@@ -20,7 +21,7 @@ func NewDriver() Driver {
 	return &driver{}
 }
 
-func (d *driver) Find(ctx context.Context, exec bun.IDB, aID account.ID) (*models.Member, error) {
+func (d *driver) Find(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error) {
 	mem := &models.Member{}
 	err := exec.
 		NewSelect().
@@ -30,6 +31,7 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, aID account.ID) (*model
 		Relation("SystemAccount.Profile").
 		Relation("SystemAccount.PhoneNumber").
 		Where("m.system_account_id = ?", aID.ToString()).
+		Where("m.workspace_id = ?", wID.ToString()).
 		Scan(ctx)
 	if err != nil {
 		return nil, err
@@ -43,7 +45,7 @@ func (d *driver) Update(ctx context.Context, exec bun.IDB, m *me.Me) (*models.Me
 		NewUpdate().
 		Model(mem).
 		Set("updated_at = now()").
-		Where("id = ?", m.Membership().Member().ID().ToString()).
+		Where("id = ?", m.Member().ID().ToString()).
 		Exec(ctx)
 	if err != nil {
 		return nil, err

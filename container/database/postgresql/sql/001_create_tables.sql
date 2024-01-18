@@ -50,9 +50,11 @@ CREATE TABLE workspace_details (
 CREATE TABLE members (
   member_id uuid NOT NULL,
   system_account_id uuid NOT NULL,
+  workspace_id uuid NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (member_id),
-  CONSTRAINT fk_members_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+  CONSTRAINT fk_members_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id),
+  CONSTRAINT fk_members_workspaces_workspace_id FOREIGN KEY (workspace_id) REFERENCES workspaces(workspace_id)
 );
 
 CREATE TABLE member_profiles (
@@ -63,15 +65,6 @@ CREATE TABLE member_profiles (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (member_id),
   CONSTRAINT fk_member_profiles_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id)
-);
-
-CREATE TABLE memberships (
-  member_id uuid NOT NULL,
-  workspace_id uuid NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (member_id, workspace_id),
-  CONSTRAINT fk_memberships_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id),
-  CONSTRAINT fk_memberships_workspaces_workspace_id FOREIGN KEY (workspace_id) REFERENCES workspaces(workspace_id)
 );
 
 CREATE TABLE member_addresses (

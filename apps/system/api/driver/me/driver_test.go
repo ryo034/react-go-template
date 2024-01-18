@@ -1,4 +1,4 @@
-package membership
+package me
 
 import (
 	"context"
@@ -34,49 +34,35 @@ func Test_driver_Find_OK(t *testing.T) {
 
 	workspaceID := workspace.NewIDFromUUID(workspaceModelID)
 
-	want := &models.Membership{
-		MemberID:    memberID,
-		WorkspaceID: workspaceModelID,
-		CreatedAt:   defaultTime,
-		Workspace: &models.Workspace{
-			WorkspaceID: workspaceModelID,
-			CreatedAt:   defaultTime,
-			Detail: &models.WorkspaceDetail{
-				WorkspaceID: workspaceModelID,
-				Name:        "Example",
-				CreatedAt:   defaultTime,
-				UpdatedAt:   defaultTime,
-			},
-		},
-		Member: &models.Member{
-			MemberID:        memberID,
+	want := &models.Member{
+		MemberID:        memberID,
+		WorkspaceID:     workspaceModelID,
+		SystemAccountID: systemAccountIDUUID,
+		CreatedAt:       defaultTime,
+		SystemAccount: &models.SystemAccount{
 			SystemAccountID: systemAccountIDUUID,
 			CreatedAt:       defaultTime,
-			SystemAccount: &models.SystemAccount{
+			PhoneNumber: &models.SystemAccountPhoneNumber{
 				SystemAccountID: systemAccountIDUUID,
+				PhoneNumber:     "09012345678",
 				CreatedAt:       defaultTime,
-				PhoneNumber: &models.SystemAccountPhoneNumber{
-					SystemAccountID: systemAccountIDUUID,
-					PhoneNumber:     "09012345678",
-					CreatedAt:       defaultTime,
-					UpdatedAt:       defaultTime,
-				},
-				Profile: &models.SystemAccountProfile{
-					SystemAccountID: systemAccountIDUUID,
-					Name:            "John Doe",
-					Email:           "system_account@example.com",
-					EmailVerified:   true,
-					CreatedAt:       defaultTime,
-					UpdatedAt:       defaultTime,
-				},
+				UpdatedAt:       defaultTime,
 			},
-			Profile: &models.MemberProfile{
-				MemberID:       memberID,
-				MemberIDNumber: "DEV-12345",
-				DisplayName:    "John Doe",
-				CreatedAt:      defaultTime,
-				UpdatedAt:      defaultTime,
+			Profile: &models.SystemAccountProfile{
+				SystemAccountID: systemAccountIDUUID,
+				Name:            "John Doe",
+				Email:           "system_account@example.com",
+				EmailVerified:   true,
+				CreatedAt:       defaultTime,
+				UpdatedAt:       defaultTime,
 			},
+		},
+		Profile: &models.MemberProfile{
+			MemberID:       memberID,
+			MemberIDNumber: "DEV-12345",
+			DisplayName:    "John Doe",
+			CreatedAt:      defaultTime,
+			UpdatedAt:      defaultTime,
 		},
 	}
 	wantErr := false

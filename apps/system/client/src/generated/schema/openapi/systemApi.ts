@@ -100,11 +100,6 @@ export interface components {
       display_name: string;
       idNumber?: string;
     };
-    Membership: {
-      member: components["schemas"]["Member"];
-      workspace: components["schemas"]["Workspace"];
-      period: components["schemas"]["MembershipPeriod"];
-    };
     MembershipPeriod: {
       /** Format: date-time */
       start: string;
@@ -115,7 +110,7 @@ export interface components {
       /** @default false */
       emailVerified: boolean;
       multiFactor?: components["schemas"]["MultiFactor"];
-      membership: components["schemas"]["Membership"];
+      member: components["schemas"]["Member"];
     };
   };
   responses: {

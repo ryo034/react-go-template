@@ -15,13 +15,13 @@ func (s *Me) Validate() error {
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Membership.Validate(); err != nil {
+		if err := s.Member.Validate(); err != nil {
 			return err
 		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "membership",
+			Name:  "member",
 			Error: err,
 		})
 	}
@@ -45,29 +45,6 @@ func (s *Member) Validate() error {
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "user",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
-func (s *Membership) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if err := s.Member.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "member",
 			Error: err,
 		})
 	}

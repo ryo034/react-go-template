@@ -13,12 +13,12 @@ Me:
   type: object
   required:
     - emailVerified
-    - membership
+    - member
   properties:
     emailVerified:
       type: boolean
       default: false
     multiFactor:
       $ref: "#/components/schemas/MultiFactor"
-    membership:
-      $ref: "#/components/schemas/Membership"
+    member:
+      $ref: "#/components/schemas/Member"

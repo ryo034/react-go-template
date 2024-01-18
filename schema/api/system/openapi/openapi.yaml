@@ -159,19 +159,6 @@ components:
           type: string
         idNumber:
           type: string
-    Membership:
-      type: object
-      required:
-        - member
-        - workspace
-        - period
-      properties:
-        member:
-          $ref: '#/components/schemas/Member'
-        workspace:
-          $ref: '#/components/schemas/Workspace'
-        period:
-          $ref: '#/components/schemas/MembershipPeriod'
     MembershipPeriod:
       type: object
       required:
@@ -188,15 +175,15 @@ components:
       type: object
       required:
         - emailVerified
-        - membership
+        - member
       properties:
         emailVerified:
           type: boolean
           default: false
         multiFactor:
           $ref: '#/components/schemas/MultiFactor'
-        membership:
-          $ref: '#/components/schemas/Membership'
+        member:
+          $ref: '#/components/schemas/Member'
   responses:
     GeneralError:
       description: General Error

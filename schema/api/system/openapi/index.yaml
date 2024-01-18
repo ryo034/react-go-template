@@ -30,8 +30,6 @@ components:
       $ref: "./components/schemas/member.yaml#/Member"
     MemberProfile:
       $ref: "./components/schemas/member.yaml#/MemberProfile"
-    Membership:
-      $ref: "./components/schemas/membership.yaml#/Membership"
     MembershipPeriod:
       $ref: "./components/schemas/membership.yaml#/MembershipPeriod"
     Me:
