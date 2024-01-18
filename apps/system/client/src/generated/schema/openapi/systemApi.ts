@@ -16,6 +16,27 @@ export interface paths {
         500: components["responses"]["InternalServerError"];
       };
     };
+    /** Checks if the server is running */
+    post: {
+      requestBody?: {
+        content: {
+          "application/json": {
+            /**
+             * @description Name
+             * @example John Doe
+             */
+            name: string;
+          };
+        };
+      };
+      responses: {
+        /** @description Ping response */
+        200: {
+          content: never;
+        };
+        500: components["responses"]["InternalServerError"];
+      };
+    };
   };
   "/me": {
     /**
@@ -55,7 +76,9 @@ export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
     User: {
+      /** Format: uuid */
       userId: string;
+      /** Format: email */
       email: string;
       name: string;
       phoneNumber?: string;
@@ -65,6 +88,7 @@ export interface components {
       phoneNumber: string;
     };
     Workspace: {
+      /** Format: uuid */
       workspaceId: string;
       name: string;
     };
@@ -228,19 +252,14 @@ export interface operations {
    * @description Sign Up
    */
   sign_up: {
-    requestBody?: {
+    requestBody: {
       content: {
         "application/json": {
           /**
-           * @description First Name
-           * @example John
+           * @description Name
+           * @example John Doe
            */
-          first_name?: string;
-          /**
-           * @description Last Name
-           * @example Doe
-           */
-          last_name?: string;
+          name: string;
         };
       };
     };

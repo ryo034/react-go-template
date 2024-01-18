@@ -14,3 +14,8 @@ func (s *service) PingGet(ctx context.Context) (openapi.PingGetRes, error) {
 		},
 	}, nil
 }
+
+func (s *service) PingPost(ctx context.Context, req openapi.OptPingPostReq) (openapi.PingPostRes, error) {
+	//return &openapi.PingPostOK{}, nil
+	return &openapi.PingPostOK{}, nil
+}

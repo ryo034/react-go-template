@@ -20,10 +20,7 @@ type adapter struct {
 }
 
 func (a *adapter) Adapt(u *openapi.User) (*user.User, error) {
-	aID, err := account.NewID(u.UserId)
-	if err != nil {
-		return nil, err
-	}
+	aID := account.NewIDFromUUID(u.UserId)
 	email, err := account.NewEmail(u.Email)
 	if err != nil {
 		return nil, err

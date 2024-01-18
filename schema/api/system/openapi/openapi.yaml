@@ -15,6 +15,25 @@ paths:
           description: Ping response
         '500':
           $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: Checks if the server is running
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: Name
+                  example: John Doe
+      responses:
+        '200':
+          description: Ping response
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /me:
     get:
       summary: Get Admin User
@@ -36,19 +55,18 @@ paths:
       description: Sign Up
       operationId: sign_up
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
+              required:
+                - name
               properties:
-                first_name:
+                name:
                   type: string
-                  description: First Name
-                  example: John
-                last_name:
-                  type: string
-                  description: Last Name
-                  example: Doe
+                  description: Name
+                  example: John Doe
       responses:
         '200':
           description: Sign Up
@@ -93,8 +111,10 @@ components:
       properties:
         userId:
           type: string
+          format: uuid
         email:
           type: string
+          format: email
         name:
           type: string
         phoneNumber:
@@ -117,6 +137,7 @@ components:
       properties:
         workspaceId:
           type: string
+          format: uuid
         name:
           type: string
     Member:

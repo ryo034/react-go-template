@@ -107,8 +107,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					switch r.Method {
 					case "GET":
 						s.handlePingGetRequest([0]string{}, elemIsEscaped, w, r)
+					case "POST":
+						s.handlePingPostRequest([0]string{}, elemIsEscaped, w, r)
 					default:
-						s.notAllowed(w, r, "GET")
+						s.notAllowed(w, r, "GET,POST")
 					}
 
 					return
@@ -279,6 +281,15 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					case "GET":
 						// Leaf: PingGet
 						r.name = "PingGet"
+						r.summary = "Checks if the server is running"
+						r.operationID = ""
+						r.pathPattern = "/ping"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						// Leaf: PingPost
+						r.name = "PingPost"
 						r.summary = "Checks if the server is running"
 						r.operationID = ""
 						r.pathPattern = "/ping"

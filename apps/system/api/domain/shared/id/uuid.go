@@ -30,3 +30,7 @@ func NewUUID(v uuid.UUID) UUID {
 func (u UUID) ToString() string {
 	return u.v.String()
 }
+
+func (u UUID) Value() uuid.UUID {
+	return u.v
+}

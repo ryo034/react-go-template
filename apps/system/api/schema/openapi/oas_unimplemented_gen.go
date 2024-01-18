@@ -40,11 +40,20 @@ func (UnimplementedHandler) PingGet(ctx context.Context) (r PingGetRes, _ error)
 	return r, ht.ErrNotImplemented
 }
 
+// PingPost implements POST /ping operation.
+//
+// Checks if the server is running.
+//
+// POST /ping
+func (UnimplementedHandler) PingPost(ctx context.Context, req OptPingPostReq) (r PingPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // SignUp implements sign_up operation.
 //
 // Sign Up.
 //
 // POST /sign_up
-func (UnimplementedHandler) SignUp(ctx context.Context, req OptSignUpReq) (r SignUpRes, _ error) {
+func (UnimplementedHandler) SignUp(ctx context.Context, req *SignUpReq) (r SignUpRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

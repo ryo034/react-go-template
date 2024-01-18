@@ -2,6 +2,10 @@
 
 package openapi
 
+import (
+	"github.com/google/uuid"
+)
+
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type BadRequestError struct {
 	// The HTTP status code generated for this occurrence of the problem.
@@ -146,10 +150,11 @@ func (s *InternalServerError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*InternalServerError) loginRes()   {}
-func (*InternalServerError) meGetRes()   {}
-func (*InternalServerError) pingGetRes() {}
-func (*InternalServerError) signUpRes()  {}
+func (*InternalServerError) loginRes()    {}
+func (*InternalServerError) meGetRes()    {}
+func (*InternalServerError) pingGetRes()  {}
+func (*InternalServerError) pingPostRes() {}
+func (*InternalServerError) signUpRes()   {}
 
 // Ref: #/components/schemas/Me
 type Me struct {
@@ -336,38 +341,38 @@ func (o OptMultiFactor) Or(d MultiFactor) MultiFactor {
 	return d
 }
 
-// NewOptSignUpReq returns new OptSignUpReq with value set to v.
-func NewOptSignUpReq(v SignUpReq) OptSignUpReq {
-	return OptSignUpReq{
+// NewOptPingPostReq returns new OptPingPostReq with value set to v.
+func NewOptPingPostReq(v PingPostReq) OptPingPostReq {
+	return OptPingPostReq{
 		Value: v,
 		Set:   true,
 	}
 }
 
-// OptSignUpReq is optional SignUpReq.
-type OptSignUpReq struct {
-	Value SignUpReq
+// OptPingPostReq is optional PingPostReq.
+type OptPingPostReq struct {
+	Value PingPostReq
 	Set   bool
 }
 
-// IsSet returns true if OptSignUpReq was set.
-func (o OptSignUpReq) IsSet() bool { return o.Set }
+// IsSet returns true if OptPingPostReq was set.
+func (o OptPingPostReq) IsSet() bool { return o.Set }
 
 // Reset unsets value.
-func (o *OptSignUpReq) Reset() {
-	var v SignUpReq
+func (o *OptPingPostReq) Reset() {
+	var v PingPostReq
 	o.Value = v
 	o.Set = false
 }
 
 // SetTo sets value to v.
-func (o *OptSignUpReq) SetTo(v SignUpReq) {
+func (o *OptPingPostReq) SetTo(v PingPostReq) {
 	o.Set = true
 	o.Value = v
 }
 
 // Get returns value and boolean that denotes whether value was set.
-func (o OptSignUpReq) Get() (v SignUpReq, ok bool) {
+func (o OptPingPostReq) Get() (v PingPostReq, ok bool) {
 	if !o.Set {
 		return v, false
 	}
@@ -375,7 +380,7 @@ func (o OptSignUpReq) Get() (v SignUpReq, ok bool) {
 }
 
 // Or returns value if set, or given parameter if does not.
-func (o OptSignUpReq) Or(d SignUpReq) SignUpReq {
+func (o OptPingPostReq) Or(d PingPostReq) PingPostReq {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -433,31 +438,39 @@ type PingGetOK struct{}
 
 func (*PingGetOK) pingGetRes() {}
 
+// PingPostOK is response for PingPost operation.
+type PingPostOK struct{}
+
+func (*PingPostOK) pingPostRes() {}
+
+type PingPostReq struct {
+	// Name.
+	Name string `json:"name"`
+}
+
+// GetName returns the value of Name.
+func (s *PingPostReq) GetName() string {
+	return s.Name
+}
+
+// SetName sets the value of Name.
+func (s *PingPostReq) SetName(val string) {
+	s.Name = val
+}
+
 type SignUpReq struct {
-	// First Name.
-	FirstName OptString `json:"first_name"`
-	// Last Name.
-	LastName OptString `json:"last_name"`
+	// Name.
+	Name string `json:"name"`
 }
 
-// GetFirstName returns the value of FirstName.
-func (s *SignUpReq) GetFirstName() OptString {
-	return s.FirstName
+// GetName returns the value of Name.
+func (s *SignUpReq) GetName() string {
+	return s.Name
 }
 
-// GetLastName returns the value of LastName.
-func (s *SignUpReq) GetLastName() OptString {
-	return s.LastName
-}
-
-// SetFirstName sets the value of FirstName.
-func (s *SignUpReq) SetFirstName(val OptString) {
-	s.FirstName = val
-}
-
-// SetLastName sets the value of LastName.
-func (s *SignUpReq) SetLastName(val OptString) {
-	s.LastName = val
+// SetName sets the value of Name.
+func (s *SignUpReq) SetName(val string) {
+	s.Name = val
 }
 
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
@@ -528,14 +541,14 @@ func (*UnauthorizedError) signUpRes() {}
 
 // Ref: #/components/schemas/User
 type User struct {
-	UserId      string    `json:"userId"`
+	UserId      uuid.UUID `json:"userId"`
 	Email       string    `json:"email"`
 	Name        string    `json:"name"`
 	PhoneNumber OptString `json:"phoneNumber"`
 }
 
 // GetUserId returns the value of UserId.
-func (s *User) GetUserId() string {
+func (s *User) GetUserId() uuid.UUID {
 	return s.UserId
 }
 
@@ -555,7 +568,7 @@ func (s *User) GetPhoneNumber() OptString {
 }
 
 // SetUserId sets the value of UserId.
-func (s *User) SetUserId(val string) {
+func (s *User) SetUserId(val uuid.UUID) {
 	s.UserId = val
 }
 

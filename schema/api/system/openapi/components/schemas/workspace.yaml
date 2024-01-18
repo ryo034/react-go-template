@@ -6,5 +6,6 @@ Workspace:
   properties:
     workspaceId:
       type: string
+      format: uuid
     name:
       type: string

@@ -41,12 +41,18 @@ type Invoker interface {
 	//
 	// GET /ping
 	PingGet(ctx context.Context) (PingGetRes, error)
+	// PingPost invokes POST /ping operation.
+	//
+	// Checks if the server is running.
+	//
+	// POST /ping
+	PingPost(ctx context.Context, request OptPingPostReq) (PingPostRes, error)
 	// SignUp invokes sign_up operation.
 	//
 	// Sign Up.
 	//
 	// POST /sign_up
-	SignUp(ctx context.Context, request OptSignUpReq) (SignUpRes, error)
+	SignUp(ctx context.Context, request *SignUpReq) (SignUpRes, error)
 }
 
 // Client implements OAS client.
@@ -346,17 +352,91 @@ func (c *Client) sendPingGet(ctx context.Context) (res PingGetRes, err error) {
 	return result, nil
 }
 
+// PingPost invokes POST /ping operation.
+//
+// Checks if the server is running.
+//
+// POST /ping
+func (c *Client) PingPost(ctx context.Context, request OptPingPostReq) (PingPostRes, error) {
+	res, err := c.sendPingPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendPingPost(ctx context.Context, request OptPingPostReq) (res PingPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/ping"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "PingPost",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/ping"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodePingPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodePingPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // SignUp invokes sign_up operation.
 //
 // Sign Up.
 //
 // POST /sign_up
-func (c *Client) SignUp(ctx context.Context, request OptSignUpReq) (SignUpRes, error) {
+func (c *Client) SignUp(ctx context.Context, request *SignUpReq) (SignUpRes, error) {
 	res, err := c.sendSignUp(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendSignUp(ctx context.Context, request OptSignUpReq) (res SignUpRes, err error) {
+func (c *Client) sendSignUp(ctx context.Context, request *SignUpReq) (res SignUpRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("sign_up"),
 		semconv.HTTPMethodKey.String("POST"),

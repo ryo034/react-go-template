@@ -6,3 +6,22 @@ ping:
         description: Ping response
       "500":
         $ref: "#/components/responses/InternalServerError"
+  post:
+    summary: Checks if the server is running
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - name
+            properties:
+              name:
+                type: string
+                description: Name
+                example: John Doe
+    responses:
+      "200":
+        description: Ping response
+      "500":
+        $ref: "#/components/responses/InternalServerError"

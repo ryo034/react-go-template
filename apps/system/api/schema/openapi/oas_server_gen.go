@@ -26,12 +26,18 @@ type Handler interface {
 	//
 	// GET /ping
 	PingGet(ctx context.Context) (PingGetRes, error)
+	// PingPost implements POST /ping operation.
+	//
+	// Checks if the server is running.
+	//
+	// POST /ping
+	PingPost(ctx context.Context, req OptPingPostReq) (PingPostRes, error)
 	// SignUp implements sign_up operation.
 	//
 	// Sign Up.
 	//
 	// POST /sign_up
-	SignUp(ctx context.Context, req OptSignUpReq) (SignUpRes, error)
+	SignUp(ctx context.Context, req *SignUpReq) (SignUpRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

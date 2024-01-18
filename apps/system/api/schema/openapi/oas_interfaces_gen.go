@@ -13,6 +13,10 @@ type PingGetRes interface {
 	pingGetRes()
 }
 
+type PingPostRes interface {
+	pingPostRes()
+}
+
 type SignUpRes interface {
 	signUpRes()
 }
