@@ -2,7 +2,6 @@ package logger
 
 import (
 	"context"
-	middleware2 "github.com/ogen-go/ogen/middleware"
 	"net/http"
 	"net/http/httputil"
 	"runtime/debug"
@@ -16,7 +15,7 @@ type Logger interface {
 	Error(msg string, keysAndValues ...interface{})
 	With(fields ...interface{}) Logger
 	LogRequest(ctx context.Context, req *http.Request) time.Time
-	LogResponse(ctx context.Context, req *http.Request, st time.Time, resp middleware2.Response)
+	LogResponse(ctx context.Context, req *http.Request, st time.Time, sc int)
 }
 
 type Config struct {

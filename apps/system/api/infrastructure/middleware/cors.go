@@ -27,3 +27,22 @@ func Cors(info *CORSInfo, req *http.Request) {
 	req.Header.Set("Access-Control-Expose-Headers", "Content-Disposition")
 	req.Header.Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
 }
+
+type CorsMiddleware interface {
+	Handler(h http.Handler) http.Handler
+}
+
+type corsMiddleware struct {
+	info *CORSInfo
+}
+
+func (hl *corsMiddleware) Handler(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		Cors(hl.info, r)
+		h.ServeHTTP(w, r)
+	})
+}
+
+func NewCorsMiddleware(info *CORSInfo) CorsMiddleware {
+	return &corsMiddleware{info}
+}

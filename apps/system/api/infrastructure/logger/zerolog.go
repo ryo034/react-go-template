@@ -2,10 +2,7 @@ package logger
 
 import (
 	"context"
-	middleware2 "github.com/ogen-go/ogen/middleware"
 	"github.com/rs/zerolog"
-	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/middleware"
-	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 	"net/http"
 	"os"
 	"time"
@@ -15,6 +12,8 @@ type zeroLogger struct {
 	logger zerolog.Logger
 	conf   Config
 }
+
+const RequestIDKey = "request-id"
 
 func NewZeroLogger(conf Config, isLocal bool, serviceName string) Logger {
 	output := zerolog.ConsoleWriter{
@@ -71,26 +70,22 @@ func (z *zeroLogger) baseLogResponse(ctx context.Context, req *http.Request, st 
 	return append(fields, "latency", latency)
 }
 
-func (z *zeroLogger) LogResponse(ctx context.Context, req *http.Request, st time.Time, resp middleware2.Response) {
+func (z *zeroLogger) LogResponse(ctx context.Context, req *http.Request, st time.Time, sc int) {
 	fields := z.baseLogResponse(ctx, req, st)
 	fn := z.logger.Info
-	//Status parameter is available in GeneralError and GetStatus() is implemented in generated code
-	if tresp, ok := resp.Type.(interface{ GetStatus() openapi.OptInt }); ok {
-		sta, stOK := tresp.GetStatus().Get()
-		if stOK {
-			fields = append(fields, "status", sta)
-		}
-		if stOK && sta >= 500 {
-			fn = z.logger.Error
-		} else if stOK && sta >= 400 {
-			fn = z.logger.Warn
-		}
+	if sc >= 0 {
+		fields = append(fields, "status", sc)
+	}
+	if sc >= 500 {
+		fn = z.logger.Error
+	} else if sc >= 400 {
+		fn = z.logger.Warn
 	}
 	fn().Fields(convertToMap(fields)).Msg("Response")
 }
 
 func (z *zeroLogger) baseFields(ctx context.Context, req *http.Request) []interface{} {
-	reqID := ctx.Value(middleware.RequestIDKey).(string)
+	reqID := ctx.Value(RequestIDKey).(string)
 	var fields []interface{}
 	fields = append(fields, "request-id", reqID)
 	fields = append(fields, "method", req.Method)

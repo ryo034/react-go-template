@@ -6,12 +6,15 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/injector"
-	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/openapi/middleware"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/logger"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/middleware"
+	openapiMiddleware "github.com/ryo034/react-go-template/apps/system/api/infrastructure/openapi/middleware"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/openapi/service"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 	"log"
 	"net/http"
+	"time"
 )
 
 func Start(conf config.Reader) {
@@ -31,16 +34,21 @@ func Start(conf config.Reader) {
 		log.Fatalln(err)
 	}
 
-	srv, err := openapi.NewServer(
+	h, err := openapi.NewServer(
 		service.NewService(inj),
-		middleware.NewSecMiddleware(),
-		openapi.WithMiddleware(middleware.NewMiddlewares().Global(conf)...),
+		openapiMiddleware.NewSecMiddleware(),
 	)
+
 	if err != nil {
 		log.Fatal(err)
 	}
-	corsHandler := conf.Cors().Handler(srv)
-	if err = http.ListenAndServe(endpoint, corsHandler); err != nil {
+
+	zl := logger.NewZeroLogger(logger.Config{TimeFormat: time.RFC3339, UTC: true}, conf.IsLocal(), conf.ServiceName())
+
+	if err = http.ListenAndServe(
+		endpoint,
+		middleware.NewMiddlewares().Global(h, conf, zl),
+	); err != nil {
 		log.Fatal(err)
 	}
 }

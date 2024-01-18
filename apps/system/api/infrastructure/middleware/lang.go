@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"context"
 	"golang.org/x/text/language"
 	"net/http"
 )
@@ -19,4 +20,24 @@ func Language(req *http.Request, defaultLang language.Tag) language.Tag {
 		}
 	}
 	return lang
+}
+
+type LangMiddleware interface {
+	Handler(h http.Handler) http.Handler
+}
+
+type langMiddleware struct {
+	defaultLang language.Tag
+}
+
+func (hl *langMiddleware) Handler(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		lang := Language(r, hl.defaultLang)
+		ctx := context.WithValue(r.Context(), "lang", lang)
+		h.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
+
+func NewLangMiddleware(defaultLang language.Tag) LangMiddleware {
+	return &langMiddleware{defaultLang}
 }
