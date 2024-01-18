@@ -201,13 +201,13 @@ func (*Me) signUpRes() {}
 
 // Ref: #/components/schemas/Member
 type Member struct {
-	IdNumber OptString `json:"idNumber"`
-	User     User      `json:"user"`
+	Profile MemberProfile `json:"profile"`
+	User    User          `json:"user"`
 }
 
-// GetIdNumber returns the value of IdNumber.
-func (s *Member) GetIdNumber() OptString {
-	return s.IdNumber
+// GetProfile returns the value of Profile.
+func (s *Member) GetProfile() MemberProfile {
+	return s.Profile
 }
 
 // GetUser returns the value of User.
@@ -215,14 +215,40 @@ func (s *Member) GetUser() User {
 	return s.User
 }
 
-// SetIdNumber sets the value of IdNumber.
-func (s *Member) SetIdNumber(val OptString) {
-	s.IdNumber = val
+// SetProfile sets the value of Profile.
+func (s *Member) SetProfile(val MemberProfile) {
+	s.Profile = val
 }
 
 // SetUser sets the value of User.
 func (s *Member) SetUser(val User) {
 	s.User = val
+}
+
+// Ref: #/components/schemas/MemberProfile
+type MemberProfile struct {
+	DisplayName string    `json:"display_name"`
+	IdNumber    OptString `json:"idNumber"`
+}
+
+// GetDisplayName returns the value of DisplayName.
+func (s *MemberProfile) GetDisplayName() string {
+	return s.DisplayName
+}
+
+// GetIdNumber returns the value of IdNumber.
+func (s *MemberProfile) GetIdNumber() OptString {
+	return s.IdNumber
+}
+
+// SetDisplayName sets the value of DisplayName.
+func (s *MemberProfile) SetDisplayName(val string) {
+	s.DisplayName = val
+}
+
+// SetIdNumber sets the value of IdNumber.
+func (s *MemberProfile) SetIdNumber(val OptString) {
+	s.IdNumber = val
 }
 
 // Ref: #/components/schemas/Membership

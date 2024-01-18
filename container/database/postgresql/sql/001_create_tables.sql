@@ -58,7 +58,7 @@ CREATE TABLE members (
 CREATE TABLE member_profiles (
   member_id uuid NOT NULL,
   member_id_number VARCHAR(255) NOT NULL,
-  name VARCHAR(50) NOT NULL,
+  display_name VARCHAR(50) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (member_id),

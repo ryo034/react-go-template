@@ -9,7 +9,7 @@ INSERT INTO system_accounts (system_account_id, created_at)
 VALUES ('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', '2024-01-10 12:00:00');
 
 INSERT INTO system_account_profiles (system_account_id, name, email, email_verified, created_at, updated_at)
-VALUES ('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', '鈴木 太郎', 'system_account@example.com', true, '2024-01-10 12:00:00', '2024-01-10 12:00:00');
+VALUES ('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'John Doe', 'system_account@example.com', true, '2024-01-10 12:00:00', '2024-01-10 12:00:00');
 
 INSERT INTO system_account_phone_numbers (system_account_id, phone_number, created_at, updated_at)
 VALUES ('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', '09012345678', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
@@ -18,13 +18,13 @@ INSERT INTO workspaces (workspace_id, created_at)
 VALUES ('c1bd2603-b9cd-4f84-8b83-3548f6ae150b', '2024-01-10 12:00:00');
 
 INSERT INTO workspace_details (workspace_id, name, created_at, updated_at)
-VALUES ('c1bd2603-b9cd-4f84-8b83-3548f6ae150b', 'Example Corp', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
+VALUES ('c1bd2603-b9cd-4f84-8b83-3548f6ae150b', 'Example', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
 
 INSERT INTO members (member_id, system_account_id, created_at)
 VALUES ('377eba35-5560-4f48-a99d-19cbd6a82b0d', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', '2024-01-10 12:00:00');
 
-INSERT INTO member_profiles (member_id, member_id_number, name, created_at, updated_at)
-VALUES ('377eba35-5560-4f48-a99d-19cbd6a82b0d', 'EMP-12345', 'John Doe', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
+INSERT INTO member_profiles (member_id, member_id_number, display_name, created_at, updated_at)
+VALUES ('377eba35-5560-4f48-a99d-19cbd6a82b0d', 'DEV-12345', 'John Doe', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
 
 INSERT INTO memberships (member_id, workspace_id, created_at)
 VALUES ('377eba35-5560-4f48-a99d-19cbd6a82b0d', 'c1bd2603-b9cd-4f84-8b83-3548f6ae150b', '2024-01-10 12:00:00');

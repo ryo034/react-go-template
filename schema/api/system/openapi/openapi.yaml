@@ -144,11 +144,21 @@ components:
       type: object
       required:
         - user
+        - profile
       properties:
-        idNumber:
-          type: string
+        profile:
+          $ref: '#/components/schemas/MemberProfile'
         user:
           $ref: '#/components/schemas/User'
+    MemberProfile:
+      type: object
+      required:
+        - display_name
+      properties:
+        display_name:
+          type: string
+        idNumber:
+          type: string
     Membership:
       type: object
       required:

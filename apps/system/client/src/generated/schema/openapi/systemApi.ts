@@ -93,8 +93,12 @@ export interface components {
       name: string;
     };
     Member: {
-      idNumber?: string;
+      profile: components["schemas"]["MemberProfile"];
       user: components["schemas"]["User"];
+    };
+    MemberProfile: {
+      display_name: string;
+      idNumber?: string;
     };
     Membership: {
       member: components["schemas"]["Member"];

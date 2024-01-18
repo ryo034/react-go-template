@@ -1,4 +1,4 @@
-package me
+package membership
 
 import (
 	"context"
@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	"github.com/ryo034/react-go-template/apps/system/api/util/test"
@@ -18,10 +19,6 @@ import (
 	"time"
 )
 
-// Check DB
-// psql -h localhost -p 5432 -U postgres -d main
-// \dt
-
 const systemAccountID = "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
 
 var systemAccountIDUUID = uuid.MustParse(systemAccountID)
@@ -32,37 +29,54 @@ func Test_driver_Find_OK(t *testing.T) {
 		t.Fatalf("failed to parse defaultTime: %v", err)
 	}
 	accountID, _ := account.NewID(systemAccountID)
-	employeeID := uuid.MustParse("377eba35-5560-4f48-a99d-19cbd6a82b0d")
+	workspaceModelID := uuid.MustParse("c1bd2603-b9cd-4f84-8b83-3548f6ae150b")
+	memberID := uuid.MustParse("377eba35-5560-4f48-a99d-19cbd6a82b0d")
 
-	want := &models.Member{
-		MemberID:        employeeID,
-		SystemAccountID: systemAccountIDUUID,
-		WorkspaceID:     uuid.MustParse("c1bd2603-b9cd-4f84-8b83-3548f6ae150b"),
-		CreatedAt:       defaultTime,
-		SystemAccount: &models.SystemAccount{
-			SystemAccountID: systemAccountIDUUID,
-			CreatedAt:       defaultTime,
-			PhoneNumber: &models.SystemAccountPhoneNumber{
-				SystemAccountID: systemAccountIDUUID,
-				PhoneNumber:     "09012345678",
-				CreatedAt:       defaultTime,
-				UpdatedAt:       defaultTime,
-			},
-			Profile: &models.SystemAccountProfile{
-				SystemAccountID: systemAccountIDUUID,
-				Name:            "鈴木 太郎",
-				Email:           "system_account@example.com",
-				EmailVerified:   true,
-				CreatedAt:       defaultTime,
-				UpdatedAt:       defaultTime,
+	workspaceID := workspace.NewIDFromUUID(workspaceModelID)
+
+	want := &models.Membership{
+		MemberID:    memberID,
+		WorkspaceID: workspaceModelID,
+		CreatedAt:   defaultTime,
+		Workspace: &models.Workspace{
+			WorkspaceID: workspaceModelID,
+			CreatedAt:   defaultTime,
+			Detail: &models.WorkspaceDetail{
+				WorkspaceID: workspaceModelID,
+				Name:        "Example",
+				CreatedAt:   defaultTime,
+				UpdatedAt:   defaultTime,
 			},
 		},
-		Profile: &models.MemberProfile{
-			MemberID:       employeeID,
-			MemberIDNumber: "EMP-12345",
-			Name:           "John Doe",
-			CreatedAt:      defaultTime,
-			UpdatedAt:      defaultTime,
+		Member: &models.Member{
+			MemberID:        memberID,
+			SystemAccountID: systemAccountIDUUID,
+			CreatedAt:       defaultTime,
+			SystemAccount: &models.SystemAccount{
+				SystemAccountID: systemAccountIDUUID,
+				CreatedAt:       defaultTime,
+				PhoneNumber: &models.SystemAccountPhoneNumber{
+					SystemAccountID: systemAccountIDUUID,
+					PhoneNumber:     "09012345678",
+					CreatedAt:       defaultTime,
+					UpdatedAt:       defaultTime,
+				},
+				Profile: &models.SystemAccountProfile{
+					SystemAccountID: systemAccountIDUUID,
+					Name:            "John Doe",
+					Email:           "system_account@example.com",
+					EmailVerified:   true,
+					CreatedAt:       defaultTime,
+					UpdatedAt:       defaultTime,
+				},
+			},
+			Profile: &models.MemberProfile{
+				MemberID:       memberID,
+				MemberIDNumber: "DEV-12345",
+				DisplayName:    "John Doe",
+				CreatedAt:      defaultTime,
+				UpdatedAt:      defaultTime,
+			},
 		},
 	}
 	wantErr := false
@@ -91,7 +105,7 @@ func Test_driver_Find_OK(t *testing.T) {
 		})
 
 		pr := core.NewDatabaseProvider(db, db)
-		got, err := NewDriver().Find(ctx, pr.GetExecutor(ctx, true), accountID)
+		got, err := NewDriver().Find(ctx, pr.GetExecutor(ctx, true), accountID, workspaceID)
 		if (err != nil) != wantErr {
 			t.Errorf("Find() error = %v, wantErr %v", err, wantErr)
 			return
