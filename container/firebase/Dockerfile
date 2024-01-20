@@ -2,12 +2,11 @@ FROM openjdk:slim
 
 RUN set -ex \
   && apt-get update \
-  && apt-get install -y curl \
-  && curl -sL https://deb.nodesource.com/setup_18.x | bash \
-  && apt-get install -y nodejs \
-  && npm install -g firebase-tools
+  && apt-get install -y --no-install-recommends curl \
+  && curl -sL https://deb.nodesource.com/setup_20.x | bash - \
+  && apt-get install -y --no-install-recommends nodejs \
+  && npm install -g firebase-tools@latest
 
-EXPOSE 9099
-EXPOSE 9199
-EXPOSE 4000
-EXPOSE 4500
+RUN  apt-get clean && rm -rf /var/lib/apt/lists/*
+
+EXPOSE 9099 9199 4000 4500
