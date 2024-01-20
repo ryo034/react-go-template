@@ -161,3 +161,12 @@ inspect-database:
 		arigaio/atlas schema inspect \
 		-u "postgres://root:password@localhost:5432/main?sslmode=disable" \
 		--format '{{ mermaid . }}'
+
+# ====================
+#  Node
+# ====================
+.PHONY: update-node-version
+update-node-version:
+	@asdf install nodejs $(VERSION)
+	@asdf local nodejs $(VERSION)
+	@corepack enable pnpm
