@@ -2,7 +2,6 @@
 
 ## How to add component
 
-
 1. Add component
 
 example.
@@ -12,6 +11,7 @@ example.
 ```
 
 2. Add export to src/components/index.ts
+
 ```ts
 ...
 export * from "./ui/separator"

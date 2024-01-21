@@ -1,11 +1,13 @@
 # System Database
 
 ## ER図
+
 基本的にはMiroで書いている
 
 ![ERD](./database.jpg)
 
 ### 自動生成
+
 https://github.com/ariga/atlas
 
 以下コマンドでER図のコード（mermaid）をデータベースから生成することができる。
@@ -97,6 +99,7 @@ erDiagram
 ```
 
 ### SQLからER図を確認
-以下のURLでSQLファイル（001_create_tables.sql）からER図を確認できる
+
+以下のURLでSQLファイル（001\_create\_tables.sql）からER図を確認できる
 
 https://gh.atlasgo.cloud/explore
