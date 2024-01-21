@@ -13,6 +13,7 @@ import (
 )
 
 type Driver interface {
+	CustomToken(ctx context.Context, aID account.ID) (string, error)
 	DeleteUser(ctx context.Context, aID account.ID) error
 	RevokeRefreshTokens(ctx context.Context, aID account.ID) error
 	GetUser(ctx context.Context, aID account.ID) (*auth.UserRecord, error)
@@ -23,14 +24,16 @@ type Driver interface {
 	UpdatePhoneNumber(ctx context.Context, aID account.ID, ph phone.Number) error
 }
 
-const currentStoreIdKey = "currentStoreID"
-
 type driver struct {
 	f *firebase.Firebase
 }
 
 func NewDriver(f *firebase.Firebase) Driver {
 	return &driver{f}
+}
+
+func (d *driver) CustomToken(ctx context.Context, aID account.ID) (string, error) {
+	return d.f.Auth.CustomToken(ctx, aID.ToString())
 }
 
 func (d *driver) DeleteUser(ctx context.Context, aID account.ID) error {

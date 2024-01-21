@@ -17,9 +17,13 @@ export class MeDriver {
     }
   }
 
-  async signUp(firstName: AccountName, lastName: AccountName): PromiseResult<components["schemas"]["Me"], Error> {
+  async signUp(name: AccountName): PromiseResult<components["schemas"]["Me"], Error> {
     try {
-      const res = await this.client.POST("/sign_up", { params: { query: { firstName, lastName } } })
+      const res = await this.client.POST('/sign_up', {
+        body: {
+          name: `${name.value}`
+        }
+      })
       return res.data ? Result.ok(res.data) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))

@@ -2,7 +2,6 @@ package me
 
 import (
 	"context"
-	"database/sql"
 	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
@@ -13,7 +12,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
-	"github.com/uptrace/bun/extra/bundebug"
 	"reflect"
 	"testing"
 	"time"
@@ -52,7 +50,6 @@ func Test_driver_Find_OK(t *testing.T) {
 				SystemAccountID: systemAccountIDUUID,
 				Name:            "John Doe",
 				Email:           "system_account@example.com",
-				EmailVerified:   true,
 				CreatedAt:       defaultTime,
 				UpdatedAt:       defaultTime,
 			},
@@ -68,28 +65,7 @@ func Test_driver_Find_OK(t *testing.T) {
 	wantErr := false
 	ctx := context.Background()
 	t.Run("Find", func(t *testing.T) {
-		pgContainer, err := test.PSQLTestContainer(ctx, test.CreateSystemTablesPath, test.CreateSystemBaseDataPath)
-		if err != nil {
-			t.Fatalf("failed to PSQLContainer creation: %v", err)
-		}
-
-		sqlDB, err := sql.Open("postgres", pgContainer.ConnectionString)
-		if err != nil {
-			t.Fatalf("failed to sql.Open: %v", err)
-		}
-
-		db := bun.NewDB(sqlDB, pgdialect.New())
-		db.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
-
-		t.Cleanup(func() {
-			if err = db.Close(); err != nil {
-				t.Fatalf("failed to close db: %s", err)
-			}
-			if err = pgContainer.Terminate(ctx); err != nil {
-				t.Fatalf("failed to terminate pgContainer: %s", err)
-			}
-		})
-
+		db := bun.NewDB(test.SetupTestDB(t, ctx).DB, pgdialect.New())
 		pr := core.NewDatabaseProvider(db, db)
 		got, err := NewDriver().Find(ctx, pr.GetExecutor(ctx, true), accountID, workspaceID)
 		if (err != nil) != wantErr {

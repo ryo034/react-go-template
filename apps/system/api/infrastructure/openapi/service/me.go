@@ -7,5 +7,6 @@ import (
 
 func (s *service) MeGet(ctx context.Context) (openapi.MeGetRes, error) {
 	aID := ""
-	return s.ctrl.Me.Find(ctx, aID)
+	wID := ""
+	return s.ctrl.Me.Find(ctx, aID, wID)
 }

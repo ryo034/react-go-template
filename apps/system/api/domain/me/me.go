@@ -6,21 +6,12 @@ import (
 )
 
 type Me struct {
-	emailVerified bool
-	multiFactors  multi_factor.MultiFactors
-	member        *member.Member
+	multiFactors multi_factor.MultiFactors
+	member       *member.Member
 }
 
-func NewMe(emailVerified bool, multiFactors multi_factor.MultiFactors, member *member.Member) *Me {
-	return &Me{emailVerified, multiFactors, member}
-}
-
-func (m *Me) EmailVerified() bool {
-	return m.emailVerified
-}
-
-func (m *Me) NotEmailVerified() bool {
-	return !m.emailVerified
+func NewMe(multiFactors multi_factor.MultiFactors, member *member.Member) *Me {
+	return &Me{multiFactors, member}
 }
 
 func (m *Me) MultiFactors() multi_factor.MultiFactors {

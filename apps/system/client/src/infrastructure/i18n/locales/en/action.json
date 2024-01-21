@@ -4,6 +4,7 @@
     "back": "back",
     "cancel": "cancel",
     "login": "login",
+    "sendOneTimeCode": "Send Authentication Code",
     "signUp": "sign up",
     "showItem": "show {{field}}",
     "inputField": "input {{field}}",

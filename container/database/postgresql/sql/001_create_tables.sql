@@ -16,7 +16,6 @@ CREATE TABLE system_account_profiles (
   system_account_id uuid NOT NULL,
   name VARCHAR(255) NOT NULL,
   email VARCHAR(256) NOT NULL,
-  email_verified BOOLEAN NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (system_account_id),

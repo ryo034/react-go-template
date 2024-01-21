@@ -16,8 +16,6 @@ type Injector struct {
 	driverInj  driver
 	useCaseInj UseCase
 	ctrl       Controller
-	resi       ResponseInjector
-	reqi       RequestInjector
 }
 
 func NewInjector(
@@ -33,10 +31,8 @@ func NewInjector(
 	pi := newPresenterInjector()
 	la := sharedPresenter.NewLanguageAdapter(defaultLang)
 	messageResource := message.NewResource(defaultLang)
-	ui := newUseCaseInjector(conf.IsLocal(), co, ri, di, pi, d, txp, messageResource, la)
-	resi := newResponseInjector()
-	reqi := newRequestInjector()
-	ctrl := newControllerInjector(ui)
+	ui := newUseCaseInjector(conf.IsLocal(), co, ri, di, pi, d, txp)
+	ctrl := newControllerInjector(ui, messageResource, la)
 	return &Injector{
 		f,
 		conf,
@@ -44,8 +40,6 @@ func NewInjector(
 		di,
 		ui,
 		ctrl,
-		resi,
-		reqi,
 	}, nil
 }
 

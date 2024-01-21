@@ -8,14 +8,14 @@ import (
 type User struct {
 	accountId   account.ID
 	email       account.Email
-	name        account.Name
+	name        *account.Name
 	phoneNumber *phone.Number
 }
 
 func NewUser(
 	accountId account.ID,
 	email account.Email,
-	name account.Name,
+	name *account.Name,
 	phoneNumber *phone.Number,
 ) *User {
 	return &User{
@@ -24,6 +24,12 @@ func NewUser(
 		name,
 		phoneNumber,
 	}
+}
+func NewTmpUser(
+	accountId account.ID,
+	email account.Email,
+) *User {
+	return &User{accountId, email, nil, nil}
 }
 
 func (u *User) AccountID() account.ID {
@@ -34,8 +40,12 @@ func (u *User) Email() account.Email {
 	return u.email
 }
 
-func (u *User) Name() account.Name {
+func (u *User) Name() *account.Name {
 	return u.name
+}
+
+func (u *User) HasName() bool {
+	return u.name != nil
 }
 
 func (u *User) PhoneNumber() *phone.Number {

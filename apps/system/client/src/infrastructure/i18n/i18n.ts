@@ -52,7 +52,6 @@ export const i18nRootKeys = {
 
 export const i18nKeys = {
   word: {
-    password: `${i18nRootKeys.word}.password`,
     email: `${i18nRootKeys.word}.email`,
     error: {
       unknown: `${i18nRootKeys.word}.error.unknown`
@@ -63,7 +62,7 @@ export const i18nKeys = {
     back: `${i18nRootKeys.action}.back`,
     cancel: `${i18nRootKeys.action}.cancel`,
     login: `${i18nRootKeys.action}.login`,
-    signUp: `${i18nRootKeys.action}.signUp`,
+    sendOneTimeCode: `${i18nRootKeys.action}.sendOneTimeCode`,
     showItem: `${i18nRootKeys.action}.showItem`,
     logout: `${i18nRootKeys.action}.logout`,
     inputField: `${i18nRootKeys.action}.inputField`,
@@ -79,7 +78,6 @@ export const i18nKeys = {
   page: {
     login: {
       forgotPassword: `${i18nRootKeys.page}.login.forgotPassword`,
-      notHaveAnAccountYet: `${i18nRootKeys.page}.login.notHaveAnAccountYet`,
       createNewAccount: `${i18nRootKeys.page}.login.createNewAccount`,
       signInYourAccount: `${i18nRootKeys.page}.login.signInYourAccount`
     }

@@ -27,6 +27,10 @@ func NewUUID(v uuid.UUID) UUID {
 	return UUID{v}
 }
 
+func GenerateUUID() UUID {
+	return UUID{uuid.New()}
+}
+
 func (u UUID) ToString() string {
 	return u.v.String()
 }

@@ -2,15 +2,21 @@ package test
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
+	"github.com/testcontainers/testcontainers-go/modules/redis"
 	"github.com/testcontainers/testcontainers-go/wait"
+	"github.com/uptrace/bun"
+	"github.com/uptrace/bun/dialect/pgdialect"
+	"github.com/uptrace/bun/extra/bundebug"
 	"path/filepath"
+	"testing"
 	"time"
 )
 
-const testContainerPort = "5432"
+const testContainerPort = "65432"
 const testContainerDBPwd = "password"
 const testContainerDBUser = "postgres"
 
@@ -55,4 +61,47 @@ func PSQLTestContainer(ctx context.Context, scripts ...string) (*PostgresContain
 		PostgresContainer: pgContainer,
 		ConnectionString:  connStr,
 	}, nil
+}
+
+func SetupTestDB(t *testing.T, ctx context.Context) *bun.DB {
+	pgContainer, err := PSQLTestContainer(ctx, CreateSystemTablesPath, CreateSystemBaseDataPath)
+	if err != nil {
+		t.Fatalf("failed to PSQLContainer creation: %v", err)
+	}
+
+	sqlDB, err := sql.Open("postgres", pgContainer.ConnectionString)
+	if err != nil {
+		t.Fatalf("failed to sql.Open: %v", err)
+	}
+
+	db := bun.NewDB(sqlDB, pgdialect.New())
+	db.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
+
+	t.Cleanup(func() {
+		if err = db.Close(); err != nil {
+			t.Fatalf("failed to close db: %s", err)
+		}
+		if err = pgContainer.Terminate(ctx); err != nil {
+			t.Fatalf("failed to terminate pgContainer: %s", err)
+		}
+	})
+	return db
+}
+
+func RedisTestContainer(ctx context.Context) (*redis.RedisContainer, error) {
+	redisContainer, err := redis.RunContainer(ctx,
+		testcontainers.WithImage("docker.io/redis:7"),
+		redis.WithSnapshotting(10, 1),
+		redis.WithLogLevel(redis.LogLevelVerbose),
+		redis.WithConfigFile(filepath.Join("testdata", "redis7.conf")),
+	)
+	if err != nil {
+		panic(err)
+	}
+	defer func() {
+		if err = redisContainer.Terminate(ctx); err != nil {
+			panic(err)
+		}
+	}()
+	return redisContainer, nil
 }

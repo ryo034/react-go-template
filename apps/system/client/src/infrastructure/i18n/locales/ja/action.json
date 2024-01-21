@@ -4,6 +4,7 @@
     "back": "戻る",
     "cancel": "キャンセル",
     "login": "ログイン",
+    "sendOneTimeCode": "認証コードを送る",
     "signUp": "新規作成",
     "showItem": "{{field}}を表示",
     "inputField": "{{field}}を入力",

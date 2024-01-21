@@ -37,6 +37,32 @@ services:
     # command: ['firebase', 'emulators:start', '--export-on-exit', './.emulator', '--import=./.emulator']
     tty: true
 
+  redis:
+    image: "redis:latest"
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - "./container/redis:/data"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+
+  mail:
+    image: mailhog/mailhog
+    container_name: mailhog
+    ports:
+      - "8025:8025"
+    healthcheck:
+      test: ["CMD", "echo | telnet 127.0.0.1 8025"]
+      interval: 1m30s
+      timeout: 5s
+      retries: 3
+    environment:
+      MH_STORAGE: maildir
+      MH_MAILDIR_PATH: /tmp
+    volumes:
+      - ./container/mailhog/data:/tmp
+
   main_db_primary:
     image: postgres:16.1
     container_name: main-db-primary
@@ -86,6 +112,8 @@ services:
       # - firebase
       - main_db_primary
       - main_db_replica
+      - redis
+      - mail
     container_name: api-server
     env_file: .env
     build:

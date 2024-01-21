@@ -22,25 +22,21 @@ export const LoginPage = () => {
   }, [])
 
   const onSubmit: SubmitHandler<LoginFormValues> = async (d) => {
-    const res = await controller.me.login(d.email, d.password)
-    if (res) {
-      setErrorMessage(errorMessageProvider.translate(res))
-      return
-    }
-
-    if (meRef.current?.emailNotVerified) {
-      navigate(routeMap.confirmEmail)
-      return
-    }
-    navigate(accountInitialPagePath)
+    // const res = await controller.me.login(d.email, d.password)
+    // if (res) {
+    //   setErrorMessage(errorMessageProvider.translate(res))
+    //   return
+    // }
+    // if (meRef.current?.emailNotVerified) {
+    //   navigate(routeMap.confirmEmail)
+    //   return
+    // }
+    // navigate(accountInitialPagePath)
+    console.log("onClickSendAuthenticationCode")
   }
 
-  const onClickGoToSignUpPage = () => {
-    console.log("onClickGoToSignUpPage")
-  }
-
-  const onClickForgotPassword = () => {
-    console.log("onClickForgotPassword")
+  const onClickGoogleLoginButton = async () => {
+    console.log("onClickGoogleLoginButton")
   }
 
   return (
@@ -53,9 +49,8 @@ export const LoginPage = () => {
                 {i18n.translate(i18nKeys.page.login.signInYourAccount)}
               </h1>
               <LoginPageForm
-                onClickGoToSignUpPage={onClickGoToSignUpPage}
-                onClickForgotPassword={onClickForgotPassword}
                 onSubmit={onSubmit}
+                onClickGoogleLoginButton={onClickGoogleLoginButton}
                 errorMessage={errorMessage}
               />
             </div>

@@ -20,6 +20,18 @@ type Handler interface {
 	//
 	// GET /me
 	MeGet(ctx context.Context) (MeGetRes, error)
+	// OtpAuthPost implements POST /otp/auth operation.
+	//
+	// Send Timed One Time Password (TOTP) to user.
+	//
+	// POST /otp/auth
+	OtpAuthPost(ctx context.Context, req *OtpAuthPostReq) (OtpAuthPostRes, error)
+	// OtpVerifyPost implements POST /otp/verify operation.
+	//
+	// Verify OTP sent by user.
+	//
+	// POST /otp/verify
+	OtpVerifyPost(ctx context.Context, req *OtpVerifyPostReq) (OtpVerifyPostRes, error)
 	// PingGet implements GET /ping operation.
 	//
 	// Checks if the server is running.

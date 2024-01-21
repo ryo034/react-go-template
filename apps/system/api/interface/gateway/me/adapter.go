@@ -29,7 +29,7 @@ func (a *adapter) Adapt(m *models.Member, fu *auth.UserRecord) (*me.Me, error) {
 	if err != nil {
 		return nil, err
 	}
-	return me.NewMe(fu.EmailVerified && m.SystemAccount.Profile.EmailVerified, nil, mem), nil
+	return me.NewMe(nil, mem), nil
 }
 
 func (a *adapter) AdaptFirebaseUser(fu *auth.UserRecord, name account.Name, phoneNumber *phone.Number) (*me.Me, error) {

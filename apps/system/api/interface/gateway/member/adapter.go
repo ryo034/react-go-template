@@ -1,7 +1,7 @@
 package member
 
 import (
-	"github.com/ryo034/react-go-template/apps/system/api/domain/member"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	userGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/user"
 )
@@ -24,5 +24,6 @@ func (a *adapter) Adapt(m *models.Member) (*member.Member, error) {
 		return nil, err
 	}
 	idNumber := m.Profile.MemberIDNumber
-	return member.NewMember(u, idNumber, nil), nil
+	id := member.NewIDFromUUID(m.MemberID)
+	return member.NewMember(id, u, nil, idNumber), nil
 }

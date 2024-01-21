@@ -49,6 +49,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		switch elem[0] {
 		case '/': // Prefix: "/"
+			origElem := elem
 			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 				elem = elem[l:]
 			} else {
@@ -60,6 +61,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			}
 			switch elem[0] {
 			case 'l': // Prefix: "login"
+				origElem := elem
 				if l := len("login"); len(elem) >= l && elem[0:l] == "login" {
 					elem = elem[l:]
 				} else {
@@ -77,7 +79,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 					return
 				}
+
+				elem = origElem
 			case 'm': // Prefix: "me"
+				origElem := elem
 				if l := len("me"); len(elem) >= l && elem[0:l] == "me" {
 					elem = elem[l:]
 				} else {
@@ -95,7 +100,67 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 					return
 				}
+
+				elem = origElem
+			case 'o': // Prefix: "otp/"
+				origElem := elem
+				if l := len("otp/"); len(elem) >= l && elem[0:l] == "otp/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'a': // Prefix: "auth"
+					origElem := elem
+					if l := len("auth"); len(elem) >= l && elem[0:l] == "auth" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleOtpAuthPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'v': // Prefix: "verify"
+					origElem := elem
+					if l := len("verify"); len(elem) >= l && elem[0:l] == "verify" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleOtpVerifyPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				}
+
+				elem = origElem
 			case 'p': // Prefix: "ping"
+				origElem := elem
 				if l := len("ping"); len(elem) >= l && elem[0:l] == "ping" {
 					elem = elem[l:]
 				} else {
@@ -115,7 +180,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 					return
 				}
+
+				elem = origElem
 			case 's': // Prefix: "sign_up"
+				origElem := elem
 				if l := len("sign_up"); len(elem) >= l && elem[0:l] == "sign_up" {
 					elem = elem[l:]
 				} else {
@@ -133,7 +201,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 					return
 				}
+
+				elem = origElem
 			}
+
+			elem = origElem
 		}
 	}
 	s.notFound(w, r)
@@ -215,6 +287,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 		}
 		switch elem[0] {
 		case '/': // Prefix: "/"
+			origElem := elem
 			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 				elem = elem[l:]
 			} else {
@@ -226,6 +299,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			}
 			switch elem[0] {
 			case 'l': // Prefix: "login"
+				origElem := elem
 				if l := len("login"); len(elem) >= l && elem[0:l] == "login" {
 					elem = elem[l:]
 				} else {
@@ -247,7 +321,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						return
 					}
 				}
+
+				elem = origElem
 			case 'm': // Prefix: "me"
+				origElem := elem
 				if l := len("me"); len(elem) >= l && elem[0:l] == "me" {
 					elem = elem[l:]
 				} else {
@@ -269,7 +346,75 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						return
 					}
 				}
+
+				elem = origElem
+			case 'o': // Prefix: "otp/"
+				origElem := elem
+				if l := len("otp/"); len(elem) >= l && elem[0:l] == "otp/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'a': // Prefix: "auth"
+					origElem := elem
+					if l := len("auth"); len(elem) >= l && elem[0:l] == "auth" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch method {
+						case "POST":
+							// Leaf: OtpAuthPost
+							r.name = "OtpAuthPost"
+							r.summary = "Send OTP"
+							r.operationID = ""
+							r.pathPattern = "/otp/auth"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'v': // Prefix: "verify"
+					origElem := elem
+					if l := len("verify"); len(elem) >= l && elem[0:l] == "verify" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch method {
+						case "POST":
+							// Leaf: OtpVerifyPost
+							r.name = "OtpVerifyPost"
+							r.summary = "Verify OTP"
+							r.operationID = ""
+							r.pathPattern = "/otp/verify"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				}
+
+				elem = origElem
 			case 'p': // Prefix: "ping"
+				origElem := elem
 				if l := len("ping"); len(elem) >= l && elem[0:l] == "ping" {
 					elem = elem[l:]
 				} else {
@@ -300,7 +445,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						return
 					}
 				}
+
+				elem = origElem
 			case 's': // Prefix: "sign_up"
+				origElem := elem
 				if l := len("sign_up"); len(elem) >= l && elem[0:l] == "sign_up" {
 					elem = elem[l:]
 				} else {
@@ -322,7 +470,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						return
 					}
 				}
+
+				elem = origElem
 			}
+
+			elem = origElem
 		}
 	}
 	return r, false

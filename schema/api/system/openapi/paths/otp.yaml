@@ -1,0 +1,60 @@
+authByOtp:
+  post:
+    summary: Send OTP
+    description: Send Timed One Time Password (TOTP) to user.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+            required:
+              - email
+    responses:
+      "200":
+        description: OTP has been sent successfully.
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+              properties:
+                code:
+                  type: string
+                  description: OTP 6 digit code
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+
+verify:
+  post:
+    summary: Verify OTP
+    description: Verify OTP sent by user.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+              otp:
+                type: string
+            required:
+              - email
+              - otp
+    responses:
+      "200":
+        description: OTP has been verified successfully.
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"

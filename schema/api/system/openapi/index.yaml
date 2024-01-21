@@ -9,6 +9,10 @@ tags:
 paths:
   /ping:
     $ref: "./paths/ping.yaml#/ping"
+  /otp/auth:
+    $ref: "./paths/otp.yaml#/authByOtp"
+  /otp/verify:
+    $ref: "./paths/otp.yaml#/verify"
   /me:
     $ref: "./paths/me.yaml#/me"
   /sign_up:

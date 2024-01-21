@@ -38,6 +38,60 @@ export interface paths {
       };
     };
   };
+  "/otp/auth": {
+    /**
+     * Send OTP
+     * @description Send Timed One Time Password (TOTP) to user.
+     */
+    post: {
+      requestBody: {
+        content: {
+          "application/json": {
+            /** Format: email */
+            email: string;
+          };
+        };
+      };
+      responses: {
+        /** @description OTP has been sent successfully. */
+        200: {
+          content: {
+            "application/json": {
+              /** @description OTP 6 digit code */
+              code: string;
+            };
+          };
+        };
+        400: components["responses"]["BadRequestError"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+  };
+  "/otp/verify": {
+    /**
+     * Verify OTP
+     * @description Verify OTP sent by user.
+     */
+    post: {
+      requestBody: {
+        content: {
+          "application/json": {
+            /** Format: email */
+            email: string;
+            otp: string;
+          };
+        };
+      };
+      responses: {
+        /** @description OTP has been verified successfully. */
+        200: {
+          content: never;
+        };
+        400: components["responses"]["BadRequestError"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+  };
   "/me": {
     /**
      * Get Admin User

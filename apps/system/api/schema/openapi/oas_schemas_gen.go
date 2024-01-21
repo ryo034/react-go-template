@@ -70,7 +70,9 @@ func (s *BadRequestError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*BadRequestError) signUpRes() {}
+func (*BadRequestError) otpAuthPostRes()   {}
+func (*BadRequestError) otpVerifyPostRes() {}
+func (*BadRequestError) signUpRes()        {}
 
 type Bearer struct {
 	Token string
@@ -150,11 +152,13 @@ func (s *InternalServerError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*InternalServerError) loginRes()    {}
-func (*InternalServerError) meGetRes()    {}
-func (*InternalServerError) pingGetRes()  {}
-func (*InternalServerError) pingPostRes() {}
-func (*InternalServerError) signUpRes()   {}
+func (*InternalServerError) loginRes()         {}
+func (*InternalServerError) meGetRes()         {}
+func (*InternalServerError) otpAuthPostRes()   {}
+func (*InternalServerError) otpVerifyPostRes() {}
+func (*InternalServerError) pingGetRes()       {}
+func (*InternalServerError) pingPostRes()      {}
+func (*InternalServerError) signUpRes()        {}
 
 // Ref: #/components/schemas/Me
 type Me struct {
@@ -457,6 +461,67 @@ func (o OptString) Or(d string) string {
 		return v
 	}
 	return d
+}
+
+type OtpAuthPostOK struct {
+	// OTP 6 digit code.
+	Code string `json:"code"`
+}
+
+// GetCode returns the value of Code.
+func (s *OtpAuthPostOK) GetCode() string {
+	return s.Code
+}
+
+// SetCode sets the value of Code.
+func (s *OtpAuthPostOK) SetCode(val string) {
+	s.Code = val
+}
+
+func (*OtpAuthPostOK) otpAuthPostRes() {}
+
+type OtpAuthPostReq struct {
+	Email string `json:"email"`
+}
+
+// GetEmail returns the value of Email.
+func (s *OtpAuthPostReq) GetEmail() string {
+	return s.Email
+}
+
+// SetEmail sets the value of Email.
+func (s *OtpAuthPostReq) SetEmail(val string) {
+	s.Email = val
+}
+
+// OtpVerifyPostOK is response for OtpVerifyPost operation.
+type OtpVerifyPostOK struct{}
+
+func (*OtpVerifyPostOK) otpVerifyPostRes() {}
+
+type OtpVerifyPostReq struct {
+	Email string `json:"email"`
+	Otp   string `json:"otp"`
+}
+
+// GetEmail returns the value of Email.
+func (s *OtpVerifyPostReq) GetEmail() string {
+	return s.Email
+}
+
+// GetOtp returns the value of Otp.
+func (s *OtpVerifyPostReq) GetOtp() string {
+	return s.Otp
+}
+
+// SetEmail sets the value of Email.
+func (s *OtpVerifyPostReq) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetOtp sets the value of Otp.
+func (s *OtpVerifyPostReq) SetOtp(val string) {
+	s.Otp = val
 }
 
 // PingGetOK is response for PingGet operation.

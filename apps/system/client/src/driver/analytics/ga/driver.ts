@@ -1,10 +1,10 @@
+import { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
 import { Me } from "~/domain"
 import { MyCustomGA } from "~/infrastructure/analytics"
-import { ErrorHandler } from "~/infrastructure/error"
 
 export class GoogleAnalyticsDriver {
-  constructor(private readonly client: MyCustomGA) {}
+  constructor(private readonly client: MyCustomGA, private readonly errorHandler: ApiErrorHandler) {}
 
   initialize(): void {
     this.client.initialize(import.meta.env.VITE_GA_MEASUREMENT_ID)
@@ -17,7 +17,7 @@ export class GoogleAnalyticsDriver {
       })
       return Result.ok(null)
     } catch (e) {
-      return Result.err(ErrorHandler.adapt(e))
+      return Result.err(this.errorHandler.adapt(e))
     }
   }
 

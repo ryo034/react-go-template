@@ -7,14 +7,12 @@ export const useLoginPageFormMessage = () => {
   const { i18n } = useContext(ContainerContext)
   return {
     forgotPassword: i18n.translate(`${i18nKeys.page.login.forgotPassword}`),
-    notHaveAnAccountYet: i18n.translate(`${i18nKeys.page.login.notHaveAnAccountYet}`),
     word: {
-      password: i18n.translate(`${i18nKeys.word.password}`),
       email: i18n.translate(`${i18nKeys.word.email}`)
     },
     action: {
       login: i18n.translate(`${i18nKeys.action.login}`),
-      signUp: i18n.translate(`${i18nKeys.action.signUp}`)
+      sendOneTimeCode: i18n.translate(`${i18nKeys.action.sendOneTimeCode}`)
     },
     form: {
       validation: {
@@ -25,10 +23,6 @@ export const useLoginPageFormMessage = () => {
             field: i18n.translate(`${i18nKeys.word.email}`),
             max: Email.max
           })
-        },
-        password: {
-          required: i18n.translate(`${i18nKeys.form.required}`, { field: i18n.translate(`${i18nKeys.word.password}`) }),
-          regex: i18n.translate(`${i18nKeys.form.passwordRegex}`)
         }
       }
     }

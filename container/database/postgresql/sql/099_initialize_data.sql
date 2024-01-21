@@ -8,8 +8,8 @@ VALUES
 INSERT INTO system_accounts (system_account_id, created_at)
 VALUES ('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', '2024-01-10 12:00:00');
 
-INSERT INTO system_account_profiles (system_account_id, name, email, email_verified, created_at, updated_at)
-VALUES ('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'John Doe', 'system_account@example.com', true, '2024-01-10 12:00:00', '2024-01-10 12:00:00');
+INSERT INTO system_account_profiles (system_account_id, name, email, created_at, updated_at)
+VALUES ('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'John Doe', 'system_account@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
 
 INSERT INTO system_account_phone_numbers (system_account_id, phone_number, created_at, updated_at)
 VALUES ('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', '09012345678', '2024-01-10 12:00:00', '2024-01-10 12:00:00');

@@ -31,6 +31,24 @@ func (UnimplementedHandler) MeGet(ctx context.Context) (r MeGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
+// OtpAuthPost implements POST /otp/auth operation.
+//
+// Send Timed One Time Password (TOTP) to user.
+//
+// POST /otp/auth
+func (UnimplementedHandler) OtpAuthPost(ctx context.Context, req *OtpAuthPostReq) (r OtpAuthPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// OtpVerifyPost implements POST /otp/verify operation.
+//
+// Verify OTP sent by user.
+//
+// POST /otp/verify
+func (UnimplementedHandler) OtpVerifyPost(ctx context.Context, req *OtpVerifyPostReq) (r OtpVerifyPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // PingGet implements GET /ping operation.
 //
 // Checks if the server is running.

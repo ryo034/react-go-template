@@ -9,6 +9,14 @@ type MeGetRes interface {
 	meGetRes()
 }
 
+type OtpAuthPostRes interface {
+	otpAuthPostRes()
+}
+
+type OtpVerifyPostRes interface {
+	otpVerifyPostRes()
+}
+
 type PingGetRes interface {
 	pingGetRes()
 }

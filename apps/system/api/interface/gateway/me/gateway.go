@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	fbDr "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	meDr "github.com/ryo034/react-go-template/apps/system/api/driver/me"
 	"github.com/uptrace/bun"
@@ -19,8 +20,8 @@ func NewGateway(md meDr.Driver, fd fbDr.Driver, a Adapter) me.Repository {
 	return &gateway{md, fd, a}
 }
 
-func (g *gateway) Find(ctx context.Context, exec bun.IDB, aID account.ID) (*me.Me, error) {
-	res, err := g.md.Find(ctx, exec, aID)
+func (g *gateway) Find(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*me.Me, error) {
+	res, err := g.md.Find(ctx, exec, aID, wID)
 	if err != nil {
 		return nil, err
 	}
