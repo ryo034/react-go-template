@@ -3,16 +3,16 @@ import { Email } from "~/domain"
 import { i18nKeys } from "~/infrastructure/i18n"
 import { ContainerContext } from "~/infrastructure/injector/context"
 
-export const useLoginPageFormMessage = () => {
+export const useAuthPageFormMessage = () => {
   const { i18n } = useContext(ContainerContext)
   return {
-    forgotPassword: i18n.translate(`${i18nKeys.page.login.forgotPassword}`),
     word: {
       email: i18n.translate(`${i18nKeys.word.email}`)
     },
     action: {
       login: i18n.translate(`${i18nKeys.action.login}`),
-      sendOneTimeCode: i18n.translate(`${i18nKeys.action.sendOneTimeCode}`)
+      sendOneTimeCode: i18n.translate(`${i18nKeys.action.sendOneTimeCode}`),
+      startWithEmail: i18n.translate(`${i18nKeys.action.startWithEmail}`)
     },
     form: {
       validation: {

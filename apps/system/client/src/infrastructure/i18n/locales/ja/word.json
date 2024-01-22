@@ -1,6 +1,8 @@
 {
   "word": {
     "email": "メールアドレス",
-    "password": "パスワード"
+    "password": "パスワード",
+    "submit": "送信",
+    "otp": "認証コード"
   }
 }

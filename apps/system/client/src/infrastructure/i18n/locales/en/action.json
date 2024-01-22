@@ -5,10 +5,12 @@
     "cancel": "cancel",
     "login": "login",
     "sendOneTimeCode": "Send Authentication Code",
+    "startWithEmail": "Start with Email",
     "signUp": "sign up",
     "showItem": "show {{field}}",
     "inputField": "input {{field}}",
-    "submitField": "submit {{field}}",
-    "doAction": "{{action}}"
+    "submitField": "Submit {{field}}",
+    "doAction": "{{action}}",
+    "enter": "Enter {{field}}"
   }
 }

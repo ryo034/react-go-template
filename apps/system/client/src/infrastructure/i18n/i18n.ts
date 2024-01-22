@@ -55,7 +55,9 @@ export const i18nKeys = {
     email: `${i18nRootKeys.word}.email`,
     error: {
       unknown: `${i18nRootKeys.word}.error.unknown`
-    }
+    },
+    submit: `${i18nRootKeys.word}.submit`,
+    otp: `${i18nRootKeys.word}.otp`,
   },
   action: {
     submit: `${i18nRootKeys.action}.submit`,
@@ -63,10 +65,12 @@ export const i18nKeys = {
     cancel: `${i18nRootKeys.action}.cancel`,
     login: `${i18nRootKeys.action}.login`,
     sendOneTimeCode: `${i18nRootKeys.action}.sendOneTimeCode`,
+    startWithEmail: `${i18nRootKeys.action}.startWithEmail`,
     showItem: `${i18nRootKeys.action}.showItem`,
     logout: `${i18nRootKeys.action}.logout`,
     inputField: `${i18nRootKeys.action}.inputField`,
-    doAction: `${i18nRootKeys.action}.doAction`
+    doAction: `${i18nRootKeys.action}.doAction`,
+    enter: `${i18nRootKeys.action}.enter`,
   },
   form: {
     required: `${i18nRootKeys.form}.required`,
@@ -76,10 +80,11 @@ export const i18nKeys = {
     passwordRegex: `${i18nRootKeys.form}.passwordRegex`
   },
   page: {
-    login: {
-      forgotPassword: `${i18nRootKeys.page}.login.forgotPassword`,
-      createNewAccount: `${i18nRootKeys.page}.login.createNewAccount`,
-      signInYourAccount: `${i18nRootKeys.page}.login.signInYourAccount`
-    }
+    auth: {
+      title: `${i18nRootKeys.page}.auth.title`,
+    },
+    verifyOtp: {
+      enterOtpMessage: `${i18nRootKeys.page}.verifyOtp.enterOtpMessage`
+    },
   }
 }

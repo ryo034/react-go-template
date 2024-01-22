@@ -1,5 +1,6 @@
 export const routeMap = {
-  login: "/",
+  auth: "/",
+  verifyOtp: "/verify-otp",
   confirmEmail: "/confirm-email",
   account: "/account",
   home: "/home",
@@ -10,7 +11,7 @@ export const routeMap = {
   settings: "/settings"
 } as const
 
-export const unauthenticatedRoutes = [routeMap.login.toString()]
+export const unauthenticatedRoutes = [routeMap.auth.toString(), routeMap.verifyOtp.toString()]
 
 export const authRoutes = [
   routeMap.account.toString(),
@@ -23,4 +24,4 @@ export const authRoutes = [
   routeMap.settings.toString()
 ]
 
-export const unprotectedInitialPagePath = routeMap.login
+export const unprotectedInitialPagePath = routeMap.auth

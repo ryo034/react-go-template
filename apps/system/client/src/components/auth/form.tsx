@@ -1,7 +1,7 @@
 import { MouseEventHandler, useEffect } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { Button, FormResultErrorMessage, Separator } from "shared-ui"
-import { useLoginPageFormMessage } from "~/components/auth/login/message"
+import { useAuthPageFormMessage } from "~/components/auth/message"
 import { FormInputSection } from "~/components/common/form/inputSection"
 import { Email } from "~/domain"
 
@@ -15,9 +15,9 @@ interface Props {
   errorMessage: string
 }
 
-const loginFormId = "loginForm"
+const authFormId = "authForm"
 
-export const LoginPageForm = ({ onSubmit, onClickGoogleLoginButton, errorMessage }: Props) => {
+export const AuthPageForm = ({ onSubmit, onClickGoogleLoginButton, errorMessage }: Props) => {
   const {
     register,
     handleSubmit,
@@ -25,7 +25,7 @@ export const LoginPageForm = ({ onSubmit, onClickGoogleLoginButton, errorMessage
     formState: { errors }
   } = useForm<LoginFormValues>()
 
-  const message = useLoginPageFormMessage()
+  const message = useAuthPageFormMessage()
 
   const emailInputField = register("email", {
     required: message.form.validation.email.required,
@@ -45,10 +45,10 @@ export const LoginPageForm = ({ onSubmit, onClickGoogleLoginButton, errorMessage
 
   return (
     <>
-      <form className="space-y-6" id={loginFormId} onSubmit={handleSubmit(onSubmit)}>
+      <form className="space-y-6" id={authFormId} onSubmit={handleSubmit(onSubmit)}>
         <div>
           <Button fullWidth type="button" onClick={onClickGoogleLoginButton} data-testid="googleLoginButton">
-            Googleログイン
+            Googleでログイン
           </Button>
         </div>
 
@@ -65,8 +65,8 @@ export const LoginPageForm = ({ onSubmit, onClickGoogleLoginButton, errorMessage
           errorMessage={errors.email?.message ?? ""}
         />
         <FormResultErrorMessage message={errorMessage} />
-        <Button fullWidth type="submit" form={loginFormId} data-testid="loginButton">
-          {message.action.sendOneTimeCode}
+        <Button fullWidth type="submit" form={authFormId} data-testid="startButton">
+          {message.action.startWithEmail}
         </Button>
       </form>
     </>

@@ -22,3 +22,5 @@ video-nexus_7.1.1
 meili_data
 
 .envrc
+
+container/redis/**

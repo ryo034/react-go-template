@@ -1,10 +1,10 @@
 {
   "page": {
-    "login": {
-      "notHaveAnAccountYet": "Don't have an account yet ?",
-      "forgotPassword": "Forgot Password ?",
-      "createNewAccount": "Create New Account",
-      "signInYourAccount": "Sign in to your account"
+    "auth": {
+      "title": "Let's Get Started"
+    },
+    "verifyOtp": {
+      "enterOtpMessage": "Please Enter the Authentication Code Sent to Your Email"
     }
   }
 }

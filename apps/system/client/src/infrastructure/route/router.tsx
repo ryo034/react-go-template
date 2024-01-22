@@ -6,10 +6,11 @@ import { LoadingLayout } from "~/layout/loading"
 import { ThemeLayout } from "~/layout/theme"
 import { TrackingLayout } from "~/layout/tracking"
 import { AccountPage } from "~/pages/account"
+import { LoginPage } from "~/pages/auth"
 import { ConfirmEmailPage } from "~/pages/confirmEmail"
 import { NotFoundPage } from "~/pages/error/notFound"
 import { HomePage } from "~/pages/home"
-import { LoginPage } from "~/pages/login"
+import { VerifyOtpPage } from "~/pages/otp"
 import { SettingsPage } from "~/pages/settings"
 
 export const accountInitialPagePath = routeMap.creatures
@@ -41,7 +42,8 @@ const router = createBrowserRouter([
               {
                 element: <AuthLayout />,
                 children: [
-                  { path: routeMap.login, element: <LoginPage /> },
+                  { path: routeMap.auth, element: <LoginPage /> },
+                  { path: routeMap.verifyOtp, element: <VerifyOtpPage /> },
                   { path: routeMap.confirmEmail, element: <ConfirmEmailPage /> },
                   {
                     element: <DashboardLayout />,

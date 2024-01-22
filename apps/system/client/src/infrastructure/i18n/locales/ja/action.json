@@ -5,10 +5,12 @@
     "cancel": "キャンセル",
     "login": "ログイン",
     "sendOneTimeCode": "認証コードを送る",
+    "startWithEmail": "メールアドレスで始める",
     "signUp": "新規作成",
     "showItem": "{{field}}を表示",
     "inputField": "{{field}}を入力",
     "submitField": "{{field}}を送信",
-    "doAction": "{{action}}をする"
+    "doAction": "{{action}}をする",
+    "enter": "{{field}}を入力"
   }
 }

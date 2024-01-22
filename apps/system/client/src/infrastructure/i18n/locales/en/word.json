@@ -1,6 +1,8 @@
 {
   "word": {
     "email": "email",
-    "password": "password"
+    "password": "password",
+    "submit": "submit",
+    "otp": "Authentication Code"
   }
 }

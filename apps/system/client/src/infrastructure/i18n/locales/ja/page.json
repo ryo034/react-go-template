@@ -1,10 +1,10 @@
 {
   "page": {
-    "login": {
-      "notHaveAnAccountYet": "まだアカウントをお持ちではありませんか？",
-      "forgotPassword": "パスワードを忘れましたか？",
-      "createNewAccount": "アカウントの新規作成",
-      "signInYourAccount": "ログイン"
+    "auth": {
+      "title": "ログインして始めよう！"
+    },
+    "verifyOtp": {
+      "enterOtpMessage": "メールアドレスに送信された認証コードを入力してください"
     }
   }
 }
