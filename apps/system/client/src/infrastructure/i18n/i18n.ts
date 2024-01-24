@@ -57,7 +57,7 @@ export const i18nKeys = {
       unknown: `${i18nRootKeys.word}.error.unknown`
     },
     submit: `${i18nRootKeys.word}.submit`,
-    otp: `${i18nRootKeys.word}.otp`,
+    otp: `${i18nRootKeys.word}.otp`
   },
   action: {
     submit: `${i18nRootKeys.action}.submit`,
@@ -70,7 +70,7 @@ export const i18nKeys = {
     logout: `${i18nRootKeys.action}.logout`,
     inputField: `${i18nRootKeys.action}.inputField`,
     doAction: `${i18nRootKeys.action}.doAction`,
-    enter: `${i18nRootKeys.action}.enter`,
+    enter: `${i18nRootKeys.action}.enter`
   },
   form: {
     required: `${i18nRootKeys.form}.required`,
@@ -81,10 +81,10 @@ export const i18nKeys = {
   },
   page: {
     auth: {
-      title: `${i18nRootKeys.page}.auth.title`,
+      title: `${i18nRootKeys.page}.auth.title`
     },
     verifyOtp: {
       enterOtpMessage: `${i18nRootKeys.page}.verifyOtp.enterOtpMessage`
-    },
+    }
   }
 }
