@@ -28,6 +28,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Echo Node.js version
+        run: echo "Node.js version is ${{ needs.node-version.outputs.node-version }}"
+
       - name: Setup Node.js
         id: setup-node
         uses: actions/setup-node@v4
