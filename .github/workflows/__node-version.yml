@@ -7,6 +7,13 @@ on:
         required: false
         type: string
         default: '.'
+    outputs:
+      node-version:
+        description: "node version"
+        value: ${{ jobs.get-node-version.outputs.node-version }}
+      major-version:
+        description: "node major version"
+        value: ${{ jobs.get-node-version.outputs.major-version }}
 
 jobs:
   get-node-version:

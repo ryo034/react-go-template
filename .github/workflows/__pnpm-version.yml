@@ -7,6 +7,10 @@ on:
         required: false
         type: string
         default: '.'
+    outputs:
+      pnpm-version:
+        description: "node version"
+        value: ${{ jobs.get-pnpm-version.outputs.pnpm-version }}
 
 jobs:
   get-pnpm-version:
