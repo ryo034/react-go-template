@@ -14,9 +14,13 @@ permissions:
 jobs:
   node-version:
     uses: ./.github/workflows/__node-version.yml
+    with:
+      directory: ${{ inputs.directory }}
 
   pnpm-version:
     uses: ./.github/workflows/__pnpm-version.yml
+    with:
+      directory: ${{ inputs.directory }}
 
   ci:
     needs: [node-version, pnpm-version]
@@ -28,8 +32,7 @@ jobs:
         id: setup-node
         uses: actions/setup-node@v4
         with:
-          node-version: 20.11.0
-          # node-version: ${{ needs.node-version.outputs.node-version }}
+          node-version: ${{ needs.node-version.outputs.node-version }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
