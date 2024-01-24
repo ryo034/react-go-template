@@ -33,10 +33,6 @@ var CreateSystemTablesPath = filepath.Join("../../../../../", "container/databas
 var CreateSystemBaseDataPath = filepath.Join("../../../../../", "container/database/postgresql/sql", "099_initialize_data.sql")
 var PsqlTestContainerConfPath = filepath.Join("../../../../../", "container/database/postgresql/primary", "postgresql.conf")
 
-//func DriverSetupScriptFilePath(filePath string) string {
-//	return filepath.Join("../../", "test/setup/driver", filePath)
-//}
-
 func PSQLTestContainer(ctx context.Context, scripts ...string) (*PostgresContainer, error) {
 	pgContainer, err := postgres.RunContainer(ctx,
 		testcontainers.WithImage("postgres:latest"),

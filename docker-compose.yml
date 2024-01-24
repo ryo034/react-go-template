@@ -71,7 +71,7 @@ services:
     container_name: main-db-primary
     command: -c 'config_file=/etc/postgresql/postgresql.conf' -c 'hba_file=/etc/postgresql/pg_hba.conf'
     environment:
-      - TZ=Asia/Tokyo
+      - TZ=UTC
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=main
@@ -96,6 +96,7 @@ services:
     container_name: main-db-replica
     entrypoint: /entrypoint.sh
     environment:
+      - TZ=UTC
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=main
