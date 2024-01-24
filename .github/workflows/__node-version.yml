@@ -28,7 +28,7 @@ jobs:
       - name: Read Node.js version from package.json
         id: node-version
         run: |
-          pnpm_version=$(cat ${{ inputs.directory }}/package.json | jq -r .engines.node)
+          node_version=$(cat ${{ inputs.directory }}/package.json | jq -r .engines.node)
           echo "version=$node_version" >> "$GITHUB_OUTPUT"
 
       - name: Get Node.js major version
