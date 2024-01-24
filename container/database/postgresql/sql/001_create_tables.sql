@@ -94,3 +94,5 @@ CREATE TABLE membership_periods (
   PRIMARY KEY (member_id, start_date),
   CONSTRAINT fk_membership_periods_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id)
 );
+
+SET TIME ZONE 'UTC';
