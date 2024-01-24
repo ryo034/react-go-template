@@ -5,6 +5,7 @@ on:
     inputs:
       directory:
         required: false
+        description: "directory to read package.json from"
         type: string
         default: '.'
     outputs:
@@ -24,10 +25,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Read Node.js version from .tool-versions
+      - name: Read Node.js version from package.json
         id: node-version
         run: |
-          node_version=$(grep nodejs ${{ inputs.directory }}/.tool-versions | cut -d ' ' -f2)
+          pnpm_version=$(cat ${{ inputs.directory }}/package.json | jq -r .engines.node)
           echo "version=$node_version" >> "$GITHUB_OUTPUT"
 
       - name: Get Node.js major version
