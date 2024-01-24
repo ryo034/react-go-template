@@ -22,7 +22,7 @@ const systemAccountID = "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
 var systemAccountIDUUID = uuid.MustParse(systemAccountID)
 
 func Test_driver_Find_OK(t *testing.T) {
-	defaultTime, err := time.Parse("2006-01-02 15:04:05 -0700", "2024-01-10 12:00:00 +0000")
+	defaultTime, err := time.Parse("2006-01-02 15:04:05", "2024-01-10 12:00:00")
 	if err != nil {
 		t.Fatalf("failed to parse defaultTime: %v", err)
 	}
