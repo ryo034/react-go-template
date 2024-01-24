@@ -42,7 +42,7 @@ func (a *adapter) Adapt(u *models.SystemAccount) (*user.User, error) {
 		}
 		pn = &tmpPn
 	}
-	return user.NewUser(aID, email, &name, pn), nil
+	return user.NewUser(aID, email, name, pn), nil
 }
 
 func (a *adapter) AdaptGender(g string) (account.Gender, error) {
