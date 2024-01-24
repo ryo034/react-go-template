@@ -7,6 +7,10 @@ on:
         required: false
         type: string
         default: '.'
+    outputs:
+      go-version:
+        description: "Go version"
+        value: ${{ jobs.get-go-version.outputs.go-version }}
 
 jobs:
   get-go-version:

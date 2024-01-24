@@ -2,6 +2,10 @@ name: __ get latest go versions
 
 on:
   workflow_call:
+    outputs:
+      go-versions:
+        description: 'Go versions'
+        value: ${{ github.event.inputs.go-versions }}
 
 jobs:
   get-go-versions:

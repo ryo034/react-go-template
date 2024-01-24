@@ -9,7 +9,7 @@ on:
         default: '.'
     outputs:
       pnpm-version:
-        description: "node version"
+        description: "pnpm version"
         value: ${{ jobs.get-pnpm-version.outputs.pnpm-version }}
 
 jobs:
