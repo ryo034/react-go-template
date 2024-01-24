@@ -3,6 +3,7 @@ package config
 import (
 	"github.com/rs/cors"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/datasource"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/redis"
 	"os"
 	"strconv"
 	"time"
@@ -22,6 +23,7 @@ type Reader interface {
 	DefaultLanguage() language.Tag
 	SourceDataSource() datasource.DataSource
 	ReplicaDataSource() datasource.DataSource
+	RedisConfig() *redis.Config
 	FirebaseStorageBucket() string
 	ServerPort() string
 }
@@ -100,6 +102,13 @@ func (r *reader) fromEnvUint(key Key) uint {
 		panic(err)
 	} else {
 		return uint(result)
+	}
+}
+func (r *reader) fromEnvInt(key Key) int {
+	if result, err := strconv.Atoi(r.fromEnv(key)); err != nil {
+		panic(err)
+	} else {
+		return int(result)
 	}
 }
 

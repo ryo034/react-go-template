@@ -50,6 +50,7 @@ update-all-typescript-package:
 	@cd ./packages/typescript/ui && ncu -u
 	@cd ./packages/typescript/network && ncu -u
 	@cd ./apps/system/client && ncu -u
+	@cd ./apps/system/test/api && ncu -u
 	@corepack pnpm install -r
 
 .PHONY: update-all-go-package
@@ -86,11 +87,20 @@ gen-system-client-openapi:
 		openapi-typescript-codegen-tmp \
 		/app/schema/api/system/openapi/openapi.yaml -o /app/apps/system/client/src/generated/schema/openapi/systemApi.ts
 
+.PHONY: gen-system-api-test-openapi
+gen-system-api-test-openapi:
+	@rm -rf ./apps/system/test/api/schema/openapi
+	@docker build -f ./container/schema/openapi/openapi-typescript/Dockerfile -t openapi-typescript-codegen-tmp .
+	@docker run --rm -v .:/app \
+		openapi-typescript-codegen-tmp \
+		/app/schema/api/system/openapi/openapi.yaml -o /app/apps/system/test/api/schema/openapi/systemApi.ts
+
 .PHONY: gen-system-openapi
 gen-system-openapi:
 	@make merge-system-openapi
-	@make gen-system-client-openapi
 	@make gen-system-api-openapi
+	@make gen-system-client-openapi
+	@make gen-system-api-test-openapi
 
 .PHONY: gen-openapi
 gen-openapi:

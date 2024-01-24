@@ -9,8 +9,8 @@ import (
 )
 
 type Controller interface {
-	AuthByTOTP(ctx context.Context, req *openapi.OtpAuthPostReq) (openapi.OtpAuthPostRes, error)
-	VerifyTOTP(ctx context.Context, req *openapi.OtpVerifyPostReq) (openapi.OtpVerifyPostRes, error)
+	AuthByTOTP(ctx context.Context, req *openapi.APIV1OtpAuthPostReq) (openapi.APIV1OtpAuthPostRes, error)
+	VerifyTOTP(ctx context.Context, req *openapi.APIV1OtpVerifyPostReq) (openapi.APIV1OtpVerifyPostRes, error)
 }
 
 type controller struct {
@@ -22,29 +22,29 @@ func NewController(auc authUc.UseCase, resl shared.Resolver) Controller {
 	return &controller{auc, resl}
 }
 
-func (c *controller) AuthByTOTP(ctx context.Context, req *openapi.OtpAuthPostReq) (openapi.OtpAuthPostRes, error) {
+func (c *controller) AuthByTOTP(ctx context.Context, req *openapi.APIV1OtpAuthPostReq) (openapi.APIV1OtpAuthPostRes, error) {
 	em, err := account.NewEmail(req.Email)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.OtpAuthPostRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1OtpAuthPostRes), nil
 	}
 	inp := authUc.ByTOTPInput{Email: em}
 	res, err := c.auc.AuthByTOTP(ctx, inp)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.OtpAuthPostRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1OtpAuthPostRes), nil
 	}
 	return res, nil
 }
 
-func (c *controller) VerifyTOTP(ctx context.Context, req *openapi.OtpVerifyPostReq) (openapi.OtpVerifyPostRes, error) {
+func (c *controller) VerifyTOTP(ctx context.Context, req *openapi.APIV1OtpVerifyPostReq) (openapi.APIV1OtpVerifyPostRes, error) {
 	em, err := account.NewEmail(req.Email)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.OtpVerifyPostRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1OtpVerifyPostRes), nil
 	}
 
 	inp := authUc.VerifyTOTPInput{Email: em, Otp: req.Otp}
 	res, err := c.auc.VerifyTOTP(ctx, inp)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.OtpVerifyPostRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1OtpVerifyPostRes), nil
 	}
 	return res, nil
 }

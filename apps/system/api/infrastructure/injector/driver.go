@@ -1,6 +1,7 @@
 package injector
 
 import (
+	"github.com/redis/go-redis/v9"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/auth"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/email"
 	firebaseDriver "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
@@ -17,13 +18,13 @@ type driver struct {
 	KeyValue keyvalue.Store
 }
 
-func newDriverInjector(f *firebase.Firebase) driver {
+func newDriverInjector(rc *redis.Client, f *firebase.Firebase) driver {
 	meDr := me.NewDriver()
 	return driver{
 		firebaseDriver.NewDriver(f),
 		meDr,
 		auth.NewDriver(),
 		email.NewDriver(),
-		keyvalue.NewRedisDriver("", "", 1),
+		keyvalue.NewRedisDriver(rc),
 	}
 }

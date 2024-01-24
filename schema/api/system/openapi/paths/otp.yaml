@@ -1,7 +1,9 @@
 authByOtp:
   post:
     summary: Send OTP
-    description: Send Timed One Time Password (TOTP) to user.
+    tags:
+      - OTP
+    description: One Time Password (OTP) to user.
     requestBody:
       required: true
       content:
@@ -29,12 +31,16 @@ authByOtp:
                   description: OTP 6 digit code
       "400":
         $ref: "#/components/responses/BadRequestError"
+      "429":
+        $ref: "#/components/responses/TooManyRequestsError"
       "500":
         $ref: "#/components/responses/InternalServerError"
 
 verify:
   post:
     summary: Verify OTP
+    tags:
+      - OTP
     description: Verify OTP sent by user.
     requestBody:
       required: true
@@ -54,7 +60,19 @@ verify:
     responses:
       "200":
         description: OTP has been verified successfully.
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+              properties:
+                token:
+                  type: string
+                  description: JWT token
       "400":
         $ref: "#/components/responses/BadRequestError"
+      "429":
+        $ref: "#/components/responses/TooManyRequestsError"
       "500":
         $ref: "#/components/responses/InternalServerError"

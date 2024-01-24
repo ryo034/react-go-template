@@ -42,8 +42,11 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
-    volumes:
-      - "./container/redis:/data"
+    environment:
+      # use username default
+      REDIS_ARGS: "--requirepass root"
+    # volumes:
+    #   - "./container/redis:/data"
     healthcheck:
       test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
 
@@ -80,7 +83,7 @@ services:
       - ./container/database/postgresql/primary/pg_hba.conf:/etc/postgresql/pg_hba.conf:Z
       - ./container/database/postgresql/primary/init.sh:/docker-entrypoint-initdb.d/init.sh:Z
       - ./container/database/postgresql/sql/001_create_tables.sql:/docker-entrypoint-initdb.d/001_create_tables.sql:Z
-      - ./container/database/postgresql/sql/099_initialize_data.sql:/docker-entrypoint-initdb.d/099_initialize_data.:Z
+      - ./container/database/postgresql/sql/099_initialize_data.sql:/docker-entrypoint-initdb.d/099_initialize_data.sql:Z
     healthcheck:
       test: pg_isready -d main
       interval: 1s
@@ -109,7 +112,7 @@ services:
 
   api:
     depends_on:
-      # - firebase
+      - firebase
       - main_db_primary
       - main_db_replica
       - redis

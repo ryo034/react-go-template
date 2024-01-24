@@ -6,6 +6,96 @@ import (
 	"github.com/google/uuid"
 )
 
+type APIV1OtpAuthPostOK struct {
+	// OTP 6 digit code.
+	Code string `json:"code"`
+}
+
+// GetCode returns the value of Code.
+func (s *APIV1OtpAuthPostOK) GetCode() string {
+	return s.Code
+}
+
+// SetCode sets the value of Code.
+func (s *APIV1OtpAuthPostOK) SetCode(val string) {
+	s.Code = val
+}
+
+func (*APIV1OtpAuthPostOK) aPIV1OtpAuthPostRes() {}
+
+type APIV1OtpAuthPostReq struct {
+	Email string `json:"email"`
+}
+
+// GetEmail returns the value of Email.
+func (s *APIV1OtpAuthPostReq) GetEmail() string {
+	return s.Email
+}
+
+// SetEmail sets the value of Email.
+func (s *APIV1OtpAuthPostReq) SetEmail(val string) {
+	s.Email = val
+}
+
+type APIV1OtpVerifyPostOK struct {
+	// JWT token.
+	Token string `json:"token"`
+}
+
+// GetToken returns the value of Token.
+func (s *APIV1OtpVerifyPostOK) GetToken() string {
+	return s.Token
+}
+
+// SetToken sets the value of Token.
+func (s *APIV1OtpVerifyPostOK) SetToken(val string) {
+	s.Token = val
+}
+
+func (*APIV1OtpVerifyPostOK) aPIV1OtpVerifyPostRes() {}
+
+type APIV1OtpVerifyPostReq struct {
+	Email string `json:"email"`
+	Otp   string `json:"otp"`
+}
+
+// GetEmail returns the value of Email.
+func (s *APIV1OtpVerifyPostReq) GetEmail() string {
+	return s.Email
+}
+
+// GetOtp returns the value of Otp.
+func (s *APIV1OtpVerifyPostReq) GetOtp() string {
+	return s.Otp
+}
+
+// SetEmail sets the value of Email.
+func (s *APIV1OtpVerifyPostReq) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetOtp sets the value of Otp.
+func (s *APIV1OtpVerifyPostReq) SetOtp(val string) {
+	s.Otp = val
+}
+
+type APIV1PingGetOK struct {
+	// Ping response message.
+	Message OptString `json:"message"`
+}
+
+// GetMessage returns the value of Message.
+func (s *APIV1PingGetOK) GetMessage() OptString {
+	return s.Message
+}
+
+// SetMessage sets the value of Message.
+func (s *APIV1PingGetOK) SetMessage(val OptString) {
+	s.Message = val
+}
+
+func (*APIV1PingGetOK) aPIV1PingGetRes() {}
+
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type BadRequestError struct {
 	// The HTTP status code generated for this occurrence of the problem.
@@ -70,9 +160,9 @@ func (s *BadRequestError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*BadRequestError) otpAuthPostRes()   {}
-func (*BadRequestError) otpVerifyPostRes() {}
-func (*BadRequestError) signUpRes()        {}
+func (*BadRequestError) aPIV1OtpAuthPostRes()   {}
+func (*BadRequestError) aPIV1OtpVerifyPostRes() {}
+func (*BadRequestError) signUpRes()             {}
 
 type Bearer struct {
 	Token string
@@ -152,13 +242,12 @@ func (s *InternalServerError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*InternalServerError) loginRes()         {}
-func (*InternalServerError) meGetRes()         {}
-func (*InternalServerError) otpAuthPostRes()   {}
-func (*InternalServerError) otpVerifyPostRes() {}
-func (*InternalServerError) pingGetRes()       {}
-func (*InternalServerError) pingPostRes()      {}
-func (*InternalServerError) signUpRes()        {}
+func (*InternalServerError) aPIV1MeGetRes()         {}
+func (*InternalServerError) aPIV1OtpAuthPostRes()   {}
+func (*InternalServerError) aPIV1OtpVerifyPostRes() {}
+func (*InternalServerError) aPIV1PingGetRes()       {}
+func (*InternalServerError) loginRes()              {}
+func (*InternalServerError) signUpRes()             {}
 
 // Ref: #/components/schemas/Me
 type Me struct {
@@ -197,9 +286,9 @@ func (s *Me) SetMember(val Member) {
 	s.Member = val
 }
 
-func (*Me) loginRes()  {}
-func (*Me) meGetRes()  {}
-func (*Me) signUpRes() {}
+func (*Me) aPIV1MeGetRes() {}
+func (*Me) loginRes()      {}
+func (*Me) signUpRes()     {}
 
 // Ref: #/components/schemas/Member
 type Member struct {
@@ -371,52 +460,6 @@ func (o OptMultiFactor) Or(d MultiFactor) MultiFactor {
 	return d
 }
 
-// NewOptPingPostReq returns new OptPingPostReq with value set to v.
-func NewOptPingPostReq(v PingPostReq) OptPingPostReq {
-	return OptPingPostReq{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptPingPostReq is optional PingPostReq.
-type OptPingPostReq struct {
-	Value PingPostReq
-	Set   bool
-}
-
-// IsSet returns true if OptPingPostReq was set.
-func (o OptPingPostReq) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptPingPostReq) Reset() {
-	var v PingPostReq
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptPingPostReq) SetTo(v PingPostReq) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptPingPostReq) Get() (v PingPostReq, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptPingPostReq) Or(d PingPostReq) PingPostReq {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // NewOptString returns new OptString with value set to v.
 func NewOptString(v string) OptString {
 	return OptString{
@@ -463,92 +506,6 @@ func (o OptString) Or(d string) string {
 	return d
 }
 
-type OtpAuthPostOK struct {
-	// OTP 6 digit code.
-	Code string `json:"code"`
-}
-
-// GetCode returns the value of Code.
-func (s *OtpAuthPostOK) GetCode() string {
-	return s.Code
-}
-
-// SetCode sets the value of Code.
-func (s *OtpAuthPostOK) SetCode(val string) {
-	s.Code = val
-}
-
-func (*OtpAuthPostOK) otpAuthPostRes() {}
-
-type OtpAuthPostReq struct {
-	Email string `json:"email"`
-}
-
-// GetEmail returns the value of Email.
-func (s *OtpAuthPostReq) GetEmail() string {
-	return s.Email
-}
-
-// SetEmail sets the value of Email.
-func (s *OtpAuthPostReq) SetEmail(val string) {
-	s.Email = val
-}
-
-// OtpVerifyPostOK is response for OtpVerifyPost operation.
-type OtpVerifyPostOK struct{}
-
-func (*OtpVerifyPostOK) otpVerifyPostRes() {}
-
-type OtpVerifyPostReq struct {
-	Email string `json:"email"`
-	Otp   string `json:"otp"`
-}
-
-// GetEmail returns the value of Email.
-func (s *OtpVerifyPostReq) GetEmail() string {
-	return s.Email
-}
-
-// GetOtp returns the value of Otp.
-func (s *OtpVerifyPostReq) GetOtp() string {
-	return s.Otp
-}
-
-// SetEmail sets the value of Email.
-func (s *OtpVerifyPostReq) SetEmail(val string) {
-	s.Email = val
-}
-
-// SetOtp sets the value of Otp.
-func (s *OtpVerifyPostReq) SetOtp(val string) {
-	s.Otp = val
-}
-
-// PingGetOK is response for PingGet operation.
-type PingGetOK struct{}
-
-func (*PingGetOK) pingGetRes() {}
-
-// PingPostOK is response for PingPost operation.
-type PingPostOK struct{}
-
-func (*PingPostOK) pingPostRes() {}
-
-type PingPostReq struct {
-	// Name.
-	Name string `json:"name"`
-}
-
-// GetName returns the value of Name.
-func (s *PingPostReq) GetName() string {
-	return s.Name
-}
-
-// SetName sets the value of Name.
-func (s *PingPostReq) SetName(val string) {
-	s.Name = val
-}
-
 type SignUpReq struct {
 	// Name.
 	Name string `json:"name"`
@@ -563,6 +520,73 @@ func (s *SignUpReq) GetName() string {
 func (s *SignUpReq) SetName(val string) {
 	s.Name = val
 }
+
+// RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
+type TooManyRequestsError struct {
+	// The HTTP status code generated for this occurrence of the problem.
+	Status OptInt `json:"status"`
+	// Error type.
+	Type OptString `json:"type"`
+	// A short, human-readable summary of the problem type.
+	Title OptString `json:"title"`
+	// A human-readable explanation specific to this occurrence of the problem.
+	Detail OptString `json:"detail"`
+	// Error code.
+	Code OptString `json:"code"`
+}
+
+// GetStatus returns the value of Status.
+func (s *TooManyRequestsError) GetStatus() OptInt {
+	return s.Status
+}
+
+// GetType returns the value of Type.
+func (s *TooManyRequestsError) GetType() OptString {
+	return s.Type
+}
+
+// GetTitle returns the value of Title.
+func (s *TooManyRequestsError) GetTitle() OptString {
+	return s.Title
+}
+
+// GetDetail returns the value of Detail.
+func (s *TooManyRequestsError) GetDetail() OptString {
+	return s.Detail
+}
+
+// GetCode returns the value of Code.
+func (s *TooManyRequestsError) GetCode() OptString {
+	return s.Code
+}
+
+// SetStatus sets the value of Status.
+func (s *TooManyRequestsError) SetStatus(val OptInt) {
+	s.Status = val
+}
+
+// SetType sets the value of Type.
+func (s *TooManyRequestsError) SetType(val OptString) {
+	s.Type = val
+}
+
+// SetTitle sets the value of Title.
+func (s *TooManyRequestsError) SetTitle(val OptString) {
+	s.Title = val
+}
+
+// SetDetail sets the value of Detail.
+func (s *TooManyRequestsError) SetDetail(val OptString) {
+	s.Detail = val
+}
+
+// SetCode sets the value of Code.
+func (s *TooManyRequestsError) SetCode(val OptString) {
+	s.Code = val
+}
+
+func (*TooManyRequestsError) aPIV1OtpAuthPostRes()   {}
+func (*TooManyRequestsError) aPIV1OtpVerifyPostRes() {}
 
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type UnauthorizedError struct {

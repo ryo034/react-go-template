@@ -1,6 +1,7 @@
 package injector
 
 import (
+	"github.com/redis/go-redis/v9"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/config"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	fb "github.com/ryo034/react-go-template/apps/system/api/infrastructure/firebase"
@@ -24,9 +25,10 @@ func NewInjector(
 	txp core.TransactionProvider,
 	co shared.ContextOperator,
 	conf config.Reader,
+	rc *redis.Client,
 ) (*Injector, error) {
 	defaultLang := conf.DefaultLanguage()
-	di := newDriverInjector(f)
+	di := newDriverInjector(rc, f)
 	ri := newRepositoryInjector(di, newGatewayAdapterInjector())
 	pi := newPresenterInjector()
 	la := sharedPresenter.NewLanguageAdapter(defaultLang)

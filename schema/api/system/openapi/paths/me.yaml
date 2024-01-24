@@ -2,6 +2,8 @@ me:
   get:
     summary: Get Admin User
     description: Returns the admin user
+    tags:
+      - Admin
     security:
       - bearer: []
     responses:

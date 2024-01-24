@@ -1,27 +1,19 @@
 ping:
   get:
     summary: Checks if the server is running
+    tags:
+      - Health
     responses:
       "200":
         description: Ping response
-      "500":
-        $ref: "#/components/responses/InternalServerError"
-  post:
-    summary: Checks if the server is running
-    requestBody:
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-              - name
-            properties:
-              name:
-                type: string
-                description: Name
-                example: John Doe
-    responses:
-      "200":
-        description: Ping response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Ping response message
+                  example: pong
       "500":
         $ref: "#/components/responses/InternalServerError"

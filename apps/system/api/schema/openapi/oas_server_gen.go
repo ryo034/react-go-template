@@ -8,47 +8,41 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// APIV1MeGet implements GET /api/v1/me operation.
+	//
+	// Returns the admin user.
+	//
+	// GET /api/v1/me
+	APIV1MeGet(ctx context.Context) (APIV1MeGetRes, error)
+	// APIV1OtpAuthPost implements POST /api/v1/otp/auth operation.
+	//
+	// One Time Password (OTP) to user.
+	//
+	// POST /api/v1/otp/auth
+	APIV1OtpAuthPost(ctx context.Context, req *APIV1OtpAuthPostReq) (APIV1OtpAuthPostRes, error)
+	// APIV1OtpVerifyPost implements POST /api/v1/otp/verify operation.
+	//
+	// Verify OTP sent by user.
+	//
+	// POST /api/v1/otp/verify
+	APIV1OtpVerifyPost(ctx context.Context, req *APIV1OtpVerifyPostReq) (APIV1OtpVerifyPostRes, error)
+	// APIV1PingGet implements GET /api/v1/ping operation.
+	//
+	// Checks if the server is running.
+	//
+	// GET /api/v1/ping
+	APIV1PingGet(ctx context.Context) (APIV1PingGetRes, error)
 	// Login implements login operation.
 	//
 	// Login.
 	//
-	// POST /login
+	// POST /api/v1/login
 	Login(ctx context.Context) (LoginRes, error)
-	// MeGet implements GET /me operation.
-	//
-	// Returns the admin user.
-	//
-	// GET /me
-	MeGet(ctx context.Context) (MeGetRes, error)
-	// OtpAuthPost implements POST /otp/auth operation.
-	//
-	// Send Timed One Time Password (TOTP) to user.
-	//
-	// POST /otp/auth
-	OtpAuthPost(ctx context.Context, req *OtpAuthPostReq) (OtpAuthPostRes, error)
-	// OtpVerifyPost implements POST /otp/verify operation.
-	//
-	// Verify OTP sent by user.
-	//
-	// POST /otp/verify
-	OtpVerifyPost(ctx context.Context, req *OtpVerifyPostReq) (OtpVerifyPostRes, error)
-	// PingGet implements GET /ping operation.
-	//
-	// Checks if the server is running.
-	//
-	// GET /ping
-	PingGet(ctx context.Context) (PingGetRes, error)
-	// PingPost implements POST /ping operation.
-	//
-	// Checks if the server is running.
-	//
-	// POST /ping
-	PingPost(ctx context.Context, req OptPingPostReq) (PingPostRes, error)
 	// SignUp implements sign_up operation.
 	//
 	// Sign Up.
 	//
-	// POST /sign_up
+	// POST /api/v1/sign_up
 	SignUp(ctx context.Context, req *SignUpReq) (SignUpRes, error)
 }
 

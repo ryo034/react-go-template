@@ -10,6 +10,7 @@ import (
 	kvDr "github.com/ryo034/react-go-template/apps/system/api/driver/keyvalue"
 	auth2 "github.com/ryo034/react-go-template/apps/system/api/infrastructure/auth"
 	"github.com/uptrace/bun"
+	"time"
 )
 
 type gateway struct {
@@ -30,7 +31,7 @@ func (g *gateway) GenTOTP(ctx context.Context, email account.Email) (string, err
 	if err != nil {
 		return "", err
 	}
-	if err = g.kvd.Set(ctx, fmt.Sprintf("%s%s", totpKeyPrefix, email.ToString()), code, totpKeyExpire); err != nil {
+	if err = g.kvd.Set(ctx, fmt.Sprintf("%s%s", totpKeyPrefix, email.ToString()), code, totpKeyExpire*time.Second); err != nil {
 		return "", err
 	}
 	return code, nil

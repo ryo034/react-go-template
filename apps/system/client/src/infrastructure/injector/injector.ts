@@ -37,7 +37,7 @@ const setupDriver = () => {
   const firebase = new FirebaseDriver(firebaseAuth, apiErrorHandler)
   return {
     firebase,
-    ga: new GoogleAnalyticsDriver(ga4),
+    ga: new GoogleAnalyticsDriver(ga4, apiErrorHandler),
     me: new MeDriver(openapiFetchClient, apiErrorHandler),
     theme: new ThemeDriver(ls)
   }

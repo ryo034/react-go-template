@@ -11,14 +11,10 @@ func GenRequestID() string {
 	return xid.New().String()
 }
 
-type RequestIDMiddleware interface {
-	Handler(h http.Handler) http.Handler
-}
-
 type requestIDMiddleware struct {
 }
 
-func (hl *requestIDMiddleware) Handler(h http.Handler) http.Handler {
+func (rim *requestIDMiddleware) Handler(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		requestID := r.Header.Get("X-Request-ID")
 		if requestID == "" {
@@ -30,6 +26,6 @@ func (hl *requestIDMiddleware) Handler(h http.Handler) http.Handler {
 	})
 }
 
-func NewRequestIDMiddleware() RequestIDMiddleware {
+func NewRequestIDMiddleware() Middleware {
 	return &requestIDMiddleware{}
 }

@@ -11,7 +11,7 @@ import (
 
 type UseCase interface {
 	Login(ctx context.Context, aID account.ID, wID workspace.ID) (openapi.LoginRes, error)
-	Find(ctx context.Context, aID account.ID, wID workspace.ID) (openapi.MeGetRes, error)
+	Find(ctx context.Context, aID account.ID, wID workspace.ID) (openapi.APIV1MeGetRes, error)
 	Update(ctx context.Context, me *me.Me) (*openapi.Me, error)
 }
 
@@ -34,7 +34,7 @@ func (u *useCase) Login(ctx context.Context, aID account.ID, wID workspace.ID) (
 	return u.op.Find(res), nil
 }
 
-func (u *useCase) Find(ctx context.Context, aID account.ID, wID workspace.ID) (openapi.MeGetRes, error) {
+func (u *useCase) Find(ctx context.Context, aID account.ID, wID workspace.ID) (openapi.APIV1MeGetRes, error) {
 	res, err := u.repo.Find(ctx, u.dbp.GetExecutor(ctx, true), aID, wID)
 	if err != nil {
 		return nil, err

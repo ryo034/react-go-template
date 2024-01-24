@@ -48,9 +48,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/"
+		case '/': // Prefix: "/api/v1/"
 			origElem := elem
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+			if l := len("/api/v1/"); len(elem) >= l && elem[0:l] == "/api/v1/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -93,7 +93,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					// Leaf node.
 					switch r.Method {
 					case "GET":
-						s.handleMeGetRequest([0]string{}, elemIsEscaped, w, r)
+						s.handleAPIV1MeGetRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET")
 					}
@@ -126,7 +126,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						// Leaf node.
 						switch r.Method {
 						case "POST":
-							s.handleOtpAuthPostRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleAPIV1OtpAuthPostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "POST")
 						}
@@ -147,7 +147,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						// Leaf node.
 						switch r.Method {
 						case "POST":
-							s.handleOtpVerifyPostRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleAPIV1OtpVerifyPostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "POST")
 						}
@@ -171,11 +171,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					// Leaf node.
 					switch r.Method {
 					case "GET":
-						s.handlePingGetRequest([0]string{}, elemIsEscaped, w, r)
-					case "POST":
-						s.handlePingPostRequest([0]string{}, elemIsEscaped, w, r)
+						s.handleAPIV1PingGetRequest([0]string{}, elemIsEscaped, w, r)
 					default:
-						s.notAllowed(w, r, "GET,POST")
+						s.notAllowed(w, r, "GET")
 					}
 
 					return
@@ -286,9 +284,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/"
+		case '/': // Prefix: "/api/v1/"
 			origElem := elem
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+			if l := len("/api/v1/"); len(elem) >= l && elem[0:l] == "/api/v1/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -313,7 +311,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.name = "Login"
 						r.summary = "Login"
 						r.operationID = "login"
-						r.pathPattern = "/login"
+						r.pathPattern = "/api/v1/login"
 						r.args = args
 						r.count = 0
 						return r, true
@@ -334,11 +332,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						// Leaf: MeGet
-						r.name = "MeGet"
+						// Leaf: APIV1MeGet
+						r.name = "APIV1MeGet"
 						r.summary = "Get Admin User"
 						r.operationID = ""
-						r.pathPattern = "/me"
+						r.pathPattern = "/api/v1/me"
 						r.args = args
 						r.count = 0
 						return r, true
@@ -371,11 +369,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "POST":
-							// Leaf: OtpAuthPost
-							r.name = "OtpAuthPost"
+							// Leaf: APIV1OtpAuthPost
+							r.name = "APIV1OtpAuthPost"
 							r.summary = "Send OTP"
 							r.operationID = ""
-							r.pathPattern = "/otp/auth"
+							r.pathPattern = "/api/v1/otp/auth"
 							r.args = args
 							r.count = 0
 							return r, true
@@ -396,11 +394,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "POST":
-							// Leaf: OtpVerifyPost
-							r.name = "OtpVerifyPost"
+							// Leaf: APIV1OtpVerifyPost
+							r.name = "APIV1OtpVerifyPost"
 							r.summary = "Verify OTP"
 							r.operationID = ""
-							r.pathPattern = "/otp/verify"
+							r.pathPattern = "/api/v1/otp/verify"
 							r.args = args
 							r.count = 0
 							return r, true
@@ -424,20 +422,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						// Leaf: PingGet
-						r.name = "PingGet"
+						// Leaf: APIV1PingGet
+						r.name = "APIV1PingGet"
 						r.summary = "Checks if the server is running"
 						r.operationID = ""
-						r.pathPattern = "/ping"
-						r.args = args
-						r.count = 0
-						return r, true
-					case "POST":
-						// Leaf: PingPost
-						r.name = "PingPost"
-						r.summary = "Checks if the server is running"
-						r.operationID = ""
-						r.pathPattern = "/ping"
+						r.pathPattern = "/api/v1/ping"
 						r.args = args
 						r.count = 0
 						return r, true
@@ -462,7 +451,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.name = "SignUp"
 						r.summary = "Sign Up"
 						r.operationID = "sign_up"
-						r.pathPattern = "/sign_up"
+						r.pathPattern = "/api/v1/sign_up"
 						r.args = args
 						r.count = 0
 						return r, true

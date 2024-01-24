@@ -23,47 +23,41 @@ import (
 
 // Invoker invokes operations described by OpenAPI v3 specification.
 type Invoker interface {
+	// APIV1MeGet invokes GET /api/v1/me operation.
+	//
+	// Returns the admin user.
+	//
+	// GET /api/v1/me
+	APIV1MeGet(ctx context.Context) (APIV1MeGetRes, error)
+	// APIV1OtpAuthPost invokes POST /api/v1/otp/auth operation.
+	//
+	// One Time Password (OTP) to user.
+	//
+	// POST /api/v1/otp/auth
+	APIV1OtpAuthPost(ctx context.Context, request *APIV1OtpAuthPostReq) (APIV1OtpAuthPostRes, error)
+	// APIV1OtpVerifyPost invokes POST /api/v1/otp/verify operation.
+	//
+	// Verify OTP sent by user.
+	//
+	// POST /api/v1/otp/verify
+	APIV1OtpVerifyPost(ctx context.Context, request *APIV1OtpVerifyPostReq) (APIV1OtpVerifyPostRes, error)
+	// APIV1PingGet invokes GET /api/v1/ping operation.
+	//
+	// Checks if the server is running.
+	//
+	// GET /api/v1/ping
+	APIV1PingGet(ctx context.Context) (APIV1PingGetRes, error)
 	// Login invokes login operation.
 	//
 	// Login.
 	//
-	// POST /login
+	// POST /api/v1/login
 	Login(ctx context.Context) (LoginRes, error)
-	// MeGet invokes GET /me operation.
-	//
-	// Returns the admin user.
-	//
-	// GET /me
-	MeGet(ctx context.Context) (MeGetRes, error)
-	// OtpAuthPost invokes POST /otp/auth operation.
-	//
-	// Send Timed One Time Password (TOTP) to user.
-	//
-	// POST /otp/auth
-	OtpAuthPost(ctx context.Context, request *OtpAuthPostReq) (OtpAuthPostRes, error)
-	// OtpVerifyPost invokes POST /otp/verify operation.
-	//
-	// Verify OTP sent by user.
-	//
-	// POST /otp/verify
-	OtpVerifyPost(ctx context.Context, request *OtpVerifyPostReq) (OtpVerifyPostRes, error)
-	// PingGet invokes GET /ping operation.
-	//
-	// Checks if the server is running.
-	//
-	// GET /ping
-	PingGet(ctx context.Context) (PingGetRes, error)
-	// PingPost invokes POST /ping operation.
-	//
-	// Checks if the server is running.
-	//
-	// POST /ping
-	PingPost(ctx context.Context, request OptPingPostReq) (PingPostRes, error)
 	// SignUp invokes sign_up operation.
 	//
 	// Sign Up.
 	//
-	// POST /sign_up
+	// POST /api/v1/sign_up
 	SignUp(ctx context.Context, request *SignUpReq) (SignUpRes, error)
 }
 
@@ -117,92 +111,20 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 	return u
 }
 
-// Login invokes login operation.
-//
-// Login.
-//
-// POST /login
-func (c *Client) Login(ctx context.Context) (LoginRes, error) {
-	res, err := c.sendLogin(ctx)
-	return res, err
-}
-
-func (c *Client) sendLogin(ctx context.Context) (res LoginRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("login"),
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/login"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "Login",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/login"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeLoginResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// MeGet invokes GET /me operation.
+// APIV1MeGet invokes GET /api/v1/me operation.
 //
 // Returns the admin user.
 //
-// GET /me
-func (c *Client) MeGet(ctx context.Context) (MeGetRes, error) {
-	res, err := c.sendMeGet(ctx)
+// GET /api/v1/me
+func (c *Client) APIV1MeGet(ctx context.Context) (APIV1MeGetRes, error) {
+	res, err := c.sendAPIV1MeGet(ctx)
 	return res, err
 }
 
-func (c *Client) sendMeGet(ctx context.Context) (res MeGetRes, err error) {
+func (c *Client) sendAPIV1MeGet(ctx context.Context) (res APIV1MeGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/me"),
+		semconv.HTTPRouteKey.String("/api/v1/me"),
 	}
 
 	// Run stopwatch.
@@ -217,7 +139,7 @@ func (c *Client) sendMeGet(ctx context.Context) (res MeGetRes, err error) {
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "MeGet",
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1MeGet",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -235,7 +157,7 @@ func (c *Client) sendMeGet(ctx context.Context) (res MeGetRes, err error) {
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
-	pathParts[0] = "/me"
+	pathParts[0] = "/api/v1/me"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
@@ -249,7 +171,7 @@ func (c *Client) sendMeGet(ctx context.Context) (res MeGetRes, err error) {
 		var satisfied bitset
 		{
 			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "MeGet", r); {
+			switch err := c.securityBearer(ctx, "APIV1MeGet", r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -285,7 +207,7 @@ func (c *Client) sendMeGet(ctx context.Context) (res MeGetRes, err error) {
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeMeGetResponse(resp)
+	result, err := decodeAPIV1MeGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -293,20 +215,20 @@ func (c *Client) sendMeGet(ctx context.Context) (res MeGetRes, err error) {
 	return result, nil
 }
 
-// OtpAuthPost invokes POST /otp/auth operation.
+// APIV1OtpAuthPost invokes POST /api/v1/otp/auth operation.
 //
-// Send Timed One Time Password (TOTP) to user.
+// One Time Password (OTP) to user.
 //
-// POST /otp/auth
-func (c *Client) OtpAuthPost(ctx context.Context, request *OtpAuthPostReq) (OtpAuthPostRes, error) {
-	res, err := c.sendOtpAuthPost(ctx, request)
+// POST /api/v1/otp/auth
+func (c *Client) APIV1OtpAuthPost(ctx context.Context, request *APIV1OtpAuthPostReq) (APIV1OtpAuthPostRes, error) {
+	res, err := c.sendAPIV1OtpAuthPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendOtpAuthPost(ctx context.Context, request *OtpAuthPostReq) (res OtpAuthPostRes, err error) {
+func (c *Client) sendAPIV1OtpAuthPost(ctx context.Context, request *APIV1OtpAuthPostReq) (res APIV1OtpAuthPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/otp/auth"),
+		semconv.HTTPRouteKey.String("/api/v1/otp/auth"),
 	}
 
 	// Run stopwatch.
@@ -321,7 +243,7 @@ func (c *Client) sendOtpAuthPost(ctx context.Context, request *OtpAuthPostReq) (
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "OtpAuthPost",
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1OtpAuthPost",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -339,7 +261,7 @@ func (c *Client) sendOtpAuthPost(ctx context.Context, request *OtpAuthPostReq) (
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
-	pathParts[0] = "/otp/auth"
+	pathParts[0] = "/api/v1/otp/auth"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
@@ -347,7 +269,7 @@ func (c *Client) sendOtpAuthPost(ctx context.Context, request *OtpAuthPostReq) (
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
-	if err := encodeOtpAuthPostRequest(request, r); err != nil {
+	if err := encodeAPIV1OtpAuthPostRequest(request, r); err != nil {
 		return res, errors.Wrap(err, "encode request")
 	}
 
@@ -359,7 +281,7 @@ func (c *Client) sendOtpAuthPost(ctx context.Context, request *OtpAuthPostReq) (
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeOtpAuthPostResponse(resp)
+	result, err := decodeAPIV1OtpAuthPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -367,20 +289,20 @@ func (c *Client) sendOtpAuthPost(ctx context.Context, request *OtpAuthPostReq) (
 	return result, nil
 }
 
-// OtpVerifyPost invokes POST /otp/verify operation.
+// APIV1OtpVerifyPost invokes POST /api/v1/otp/verify operation.
 //
 // Verify OTP sent by user.
 //
-// POST /otp/verify
-func (c *Client) OtpVerifyPost(ctx context.Context, request *OtpVerifyPostReq) (OtpVerifyPostRes, error) {
-	res, err := c.sendOtpVerifyPost(ctx, request)
+// POST /api/v1/otp/verify
+func (c *Client) APIV1OtpVerifyPost(ctx context.Context, request *APIV1OtpVerifyPostReq) (APIV1OtpVerifyPostRes, error) {
+	res, err := c.sendAPIV1OtpVerifyPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendOtpVerifyPost(ctx context.Context, request *OtpVerifyPostReq) (res OtpVerifyPostRes, err error) {
+func (c *Client) sendAPIV1OtpVerifyPost(ctx context.Context, request *APIV1OtpVerifyPostReq) (res APIV1OtpVerifyPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/otp/verify"),
+		semconv.HTTPRouteKey.String("/api/v1/otp/verify"),
 	}
 
 	// Run stopwatch.
@@ -395,7 +317,7 @@ func (c *Client) sendOtpVerifyPost(ctx context.Context, request *OtpVerifyPostRe
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "OtpVerifyPost",
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1OtpVerifyPost",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -413,7 +335,7 @@ func (c *Client) sendOtpVerifyPost(ctx context.Context, request *OtpVerifyPostRe
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
-	pathParts[0] = "/otp/verify"
+	pathParts[0] = "/api/v1/otp/verify"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
@@ -421,7 +343,7 @@ func (c *Client) sendOtpVerifyPost(ctx context.Context, request *OtpVerifyPostRe
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
-	if err := encodeOtpVerifyPostRequest(request, r); err != nil {
+	if err := encodeAPIV1OtpVerifyPostRequest(request, r); err != nil {
 		return res, errors.Wrap(err, "encode request")
 	}
 
@@ -433,7 +355,7 @@ func (c *Client) sendOtpVerifyPost(ctx context.Context, request *OtpVerifyPostRe
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeOtpVerifyPostResponse(resp)
+	result, err := decodeAPIV1OtpVerifyPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -441,20 +363,20 @@ func (c *Client) sendOtpVerifyPost(ctx context.Context, request *OtpVerifyPostRe
 	return result, nil
 }
 
-// PingGet invokes GET /ping operation.
+// APIV1PingGet invokes GET /api/v1/ping operation.
 //
 // Checks if the server is running.
 //
-// GET /ping
-func (c *Client) PingGet(ctx context.Context) (PingGetRes, error) {
-	res, err := c.sendPingGet(ctx)
+// GET /api/v1/ping
+func (c *Client) APIV1PingGet(ctx context.Context) (APIV1PingGetRes, error) {
+	res, err := c.sendAPIV1PingGet(ctx)
 	return res, err
 }
 
-func (c *Client) sendPingGet(ctx context.Context) (res PingGetRes, err error) {
+func (c *Client) sendAPIV1PingGet(ctx context.Context) (res APIV1PingGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/ping"),
+		semconv.HTTPRouteKey.String("/api/v1/ping"),
 	}
 
 	// Run stopwatch.
@@ -469,7 +391,7 @@ func (c *Client) sendPingGet(ctx context.Context) (res PingGetRes, err error) {
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "PingGet",
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1PingGet",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -487,7 +409,7 @@ func (c *Client) sendPingGet(ctx context.Context) (res PingGetRes, err error) {
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
-	pathParts[0] = "/ping"
+	pathParts[0] = "/api/v1/ping"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
@@ -504,7 +426,7 @@ func (c *Client) sendPingGet(ctx context.Context) (res PingGetRes, err error) {
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodePingGetResponse(resp)
+	result, err := decodeAPIV1PingGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -512,20 +434,21 @@ func (c *Client) sendPingGet(ctx context.Context) (res PingGetRes, err error) {
 	return result, nil
 }
 
-// PingPost invokes POST /ping operation.
+// Login invokes login operation.
 //
-// Checks if the server is running.
+// Login.
 //
-// POST /ping
-func (c *Client) PingPost(ctx context.Context, request OptPingPostReq) (PingPostRes, error) {
-	res, err := c.sendPingPost(ctx, request)
+// POST /api/v1/login
+func (c *Client) Login(ctx context.Context) (LoginRes, error) {
+	res, err := c.sendLogin(ctx)
 	return res, err
 }
 
-func (c *Client) sendPingPost(ctx context.Context, request OptPingPostReq) (res PingPostRes, err error) {
+func (c *Client) sendLogin(ctx context.Context) (res LoginRes, err error) {
 	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("login"),
 		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/ping"),
+		semconv.HTTPRouteKey.String("/api/v1/login"),
 	}
 
 	// Run stopwatch.
@@ -540,7 +463,7 @@ func (c *Client) sendPingPost(ctx context.Context, request OptPingPostReq) (res 
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "PingPost",
+	ctx, span := c.cfg.Tracer.Start(ctx, "Login",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -558,16 +481,13 @@ func (c *Client) sendPingPost(ctx context.Context, request OptPingPostReq) (res 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
-	pathParts[0] = "/ping"
+	pathParts[0] = "/api/v1/login"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodePingPostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
 	}
 
 	stage = "SendRequest"
@@ -578,7 +498,7 @@ func (c *Client) sendPingPost(ctx context.Context, request OptPingPostReq) (res 
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodePingPostResponse(resp)
+	result, err := decodeLoginResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -590,7 +510,7 @@ func (c *Client) sendPingPost(ctx context.Context, request OptPingPostReq) (res 
 //
 // Sign Up.
 //
-// POST /sign_up
+// POST /api/v1/sign_up
 func (c *Client) SignUp(ctx context.Context, request *SignUpReq) (SignUpRes, error) {
 	res, err := c.sendSignUp(ctx, request)
 	return res, err
@@ -600,7 +520,7 @@ func (c *Client) sendSignUp(ctx context.Context, request *SignUpReq) (res SignUp
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("sign_up"),
 		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/sign_up"),
+		semconv.HTTPRouteKey.String("/api/v1/sign_up"),
 	}
 
 	// Run stopwatch.
@@ -633,7 +553,7 @@ func (c *Client) sendSignUp(ctx context.Context, request *SignUpReq) (res SignUp
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
-	pathParts[0] = "/sign_up"
+	pathParts[0] = "/api/v1/sign_up"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"

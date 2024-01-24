@@ -36,9 +36,9 @@ type corsMiddleware struct {
 	info *CORSInfo
 }
 
-func (hl *corsMiddleware) Handler(h http.Handler) http.Handler {
+func (cm *corsMiddleware) Handler(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		Cors(hl.info, r)
+		Cors(cm.info, r)
 		h.ServeHTTP(w, r)
 	})
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	rds "github.com/redis/go-redis/v9"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/modules/redis"
@@ -89,19 +90,32 @@ func SetupTestDB(t *testing.T, ctx context.Context) *bun.DB {
 }
 
 func RedisTestContainer(ctx context.Context) (*redis.RedisContainer, error) {
-	redisContainer, err := redis.RunContainer(ctx,
+	rc, err := redis.RunContainer(ctx,
 		testcontainers.WithImage("docker.io/redis:7"),
 		redis.WithSnapshotting(10, 1),
 		redis.WithLogLevel(redis.LogLevelVerbose),
-		redis.WithConfigFile(filepath.Join("testdata", "redis7.conf")),
 	)
 	if err != nil {
 		panic(err)
 	}
 	defer func() {
-		if err = redisContainer.Terminate(ctx); err != nil {
+		if err = rc.Terminate(ctx); err != nil {
 			panic(err)
 		}
 	}()
-	return redisContainer, nil
+	return rc, nil
+}
+
+func SetupRedisClient(ctx context.Context) (*rds.Client, error) {
+	rc, err := RedisTestContainer(ctx)
+	host, err := rc.Host(ctx)
+	if err != nil {
+		return nil, err
+	}
+	rdb := rds.NewClient(&rds.Options{
+		Addr: fmt.Sprintf("%s:%s", host, "6379"),
+		DB:   0,
+	})
+	_ = rdb.FlushDB(ctx).Err()
+	return rdb, nil
 }

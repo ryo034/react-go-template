@@ -6,8 +6,8 @@ components:
         application/json:
           schema:
             $ref: "../schemas/error.yaml#/GeneralError"
-    UnauthorizedError:
-      description: Unauthorized
+    BadRequestError:
+      description: Bad request
       content:
         application/json:
           schema:
@@ -18,8 +18,14 @@ components:
         application/json:
           schema:
             $ref: "../schemas/error.yaml#/GeneralError"
-    BadRequestError:
-      description: Bad request
+    UnauthorizedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/error.yaml#/GeneralError"
+    TooManyRequestsError:
+      description: Too many requests
       content:
         application/json:
           schema:

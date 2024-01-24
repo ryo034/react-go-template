@@ -3,41 +3,32 @@ info:
   title: System API
   description: System API
   version: 1.0.0
-tags:
-  - name: Health
-    description: Health Check
 paths:
-  /ping:
+  /api/v1/ping:
     get:
       summary: Checks if the server is running
+      tags:
+        - Health
       responses:
         '200':
           description: Ping response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Ping response message
+                    example: pong
         '500':
           $ref: '#/components/responses/InternalServerError'
-    post:
-      summary: Checks if the server is running
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - name
-              properties:
-                name:
-                  type: string
-                  description: Name
-                  example: John Doe
-      responses:
-        '200':
-          description: Ping response
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /otp/auth:
+  /api/v1/otp/auth:
     post:
       summary: Send OTP
-      description: Send Timed One Time Password (TOTP) to user.
+      tags:
+        - OTP
+      description: One Time Password (OTP) to user.
       requestBody:
         required: true
         content:
@@ -65,11 +56,15 @@ paths:
                     description: OTP 6 digit code
         '400':
           $ref: '#/components/responses/BadRequestError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /otp/verify:
+  /api/v1/otp/verify:
     post:
       summary: Verify OTP
+      tags:
+        - OTP
       description: Verify OTP sent by user.
       requestBody:
         required: true
@@ -89,14 +84,28 @@ paths:
       responses:
         '200':
           description: OTP has been verified successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - token
+                properties:
+                  token:
+                    type: string
+                    description: JWT token
         '400':
           $ref: '#/components/responses/BadRequestError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /me:
+  /api/v1/me:
     get:
       summary: Get Admin User
       description: Returns the admin user
+      tags:
+        - Admin
       security:
         - bearer: []
       responses:
@@ -108,7 +117,7 @@ paths:
                 $ref: '#/components/schemas/Me'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /sign_up:
+  /api/v1/sign_up:
     post:
       summary: Sign Up
       description: Sign Up
@@ -139,7 +148,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /login:
+  /api/v1/login:
     post:
       summary: Login
       description: Login
@@ -274,8 +283,8 @@ components:
                 type: string
                 example: invalid_item_id
                 description: error code
-    UnauthorizedError:
-      description: Unauthorized
+    BadRequestError:
+      description: Bad request
       content:
         application/json:
           schema:
@@ -334,8 +343,38 @@ components:
                 type: string
                 example: invalid_item_id
                 description: error code
-    BadRequestError:
-      description: Bad request
+    UnauthorizedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            description: RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807
+            properties:
+              status:
+                type: integer
+                example: 400
+                description: >-
+                  The HTTP status code generated for this occurrence of the
+                  problem.
+              type:
+                type: string
+                example: invalid_item_id
+                description: error type
+              title:
+                type: string
+                description: A short, human-readable summary of the problem type
+              detail:
+                type: string
+                description: >-
+                  A human-readable explanation specific to this occurrence of
+                  the problem.
+              code:
+                type: string
+                example: invalid_item_id
+                description: error code
+    TooManyRequestsError:
+      description: Too many requests
       content:
         application/json:
           schema:

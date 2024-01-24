@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/config"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/redis"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/injector"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/logger"
@@ -29,7 +30,9 @@ func Start(conf config.Reader) {
 	dbCloseFn, p, txp := core.Initialize(conf.SourceDataSource(), conf.ReplicaDataSource(), conf.IsDebug())
 	defer dbCloseFn()
 
-	inj, err := injector.NewInjector(fb, p, txp, co, conf)
+	rc := redis.NewRedisClient(conf.RedisConfig())
+
+	inj, err := injector.NewInjector(fb, p, txp, co, conf, rc)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -47,7 +50,7 @@ func Start(conf config.Reader) {
 
 	if err = http.ListenAndServe(
 		endpoint,
-		middleware.NewMiddlewares().Global(h, conf, zl),
+		middleware.NewMiddlewares().Global(h, conf, zl, rc),
 	); err != nil {
 		log.Fatal(err)
 	}

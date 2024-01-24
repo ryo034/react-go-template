@@ -16,4 +16,8 @@ var localValues = map[Key]string{
 	firebaseStorageBucket: "",
 	// cors
 	allowOrigin: "http://localhost:5173,http://localhost",
+	// redis
+	redisAddr: "host.docker.internal:6379",
+	redisDB:   "0",
+	redisPass: "root",
 }

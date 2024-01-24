@@ -1,13 +1,18 @@
 package middleware
 
 import (
+	"github.com/redis/go-redis/v9"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/config"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/logger"
 	"net/http"
 )
 
 type Middlewares interface {
-	Global(h http.Handler, conf config.Reader, zl logger.Logger) http.Handler
+	Global(h http.Handler, conf config.Reader, zl logger.Logger, rds *redis.Client) http.Handler
+}
+
+type Middleware interface {
+	Handler(h http.Handler) http.Handler
 }
 
 type HttpMiddleware func(http.Handler) http.Handler
@@ -21,13 +26,14 @@ func applyMiddlewares(h http.Handler, middlewares ...HttpMiddleware) http.Handle
 	return h
 }
 
-func (m *mid) Global(h http.Handler, conf config.Reader, zl logger.Logger) http.Handler {
+func (m *mid) Global(h http.Handler, conf config.Reader, zl logger.Logger, rds *redis.Client) http.Handler {
 	return applyMiddlewares(
 		h,
 		NewRequestIDMiddleware().Handler,
 		NewLangMiddleware(conf.DefaultLanguage()).Handler,
 		NewLogMiddleware(zl, conf.IsLocal()).Handler,
 		conf.Cors().Handler,
+		NewOtpRateLimitMiddleware(rds, OtpRateLimitConfig()).Handler,
 	)
 }
 

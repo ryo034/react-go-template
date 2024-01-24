@@ -13,57 +13,48 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// APIV1MeGet implements GET /api/v1/me operation.
+//
+// Returns the admin user.
+//
+// GET /api/v1/me
+func (UnimplementedHandler) APIV1MeGet(ctx context.Context) (r APIV1MeGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1OtpAuthPost implements POST /api/v1/otp/auth operation.
+//
+// One Time Password (OTP) to user.
+//
+// POST /api/v1/otp/auth
+func (UnimplementedHandler) APIV1OtpAuthPost(ctx context.Context, req *APIV1OtpAuthPostReq) (r APIV1OtpAuthPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1OtpVerifyPost implements POST /api/v1/otp/verify operation.
+//
+// Verify OTP sent by user.
+//
+// POST /api/v1/otp/verify
+func (UnimplementedHandler) APIV1OtpVerifyPost(ctx context.Context, req *APIV1OtpVerifyPostReq) (r APIV1OtpVerifyPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1PingGet implements GET /api/v1/ping operation.
+//
+// Checks if the server is running.
+//
+// GET /api/v1/ping
+func (UnimplementedHandler) APIV1PingGet(ctx context.Context) (r APIV1PingGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // Login implements login operation.
 //
 // Login.
 //
-// POST /login
+// POST /api/v1/login
 func (UnimplementedHandler) Login(ctx context.Context) (r LoginRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// MeGet implements GET /me operation.
-//
-// Returns the admin user.
-//
-// GET /me
-func (UnimplementedHandler) MeGet(ctx context.Context) (r MeGetRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// OtpAuthPost implements POST /otp/auth operation.
-//
-// Send Timed One Time Password (TOTP) to user.
-//
-// POST /otp/auth
-func (UnimplementedHandler) OtpAuthPost(ctx context.Context, req *OtpAuthPostReq) (r OtpAuthPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// OtpVerifyPost implements POST /otp/verify operation.
-//
-// Verify OTP sent by user.
-//
-// POST /otp/verify
-func (UnimplementedHandler) OtpVerifyPost(ctx context.Context, req *OtpVerifyPostReq) (r OtpVerifyPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// PingGet implements GET /ping operation.
-//
-// Checks if the server is running.
-//
-// GET /ping
-func (UnimplementedHandler) PingGet(ctx context.Context) (r PingGetRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// PingPost implements POST /ping operation.
-//
-// Checks if the server is running.
-//
-// POST /ping
-func (UnimplementedHandler) PingPost(ctx context.Context, req OptPingPostReq) (r PingPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -71,7 +62,7 @@ func (UnimplementedHandler) PingPost(ctx context.Context, req OptPingPostReq) (r
 //
 // Sign Up.
 //
-// POST /sign_up
+// POST /api/v1/sign_up
 func (UnimplementedHandler) SignUp(ctx context.Context, req *SignUpReq) (r SignUpRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

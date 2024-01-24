@@ -10,7 +10,7 @@ export class MeDriver {
 
   async login(): PromiseResult<components["schemas"]["Me"], Error> {
     try {
-      const res = await this.client.POST("/login")
+      const res = await this.client.POST("/api/v1/login")
       return res.data ? Result.ok(res.data) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))
@@ -19,7 +19,7 @@ export class MeDriver {
 
   async signUp(name: AccountName): PromiseResult<components["schemas"]["Me"], Error> {
     try {
-      const res = await this.client.POST('/sign_up', {
+      const res = await this.client.POST("/api/v1/sign_up", {
         body: {
           name: `${name.value}`
         }
@@ -32,7 +32,7 @@ export class MeDriver {
 
   async find(): PromiseResult<components["schemas"]["Me"], Error> {
     try {
-      const res = await this.client.GET("/me")
+      const res = await this.client.GET("/api/v1/me")
       return res.data ? Result.ok(res.data) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))

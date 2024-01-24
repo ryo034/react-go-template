@@ -3,21 +3,18 @@ info:
   title: System API
   description: System API
   version: 1.0.0
-tags:
-  - name: Health
-    description: Health Check
 paths:
-  /ping:
+  /api/v1/ping:
     $ref: "./paths/ping.yaml#/ping"
-  /otp/auth:
+  /api/v1/otp/auth:
     $ref: "./paths/otp.yaml#/authByOtp"
-  /otp/verify:
+  /api/v1/otp/verify:
     $ref: "./paths/otp.yaml#/verify"
-  /me:
+  /api/v1/me:
     $ref: "./paths/me.yaml#/me"
-  /sign_up:
+  /api/v1/sign_up:
     $ref: "./paths/sign_up.yaml#/sign_up"
-  /login:
+  /api/v1/login:
     $ref: "./paths/login.yaml#/login"
 
 components:
@@ -41,11 +38,13 @@ components:
   responses:
     GeneralError:
       $ref: "./components/responses/error.yaml#/components/responses/GeneralError"
-    UnauthorizedError:
-      $ref: "./components/responses/error.yaml#/components/responses/UnauthorizedError"
-    NotFoundError:
-      $ref: "./components/responses/error.yaml#/components/responses/NotFoundError"
     BadRequestError:
       $ref: "./components/responses/error.yaml#/components/responses/BadRequestError"
+    NotFoundError:
+      $ref: "./components/responses/error.yaml#/components/responses/NotFoundError"
+    UnauthorizedError:
+      $ref: "./components/responses/error.yaml#/components/responses/UnauthorizedError"
+    TooManyRequestsError:
+      $ref: "./components/responses/error.yaml#/components/responses/TooManyRequestsError"
     InternalServerError:
       $ref: "./components/responses/error.yaml#/components/responses/InternalServerError"

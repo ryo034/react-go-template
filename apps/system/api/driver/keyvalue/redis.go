@@ -10,14 +10,8 @@ type RedisDriver struct {
 	client *redis.Client
 }
 
-func NewRedisDriver(addr string, password string, db int) *RedisDriver {
-	return &RedisDriver{
-		client: redis.NewClient(&redis.Options{
-			Addr:     addr,
-			Password: password,
-			DB:       db,
-		}),
-	}
+func NewRedisDriver(client *redis.Client) *RedisDriver {
+	return &RedisDriver{client}
 }
 
 func (r *RedisDriver) Set(ctx context.Context, key string, value interface{}, expiration time.Duration) error {

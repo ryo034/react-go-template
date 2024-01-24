@@ -10,7 +10,7 @@ import (
 )
 
 type Controller interface {
-	Find(ctx context.Context, aID string, wID string) (openapi.MeGetRes, error)
+	Find(ctx context.Context, aID string, wID string) (openapi.APIV1MeGetRes, error)
 }
 
 type controller struct {
@@ -22,7 +22,7 @@ func NewController(uc meUc.UseCase, resl shared.Resolver) Controller {
 	return &controller{uc, resl}
 }
 
-func (c *controller) Find(ctx context.Context, aID string, wID string) (openapi.MeGetRes, error) {
+func (c *controller) Find(ctx context.Context, aID string, wID string) (openapi.APIV1MeGetRes, error) {
 	accountID, err := account.NewID(aID)
 	wsID := workspace.ID{}
 	if err != nil {
@@ -30,7 +30,7 @@ func (c *controller) Find(ctx context.Context, aID string, wID string) (openapi.
 	}
 	res, err := c.uc.Find(ctx, accountID, wsID)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.MeGetRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1MeGetRes), nil
 	}
 	return res, nil
 }

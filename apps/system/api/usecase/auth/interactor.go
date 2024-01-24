@@ -2,6 +2,8 @@ package auth
 
 import (
 	"context"
+	"database/sql"
+	"github.com/go-faster/errors"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/auth"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/email"
@@ -12,8 +14,8 @@ import (
 )
 
 type UseCase interface {
-	AuthByTOTP(ctx context.Context, input ByTOTPInput) (openapi.OtpAuthPostRes, error)
-	VerifyTOTP(ctx context.Context, input VerifyTOTPInput) (openapi.OtpVerifyPostRes, error)
+	AuthByTOTP(ctx context.Context, input ByTOTPInput) (openapi.APIV1OtpAuthPostRes, error)
+	VerifyTOTP(ctx context.Context, input VerifyTOTPInput) (openapi.APIV1OtpVerifyPostRes, error)
 }
 
 type useCase struct {
@@ -28,7 +30,7 @@ func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo auth.Rep
 	return &useCase{txp, dbp, acRepo, emailDr, fbDr}
 }
 
-func (u *useCase) AuthByTOTP(ctx context.Context, input ByTOTPInput) (openapi.OtpAuthPostRes, error) {
+func (u *useCase) AuthByTOTP(ctx context.Context, input ByTOTPInput) (openapi.APIV1OtpAuthPostRes, error) {
 	code, err := u.repo.GenTOTP(ctx, input.Email)
 	if err != nil {
 		return nil, err
@@ -36,10 +38,10 @@ func (u *useCase) AuthByTOTP(ctx context.Context, input ByTOTPInput) (openapi.Ot
 	if err = u.emailDr.Send(ctx, input.Email); err != nil {
 		return nil, err
 	}
-	return &openapi.OtpAuthPostOK{Code: code}, nil
+	return &openapi.APIV1OtpAuthPostOK{Code: code}, nil
 }
 
-func (u *useCase) VerifyTOTP(ctx context.Context, input VerifyTOTPInput) (openapi.OtpVerifyPostRes, error) {
+func (u *useCase) VerifyTOTP(ctx context.Context, input VerifyTOTPInput) (openapi.APIV1OtpVerifyPostRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
@@ -47,7 +49,7 @@ func (u *useCase) VerifyTOTP(ctx context.Context, input VerifyTOTPInput) (openap
 	}
 	fn := func() (string, error) {
 		usr, err := u.repo.Find(pr, p, input.Email)
-		if err != nil {
+		if err != nil && !errors.Is(err, sql.ErrNoRows) {
 			return "", err
 		}
 		// if user exists, verify TOTP and return custom token
@@ -61,7 +63,9 @@ func (u *useCase) VerifyTOTP(ctx context.Context, input VerifyTOTPInput) (openap
 	if err = result.Error(); err != nil {
 		return nil, err
 	}
-	return &openapi.OtpVerifyPostOK{}, nil
+	return &openapi.APIV1OtpVerifyPostOK{
+		Token: result.Value(0).(string),
+	}, nil
 }
 
 func (u *useCase) verifyTOTP(ctx context.Context, aID account.ID, email account.Email, code string) (string, error) {

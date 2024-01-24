@@ -15,25 +15,21 @@ func (w *statusResponseWriter) WriteHeader(status int) {
 	w.ResponseWriter.WriteHeader(status)
 }
 
-type LogMiddleware interface {
-	Handler(h http.Handler) http.Handler
-}
-
 type logMiddleware struct {
 	zl    logger.Logger
 	stack bool
 }
 
-func (hl *logMiddleware) Handler(h http.Handler) http.Handler {
+func (lm *logMiddleware) Handler(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		st := hl.zl.LogRequest(r.Context(), r)
-		logger.Recovery(hl.zl, hl.stack, r)
+		st := lm.zl.LogRequest(r.Context(), r)
+		logger.Recovery(lm.zl, lm.stack, r)
 		sw := &statusResponseWriter{ResponseWriter: w}
 		h.ServeHTTP(sw, r)
-		hl.zl.LogResponse(r.Context(), r, st, sw.status)
+		lm.zl.LogResponse(r.Context(), r, st, sw.status)
 	})
 }
 
-func NewLogMiddleware(zl logger.Logger, stack bool) LogMiddleware {
+func NewLogMiddleware(zl logger.Logger, stack bool) Middleware {
 	return &logMiddleware{zl, stack}
 }

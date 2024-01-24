@@ -30,9 +30,9 @@ type langMiddleware struct {
 	defaultLang language.Tag
 }
 
-func (hl *langMiddleware) Handler(h http.Handler) http.Handler {
+func (lm *langMiddleware) Handler(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		lang := Language(r, hl.defaultLang)
+		lang := Language(r, lm.defaultLang)
 		ctx := context.WithValue(r.Context(), "lang", lang)
 		h.ServeHTTP(w, r.WithContext(ctx))
 	})

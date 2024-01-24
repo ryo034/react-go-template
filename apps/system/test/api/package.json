@@ -1,0 +1,32 @@
+{
+  "name": "api-test",
+  "description": "API test",
+  "scripts": {
+    "test": "playwright test",
+    "test:stateless": "playwright test --grep-invert @stateful",
+    "test:stateful": "playwright test --grep @stateful"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.2",
+    "firebase-admin": "^12.0.0",
+    "openapi-fetch": "^0.8.2",
+    "pg": "^8.11.3",
+    "pg-format": "^1.0.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3",
+    "playwright": "1.41.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.41.1",
+    "@types/node": "^20.11.5",
+    "@types/pg": "^8.10.9",
+    "csv-parse": "^5.5.3"
+  },
+  "packageManager": "pnpm@8.14.0+sha256.9cebf61abd83f68177b29484da72da9751390eaad46dfc3072d266bfbb1ba7bf",
+  "engines": {
+    "node": "20.11.0",
+    "npm": "use pnpm please!",
+    "yarn": "use pnpm please!",
+    "pnpm": "8.14.0"
+  }
+}
