@@ -63,10 +63,10 @@ func (z *zeroLogger) LogRequest(ctx context.Context, req *http.Request) time.Tim
 func (z *zeroLogger) baseLogResponse(ctx context.Context, req *http.Request, st time.Time) []interface{} {
 	fields := z.baseFields(ctx, req)
 	end := time.Now()
-	latency := end.Sub(st)
 	if z.conf.UTC {
 		end = end.UTC()
 	}
+	latency := end.Sub(st)
 	return append(fields, "latency", latency)
 }
 

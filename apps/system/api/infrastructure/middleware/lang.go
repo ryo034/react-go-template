@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"golang.org/x/text/language"
 	"net/http"
 )
@@ -33,7 +34,7 @@ type langMiddleware struct {
 func (lm *langMiddleware) Handler(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		lang := Language(r, lm.defaultLang)
-		ctx := context.WithValue(r.Context(), "lang", lang)
+		ctx := context.WithValue(r.Context(), shared.ContextLanguageKey, lang)
 		h.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

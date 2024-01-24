@@ -3,7 +3,7 @@ package middleware
 import (
 	"context"
 	"github.com/rs/xid"
-	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/logger"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"net/http"
 )
 
@@ -20,7 +20,7 @@ func (rim *requestIDMiddleware) Handler(h http.Handler) http.Handler {
 		if requestID == "" {
 			requestID = GenRequestID()
 		}
-		ctx := context.WithValue(r.Context(), logger.RequestIDKey, requestID)
+		ctx := context.WithValue(r.Context(), shared.ContextRequestIDKey, requestID)
 		r.Header.Set("X-Request-ID", requestID)
 		h.ServeHTTP(w, r.WithContext(ctx))
 	})

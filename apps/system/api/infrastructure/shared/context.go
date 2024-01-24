@@ -21,12 +21,13 @@ func NewContextOperator() ContextOperator {
 	return contextOperator{}
 }
 
-type key string
+type Key string
 
 const (
-	ContextTokenKey    key = "token"
-	ContextUIDKey      key = "uid"
-	ContextLanguageKey key = "lang"
+	ContextTokenKey     Key = "token"
+	ContextUIDKey       Key = "uid"
+	ContextLanguageKey  Key = "lang"
+	ContextRequestIDKey Key = "request-id"
 )
 
 func (co contextOperator) SetClaim(ctx context.Context, claim map[string]interface{}) context.Context {
