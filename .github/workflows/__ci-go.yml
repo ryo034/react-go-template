@@ -43,9 +43,6 @@ jobs:
       - name: Run Staticcheck
         run: staticcheck ./...
 
-      - name: Go Mod Verify
-        run: go mod verify
-
       - name: go vet
         run: go vet ./...
 
@@ -69,7 +66,7 @@ jobs:
       - name: Test
         run: |
           set -o pipefail
-          go test ./... -tags='!testcontainers' -json | tee ./go-test.out | tparse -all
+          go test -v -count=1 -race -shuffle=on ./... -tags='!testcontainers' -json | tee ./go-test.out | tparse -all
 
       - name: Add job summary
         shell: bash

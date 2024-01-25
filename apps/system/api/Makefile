@@ -29,7 +29,7 @@ format:
 
 .PHONY: test
 test:
-	go test $(go list ./... | grep -v /driver/)
+	go test -v -count=1 -race -shuffle=on ./...
 
 .PHONY: test-integration
 test-integration:

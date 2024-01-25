@@ -40,7 +40,7 @@ jobs:
       - name: Test
         run: |
           set -o pipefail
-          go test ./... -tags='testcontainers' -json | tee ./go-test.out | tparse -all
+          go test -v -count=1 -race -shuffle=on ./... -tags='testcontainers' -json | tee ./go-test.out | tparse -all
 
       - name: Add job summary
         shell: bash
