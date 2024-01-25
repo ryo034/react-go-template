@@ -14,9 +14,11 @@ type Firebase struct {
 	Storage *storage.Client
 }
 
-func setEmulatorEnv() {
-	os.Setenv("FIREBASE_AUTH_EMULATOR_HOST", "host.docker.internal:9099")
-	os.Setenv("STORAGE_EMULATOR_HOST", "host.docker.internal:9199")
+func setEmulatorEnv() error {
+	if err := os.Setenv("FIREBASE_AUTH_EMULATOR_HOST", "host.docker.internal:9099"); err != nil {
+		panic(err)
+	}
+	return os.Setenv("STORAGE_EMULATOR_HOST", "host.docker.internal:9199")
 }
 
 var firebaseLocalProjectID = "test"
@@ -27,7 +29,9 @@ func NewFirebase(isLocal bool, firebaseStorageBucket string) (inst *Firebase, er
 	}
 
 	if isLocal {
-		setEmulatorEnv()
+		if err = setEmulatorEnv(); err != nil {
+			return nil, err
+		}
 		fConf.ProjectID = firebaseLocalProjectID
 	}
 

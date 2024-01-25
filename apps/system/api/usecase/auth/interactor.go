@@ -81,8 +81,11 @@ func (u *useCase) verifyTOTP(ctx context.Context, aID account.ID, email account.
 }
 
 func (u *useCase) verifyTOTPWithCreate(ctx context.Context, exec bun.IDB, email account.Email, code string) (string, error) {
-	aID := account.GenerateID()
-	if _, err := u.repo.Create(ctx, exec, aID, email); err != nil {
+	aID, err := account.GenerateID()
+	if err != nil {
+		return "", err
+	}
+	if _, err = u.repo.Create(ctx, exec, aID, email); err != nil {
 		return "", err
 	}
 	ok, err := u.repo.VerifyTOTP(ctx, email, code)

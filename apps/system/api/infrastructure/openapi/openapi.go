@@ -48,10 +48,15 @@ func Start(conf config.Reader) {
 
 	zl := logger.NewZeroLogger(logger.Config{TimeFormat: time.RFC3339, UTC: true}, conf.IsLocal(), conf.ServiceName())
 
-	if err = http.ListenAndServe(
-		endpoint,
-		middleware.NewMiddlewares().Global(h, conf, zl, rc),
-	); err != nil {
+	server := &http.Server{
+		Addr:         endpoint,
+		Handler:      middleware.NewMiddlewares().Global(h, conf, zl, rc),
+		ReadTimeout:  15 * time.Second,
+		WriteTimeout: 15 * time.Second,
+		IdleTimeout:  15 * time.Second,
+	}
+
+	if err = server.ListenAndServe(); err != nil {
 		log.Fatal(err)
 	}
 }

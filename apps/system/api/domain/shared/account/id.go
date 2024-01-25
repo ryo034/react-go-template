@@ -18,8 +18,12 @@ func NewID(v string) (ID, error) {
 	return ID{i}, nil
 }
 
-func GenerateID() ID {
-	return ID{id.GenerateUUID()}
+func GenerateID() (ID, error) {
+	i, err := id.GenerateUUID()
+	if err != nil {
+		return ID{}, err
+	}
+	return ID{i}, nil
 }
 
 func NewIDFromUUID(v uuid.UUID) ID {
