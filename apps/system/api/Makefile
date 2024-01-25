@@ -7,14 +7,10 @@ rerun:
 	@docker-compose stop api
 	@docker-compose up -d api
 
-.PHONY: update-proto-package
-update-proto-package:
+.PHONY: update-package
+update-package:
 	@go clean --modcache
-	@go mod tidy
-
-.PHONY: update-private-package
-update-private-package:
-	@go get -v github.com/ryo034/react-go-template/packages/go
+	@go get -u ./...
 	@go mod tidy
 
 .PHONY: generate
@@ -33,4 +29,4 @@ test:
 
 .PHONY: test-integration
 test-integration:
-	go test ./driver/...
+	go test -v -count=1 -race -shuffle=on ./... -tags='testcontainers'

@@ -53,9 +53,21 @@ update-all-typescript-package:
 	@cd ./apps/system/test/api && ncu -u
 	@corepack pnpm install -r
 
+.PHONY: update-pnpm-version
+update-pnpm-version:
+	@cd ./packages/typescript/ui && sed -i '' 's/"pnpm": "[^"]*"/"pnpm": "$(VERSION)"/' package.json
+	@cd ./packages/typescript/network && sed -i '' 's/"pnpm": "[^"]*"/"pnpm": "$(VERSION)"/' package.json
+	@cd ./apps/system/client && sed -i '' 's/"pnpm": "[^"]*"/"pnpm": "$(VERSION)"/' package.json
+	@cd ./apps/system/test/api && sed -i '' 's/"pnpm": "[^"]*"/"pnpm": "$(VERSION)"/' package.json
+	@cd ./packages/typescript/ui && corepack use pnpm@$(VERSION)
+	@cd ./packages/typescript/network && corepack use pnpm@$(VERSION)
+	@cd ./apps/system/client && corepack use pnpm@$(VERSION)
+	@cd ./apps/system/test/api && corepack use pnpm@$(VERSION)
+	@corepack pnpm install -r
+
 .PHONY: update-all-go-package
 update-all-go-package:
-	@cd ./apps/system/api && make update-private-package
+	@cd ./apps/system/api && make update-package
 
 # ============
 #  Schema
