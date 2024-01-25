@@ -3,6 +3,7 @@ package logger
 import (
 	"context"
 	"github.com/rs/zerolog"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"net/http"
 	"os"
 	"time"
@@ -12,8 +13,6 @@ type zeroLogger struct {
 	logger zerolog.Logger
 	conf   Config
 }
-
-const RequestIDKey = "request-id"
 
 func NewZeroLogger(conf Config, isLocal bool, serviceName string) Logger {
 	output := zerolog.ConsoleWriter{
@@ -85,7 +84,7 @@ func (z *zeroLogger) LogResponse(ctx context.Context, req *http.Request, st time
 }
 
 func (z *zeroLogger) baseFields(ctx context.Context, req *http.Request) []interface{} {
-	reqID := ctx.Value(RequestIDKey).(string)
+	reqID := ctx.Value(shared.ContextRequestIDKey).(string)
 	var fields []interface{}
 	fields = append(fields, "request-id", reqID)
 	fields = append(fields, "method", req.Method)
