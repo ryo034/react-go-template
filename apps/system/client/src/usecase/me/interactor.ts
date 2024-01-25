@@ -1,5 +1,5 @@
 import { MeRepository } from "~/domain"
-import { MeUseCaseInput, MeUseCaseOutput, MeUseCaseSignUpInputData } from "~/usecase"
+import { MeUseCaseInput, MeUseCaseOutput } from "~/usecase"
 
 export class MeInteractor implements MeUseCaseInput {
   constructor(private readonly repository: MeRepository, private readonly presenter: MeUseCaseOutput) {}
@@ -12,15 +12,6 @@ export class MeInteractor implements MeUseCaseInput {
       return fbRes.error
     }
     this.presenter.setIsLoading(false)
-    return null
-  }
-
-  async signUp(data: MeUseCaseSignUpInputData): Promise<Error | null> {
-    const res = await this.repository.signUp()
-    if (res.isErr) {
-      return res.error
-    }
-    this.presenter.clear()
     return null
   }
 

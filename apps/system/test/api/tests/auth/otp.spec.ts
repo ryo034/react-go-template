@@ -7,7 +7,7 @@ const client = genAPIClient()
 test.describe("Otp API", () => {
   test("Create Account And Verify By OTP @stateful", async () => {
     const email = "test@example.com"
-    const { data, response, error } = await client.POST("/api/v1/otp/auth", {
+    const { data, response, error } = await client.POST("/api/v1/auth/otp", {
       headers: defaultPostHeaders,
       body: { email }
     })
@@ -16,7 +16,7 @@ test.describe("Otp API", () => {
     const { code } = data
     expect(code).toMatch(/^\d{6}$/)
 
-    const verifyRes = await client.POST("/api/v1/otp/verify", {
+    const verifyRes = await client.POST("/api/v1/auth/otp/verify", {
       headers: defaultPostHeaders,
       body: { email, otp: code }
     })

@@ -60,6 +60,85 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
+			case 'a': // Prefix: "auth/o"
+				origElem := elem
+				if l := len("auth/o"); len(elem) >= l && elem[0:l] == "auth/o" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'a': // Prefix: "auth"
+					origElem := elem
+					if l := len("auth"); len(elem) >= l && elem[0:l] == "auth" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAPIV1AuthOAuthPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 't': // Prefix: "tp"
+					origElem := elem
+					if l := len("tp"); len(elem) >= l && elem[0:l] == "tp" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch r.Method {
+						case "POST":
+							s.handleAPIV1AuthOtpPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/verify"
+						origElem := elem
+						if l := len("/verify"); len(elem) >= l && elem[0:l] == "/verify" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIV1AuthOtpVerifyPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
+				}
+
+				elem = origElem
 			case 'l': // Prefix: "login"
 				origElem := elem
 				if l := len("login"); len(elem) >= l && elem[0:l] == "login" {
@@ -102,63 +181,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
-			case 'o': // Prefix: "otp/"
-				origElem := elem
-				if l := len("otp/"); len(elem) >= l && elem[0:l] == "otp/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					break
-				}
-				switch elem[0] {
-				case 'a': // Prefix: "auth"
-					origElem := elem
-					if l := len("auth"); len(elem) >= l && elem[0:l] == "auth" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIV1OtpAuthPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
-						}
-
-						return
-					}
-
-					elem = origElem
-				case 'v': // Prefix: "verify"
-					origElem := elem
-					if l := len("verify"); len(elem) >= l && elem[0:l] == "verify" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleAPIV1OtpVerifyPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
-						}
-
-						return
-					}
-
-					elem = origElem
-				}
-
-				elem = origElem
 			case 'p': // Prefix: "ping"
 				origElem := elem
 				if l := len("ping"); len(elem) >= l && elem[0:l] == "ping" {
@@ -174,27 +196,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						s.handleAPIV1PingGetRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET")
-					}
-
-					return
-				}
-
-				elem = origElem
-			case 's': // Prefix: "sign_up"
-				origElem := elem
-				if l := len("sign_up"); len(elem) >= l && elem[0:l] == "sign_up" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "POST":
-						s.handleSignUpRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "POST")
 					}
 
 					return
@@ -296,6 +297,97 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
+			case 'a': // Prefix: "auth/o"
+				origElem := elem
+				if l := len("auth/o"); len(elem) >= l && elem[0:l] == "auth/o" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'a': // Prefix: "auth"
+					origElem := elem
+					if l := len("auth"); len(elem) >= l && elem[0:l] == "auth" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch method {
+						case "POST":
+							// Leaf: AuthByOAuth
+							r.name = "AuthByOAuth"
+							r.summary = "Auth by OAuth"
+							r.operationID = ""
+							r.pathPattern = "/api/v1/auth/oauth"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 't': // Prefix: "tp"
+					origElem := elem
+					if l := len("tp"); len(elem) >= l && elem[0:l] == "tp" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch method {
+						case "POST":
+							r.name = "APIV1AuthOtpPost"
+							r.summary = "Send OTP"
+							r.operationID = ""
+							r.pathPattern = "/api/v1/auth/otp"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/verify"
+						origElem := elem
+						if l := len("/verify"); len(elem) >= l && elem[0:l] == "/verify" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch method {
+							case "POST":
+								// Leaf: APIV1AuthOtpVerifyPost
+								r.name = "APIV1AuthOtpVerifyPost"
+								r.summary = "Verify OTP"
+								r.operationID = ""
+								r.pathPattern = "/api/v1/auth/otp/verify"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
+				}
+
+				elem = origElem
 			case 'l': // Prefix: "login"
 				origElem := elem
 				if l := len("login"); len(elem) >= l && elem[0:l] == "login" {
@@ -346,71 +438,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				elem = origElem
-			case 'o': // Prefix: "otp/"
-				origElem := elem
-				if l := len("otp/"); len(elem) >= l && elem[0:l] == "otp/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					break
-				}
-				switch elem[0] {
-				case 'a': // Prefix: "auth"
-					origElem := elem
-					if l := len("auth"); len(elem) >= l && elem[0:l] == "auth" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						switch method {
-						case "POST":
-							// Leaf: APIV1OtpAuthPost
-							r.name = "APIV1OtpAuthPost"
-							r.summary = "Send OTP"
-							r.operationID = ""
-							r.pathPattern = "/api/v1/otp/auth"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-					elem = origElem
-				case 'v': // Prefix: "verify"
-					origElem := elem
-					if l := len("verify"); len(elem) >= l && elem[0:l] == "verify" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						switch method {
-						case "POST":
-							// Leaf: APIV1OtpVerifyPost
-							r.name = "APIV1OtpVerifyPost"
-							r.summary = "Verify OTP"
-							r.operationID = ""
-							r.pathPattern = "/api/v1/otp/verify"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-					elem = origElem
-				}
-
-				elem = origElem
 			case 'p': // Prefix: "ping"
 				origElem := elem
 				if l := len("ping"); len(elem) >= l && elem[0:l] == "ping" {
@@ -427,31 +454,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.summary = "Checks if the server is running"
 						r.operationID = ""
 						r.pathPattern = "/api/v1/ping"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
-					}
-				}
-
-				elem = origElem
-			case 's': // Prefix: "sign_up"
-				origElem := elem
-				if l := len("sign_up"); len(elem) >= l && elem[0:l] == "sign_up" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					switch method {
-					case "POST":
-						// Leaf: SignUp
-						r.name = "SignUp"
-						r.summary = "Sign Up"
-						r.operationID = "sign_up"
-						r.pathPattern = "/api/v1/sign_up"
 						r.args = args
 						r.count = 0
 						return r, true

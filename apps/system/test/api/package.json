@@ -7,7 +7,7 @@
     "test:stateful": "playwright test --grep @stateful"
   },
   "dependencies": {
-    "dotenv": "^16.4.0",
+    "dotenv": "^16.4.1",
     "firebase-admin": "^12.0.0",
     "openapi-fetch": "^0.8.2",
     "pg": "^8.11.3",
@@ -19,14 +19,14 @@
   "devDependencies": {
     "@playwright/test": "^1.41.1",
     "@types/node": "^20.11.6",
-    "@types/pg": "^8.10.9",
+    "@types/pg": "^8.11.0",
     "csv-parse": "^5.5.3"
   },
-  "packageManager": "pnpm@8.14.0+sha256.9cebf61abd83f68177b29484da72da9751390eaad46dfc3072d266bfbb1ba7bf",
+  "packageManager": "pnpm@8.14.3+sha256.2d0363bb6c314daa67087ef07743eea1ba2e2d360c835e8fec6b5575e4ed9484",
   "engines": {
     "node": "20.11.0",
     "npm": "use pnpm please!",
     "yarn": "use pnpm please!",
-    "pnpm": "8.14.0"
+    "pnpm": "8.14.3"
   }
 }

@@ -23,24 +23,30 @@ import (
 
 // Invoker invokes operations described by OpenAPI v3 specification.
 type Invoker interface {
+	// APIV1AuthOAuthPost invokes POST /api/v1/auth/oauth operation.
+	//
+	// Auth by OAuth.
+	//
+	// POST /api/v1/auth/oauth
+	APIV1AuthOAuthPost(ctx context.Context) (APIV1AuthOAuthPostRes, error)
+	// APIV1AuthOtpPost invokes POST /api/v1/auth/otp operation.
+	//
+	// One Time Password (OTP) to user.
+	//
+	// POST /api/v1/auth/otp
+	APIV1AuthOtpPost(ctx context.Context, request *APIV1AuthOtpPostReq) (APIV1AuthOtpPostRes, error)
+	// APIV1AuthOtpVerifyPost invokes POST /api/v1/auth/otp/verify operation.
+	//
+	// Verify OTP sent by user.
+	//
+	// POST /api/v1/auth/otp/verify
+	APIV1AuthOtpVerifyPost(ctx context.Context, request *APIV1AuthOtpVerifyPostReq) (APIV1AuthOtpVerifyPostRes, error)
 	// APIV1MeGet invokes GET /api/v1/me operation.
 	//
 	// Returns the admin user.
 	//
 	// GET /api/v1/me
 	APIV1MeGet(ctx context.Context) (APIV1MeGetRes, error)
-	// APIV1OtpAuthPost invokes POST /api/v1/otp/auth operation.
-	//
-	// One Time Password (OTP) to user.
-	//
-	// POST /api/v1/otp/auth
-	APIV1OtpAuthPost(ctx context.Context, request *APIV1OtpAuthPostReq) (APIV1OtpAuthPostRes, error)
-	// APIV1OtpVerifyPost invokes POST /api/v1/otp/verify operation.
-	//
-	// Verify OTP sent by user.
-	//
-	// POST /api/v1/otp/verify
-	APIV1OtpVerifyPost(ctx context.Context, request *APIV1OtpVerifyPostReq) (APIV1OtpVerifyPostRes, error)
 	// APIV1PingGet invokes GET /api/v1/ping operation.
 	//
 	// Checks if the server is running.
@@ -53,12 +59,6 @@ type Invoker interface {
 	//
 	// POST /api/v1/login
 	Login(ctx context.Context) (LoginRes, error)
-	// SignUp invokes sign_up operation.
-	//
-	// Sign Up.
-	//
-	// POST /api/v1/sign_up
-	SignUp(ctx context.Context, request *SignUpReq) (SignUpRes, error)
 }
 
 // Client implements OAS client.
@@ -109,6 +109,258 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 		return c.serverURL
 	}
 	return u
+}
+
+// APIV1AuthOAuthPost invokes POST /api/v1/auth/oauth operation.
+//
+// Auth by OAuth.
+//
+// POST /api/v1/auth/oauth
+func (c *Client) APIV1AuthOAuthPost(ctx context.Context) (APIV1AuthOAuthPostRes, error) {
+	res, err := c.sendAPIV1AuthOAuthPost(ctx)
+	return res, err
+}
+
+func (c *Client) sendAPIV1AuthOAuthPost(ctx context.Context) (res APIV1AuthOAuthPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/v1/auth/oauth"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "AuthByOAuth",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/auth/oauth"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "AuthByOAuth", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1AuthOAuthPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1AuthOtpPost invokes POST /api/v1/auth/otp operation.
+//
+// One Time Password (OTP) to user.
+//
+// POST /api/v1/auth/otp
+func (c *Client) APIV1AuthOtpPost(ctx context.Context, request *APIV1AuthOtpPostReq) (APIV1AuthOtpPostRes, error) {
+	res, err := c.sendAPIV1AuthOtpPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIV1AuthOtpPost(ctx context.Context, request *APIV1AuthOtpPostReq) (res APIV1AuthOtpPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/v1/auth/otp"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1AuthOtpPost",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/auth/otp"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIV1AuthOtpPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1AuthOtpPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1AuthOtpVerifyPost invokes POST /api/v1/auth/otp/verify operation.
+//
+// Verify OTP sent by user.
+//
+// POST /api/v1/auth/otp/verify
+func (c *Client) APIV1AuthOtpVerifyPost(ctx context.Context, request *APIV1AuthOtpVerifyPostReq) (APIV1AuthOtpVerifyPostRes, error) {
+	res, err := c.sendAPIV1AuthOtpVerifyPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIV1AuthOtpVerifyPost(ctx context.Context, request *APIV1AuthOtpVerifyPostReq) (res APIV1AuthOtpVerifyPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/v1/auth/otp/verify"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1AuthOtpVerifyPost",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/auth/otp/verify"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIV1AuthOtpVerifyPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1AuthOtpVerifyPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
 }
 
 // APIV1MeGet invokes GET /api/v1/me operation.
@@ -208,154 +460,6 @@ func (c *Client) sendAPIV1MeGet(ctx context.Context) (res APIV1MeGetRes, err err
 
 	stage = "DecodeResponse"
 	result, err := decodeAPIV1MeGetResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1OtpAuthPost invokes POST /api/v1/otp/auth operation.
-//
-// One Time Password (OTP) to user.
-//
-// POST /api/v1/otp/auth
-func (c *Client) APIV1OtpAuthPost(ctx context.Context, request *APIV1OtpAuthPostReq) (APIV1OtpAuthPostRes, error) {
-	res, err := c.sendAPIV1OtpAuthPost(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendAPIV1OtpAuthPost(ctx context.Context, request *APIV1OtpAuthPostReq) (res APIV1OtpAuthPostRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/v1/otp/auth"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1OtpAuthPost",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/otp/auth"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeAPIV1OtpAuthPostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1OtpAuthPostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1OtpVerifyPost invokes POST /api/v1/otp/verify operation.
-//
-// Verify OTP sent by user.
-//
-// POST /api/v1/otp/verify
-func (c *Client) APIV1OtpVerifyPost(ctx context.Context, request *APIV1OtpVerifyPostReq) (APIV1OtpVerifyPostRes, error) {
-	res, err := c.sendAPIV1OtpVerifyPost(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendAPIV1OtpVerifyPost(ctx context.Context, request *APIV1OtpVerifyPostReq) (res APIV1OtpVerifyPostRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/v1/otp/verify"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1OtpVerifyPost",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/otp/verify"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeAPIV1OtpVerifyPostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1OtpVerifyPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -499,81 +603,6 @@ func (c *Client) sendLogin(ctx context.Context) (res LoginRes, err error) {
 
 	stage = "DecodeResponse"
 	result, err := decodeLoginResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// SignUp invokes sign_up operation.
-//
-// Sign Up.
-//
-// POST /api/v1/sign_up
-func (c *Client) SignUp(ctx context.Context, request *SignUpReq) (SignUpRes, error) {
-	res, err := c.sendSignUp(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendSignUp(ctx context.Context, request *SignUpReq) (res SignUpRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("sign_up"),
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/v1/sign_up"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "SignUp",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/sign_up"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeSignUpRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeSignUpResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

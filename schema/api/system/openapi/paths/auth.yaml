@@ -76,3 +76,23 @@ verify:
         $ref: "#/components/responses/TooManyRequestsError"
       "500":
         $ref: "#/components/responses/InternalServerError"
+
+oauth:
+  post:
+    summary: Auth by OAuth
+    tags:
+      - OAuth
+    description: Auth by OAuth.
+    security:
+      - bearer: []
+    responses:
+      "200":
+        description: SignIn response
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"

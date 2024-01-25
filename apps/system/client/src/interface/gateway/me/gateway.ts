@@ -22,10 +22,6 @@ export class MeGateway implements MeRepository {
     return this.adapter.adapt(res.value)
   }
 
-  async signUp(): PromiseResult<null, Error> {
-    return this.apDriver.signUp()
-  }
-
   async signOut(): PromiseResult<null, Error> {
     return this.apDriver.signOut()
   }

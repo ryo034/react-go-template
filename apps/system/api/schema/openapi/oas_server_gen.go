@@ -8,24 +8,30 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// APIV1AuthOAuthPost implements POST /api/v1/auth/oauth operation.
+	//
+	// Auth by OAuth.
+	//
+	// POST /api/v1/auth/oauth
+	APIV1AuthOAuthPost(ctx context.Context) (APIV1AuthOAuthPostRes, error)
+	// APIV1AuthOtpPost implements POST /api/v1/auth/otp operation.
+	//
+	// One Time Password (OTP) to user.
+	//
+	// POST /api/v1/auth/otp
+	APIV1AuthOtpPost(ctx context.Context, req *APIV1AuthOtpPostReq) (APIV1AuthOtpPostRes, error)
+	// APIV1AuthOtpVerifyPost implements POST /api/v1/auth/otp/verify operation.
+	//
+	// Verify OTP sent by user.
+	//
+	// POST /api/v1/auth/otp/verify
+	APIV1AuthOtpVerifyPost(ctx context.Context, req *APIV1AuthOtpVerifyPostReq) (APIV1AuthOtpVerifyPostRes, error)
 	// APIV1MeGet implements GET /api/v1/me operation.
 	//
 	// Returns the admin user.
 	//
 	// GET /api/v1/me
 	APIV1MeGet(ctx context.Context) (APIV1MeGetRes, error)
-	// APIV1OtpAuthPost implements POST /api/v1/otp/auth operation.
-	//
-	// One Time Password (OTP) to user.
-	//
-	// POST /api/v1/otp/auth
-	APIV1OtpAuthPost(ctx context.Context, req *APIV1OtpAuthPostReq) (APIV1OtpAuthPostRes, error)
-	// APIV1OtpVerifyPost implements POST /api/v1/otp/verify operation.
-	//
-	// Verify OTP sent by user.
-	//
-	// POST /api/v1/otp/verify
-	APIV1OtpVerifyPost(ctx context.Context, req *APIV1OtpVerifyPostReq) (APIV1OtpVerifyPostRes, error)
 	// APIV1PingGet implements GET /api/v1/ping operation.
 	//
 	// Checks if the server is running.
@@ -38,12 +44,6 @@ type Handler interface {
 	//
 	// POST /api/v1/login
 	Login(ctx context.Context) (LoginRes, error)
-	// SignUp implements sign_up operation.
-	//
-	// Sign Up.
-	//
-	// POST /api/v1/sign_up
-	SignUp(ctx context.Context, req *SignUpReq) (SignUpRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

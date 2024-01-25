@@ -14,8 +14,8 @@ import (
 )
 
 type UseCase interface {
-	AuthByTOTP(ctx context.Context, input ByTOTPInput) (openapi.APIV1OtpAuthPostRes, error)
-	VerifyTOTP(ctx context.Context, input VerifyTOTPInput) (openapi.APIV1OtpVerifyPostRes, error)
+	AuthByTOTP(ctx context.Context, input ByTOTPInput) (openapi.APIV1AuthOtpPostRes, error)
+	VerifyTOTP(ctx context.Context, input VerifyTOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error)
 }
 
 type useCase struct {
@@ -30,7 +30,7 @@ func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo auth.Rep
 	return &useCase{txp, dbp, acRepo, emailDr, fbDr}
 }
 
-func (u *useCase) AuthByTOTP(ctx context.Context, input ByTOTPInput) (openapi.APIV1OtpAuthPostRes, error) {
+func (u *useCase) AuthByTOTP(ctx context.Context, input ByTOTPInput) (openapi.APIV1AuthOtpPostRes, error) {
 	code, err := u.repo.GenTOTP(ctx, input.Email)
 	if err != nil {
 		return nil, err
@@ -38,10 +38,10 @@ func (u *useCase) AuthByTOTP(ctx context.Context, input ByTOTPInput) (openapi.AP
 	if err = u.emailDr.Send(ctx, input.Email); err != nil {
 		return nil, err
 	}
-	return &openapi.APIV1OtpAuthPostOK{Code: code}, nil
+	return &openapi.APIV1AuthOtpPostOK{Code: code}, nil
 }
 
-func (u *useCase) VerifyTOTP(ctx context.Context, input VerifyTOTPInput) (openapi.APIV1OtpVerifyPostRes, error) {
+func (u *useCase) VerifyTOTP(ctx context.Context, input VerifyTOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
@@ -63,7 +63,7 @@ func (u *useCase) VerifyTOTP(ctx context.Context, input VerifyTOTPInput) (openap
 	if err = result.Error(); err != nil {
 		return nil, err
 	}
-	return &openapi.APIV1OtpVerifyPostOK{
+	return &openapi.APIV1AuthOtpVerifyPostOK{
 		Token: result.Value(0).(string),
 	}, nil
 }

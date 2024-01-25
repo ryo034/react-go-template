@@ -6,7 +6,6 @@
     "login": "login",
     "sendOneTimeCode": "Send Authentication Code",
     "startWithEmail": "Start with Email",
-    "signUp": "sign up",
     "showItem": "show {{field}}",
     "inputField": "input {{field}}",
     "submitField": "Submit {{field}}",

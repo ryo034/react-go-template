@@ -25,7 +25,7 @@ export interface paths {
       };
     };
   };
-  "/api/v1/otp/auth": {
+  "/api/v1/auth/otp": {
     /**
      * Send OTP
      * @description One Time Password (OTP) to user.
@@ -55,7 +55,7 @@ export interface paths {
       };
     };
   };
-  "/api/v1/otp/verify": {
+  "/api/v1/auth/otp/verify": {
     /**
      * Verify OTP
      * @description Verify OTP sent by user.
@@ -86,6 +86,24 @@ export interface paths {
       };
     };
   };
+  "/api/v1/auth/oauth": {
+    /**
+     * Auth by OAuth
+     * @description Auth by OAuth.
+     */
+    post: {
+      responses: {
+        /** @description SignIn response */
+        200: {
+          content: {
+            "application/json": components["schemas"]["User"];
+          };
+        };
+        400: components["responses"]["BadRequestError"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+  };
   "/api/v1/me": {
     /**
      * Get Admin User
@@ -102,13 +120,6 @@ export interface paths {
         500: components["responses"]["InternalServerError"];
       };
     };
-  };
-  "/api/v1/sign_up": {
-    /**
-     * Sign Up
-     * @description Sign Up
-     */
-    post: operations["sign_up"];
   };
   "/api/v1/login": {
     /**
@@ -331,34 +342,6 @@ export type external = Record<string, never>;
 
 export interface operations {
 
-  /**
-   * Sign Up
-   * @description Sign Up
-   */
-  sign_up: {
-    requestBody: {
-      content: {
-        "application/json": {
-          /**
-           * @description Name
-           * @example John Doe
-           */
-          name: string;
-        };
-      };
-    };
-    responses: {
-      /** @description Sign Up */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Me"];
-        };
-      };
-      400: components["responses"]["BadRequestError"];
-      401: components["responses"]["UnauthorizedError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
   /**
    * Login
    * @description Login

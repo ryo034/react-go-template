@@ -15,8 +15,8 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func (s *Server) decodeAPIV1OtpAuthPostRequest(r *http.Request) (
-	req *APIV1OtpAuthPostReq,
+func (s *Server) decodeAPIV1AuthOtpPostRequest(r *http.Request) (
+	req *APIV1AuthOtpPostReq,
 	close func() error,
 	rerr error,
 ) {
@@ -55,7 +55,7 @@ func (s *Server) decodeAPIV1OtpAuthPostRequest(r *http.Request) (
 
 		d := jx.DecodeBytes(buf)
 
-		var request APIV1OtpAuthPostReq
+		var request APIV1AuthOtpPostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -86,8 +86,8 @@ func (s *Server) decodeAPIV1OtpAuthPostRequest(r *http.Request) (
 	}
 }
 
-func (s *Server) decodeAPIV1OtpVerifyPostRequest(r *http.Request) (
-	req *APIV1OtpVerifyPostReq,
+func (s *Server) decodeAPIV1AuthOtpVerifyPostRequest(r *http.Request) (
+	req *APIV1AuthOtpVerifyPostReq,
 	close func() error,
 	rerr error,
 ) {
@@ -126,7 +126,7 @@ func (s *Server) decodeAPIV1OtpVerifyPostRequest(r *http.Request) (
 
 		d := jx.DecodeBytes(buf)
 
-		var request APIV1OtpVerifyPostReq
+		var request APIV1AuthOtpVerifyPostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -150,69 +150,6 @@ func (s *Server) decodeAPIV1OtpVerifyPostRequest(r *http.Request) (
 			return nil
 		}(); err != nil {
 			return req, close, errors.Wrap(err, "validate")
-		}
-		return &request, close, nil
-	default:
-		return req, close, validate.InvalidContentType(ct)
-	}
-}
-
-func (s *Server) decodeSignUpRequest(r *http.Request) (
-	req *SignUpReq,
-	close func() error,
-	rerr error,
-) {
-	var closers []func() error
-	close = func() error {
-		var merr error
-		// Close in reverse order, to match defer behavior.
-		for i := len(closers) - 1; i >= 0; i-- {
-			c := closers[i]
-			merr = multierr.Append(merr, c())
-		}
-		return merr
-	}
-	defer func() {
-		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
-		}
-	}()
-	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
-	if err != nil {
-		return req, close, errors.Wrap(err, "parse media type")
-	}
-	switch {
-	case ct == "application/json":
-		if r.ContentLength == 0 {
-			return req, close, validate.ErrBodyRequired
-		}
-		buf, err := io.ReadAll(r.Body)
-		if err != nil {
-			return req, close, err
-		}
-
-		if len(buf) == 0 {
-			return req, close, validate.ErrBodyRequired
-		}
-
-		d := jx.DecodeBytes(buf)
-
-		var request SignUpReq
-		if err := func() error {
-			if err := request.Decode(d); err != nil {
-				return err
-			}
-			if err := d.Skip(); err != io.EOF {
-				return errors.New("unexpected trailing data")
-			}
-			return nil
-		}(); err != nil {
-			err = &ogenerrors.DecodeBodyError{
-				ContentType: ct,
-				Body:        buf,
-				Err:         err,
-			}
-			return req, close, err
 		}
 		return &request, close, nil
 	default:

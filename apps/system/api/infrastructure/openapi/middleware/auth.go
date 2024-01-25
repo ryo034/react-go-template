@@ -9,7 +9,7 @@ type Middleware struct {
 }
 
 func (m *Middleware) HandleBearer(ctx context.Context, operationName string, t openapi.Bearer) (context.Context, error) {
-	return ctx, nil
+	return context.WithValue(ctx, "token", t.GetToken()), nil
 }
 
 func NewSecMiddleware() *Middleware {

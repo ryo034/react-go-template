@@ -13,30 +13,39 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// APIV1AuthOAuthPost implements POST /api/v1/auth/oauth operation.
+//
+// Auth by OAuth.
+//
+// POST /api/v1/auth/oauth
+func (UnimplementedHandler) APIV1AuthOAuthPost(ctx context.Context) (r APIV1AuthOAuthPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1AuthOtpPost implements POST /api/v1/auth/otp operation.
+//
+// One Time Password (OTP) to user.
+//
+// POST /api/v1/auth/otp
+func (UnimplementedHandler) APIV1AuthOtpPost(ctx context.Context, req *APIV1AuthOtpPostReq) (r APIV1AuthOtpPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1AuthOtpVerifyPost implements POST /api/v1/auth/otp/verify operation.
+//
+// Verify OTP sent by user.
+//
+// POST /api/v1/auth/otp/verify
+func (UnimplementedHandler) APIV1AuthOtpVerifyPost(ctx context.Context, req *APIV1AuthOtpVerifyPostReq) (r APIV1AuthOtpVerifyPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIV1MeGet implements GET /api/v1/me operation.
 //
 // Returns the admin user.
 //
 // GET /api/v1/me
 func (UnimplementedHandler) APIV1MeGet(ctx context.Context) (r APIV1MeGetRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1OtpAuthPost implements POST /api/v1/otp/auth operation.
-//
-// One Time Password (OTP) to user.
-//
-// POST /api/v1/otp/auth
-func (UnimplementedHandler) APIV1OtpAuthPost(ctx context.Context, req *APIV1OtpAuthPostReq) (r APIV1OtpAuthPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1OtpVerifyPost implements POST /api/v1/otp/verify operation.
-//
-// Verify OTP sent by user.
-//
-// POST /api/v1/otp/verify
-func (UnimplementedHandler) APIV1OtpVerifyPost(ctx context.Context, req *APIV1OtpVerifyPostReq) (r APIV1OtpVerifyPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -55,14 +64,5 @@ func (UnimplementedHandler) APIV1PingGet(ctx context.Context) (r APIV1PingGetRes
 //
 // POST /api/v1/login
 func (UnimplementedHandler) Login(ctx context.Context) (r LoginRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// SignUp implements sign_up operation.
-//
-// Sign Up.
-//
-// POST /api/v1/sign_up
-func (UnimplementedHandler) SignUp(ctx context.Context, req *SignUpReq) (r SignUpRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

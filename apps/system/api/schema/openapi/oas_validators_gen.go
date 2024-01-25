@@ -8,7 +8,7 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func (s *APIV1OtpAuthPostReq) Validate() error {
+func (s *APIV1AuthOtpPostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -39,7 +39,7 @@ func (s *APIV1OtpAuthPostReq) Validate() error {
 	return nil
 }
 
-func (s *APIV1OtpVerifyPostReq) Validate() error {
+func (s *APIV1AuthOtpVerifyPostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}

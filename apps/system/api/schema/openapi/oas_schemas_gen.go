@@ -6,76 +6,76 @@ import (
 	"github.com/google/uuid"
 )
 
-type APIV1OtpAuthPostOK struct {
+type APIV1AuthOtpPostOK struct {
 	// OTP 6 digit code.
 	Code string `json:"code"`
 }
 
 // GetCode returns the value of Code.
-func (s *APIV1OtpAuthPostOK) GetCode() string {
+func (s *APIV1AuthOtpPostOK) GetCode() string {
 	return s.Code
 }
 
 // SetCode sets the value of Code.
-func (s *APIV1OtpAuthPostOK) SetCode(val string) {
+func (s *APIV1AuthOtpPostOK) SetCode(val string) {
 	s.Code = val
 }
 
-func (*APIV1OtpAuthPostOK) aPIV1OtpAuthPostRes() {}
+func (*APIV1AuthOtpPostOK) aPIV1AuthOtpPostRes() {}
 
-type APIV1OtpAuthPostReq struct {
+type APIV1AuthOtpPostReq struct {
 	Email string `json:"email"`
 }
 
 // GetEmail returns the value of Email.
-func (s *APIV1OtpAuthPostReq) GetEmail() string {
+func (s *APIV1AuthOtpPostReq) GetEmail() string {
 	return s.Email
 }
 
 // SetEmail sets the value of Email.
-func (s *APIV1OtpAuthPostReq) SetEmail(val string) {
+func (s *APIV1AuthOtpPostReq) SetEmail(val string) {
 	s.Email = val
 }
 
-type APIV1OtpVerifyPostOK struct {
+type APIV1AuthOtpVerifyPostOK struct {
 	// JWT token.
 	Token string `json:"token"`
 }
 
 // GetToken returns the value of Token.
-func (s *APIV1OtpVerifyPostOK) GetToken() string {
+func (s *APIV1AuthOtpVerifyPostOK) GetToken() string {
 	return s.Token
 }
 
 // SetToken sets the value of Token.
-func (s *APIV1OtpVerifyPostOK) SetToken(val string) {
+func (s *APIV1AuthOtpVerifyPostOK) SetToken(val string) {
 	s.Token = val
 }
 
-func (*APIV1OtpVerifyPostOK) aPIV1OtpVerifyPostRes() {}
+func (*APIV1AuthOtpVerifyPostOK) aPIV1AuthOtpVerifyPostRes() {}
 
-type APIV1OtpVerifyPostReq struct {
+type APIV1AuthOtpVerifyPostReq struct {
 	Email string `json:"email"`
 	Otp   string `json:"otp"`
 }
 
 // GetEmail returns the value of Email.
-func (s *APIV1OtpVerifyPostReq) GetEmail() string {
+func (s *APIV1AuthOtpVerifyPostReq) GetEmail() string {
 	return s.Email
 }
 
 // GetOtp returns the value of Otp.
-func (s *APIV1OtpVerifyPostReq) GetOtp() string {
+func (s *APIV1AuthOtpVerifyPostReq) GetOtp() string {
 	return s.Otp
 }
 
 // SetEmail sets the value of Email.
-func (s *APIV1OtpVerifyPostReq) SetEmail(val string) {
+func (s *APIV1AuthOtpVerifyPostReq) SetEmail(val string) {
 	s.Email = val
 }
 
 // SetOtp sets the value of Otp.
-func (s *APIV1OtpVerifyPostReq) SetOtp(val string) {
+func (s *APIV1AuthOtpVerifyPostReq) SetOtp(val string) {
 	s.Otp = val
 }
 
@@ -160,9 +160,9 @@ func (s *BadRequestError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*BadRequestError) aPIV1OtpAuthPostRes()   {}
-func (*BadRequestError) aPIV1OtpVerifyPostRes() {}
-func (*BadRequestError) signUpRes()             {}
+func (*BadRequestError) aPIV1AuthOAuthPostRes()     {}
+func (*BadRequestError) aPIV1AuthOtpPostRes()       {}
+func (*BadRequestError) aPIV1AuthOtpVerifyPostRes() {}
 
 type Bearer struct {
 	Token string
@@ -242,12 +242,12 @@ func (s *InternalServerError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*InternalServerError) aPIV1MeGetRes()         {}
-func (*InternalServerError) aPIV1OtpAuthPostRes()   {}
-func (*InternalServerError) aPIV1OtpVerifyPostRes() {}
-func (*InternalServerError) aPIV1PingGetRes()       {}
-func (*InternalServerError) loginRes()              {}
-func (*InternalServerError) signUpRes()             {}
+func (*InternalServerError) aPIV1AuthOAuthPostRes()     {}
+func (*InternalServerError) aPIV1AuthOtpPostRes()       {}
+func (*InternalServerError) aPIV1AuthOtpVerifyPostRes() {}
+func (*InternalServerError) aPIV1MeGetRes()             {}
+func (*InternalServerError) aPIV1PingGetRes()           {}
+func (*InternalServerError) loginRes()                  {}
 
 // Ref: #/components/schemas/Me
 type Me struct {
@@ -288,7 +288,6 @@ func (s *Me) SetMember(val Member) {
 
 func (*Me) aPIV1MeGetRes() {}
 func (*Me) loginRes()      {}
-func (*Me) signUpRes()     {}
 
 // Ref: #/components/schemas/Member
 type Member struct {
@@ -506,21 +505,6 @@ func (o OptString) Or(d string) string {
 	return d
 }
 
-type SignUpReq struct {
-	// Name.
-	Name string `json:"name"`
-}
-
-// GetName returns the value of Name.
-func (s *SignUpReq) GetName() string {
-	return s.Name
-}
-
-// SetName sets the value of Name.
-func (s *SignUpReq) SetName(val string) {
-	s.Name = val
-}
-
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type TooManyRequestsError struct {
 	// The HTTP status code generated for this occurrence of the problem.
@@ -585,74 +569,8 @@ func (s *TooManyRequestsError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*TooManyRequestsError) aPIV1OtpAuthPostRes()   {}
-func (*TooManyRequestsError) aPIV1OtpVerifyPostRes() {}
-
-// RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
-type UnauthorizedError struct {
-	// The HTTP status code generated for this occurrence of the problem.
-	Status OptInt `json:"status"`
-	// Error type.
-	Type OptString `json:"type"`
-	// A short, human-readable summary of the problem type.
-	Title OptString `json:"title"`
-	// A human-readable explanation specific to this occurrence of the problem.
-	Detail OptString `json:"detail"`
-	// Error code.
-	Code OptString `json:"code"`
-}
-
-// GetStatus returns the value of Status.
-func (s *UnauthorizedError) GetStatus() OptInt {
-	return s.Status
-}
-
-// GetType returns the value of Type.
-func (s *UnauthorizedError) GetType() OptString {
-	return s.Type
-}
-
-// GetTitle returns the value of Title.
-func (s *UnauthorizedError) GetTitle() OptString {
-	return s.Title
-}
-
-// GetDetail returns the value of Detail.
-func (s *UnauthorizedError) GetDetail() OptString {
-	return s.Detail
-}
-
-// GetCode returns the value of Code.
-func (s *UnauthorizedError) GetCode() OptString {
-	return s.Code
-}
-
-// SetStatus sets the value of Status.
-func (s *UnauthorizedError) SetStatus(val OptInt) {
-	s.Status = val
-}
-
-// SetType sets the value of Type.
-func (s *UnauthorizedError) SetType(val OptString) {
-	s.Type = val
-}
-
-// SetTitle sets the value of Title.
-func (s *UnauthorizedError) SetTitle(val OptString) {
-	s.Title = val
-}
-
-// SetDetail sets the value of Detail.
-func (s *UnauthorizedError) SetDetail(val OptString) {
-	s.Detail = val
-}
-
-// SetCode sets the value of Code.
-func (s *UnauthorizedError) SetCode(val OptString) {
-	s.Code = val
-}
-
-func (*UnauthorizedError) signUpRes() {}
+func (*TooManyRequestsError) aPIV1AuthOtpPostRes()       {}
+func (*TooManyRequestsError) aPIV1AuthOtpVerifyPostRes() {}
 
 // Ref: #/components/schemas/User
 type User struct {
@@ -701,3 +619,5 @@ func (s *User) SetName(val string) {
 func (s *User) SetPhoneNumber(val OptString) {
 	s.PhoneNumber = val
 }
+
+func (*User) aPIV1AuthOAuthPostRes() {}
