@@ -18,7 +18,7 @@ func Test_redis_OK(t *testing.T) {
 	const value = "123456"
 
 	t.Run("OK", func(t *testing.T) {
-		redisClient, err := test.SetupRedisClient(ctx)
+		redisClient, err := test.SetupRedisClient(t, ctx)
 		if err != nil {
 			t.Errorf("SetupRedisClient() error = %v, wantErr %v", err, wantErr)
 			return

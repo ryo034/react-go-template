@@ -1,3 +1,5 @@
+//go:build testcontainers
+
 package me
 
 import (

@@ -86,32 +86,43 @@ func SetupTestDB(t *testing.T, ctx context.Context) *bun.DB {
 }
 
 func RedisTestContainer(ctx context.Context) (*redis.RedisContainer, error) {
-	rc, err := redis.RunContainer(ctx,
-		testcontainers.WithImage("docker.io/redis:7"),
+	return redis.RunContainer(ctx,
+		testcontainers.WithImage("redis:latest"),
+		testcontainers.WithWaitStrategy(
+			wait.ForLog("Ready to accept connections").
+				WithStartupTimeout(5*time.Second)),
 		redis.WithSnapshotting(10, 1),
 		redis.WithLogLevel(redis.LogLevelVerbose),
 	)
-	if err != nil {
-		panic(err)
-	}
-	defer func() {
-		if err = rc.Terminate(ctx); err != nil {
-			panic(err)
-		}
-	}()
-	return rc, nil
 }
 
-func SetupRedisClient(ctx context.Context) (*rds.Client, error) {
+func SetupRedisClient(t *testing.T, ctx context.Context) (*rds.Client, error) {
 	rc, err := RedisTestContainer(ctx)
-	host, err := rc.Host(ctx)
 	if err != nil {
 		return nil, err
 	}
+
+	endpoint, err := rc.Endpoint(ctx, "")
+	if err != nil {
+		return nil, err
+	}
+
 	rdb := rds.NewClient(&rds.Options{
-		Addr: fmt.Sprintf("%s:%s", host, "6379"),
+		Addr: endpoint,
 		DB:   0,
 	})
-	_ = rdb.FlushDB(ctx).Err()
+	if err = rdb.FlushDB(ctx).Err(); err != nil {
+		return nil, err
+	}
+
+	t.Cleanup(func() {
+		if err = rdb.FlushDB(ctx).Err(); err != nil {
+			t.Fatalf("failed to flush redis: %s", err)
+		}
+		if err = rc.Terminate(ctx); err != nil {
+			t.Fatalf("failed to terminate redisContainer: %s", err)
+		}
+	})
+
 	return rdb, nil
 }
