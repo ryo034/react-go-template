@@ -15,7 +15,6 @@ require (
 	github.com/jackc/pgx/v4 v4.18.1
 	github.com/lib/pq v1.10.9
 	github.com/ogen-go/ogen v0.81.2
-	github.com/oklog/ulid v1.3.1
 	github.com/pkg/errors v0.9.1
 	github.com/redis/go-redis/v9 v9.4.0
 	github.com/rs/cors v1.10.1
