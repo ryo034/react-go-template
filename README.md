@@ -21,3 +21,8 @@
 ## Database
 
 # Setup
+
+
+# TODO
+- Accelerate Firebase Authentication's verifyIDToken
+- API Error Handling
