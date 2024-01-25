@@ -16,7 +16,7 @@ import (
 func Test_OrpRateLimiterMiddleware_Burst(t *testing.T) {
 	// rate limit: 1 request per second
 	ctx := context.Background()
-	rc, err := test.SetupRedisClient(ctx)
+	rc, err := test.SetupRedisClient(t, ctx)
 	if err != nil {
 		t.Fatalf("Failed to setup redis client: %v", err)
 		return

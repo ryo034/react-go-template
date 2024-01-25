@@ -25,3 +25,9 @@ jobs:
     uses: ./.github/workflows/__ci-js.yml
     with:
       directory: './apps/system/client'
+
+  # Execute before deploy
+  # ci-go-with-container:
+  #   uses: ./.github/workflows/__ci-go-with-container.yml
+  #   with:
+  #     directory: './apps/system/api'

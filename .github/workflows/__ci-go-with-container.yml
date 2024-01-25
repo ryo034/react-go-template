@@ -1,4 +1,4 @@
-name: __ Go CI
+name: __ Go CI With Container
 
 on:
   workflow_call:
@@ -17,7 +17,7 @@ jobs:
     with:
       directory: ${{ inputs.directory }}
 
-  ci:
+  ci-with-container:
     needs: [go-version]
     defaults:
       run:
@@ -34,22 +34,13 @@ jobs:
       - name: Get dependencies
         run: go mod download
 
-      - name: go vet
-        run: go vet ./...
-
-      - name: Install Staticcheck
-        run: go install honnef.co/go/tools/cmd/staticcheck@latest
-
-      - name: Run Staticcheck
-        run: staticcheck ./...
-
       - name: Install tparse
         run: go install github.com/mfridman/tparse@latest
 
       - name: Test
         run: |
           set -o pipefail
-          go test ./... -tags='!testcontainers' -json | tee ./go-test.out | tparse -all
+          go test ./... -tags='testcontainers' -json | tee ./go-test.out | tparse -all
 
       - name: Add job summary
         shell: bash
