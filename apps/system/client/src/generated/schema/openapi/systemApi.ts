@@ -139,7 +139,7 @@ export interface components {
       userId: string;
       /** Format: email */
       email: string;
-      name: string;
+      name?: string;
       phoneNumber?: string;
     };
     MultiFactor: {
@@ -147,16 +147,25 @@ export interface components {
       phoneNumber: string;
     };
     Workspace: {
-      /** Format: uuid */
+      /**
+       * @description base32 encoded UUID
+       * @example 3VZ6ZJ2Z6VZ6ZJ2Z
+       */
       workspaceId: string;
       name: string;
     };
+    Workspaces: components["schemas"]["Workspace"][];
     Member: {
       profile: components["schemas"]["MemberProfile"];
       user: components["schemas"]["User"];
     };
     MemberProfile: {
-      display_name: string;
+      /**
+       * @description base32 encoded UUID
+       * @example 3VZ6ZJ2Z6VZ6ZJ2Z
+       */
+      id: string;
+      displayName?: string;
       idNumber?: string;
     };
     MembershipPeriod: {
@@ -166,10 +175,9 @@ export interface components {
       end: string;
     };
     Me: {
-      /** @default false */
-      emailVerified: boolean;
-      multiFactor?: components["schemas"]["MultiFactor"];
-      member: components["schemas"]["Member"];
+      self: components["schemas"]["User"];
+      member?: components["schemas"]["Member"];
+      currentWorkspace?: components["schemas"]["Workspace"];
     };
   };
   responses: {

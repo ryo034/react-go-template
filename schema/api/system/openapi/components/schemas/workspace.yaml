@@ -6,6 +6,12 @@ Workspace:
   properties:
     workspaceId:
       type: string
-      format: uuid
+      description: base32 encoded UUID
+      example: 3VZ6ZJ2Z6VZ6ZJ2Z
     name:
       type: string
+
+Workspaces:
+  type: array
+  items:
+    $ref: "#/components/schemas/Workspace"

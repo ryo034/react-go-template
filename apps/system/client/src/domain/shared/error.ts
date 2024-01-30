@@ -13,18 +13,11 @@ export const domainKeys = {
   AddressPrefecture: "AddressPrefecture",
   BusinessEntityName: "BusinessEntityName",
   BusinessEntity: "BusinessEntity",
-  CreatureName: "CreatureName",
-  StoreName: "StoreName",
-  CorporateNumber: "CorporateNumber",
-  TransactionTitle: "TransactionTitle",
-  TransactionQuantity: "TransactionQuantity",
-  TransactionTotalAmount: "TransactionTotalAmount",
+  MemberDisplayName: "MemberDisplayName",
+  MemberIdNumber: "MemberIdNumber",
   AccountName: "AccountName",
   StringId: "StringId",
-  MFAAuthCode: "MFAAuthCode",
-  ItemId: "ItemId",
-  ItemTitle: "ItemTitle",
-  ItemTaxIncludedPrice: "ItemTaxIncludedPrice"
+  MFAAuthCode: "MFAAuthCode"
 } as const
 
 type DomainKeyTypes = keyof typeof domainKeys

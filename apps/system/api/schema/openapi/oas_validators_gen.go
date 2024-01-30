@@ -77,8 +77,26 @@ func (s *Me) Validate() error {
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Member.Validate(); err != nil {
+		if err := s.Self.Validate(); err != nil {
 			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "self",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if value, ok := s.Member.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
 		}
 		return nil
 	}(); err != nil {

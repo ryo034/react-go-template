@@ -27,7 +27,7 @@ func (a *adapter) Adapt(u *openapi.User) (*user.User, error) {
 	}
 	var phoneNumber *phone.Number = nil
 
-	n, err := account.NewName(u.Name)
+	n, err := account.NewName(u.Name.Value)
 	if err != nil {
 		return nil, err
 	}

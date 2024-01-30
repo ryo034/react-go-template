@@ -11,6 +11,9 @@ import { DriverAuthMiddleware } from "~/infrastructure/middleware/driver"
 import { openapiFetchClient } from "~/infrastructure/openapi/client"
 import { MeController, ThemeController } from "~/interface/controller"
 import { MeGateway, MeGatewayAdapter } from "~/interface/gateway"
+import { UserGatewayAdapter } from "~/interface/gateway/user"
+import { WorkspaceGatewayAdapter } from "~/interface/gateway/workspace"
+import { MemberGatewayAdapter } from "~/interface/gateway/workspace/member"
 import { MePresenter } from "~/interface/presenter/me/presenter"
 import { ThemePresenter } from "~/interface/presenter/theme/presenter"
 import { meStore } from "~/store/me/store"
@@ -46,8 +49,14 @@ const setupDriver = () => {
 const driver = setupDriver()
 
 const setupGatewayAdapter = () => {
+  const user = new UserGatewayAdapter()
+  const member = new MemberGatewayAdapter(user)
+  const workspace = new WorkspaceGatewayAdapter()
   return {
-    me: new MeGatewayAdapter()
+    user,
+    member,
+    workspace,
+    me: new MeGatewayAdapter(user, member, workspace)
   }
 }
 

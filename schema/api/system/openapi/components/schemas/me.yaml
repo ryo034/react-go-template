@@ -12,13 +12,11 @@ MultiFactor:
 Me:
   type: object
   required:
-    - emailVerified
-    - member
+    - self
   properties:
-    emailVerified:
-      type: boolean
-      default: false
-    multiFactor:
-      $ref: "#/components/schemas/MultiFactor"
+    self:
+      $ref: "#/components/schemas/User"
     member:
       $ref: "#/components/schemas/Member"
+    currentWorkspace:
+      $ref: "#/components/schemas/Workspace"

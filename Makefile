@@ -63,6 +63,7 @@ update-pnpm-version:
 	@cd ./packages/typescript/network && corepack use pnpm@$(VERSION)
 	@cd ./apps/system/client && corepack use pnpm@$(VERSION)
 	@cd ./apps/system/test/api && corepack use pnpm@$(VERSION)
+	@sed -i '' 's/"pnpm": "[^"]*"/"pnpm": "$(VERSION)"/' package.json
 	@corepack pnpm install -r
 
 .PHONY: update-all-go-package

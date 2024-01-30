@@ -3,8 +3,7 @@ import { Email, Entity } from "@/domain/shared"
 
 interface Props {
   id: AccountId
-  firstName: AccountName
-  lastName: AccountName
+  name?: AccountName
   email: Email
 }
 
@@ -17,16 +16,12 @@ export class User extends Entity<Props> {
     return this.value.id
   }
 
-  get firstName(): AccountName {
-    return this.value.firstName
+  get name(): AccountName | undefined {
+    return this.value.name
   }
 
-  get lastName(): AccountName {
-    return this.value.lastName
-  }
-
-  get name(): string {
-    return `${this.lastName.value} ${this.firstName.value}`
+  get hasName(): boolean {
+    return this.value.name !== null
   }
 
   get email(): Email {

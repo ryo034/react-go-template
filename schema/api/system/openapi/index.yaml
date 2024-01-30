@@ -27,6 +27,8 @@ components:
       $ref: "./components/schemas/me.yaml#/MultiFactor"
     Workspace:
       $ref: "./components/schemas/workspace.yaml#/Workspace"
+    Workspaces:
+      $ref: "./components/schemas/workspace.yaml#/Workspaces"
     Member:
       $ref: "./components/schemas/member.yaml#/Member"
     MemberProfile:

@@ -320,8 +320,8 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "POST":
-							// Leaf: AuthByOAuth
-							r.name = "AuthByOAuth"
+							// Leaf: APIV1AuthOAuthPost
+							r.name = "APIV1AuthOAuthPost"
 							r.summary = "Auth by OAuth"
 							r.operationID = ""
 							r.pathPattern = "/api/v1/auth/oauth"

@@ -7,7 +7,7 @@ import (
 )
 
 type WorkspaceDetail struct {
-	bun.BaseModel `bun:"table:workspace_details,alias:od"`
+	bun.BaseModel `bun:"table:workspace_details,alias:wd"`
 
 	WorkspaceID uuid.UUID `bun:"workspace_id,pk"`
 	Name        string    `bun:"name,notnull"`

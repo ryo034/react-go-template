@@ -32,7 +32,7 @@ func (s *Server) handleAPIV1AuthOAuthPostRequest(args [0]string, argsEscaped boo
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "AuthByOAuth",
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "APIV1AuthOAuthPost",
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -57,7 +57,7 @@ func (s *Server) handleAPIV1AuthOAuthPostRequest(args [0]string, argsEscaped boo
 		}
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: "AuthByOAuth",
+			Name: "APIV1AuthOAuthPost",
 			ID:   "",
 		}
 	)
@@ -65,7 +65,7 @@ func (s *Server) handleAPIV1AuthOAuthPostRequest(args [0]string, argsEscaped boo
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityBearer(ctx, "AuthByOAuth", r)
+			sctx, ok, err := s.securityBearer(ctx, "APIV1AuthOAuthPost", r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -110,7 +110,7 @@ func (s *Server) handleAPIV1AuthOAuthPostRequest(args [0]string, argsEscaped boo
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    "AuthByOAuth",
+			OperationName:    "APIV1AuthOAuthPost",
 			OperationSummary: "Auth by OAuth",
 			OperationID:      "",
 			Body:             nil,

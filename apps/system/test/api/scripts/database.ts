@@ -54,6 +54,9 @@ export class MainDb implements Database {
     csv = parse(readFileSync(`./setup/database/${tableName}.csv`))
 
     const header = csv.shift()
+    if (header === undefined) {
+      throw new Error("header is undefined")
+    }
     const columns = header.join(",")
 
     if (csv.length > 0) {

@@ -3,7 +3,6 @@ User:
   required:
     - userId
     - email
-    - name
   properties:
     userId:
       type: string

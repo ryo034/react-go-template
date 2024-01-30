@@ -5,6 +5,10 @@ import { genAPIClient } from "../../scripts"
 const client = genAPIClient()
 
 test.describe("Otp API", () => {
+  test.beforeEach(async ({ testIdAttribute }, testInfo) => {
+    // console.log("beforeEach", )
+    console.log("beforeEach", testInfo)
+  })
   test("Create Account And Verify By OTP @stateful", async () => {
     const email = "test@example.com"
     const { data, response, error } = await client.POST("/api/v1/auth/otp", {
@@ -13,6 +17,9 @@ test.describe("Otp API", () => {
     })
     expect(response.status).toBe(200)
     expect(error).toBeUndefined()
+    if (data === undefined) {
+      throw new Error("data is undefined")
+    }
     const { code } = data
     expect(code).toMatch(/^\d{6}$/)
 
@@ -22,6 +29,9 @@ test.describe("Otp API", () => {
     })
     expect(verifyRes.response.status).toBe(200)
     expect(verifyRes.error).toBeUndefined()
+    if (verifyRes.data === undefined) {
+      throw new Error("verifyRes.data is undefined")
+    }
     const { token } = verifyRes.data
     expect(token.length).toBeGreaterThan(0)
   })

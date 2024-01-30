@@ -1,7 +1,12 @@
 import { defineConfig, devices } from "@playwright/test"
-import * as dotenv from "dotenv"
+import { config } from "dotenv"
 
-dotenv.config()
+config()
+
+console.log("process.env.PARALLEL", process.env.PARALLEL)
+
+const globalSetupFilePath = "./scripts/global.setup"
+const globalTeardownFilePath = "./scripts/global.teardown"
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -9,10 +14,11 @@ dotenv.config()
 export default defineConfig({
   testDir: "tests",
   forbidOnly: !!process.env.CI,
+  fullyParallel: !!process.env.PARALLEL,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  globalSetup: require.resolve("./scripts/setup"),
-  globalTeardown: require.resolve("./scripts/teardown"),
+  globalSetup: globalSetupFilePath,
+  globalTeardown: globalTeardownFilePath,
   timeout: 30000,
   reporter: process.env.CI ? "html" : "line",
   use: {

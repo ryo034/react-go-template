@@ -139,7 +139,7 @@ func (c *Client) sendAPIV1AuthOAuthPost(ctx context.Context) (res APIV1AuthOAuth
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "AuthByOAuth",
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1AuthOAuthPost",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -171,7 +171,7 @@ func (c *Client) sendAPIV1AuthOAuthPost(ctx context.Context) (res APIV1AuthOAuth
 		var satisfied bitset
 		{
 			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "AuthByOAuth", r); {
+			switch err := c.securityBearer(ctx, "APIV1AuthOAuthPost", r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):

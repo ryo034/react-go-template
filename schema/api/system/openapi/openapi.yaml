@@ -163,7 +163,6 @@ components:
       required:
         - userId
         - email
-        - name
       properties:
         userId:
           type: string
@@ -193,9 +192,14 @@ components:
       properties:
         workspaceId:
           type: string
-          format: uuid
+          description: base32 encoded UUID
+          example: 3VZ6ZJ2Z6VZ6ZJ2Z
         name:
           type: string
+    Workspaces:
+      type: array
+      items:
+        $ref: '#/components/schemas/Workspace'
     Member:
       type: object
       required:
@@ -209,9 +213,13 @@ components:
     MemberProfile:
       type: object
       required:
-        - display_name
+        - id
       properties:
-        display_name:
+        id:
+          type: string
+          description: base32 encoded UUID
+          example: 3VZ6ZJ2Z6VZ6ZJ2Z
+        displayName:
           type: string
         idNumber:
           type: string
@@ -230,16 +238,14 @@ components:
     Me:
       type: object
       required:
-        - emailVerified
-        - member
+        - self
       properties:
-        emailVerified:
-          type: boolean
-          default: false
-        multiFactor:
-          $ref: '#/components/schemas/MultiFactor'
+        self:
+          $ref: '#/components/schemas/User'
         member:
           $ref: '#/components/schemas/Member'
+        currentWorkspace:
+          $ref: '#/components/schemas/Workspace'
   responses:
     GeneralError:
       description: General Error

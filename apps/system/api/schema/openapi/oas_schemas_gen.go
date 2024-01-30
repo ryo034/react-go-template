@@ -251,39 +251,39 @@ func (*InternalServerError) loginRes()                  {}
 
 // Ref: #/components/schemas/Me
 type Me struct {
-	EmailVerified bool           `json:"emailVerified"`
-	MultiFactor   OptMultiFactor `json:"multiFactor"`
-	Member        Member         `json:"member"`
+	Self             User         `json:"self"`
+	Member           OptMember    `json:"member"`
+	CurrentWorkspace OptWorkspace `json:"currentWorkspace"`
 }
 
-// GetEmailVerified returns the value of EmailVerified.
-func (s *Me) GetEmailVerified() bool {
-	return s.EmailVerified
-}
-
-// GetMultiFactor returns the value of MultiFactor.
-func (s *Me) GetMultiFactor() OptMultiFactor {
-	return s.MultiFactor
+// GetSelf returns the value of Self.
+func (s *Me) GetSelf() User {
+	return s.Self
 }
 
 // GetMember returns the value of Member.
-func (s *Me) GetMember() Member {
+func (s *Me) GetMember() OptMember {
 	return s.Member
 }
 
-// SetEmailVerified sets the value of EmailVerified.
-func (s *Me) SetEmailVerified(val bool) {
-	s.EmailVerified = val
+// GetCurrentWorkspace returns the value of CurrentWorkspace.
+func (s *Me) GetCurrentWorkspace() OptWorkspace {
+	return s.CurrentWorkspace
 }
 
-// SetMultiFactor sets the value of MultiFactor.
-func (s *Me) SetMultiFactor(val OptMultiFactor) {
-	s.MultiFactor = val
+// SetSelf sets the value of Self.
+func (s *Me) SetSelf(val User) {
+	s.Self = val
 }
 
 // SetMember sets the value of Member.
-func (s *Me) SetMember(val Member) {
+func (s *Me) SetMember(val OptMember) {
 	s.Member = val
+}
+
+// SetCurrentWorkspace sets the value of CurrentWorkspace.
+func (s *Me) SetCurrentWorkspace(val OptWorkspace) {
+	s.CurrentWorkspace = val
 }
 
 func (*Me) aPIV1MeGetRes() {}
@@ -317,12 +317,19 @@ func (s *Member) SetUser(val User) {
 
 // Ref: #/components/schemas/MemberProfile
 type MemberProfile struct {
-	DisplayName string    `json:"display_name"`
+	// Base32 encoded UUID.
+	ID          string    `json:"id"`
+	DisplayName OptString `json:"displayName"`
 	IdNumber    OptString `json:"idNumber"`
 }
 
+// GetID returns the value of ID.
+func (s *MemberProfile) GetID() string {
+	return s.ID
+}
+
 // GetDisplayName returns the value of DisplayName.
-func (s *MemberProfile) GetDisplayName() string {
+func (s *MemberProfile) GetDisplayName() OptString {
 	return s.DisplayName
 }
 
@@ -331,40 +338,19 @@ func (s *MemberProfile) GetIdNumber() OptString {
 	return s.IdNumber
 }
 
+// SetID sets the value of ID.
+func (s *MemberProfile) SetID(val string) {
+	s.ID = val
+}
+
 // SetDisplayName sets the value of DisplayName.
-func (s *MemberProfile) SetDisplayName(val string) {
+func (s *MemberProfile) SetDisplayName(val OptString) {
 	s.DisplayName = val
 }
 
 // SetIdNumber sets the value of IdNumber.
 func (s *MemberProfile) SetIdNumber(val OptString) {
 	s.IdNumber = val
-}
-
-// Ref: #/components/schemas/MultiFactor
-type MultiFactor struct {
-	FactorId    string `json:"factorId"`
-	PhoneNumber string `json:"phoneNumber"`
-}
-
-// GetFactorId returns the value of FactorId.
-func (s *MultiFactor) GetFactorId() string {
-	return s.FactorId
-}
-
-// GetPhoneNumber returns the value of PhoneNumber.
-func (s *MultiFactor) GetPhoneNumber() string {
-	return s.PhoneNumber
-}
-
-// SetFactorId sets the value of FactorId.
-func (s *MultiFactor) SetFactorId(val string) {
-	s.FactorId = val
-}
-
-// SetPhoneNumber sets the value of PhoneNumber.
-func (s *MultiFactor) SetPhoneNumber(val string) {
-	s.PhoneNumber = val
 }
 
 // NewOptInt returns new OptInt with value set to v.
@@ -413,38 +399,38 @@ func (o OptInt) Or(d int) int {
 	return d
 }
 
-// NewOptMultiFactor returns new OptMultiFactor with value set to v.
-func NewOptMultiFactor(v MultiFactor) OptMultiFactor {
-	return OptMultiFactor{
+// NewOptMember returns new OptMember with value set to v.
+func NewOptMember(v Member) OptMember {
+	return OptMember{
 		Value: v,
 		Set:   true,
 	}
 }
 
-// OptMultiFactor is optional MultiFactor.
-type OptMultiFactor struct {
-	Value MultiFactor
+// OptMember is optional Member.
+type OptMember struct {
+	Value Member
 	Set   bool
 }
 
-// IsSet returns true if OptMultiFactor was set.
-func (o OptMultiFactor) IsSet() bool { return o.Set }
+// IsSet returns true if OptMember was set.
+func (o OptMember) IsSet() bool { return o.Set }
 
 // Reset unsets value.
-func (o *OptMultiFactor) Reset() {
-	var v MultiFactor
+func (o *OptMember) Reset() {
+	var v Member
 	o.Value = v
 	o.Set = false
 }
 
 // SetTo sets value to v.
-func (o *OptMultiFactor) SetTo(v MultiFactor) {
+func (o *OptMember) SetTo(v Member) {
 	o.Set = true
 	o.Value = v
 }
 
 // Get returns value and boolean that denotes whether value was set.
-func (o OptMultiFactor) Get() (v MultiFactor, ok bool) {
+func (o OptMember) Get() (v Member, ok bool) {
 	if !o.Set {
 		return v, false
 	}
@@ -452,7 +438,7 @@ func (o OptMultiFactor) Get() (v MultiFactor, ok bool) {
 }
 
 // Or returns value if set, or given parameter if does not.
-func (o OptMultiFactor) Or(d MultiFactor) MultiFactor {
+func (o OptMember) Or(d Member) Member {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -499,6 +485,52 @@ func (o OptString) Get() (v string, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptString) Or(d string) string {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptWorkspace returns new OptWorkspace with value set to v.
+func NewOptWorkspace(v Workspace) OptWorkspace {
+	return OptWorkspace{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptWorkspace is optional Workspace.
+type OptWorkspace struct {
+	Value Workspace
+	Set   bool
+}
+
+// IsSet returns true if OptWorkspace was set.
+func (o OptWorkspace) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptWorkspace) Reset() {
+	var v Workspace
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptWorkspace) SetTo(v Workspace) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptWorkspace) Get() (v Workspace, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptWorkspace) Or(d Workspace) Workspace {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -576,7 +608,7 @@ func (*TooManyRequestsError) aPIV1AuthOtpVerifyPostRes() {}
 type User struct {
 	UserId      uuid.UUID `json:"userId"`
 	Email       string    `json:"email"`
-	Name        string    `json:"name"`
+	Name        OptString `json:"name"`
 	PhoneNumber OptString `json:"phoneNumber"`
 }
 
@@ -591,7 +623,7 @@ func (s *User) GetEmail() string {
 }
 
 // GetName returns the value of Name.
-func (s *User) GetName() string {
+func (s *User) GetName() OptString {
 	return s.Name
 }
 
@@ -611,7 +643,7 @@ func (s *User) SetEmail(val string) {
 }
 
 // SetName sets the value of Name.
-func (s *User) SetName(val string) {
+func (s *User) SetName(val OptString) {
 	s.Name = val
 }
 
@@ -621,3 +653,30 @@ func (s *User) SetPhoneNumber(val OptString) {
 }
 
 func (*User) aPIV1AuthOAuthPostRes() {}
+
+// Ref: #/components/schemas/Workspace
+type Workspace struct {
+	// Base32 encoded UUID.
+	WorkspaceId string `json:"workspaceId"`
+	Name        string `json:"name"`
+}
+
+// GetWorkspaceId returns the value of WorkspaceId.
+func (s *Workspace) GetWorkspaceId() string {
+	return s.WorkspaceId
+}
+
+// GetName returns the value of Name.
+func (s *Workspace) GetName() string {
+	return s.Name
+}
+
+// SetWorkspaceId sets the value of WorkspaceId.
+func (s *Workspace) SetWorkspaceId(val string) {
+	s.WorkspaceId = val
+}
+
+// SetName sets the value of Name.
+func (s *Workspace) SetName(val string) {
+	s.Name = val
+}

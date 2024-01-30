@@ -13,7 +13,7 @@ export class GoogleAnalyticsDriver {
   sendUser(me: Me): Result<null, Error> {
     try {
       this.client.gtag("set", "user_properties", {
-        user_id: me.user.id.value.asString
+        user_id: me.self.id.value.asString
       })
       return Result.ok(null)
     } catch (e) {

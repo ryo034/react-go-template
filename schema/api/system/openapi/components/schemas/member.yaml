@@ -12,9 +12,13 @@ Member:
 MemberProfile:
   type: object
   required:
-    - display_name
+    - id
   properties:
-    display_name:
+    id:
+      type: string
+      description: base32 encoded UUID
+      example: 3VZ6ZJ2Z6VZ6ZJ2Z
+    displayName:
       type: string
     idNumber:
       type: string

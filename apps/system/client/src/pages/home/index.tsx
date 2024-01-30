@@ -31,7 +31,7 @@ export function HomePage() {
               <CardTitle>Congratulations🎉🎉🎉</CardTitle>
             </CardHeader>
             <CardContent className="grid gap-4">
-              <h2>Hello!! {me.user.name}</h2>
+              <h2>Hello!! {me.self.name}</h2>
             </CardContent>
             <CardFooter>
               <Button className="w-full" onClick={onClick}>

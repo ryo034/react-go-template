@@ -7,7 +7,7 @@ import (
 )
 
 type Workspace struct {
-	bun.BaseModel `bun:"table:workspaces,alias:org"`
+	bun.BaseModel `bun:"table:workspaces,alias:ws"`
 
 	WorkspaceID uuid.UUID `bun:"workspace_id,pk"`
 	CreatedAt   time.Time `bun:"created_at,notnull,default:current_timestamp"`
@@ -15,3 +15,5 @@ type Workspace struct {
 	Detail  *WorkspaceDetail `bun:"rel:has-one"`
 	Members []*Member        `bun:"rel:has-many"`
 }
+
+type Workspaces []*Workspace

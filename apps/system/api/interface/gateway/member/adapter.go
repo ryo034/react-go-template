@@ -23,7 +23,15 @@ func (a *adapter) Adapt(m *models.Member) (*member.Member, error) {
 	if err != nil {
 		return nil, err
 	}
-	idNumber := m.Profile.MemberIDNumber
+	idNumber, err := member.NewIDNumber(m.Profile.MemberIDNumber)
+	if err != nil {
+		return nil, err
+	}
+
+	dn, err := member.NewDisplayName(m.Profile.DisplayName)
+	if err != nil {
+		return nil, err
+	}
 	id := member.NewIDFromUUID(m.MemberID)
-	return member.NewMember(id, u, nil, idNumber), nil
+	return member.NewMember(id, u, &dn, &idNumber), nil
 }
