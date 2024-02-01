@@ -38,8 +38,8 @@ func (m message) WithLang(tag language.Tag, args ...interface{}) string {
 }
 
 type resource struct {
-	errorMessages    map[string]Message
 	successMessages  map[string]Message
+	errorMessages    map[string]Message
 	titleMessages    map[string]Message
 	detailMessages   map[string]Message
 	typeMessages     map[string]Message
@@ -48,6 +48,14 @@ type resource struct {
 }
 
 func NewResource(defaultLang language.Tag) Resource {
+	toMassages := func(m map[string]map[language.Tag]string) map[string]Message {
+		result := make(map[string]Message, len(m))
+		for k, v := range m {
+			result[k] = message{defaultLang, v}
+		}
+		return result
+	}
+
 	domainErrorMessages := DomainErrorMessages
 	errorMessages := make(map[string]map[language.Tag]string, len(commonErrorMessages)+len(domainErrorMessages))
 	for k, v := range commonErrorMessages {
@@ -56,20 +64,34 @@ func NewResource(defaultLang language.Tag) Resource {
 	for k, v := range domainErrorMessages {
 		errorMessages[string(k)] = v
 	}
-	toMassages := func(m map[string]map[language.Tag]string) map[string]Message {
-		result := make(map[string]Message, len(m))
-		for k, v := range m {
-			result[k] = message{defaultLang, v}
-		}
-		return result
+
+	tims := make(map[string]map[language.Tag]string, len(titleMessages))
+	for k, v := range titleMessages {
+		tims[string(k)] = v
 	}
+
+	dms := make(map[string]map[language.Tag]string, len(detailMessages))
+	for k, v := range detailMessages {
+		dms[string(k)] = v
+	}
+
+	tyms := make(map[string]map[language.Tag]string, len(typeMessages))
+	for k, v := range typeMessages {
+		tyms[string(k)] = v
+	}
+
+	ims := make(map[string]map[language.Tag]string, len(instanceMessages))
+	for k, v := range instanceMessages {
+		ims[string(k)] = v
+	}
+
 	return &resource{
-		toMassages(errorMessages),
 		toMassages(successMessages),
-		toMassages(titleMessages),
-		toMassages(detailMessages),
-		toMassages(typeMessages),
-		toMassages(instanceMessages),
+		toMassages(errorMessages),
+		toMassages(tims),
+		toMassages(dms),
+		toMassages(tyms),
+		toMassages(ims),
 		toMassages(filedNames),
 	}
 }

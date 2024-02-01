@@ -7,24 +7,30 @@ import (
 	firebaseDriver "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/keyvalue"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/me"
+	"github.com/ryo034/react-go-template/apps/system/api/driver/workspace"
+	"github.com/ryo034/react-go-template/apps/system/api/driver/workspace/member"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/firebase"
 )
 
 type driver struct {
-	Firebase firebaseDriver.Driver
-	Me       me.Driver
-	Auth     auth.Driver
-	Email    email.Driver
-	KeyValue keyvalue.Store
+	KeyValue  keyvalue.Store
+	Firebase  firebaseDriver.Driver
+	Email     email.Driver
+	Me        me.Driver
+	Auth      auth.Driver
+	Workspace workspace.Driver
+	Member    member.Driver
 }
 
 func newDriverInjector(rc *redis.Client, f *firebase.Firebase) driver {
 	meDr := me.NewDriver()
 	return driver{
+		keyvalue.NewRedisDriver(rc),
 		firebaseDriver.NewDriver(f),
+		email.NewDriver(),
 		meDr,
 		auth.NewDriver(),
-		email.NewDriver(),
-		keyvalue.NewRedisDriver(rc),
+		workspace.NewDriver(),
+		member.NewDriver(),
 	}
 }

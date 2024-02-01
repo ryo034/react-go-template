@@ -121,12 +121,54 @@ export interface paths {
       };
     };
   };
+  "/api/v1/me/update-name": {
+    /**
+     * Update Name
+     * @description Update Name
+     */
+    post: operations["updateName"];
+  };
   "/api/v1/login": {
     /**
      * Login
      * @description Login
      */
     post: operations["login"];
+  };
+  "/api/v1/workspaces": {
+    /**
+     * Get Joined Workspaces
+     * @description Returns the workspaces the user is a member of
+     */
+    get: {
+      responses: {
+        /** @description Joined Workspaces */
+        200: {
+          content: {
+            "application/json": components["schemas"]["Workspaces"];
+          };
+        };
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+    /**
+     * Create Workspace
+     * @description Creates a new workspace
+     */
+    post: {
+      requestBody: components["requestBodies"]["CreateWorkspace"];
+      responses: {
+        /** @description Workspace created */
+        201: {
+          content: {
+            "application/json": components["schemas"]["Workspace"];
+          };
+        };
+        400: components["responses"]["BadRequestError"];
+        409: components["responses"]["ConflictError"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
   };
 }
 
@@ -152,7 +194,10 @@ export interface components {
        * @example 3VZ6ZJ2Z6VZ6ZJ2Z
        */
       workspaceId: string;
+      /** @description workspace name */
       name: string;
+      /** @description workspace subdomain (e.x. example-test) */
+      subdomain: string;
     };
     Workspaces: components["schemas"]["Workspace"][];
     Member: {
@@ -165,7 +210,7 @@ export interface components {
        * @example 3VZ6ZJ2Z6VZ6ZJ2Z
        */
       id: string;
-      displayName?: string;
+      displayName: string;
       idNumber?: string;
     };
     MembershipPeriod: {
@@ -285,6 +330,32 @@ export interface components {
         };
       };
     };
+    /** @description Conflict */
+    ConflictError: {
+      content: {
+        "application/json": {
+          /**
+           * @description The HTTP status code generated for this occurrence of the problem.
+           * @example 400
+           */
+          status?: number;
+          /**
+           * @description error type
+           * @example invalid_item_id
+           */
+          type?: string;
+          /** @description A short, human-readable summary of the problem type */
+          title?: string;
+          /** @description A human-readable explanation specific to this occurrence of the problem. */
+          detail?: string;
+          /**
+           * @description error code
+           * @example invalid_item_id
+           */
+          code?: string;
+        };
+      };
+    };
     /** @description Too many requests */
     TooManyRequestsError: {
       content: {
@@ -339,7 +410,31 @@ export interface components {
     };
   };
   parameters: never;
-  requestBodies: never;
+  requestBodies: {
+    /** @description Creates a new workspace */
+    CreateWorkspace: {
+      content: {
+        "application/json": {
+          /** @description workspace name */
+          name: string;
+          /** @description workspace subdomain (e.x. example-test) */
+          subdomain: string;
+        };
+      };
+    };
+    /** @description Update Name */
+    UpdateName: {
+      content: {
+        "application/json": {
+          /**
+           * @description Name
+           * @example John Doe
+           */
+          name: string;
+        };
+      };
+    };
+  };
   headers: never;
   pathItems: never;
 }
@@ -350,6 +445,23 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /**
+   * Update Name
+   * @description Update Name
+   */
+  updateName: {
+    requestBody: components["requestBodies"]["UpdateName"];
+    responses: {
+      /** @description Update Name response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Me"];
+        };
+      };
+      400: components["responses"]["BadRequestError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
   /**
    * Login
    * @description Login

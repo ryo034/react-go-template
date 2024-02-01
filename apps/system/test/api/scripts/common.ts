@@ -1,29 +1,53 @@
-import { readFileSync } from "fs"
+import { test } from "@playwright/test"
+import { defaultPostHeaders, headers } from "config/config"
 import createClient from "openapi-fetch"
 import { paths } from "../schema/openapi/systemApi"
+import { firebaseConfig } from "./config"
 import { MainDb } from "./database"
-import { Firebase, FirebaseUser } from "./firebase"
+import { Firebase } from "./firebase"
+
+const APIBaseURL = "http://localhost:19004"
 
 export const statefulBeforeEach = async () => {
-  const fb = Firebase.getInstance({
-    apiKey: process.env.FIREBASE_API_KEY || "test",
-    authDomain: process.env.FIREBASE_AUTH_DOMAIN || "localhost",
-    projectId: process.env.FIREBASE_PROJECT_ID || "test",
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "test",
-    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || "test",
-    appId: process.env.FIREBASE_APP_ID || "test",
-    localConfig: {
-      firebaseEmulatorHost: process.env.FIREBASE_EMULATOR_HOST || "localhost:9099",
-      firestoreEmulatorHost: process.env.FIRESTORE_EMULATOR_HOST || "localhost:8080"
-    }
-  })
-  const jsonData = JSON.parse(readFileSync("./setup/firebase/auth/users.json", "utf8").toString())
-  const us = jsonData.users as FirebaseUser[]
+  const fb = new Firebase(firebaseConfig, { showConsole: false })
   const db = new MainDb()
   await Promise.all([fb.clear(), db.clear()])
-  await Promise.all([fb.setup(us), db.setup()])
+  await Promise.all([fb.setup(), db.setup()])
 }
 
 export const genAPIClient = () => {
-  return createClient<paths>({ baseUrl: "http://localhost:19004" })
+  return createClient<paths>({ baseUrl: APIBaseURL })
 }
+
+const client = createClient<paths>({ baseUrl: APIBaseURL })
+
+export const getToken = async (email: string) => {
+  const { data, response, error } = await client.POST("/api/v1/auth/otp", {
+    headers: defaultPostHeaders,
+    body: { email }
+  })
+  console.log("data", data)
+
+  if (data === undefined) {
+    throw new Error("data is undefined")
+  }
+  const { code } = data
+  const verifyRes = await client.POST("/api/v1/auth/otp/verify", {
+    headers: defaultPostHeaders,
+    body: { email, otp: code }
+  })
+  if (verifyRes.data === undefined) {
+    throw new Error("verifyRes.data is undefined")
+  }
+  const { token } = verifyRes.data
+  const fb = new Firebase(firebaseConfig, { showConsole: false })
+  const tk = await fb.signInWithCustomToken(token)
+  return tk.token
+}
+
+export const statefulTest = test.extend({
+  page: async ({ baseURL, page }, use) => {
+    await statefulBeforeEach()
+    await use(page)
+  }
+})

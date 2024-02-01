@@ -11,3 +11,7 @@ func NewDisplayName(v string) (DisplayName, error) {
 func (dn DisplayName) ToString() string {
 	return dn.v
 }
+
+func (dn DisplayName) IsEmpty() bool {
+	return dn.v == ""
+}

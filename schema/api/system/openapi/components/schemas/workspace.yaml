@@ -3,6 +3,7 @@ Workspace:
   required:
     - workspaceId
     - name
+    - subdomain
   properties:
     workspaceId:
       type: string
@@ -10,6 +11,10 @@ Workspace:
       example: 3VZ6ZJ2Z6VZ6ZJ2Z
     name:
       type: string
+      description: workspace name
+    subdomain:
+      type: string
+      description: workspace subdomain (e.x. example-test)
 
 Workspaces:
   type: array

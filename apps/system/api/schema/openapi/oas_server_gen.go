@@ -38,12 +38,30 @@ type Handler interface {
 	//
 	// GET /api/v1/ping
 	APIV1PingGet(ctx context.Context) (APIV1PingGetRes, error)
+	// APIV1WorkspacesGet implements GET /api/v1/workspaces operation.
+	//
+	// Returns the workspaces the user is a member of.
+	//
+	// GET /api/v1/workspaces
+	APIV1WorkspacesGet(ctx context.Context) (APIV1WorkspacesGetRes, error)
+	// APIV1WorkspacesPost implements POST /api/v1/workspaces operation.
+	//
+	// Creates a new workspace.
+	//
+	// POST /api/v1/workspaces
+	APIV1WorkspacesPost(ctx context.Context, req *APIV1WorkspacesPostReq) (APIV1WorkspacesPostRes, error)
 	// Login implements login operation.
 	//
 	// Login.
 	//
 	// POST /api/v1/login
 	Login(ctx context.Context) (LoginRes, error)
+	// UpdateName implements updateName operation.
+	//
+	// Update Name.
+	//
+	// POST /api/v1/me/update-name
+	UpdateName(ctx context.Context, req *UpdateNameReq) (UpdateNameRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

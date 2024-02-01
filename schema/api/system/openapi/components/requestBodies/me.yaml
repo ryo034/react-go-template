@@ -1,0 +1,14 @@
+UpdateName:
+  description: Update Name
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - name
+        properties:
+          name:
+            type: string
+            description: Name
+            example: "John Doe"

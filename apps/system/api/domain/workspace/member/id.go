@@ -20,3 +20,11 @@ func NewID(v string) (ID, error) {
 func NewIDFromUUID(v uuid.UUID) ID {
 	return ID{id.NewUUID(v)}
 }
+
+func GenerateID() (ID, error) {
+	i, err := id.GenerateUUID()
+	if err != nil {
+		return ID{}, err
+	}
+	return ID{i}, nil
+}

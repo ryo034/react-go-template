@@ -31,5 +31,5 @@ func (a *adapter) Adapt(u *openapi.User) (*user.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	return user.NewUser(aID, email, n, phoneNumber), nil
+	return user.NewUser(aID, email, &n, phoneNumber), nil
 }

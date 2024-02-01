@@ -15,3 +15,26 @@ me:
               $ref: "#/components/schemas/Me"
       "500":
         $ref: "#/components/responses/InternalServerError"
+
+updateName:
+  post:
+    summary: Update Name
+    description: Update Name
+    operationId: updateName
+    tags:
+      - Admin
+    security:
+      - bearer: []
+    requestBody:
+      $ref: "#/components/requestBodies/UpdateName"
+    responses:
+      "200":
+        description: Update Name response
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Me"
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"

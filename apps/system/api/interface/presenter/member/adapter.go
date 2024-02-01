@@ -24,11 +24,8 @@ func (a *adapter) Adapt(m *member.Member) openapi.Member {
 	}
 	return openapi.Member{
 		Profile: openapi.MemberProfile{
-			ID: m.ID().ToFriendlyString(),
-			DisplayName: openapi.OptString{
-				Value: m.DisplayName().ToString(),
-				Set:   m.HasDisplayName(),
-			},
+			ID:          m.ID().ToFriendlyString(),
+			DisplayName: m.DisplayName().ToString(),
 			IdNumber: openapi.OptString{
 				Value: m.IDNumber().ToString(),
 				Set:   m.HasIDNumber(),

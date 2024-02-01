@@ -30,34 +30,34 @@ func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo auth.Rep
 	return &useCase{txp, dbp, acRepo, emailDr, fbDr}
 }
 
-func (u *useCase) AuthByTOTP(ctx context.Context, input ByTOTPInput) (openapi.APIV1AuthOtpPostRes, error) {
-	code, err := u.repo.GenTOTP(ctx, input.Email)
+func (u *useCase) AuthByTOTP(ctx context.Context, i ByTOTPInput) (openapi.APIV1AuthOtpPostRes, error) {
+	code, err := u.repo.GenTOTP(ctx, i.Email)
 	if err != nil {
 		return nil, err
 	}
-	if err = u.emailDr.Send(ctx, input.Email); err != nil {
+	if err = u.emailDr.Send(ctx, i.Email); err != nil {
 		return nil, err
 	}
 	return &openapi.APIV1AuthOtpPostOK{Code: code}, nil
 }
 
-func (u *useCase) VerifyTOTP(ctx context.Context, input VerifyTOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error) {
+func (u *useCase) VerifyTOTP(ctx context.Context, i VerifyTOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
 		return nil, err
 	}
 	fn := func() (string, error) {
-		usr, err := u.repo.Find(pr, p, input.Email)
+		usr, err := u.repo.Find(pr, p, i.Email)
 		if err != nil && !errors.Is(err, sql.ErrNoRows) {
 			return "", err
 		}
 		// if user exists, verify TOTP and return custom token
 		if usr != nil {
-			return u.verifyTOTP(pr, usr.AccountID(), input.Email, input.Otp)
+			return u.verifyTOTP(pr, usr.AccountID(), i.Email, i.Otp)
 		}
 		// if user does not exist, create user, verify TOTP and return custom token
-		return u.verifyTOTPWithCreate(pr, p, input.Email, input.Otp)
+		return u.verifyTOTPWithCreate(pr, p, i.Email, i.Otp)
 	}
 	result := pr.Transactional(fn)()
 	if err = result.Error(); err != nil {
@@ -96,5 +96,12 @@ func (u *useCase) verifyTOTPWithCreate(ctx context.Context, exec bun.IDB, email 
 	if !ok {
 		return "", err
 	}
-	return u.fbDr.CustomToken(ctx, aID)
+	tk, err := u.fbDr.CustomToken(ctx, aID)
+	if err != nil {
+		return "", err
+	}
+	if err = u.fbDr.CreateUser(ctx, aID, email); err != nil {
+		return "", err
+	}
+	return tk, nil
 }

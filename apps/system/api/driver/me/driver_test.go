@@ -79,3 +79,48 @@ func Test_driver_Find_OK(t *testing.T) {
 		}
 	})
 }
+
+func Test_driver_UpdateName_OK(t *testing.T) {
+	defaultTime := test.GetDefaultTime()
+	wantErr := false
+
+	var systemAccountIDUUID = uuid.MustParse("394e67b6-2850-4ddf-a4c9-c2a619d5bf70")
+	aID := account.NewIDFromUUID(systemAccountIDUUID)
+
+	name, _ := account.NewName("John Doe 2")
+
+	want := &models.SystemAccount{
+		SystemAccountID: systemAccountIDUUID,
+		CreatedAt:       defaultTime,
+		PhoneNumber: &models.SystemAccountPhoneNumber{
+			SystemAccountID: systemAccountIDUUID,
+			PhoneNumber:     "",
+			CreatedAt:       defaultTime,
+			UpdatedAt:       defaultTime,
+		},
+		Profile: &models.SystemAccountProfile{
+			SystemAccountID: systemAccountIDUUID,
+			Name:            "John Doe 2",
+			Email:           "",
+			CreatedAt:       defaultTime,
+			UpdatedAt:       defaultTime,
+		},
+	}
+
+	ctx := context.Background()
+	t.Run("UpdateName", func(t *testing.T) {
+		db := bun.NewDB(test.SetupTestDB(t, ctx).DB, pgdialect.New())
+		pr := core.NewDatabaseProvider(db, db)
+		res, err := NewDriver().UpdateName(ctx, pr.GetExecutor(ctx, false), aID, name)
+		if (err != nil) != wantErr {
+			t.Errorf("UpdateName() error = %v, wantErr %v", err, wantErr)
+			return
+		}
+		if res.Profile.Name != want.Profile.Name {
+			assert.EqualValuesf(t, want.Profile.Name, res.Profile.Name, "%v failed", "UpdateName")
+		}
+		if res.SystemAccountID != want.SystemAccountID {
+			assert.EqualValuesf(t, want.SystemAccountID, res.SystemAccountID, "%v failed", "UpdateName")
+		}
+	})
+}

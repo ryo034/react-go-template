@@ -2,16 +2,24 @@ import { readFileSync } from "fs"
 import { parse } from "csv-parse/sync"
 import { Client, types } from "pg"
 import format from "pg-format"
-import { dbConfig } from "./config"
+import { dbConfig, env, initializeData } from "./config"
 
-export interface Database {
+const logWithEllipsis = (text: string, maxLength = 50) => {
+  if (text.length > maxLength) {
+    console.log(`${text.substring(0, maxLength)}...`)
+  } else {
+    console.log(text)
+  }
+}
+
+interface Database {
+  getConnection(): Promise<Client>
   canConnect(): Promise<boolean>
   setup(): Promise<void>
   clear(): Promise<void>
-  getConnection(): any
 }
 
-const targetTables = [
+export const targetTables = [
   "address_components",
   "system_accounts",
   "system_account_profiles",
@@ -36,7 +44,7 @@ export class MainDb implements Database {
     try {
       await this.getConnection()
       return true
-    } catch (_) {
+    } catch (_e) {
       return false
     }
   }
@@ -46,23 +54,28 @@ export class MainDb implements Database {
     for (const tableName of targetTables) {
       await this.insertInitDataInCsvPostgres(connection, tableName)
     }
-    return connection.end()
+
+    connection.end()
   }
 
   private async insertInitDataInCsvPostgres(connection: Client, tableName: string) {
     let csv: Array<Array<string>> = []
-    csv = parse(readFileSync(`./setup/database/${tableName}.csv`))
+    if (initializeData === "true" && env !== "localhost") {
+      csv = parse(readFileSync(`./setup/database/${tableName}.csv`))
+    } else {
+      csv = parse(readFileSync(`./setup/database/${tableName}.csv`))
+    }
 
     const header = csv.shift()
-    if (header === undefined) {
-      throw new Error("header is undefined")
+    if (!header) {
+      throw new Error("csv header is empty")
     }
     const columns = header.join(",")
 
     if (csv.length > 0) {
       for (const row of csv) {
         const query = format(`INSERT INTO ${tableName} (${columns}) VALUES %L`, [row]).replace(/''/gi, "NULL")
-        console.log(`${query.substring(0, 100)}...`)
+        logWithEllipsis(query)
         await connection.query(query)
       }
     }
@@ -73,9 +86,9 @@ export class MainDb implements Database {
     const reversedTables = [...targetTables].reverse()
     for (const tableName of reversedTables) {
       const query = `DELETE FROM ${tableName};`
-      console.log(`${query.substring(0, 100)}...`)
+      logWithEllipsis(query)
       await connection.query(query)
     }
-    return connection.end()
+    connection.end()
   }
 }

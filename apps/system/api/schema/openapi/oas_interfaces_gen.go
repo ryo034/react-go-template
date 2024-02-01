@@ -21,6 +21,18 @@ type APIV1PingGetRes interface {
 	aPIV1PingGetRes()
 }
 
+type APIV1WorkspacesGetRes interface {
+	aPIV1WorkspacesGetRes()
+}
+
+type APIV1WorkspacesPostRes interface {
+	aPIV1WorkspacesPostRes()
+}
+
 type LoginRes interface {
 	loginRes()
+}
+
+type UpdateNameRes interface {
+	updateNameRes()
 }

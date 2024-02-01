@@ -53,10 +53,7 @@ func Test_driver_Create_OK(t *testing.T) {
 
 func Test_driver_Find_OK(t *testing.T) {
 	var systemAccountIDUUID = uuid.MustParse("394e67b6-2850-4ddf-a4c9-c2a619d5bf70")
-	defaultTime, err := time.Parse("2006-01-02 15:04:05", "2024-01-10 12:00:00")
-	if err != nil {
-		t.Fatalf("failed to parse defaultTime: %v", err)
-	}
+	defaultTime := test.GetDefaultTime()
 	email, _ := account.NewEmail("system_account@example.com")
 
 	want := &models.SystemAccount{

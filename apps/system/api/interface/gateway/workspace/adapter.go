@@ -23,7 +23,11 @@ func (a *adapter) Adapt(w *models.Workspace) (*workspace.Workspace, error) {
 	if err != nil {
 		return nil, err
 	}
-	d := workspace.NewDetail(name)
+	sd, err := workspace.NewSubdomain(w.Detail.Subdomain)
+	if err != nil {
+		return nil, err
+	}
+	d := workspace.NewDetail(name, sd)
 	return workspace.NewWorkspace(id, d), nil
 }
 

@@ -3,18 +3,22 @@ package injector
 import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/auth"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	authGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/auth"
 	meGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/me"
+	workspaceGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/workspace"
 )
 
 type RepositoryInjector struct {
-	Me   me.Repository
-	Auth auth.Repository
+	Me        me.Repository
+	Auth      auth.Repository
+	Workspace workspace.Repository
 }
 
 func newRepositoryInjector(di driver, gw GatewayAdapter) RepositoryInjector {
 	return RepositoryInjector{
-		Me:   meGw.NewGateway(di.Me, di.Firebase, gw.Me),
-		Auth: authGw.NewGateway(di.KeyValue, di.Auth, gw.Auth),
+		meGw.NewGateway(di.Me, di.Firebase, gw.Me),
+		authGw.NewGateway(di.KeyValue, di.Auth, gw.Auth),
+		workspaceGw.NewGateway(di.Workspace, di.Member, gw.Workspace, gw.Member),
 	}
 }

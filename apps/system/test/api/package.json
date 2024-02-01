@@ -1,24 +1,26 @@
 {
-  "name": "api-test",
+  "name": "system-api-test",
   "description": "API test",
   "scripts": {
-    "test": "playwright test",
+    "test-o": "PARALLEL=false playwright test ./tests/auth/otp.spec.ts",
+    "test-w": "PARALLEL=false playwright test ./tests/workspace/validation.spec.ts",
     "test:stateless": "PARALLEL=true playwright test --grep-invert @stateful",
     "test:stateful": "PARALLEL=false playwright test --grep @stateful"
   },
   "dependencies": {
     "dotenv": "^16.4.1",
+    "firebase": "^10.7.2",
     "firebase-admin": "^12.0.0",
     "openapi-fetch": "^0.8.2",
     "pg": "^8.11.3",
     "pg-format": "^1.0.4",
-    "playwright": "1.41.1",
+    "playwright": "1.41.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
   "devDependencies": {
-    "@playwright/test": "^1.41.1",
-    "@types/node": "^20.11.10",
+    "@playwright/test": "^1.41.2",
+    "@types/node": "^20.11.16",
     "@types/pg": "^8.11.0",
     "@types/pg-format": "^1.0.5",
     "csv-parse": "^5.5.3"

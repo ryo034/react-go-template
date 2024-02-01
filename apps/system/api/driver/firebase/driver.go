@@ -17,7 +17,7 @@ type Driver interface {
 	DeleteUser(ctx context.Context, aID account.ID) error
 	RevokeRefreshTokens(ctx context.Context, aID account.ID) error
 	GetUser(ctx context.Context, aID account.ID) (*auth.UserRecord, error)
-	EmailVerified(ctx context.Context, aID account.ID) (bool, string, error)
+	CreateUser(ctx context.Context, aID account.ID, email account.Email) error
 	UpdateMe(ctx context.Context, me *me.Me) error
 	UpdateEmail(ctx context.Context, aID account.ID, em account.Email) error
 	UpdateName(ctx context.Context, aID account.ID, n account.Name) error
@@ -53,15 +53,15 @@ func (d *driver) GetUser(ctx context.Context, aID account.ID) (*auth.UserRecord,
 	return ur, err
 }
 
-func (d *driver) EmailVerified(ctx context.Context, aID account.ID) (bool, string, error) {
-	ur, err := d.f.Auth.GetUser(ctx, aID.ToString())
-	if err != nil {
-		return false, "", err
-	}
-	return ur.EmailVerified, ur.Email, nil
+func (d *driver) UpdateMe(ctx context.Context, me *me.Me) error {
+	return nil
 }
 
-func (d *driver) UpdateMe(ctx context.Context, me *me.Me) error {
+func (d *driver) CreateUser(ctx context.Context, aID account.ID, email account.Email) error {
+	params := (&auth.UserToCreate{}).Email(email.ToString()).UID(aID.ToString()).EmailVerified(true)
+	if _, err := d.f.Auth.CreateUser(ctx, params); err != nil {
+		return err
+	}
 	return nil
 }
 

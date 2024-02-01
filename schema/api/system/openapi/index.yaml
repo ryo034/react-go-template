@@ -14,8 +14,12 @@ paths:
     $ref: "./paths/auth.yaml#/oauth"
   /api/v1/me:
     $ref: "./paths/me.yaml#/me"
+  /api/v1/me/update-name:
+    $ref: "./paths/me.yaml#/updateName"
   /api/v1/login:
     $ref: "./paths/login.yaml#/login"
+  /api/v1/workspaces:
+    $ref: "./paths/workspace.yaml#/workspaces"
 
 components:
   securitySchemes:
@@ -37,6 +41,11 @@ components:
       $ref: "./components/schemas/membership.yaml#/MembershipPeriod"
     Me:
       $ref: "./components/schemas/me.yaml#/Me"
+  requestBodies:
+    CreateWorkspace:
+      $ref: "./components/requestBodies/workspace.yaml#/CreateWorkspace"
+    UpdateName:
+      $ref: "./components/requestBodies/me.yaml#/UpdateName"
   responses:
     GeneralError:
       $ref: "./components/responses/error.yaml#/components/responses/GeneralError"
@@ -46,6 +55,8 @@ components:
       $ref: "./components/responses/error.yaml#/components/responses/NotFoundError"
     UnauthorizedError:
       $ref: "./components/responses/error.yaml#/components/responses/UnauthorizedError"
+    ConflictError:
+      $ref: "./components/responses/error.yaml#/components/responses/ConflictError"
     TooManyRequestsError:
       $ref: "./components/responses/error.yaml#/components/responses/TooManyRequestsError"
     InternalServerError:

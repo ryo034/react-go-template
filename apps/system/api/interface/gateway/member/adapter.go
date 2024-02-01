@@ -33,5 +33,5 @@ func (a *adapter) Adapt(m *models.Member) (*member.Member, error) {
 		return nil, err
 	}
 	id := member.NewIDFromUUID(m.MemberID)
-	return member.NewMember(id, u, &dn, &idNumber), nil
+	return member.NewMember(id, u, dn, &idNumber), nil
 }

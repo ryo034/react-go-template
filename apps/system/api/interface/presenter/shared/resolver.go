@@ -3,7 +3,7 @@ package shared
 import (
 	"context"
 	"errors"
-	domainError "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
+	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	domainValidation "github.com/ryo034/react-go-template/apps/system/api/domain/shared/validation"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/message"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/controller/shared/request/validation"
@@ -37,15 +37,15 @@ func (r *resolver) SuccessMessage(c context.Context, msgKey string, msgArgs ...i
 func (r *resolver) errTitle(tag language.Tag, err error, msgArgs ...interface{}) string {
 	msg := ""
 	var t domainValidation.Error
-	var conflictErr *domainError.Conflicted
-	var noSuchData *domainError.NoSuchData
+	var conflictErr *domainErr.Conflicted
+	var noSuchData *domainErr.NoSuchData
 	switch {
 	case errors.As(err, &t):
 		msg = r.mr.TitleMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
 	case errors.As(err, &conflictErr):
-		msg = r.mr.TitleMessage("conflicted").WithLang(tag)
+		msg = r.mr.TitleMessage(string(domainErr.ConflictedMessageKey)).WithLang(tag)
 	case errors.As(err, &noSuchData):
-		msg = r.mr.TitleMessage("noSuchData").WithLang(tag)
+		msg = r.mr.TitleMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
 	}
 	return msg
 }
@@ -53,15 +53,15 @@ func (r *resolver) errTitle(tag language.Tag, err error, msgArgs ...interface{})
 func (r *resolver) errDetail(tag language.Tag, err error, msgArgs ...interface{}) string {
 	msg := ""
 	var t domainValidation.Error
-	var conflictErr *domainError.Conflicted
-	var noSuchData *domainError.NoSuchData
+	var conflictErr *domainErr.Conflicted
+	var noSuchData *domainErr.NoSuchData
 	switch {
 	case errors.As(err, &t):
 		msg = r.mr.DetailMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
 	case errors.As(err, &conflictErr):
-		msg = r.mr.DetailMessage("conflicted").WithLang(tag)
+		msg = r.mr.DetailMessage(string(domainErr.ConflictedMessageKey)).WithLang(tag)
 	case errors.As(err, &noSuchData):
-		msg = r.mr.DetailMessage("noSuchData").WithLang(tag)
+		msg = r.mr.DetailMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
 	}
 	return msg
 }
@@ -69,15 +69,15 @@ func (r *resolver) errDetail(tag language.Tag, err error, msgArgs ...interface{}
 func (r *resolver) errType(tag language.Tag, err error, msgArgs ...interface{}) string {
 	msg := ""
 	var t domainValidation.Error
-	var conflictErr *domainError.Conflicted
-	var noSuchData *domainError.NoSuchData
+	var conflictErr *domainErr.Conflicted
+	var noSuchData *domainErr.NoSuchData
 	switch {
 	case errors.As(err, &t):
 		msg = r.mr.TypeMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
 	case errors.As(err, &conflictErr):
-		msg = r.mr.TypeMessage("conflicted").WithLang(tag)
+		msg = r.mr.TypeMessage(string(domainErr.ConflictedMessageKey)).WithLang(tag)
 	case errors.As(err, &noSuchData):
-		msg = r.mr.TypeMessage("noSuchData").WithLang(tag)
+		msg = r.mr.TypeMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
 	}
 	return msg
 }
@@ -86,8 +86,8 @@ func (r *resolver) Error(c context.Context, err error) interface{} {
 	er := r.newErrorResponse(r.getLanguage(c), err)
 
 	var t domainValidation.Error
-	var conflictErr *domainError.Conflicted
-	var noSuchData *domainError.NoSuchData
+	var conflictErr *domainErr.Conflicted
+	var noSuchData *domainErr.NoSuchData
 
 	switch {
 	case errors.As(err, &t):
@@ -97,6 +97,11 @@ func (r *resolver) Error(c context.Context, err error) interface{} {
 			Detail: openapi.OptString{Value: er.Detail, Set: true},
 		}
 	case errors.As(err, &conflictErr):
+		return &openapi.ConflictError{
+			Type:   openapi.OptString{Value: er.Type, Set: true},
+			Title:  openapi.OptString{Value: er.Title, Set: true},
+			Detail: openapi.OptString{Value: er.Detail, Set: true},
+		}
 	case errors.As(err, &noSuchData):
 	}
 	return &openapi.InternalServerError{
@@ -142,15 +147,15 @@ func (r *resolver) details(tag language.Tag, err error) []errDetail {
 func (r *resolver) detail(tag language.Tag, err error) errDetail {
 	msg := ""
 	var t domainValidation.Error
-	var conflictErr *domainError.Conflicted
-	var noSuchData *domainError.NoSuchData
+	var conflictErr *domainErr.Conflicted
+	var noSuchData *domainErr.NoSuchData
 	switch {
 	case errors.As(err, &t):
 		msg = r.mr.ErrorMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
 	case errors.As(err, &conflictErr):
-		msg = r.mr.ErrorMessage("conflicted").WithLang(tag)
+		msg = r.mr.ErrorMessage(string(domainErr.ConflictedMessageKey)).WithLang(tag)
 	case errors.As(err, &noSuchData):
-		msg = r.mr.ErrorMessage("noSuchData").WithLang(tag)
+		msg = r.mr.ErrorMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
 	}
 	return errDetail{msg}
 }

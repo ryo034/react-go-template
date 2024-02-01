@@ -48,6 +48,10 @@ func (u *User) HasName() bool {
 	return u.name != nil
 }
 
+func (u *User) HasNotName() bool {
+	return u.name == nil
+}
+
 func (u *User) PhoneNumber() *phone.Number {
 	return u.phoneNumber
 }

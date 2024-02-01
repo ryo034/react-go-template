@@ -11,6 +11,7 @@ import (
 
 type Adapter interface {
 	Adapt(m *models.Member, fu *auth.UserRecord) (*me.Me, error)
+	AdaptSystemAccount(m *models.SystemAccount) (*me.Me, error)
 }
 
 type adapter struct {
@@ -34,4 +35,12 @@ func (a *adapter) Adapt(m *models.Member, fu *auth.UserRecord) (*me.Me, error) {
 		return nil, err
 	}
 	return me.NewMe(u, w, mem), nil
+}
+
+func (a *adapter) AdaptSystemAccount(m *models.SystemAccount) (*me.Me, error) {
+	u, err := a.uga.Adapt(m)
+	if err != nil {
+		return nil, err
+	}
+	return me.NewMe(u, nil, nil), nil
 }

@@ -17,16 +17,20 @@ func NewAdapter() Adapter {
 }
 
 func (a *adapter) Adapt(u *user.User) openapi.User {
+	var na = openapi.OptString{Set: false}
+	if u.HasName() {
+		na.Set = true
+		na.Value = u.Name().ToString()
+	}
+	var ph = openapi.OptString{Set: false}
+	if u.HasPhoneNumber() {
+		ph.Set = true
+		ph.Value = u.PhoneNumber().ToString()
+	}
 	return openapi.User{
-		UserId: u.AccountID().Value(),
-		Email:  u.Email().ToString(),
-		Name: openapi.OptString{
-			Set:   u.HasName(),
-			Value: u.Name().ToString(),
-		},
-		PhoneNumber: openapi.OptString{
-			Set:   u.HasPhoneNumber(),
-			Value: u.PhoneNumber().ToString(),
-		},
+		UserId:      u.AccountID().Value(),
+		Email:       u.Email().ToString(),
+		Name:        na,
+		PhoneNumber: ph,
 	}
 }

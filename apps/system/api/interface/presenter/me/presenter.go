@@ -20,15 +20,19 @@ type presenter struct {
 }
 
 func (p *presenter) Find(m *me.Me) *openapi.Me {
+	var mem = openapi.OptMember{Set: false}
+	if m.HasMember() {
+		mem.Set = true
+		mem.Value = p.ma.Adapt(m.Member())
+	}
+	var cw = openapi.OptWorkspace{Set: false}
+	if m.HasWorkspace() {
+		cw.Set = true
+		cw.Value = p.wa.Adapt(m.Workspace())
+	}
 	return &openapi.Me{
-		Self: p.ua.Adapt(m.Self()),
-		Member: openapi.OptMember{
-			Set:   m.HasMember(),
-			Value: p.ma.Adapt(m.Member()),
-		},
-		CurrentWorkspace: openapi.OptWorkspace{
-			Set:   m.HasWorkspace(),
-			Value: p.wa.Adapt(m.Workspace()),
-		},
+		Self:             p.ua.Adapt(m.Self()),
+		Member:           mem,
+		CurrentWorkspace: cw,
 	}
 }

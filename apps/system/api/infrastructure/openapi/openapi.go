@@ -39,7 +39,7 @@ func Start(conf config.Reader) {
 
 	h, err := openapi.NewServer(
 		service.NewService(inj),
-		openapiMiddleware.NewSecMiddleware(),
+		openapiMiddleware.NewSecMiddleware(fb, co),
 	)
 
 	if err != nil {

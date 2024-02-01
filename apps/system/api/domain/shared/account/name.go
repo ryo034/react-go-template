@@ -13,15 +13,15 @@ const (
 	InvalidAccountName domainError.MessageKey = "invalid.account.name"
 )
 
-func NewName(v string) (*Name, error) {
+func NewName(v string) (Name, error) {
 	errs := validation.NewErrors()
 	if v == "" {
 		errs.Append(InvalidAccountName, v)
 	}
 	if errs.IsNotEmpty() {
-		return nil, errs
+		return Name{}, errs
 	}
-	return &Name{v}, nil
+	return Name{v}, nil
 }
 
 func (n Name) ToString() string {

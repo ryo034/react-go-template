@@ -17,6 +17,11 @@ update-package:
 generate:
 	@go generate ./...
 
+.PHONY: check
+check:
+	@go vet ./...
+	@staticcheck ./...
+
 .PHONY: format
 format:
 	@go fmt .

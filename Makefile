@@ -24,13 +24,7 @@ start:
 .PHONY: restart
 restart:
 	@docker-compose down
-	@docker-compose up -d api
-
-.PHONY: restart-statefull
-restart-statefull:
-	@docker-compose down
-	@rm -rf container/database/postgresql/primary/data
-	@rm -rf container/database/postgresql/replica/data
+	@make restart-db
 	@docker-compose up -d api
 
 .PHONY: restart-db
@@ -51,6 +45,7 @@ update-all-typescript-package:
 	@cd ./packages/typescript/network && ncu -u
 	@cd ./apps/system/client && ncu -u
 	@cd ./apps/system/test/api && ncu -u
+	@cd ./apps/system/test/e2e && ncu -u
 	@corepack pnpm install -r
 
 .PHONY: update-pnpm-version
@@ -63,6 +58,7 @@ update-pnpm-version:
 	@cd ./packages/typescript/network && corepack use pnpm@$(VERSION)
 	@cd ./apps/system/client && corepack use pnpm@$(VERSION)
 	@cd ./apps/system/test/api && corepack use pnpm@$(VERSION)
+	@cd ./apps/system/test/e2e && corepack use pnpm@$(VERSION)
 	@sed -i '' 's/"pnpm": "[^"]*"/"pnpm": "$(VERSION)"/' package.json
 	@corepack pnpm install -r
 
@@ -115,8 +111,8 @@ gen-system-openapi:
 	@make gen-system-client-openapi
 	@make gen-system-api-test-openapi
 
-.PHONY: gen-openapi
-gen-openapi:
+.PHONY: codegen
+codegen:
 	@make gen-system-openapi
 
 # ====================

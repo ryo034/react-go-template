@@ -13,6 +13,7 @@ MemberProfile:
   type: object
   required:
     - id
+    - displayName
   properties:
     id:
       type: string

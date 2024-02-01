@@ -164,3 +164,11 @@ func (s *User) Validate() error {
 	}
 	return nil
 }
+
+func (s Workspaces) Validate() error {
+	alias := ([]Workspace)(s)
+	if alias == nil {
+		return errors.New("nil is invalid value")
+	}
+	return nil
+}

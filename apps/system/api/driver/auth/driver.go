@@ -20,38 +20,53 @@ func NewDriver() Driver {
 }
 
 func (p *driver) Create(ctx context.Context, exec bun.IDB, aID account.ID, email account.Email) (*models.SystemAccount, error) {
-	sa := &models.SystemAccount{
+	sa := models.SystemAccount{
 		SystemAccountID: aID.Value(),
-		Profile: &models.SystemAccountProfile{
-			SystemAccountID: aID.Value(),
-			Name:            "",
-			Email:           email.ToString(),
-		},
 	}
 	_, err := exec.
 		NewInsert().
-		Model(sa).
+		Model(&sa).
 		Exec(ctx)
 	if err != nil {
 		return nil, err
 	}
 
+	sap := models.SystemAccountProfile{
+		SystemAccountID: aID.Value(),
+		Name:            "",
+		Email:           email.ToString(),
+	}
 	_, err = exec.
 		NewInsert().
-		Model(sa.Profile).
+		Model(&sap).
 		Exec(ctx)
+	if err != nil {
+		return nil, err
+	}
 
-	return sa, err
+	sa.Profile = &sap
+
+	return &sa, err
 }
 
 func (p *driver) Find(ctx context.Context, exec bun.IDB, email account.Email) (*models.SystemAccount, error) {
-	sa := &models.SystemAccount{}
+	sap := &models.SystemAccountProfile{}
 	err := exec.
+		NewSelect().
+		Model(sap).
+		Where("email = ?", email.ToString()).
+		Scan(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	sa := &models.SystemAccount{}
+	err = exec.
 		NewSelect().
 		Model(sa).
 		Relation("Profile").
 		Relation("PhoneNumber").
-		Where("profile.email = ?", email.ToString()).
+		Where("sa.system_account_id = ?", sap.SystemAccountID).
 		Scan(ctx)
 	if err != nil {
 		return nil, err

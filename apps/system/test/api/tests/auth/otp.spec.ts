@@ -7,10 +7,10 @@ const client = genAPIClient()
 test.describe("Otp API", () => {
   test.beforeEach(async ({ testIdAttribute }, testInfo) => {
     // console.log("beforeEach", )
-    console.log("beforeEach", testInfo)
+    // console.log("beforeEach", testInfo)
   })
   test("Create Account And Verify By OTP @stateful", async () => {
-    const email = "test@example.com"
+    const email = "test+999@example.com"
     const { data, response, error } = await client.POST("/api/v1/auth/otp", {
       headers: defaultPostHeaders,
       body: { email }

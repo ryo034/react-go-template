@@ -32,10 +32,29 @@ func (g *gateway) Find(ctx context.Context, exec bun.IDB, aID account.ID, wID wo
 	return g.a.Adapt(res, fu)
 }
 
+func (g *gateway) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*me.Me, error) {
+	res, err := g.md.FindBeforeOnboard(ctx, exec, aID)
+	if err != nil {
+		return nil, err
+	}
+	return g.a.AdaptSystemAccount(res)
+}
+
 func (g *gateway) Update(ctx context.Context, exec bun.IDB, m *me.Me) (*me.Me, error) {
 	res, err := g.md.Update(ctx, exec, m)
 	if err != nil {
 		return nil, err
 	}
 	return g.a.Adapt(res, nil)
+}
+
+func (g *gateway) UpdateName(ctx context.Context, exec bun.IDB, aID account.ID, name account.Name) (*me.Me, error) {
+	res, err := g.md.UpdateName(ctx, exec, aID, name)
+	if err != nil {
+		return nil, err
+	}
+	if err = g.fd.UpdateName(ctx, aID, name); err != nil {
+		return nil, err
+	}
+	return g.a.AdaptSystemAccount(res)
 }

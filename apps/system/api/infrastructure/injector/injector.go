@@ -34,7 +34,7 @@ func NewInjector(
 	la := sharedPresenter.NewLanguageAdapter(defaultLang)
 	messageResource := message.NewResource(defaultLang)
 	ui := newUseCaseInjector(conf.IsLocal(), co, ri, di, pi, d, txp)
-	ctrl := newControllerInjector(ui, messageResource, la)
+	ctrl := newControllerInjector(ui, messageResource, la, co)
 	return &Injector{
 		f,
 		conf,

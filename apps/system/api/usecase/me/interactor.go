@@ -13,6 +13,7 @@ type UseCase interface {
 	Login(ctx context.Context, aID account.ID, wID workspace.ID) (openapi.LoginRes, error)
 	Find(ctx context.Context, aID account.ID, wID workspace.ID) (openapi.APIV1MeGetRes, error)
 	Update(ctx context.Context, me *me.Me) (*openapi.Me, error)
+	UpdateName(ctx context.Context, i *UpdateNameInput) (*openapi.Me, error)
 }
 
 type useCase struct {
@@ -50,6 +51,22 @@ func (u *useCase) Update(ctx context.Context, m *me.Me) (*openapi.Me, error) {
 	}
 	fn := func() (*me.Me, error) {
 		return u.repo.Update(ctx, p, m)
+	}
+	result := pr.Transactional(fn)()
+	if err = result.Error(); err != nil {
+		return nil, err
+	}
+	return u.op.Find(result.Value(0).(*me.Me)), nil
+}
+
+func (u *useCase) UpdateName(ctx context.Context, i *UpdateNameInput) (*openapi.Me, error) {
+	p := u.dbp.GetExecutor(ctx, false)
+	pr, err := u.txp.Provide(ctx)
+	if err != nil {
+		return nil, err
+	}
+	fn := func() (*me.Me, error) {
+		return u.repo.UpdateName(pr, p, i.accountID, i.name)
 	}
 	result := pr.Transactional(fn)()
 	if err = result.Error(); err != nil {

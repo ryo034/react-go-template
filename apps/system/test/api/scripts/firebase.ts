@@ -1,19 +1,10 @@
-import { APIRequestContext } from "@playwright/test"
+import { readFileSync } from "fs"
 import { getApp, getApps, initializeApp } from "firebase-admin/app"
 import { MultiFactorCreateSettings, UserProvider, getAuth } from "firebase-admin/auth"
-
-const firebaseApiHost = process.env.FIREBASE_API_HOST || "http://localhost:9099/identitytoolkit.googleapis.com"
-const firebaseApiKey = process.env.FIREBASE_API_KEY || "test"
-
-interface FirebaseResult {
-  kind: string
-  registered: boolean
-  localId: string
-  email: string
-  idToken: string
-  refreshToken: string
-  expiresIn: string
-}
+import * as fba from "firebase/app"
+import * as fb from "firebase/auth"
+import { connectStorageEmulator, getStorage } from "firebase/storage"
+import { firebaseClientConfig, firebaseConfig } from "./config"
 
 export interface FirebaseUser {
   localId: string
@@ -29,7 +20,7 @@ export interface FirebaseUser {
   multiFactor: MultiFactorCreateSettings | null
 }
 
-interface FirebaseConfig {
+export interface FirebaseConfig {
   apiKey: string
   authDomain: string
   projectId: string
@@ -42,56 +33,59 @@ interface FirebaseConfig {
   }
 }
 
-export const getFirebaseApiKey = async (
-  request: APIRequestContext,
-  email: string,
-  password: string
-): Promise<FirebaseResult> => {
-  try {
-    const firebaseResult = await request.post(
-      `${firebaseApiHost}/v1/accounts:signInWithPassword?key=${firebaseApiKey}`,
-      {
-        headers: { "Content-Type": "application/json" },
-        data: { email, password, returnSecureToken: true }
-      }
-    )
-    const res = (await firebaseResult.json()) as FirebaseResult
-    if (!res.idToken) {
-      throw new Error("firebaseResult.idToken is undefined")
-    }
-    return res
-  } catch (e) {
-    console.error("failed to get firebase api key", e)
-  }
+export interface FirebaseTestConfig {
+  showConsole: boolean
 }
 
+const firebaseAuthEmulatorHost = "http://localhost:9099"
+
 export class Firebase {
-  private auth: ReturnType<typeof getAuth>
-  private constructor(config: FirebaseConfig) {
-    if (config.localConfig) {
-      console.log("Setting up Firebase Emulator...")
-      process.env.FIREBASE_AUTH_EMULATOR_HOST = config.localConfig.firebaseEmulatorHost
-      process.env.FIRESTORE_EMULATOR_HOST = config.localConfig.firestoreEmulatorHost
+  private firebaseAdminAuth: ReturnType<typeof getAuth>
+  private firebaseClientAuth: ReturnType<typeof fb.getAuth>
+
+  constructor(
+    private readonly config: FirebaseConfig,
+    private readonly testConfig: FirebaseTestConfig = { showConsole: false }
+  ) {
+    if (this.config.localConfig) {
+      if (testConfig.showConsole) console.log("Setting up Firebase Emulator...")
+      process.env.FIREBASE_AUTH_EMULATOR_HOST = this.config.localConfig.firebaseEmulatorHost
+      process.env.FIRESTORE_EMULATOR_HOST = this.config.localConfig.firestoreEmulatorHost
     }
     const firebase = getApps().length === 0 ? initializeApp(config) : getApp()
-    this.auth = getAuth(firebase)
-  }
+    this.firebaseAdminAuth = getAuth(firebase)
 
-  static getInstance(config: FirebaseConfig) {
-    return new Firebase(config)
+    // Firebase Client
+    const fbc = fba.initializeApp(firebaseClientConfig)
+    const firebaseAuth = fb.getAuth(fbc)
+    if (this.config.localConfig) {
+      fb.connectAuthEmulator(firebaseAuth, firebaseAuthEmulatorHost, { disableWarnings: true })
+    }
+    this.firebaseClientAuth = firebaseAuth
   }
 
   async clear() {
-    console.log("Clearing firebase...")
-    const users = await this.auth.listUsers()
+    if (this.testConfig.showConsole) console.log("Clearing firebase...")
+    const users = await this.firebaseAdminAuth.listUsers()
     for (const u of users.users) {
-      await this.auth.revokeRefreshTokens(u.uid)
+      await this.firebaseAdminAuth.revokeRefreshTokens(u.uid)
     }
-    await this.auth.deleteUsers(users.users.map((user) => user.uid))
+    await this.firebaseAdminAuth.deleteUsers(users.users.map((u: any) => u.uid))
   }
 
-  async setup(users: FirebaseUser[]) {
-    console.log("Setting up firebase...")
+  async signInWithCustomToken(token: string) {
+    const res = await fb.signInWithCustomToken(this.firebaseClientAuth, token)
+    return await res.user.getIdTokenResult()
+  }
+
+  get authInstance() {
+    return this.firebaseAdminAuth
+  }
+
+  async setup() {
+    const jsonData = JSON.parse(readFileSync("./setup/firebase/auth/users.json", "utf8").toString())
+    const users = jsonData.users as FirebaseUser[]
+    if (this.testConfig.showConsole) console.log("Setting up firebase...")
     for (let idx = 0; idx < users.length; idx++) {
       let mfa: MultiFactorCreateSettings | undefined
       if (users[idx].mfaInfo) {
@@ -106,14 +100,14 @@ export class Firebase {
           })
         }
       }
-      const password = users[idx].passwordHash.split(":")[2].split("=")[1]
+      // const password = users[idx].passwordHash.split(":")[2].split("=")[1]
       try {
-        await this.auth.createUser({
+        await this.firebaseAdminAuth.createUser({
           uid: users[idx].localId,
           email: users[idx].email,
           emailVerified: users[idx].emailVerified,
           phoneNumber: users[idx].phoneNumber,
-          password,
+          // password,
           displayName: users[idx].displayName,
           photoURL: users[idx].photoURL,
           disabled: users[idx].disabled,

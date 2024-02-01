@@ -58,11 +58,38 @@ func (UnimplementedHandler) APIV1PingGet(ctx context.Context) (r APIV1PingGetRes
 	return r, ht.ErrNotImplemented
 }
 
+// APIV1WorkspacesGet implements GET /api/v1/workspaces operation.
+//
+// Returns the workspaces the user is a member of.
+//
+// GET /api/v1/workspaces
+func (UnimplementedHandler) APIV1WorkspacesGet(ctx context.Context) (r APIV1WorkspacesGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1WorkspacesPost implements POST /api/v1/workspaces operation.
+//
+// Creates a new workspace.
+//
+// POST /api/v1/workspaces
+func (UnimplementedHandler) APIV1WorkspacesPost(ctx context.Context, req *APIV1WorkspacesPostReq) (r APIV1WorkspacesPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // Login implements login operation.
 //
 // Login.
 //
 // POST /api/v1/login
 func (UnimplementedHandler) Login(ctx context.Context) (r LoginRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// UpdateName implements updateName operation.
+//
+// Update Name.
+//
+// POST /api/v1/me/update-name
+func (UnimplementedHandler) UpdateName(ctx context.Context, req *UpdateNameReq) (r UpdateNameRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

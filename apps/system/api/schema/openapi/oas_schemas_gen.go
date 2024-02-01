@@ -96,6 +96,33 @@ func (s *APIV1PingGetOK) SetMessage(val OptString) {
 
 func (*APIV1PingGetOK) aPIV1PingGetRes() {}
 
+type APIV1WorkspacesPostReq struct {
+	// Workspace name.
+	Name string `json:"name"`
+	// Workspace subdomain (e.x. example-test).
+	Subdomain string `json:"subdomain"`
+}
+
+// GetName returns the value of Name.
+func (s *APIV1WorkspacesPostReq) GetName() string {
+	return s.Name
+}
+
+// GetSubdomain returns the value of Subdomain.
+func (s *APIV1WorkspacesPostReq) GetSubdomain() string {
+	return s.Subdomain
+}
+
+// SetName sets the value of Name.
+func (s *APIV1WorkspacesPostReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetSubdomain sets the value of Subdomain.
+func (s *APIV1WorkspacesPostReq) SetSubdomain(val string) {
+	s.Subdomain = val
+}
+
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type BadRequestError struct {
 	// The HTTP status code generated for this occurrence of the problem.
@@ -163,6 +190,8 @@ func (s *BadRequestError) SetCode(val OptString) {
 func (*BadRequestError) aPIV1AuthOAuthPostRes()     {}
 func (*BadRequestError) aPIV1AuthOtpPostRes()       {}
 func (*BadRequestError) aPIV1AuthOtpVerifyPostRes() {}
+func (*BadRequestError) aPIV1WorkspacesPostRes()    {}
+func (*BadRequestError) updateNameRes()             {}
 
 type Bearer struct {
 	Token string
@@ -177,6 +206,72 @@ func (s *Bearer) GetToken() string {
 func (s *Bearer) SetToken(val string) {
 	s.Token = val
 }
+
+// RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
+type ConflictError struct {
+	// The HTTP status code generated for this occurrence of the problem.
+	Status OptInt `json:"status"`
+	// Error type.
+	Type OptString `json:"type"`
+	// A short, human-readable summary of the problem type.
+	Title OptString `json:"title"`
+	// A human-readable explanation specific to this occurrence of the problem.
+	Detail OptString `json:"detail"`
+	// Error code.
+	Code OptString `json:"code"`
+}
+
+// GetStatus returns the value of Status.
+func (s *ConflictError) GetStatus() OptInt {
+	return s.Status
+}
+
+// GetType returns the value of Type.
+func (s *ConflictError) GetType() OptString {
+	return s.Type
+}
+
+// GetTitle returns the value of Title.
+func (s *ConflictError) GetTitle() OptString {
+	return s.Title
+}
+
+// GetDetail returns the value of Detail.
+func (s *ConflictError) GetDetail() OptString {
+	return s.Detail
+}
+
+// GetCode returns the value of Code.
+func (s *ConflictError) GetCode() OptString {
+	return s.Code
+}
+
+// SetStatus sets the value of Status.
+func (s *ConflictError) SetStatus(val OptInt) {
+	s.Status = val
+}
+
+// SetType sets the value of Type.
+func (s *ConflictError) SetType(val OptString) {
+	s.Type = val
+}
+
+// SetTitle sets the value of Title.
+func (s *ConflictError) SetTitle(val OptString) {
+	s.Title = val
+}
+
+// SetDetail sets the value of Detail.
+func (s *ConflictError) SetDetail(val OptString) {
+	s.Detail = val
+}
+
+// SetCode sets the value of Code.
+func (s *ConflictError) SetCode(val OptString) {
+	s.Code = val
+}
+
+func (*ConflictError) aPIV1WorkspacesPostRes() {}
 
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type InternalServerError struct {
@@ -247,7 +342,10 @@ func (*InternalServerError) aPIV1AuthOtpPostRes()       {}
 func (*InternalServerError) aPIV1AuthOtpVerifyPostRes() {}
 func (*InternalServerError) aPIV1MeGetRes()             {}
 func (*InternalServerError) aPIV1PingGetRes()           {}
+func (*InternalServerError) aPIV1WorkspacesGetRes()     {}
+func (*InternalServerError) aPIV1WorkspacesPostRes()    {}
 func (*InternalServerError) loginRes()                  {}
+func (*InternalServerError) updateNameRes()             {}
 
 // Ref: #/components/schemas/Me
 type Me struct {
@@ -288,6 +386,7 @@ func (s *Me) SetCurrentWorkspace(val OptWorkspace) {
 
 func (*Me) aPIV1MeGetRes() {}
 func (*Me) loginRes()      {}
+func (*Me) updateNameRes() {}
 
 // Ref: #/components/schemas/Member
 type Member struct {
@@ -319,7 +418,7 @@ func (s *Member) SetUser(val User) {
 type MemberProfile struct {
 	// Base32 encoded UUID.
 	ID          string    `json:"id"`
-	DisplayName OptString `json:"displayName"`
+	DisplayName string    `json:"displayName"`
 	IdNumber    OptString `json:"idNumber"`
 }
 
@@ -329,7 +428,7 @@ func (s *MemberProfile) GetID() string {
 }
 
 // GetDisplayName returns the value of DisplayName.
-func (s *MemberProfile) GetDisplayName() OptString {
+func (s *MemberProfile) GetDisplayName() string {
 	return s.DisplayName
 }
 
@@ -344,7 +443,7 @@ func (s *MemberProfile) SetID(val string) {
 }
 
 // SetDisplayName sets the value of DisplayName.
-func (s *MemberProfile) SetDisplayName(val OptString) {
+func (s *MemberProfile) SetDisplayName(val string) {
 	s.DisplayName = val
 }
 
@@ -604,6 +703,21 @@ func (s *TooManyRequestsError) SetCode(val OptString) {
 func (*TooManyRequestsError) aPIV1AuthOtpPostRes()       {}
 func (*TooManyRequestsError) aPIV1AuthOtpVerifyPostRes() {}
 
+type UpdateNameReq struct {
+	// Name.
+	Name string `json:"name"`
+}
+
+// GetName returns the value of Name.
+func (s *UpdateNameReq) GetName() string {
+	return s.Name
+}
+
+// SetName sets the value of Name.
+func (s *UpdateNameReq) SetName(val string) {
+	s.Name = val
+}
+
 // Ref: #/components/schemas/User
 type User struct {
 	UserId      uuid.UUID `json:"userId"`
@@ -658,7 +772,10 @@ func (*User) aPIV1AuthOAuthPostRes() {}
 type Workspace struct {
 	// Base32 encoded UUID.
 	WorkspaceId string `json:"workspaceId"`
-	Name        string `json:"name"`
+	// Workspace name.
+	Name string `json:"name"`
+	// Workspace subdomain (e.x. example-test).
+	Subdomain string `json:"subdomain"`
 }
 
 // GetWorkspaceId returns the value of WorkspaceId.
@@ -671,6 +788,11 @@ func (s *Workspace) GetName() string {
 	return s.Name
 }
 
+// GetSubdomain returns the value of Subdomain.
+func (s *Workspace) GetSubdomain() string {
+	return s.Subdomain
+}
+
 // SetWorkspaceId sets the value of WorkspaceId.
 func (s *Workspace) SetWorkspaceId(val string) {
 	s.WorkspaceId = val
@@ -680,3 +802,14 @@ func (s *Workspace) SetWorkspaceId(val string) {
 func (s *Workspace) SetName(val string) {
 	s.Name = val
 }
+
+// SetSubdomain sets the value of Subdomain.
+func (s *Workspace) SetSubdomain(val string) {
+	s.Subdomain = val
+}
+
+func (*Workspace) aPIV1WorkspacesPostRes() {}
+
+type Workspaces []Workspace
+
+func (*Workspaces) aPIV1WorkspacesGetRes() {}

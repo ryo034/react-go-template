@@ -11,7 +11,9 @@ import (
 
 type Driver interface {
 	Find(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error)
+	FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*models.SystemAccount, error)
 	Update(ctx context.Context, exec bun.IDB, m *me.Me) (*models.Member, error)
+	UpdateName(ctx context.Context, exec bun.IDB, aID account.ID, name account.Name) (*models.SystemAccount, error)
 }
 
 type driver struct {
@@ -39,6 +41,21 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, aID account.ID, wID wor
 	return mem, nil
 }
 
+func (d *driver) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*models.SystemAccount, error) {
+	sysAcc := &models.SystemAccount{}
+	err := exec.
+		NewSelect().
+		Model(sysAcc).
+		Relation("Profile").
+		Relation("PhoneNumber").
+		Where("sa.system_account_id = ?", aID.ToString()).
+		Scan(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return sysAcc, nil
+}
+
 func (d *driver) Update(ctx context.Context, exec bun.IDB, m *me.Me) (*models.Member, error) {
 	mem := &models.Member{}
 	_, err := exec.
@@ -51,4 +68,26 @@ func (d *driver) Update(ctx context.Context, exec bun.IDB, m *me.Me) (*models.Me
 		return nil, err
 	}
 	return mem, nil
+}
+
+func (d *driver) UpdateName(ctx context.Context, exec bun.IDB, aID account.ID, name account.Name) (*models.SystemAccount, error) {
+	res, err := d.FindBeforeOnboard(ctx, exec, aID)
+	if err != nil {
+		return nil, err
+	}
+	res.Profile.Name = name.ToString()
+	m := models.SystemAccountProfile{
+		SystemAccountID: aID.Value(),
+		Name:            name.ToString(),
+		Email:           res.Profile.Email,
+	}
+	_, err = exec.
+		NewUpdate().
+		Model(&m).
+		Where("system_account_id = ?", aID.ToString()).
+		Exec(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }

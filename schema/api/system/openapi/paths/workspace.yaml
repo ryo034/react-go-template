@@ -1,0 +1,39 @@
+workspaces:
+  get:
+    summary: Get Joined Workspaces
+    description: Returns the workspaces the user is a member of
+    tags:
+      - Admin
+    security:
+      - bearer: []
+    responses:
+      "200":
+        description: Joined Workspaces
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Workspaces"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+  post:
+    summary: Create Workspace
+    description: Creates a new workspace
+    tags:
+      - Admin
+    security:
+      - bearer: []
+    requestBody:
+      $ref: "#/components/requestBodies/CreateWorkspace"
+    responses:
+      "201":
+        description: Workspace created
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Workspace"
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "409":
+        $ref: "#/components/responses/ConflictError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"

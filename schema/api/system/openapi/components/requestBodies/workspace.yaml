@@ -1,0 +1,17 @@
+CreateWorkspace:
+  description: Creates a new workspace
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - name
+          - subdomain
+        properties:
+          name:
+            type: string
+            description: workspace name
+          subdomain:
+            type: string
+            description: workspace subdomain (e.x. example-test)

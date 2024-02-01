@@ -169,7 +169,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
 					switch r.Method {
 					case "GET":
 						s.handleAPIV1MeGetRequest([0]string{}, elemIsEscaped, w, r)
@@ -178,6 +177,29 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					return
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/update-name"
+					origElem := elem
+					if l := len("/update-name"); len(elem) >= l && elem[0:l] == "/update-name" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleUpdateNameRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
@@ -196,6 +218,29 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						s.handleAPIV1PingGetRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET")
+					}
+
+					return
+				}
+
+				elem = origElem
+			case 'w': // Prefix: "workspaces"
+				origElem := elem
+				if l := len("workspaces"); len(elem) >= l && elem[0:l] == "workspaces" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "GET":
+						s.handleAPIV1WorkspacesGetRequest([0]string{}, elemIsEscaped, w, r)
+					case "POST":
+						s.handleAPIV1WorkspacesPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
 					}
 
 					return
@@ -424,7 +469,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						// Leaf: APIV1MeGet
 						r.name = "APIV1MeGet"
 						r.summary = "Get Admin User"
 						r.operationID = ""
@@ -435,6 +479,33 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					default:
 						return
 					}
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/update-name"
+					origElem := elem
+					if l := len("/update-name"); len(elem) >= l && elem[0:l] == "/update-name" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch method {
+						case "POST":
+							// Leaf: UpdateName
+							r.name = "UpdateName"
+							r.summary = "Update Name"
+							r.operationID = "updateName"
+							r.pathPattern = "/api/v1/me/update-name"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
@@ -454,6 +525,40 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.summary = "Checks if the server is running"
 						r.operationID = ""
 						r.pathPattern = "/api/v1/ping"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+
+				elem = origElem
+			case 'w': // Prefix: "workspaces"
+				origElem := elem
+				if l := len("workspaces"); len(elem) >= l && elem[0:l] == "workspaces" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch method {
+					case "GET":
+						// Leaf: APIV1WorkspacesGet
+						r.name = "APIV1WorkspacesGet"
+						r.summary = "Get Joined Workspaces"
+						r.operationID = ""
+						r.pathPattern = "/api/v1/workspaces"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						// Leaf: APIV1WorkspacesPost
+						r.name = "APIV1WorkspacesPost"
+						r.summary = "Create Workspace"
+						r.operationID = ""
+						r.pathPattern = "/api/v1/workspaces"
 						r.args = args
 						r.count = 0
 						return r, true
