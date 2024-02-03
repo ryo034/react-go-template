@@ -1,14 +1,21 @@
 import { expect, test } from "@playwright/test"
-import { headers } from "../../config/config"
+import { authHeaders } from "../../config/config"
 import { genAPIClient, getAuthInfo } from "../../scripts"
 const client = genAPIClient()
 
 test.describe("Me success", () => {
-  test("success", async () => {
+  test("if onboarding is completed, response include workspace info", async () => {
     const authInfo = await getAuthInfo("system_account@example.com")
-    const hs = headers(authInfo.token)
-    const res = await client.GET("/api/v1/me", { headers: hs })
+    const res = await client.GET("/api/v1/me", { headers: authHeaders(authInfo.token) })
     expect(res.response.status).toBe(200)
     expect(res.data).toStrictEqual((await import("./success.json")).default)
+  })
+
+  test("if onboarding is not completed, response not include workspace info", async () => {
+    const authInfo = await getAuthInfo("unfinished_onboarding@example.com")
+    expect(authInfo.currentWorkspaceId).toBe("")
+    const res = await client.GET("/api/v1/me", { headers: authHeaders(authInfo.token) })
+    expect(res.response.status).toBe(200)
+    expect(res.data).toStrictEqual((await import("./unfinished_onboarding.json")).default)
   })
 })

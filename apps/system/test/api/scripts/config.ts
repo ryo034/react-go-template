@@ -3,6 +3,7 @@ export const isLocal = env === "localhost"
 export const homeURL = process.env.HOME_URL || "http://localhost:5173"
 export const initializeData = process.env.DO_INITIALIZE_DATA || "false"
 export const rootPath = initializeData === "true" && env !== "localhost" ? "./e2e" : "."
+export const isSilent = process.env.SILENT === "true" || false
 
 export const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY || "test",

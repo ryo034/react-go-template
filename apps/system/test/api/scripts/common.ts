@@ -1,5 +1,5 @@
 import { test } from "@playwright/test"
-import { defaultPostHeaders, headers } from "config/config"
+import { authHeaders, defaultPostHeaders } from "config/config"
 import createClient from "openapi-fetch"
 import { paths } from "../schema/openapi/systemApi"
 import { firebaseConfig } from "./config"

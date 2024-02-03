@@ -20,14 +20,12 @@
     "user": {
       "email": "system_account@example.com",
       "name": "John Doe",
-      "phoneNumber": "09012345678",
       "userId": "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
     }
   },
   "self": {
     "email": "system_account@example.com",
     "name": "John Doe",
-    "phoneNumber": "09012345678",
     "userId": "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
   }
 }

@@ -30,6 +30,9 @@ func (a *adapter) Adapt(w *workspace.Workspace) openapi.Workspace {
 }
 
 func (a *adapter) AdaptAll(ws workspace.Workspaces) []openapi.Workspace {
+	if ws == nil {
+		return nil
+	}
 	res := make([]openapi.Workspace, 0, ws.Size())
 	for _, w := range ws.AsSlice() {
 		res = append(res, a.Adapt(w))

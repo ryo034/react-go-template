@@ -28,11 +28,7 @@ func (c *controller) Find(ctx context.Context) (openapi.APIV1MeGetRes, error) {
 	if err != nil {
 		return nil, err
 	}
-	res, err := c.uc.Find(ctx, aID)
-	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1MeGetRes), nil
-	}
-	return res, nil
+	return c.uc.Find(ctx, aID)
 }
 
 type UpdateNameInput struct {
@@ -48,9 +44,5 @@ func (c *controller) UpdateName(ctx context.Context, i UpdateNameInput) (openapi
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.UpdateNameRes), nil
 	}
-	res, err := c.uc.UpdateName(ctx, in)
-	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.UpdateNameRes), nil
-	}
-	return res, nil
+	return c.uc.UpdateName(ctx, in)
 }

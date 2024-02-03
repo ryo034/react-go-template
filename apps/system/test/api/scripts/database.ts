@@ -2,14 +2,19 @@ import { readFileSync } from "fs"
 import { parse } from "csv-parse/sync"
 import { Client, types } from "pg"
 import format from "pg-format"
-import { dbConfig, env, initializeData } from "./config"
+import { dbConfig, env, initializeData, isSilent } from "./config"
 
 const logWithEllipsis = (text: string, maxLength = 50) => {
   if (text.length > maxLength) {
-    console.log(`${text.substring(0, maxLength)}...`)
+    showLog(`${text.substring(0, maxLength)}...`)
   } else {
-    console.log(text)
+    showLog(text)
   }
+}
+
+const showLog = (text: string) => {
+  if (isSilent) return
+  console.log(text)
 }
 
 interface Database {

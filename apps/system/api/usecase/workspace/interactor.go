@@ -56,7 +56,11 @@ func (u *useCase) Create(ctx context.Context, i *CreateInput) (openapi.APIV1Work
 			return nil, err
 		}
 
-		if err = u.meRepo.LastLogin(pr, p, meRes); err != nil {
+		reMeRes, err := u.meRepo.Find(pr, p, meRes.Self().AccountID(), wres.ID())
+		if err != nil {
+			return nil, err
+		}
+		if err = u.meRepo.LastLogin(pr, p, reMeRes); err != nil {
 			return nil, err
 		}
 		return wres, nil

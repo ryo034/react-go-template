@@ -40,7 +40,7 @@ func Test_OrpRateLimiterMiddleware_Burst(t *testing.T) {
 	defer server.Close()
 
 	// Confirm that multiple users can access without affecting each other's rate limits
-	body1 := `{"email":"test+1@example.com"}`
+	body1 := `{"email":"unfinished_onboarding@example.com"}`
 	body2 := `{"email":"test+2@example.com"}`
 
 	// Under the limit

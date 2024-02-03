@@ -2,11 +2,8 @@
   "name": "system-api-test",
   "description": "API test",
   "scripts": {
-    "test-o": "PARALLEL=false playwright test ./tests/auth/otp.spec.ts",
-    "test-w": "PARALLEL=false playwright test ./tests/workspace/validation.spec.ts",
-    "test-m": "PARALLEL=false playwright test ./tests/me/me.spec.ts",
-    "test:stateless": "PARALLEL=true playwright test --grep-invert @stateful",
-    "test:stateful": "PARALLEL=false playwright test --grep @stateful"
+    "test:stateless": "PARALLEL=true SILENT=true playwright test --workers=3 --grep-invert @stateful",
+    "test:stateful": "PARALLEL=false SILENT=true playwright test --workers=1 --grep @stateful"
   },
   "dependencies": {
     "dotenv": "^16.4.1",

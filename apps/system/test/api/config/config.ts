@@ -5,7 +5,7 @@ export const defaultPostHeaders = {
   origin
 }
 
-export const headers = (token: string) => {
+export const authHeaders = (token: string) => {
   if (!token) return defaultPostHeaders
   return {
     ...defaultPostHeaders,

@@ -13,12 +13,12 @@ VALUES
 INSERT INTO system_account_profiles (system_account_id, name, email, created_at, updated_at)
 VALUES
 ('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'John Doe', 'system_account@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018d6189-9ad0-7b72-801b-1e0de0d3c214', 'タロウ 認証済', 'test+1@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
+('018d6189-9ad0-7b72-801b-1e0de0d3c214', 'Unfinished Onboarding', 'unfinished_onboarding@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
 
-INSERT INTO system_account_phone_numbers (system_account_id, phone_number, created_at, updated_at)
-VALUES
-('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', '09012345678', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018d6189-9ad0-7b72-801b-1e0de0d3c214', '09012345679', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
+-- INSERT INTO system_account_phone_numbers (system_account_id, phone_number, created_at, updated_at)
+-- VALUES
+-- ('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', '09012345678', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
+-- ('018d6189-9ad0-7b72-801b-1e0de0d3c214', '09012345679', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
 
 INSERT INTO workspaces (workspace_id, created_at)
 VALUES

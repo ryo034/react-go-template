@@ -3,8 +3,6 @@ import { config } from "dotenv"
 
 config()
 
-console.log("process.env.PARALLEL", process.env.PARALLEL)
-
 const globalSetupFilePath = "./scripts/global.setup"
 const globalTeardownFilePath = "./scripts/global.teardown"
 
@@ -19,10 +17,11 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   globalSetup: globalSetupFilePath,
   globalTeardown: globalTeardownFilePath,
-  timeout: 30000,
+  timeout: 15000,
   reporter: process.env.CI ? "html" : "line",
   use: {
-    trace: "on-first-retry"
+    trace: process.env.CI ? "on-first-retry" : "on",
+    video: process.env.CI ? "on-first-retry" : "on"
   },
   projects: [
     {
