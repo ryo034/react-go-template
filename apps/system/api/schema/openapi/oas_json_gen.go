@@ -1008,12 +1008,21 @@ func (s *Me) encodeFields(e *jx.Encoder) {
 			s.CurrentWorkspace.Encode(e)
 		}
 	}
+	{
+		e.FieldStart("joinedWorkspaces")
+		e.ArrStart()
+		for _, elem := range s.JoinedWorkspaces {
+			elem.Encode(e)
+		}
+		e.ArrEnd()
+	}
 }
 
-var jsonFieldsNameOfMe = [3]string{
+var jsonFieldsNameOfMe = [4]string{
 	0: "self",
 	1: "member",
 	2: "currentWorkspace",
+	3: "joinedWorkspaces",
 }
 
 // Decode decodes Me from json.
@@ -1055,6 +1064,24 @@ func (s *Me) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"currentWorkspace\"")
 			}
+		case "joinedWorkspaces":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				s.JoinedWorkspaces = make([]Workspace, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem Workspace
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.JoinedWorkspaces = append(s.JoinedWorkspaces, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"joinedWorkspaces\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -1065,7 +1092,7 @@ func (s *Me) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000001,
+		0b00001001,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

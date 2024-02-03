@@ -28,9 +28,13 @@ INSERT INTO workspace_details (workspace_id, name, subdomain, created_at, update
 VALUES
 ('c1bd2603-b9cd-4f84-8b83-3548f6ae150b', 'Example', 'example', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
 
-INSERT INTO members (member_id, workspace_id, system_account_id, created_at)
+INSERT INTO members (member_id, system_account_id, workspace_id, created_at)
 VALUES
-('377eba35-5560-4f48-a99d-19cbd6a82b0d', 'c1bd2603-b9cd-4f84-8b83-3548f6ae150b', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', '2024-01-10 12:00:00');
+('377eba35-5560-4f48-a99d-19cbd6a82b0d', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'c1bd2603-b9cd-4f84-8b83-3548f6ae150b', '2024-01-10 12:00:00');
+
+INSERT INTO member_login_histories (member_login_history_id, member_id, login_at)
+VALUES
+('018d6bc0-3884-7420-a802-f857192c7e24', '377eba35-5560-4f48-a99d-19cbd6a82b0d', '2024-01-10 12:00:00');
 
 INSERT INTO member_profiles (member_id, member_id_number, display_name, created_at, updated_at)
 VALUES

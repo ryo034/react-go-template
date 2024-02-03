@@ -11,7 +11,7 @@ import (
 
 type UseCase interface {
 	Login(ctx context.Context, aID account.ID, wID workspace.ID) (openapi.LoginRes, error)
-	Find(ctx context.Context, aID account.ID, wID workspace.ID) (openapi.APIV1MeGetRes, error)
+	Find(ctx context.Context, aID account.ID) (openapi.APIV1MeGetRes, error)
 	Update(ctx context.Context, me *me.Me) (*openapi.Me, error)
 	UpdateName(ctx context.Context, i *UpdateNameInput) (*openapi.Me, error)
 }
@@ -35,12 +35,19 @@ func (u *useCase) Login(ctx context.Context, aID account.ID, wID workspace.ID) (
 	return u.op.Find(res), nil
 }
 
-func (u *useCase) Find(ctx context.Context, aID account.ID, wID workspace.ID) (openapi.APIV1MeGetRes, error) {
-	res, err := u.repo.Find(ctx, u.dbp.GetExecutor(ctx, true), aID, wID)
+func (u *useCase) Find(ctx context.Context, aID account.ID) (openapi.APIV1MeGetRes, error) {
+	exec := u.dbp.GetExecutor(ctx, true)
+	lastLoginRes, err := u.repo.FindLastLogin(ctx, exec, aID)
+	if lastLoginRes != nil {
+		return u.op.Find(lastLoginRes), nil
+	}
+	// If there is no last login information,
+	//　it is considered that the user has not joined the workspace.
+	m, err := u.repo.FindBeforeOnboard(ctx, exec, aID)
 	if err != nil {
 		return nil, err
 	}
-	return u.op.Find(res), nil
+	return u.op.Find(m), nil
 }
 
 func (u *useCase) Update(ctx context.Context, m *me.Me) (*openapi.Me, error) {

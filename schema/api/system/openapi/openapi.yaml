@@ -306,6 +306,7 @@ components:
       type: object
       required:
         - self
+        - joinedWorkspaces
       properties:
         self:
           $ref: '#/components/schemas/User'
@@ -313,6 +314,10 @@ components:
           $ref: '#/components/schemas/Member'
         currentWorkspace:
           $ref: '#/components/schemas/Workspace'
+        joinedWorkspaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/Workspace'
   requestBodies:
     CreateWorkspace:
       description: Creates a new workspace

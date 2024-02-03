@@ -57,6 +57,14 @@ CREATE TABLE members (
   CONSTRAINT fk_members_workspaces_workspace_id FOREIGN KEY (workspace_id) REFERENCES workspaces(workspace_id)
 );
 
+CREATE TABLE member_login_histories (
+  member_login_history_id uuid NOT NULL,
+  member_id uuid NOT NULL,
+  login_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (member_login_history_id),
+  CONSTRAINT fk_member_login_histories_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id)
+);
+
 CREATE TABLE member_profiles (
   member_id uuid NOT NULL,
   member_id_number VARCHAR(255) NOT NULL,

@@ -1,0 +1,33 @@
+{
+  "currentWorkspace": {
+    "name": "Example",
+    "subdomain": "example",
+    "workspaceId": "yg6sma5zzvhyjc4dgvepnlqvbm"
+  },
+  "joinedWorkspaces": [
+    {
+      "name": "Example",
+      "subdomain": "example",
+      "workspaceId": "yg6sma5zzvhyjc4dgvepnlqvbm"
+    }
+  ],
+  "member": {
+    "profile": {
+      "displayName": "John Doe",
+      "id": "g57lunkvmbhurkm5dhf5nkblbu",
+      "idNumber": "DEV-12345"
+    },
+    "user": {
+      "email": "system_account@example.com",
+      "name": "John Doe",
+      "phoneNumber": "09012345678",
+      "userId": "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
+    }
+  },
+  "self": {
+    "email": "system_account@example.com",
+    "name": "John Doe",
+    "phoneNumber": "09012345678",
+    "userId": "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
+  }
+}

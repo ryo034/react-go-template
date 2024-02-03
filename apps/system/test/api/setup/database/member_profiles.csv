@@ -1,2 +1,2 @@
 member_id,member_id_number,display_name,created_at,updated_at
-377eba35-5560-4f48-a99d-19cbd6a82b0d,DEV-12345,John Doe,2024-01-10 12:00:00.000000,2024-01-10 12:00:00.000000
+377eba35-5560-4f48-a99d-19cbd6a82b0d,DEV-12345,John Doe,2024-01-10 12:00:00.000000 +00:00,2024-01-10 12:00:00.000000 +00:00

@@ -30,9 +30,11 @@ func (p *presenter) Find(m *me.Me) *openapi.Me {
 		cw.Set = true
 		cw.Value = p.wa.Adapt(m.Workspace())
 	}
+
 	return &openapi.Me{
 		Self:             p.ua.Adapt(m.Self()),
 		Member:           mem,
 		CurrentWorkspace: cw,
+		JoinedWorkspaces: p.wa.AdaptAll(m.JoinedWorkspaces()),
 	}
 }

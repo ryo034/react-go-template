@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"github.com/go-faster/errors"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/auth"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/email"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
@@ -22,12 +23,13 @@ type useCase struct {
 	txp     core.TransactionProvider
 	dbp     core.Provider
 	repo    auth.Repository
+	meRepo  me.Repository
 	emailDr email.Driver
 	fbDr    firebase.Driver
 }
 
-func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo auth.Repository, emailDr email.Driver, fbDr firebase.Driver) UseCase {
-	return &useCase{txp, dbp, acRepo, emailDr, fbDr}
+func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo auth.Repository, meRepo me.Repository, emailDr email.Driver, fbDr firebase.Driver) UseCase {
+	return &useCase{txp, dbp, acRepo, meRepo, emailDr, fbDr}
 }
 
 func (u *useCase) AuthByTOTP(ctx context.Context, i ByTOTPInput) (openapi.APIV1AuthOtpPostRes, error) {
@@ -41,6 +43,18 @@ func (u *useCase) AuthByTOTP(ctx context.Context, i ByTOTPInput) (openapi.APIV1A
 	return &openapi.APIV1AuthOtpPostOK{Code: code}, nil
 }
 
+// memberLastLogin If there is information about the last logged-in workspace,put that workspace information in the jwt.
+func (u *useCase) memberLastLogin(ctx context.Context, exec bun.IDB, aID account.ID) error {
+	meRes, err := u.meRepo.FindLastLogin(ctx, exec, aID)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return err
+	}
+	if errors.Is(err, sql.ErrNoRows) || meRes.NotJoined() {
+		return nil
+	}
+	return u.meRepo.LastLogin(ctx, exec, meRes)
+}
+
 func (u *useCase) VerifyTOTP(ctx context.Context, i VerifyTOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
 	pr, err := u.txp.Provide(ctx)
@@ -52,12 +66,21 @@ func (u *useCase) VerifyTOTP(ctx context.Context, i VerifyTOTPInput) (openapi.AP
 		if err != nil && !errors.Is(err, sql.ErrNoRows) {
 			return "", err
 		}
-		// if user exists, verify TOTP and return custom token
-		if usr != nil {
-			return u.verifyTOTP(pr, usr.AccountID(), i.Email, i.Otp)
+		if usr == nil {
+			// if user does not exist, create user, verify TOTP and return custom token
+			return u.verifyTOTPWithCreate(pr, p, i.Email, i.Otp)
 		}
-		// if user does not exist, create user, verify TOTP and return custom token
-		return u.verifyTOTPWithCreate(pr, p, i.Email, i.Otp)
+
+		// if user exists, verify TOTP and return custom token
+		tk, err := u.verifyTOTP(pr, usr.AccountID(), i.Email, i.Otp)
+		if err != nil {
+			return "", err
+		}
+
+		if err = u.memberLastLogin(pr, p, usr.AccountID()); err != nil {
+			return "", err
+		}
+		return tk, nil
 	}
 	result := pr.Transactional(fn)()
 	if err = result.Error(); err != nil {

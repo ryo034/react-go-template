@@ -223,6 +223,7 @@ export interface components {
       self: components["schemas"]["User"];
       member?: components["schemas"]["Member"];
       currentWorkspace?: components["schemas"]["Workspace"];
+      joinedWorkspaces: components["schemas"]["Workspace"][];
     };
   };
   responses: {

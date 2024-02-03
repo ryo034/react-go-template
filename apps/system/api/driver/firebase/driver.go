@@ -4,6 +4,7 @@ import (
 	"context"
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"log"
 
 	"firebase.google.com/go/v4/auth"
@@ -18,6 +19,7 @@ type Driver interface {
 	RevokeRefreshTokens(ctx context.Context, aID account.ID) error
 	GetUser(ctx context.Context, aID account.ID) (*auth.UserRecord, error)
 	CreateUser(ctx context.Context, aID account.ID, email account.Email) error
+	SetCurrentWorkspaceToCustomClaim(ctx context.Context, aID account.ID, wID workspace.ID) error
 	UpdateMe(ctx context.Context, me *me.Me) error
 	UpdateEmail(ctx context.Context, aID account.ID, em account.Email) error
 	UpdateName(ctx context.Context, aID account.ID, n account.Name) error
@@ -55,6 +57,10 @@ func (d *driver) GetUser(ctx context.Context, aID account.ID) (*auth.UserRecord,
 
 func (d *driver) UpdateMe(ctx context.Context, me *me.Me) error {
 	return nil
+}
+
+func (d *driver) SetCurrentWorkspaceToCustomClaim(ctx context.Context, aID account.ID, wID workspace.ID) error {
+	return d.f.Auth.SetCustomUserClaims(ctx, aID.ToString(), map[string]interface{}{"current_workspace_id": wID.ToFriendlyString()})
 }
 
 func (d *driver) CreateUser(ctx context.Context, aID account.ID, email account.Email) error {

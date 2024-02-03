@@ -352,6 +352,7 @@ type Me struct {
 	Self             User         `json:"self"`
 	Member           OptMember    `json:"member"`
 	CurrentWorkspace OptWorkspace `json:"currentWorkspace"`
+	JoinedWorkspaces []Workspace  `json:"joinedWorkspaces"`
 }
 
 // GetSelf returns the value of Self.
@@ -369,6 +370,11 @@ func (s *Me) GetCurrentWorkspace() OptWorkspace {
 	return s.CurrentWorkspace
 }
 
+// GetJoinedWorkspaces returns the value of JoinedWorkspaces.
+func (s *Me) GetJoinedWorkspaces() []Workspace {
+	return s.JoinedWorkspaces
+}
+
 // SetSelf sets the value of Self.
 func (s *Me) SetSelf(val User) {
 	s.Self = val
@@ -382,6 +388,11 @@ func (s *Me) SetMember(val OptMember) {
 // SetCurrentWorkspace sets the value of CurrentWorkspace.
 func (s *Me) SetCurrentWorkspace(val OptWorkspace) {
 	s.CurrentWorkspace = val
+}
+
+// SetJoinedWorkspaces sets the value of JoinedWorkspaces.
+func (s *Me) SetJoinedWorkspaces(val []Workspace) {
+	s.JoinedWorkspaces = val
 }
 
 func (*Me) aPIV1MeGetRes() {}

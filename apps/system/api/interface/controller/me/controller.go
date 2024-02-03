@@ -2,8 +2,6 @@ package me
 
 import (
 	"context"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	infraShared "github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/shared"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
@@ -11,7 +9,7 @@ import (
 )
 
 type Controller interface {
-	Find(ctx context.Context, aID string, wID string) (openapi.APIV1MeGetRes, error)
+	Find(ctx context.Context) (openapi.APIV1MeGetRes, error)
 	UpdateName(ctx context.Context, i UpdateNameInput) (openapi.UpdateNameRes, error)
 }
 
@@ -25,13 +23,12 @@ func NewController(uc meUc.UseCase, resl shared.Resolver, co infraShared.Context
 	return &controller{uc, resl, co}
 }
 
-func (c *controller) Find(ctx context.Context, aID string, wID string) (openapi.APIV1MeGetRes, error) {
-	accountID, err := account.NewID(aID)
-	wsID := workspace.ID{}
+func (c *controller) Find(ctx context.Context) (openapi.APIV1MeGetRes, error) {
+	aID, err := c.co.GetUID(ctx)
 	if err != nil {
 		return nil, err
 	}
-	res, err := c.uc.Find(ctx, accountID, wsID)
+	res, err := c.uc.Find(ctx, aID)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MeGetRes), nil
 	}

@@ -4,13 +4,17 @@ import (
 	"context"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/id"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	"github.com/uptrace/bun"
 )
 
 type Driver interface {
 	Find(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error)
+	LastLogin(ctx context.Context, exec bun.IDB, mID member.ID) error
+	FindLastLogin(ctx context.Context, exec bun.IDB, aID account.ID) (*models.MemberLoginHistory, error)
 	FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*models.SystemAccount, error)
 	Update(ctx context.Context, exec bun.IDB, m *me.Me) (*models.Member, error)
 	UpdateName(ctx context.Context, exec bun.IDB, aID account.ID, name account.Name) (*models.SystemAccount, error)
@@ -29,6 +33,8 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, aID account.ID, wID wor
 		NewSelect().
 		Model(mem).
 		Relation("Profile").
+		Relation("Workspace").
+		Relation("Workspace.Detail").
 		Relation("SystemAccount").
 		Relation("SystemAccount.Profile").
 		Relation("SystemAccount.PhoneNumber").
@@ -39,6 +45,38 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, aID account.ID, wID wor
 		return nil, err
 	}
 	return mem, nil
+}
+
+func (d *driver) LastLogin(ctx context.Context, exec bun.IDB, mID member.ID) error {
+	pkID, err := id.GenerateUUID()
+	if err != nil {
+		return err
+	}
+	m := &models.MemberLoginHistory{
+		MemberLoginHistoryID: pkID.Value(),
+		MemberID:             mID.Value(),
+	}
+	_, err = exec.
+		NewInsert().
+		Model(m).
+		Exec(ctx)
+	return err
+}
+
+func (d *driver) FindLastLogin(ctx context.Context, exec bun.IDB, aID account.ID) (*models.MemberLoginHistory, error) {
+	m := &models.MemberLoginHistory{}
+	err := exec.
+		NewSelect().
+		Model(m).
+		Relation("Member").
+		Where("member.system_account_id = ?", aID.ToString()).
+		Order("login_at DESC").
+		Limit(1).
+		Scan(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (d *driver) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*models.SystemAccount, error) {

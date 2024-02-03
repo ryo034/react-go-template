@@ -13,6 +13,7 @@ Me:
   type: object
   required:
     - self
+    - joinedWorkspaces
   properties:
     self:
       $ref: "#/components/schemas/User"
@@ -20,3 +21,7 @@ Me:
       $ref: "#/components/schemas/Member"
     currentWorkspace:
       $ref: "#/components/schemas/Workspace"
+    joinedWorkspaces:
+      type: array
+      items:
+        $ref: "#/components/schemas/Workspace"

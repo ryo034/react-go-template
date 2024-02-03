@@ -1,7 +1,6 @@
 package me
 
 import (
-	"firebase.google.com/go/v4/auth"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	memberGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/member"
@@ -10,7 +9,7 @@ import (
 )
 
 type Adapter interface {
-	Adapt(m *models.Member, fu *auth.UserRecord) (*me.Me, error)
+	Adapt(m *models.Member, ws models.Workspaces) (*me.Me, error)
 	AdaptSystemAccount(m *models.SystemAccount) (*me.Me, error)
 }
 
@@ -24,7 +23,7 @@ func NewAdapter(uga userGw.Adapter, wga workspaceGw.Adapter, mga memberGw.Adapte
 	return &adapter{uga, wga, mga}
 }
 
-func (a *adapter) Adapt(m *models.Member, fu *auth.UserRecord) (*me.Me, error) {
+func (a *adapter) Adapt(m *models.Member, ws models.Workspaces) (*me.Me, error) {
 	u, err := a.uga.Adapt(m.SystemAccount)
 	mem, err := a.mga.Adapt(m)
 	if err != nil {
@@ -34,7 +33,11 @@ func (a *adapter) Adapt(m *models.Member, fu *auth.UserRecord) (*me.Me, error) {
 	if err != nil {
 		return nil, err
 	}
-	return me.NewMe(u, w, mem), nil
+	aws, err := a.wga.AdaptAll(ws)
+	if err != nil {
+		return nil, err
+	}
+	return me.NewMe(u, w, mem, aws), nil
 }
 
 func (a *adapter) AdaptSystemAccount(m *models.SystemAccount) (*me.Me, error) {
@@ -42,5 +45,5 @@ func (a *adapter) AdaptSystemAccount(m *models.SystemAccount) (*me.Me, error) {
 	if err != nil {
 		return nil, err
 	}
-	return me.NewMe(u, nil, nil), nil
+	return me.NewMe(u, nil, nil, nil), nil
 }

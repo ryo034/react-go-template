@@ -4,6 +4,7 @@
   "scripts": {
     "test-o": "PARALLEL=false playwright test ./tests/auth/otp.spec.ts",
     "test-w": "PARALLEL=false playwright test ./tests/workspace/validation.spec.ts",
+    "test-m": "PARALLEL=false playwright test ./tests/me/me.spec.ts",
     "test:stateless": "PARALLEL=true playwright test --grep-invert @stateful",
     "test:stateful": "PARALLEL=false playwright test --grep @stateful"
   },

@@ -7,7 +7,7 @@ import (
 
 type Adapter interface {
 	Adapt(w *workspace.Workspace) openapi.Workspace
-	AdaptAll(ws workspace.Workspaces) []*openapi.Workspace
+	AdaptAll(ws workspace.Workspaces) []openapi.Workspace
 }
 
 type adapter struct {
@@ -25,17 +25,14 @@ func (a *adapter) Adapt(w *workspace.Workspace) openapi.Workspace {
 	return openapi.Workspace{
 		WorkspaceId: w.ID().ToFriendlyString(),
 		Name:        d.Name().ToString(),
+		Subdomain:   d.Subdomain().ToString(),
 	}
 }
 
-func (a *adapter) AdaptAll(ws workspace.Workspaces) []*openapi.Workspace {
-	res := make([]*openapi.Workspace, 0, ws.Size())
+func (a *adapter) AdaptAll(ws workspace.Workspaces) []openapi.Workspace {
+	res := make([]openapi.Workspace, 0, ws.Size())
 	for _, w := range ws.AsSlice() {
-		d := w.Detail()
-		res = append(res, &openapi.Workspace{
-			WorkspaceId: w.ID().ToFriendlyString(),
-			Name:        d.Name().ToString(),
-		})
+		res = append(res, a.Adapt(w))
 	}
 	return res
 }

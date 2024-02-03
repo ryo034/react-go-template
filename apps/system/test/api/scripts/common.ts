@@ -21,13 +21,16 @@ export const genAPIClient = () => {
 
 const client = createClient<paths>({ baseUrl: APIBaseURL })
 
-export const getToken = async (email: string) => {
+type AuthInfo = {
+  token: string
+  currentWorkspaceId: string
+}
+
+export const getAuthInfo = async (email: string): Promise<AuthInfo> => {
   const { data, response, error } = await client.POST("/api/v1/auth/otp", {
     headers: defaultPostHeaders,
     body: { email }
   })
-  console.log("data", data)
-
   if (data === undefined) {
     throw new Error("data is undefined")
   }
@@ -42,7 +45,10 @@ export const getToken = async (email: string) => {
   const { token } = verifyRes.data
   const fb = new Firebase(firebaseConfig, { showConsole: false })
   const tk = await fb.signInWithCustomToken(token)
-  return tk.token
+  return {
+    token: tk.token,
+    currentWorkspaceId: (tk.claims.current_workspace_id as string) ?? ""
+  }
 }
 
 export const statefulTest = test.extend({
