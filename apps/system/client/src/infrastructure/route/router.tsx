@@ -6,7 +6,7 @@ import { LoadingLayout } from "~/layout/loading"
 import { ThemeLayout } from "~/layout/theme"
 import { TrackingLayout } from "~/layout/tracking"
 import { AccountPage } from "~/pages/account"
-import { LoginPage } from "~/pages/auth"
+import { AuthPage } from "~/pages/auth"
 import { NotFoundPage } from "~/pages/error/notFound"
 import { HomePage } from "~/pages/home"
 import { VerifyOtpPage } from "~/pages/otp"
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
               {
                 element: <AuthLayout />,
                 children: [
-                  { path: routeMap.auth, element: <LoginPage /> },
+                  { path: routeMap.auth, element: <AuthPage /> },
                   { path: routeMap.verifyOtp, element: <VerifyOtpPage /> },
                   {
                     element: <DashboardLayout />,

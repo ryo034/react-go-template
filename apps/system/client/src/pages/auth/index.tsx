@@ -6,7 +6,7 @@ import { i18nKeys } from "~/infrastructure/i18n"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { routeMap } from "~/infrastructure/route/path"
 
-export const LoginPage = () => {
+export const AuthPage = () => {
   const { store, controller, i18n, errorMessageProvider } = useContext(ContainerContext)
   const me = store.me((state) => state.me)
   const meRef = useRef(me)
