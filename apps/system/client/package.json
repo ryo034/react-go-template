@@ -25,7 +25,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^0.2.1",
-    "firebase": "^10.7.2",
+    "firebase": "^10.8.0",
     "i18next": "^23.8.2",
     "immer": "^10.0.3",
     "lucide-react": "^0.321.0",
@@ -39,7 +39,7 @@
     "react-i18next": "^14.0.1",
     "react-icons": "^5.0.1",
     "react-markdown": "^9.0.1",
-    "react-router-dom": "^6.21.3",
+    "react-router-dom": "^6.22.0",
     "shared-network": "workspace:shared-network@*",
     "shared-ui": "workspace:shared-ui@*",
     "tailwind-merge": "^2.2.1",
@@ -54,11 +54,12 @@
     "@testing-library/jest-dom": "^6.4.1",
     "@testing-library/react": "^14.2.1",
     "@testing-library/user-event": "^14.5.2",
-    "@types/react": "^18.2.51",
+    "@types/react": "^18.2.52",
     "@types/react-dom": "^18.2.18",
     "@vitejs/plugin-react": "^4.2.1",
     "@vitest/coverage-v8": "^1.2.2",
     "autoprefixer": "^10.4.17",
+    "cssnano": "^6.0.3",
     "jsdom": "^24.0.0",
     "postcss": "^8.4.33",
     "rollup-plugin-visualizer": "^5.12.0",
@@ -75,5 +76,9 @@
     "yarn": "use pnpm please!",
     "pnpm": "8.15.0"
   },
-  "browserslist": ["> 0.2%, not dead", "not IE 11", "Safari > 11, iOS > 11"]
+  "browserslist": [
+    "> 0.2%, not dead",
+    "not IE 11",
+    "Safari > 11, iOS > 11"
+  ]
 }

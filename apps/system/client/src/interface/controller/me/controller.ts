@@ -1,11 +1,7 @@
-import { MeUseCaseInput } from "~/usecase"
+import { MeUseCase } from "~/usecase"
 
 export class MeController {
-  constructor(private readonly useCase: MeUseCaseInput) {}
-
-  async login(): Promise<null | Error> {
-    return await this.useCase.login()
-  }
+  constructor(private readonly useCase: MeUseCase) {}
 
   async signOut(): Promise<null | Error> {
     return await this.useCase.signOut()

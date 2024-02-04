@@ -4,13 +4,15 @@
   "scripts": {
     "test-stateless": "gauge run --max-retries-count=1 --tags '!unimplemented & !stateful' specs",
     "test-stateful": "gauge run --max-retries-count=1 --tags '!unimplemented & stateful' specs",
-    "test-failed": "gauge run -f"
+    "test-auth": "gauge run --max-retries-count=1 specs/me/auth/create.spec"
   },
   "dependencies": {
     "@playwright/test": "^1.41.2",
+    "firebase": "^10.8.0",
     "firebase-admin": "^12.0.0",
     "gauge-ts": "^0.1.1",
-    "got": "^14.1.0",
+    "got": "^14.2.0",
+    "ioredis": "^5.3.2",
     "pg": "^8.11.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"

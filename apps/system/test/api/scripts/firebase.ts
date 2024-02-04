@@ -3,8 +3,7 @@ import { getApp, getApps, initializeApp } from "firebase-admin/app"
 import { MultiFactorCreateSettings, UserProvider, getAuth } from "firebase-admin/auth"
 import * as fba from "firebase/app"
 import * as fb from "firebase/auth"
-import { connectStorageEmulator, getStorage } from "firebase/storage"
-import { firebaseClientConfig, firebaseConfig } from "./config"
+import { firebaseClientConfig } from "./config"
 
 export interface FirebaseUser {
   localId: string

@@ -4,6 +4,11 @@ import { page } from "../browser"
 import { homeURL } from "../config"
 
 export default class PagesStep {
+  @Step("<second>秒待機")
+  async waitSeconds(seconds: number) {
+    await page.waitForTimeout(seconds * 1000)
+  }
+
   @Step("ホームに遷移する")
   async openOrdersPage() {
     await page.goto(homeURL)
@@ -50,28 +55,24 @@ export default class PagesStep {
   @Step("サイドバーメニューから<pageName>を選択")
   async selectFromSidebarMenu(pageName: string) {
     const target = page.getByTestId("sidebarMenuList").getByText(pageName)
-    await target.waitFor()
     await target.click()
   }
 
   @Step("ログインボタンをクリック")
   async clickLoginButton() {
     const target = page.locator("button").getByText("ログイン")
-    await target.waitFor()
     await target.click()
   }
 
   @Step("作成ボタンをクリック")
   async clickCreateButton() {
     const target = page.locator("button").getByText("作成")
-    await target.waitFor()
     await target.click()
   }
 
   @Step("<buttonName>ボタンをクリック")
   async clickButtonByName(buttonName: string) {
     const target = page.locator("button").getByText(buttonName)
-    await target.waitFor()
     await target.click()
   }
 

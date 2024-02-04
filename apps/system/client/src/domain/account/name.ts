@@ -6,8 +6,8 @@ export class AccountName extends ValueObject<string> {
   static pattern = /^[ぁ-んァ-ン一-龥a-zA-Z]+$/
   static max = 50
   static create(v: string): Result<AccountName, Error> {
-    const trimmedName = v.replace(/[\s　]/g, "")
-    if (trimmedName.length > AccountName.max) {
+    const trimmed = v.replace(/[\s　]/g, "")
+    if (trimmed.length > AccountName.max) {
       return Result.err(
         new DomainError({
           domainKey: domainKeys.AccountName,
@@ -16,7 +16,7 @@ export class AccountName extends ValueObject<string> {
         })
       )
     }
-    if (!AccountName.pattern.test(trimmedName)) {
+    if (!AccountName.pattern.test(trimmed)) {
       return Result.err(
         new DomainError({
           domainKey: domainKeys.AccountName,
@@ -25,6 +25,6 @@ export class AccountName extends ValueObject<string> {
         })
       )
     }
-    return Result.ok(new AccountName(trimmedName))
+    return Result.ok(new AccountName(trimmed))
   }
 }

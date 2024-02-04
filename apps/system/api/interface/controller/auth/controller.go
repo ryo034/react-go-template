@@ -28,8 +28,8 @@ func (c *controller) AuthByOTP(ctx context.Context, req *openapi.APIV1AuthOtpPos
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1AuthOtpPostRes), nil
 	}
-	inp := authUc.ByTOTPInput{Email: em}
-	res, err := c.auc.AuthByTOTP(ctx, inp)
+	inp := authUc.ByOTPInput{Email: em}
+	res, err := c.auc.AuthByOTP(ctx, inp)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1AuthOtpPostRes), nil
 	}
@@ -41,13 +41,8 @@ func (c *controller) VerifyOTP(ctx context.Context, req *openapi.APIV1AuthOtpVer
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1AuthOtpVerifyPostRes), nil
 	}
-
-	inp := authUc.VerifyTOTPInput{Email: em, Otp: req.Otp}
-	res, err := c.auc.VerifyTOTP(ctx, inp)
-	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1AuthOtpVerifyPostRes), nil
-	}
-	return res, nil
+	inp := authUc.VerifyOTPInput{Email: em, Otp: req.Otp}
+	return c.auc.VerifyOTP(ctx, inp)
 }
 
 func (c *controller) AuthByOAuth(ctx context.Context) (openapi.APIV1AuthOAuthPostRes, error) {
@@ -57,7 +52,7 @@ func (c *controller) AuthByOAuth(ctx context.Context) (openapi.APIV1AuthOAuthPos
 	//	return c.resl.Error(ctx, err).(openapi.APIV1AuthOAuthPostRes), nil
 	//}
 	//
-	//inp := authUc.VerifyTOTPInput{Email: em, Otp: req.Otp}
+	//inp := authUc.VerifyOTPInput{Email: em, Otp: req.Otp}
 	//res, err := c.auc.VerifyOTP(ctx, inp)
 	//if err != nil {
 	//	return c.resl.Error(ctx, err).(openapi.APIV1AuthOAuthPostRes), nil

@@ -9,18 +9,33 @@ export const VerifyOtpPage = () => {
   const { store, controller, i18n, errorMessageProvider } = useContext(ContainerContext)
   const me = store.me((state) => state.me)
   const meRef = useRef(me)
+  const email = store.auth((state) => state.email)
   const [errorMessage, setErrorMessage] = useState("")
 
   const navigate = useNavigate()
 
   useLayoutEffect(() => {
+    if (email === null || email.value === "") {
+      navigate("/")
+      return
+    }
     store.me.subscribe((state) => {
       meRef.current = state.me
     })
   }, [])
 
   const onSubmit: SubmitHandler<OtpFormValues> = async (d) => {
-    console.log("onSubmit")
+    if (!email) {
+      return
+    }
+    const opt = d.otpInput1 + d.otpInput2 + d.otpInput3 + d.otpInput4 + d.otpInput5 + d.otpInput6
+    const res = await controller.auth.verifyOtp(email, opt)
+    console.log("res", res)
+    if (res) {
+      setErrorMessage(errorMessageProvider.translate(res))
+      return
+    }
+    navigate("/")
   }
 
   return (

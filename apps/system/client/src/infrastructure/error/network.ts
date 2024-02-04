@@ -19,6 +19,8 @@ export const openapiFetchErrorInterpreter = (res: unknown): Error | null => {
 
 export class SystemNetworkErrorInterpreter extends NetworkErrorInterpreter {
   convertToSpecificError(err: unknown): Error | null {
+    console.log("convertToSpecificError", err)
+
     if (this.isValidGenericError(err)) {
       return convertToErrorByStatusCode(err.statusCode, err.message)
     }

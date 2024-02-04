@@ -1,6 +1,9 @@
 import { readFileSync } from "fs"
 import { getApp, getApps, initializeApp } from "firebase-admin/app"
 import { MultiFactorCreateSettings, UserProvider, getAuth } from "firebase-admin/auth"
+import * as fba from "firebase/app"
+import * as fb from "firebase/auth"
+import { firebaseClientConfig } from "./config"
 
 export interface FirebaseUser {
   localId: string
@@ -33,8 +36,11 @@ export interface FirebaseTestConfig {
   showConsole: boolean
 }
 
+const firebaseAuthEmulatorHost = "http://localhost:9099"
+
 export class Firebase {
-  private auth: ReturnType<typeof getAuth>
+  private firebaseAdminAuth: ReturnType<typeof getAuth>
+  private firebaseClientAuth: ReturnType<typeof fb.getAuth>
 
   constructor(
     private readonly config: FirebaseConfig,
@@ -46,20 +52,33 @@ export class Firebase {
       process.env.FIRESTORE_EMULATOR_HOST = this.config.localConfig.firestoreEmulatorHost
     }
     const firebase = getApps().length === 0 ? initializeApp(config) : getApp()
-    this.auth = getAuth(firebase)
+    this.firebaseAdminAuth = getAuth(firebase)
+
+    // Firebase Client
+    const fbc = fba.initializeApp(firebaseClientConfig)
+    const firebaseAuth = fb.getAuth(fbc)
+    if (this.config.localConfig) {
+      fb.connectAuthEmulator(firebaseAuth, firebaseAuthEmulatorHost, { disableWarnings: true })
+    }
+    this.firebaseClientAuth = firebaseAuth
   }
 
   async clear() {
     if (this.testConfig.showConsole) console.log("Clearing firebase...")
-    const users = await this.auth.listUsers()
+    const users = await this.firebaseAdminAuth.listUsers()
     for (const u of users.users) {
-      await this.auth.revokeRefreshTokens(u.uid)
+      await this.firebaseAdminAuth.revokeRefreshTokens(u.uid)
     }
-    await this.auth.deleteUsers(users.users.map((u: any) => u.uid))
+    await this.firebaseAdminAuth.deleteUsers(users.users.map((u: any) => u.uid))
+  }
+
+  async signInWithCustomToken(token: string) {
+    const res = await fb.signInWithCustomToken(this.firebaseClientAuth, token)
+    return await res.user.getIdTokenResult()
   }
 
   get authInstance() {
-    return this.auth
+    return this.firebaseAdminAuth
   }
 
   async setup() {
@@ -80,14 +99,14 @@ export class Firebase {
           })
         }
       }
-      const password = users[idx].passwordHash.split(":")[2].split("=")[1]
+      // const password = users[idx].passwordHash.split(":")[2].split("=")[1]
       try {
-        await this.auth.createUser({
+        await this.firebaseAdminAuth.createUser({
           uid: users[idx].localId,
           email: users[idx].email,
           emailVerified: users[idx].emailVerified,
           phoneNumber: users[idx].phoneNumber,
-          password,
+          // password,
           displayName: users[idx].displayName,
           photoURL: users[idx].photoURL,
           disabled: users[idx].disabled,

@@ -37,7 +37,7 @@ func (g *gateway) GenTOTP(ctx context.Context, email account.Email) (string, err
 	return code, nil
 }
 
-func (g *gateway) VerifyTOTP(ctx context.Context, email account.Email, code string) (bool, error) {
+func (g *gateway) VerifyOTP(ctx context.Context, email account.Email, code string) (bool, error) {
 	c, err := g.kvd.Get(ctx, fmt.Sprintf("%s%s", totpKeyPrefix, email.ToString()))
 	if err != nil {
 		return false, err

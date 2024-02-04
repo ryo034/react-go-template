@@ -11,17 +11,6 @@ export class MeGateway implements MeRepository {
     private readonly adapter: MeGatewayAdapter
   ) {}
 
-  async login(): PromiseResult<Me, Error> {
-    if (this.apDriver.currentUser === null) {
-      return Result.err(new Error("user is not logged in"))
-    }
-    const res = await this.driver.login()
-    if (res.isErr) {
-      return Result.err(res.error)
-    }
-    return this.adapter.adapt(res.value)
-  }
-
   async signOut(): PromiseResult<null, Error> {
     return this.apDriver.signOut()
   }

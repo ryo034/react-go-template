@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test"
 import { defaultPostHeaders } from "../../config/config"
-import { genAPIClient, statefulTest } from "../../scripts"
+import { genAPIClient, getOtpCodeFromRedis, statefulTest } from "../../scripts"
 
 const client = genAPIClient()
 
@@ -13,11 +13,8 @@ test.describe("Otp API", () => {
     })
     expect(response.status).toBe(200)
     expect(error).toBeUndefined()
-    if (data === undefined) {
-      throw new Error("data is undefined")
-    }
-    const { code } = data
-    expect(code).toMatch(/^\d{6}$/)
+
+    const code = await getOtpCodeFromRedis(email)
 
     const verifyRes = await client.POST("/api/v1/auth/otp/verify", {
       headers: defaultPostHeaders,

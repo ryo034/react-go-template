@@ -31,23 +31,11 @@ export interface paths {
      * @description One Time Password (OTP) to user.
      */
     post: {
-      requestBody: {
-        content: {
-          "application/json": {
-            /** Format: email */
-            email: string;
-          };
-        };
-      };
+      requestBody: components["requestBodies"]["AuthByOtpPost"];
       responses: {
         /** @description OTP has been sent successfully. */
         200: {
-          content: {
-            "application/json": {
-              /** @description OTP 6 digit code */
-              code: string;
-            };
-          };
+          content: never;
         };
         400: components["responses"]["BadRequestError"];
         429: components["responses"]["TooManyRequestsError"];
@@ -61,23 +49,12 @@ export interface paths {
      * @description Verify OTP sent by user.
      */
     post: {
-      requestBody: {
-        content: {
-          "application/json": {
-            /** Format: email */
-            email: string;
-            otp: string;
-          };
-        };
-      };
+      requestBody: components["requestBodies"]["AuthVerifyPost"];
       responses: {
-        /** @description OTP has been verified successfully. */
+        /** @description Successfully verified OTP. The user is now authenticated. */
         200: {
           content: {
-            "application/json": {
-              /** @description JWT token */
-              token: string;
-            };
+            "application/json": components["schemas"]["JwtToken"];
           };
         };
         400: components["responses"]["BadRequestError"];
@@ -176,6 +153,10 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    JwtToken: {
+      /** @description JWT token */
+      token: string;
+    };
     User: {
       /** Format: uuid */
       userId: string;
@@ -412,6 +393,25 @@ export interface components {
   };
   parameters: never;
   requestBodies: {
+    /** @description Authenticate user by OTP. */
+    AuthByOtpPost: {
+      content: {
+        "application/json": {
+          /** Format: email */
+          email: string;
+        };
+      };
+    };
+    /** @description Verify OTP sent by user. */
+    AuthVerifyPost: {
+      content: {
+        "application/json": {
+          /** Format: email */
+          email: string;
+          otp: string;
+        };
+      };
+    };
     /** @description Creates a new workspace */
     CreateWorkspace: {
       content: {

@@ -1,7 +1,7 @@
-import { BeforeSuite } from "gauge-ts"
-import { AfterSuite, BeforeScenario } from "gauge-ts"
+import { BeforeScenario, BeforeSuite } from "gauge-ts"
+import { AfterSuite } from "gauge-ts"
 import { firebaseConfig } from "./config"
-import { Databases, MainDb } from "./database"
+import { Databases } from "./database"
 import { Firebase } from "./firebase"
 
 export default class SetupAndTearDown {
@@ -10,20 +10,10 @@ export default class SetupAndTearDown {
   // 	await Promise.all([clearFirebase(), clearDB()]);
   // 	await Promise.all([setupFirebase(), setupDB()]);
   // }
-  @BeforeScenario({ tags: ["initializeDb"] })
-  async beforeScenario() {
-    await new MainDb().clear()
-  }
-
-  @BeforeScenario({ tags: ["initializeFirebase"] })
-  async beforeScenarioFirebase() {
-    const fb = new Firebase(firebaseConfig, { showConsole: false })
-    await fb.clear()
-    await fb.setup()
-  }
 
   @BeforeSuite()
   @AfterSuite()
+  @BeforeScenario({ tags: ["stateful"] })
   async beforeScenarioStatefulAll() {
     const fb = new Firebase(firebaseConfig, { showConsole: false })
     const dbs = Databases.gen()

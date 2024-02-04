@@ -1,19 +1,13 @@
 import { MeRepository } from "~/domain"
-import { MeUseCaseInput, MeUseCaseOutput } from "~/usecase"
+import { MeUseCaseOutput } from "~/usecase"
 
-export class MeInteractor implements MeUseCaseInput {
+export interface MeUseCase {
+  signOut(): Promise<Error | null>
+  find(): Promise<Error | null>
+}
+
+export class MeInteractor implements MeUseCase {
   constructor(private readonly repository: MeRepository, private readonly presenter: MeUseCaseOutput) {}
-
-  async login(): Promise<Error | null> {
-    this.presenter.setIsLoading(true)
-    const fbRes = await this.repository.login()
-    if (fbRes.isErr) {
-      this.presenter.setIsLoading(false)
-      return fbRes.error
-    }
-    this.presenter.setIsLoading(false)
-    return null
-  }
 
   async signOut(): Promise<Error | null> {
     const res = await this.repository.signOut()

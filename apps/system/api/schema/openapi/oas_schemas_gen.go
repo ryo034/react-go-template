@@ -6,20 +6,8 @@ import (
 	"github.com/google/uuid"
 )
 
-type APIV1AuthOtpPostOK struct {
-	// OTP 6 digit code.
-	Code string `json:"code"`
-}
-
-// GetCode returns the value of Code.
-func (s *APIV1AuthOtpPostOK) GetCode() string {
-	return s.Code
-}
-
-// SetCode sets the value of Code.
-func (s *APIV1AuthOtpPostOK) SetCode(val string) {
-	s.Code = val
-}
+// APIV1AuthOtpPostOK is response for APIV1AuthOtpPost operation.
+type APIV1AuthOtpPostOK struct{}
 
 func (*APIV1AuthOtpPostOK) aPIV1AuthOtpPostRes() {}
 
@@ -36,23 +24,6 @@ func (s *APIV1AuthOtpPostReq) GetEmail() string {
 func (s *APIV1AuthOtpPostReq) SetEmail(val string) {
 	s.Email = val
 }
-
-type APIV1AuthOtpVerifyPostOK struct {
-	// JWT token.
-	Token string `json:"token"`
-}
-
-// GetToken returns the value of Token.
-func (s *APIV1AuthOtpVerifyPostOK) GetToken() string {
-	return s.Token
-}
-
-// SetToken sets the value of Token.
-func (s *APIV1AuthOtpVerifyPostOK) SetToken(val string) {
-	s.Token = val
-}
-
-func (*APIV1AuthOtpVerifyPostOK) aPIV1AuthOtpVerifyPostRes() {}
 
 type APIV1AuthOtpVerifyPostReq struct {
 	Email string `json:"email"`
@@ -346,6 +317,24 @@ func (*InternalServerError) aPIV1WorkspacesGetRes()     {}
 func (*InternalServerError) aPIV1WorkspacesPostRes()    {}
 func (*InternalServerError) loginRes()                  {}
 func (*InternalServerError) updateNameRes()             {}
+
+// Ref: #/components/schemas/JwtToken
+type JwtToken struct {
+	// JWT token.
+	Token string `json:"token"`
+}
+
+// GetToken returns the value of Token.
+func (s *JwtToken) GetToken() string {
+	return s.Token
+}
+
+// SetToken sets the value of Token.
+func (s *JwtToken) SetToken(val string) {
+	s.Token = val
+}
+
+func (*JwtToken) aPIV1AuthOtpVerifyPostRes() {}
 
 // Ref: #/components/schemas/Me
 type Me struct {

@@ -1,6 +1,6 @@
 import { MouseEventHandler, useEffect } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { Button, FormResultErrorMessage, Separator } from "shared-ui"
+import { Button, FormResultErrorMessage, LoadingButton, Separator } from "shared-ui"
 import { useAuthPageFormMessage } from "~/components/auth/message"
 import { FormInputSection } from "~/components/common/form/inputSection"
 import { Email } from "~/domain"
@@ -13,11 +13,12 @@ interface Props {
   onSubmit: SubmitHandler<LoginFormValues>
   onClickGoogleLoginButton: MouseEventHandler<HTMLButtonElement>
   errorMessage: string
+  isLoading: boolean
 }
 
 const authFormId = "authForm"
 
-export const AuthPageForm = ({ onSubmit, onClickGoogleLoginButton, errorMessage }: Props) => {
+export const AuthPageForm = ({ onSubmit, onClickGoogleLoginButton, errorMessage, isLoading = false }: Props) => {
   const {
     register,
     handleSubmit,
@@ -65,9 +66,13 @@ export const AuthPageForm = ({ onSubmit, onClickGoogleLoginButton, errorMessage 
           errorMessage={errors.email?.message ?? ""}
         />
         <FormResultErrorMessage message={errorMessage} />
-        <Button fullWidth type="submit" form={authFormId} data-testid="startButton">
-          {message.action.startWithEmail}
-        </Button>
+        {isLoading ? (
+          <LoadingButton fullWidth data-testid="authPageFormStartLoadingButton" />
+        ) : (
+          <Button fullWidth type="submit" form={authFormId} data-testid="startButton">
+            {message.action.startWithEmail}
+          </Button>
+        )}
       </form>
     </>
   )

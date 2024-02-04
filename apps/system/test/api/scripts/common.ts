@@ -1,10 +1,11 @@
 import { test } from "@playwright/test"
-import { authHeaders, defaultPostHeaders } from "config/config"
+import { defaultPostHeaders } from "config/config"
 import createClient from "openapi-fetch"
 import { paths } from "../schema/openapi/systemApi"
 import { firebaseConfig } from "./config"
 import { MainDb } from "./database"
 import { Firebase } from "./firebase"
+import { RedisClient } from "./redis"
 
 const APIBaseURL = "http://localhost:19004"
 
@@ -26,20 +27,29 @@ type AuthInfo = {
   currentWorkspaceId: string
 }
 
+export const getOtpCodeFromRedis = async (email: string): Promise<string> => {
+  const redis = await RedisClient.create()
+  const code = await redis.get(`otp:${email}`)
+  if (code === null) {
+    throw new Error("code is null")
+  }
+  return code
+}
+
 export const getAuthInfo = async (email: string): Promise<AuthInfo> => {
   const { data, response, error } = await client.POST("/api/v1/auth/otp", {
     headers: defaultPostHeaders,
     body: { email }
   })
-  if (data === undefined) {
+  if (error !== undefined || response.status !== 200) {
     throw new Error("data is undefined")
   }
-  const { code } = data
+  const code = await getOtpCodeFromRedis(email)
   const verifyRes = await client.POST("/api/v1/auth/otp/verify", {
     headers: defaultPostHeaders,
     body: { email, otp: code }
   })
-  if (verifyRes.data === undefined) {
+  if (verifyRes.error !== undefined || verifyRes.response.status !== 200) {
     throw new Error("verifyRes.data is undefined")
   }
   const { token } = verifyRes.data

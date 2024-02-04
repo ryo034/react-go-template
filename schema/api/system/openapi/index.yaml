@@ -25,6 +25,8 @@ components:
   securitySchemes:
     $ref: "./components/securitySchemes/index.yaml#/securitySchemes"
   schemas:
+    JwtToken:
+      $ref: "./components/schemas/auth.yaml#/JwtToken"
     User:
       $ref: "./components/schemas/user.yaml#/User"
     MultiFactor:
@@ -42,6 +44,10 @@ components:
     Me:
       $ref: "./components/schemas/me.yaml#/Me"
   requestBodies:
+    AuthByOtpPost:
+      $ref: "./components/requestBodies/auth.yaml#/AuthByOtpPost"
+    AuthVerifyPost:
+      $ref: "./components/requestBodies/auth.yaml#/AuthVerifyPost"
     CreateWorkspace:
       $ref: "./components/requestBodies/workspace.yaml#/CreateWorkspace"
     UpdateName:

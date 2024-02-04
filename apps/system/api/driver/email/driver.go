@@ -6,7 +6,7 @@ import (
 )
 
 type Driver interface {
-	Send(ctx context.Context, email account.Email) error
+	Send(ctx context.Context, email account.Email, code string) error
 }
 
 type driver struct {
@@ -16,6 +16,6 @@ func NewDriver() Driver {
 	return &driver{}
 }
 
-func (d *driver) Send(ctx context.Context, email account.Email) error {
+func (d *driver) Send(ctx context.Context, email account.Email, code string) error {
 	return nil
 }

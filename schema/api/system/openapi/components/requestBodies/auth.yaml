@@ -1,0 +1,30 @@
+AuthByOtpPost:
+  description: Authenticate user by OTP.
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          email:
+            type: string
+            format: email
+        required:
+          - email
+
+AuthVerifyPost:
+  description: Verify OTP sent by user.
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          email:
+            type: string
+            format: email
+          otp:
+            type: string
+        required:
+          - email
+          - otp

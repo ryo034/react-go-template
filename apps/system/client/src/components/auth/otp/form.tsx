@@ -103,11 +103,17 @@ export const VerifyOTPPageForm = ({ onSubmit, errorMessage }: Props) => {
     if (isSubmitSuccessful || isSubmitting) return
 
     const allFilled =
+      otpInput1 !== undefined &&
       otpInput1.length === 1 &&
+      otpInput2 !== undefined &&
       otpInput2.length === 1 &&
+      otpInput3 !== undefined &&
       otpInput3.length === 1 &&
+      otpInput4 !== undefined &&
       otpInput4.length === 1 &&
+      otpInput5 !== undefined &&
       otpInput5.length === 1 &&
+      otpInput6 !== undefined &&
       otpInput6.length === 1
 
     if (allFilled) {

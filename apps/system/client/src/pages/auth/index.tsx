@@ -5,12 +5,12 @@ import { AuthPageForm, LoginFormValues } from "~/components/auth/form"
 import { i18nKeys } from "~/infrastructure/i18n"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { routeMap } from "~/infrastructure/route/path"
-import { accountInitialPagePath } from "~/infrastructure/route/router"
 
 export const LoginPage = () => {
   const { store, controller, i18n, errorMessageProvider } = useContext(ContainerContext)
   const me = store.me((state) => state.me)
   const meRef = useRef(me)
+  const authIsLoading = store.auth((state) => state.isLoading)
   const [errorMessage, setErrorMessage] = useState("")
 
   const navigate = useNavigate()
@@ -22,17 +22,14 @@ export const LoginPage = () => {
   }, [])
 
   const onSubmit: SubmitHandler<LoginFormValues> = async (d) => {
-    // const res = await controller.me.login(d.email, d.password)
-    // if (res) {
-    //   setErrorMessage(errorMessageProvider.translate(res))
-    //   return
-    // }
-    // if (meRef.current?.emailNotVerified) {
-    //   navigate(routeMap.confirmEmail)
-    //   return
-    // }
-    // navigate(accountInitialPagePath)
     console.log("onClickSendAuthenticationCode")
+    const res = await controller.auth.startWithEmail(d.email)
+    console.log("res", res)
+    if (res) {
+      setErrorMessage(errorMessageProvider.translate(res))
+      return
+    }
+    navigate(routeMap.verifyOtp)
   }
 
   const onClickGoogleLoginButton = async () => {
@@ -52,6 +49,7 @@ export const LoginPage = () => {
                 onSubmit={onSubmit}
                 onClickGoogleLoginButton={onClickGoogleLoginButton}
                 errorMessage={errorMessage}
+                isLoading={authIsLoading}
               />
             </div>
           </div>

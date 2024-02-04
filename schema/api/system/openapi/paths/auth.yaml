@@ -5,30 +5,10 @@ authByOtp:
       - OTP
     description: One Time Password (OTP) to user.
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              email:
-                type: string
-                format: email
-            required:
-              - email
+      $ref: "#/components/requestBodies/AuthByOtpPost"
     responses:
       "200":
         description: OTP has been sent successfully.
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - code
-              properties:
-                code:
-                  type: string
-                  description: OTP 6 digit code
       "400":
         $ref: "#/components/responses/BadRequestError"
       "429":
@@ -43,33 +23,14 @@ verify:
       - OTP
     description: Verify OTP sent by user.
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              email:
-                type: string
-                format: email
-              otp:
-                type: string
-            required:
-              - email
-              - otp
+      $ref: "#/components/requestBodies/AuthVerifyPost"
     responses:
       "200":
-        description: OTP has been verified successfully.
+        description: Successfully verified OTP. The user is now authenticated.
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - token
-              properties:
-                token:
-                  type: string
-                  description: JWT token
+              $ref: "#/components/schemas/JwtToken"
       "400":
         $ref: "#/components/responses/BadRequestError"
       "429":

@@ -15,8 +15,8 @@ import (
 )
 
 type UseCase interface {
-	AuthByTOTP(ctx context.Context, input ByTOTPInput) (openapi.APIV1AuthOtpPostRes, error)
-	VerifyTOTP(ctx context.Context, input VerifyTOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error)
+	AuthByOTP(ctx context.Context, input ByOTPInput) (openapi.APIV1AuthOtpPostRes, error)
+	VerifyOTP(ctx context.Context, input VerifyOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error)
 }
 
 type useCase struct {
@@ -26,21 +26,22 @@ type useCase struct {
 	meRepo  me.Repository
 	emailDr email.Driver
 	fbDr    firebase.Driver
+	op      OutputPort
 }
 
-func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo auth.Repository, meRepo me.Repository, emailDr email.Driver, fbDr firebase.Driver) UseCase {
-	return &useCase{txp, dbp, acRepo, meRepo, emailDr, fbDr}
+func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo auth.Repository, meRepo me.Repository, emailDr email.Driver, fbDr firebase.Driver, op OutputPort) UseCase {
+	return &useCase{txp, dbp, acRepo, meRepo, emailDr, fbDr, op}
 }
 
-func (u *useCase) AuthByTOTP(ctx context.Context, i ByTOTPInput) (openapi.APIV1AuthOtpPostRes, error) {
+func (u *useCase) AuthByOTP(ctx context.Context, i ByOTPInput) (openapi.APIV1AuthOtpPostRes, error) {
 	code, err := u.repo.GenTOTP(ctx, i.Email)
 	if err != nil {
 		return nil, err
 	}
-	if err = u.emailDr.Send(ctx, i.Email); err != nil {
+	if err = u.emailDr.Send(ctx, i.Email, code); err != nil {
 		return nil, err
 	}
-	return &openapi.APIV1AuthOtpPostOK{Code: code}, nil
+	return &openapi.APIV1AuthOtpPostOK{}, nil
 }
 
 // memberLastLogin If there is information about the last logged-in workspace,put that workspace information in the jwt.
@@ -55,7 +56,7 @@ func (u *useCase) memberLastLogin(ctx context.Context, exec bun.IDB, aID account
 	return u.meRepo.LastLogin(ctx, exec, meRes)
 }
 
-func (u *useCase) VerifyTOTP(ctx context.Context, i VerifyTOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error) {
+func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
@@ -68,11 +69,11 @@ func (u *useCase) VerifyTOTP(ctx context.Context, i VerifyTOTPInput) (openapi.AP
 		}
 		if usr == nil {
 			// if user does not exist, create user, verify TOTP and return custom token
-			return u.verifyTOTPWithCreate(pr, p, i.Email, i.Otp)
+			return u.verifyOTPWithCreate(pr, p, i.Email, i.Otp)
 		}
 
 		// if user exists, verify TOTP and return custom token
-		tk, err := u.verifyTOTP(pr, usr.AccountID(), i.Email, i.Otp)
+		tk, err := u.verifyOTP(pr, usr.AccountID(), i.Email, i.Otp)
 		if err != nil {
 			return "", err
 		}
@@ -86,13 +87,11 @@ func (u *useCase) VerifyTOTP(ctx context.Context, i VerifyTOTPInput) (openapi.AP
 	if err = result.Error(); err != nil {
 		return nil, err
 	}
-	return &openapi.APIV1AuthOtpVerifyPostOK{
-		Token: result.Value(0).(string),
-	}, nil
+	return u.op.JwtToken(result.Value(0).(string)), nil
 }
 
-func (u *useCase) verifyTOTP(ctx context.Context, aID account.ID, email account.Email, code string) (string, error) {
-	ok, err := u.repo.VerifyTOTP(ctx, email, code)
+func (u *useCase) verifyOTP(ctx context.Context, aID account.ID, email account.Email, code string) (string, error) {
+	ok, err := u.repo.VerifyOTP(ctx, email, code)
 	if err != nil {
 		return "", err
 	}
@@ -103,7 +102,7 @@ func (u *useCase) verifyTOTP(ctx context.Context, aID account.ID, email account.
 	return u.fbDr.CustomToken(ctx, aID)
 }
 
-func (u *useCase) verifyTOTPWithCreate(ctx context.Context, exec bun.IDB, email account.Email, code string) (string, error) {
+func (u *useCase) verifyOTPWithCreate(ctx context.Context, exec bun.IDB, email account.Email, code string) (string, error) {
 	aID, err := account.GenerateID()
 	if err != nil {
 		return "", err
@@ -111,7 +110,7 @@ func (u *useCase) verifyTOTPWithCreate(ctx context.Context, exec bun.IDB, email 
 	if _, err = u.repo.Create(ctx, exec, aID, email); err != nil {
 		return "", err
 	}
-	ok, err := u.repo.VerifyTOTP(ctx, email, code)
+	ok, err := u.repo.VerifyOTP(ctx, email, code)
 	if err != nil {
 		return "", err
 	}

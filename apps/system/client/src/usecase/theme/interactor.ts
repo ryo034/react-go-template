@@ -1,12 +1,17 @@
 import { ThemeDriver } from "~/driver"
-import { ThemeUseCaseInput, ThemeUseCaseOutput } from "~/usecase"
+import { ThemeUseCaseOutput, ToggleInput } from "~/usecase"
 
-export class ThemeInteractor implements ThemeUseCaseInput {
+export interface ThemeUseCase {
+  toggle(i: ToggleInput): null
+  get(): void
+}
+
+export class ThemeInteractor implements ThemeUseCase {
   constructor(private readonly driver: ThemeDriver, private readonly presenter: ThemeUseCaseOutput) {}
 
-  toggle(isDark: boolean): null {
-    this.driver.set(isDark)
-    this.presenter.set(isDark)
+  toggle(i: ToggleInput): null {
+    this.driver.set(i.isDark)
+    this.presenter.set(i.isDark)
     return null
   }
 

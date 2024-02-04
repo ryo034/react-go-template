@@ -62,6 +62,11 @@ update-pnpm-version:
 	@sed -i '' 's/"pnpm": "[^"]*"/"pnpm": "$(VERSION)"/' package.json
 	@corepack pnpm install -r
 
+.PHONY: update-client-shared-package
+update-client-shared-package:
+	@corepack pnpm run package:build
+	@corepack pnpm install
+
 .PHONY: update-all-go-package
 update-all-go-package:
 	@cd ./apps/system/api && make update-package
