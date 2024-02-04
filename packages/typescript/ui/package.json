@@ -27,6 +27,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-toast": "^1.1.5",
+    "@radix-ui/react-tooltip": "^1.0.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "lucide-react": "^0.321.0",
@@ -34,8 +35,10 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.50.0",
     "react-icons": "^5.0.1",
+    "react-resizable-panels": "^2.0.3",
     "tailwind-merge": "^2.2.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vaul": "^0.9.0"
   },
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
@@ -55,7 +58,9 @@
     "vite-plugin-compression": "^0.5.1",
     "vitest": "^1.2.2"
   },
-  "files": ["/dist"],
+  "files": [
+    "/dist"
+  ],
   "types": "./dist/index.d.ts",
   "main": "./dist/shared-ui.umd.js",
   "module": "./dist/shared-ui.es.js",
