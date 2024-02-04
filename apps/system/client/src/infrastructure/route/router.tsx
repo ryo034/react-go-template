@@ -12,7 +12,7 @@ import { HomePage } from "~/pages/home"
 import { VerifyOtpPage } from "~/pages/otp"
 import { SettingsPage } from "~/pages/settings"
 
-export const accountInitialPagePath = routeMap.creatures
+export const accountInitialPagePath = routeMap.home
 
 // const LazyLoadedPage = (
 //   pageName: string,
