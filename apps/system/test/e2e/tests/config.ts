@@ -9,6 +9,7 @@ export const dbUser = process.env.DB_USER || "root"
 export const dbPassword = process.env.DB_PASSWORD || "password"
 export const dbDatabase = process.env.DB_DATABASE || "main"
 export const dbPort = process.env.DB_PORT || "15432"
+export const isSilent = process.env.SILENT === "true" || false
 
 export const firebaseApiKey = process.env.FIREBASE_API_KEY || "test"
 export const firebaseAuthDomain = process.env.FIREBASE_AUTH_DOMAIN || "localhost"

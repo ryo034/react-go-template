@@ -20,7 +20,7 @@ export const AuthLayout = () => {
       if (state.me === null || driver.firebase.currentUser === null) {
         return
       }
-      if (isAuthenticatedRoute && state.me.emailNotVerified) {
+      if (isAuthenticatedRoute) {
         navigate(routeMap.confirmEmail)
       }
     })

@@ -1,7 +1,7 @@
 import { readFileSync } from "fs"
 import { parse } from "csv-parse/sync"
+import { format } from "node-pg-format"
 import { Client, types } from "pg"
-import format from "pg-format"
 import { dbConfig, env, initializeData, isSilent } from "./config"
 
 const logWithEllipsis = (text: string, maxLength = 50) => {

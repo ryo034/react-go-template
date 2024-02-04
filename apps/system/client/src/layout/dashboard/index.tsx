@@ -8,24 +8,9 @@ import { routeMap } from "~/infrastructure/route/path"
 
 export const sideMenu: NavItem[] = [
   {
-    label: "生き物",
-    icon: <LucideFish className="w-6 h-6" />,
-    link: routeMap.creatures
-  },
-  {
-    label: "商品",
-    icon: <Package className="w-6 h-6" />,
-    link: routeMap.items
-  },
-  {
-    label: "取引",
-    icon: <LucideDollarSign className="w-6 h-6" />,
-    link: routeMap.transactions
-  },
-  {
-    label: "分析",
+    label: "ホーム",
     icon: <LucideBarChart4 className="w-6 h-6" />,
-    link: routeMap.analytics
+    link: routeMap.home
   },
   {
     label: "設定",
