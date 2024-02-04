@@ -20,7 +20,6 @@ export interface Props extends HTMLAttributes<HTMLAnchorElement> {
 export const SidebarListItem = (link: NavItem) => {
   return (
     <Link
-      key={link.title}
       to={link.to}
       className={cn(
         buttonVariants({ variant: link.variant, size: "sm" }),

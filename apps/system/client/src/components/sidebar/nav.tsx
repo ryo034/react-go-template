@@ -35,7 +35,7 @@ export const Nav = ({ isCollapsed }: NavProps) => {
       <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
         {links.map((link) =>
           isCollapsed ? (
-            <Tooltip key={link.title} delayDuration={0}>
+            <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
                 <SidebarListItemCollapsed {...link} />
               </TooltipTrigger>
@@ -45,7 +45,7 @@ export const Nav = ({ isCollapsed }: NavProps) => {
               </TooltipContent>
             </Tooltip>
           ) : (
-            <SidebarListItem {...link} />
+            <SidebarListItem {...link} key={`${link.title}-${link.to}`} />
           )
         )}
       </nav>
