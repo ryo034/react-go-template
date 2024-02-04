@@ -17,4 +17,22 @@ const Separator = React.forwardRef<
 ))
 Separator.displayName = SeparatorPrimitive.Root.displayName
 
-export { Separator }
+interface SeparatorWithTitleProps {
+  title: string
+}
+
+const SeparatorWithTitle = React.forwardRef<HTMLDivElement, SeparatorWithTitleProps>(({ title, ...props }, ref) => {
+  return (
+    <div className="relative" {...props} ref={ref}>
+      <div className="absolute inset-0 flex items-center">
+        <span className="w-full border-t" />
+      </div>
+      <div className="relative flex justify-center text-xs uppercase">
+        <span className="bg-background px-2 text-muted-foreground">{title}</span>
+      </div>
+    </div>
+  )
+})
+SeparatorWithTitle.displayName = "SeparatorWithTitle"
+
+export { Separator, SeparatorWithTitle }

@@ -1,24 +1,35 @@
+import { LogOut } from "lucide-react"
 import { useContext } from "react"
-import { Button } from "shared-ui"
+import { Button, Card, useToast } from "shared-ui"
 import { ContainerContext } from "~/infrastructure/injector/context"
 
 export const settingPageRoute = "/settings"
 
 export const SettingsPage = () => {
-  const { store, controller } = useContext(ContainerContext)
-  const me = store.me((state) => state.me)
+  const { controller } = useContext(ContainerContext)
+  // const me = store.me((state) => state.me)
 
-  if (me === null) {
-    return <></>
+  const { toast } = useToast()
+
+  const onClick = async () => {
+    const res = await controller.me.signOut()
+    if (!res) {
+      toast({ title: "ログアウトしました👋" })
+      return
+    }
   }
 
-  const onClickLogout = async () => {
-    await controller.me.signOut()
-  }
+  // if (me === null) {
+  //   return <></>
+  // }
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <Button onClick={onClickLogout}>ログアウト</Button>
+      <Card>
+        <Button className="w-full" onClick={onClick}>
+          <LogOut className="mr-2 h-4 w-4" /> Logout
+        </Button>
+      </Card>
     </div>
   )
 }

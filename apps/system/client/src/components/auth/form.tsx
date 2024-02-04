@@ -1,6 +1,6 @@
 import { MouseEventHandler, useEffect } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { Button, FormResultErrorMessage, LoadingButton, Separator } from "shared-ui"
+import { Button, FormResultErrorMessage, LoadingButton, SeparatorWithTitle } from "shared-ui"
 import { useAuthPageFormMessage } from "~/components/auth/message"
 import { FormInputSection } from "~/components/common/form/inputSection"
 import { Email } from "~/domain"
@@ -53,7 +53,7 @@ export const AuthPageForm = ({ onSubmit, onClickGoogleLoginButton, errorMessage,
           </Button>
         </div>
 
-        <Separator />
+        <SeparatorWithTitle title="Or continue with" />
 
         <FormInputSection
           fullWidth

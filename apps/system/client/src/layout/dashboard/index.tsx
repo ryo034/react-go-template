@@ -15,18 +15,12 @@ import { AccountSwitcher } from "~/components/sidebar/accountSwitcher"
 import { Nav } from "~/components/sidebar/nav"
 
 interface DashboardLayoutProps {
-  accounts?: {
-    label: string
-    email: string
-    icon: React.ReactNode
-  }[]
   defaultLayout?: number[] | undefined
   defaultCollapsed?: boolean
   navCollapsedSize?: number
 }
 
 export const DashboardLayout = ({
-  accounts = [],
   defaultLayout = [265, 440, 655],
   defaultCollapsed = false,
   navCollapsedSize = 4
@@ -57,8 +51,7 @@ export const DashboardLayout = ({
           className={cn(isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out")}
         >
           <div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? "h-[52px]" : "px-2")}>
-            {isCollapsed ? "A" : "B"}
-            {/* <AccountSwitcher isCollapsed={isCollapsed} accounts={accounts} /> */}
+            <AccountSwitcher isCollapsed={isCollapsed} accounts={[]} />
           </div>
           <Separator />
           <Nav isCollapsed={isCollapsed} />

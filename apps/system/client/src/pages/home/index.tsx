@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { Button, Card, useToast } from "shared-ui"
+import { Card, useToast } from "shared-ui"
 import { ContainerContext } from "~/infrastructure/injector/context"
 
 export const homePageRoute = "/home"
@@ -24,9 +24,7 @@ export function HomePage() {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <Card>
-        <Button onClick={onClick}>ログアウト</Button>
-      </Card>
+      <Card>🎉🎉🎉Home🎉🎉🎉</Card>
     </div>
   )
 }
