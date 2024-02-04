@@ -2,18 +2,18 @@
 
 ## 未登録ユーザーは新規作成で途中離脱しても、正しくアカウントを作成することができる
 * 未登録ユーザーで認証する
-* "10"秒待機
-* "送信"ボタンをクリックする
-現在のURLのパスが"/onboarding/me/name"である
+* "送信"ボタンをクリック
+* ホーム画面が表示されている
+現在のURLのパスが"/onboarding/me/name"
 認証情報を破棄する
 未登録ユーザーで認証する
-現在のURLのパスが"/onboarding/me/name"である
+現在のURLのパスが"/onboarding/me/name"
 名前入力欄に名前"未登録ユーザー"を入力する
 "登録"ボタンをクリックする
-現在のURLのパスが"/onboarding/create-workspace"である
+現在のURLのパスが"/onboarding/create-workspace"
 認証情報を破棄する
 未登録ユーザーで認証する
-現在のURLのパスが"/onboarding/create-workspace"である
+現在のURLのパスが"/onboarding/create-workspace"
 ワークスペース新規作成画面でワークスペース名"未登録ユーザーのワークスペース"を入力する
 "作成"ボタンをクリックする
 開いている画面がワークスペースのメンバー一覧画面である

@@ -1,6 +1,6 @@
 import { AuthRepository } from "~/domain/auth"
 import { AuthUseCaseOutput, StartWithEmailInput, VerifyOtpInput } from "~/usecase/auth"
-import { MeUseCase } from "../me"
+import { MeUseCase } from "~/usecase/me"
 
 export interface AuthUseCase {
   startWithEmail(i: StartWithEmailInput): Promise<Error | null>
@@ -22,7 +22,6 @@ export class AuthInteractor implements AuthUseCase {
       this.presenter.setIsLoading(false)
       return res.error
     }
-    this.presenter.set(res.value)
     this.presenter.setIsLoading(false)
     return null
   }

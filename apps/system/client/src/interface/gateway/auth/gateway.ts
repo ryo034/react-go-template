@@ -1,6 +1,6 @@
 import { Result } from "true-myth"
 import { Email } from "~/domain"
-import { AuthRepository, Jwt, Otp } from "~/domain/auth"
+import { AuthRepository, CustomToken, Otp } from "~/domain/auth"
 import { AuthDriver, AuthProviderDriver } from "~/driver"
 import { PromiseResult } from "~/infrastructure/shared/result"
 import { AuthGatewayAdapter } from "~/interface/gateway/auth"
@@ -12,15 +12,15 @@ export class AuthGateway implements AuthRepository {
     private readonly adapter: AuthGatewayAdapter
   ) {}
 
-  async startWithEmail(email: Email): PromiseResult<Otp, Error> {
+  async startWithEmail(email: Email): PromiseResult<null, Error> {
     const res = await this.driver.startWithEmail(email)
     if (res.isErr) {
       return Result.err(res.error)
     }
-    return this.adapter.adaptOtp(res.value)
+    return Result.ok(null)
   }
 
-  async verifyOtp(email: Email, otp: Otp): PromiseResult<Jwt, Error> {
+  async verifyOtp(email: Email, otp: Otp): PromiseResult<CustomToken, Error> {
     const res = await this.driver.verifyOtp(email, otp)
     if (res.isErr) {
       return Result.err(res.error)
@@ -28,8 +28,8 @@ export class AuthGateway implements AuthRepository {
     return this.adapter.adaptJwt(res.value)
   }
 
-  async signInWithCustomToken(jwt: Jwt): PromiseResult<null, Error> {
-    const res = await this.apDriver.signInWithCustomToken(jwt)
+  async signInWithCustomToken(customToken: CustomToken): PromiseResult<null, Error> {
+    const res = await this.apDriver.signInWithCustomToken(customToken)
     if (res.isErr) {
       return Result.err(res.error)
     }

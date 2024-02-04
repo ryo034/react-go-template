@@ -1,8 +1,8 @@
 import { Result } from "true-myth"
 import { DomainError, ValueObject, domainKeys } from "~/domain/shared"
 
-export class Jwt extends ValueObject<string> {
-  static create(v: string): Result<Jwt, Error> {
+export class CustomToken extends ValueObject<string> {
+  static create(v: string): Result<CustomToken, Error> {
     if (v === "") {
       return Result.err(
         new DomainError({
@@ -12,6 +12,6 @@ export class Jwt extends ValueObject<string> {
         })
       )
     }
-    return Result.ok(new Jwt(v))
+    return Result.ok(new CustomToken(v))
   }
 }

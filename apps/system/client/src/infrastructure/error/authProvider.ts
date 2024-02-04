@@ -21,4 +21,5 @@ export class AuthProviderEmailAlreadyInUseError extends AuthProviderCustomError 
 export class AuthProviderIdTokenExpiredError extends AuthProviderCustomError {}
 export class AuthProviderIdTokenRevokedError extends AuthProviderCustomError {}
 export class AuthProviderUnverifiedEmailError extends AuthProviderCustomError {}
+export class AuthProviderInvalidContentTypeError extends AuthProviderCustomError {}
 export class AuthProviderInternalError extends AuthProviderCustomError {}

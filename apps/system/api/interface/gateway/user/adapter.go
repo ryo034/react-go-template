@@ -30,10 +30,15 @@ func (a *adapter) Adapt(u *models.SystemAccount) (*user.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	name, err := account.NewName(u.Profile.Name)
-	if err != nil {
-		return nil, err
+	var nm *account.Name = nil
+	if u.Profile.Name != "" {
+		name, err := account.NewName(u.Profile.Name)
+		if err != nil {
+			return nil, err
+		}
+		nm = &name
 	}
+
 	var pn *phone.Number = nil
 	if u.PhoneNumber != nil {
 		tmpPn, err := phone.NewPhoneNumber(u.PhoneNumber.PhoneNumber)
@@ -42,7 +47,7 @@ func (a *adapter) Adapt(u *models.SystemAccount) (*user.User, error) {
 		}
 		pn = &tmpPn
 	}
-	return user.NewUser(aID, email, &name, pn), nil
+	return user.NewUser(aID, email, nm, pn), nil
 }
 
 func (a *adapter) AdaptGender(g string) (account.Gender, error) {

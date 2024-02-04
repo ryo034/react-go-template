@@ -51,7 +51,7 @@ export const DashboardLayout = ({
           className={cn(isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out")}
         >
           <div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? "h-[52px]" : "px-2")}>
-            <AccountSwitcher isCollapsed={isCollapsed} accounts={[]} />
+            {/* <AccountSwitcher isCollapsed={isCollapsed} accounts={[]} /> */}
           </div>
           <Separator />
           <Nav isCollapsed={isCollapsed} />

@@ -4,6 +4,7 @@ import {
   AuthProviderEmailAlreadyInUseError,
   AuthProviderIdTokenExpiredError,
   AuthProviderIdTokenRevokedError,
+  AuthProviderInvalidContentTypeError,
   AuthProviderInvalidPasswordError,
   AuthProviderInvalidPhoneNumberError,
   AuthProviderMissingEmail,
@@ -22,7 +23,8 @@ const firebaseErrorCode = {
   idTokenExpiredError: "auth/id-token-expired",
   idTokenRevokedError: "auth/id-token-revoked",
   multiFactorAuthRequired: "auth/multi-factor-auth-required",
-  unverifiedEmail: "auth/unverified-email"
+  unverifiedEmail: "auth/unverified-email",
+  invalidContentType: "auth/invalid-content-type"
 }
 
 export class FirebaseErrorAdapter {
@@ -46,6 +48,8 @@ export class FirebaseErrorAdapter {
         return new AuthProviderIdTokenRevokedError("id token revoked")
       case firebaseErrorCode.unverifiedEmail:
         return new AuthProviderUnverifiedEmailError("unverified email")
+      case firebaseErrorCode.invalidContentType:
+        return new AuthProviderInvalidContentTypeError("invalid content type")
       default:
         return new InternalServerError(HttpStatusCode.INTERNAL_SERVER_ERROR, "Internal Server Error")
     }

@@ -1,15 +1,7 @@
-import {
-  Auth,
-  reload,
-  sendEmailVerification,
-  signInWithCustomToken,
-  signInWithEmailAndPassword,
-  signOut
-} from "firebase/auth"
+import { Auth, reload, signInWithCustomToken, signOut } from "firebase/auth"
 import { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
-import { Email, Password } from "~/domain"
-import { Jwt } from "~/domain/auth"
+import { CustomToken } from "~/domain/auth"
 import { AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
 import { PromiseResult } from "~/infrastructure/shared"
 
@@ -28,9 +20,8 @@ export interface UserCredential {
 export interface AuthProviderDriver {
   readonly currentUser: AuthProviderUser | null
   reload(): PromiseResult<null, Error>
-  signUp(): PromiseResult<null, Error>
   signOut(): PromiseResult<null, Error>
-  signInWithCustomToken(jwt: Jwt): PromiseResult<UserCredential, Error>
+  signInWithCustomToken(customToken: CustomToken): PromiseResult<UserCredential, Error>
 }
 
 export class FirebaseDriver implements AuthProviderDriver {
@@ -53,31 +44,6 @@ export class FirebaseDriver implements AuthProviderDriver {
     }
   }
 
-  async signInWithEmailAndPassword(email: Email, password: Password): PromiseResult<UserCredential, Error> {
-    try {
-      const res = await signInWithEmailAndPassword(this.client, email.value, password.value)
-      const credential: UserCredential = {
-        user: this.adaptAuthProviderUser(res.user),
-        providerId: res.providerId
-      }
-      return Result.ok(credential)
-    } catch (e) {
-      return Result.err(this.errorHandler.adapt(e))
-    }
-  }
-
-  async sendEmailVerification(): PromiseResult<null, Error> {
-    if (this.client.currentUser === null) {
-      return Result.err(new AuthProviderCurrentUserNotFoundError("currentUser is null"))
-    }
-    try {
-      await sendEmailVerification(this.client.currentUser)
-      return Result.ok(null)
-    } catch (e) {
-      return Result.err(this.errorHandler.adapt(e))
-    }
-  }
-
   async reload(): PromiseResult<null, Error> {
     try {
       if (this.client.currentUser === null) {
@@ -90,10 +56,6 @@ export class FirebaseDriver implements AuthProviderDriver {
     }
   }
 
-  async signUp(): PromiseResult<null, Error> {
-    throw new Error("Method not implemented.")
-  }
-
   async signOut(): PromiseResult<null, Error> {
     try {
       await signOut(this.client)
@@ -103,9 +65,9 @@ export class FirebaseDriver implements AuthProviderDriver {
     }
   }
 
-  async signInWithCustomToken(jwt: Jwt): PromiseResult<UserCredential, Error> {
+  async signInWithCustomToken(customToken: CustomToken): PromiseResult<UserCredential, Error> {
     try {
-      const res = await signInWithCustomToken(this.client, jwt.value)
+      const res = await signInWithCustomToken(this.client, customToken.value)
       const credential: UserCredential = {
         user: this.adaptAuthProviderUser(res.user),
         providerId: res.providerId

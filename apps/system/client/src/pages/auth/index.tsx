@@ -25,7 +25,6 @@ export const AuthPage = () => {
 
   const onSubmit: SubmitHandler<LoginFormValues> = async (d) => {
     const res = await controller.auth.startWithEmail(d.email)
-    console.log("res", res)
     if (res) {
       setErrorMessage(errorMessageProvider.translate(res))
       return

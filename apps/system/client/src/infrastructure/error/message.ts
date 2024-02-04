@@ -51,6 +51,8 @@ export const adaptAuthProviderError = (err: AuthProviderCustomError): string => 
   } else if (err instanceof AuthProviderUnverifiedEmailError) {
     msg = "メールアドレスが認証されていません"
   } else if (err instanceof AuthProviderIdTokenRevokedError) {
+  } else if (err instanceof AuthProviderInvalidPasswordError) {
+    msg = "入力された情報が正しくありません"
   } else if (err instanceof AuthProviderInternalError) {
     msg = "サーバーでエラーが発生しました"
   } else {

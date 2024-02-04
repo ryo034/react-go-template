@@ -12,6 +12,9 @@ export default class OtpConfirmStep {
   @Step("メールアドレス<email>に送信されたワンタイムパスワードを取得")
   async getOtpCodeFromRedis(email: string) {
     const code = await getOtpCodeFromRedis(email)
+    if (code === null) {
+      throw new Error("code is null")
+    }
     dataStore.put(keys.otp, code)
   }
 

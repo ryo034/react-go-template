@@ -1,4 +1,6 @@
+import { FirebaseError } from "firebase/app"
 import { NetworkBaseError, NetworkErrorInterpreter, convertToErrorByStatusCode } from "shared-network"
+import { FirebaseErrorAdapter } from "./firebase"
 
 export class EmailAlreadyInUseError extends NetworkBaseError {}
 export class InvalidEmailUseError extends NetworkBaseError {}
@@ -18,13 +20,20 @@ export const openapiFetchErrorInterpreter = (res: unknown): Error | null => {
 }
 
 export class SystemNetworkErrorInterpreter extends NetworkErrorInterpreter {
-  convertToSpecificError(err: unknown): Error | null {
-    console.log("convertToSpecificError", err)
+  constructor() {
+    super()
+    this.convertToSpecificError = this.convertToSpecificError.bind(this)
+    this.isValidGenericError = this.isValidGenericError.bind(this)
+  }
 
+  convertToSpecificError(err: unknown): Error | null {
     if (this.isValidGenericError(err)) {
       return convertToErrorByStatusCode(err.statusCode, err.message)
     }
-    // Firebaseのエラーをここに追加する
+
+    if (err instanceof FirebaseError) {
+      return FirebaseErrorAdapter.create(err)
+    }
 
     return openapiFetchErrorInterpreter(err)
   }
