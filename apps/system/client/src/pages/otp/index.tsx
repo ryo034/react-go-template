@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom"
 import { OtpFormValues, VerifyOTPPageForm } from "~/components/auth/otp/form"
 import { i18nKeys } from "~/infrastructure/i18n"
 import { ContainerContext } from "~/infrastructure/injector/context"
+import { routeMap } from "~/infrastructure/route/path"
+
+export const verifyOtpPageRoute = "/verify-otp"
 
 export const VerifyOtpPage = () => {
   const { store, controller, i18n, errorMessageProvider } = useContext(ContainerContext)
@@ -28,14 +31,13 @@ export const VerifyOtpPage = () => {
     if (!email) {
       return
     }
-    const opt = d.otpInput1 + d.otpInput2 + d.otpInput3 + d.otpInput4 + d.otpInput5 + d.otpInput6
+    const opt = `${d.otpInput1}${d.otpInput2}${d.otpInput3}${d.otpInput4}${d.otpInput5}${d.otpInput6}`
     const res = await controller.auth.verifyOtp(email, opt)
-    console.log("res", res)
     if (res) {
       setErrorMessage(errorMessageProvider.translate(res))
       return
     }
-    navigate("/")
+    navigate(routeMap.home)
   }
 
   return (

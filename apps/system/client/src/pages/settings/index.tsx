@@ -2,6 +2,8 @@ import { useContext } from "react"
 import { Button } from "shared-ui"
 import { ContainerContext } from "~/infrastructure/injector/context"
 
+export const settingPageRoute = "/settings"
+
 export const SettingsPage = () => {
   const { store, controller } = useContext(ContainerContext)
   const me = store.me((state) => state.me)
@@ -15,8 +17,8 @@ export const SettingsPage = () => {
   }
 
   return (
-    <section className="">
+    <div className="flex justify-center items-center min-h-screen">
       <Button onClick={onClickLogout}>ログアウト</Button>
-    </section>
+    </div>
   )
 }

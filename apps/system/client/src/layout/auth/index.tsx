@@ -12,33 +12,33 @@ export const AuthLayout = () => {
   const meRef = useRef(me)
   const [_, loading] = useAuthState(firebaseAuth)
 
-  useLayoutEffect(() => {
-    // 認証済みルートを検証
-    store.me.subscribe((state) => {
-      const isAuthenticatedRoute = authRoutes.includes(window.location.pathname)
-      meRef.current = state.me
-      if (state.me === null || driver.firebase.currentUser === null) {
-        return
-      }
-      if (isAuthenticatedRoute) {
-        navigate(routeMap.confirmEmail)
-      }
-    })
+  // useLayoutEffect(() => {
+  //   // 認証済みルートを検証
+  //   store.me.subscribe((state) => {
+  //     const isAuthenticatedRoute = authRoutes.includes(window.location.pathname)
+  //     meRef.current = state.me
+  //     if (state.me === null || driver.firebase.currentUser === null) {
+  //       return
+  //     }
+  //     if (isAuthenticatedRoute) {
+  //       navigate(routeMap.auth)
+  //     }
+  //   })
 
-    // 未認証ルートを検証
-    const unsubscribed = firebaseAuth.onAuthStateChanged(async (user) => {
-      const isAuthenticatedRoute = authRoutes.includes(window.location.pathname)
-      if (user === null) {
-        if (isAuthenticatedRoute) {
-          navigate(unprotectedInitialPagePath)
-          return
-        }
-      }
-      await controller.me.find()
-    })
+  //   // 未認証ルートを検証
+  //   const unsubscribed = firebaseAuth.onAuthStateChanged(async (user) => {
+  //     const isAuthenticatedRoute = authRoutes.includes(window.location.pathname)
+  //     if (user === null) {
+  //       if (isAuthenticatedRoute) {
+  //         navigate(unprotectedInitialPagePath)
+  //         return
+  //       }
+  //     }
+  //     await controller.me.find()
+  //   })
 
-    return () => unsubscribed()
-  }, [])
+  //   return () => unsubscribed()
+  // }, [])
 
   if (loading) {
     return <div />

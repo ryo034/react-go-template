@@ -1,42 +1,75 @@
-import { LucideBarChart4, LucideCog, LucideDollarSign, LucideFish, Package } from "lucide-react"
-import { useContext, useLayoutEffect } from "react"
+"use client"
+
+import * as React from "react"
 import { Outlet } from "react-router-dom"
-import { NavItem } from "~/components/sidebar/listItem"
-import { Sidebar } from "~/components/sidebar/sidebar"
-import { ContainerContext } from "~/infrastructure/injector/context"
-import { routeMap } from "~/infrastructure/route/path"
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+  ScrollArea,
+  Separator,
+  TooltipProvider,
+  cn
+} from "shared-ui"
+import { AccountSwitcher } from "~/components/sidebar/accountSwitcher"
+import { Nav } from "~/components/sidebar/nav"
 
-export const sideMenu: NavItem[] = [
-  {
-    label: "ホーム",
-    icon: <LucideBarChart4 className="w-6 h-6" />,
-    link: routeMap.home
-  },
-  {
-    label: "設定",
-    icon: <LucideCog className="w-6 h-6" />,
-    link: routeMap.settings
-  }
-]
+interface DashboardLayoutProps {
+  accounts?: {
+    label: string
+    email: string
+    icon: React.ReactNode
+  }[]
+  defaultLayout?: number[] | undefined
+  defaultCollapsed?: boolean
+  navCollapsedSize?: number
+}
 
-export const DashboardLayout = () => {
-  const { store } = useContext(ContainerContext)
-  useLayoutEffect(() => {
-    store.me.subscribe((state) => {
-      if (state.me === null) {
-        return
-      }
-      return () => {}
-    })
-  })
+export const DashboardLayout = ({
+  accounts = [],
+  defaultLayout = [265, 440, 655],
+  defaultCollapsed = false,
+  navCollapsedSize = 4
+}: DashboardLayoutProps) => {
+  const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed)
+
   return (
-    <div className="overflow-hidden w-full h-full relative flex z-0">
-      <Sidebar menus={sideMenu} />
-      <main className="relative flex h-full max-w-full flex-1 overflow-hidden">
-        <div className="flex-1 overflow-y-auto">
-          <Outlet />
-        </div>
-      </main>
-    </div>
+    <TooltipProvider delayDuration={0}>
+      <ResizablePanelGroup
+        direction="horizontal"
+        onLayout={(sizes: number[]) => {
+          document.cookie = `react-resizable-panels:layout=${JSON.stringify(sizes)}`
+        }}
+        className="h-full max-h-full items-stretch"
+      >
+        <ResizablePanel
+          defaultSize={defaultLayout[0]}
+          collapsedSize={navCollapsedSize}
+          collapsible={true}
+          minSize={15}
+          maxSize={20}
+          onExpand={() => {
+            setIsCollapsed(false)
+          }}
+          onCollapse={() => {
+            setIsCollapsed(true)
+          }}
+          className={cn(isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out")}
+        >
+          <div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? "h-[52px]" : "px-2")}>
+            {isCollapsed ? "A" : "B"}
+            {/* <AccountSwitcher isCollapsed={isCollapsed} accounts={accounts} /> */}
+          </div>
+          <Separator />
+          <Nav isCollapsed={isCollapsed} />
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={defaultLayout[2]}>
+          <ScrollArea className="h-screen">
+            <Outlet />
+          </ScrollArea>
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </TooltipProvider>
   )
 }

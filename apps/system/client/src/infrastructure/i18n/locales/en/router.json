@@ -1,0 +1,6 @@
+{
+  "router": {
+    "home": "Home",
+    "setting": "Setting"
+  }
+}

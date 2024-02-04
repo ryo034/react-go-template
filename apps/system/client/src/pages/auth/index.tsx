@@ -6,6 +6,8 @@ import { i18nKeys } from "~/infrastructure/i18n"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { routeMap } from "~/infrastructure/route/path"
 
+export const authPageRoute = "/"
+
 export const AuthPage = () => {
   const { store, controller, i18n, errorMessageProvider } = useContext(ContainerContext)
   const me = store.me((state) => state.me)
@@ -22,7 +24,6 @@ export const AuthPage = () => {
   }, [])
 
   const onSubmit: SubmitHandler<LoginFormValues> = async (d) => {
-    console.log("onClickSendAuthenticationCode")
     const res = await controller.auth.startWithEmail(d.email)
     console.log("res", res)
     if (res) {

@@ -1,12 +1,15 @@
-import { cva } from "class-variance-authority"
-import { HTMLAttributes, ReactNode } from "react"
+import { LucideIcon } from "lucide-react"
+import { HTMLAttributes } from "react"
 import { Link } from "react-router-dom"
+import { buttonVariants } from "shared-ui"
 import { cn } from "~/infrastructure/tailwindcss"
 
 export interface NavItem {
-  label: string
-  icon: ReactNode | undefined
-  link: string
+  title: string
+  label?: string
+  icon: LucideIcon
+  variant: "default" | "ghost"
+  to: string
 }
 
 export interface Props extends HTMLAttributes<HTMLAnchorElement> {
@@ -14,28 +17,41 @@ export interface Props extends HTMLAttributes<HTMLAnchorElement> {
   variant?: "default"
 }
 
-const variants = cva(
-  "flex items-center rounded-lg px-3 py-2 text-slate-900 dark:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 dark:focus:ring-blue-500",
-  {
-    variants: {
-      variant: {
-        default: "hover:bg-sidebar-hover"
-      }
-    },
-    defaultVariants: {
-      variant: "default"
-    }
-  }
-)
-
-export const SidebarListItem = ({ menu, variant, className }: Props) => {
+export const SidebarListItem = (link: NavItem) => {
   return (
-    <li className="px-3">
-      <Link className={cn(variants({ variant, className }))} to={menu.link}>
-        <span className="inline-flex items-center justify-center gap-1">
-          {menu.icon} <span className="ml-3 text-lg flex-1 whitespace-nowrap">{menu.label}</span>
+    <Link
+      key={link.title}
+      to={link.to}
+      className={cn(
+        buttonVariants({ variant: link.variant, size: "sm" }),
+        link.variant === "default" && "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
+        "justify-start"
+      )}
+    >
+      <link.icon className="mr-2 h-4 w-4" />
+      {link.title}
+      {link.label && (
+        <span className={cn("ml-auto", link.variant === "default" && "text-background dark:text-white")}>
+          {link.label}
         </span>
-      </Link>
-    </li>
+      )}
+    </Link>
+  )
+}
+
+export const SidebarListItemCollapsed = (link: NavItem) => {
+  return (
+    <Link
+      to={link.to}
+      className={cn(
+        buttonVariants({ variant: link.variant, size: "icon" }),
+        "h-9 w-9",
+        link.variant === "default" &&
+          "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
+      )}
+    >
+      <link.icon className="h-4 w-4" />
+      <span className="sr-only">{link.title}</span>
+    </Link>
   )
 }

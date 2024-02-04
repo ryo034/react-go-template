@@ -1,8 +1,8 @@
-import { LogOut } from "lucide-react"
 import { useContext } from "react"
-import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle, useToast } from "shared-ui"
+import { Button, Card, useToast } from "shared-ui"
 import { ContainerContext } from "~/infrastructure/injector/context"
-import { cn } from "~/infrastructure/tailwindcss"
+
+export const homePageRoute = "/home"
 
 export function HomePage() {
   const { controller, store } = useContext(ContainerContext)
@@ -18,29 +18,15 @@ export function HomePage() {
     }
   }
 
-  if (me === null) {
-    return <></>
-  }
+  // if (me === null || me.self === undefined || me.self.name === undefined) {
+  //   return <></>
+  // }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-background/95">
-      <section className="">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <Card className={cn("w-[380px]")}>
-            <CardHeader>
-              <CardTitle>Congratulations🎉🎉🎉</CardTitle>
-            </CardHeader>
-            <CardContent className="grid gap-4">
-              <h2>Hello!! {me.self.name}</h2>
-            </CardContent>
-            <CardFooter>
-              <Button className="w-full" onClick={onClick}>
-                <LogOut className="mr-2 h-4 w-4" /> Logout
-              </Button>
-            </CardFooter>
-          </Card>
-        </div>
-      </section>
+    <div className="flex justify-center items-center min-h-screen">
+      <Card>
+        <Button onClick={onClick}>ログアウト</Button>
+      </Card>
     </div>
   )
 }
