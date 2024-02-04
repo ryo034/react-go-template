@@ -5,7 +5,6 @@ import { DashboardLayout } from "~/layout/dashboard"
 import { LoadingLayout } from "~/layout/loading"
 import { ThemeLayout } from "~/layout/theme"
 import { TrackingLayout } from "~/layout/tracking"
-import { AccountPage } from "~/pages/account"
 import { AuthPage } from "~/pages/auth"
 import { NotFoundPage } from "~/pages/error/notFound"
 import { HomePage } from "~/pages/home"
@@ -47,7 +46,6 @@ const router = createBrowserRouter([
                     element: <DashboardLayout />,
                     children: [
                       { path: routeMap.home, element: <HomePage /> },
-                      { path: routeMap.account, element: <AccountPage /> },
                       { path: routeMap.settings, element: <SettingsPage /> }
                     ]
                   }
