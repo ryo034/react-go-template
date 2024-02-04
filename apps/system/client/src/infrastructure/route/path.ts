@@ -1,7 +1,6 @@
 export const routeMap = {
   auth: "/",
   verifyOtp: "/verify-otp",
-  confirmEmail: "/confirm-email",
   account: "/account",
   home: "/home",
   items: "/items",
@@ -15,7 +14,6 @@ export const unauthenticatedRoutes = [routeMap.auth.toString(), routeMap.verifyO
 
 export const authRoutes = [
   routeMap.account.toString(),
-  routeMap.confirmEmail.toString(),
   routeMap.home.toString(),
   routeMap.transactions.toString(),
   routeMap.items.toString(),
