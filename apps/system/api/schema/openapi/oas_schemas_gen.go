@@ -50,6 +50,20 @@ func (s *APIV1AuthOtpVerifyPostReq) SetOtp(val string) {
 	s.Otp = val
 }
 
+type APIV1MeProfilePutReq struct {
+	User User `json:"user"`
+}
+
+// GetUser returns the value of User.
+func (s *APIV1MeProfilePutReq) GetUser() User {
+	return s.User
+}
+
+// SetUser sets the value of User.
+func (s *APIV1MeProfilePutReq) SetUser(val User) {
+	s.User = val
+}
+
 type APIV1PingGetOK struct {
 	// Ping response message.
 	Message OptString `json:"message"`
@@ -161,8 +175,8 @@ func (s *BadRequestError) SetCode(val OptString) {
 func (*BadRequestError) aPIV1AuthOAuthPostRes()     {}
 func (*BadRequestError) aPIV1AuthOtpPostRes()       {}
 func (*BadRequestError) aPIV1AuthOtpVerifyPostRes() {}
+func (*BadRequestError) aPIV1MeProfilePutRes()      {}
 func (*BadRequestError) aPIV1WorkspacesPostRes()    {}
-func (*BadRequestError) updateNameRes()             {}
 
 type Bearer struct {
 	Token string
@@ -312,11 +326,11 @@ func (*InternalServerError) aPIV1AuthOAuthPostRes()     {}
 func (*InternalServerError) aPIV1AuthOtpPostRes()       {}
 func (*InternalServerError) aPIV1AuthOtpVerifyPostRes() {}
 func (*InternalServerError) aPIV1MeGetRes()             {}
+func (*InternalServerError) aPIV1MeProfilePutRes()      {}
 func (*InternalServerError) aPIV1PingGetRes()           {}
 func (*InternalServerError) aPIV1WorkspacesGetRes()     {}
 func (*InternalServerError) aPIV1WorkspacesPostRes()    {}
 func (*InternalServerError) loginRes()                  {}
-func (*InternalServerError) updateNameRes()             {}
 
 // Ref: #/components/schemas/JwtToken
 type JwtToken struct {
@@ -384,9 +398,9 @@ func (s *Me) SetJoinedWorkspaces(val []Workspace) {
 	s.JoinedWorkspaces = val
 }
 
-func (*Me) aPIV1MeGetRes() {}
-func (*Me) loginRes()      {}
-func (*Me) updateNameRes() {}
+func (*Me) aPIV1MeGetRes()        {}
+func (*Me) aPIV1MeProfilePutRes() {}
+func (*Me) loginRes()             {}
 
 // Ref: #/components/schemas/Member
 type Member struct {
@@ -703,20 +717,72 @@ func (s *TooManyRequestsError) SetCode(val OptString) {
 func (*TooManyRequestsError) aPIV1AuthOtpPostRes()       {}
 func (*TooManyRequestsError) aPIV1AuthOtpVerifyPostRes() {}
 
-type UpdateNameReq struct {
-	// Name.
-	Name string `json:"name"`
+// RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
+type UnauthorizedError struct {
+	// The HTTP status code generated for this occurrence of the problem.
+	Status OptInt `json:"status"`
+	// Error type.
+	Type OptString `json:"type"`
+	// A short, human-readable summary of the problem type.
+	Title OptString `json:"title"`
+	// A human-readable explanation specific to this occurrence of the problem.
+	Detail OptString `json:"detail"`
+	// Error code.
+	Code OptString `json:"code"`
 }
 
-// GetName returns the value of Name.
-func (s *UpdateNameReq) GetName() string {
-	return s.Name
+// GetStatus returns the value of Status.
+func (s *UnauthorizedError) GetStatus() OptInt {
+	return s.Status
 }
 
-// SetName sets the value of Name.
-func (s *UpdateNameReq) SetName(val string) {
-	s.Name = val
+// GetType returns the value of Type.
+func (s *UnauthorizedError) GetType() OptString {
+	return s.Type
 }
+
+// GetTitle returns the value of Title.
+func (s *UnauthorizedError) GetTitle() OptString {
+	return s.Title
+}
+
+// GetDetail returns the value of Detail.
+func (s *UnauthorizedError) GetDetail() OptString {
+	return s.Detail
+}
+
+// GetCode returns the value of Code.
+func (s *UnauthorizedError) GetCode() OptString {
+	return s.Code
+}
+
+// SetStatus sets the value of Status.
+func (s *UnauthorizedError) SetStatus(val OptInt) {
+	s.Status = val
+}
+
+// SetType sets the value of Type.
+func (s *UnauthorizedError) SetType(val OptString) {
+	s.Type = val
+}
+
+// SetTitle sets the value of Title.
+func (s *UnauthorizedError) SetTitle(val OptString) {
+	s.Title = val
+}
+
+// SetDetail sets the value of Detail.
+func (s *UnauthorizedError) SetDetail(val OptString) {
+	s.Detail = val
+}
+
+// SetCode sets the value of Code.
+func (s *UnauthorizedError) SetCode(val OptString) {
+	s.Code = val
+}
+
+func (*UnauthorizedError) aPIV1MeGetRes()        {}
+func (*UnauthorizedError) aPIV1MeProfilePutRes() {}
 
 // Ref: #/components/schemas/User
 type User struct {

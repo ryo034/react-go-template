@@ -21,7 +21,7 @@ const firebaseAuthEmulatorHost = "http://localhost:9099"
 
 const setupForEmulator = () => {
   connectAuthEmulator(firebaseAuth, firebaseAuthEmulatorHost, {
-    disableWarnings: false
+    disableWarnings: true
   })
   connectStorageEmulator(firebaseStorage, "localhost", 9199)
 }

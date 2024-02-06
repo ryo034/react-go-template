@@ -27,7 +27,11 @@ export class Me extends Entity<Props> {
   }
 
   get hasWorkspace(): boolean {
-    return this.value.workspace !== undefined
+    return !!this.value.workspace
+  }
+
+  get hasNotWorkspace(): boolean {
+    return !this.hasWorkspace
   }
 
   get hasMember(): boolean {

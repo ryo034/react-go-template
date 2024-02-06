@@ -24,6 +24,10 @@ func NewName(v string) (Name, error) {
 	return Name{v}, nil
 }
 
-func (n Name) ToString() string {
+func (n *Name) ToString() string {
 	return n.v
+}
+
+func (n *Name) Equals(target Name) bool {
+	return n.v == target.v
 }

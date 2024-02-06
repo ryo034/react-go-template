@@ -2,22 +2,24 @@ package me
 
 import (
 	"context"
+	"fmt"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/id"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	"github.com/uptrace/bun"
 )
 
 type Driver interface {
-	Find(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error)
+	Find(ctx context.Context, exec bun.IDB, mID member.ID) (*models.Member, error)
 	LastLogin(ctx context.Context, exec bun.IDB, mID member.ID) error
 	FindLastLogin(ctx context.Context, exec bun.IDB, aID account.ID) (*models.MemberLoginHistory, error)
 	FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*models.SystemAccount, error)
-	Update(ctx context.Context, exec bun.IDB, m *me.Me) (*models.Member, error)
-	UpdateName(ctx context.Context, exec bun.IDB, aID account.ID, name account.Name) (*models.SystemAccount, error)
+	FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) (*models.SystemAccount, error)
+	UpdateMember(ctx context.Context, exec bun.IDB, m *me.Me) error
+	UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User) error
 }
 
 type driver struct {
@@ -27,7 +29,7 @@ func NewDriver() Driver {
 	return &driver{}
 }
 
-func (d *driver) Find(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error) {
+func (d *driver) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*models.Member, error) {
 	mem := &models.Member{}
 	err := exec.
 		NewSelect().
@@ -38,8 +40,7 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, aID account.ID, wID wor
 		Relation("SystemAccount").
 		Relation("SystemAccount.Profile").
 		Relation("SystemAccount.PhoneNumber").
-		Where("m.system_account_id = ?", aID.ToString()).
-		Where("m.workspace_id = ?", wID.ToString()).
+		Where("m.member_id = ?", mID.Value()).
 		Scan(ctx)
 	if err != nil {
 		return nil, err
@@ -94,38 +95,46 @@ func (d *driver) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID accoun
 	return sysAcc, nil
 }
 
-func (d *driver) Update(ctx context.Context, exec bun.IDB, m *me.Me) (*models.Member, error) {
-	mem := &models.Member{}
+func (d *driver) FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) (*models.SystemAccount, error) {
+	sysAcc := &models.SystemAccount{}
+	err := exec.
+		NewSelect().
+		Model(sysAcc).
+		Relation("Profile").
+		Relation("PhoneNumber").
+		Where("sa.system_account_id = ?", aID.ToString()).
+		Scan(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return sysAcc, nil
+}
+
+func (d *driver) UpdateMember(ctx context.Context, exec bun.IDB, m *me.Me) error {
+	mem := &models.MemberProfile{
+		MemberID:       m.Member().ID().Value(),
+		MemberIDNumber: m.Member().IDNumber().ToString(),
+		DisplayName:    m.Member().DisplayName().ToString(),
+	}
 	_, err := exec.
 		NewUpdate().
 		Model(mem).
-		Set("updated_at = now()").
-		Where("id = ?", m.Member().ID().ToString()).
+		WherePK().
 		Exec(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return mem, nil
+	return err
 }
 
-func (d *driver) UpdateName(ctx context.Context, exec bun.IDB, aID account.ID, name account.Name) (*models.SystemAccount, error) {
-	res, err := d.FindBeforeOnboard(ctx, exec, aID)
-	if err != nil {
-		return nil, err
+func (d *driver) UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User) error {
+	mem := &models.SystemAccountProfile{
+		SystemAccountID: usr.AccountID().Value(),
+		Name:            usr.Name().ToString(),
+		Email:           usr.Email().ToString(),
 	}
-	res.Profile.Name = name.ToString()
-	m := models.SystemAccountProfile{
-		SystemAccountID: aID.Value(),
-		Name:            name.ToString(),
-		Email:           res.Profile.Email,
-	}
-	_, err = exec.
+	res, err := exec.
 		NewUpdate().
-		Model(&m).
-		Where("system_account_id = ?", aID.ToString()).
+		Model(mem).
+		WherePK().
 		Exec(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
+	fmt.Println(res)
+	return err
 }

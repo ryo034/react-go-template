@@ -5,6 +5,14 @@
     },
     "verifyOtp": {
       "enterOtpMessage": "Please Enter the Authentication Code Sent to Your Email"
+    },
+    "onboardingSettingName": {
+      "title": "Hello, what's your name?",
+      "description": "We would like to know you better🙏"
+    },
+    "onboardingSettingWorkspace": {
+      "title": "Your workspace unique link.",
+      "description": "This will be your unique link to access your workspace."
     }
   }
 }

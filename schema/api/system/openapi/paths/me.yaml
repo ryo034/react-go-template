@@ -13,27 +13,30 @@ me:
           application/json:
             schema:
               $ref: "#/components/schemas/Me"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
       "500":
         $ref: "#/components/responses/InternalServerError"
 
-updateName:
-  post:
-    summary: Update Name
-    description: Update Name
-    operationId: updateName
+profile:
+  put:
+    summary: Update Profile
+    description: Updates the user profile
     tags:
-      - Admin
+      - Profile
     security:
       - bearer: []
     requestBody:
-      $ref: "#/components/requestBodies/UpdateName"
+      $ref: "#/components/requestBodies/UpdateMeProfile"
     responses:
       "200":
-        description: Update Name response
+        description: Profile updated
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/Me"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
       "400":
         $ref: "#/components/responses/BadRequestError"
       "500":

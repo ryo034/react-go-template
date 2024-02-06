@@ -94,16 +94,30 @@ export interface paths {
             "application/json": components["schemas"]["Me"];
           };
         };
+        401: components["responses"]["UnauthorizedError"];
         500: components["responses"]["InternalServerError"];
       };
     };
   };
-  "/api/v1/me/update-name": {
+  "/api/v1/me/profile": {
     /**
-     * Update Name
-     * @description Update Name
+     * Update Profile
+     * @description Updates the user profile
      */
-    post: operations["updateName"];
+    put: {
+      requestBody: components["requestBodies"]["UpdateMeProfile"];
+      responses: {
+        /** @description Profile updated */
+        200: {
+          content: {
+            "application/json": components["schemas"]["Me"];
+          };
+        };
+        400: components["responses"]["BadRequestError"];
+        401: components["responses"]["UnauthorizedError"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
   };
   "/api/v1/login": {
     /**
@@ -423,15 +437,11 @@ export interface components {
         };
       };
     };
-    /** @description Update Name */
-    UpdateName: {
+    /** @description Update Me Profile */
+    UpdateMeProfile: {
       content: {
         "application/json": {
-          /**
-           * @description Name
-           * @example John Doe
-           */
-          name: string;
+          user: components["schemas"]["User"];
         };
       };
     };
@@ -446,23 +456,6 @@ export type external = Record<string, never>;
 
 export interface operations {
 
-  /**
-   * Update Name
-   * @description Update Name
-   */
-  updateName: {
-    requestBody: components["requestBodies"]["UpdateName"];
-    responses: {
-      /** @description Update Name response */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Me"];
-        };
-      };
-      400: components["responses"]["BadRequestError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
   /**
    * Login
    * @description Login

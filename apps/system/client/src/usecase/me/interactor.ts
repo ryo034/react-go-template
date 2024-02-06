@@ -1,9 +1,14 @@
-import { MeRepository } from "~/domain"
+import { MeRepository, User } from "~/domain"
 import { MeUseCaseOutput } from "~/usecase"
 
 export interface MeUseCase {
   signOut(): Promise<Error | null>
   find(): Promise<Error | null>
+  updateProfile(i: UpdateProfileInput): Promise<Error | null>
+}
+
+export type UpdateProfileInput = {
+  user: User
 }
 
 export class MeInteractor implements MeUseCase {
@@ -27,6 +32,15 @@ export class MeInteractor implements MeUseCase {
     }
     this.presenter.set(res.value)
     this.presenter.setIsLoading(false)
+    return null
+  }
+
+  async updateProfile(i: UpdateProfileInput): Promise<Error | null> {
+    const res = await this.repository.updateProfile(i.user)
+    if (res.isErr) {
+      return res.error
+    }
+    this.presenter.set(res.value)
     return null
   }
 }

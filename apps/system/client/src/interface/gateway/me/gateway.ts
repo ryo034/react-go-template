@@ -1,5 +1,5 @@
 import { Result } from "true-myth"
-import { Me, MeRepository } from "~/domain"
+import { AccountName, Me, MeRepository, User } from "~/domain"
 import { AuthProviderDriver, MeDriver } from "~/driver"
 import { PromiseResult } from "~/infrastructure/shared/result"
 import { MeGatewayAdapter } from "~/interface/gateway/me/adapter"
@@ -20,6 +20,14 @@ export class MeGateway implements MeRepository {
       return Result.err(new Error("user is not logged in"))
     }
     const res = await this.driver.find()
+    if (res.isErr) {
+      return Result.err(res.error)
+    }
+    return this.adapter.adapt(res.value)
+  }
+
+  async updateProfile(user: User): PromiseResult<Me, Error> {
+    const res = await this.driver.updateProfile(user)
     if (res.isErr) {
       return Result.err(res.error)
     }

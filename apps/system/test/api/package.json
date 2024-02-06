@@ -2,6 +2,7 @@
   "name": "system-api-test",
   "description": "API test",
   "scripts": {
+    "test-me": "PARALLEL=true SILENT=true playwright test ./tests/me/update.spec.ts",
     "test:stateless": "PARALLEL=true SILENT=true playwright test --workers=3 --grep-invert @stateful",
     "test:stateful": "PARALLEL=false SILENT=true playwright test --workers=1 --grep @stateful"
   },

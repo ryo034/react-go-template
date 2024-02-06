@@ -6,7 +6,8 @@ import (
 	"errors"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	fbDr "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	meDr "github.com/ryo034/react-go-template/apps/system/api/driver/me"
 	workspaceDr "github.com/ryo034/react-go-template/apps/system/api/driver/workspace"
@@ -24,12 +25,12 @@ func NewGateway(md meDr.Driver, fd fbDr.Driver, wd workspaceDr.Driver, a Adapter
 	return &gateway{md, fd, wd, a}
 }
 
-func (g *gateway) Find(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*me.Me, error) {
-	res, err := g.md.Find(ctx, exec, aID, wID)
+func (g *gateway) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*me.Me, error) {
+	res, err := g.md.Find(ctx, exec, mID)
 	if err != nil {
 		return nil, err
 	}
-	ws, err := g.wd.FindAll(ctx, exec, aID)
+	ws, err := g.wd.FindAll(ctx, exec, account.NewIDFromUUID(res.SystemAccountID))
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		return nil, err
 	}
@@ -41,7 +42,7 @@ func (g *gateway) FindLastLogin(ctx context.Context, exec bun.IDB, aID account.I
 	if err != nil {
 		return nil, err
 	}
-	return g.Find(ctx, exec, aID, workspace.NewIDFromUUID(res.Member.WorkspaceID))
+	return g.Find(ctx, exec, member.NewIDFromUUID(res.Member.MemberID))
 }
 
 func (g *gateway) LastLogin(ctx context.Context, exec bun.IDB, m *me.Me) error {
@@ -59,21 +60,21 @@ func (g *gateway) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID accou
 	return g.a.AdaptSystemAccount(res)
 }
 
-func (g *gateway) Update(ctx context.Context, exec bun.IDB, m *me.Me) (*me.Me, error) {
-	res, err := g.md.Update(ctx, exec, m)
+func (g *gateway) FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) (*me.Me, error) {
+	res, err := g.md.FindProfile(ctx, exec, aID)
 	if err != nil {
-		return nil, err
-	}
-	return g.a.Adapt(res, nil)
-}
-
-func (g *gateway) UpdateName(ctx context.Context, exec bun.IDB, aID account.ID, name account.Name) (*me.Me, error) {
-	res, err := g.md.UpdateName(ctx, exec, aID, name)
-	if err != nil {
-		return nil, err
-	}
-	if err = g.fd.UpdateName(ctx, aID, name); err != nil {
 		return nil, err
 	}
 	return g.a.AdaptSystemAccount(res)
+}
+
+func (g *gateway) UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User) error {
+	if err := g.md.UpdateProfile(ctx, exec, usr); err != nil {
+		return err
+	}
+	return g.fd.UpdateProfile(ctx, usr)
+}
+
+func (g *gateway) UpdateMember(ctx context.Context, exec bun.IDB, m *me.Me) error {
+	return g.md.UpdateMember(ctx, exec, m)
 }

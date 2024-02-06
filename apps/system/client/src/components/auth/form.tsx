@@ -45,35 +45,33 @@ export const AuthPageForm = ({ onSubmit, onClickGoogleLoginButton, errorMessage,
   }, [])
 
   return (
-    <>
-      <form className="space-y-6" id={authFormId} onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <Button fullWidth type="button" onClick={onClickGoogleLoginButton} data-testid="googleLoginButton">
-            Googleでログイン
-          </Button>
-        </div>
+    <form className="space-y-6" id={authFormId} onSubmit={handleSubmit(onSubmit)}>
+      <div>
+        <Button fullWidth type="button" onClick={onClickGoogleLoginButton} data-testid="googleLoginButton">
+          Googleでログイン
+        </Button>
+      </div>
 
-        <SeparatorWithTitle title="Or continue with" />
+      <SeparatorWithTitle title="Or continue with" />
 
-        <FormInputSection
-          fullWidth
-          title={message.word.email}
-          id="email"
-          type="email"
-          placeholder="name@company.com"
-          autoComplete="email"
-          reactHookForm={emailInputField}
-          errorMessage={errors.email?.message ?? ""}
-        />
-        <FormResultErrorMessage message={errorMessage} />
-        {isLoading ? (
-          <LoadingButton fullWidth data-testid="authPageFormStartLoadingButton" />
-        ) : (
-          <Button fullWidth type="submit" form={authFormId} data-testid="startButton">
-            {message.action.startWithEmail}
-          </Button>
-        )}
-      </form>
-    </>
+      <FormInputSection
+        fullWidth
+        title={message.word.email}
+        id="email"
+        type="email"
+        placeholder="name@company.com"
+        autoComplete="email"
+        reactHookForm={emailInputField}
+        errorMessage={errors.email?.message ?? ""}
+      />
+      <FormResultErrorMessage message={errorMessage} />
+      {isLoading ? (
+        <LoadingButton fullWidth data-testid="authPageFormStartLoadingButton" />
+      ) : (
+        <Button fullWidth type="submit" form={authFormId} data-testid="startButton">
+          {message.action.startWithEmail}
+        </Button>
+      )}
+    </form>
   )
 }

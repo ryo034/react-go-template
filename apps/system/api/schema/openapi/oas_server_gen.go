@@ -32,6 +32,12 @@ type Handler interface {
 	//
 	// GET /api/v1/me
 	APIV1MeGet(ctx context.Context) (APIV1MeGetRes, error)
+	// APIV1MeProfilePut implements PUT /api/v1/me/profile operation.
+	//
+	// Updates the user profile.
+	//
+	// PUT /api/v1/me/profile
+	APIV1MeProfilePut(ctx context.Context, req *APIV1MeProfilePutReq) (APIV1MeProfilePutRes, error)
 	// APIV1PingGet implements GET /api/v1/ping operation.
 	//
 	// Checks if the server is running.
@@ -56,12 +62,6 @@ type Handler interface {
 	//
 	// POST /api/v1/login
 	Login(ctx context.Context) (LoginRes, error)
-	// UpdateName implements updateName operation.
-	//
-	// Update Name.
-	//
-	// POST /api/v1/me/update-name
-	UpdateName(ctx context.Context, req *UpdateNameReq) (UpdateNameRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

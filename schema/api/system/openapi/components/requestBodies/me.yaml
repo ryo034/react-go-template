@@ -1,14 +1,12 @@
-UpdateName:
-  description: Update Name
+UpdateMeProfile:
+  description: Update Me Profile
   required: true
   content:
     application/json:
       schema:
         type: object
         required:
-          - name
+          - user
         properties:
-          name:
-            type: string
-            description: Name
-            example: "John Doe"
+          user:
+            $ref: "#/components/schemas/User"

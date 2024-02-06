@@ -4,11 +4,11 @@ import (
 	"context"
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"log"
 
 	"firebase.google.com/go/v4/auth"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/firebase"
 )
@@ -20,7 +20,7 @@ type Driver interface {
 	GetUser(ctx context.Context, aID account.ID) (*auth.UserRecord, error)
 	CreateUser(ctx context.Context, aID account.ID, email account.Email) error
 	SetCurrentWorkspaceToCustomClaim(ctx context.Context, aID account.ID, wID workspace.ID) error
-	UpdateMe(ctx context.Context, me *me.Me) error
+	UpdateProfile(ctx context.Context, usr *user.User) error
 	UpdateEmail(ctx context.Context, aID account.ID, em account.Email) error
 	UpdateName(ctx context.Context, aID account.ID, n account.Name) error
 	UpdatePhoneNumber(ctx context.Context, aID account.ID, ph phone.Number) error
@@ -55,8 +55,16 @@ func (d *driver) GetUser(ctx context.Context, aID account.ID) (*auth.UserRecord,
 	return ur, err
 }
 
-func (d *driver) UpdateMe(ctx context.Context, me *me.Me) error {
-	return nil
+func (d *driver) UpdateProfile(ctx context.Context, usr *user.User) error {
+	params := &auth.UserToUpdate{}
+	if usr.HasName() {
+		params = params.DisplayName(usr.Name().ToString())
+	}
+	if usr.HasPhoneNumber() {
+		params = params.PhoneNumber(usr.PhoneNumber().ToInternationalNumberString())
+	}
+	_, err := d.f.Auth.UpdateUser(ctx, usr.AccountID().ToString(), params)
+	return err
 }
 
 func (d *driver) SetCurrentWorkspaceToCustomClaim(ctx context.Context, aID account.ID, wID workspace.ID) error {

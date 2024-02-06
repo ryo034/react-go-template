@@ -1,0 +1,11 @@
+{
+  "form": {
+    "required": "{{field}} is required",
+    "regex": "invalid {{field}}",
+    "max": "{{field}} must be less than {{max}}",
+    "passwordRegex": "Password must be 6-128 characters with one uppercase, one lowercase, and one number.",
+    "placeholder": {
+      "input": "Enter {{field}}"
+    }
+  }
+}

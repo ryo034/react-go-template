@@ -8,6 +8,8 @@ import { TrackingLayout } from "~/layout/tracking"
 import { AuthPage } from "~/pages/auth"
 import { NotFoundPage } from "~/pages/error/notFound"
 import { HomePage } from "~/pages/home"
+import { OnboardingSettingNamePage } from "~/pages/onboarding/name"
+import { OnboardingSettingWorkspacePage } from "~/pages/onboarding/workspace"
 import { VerifyOtpPage } from "~/pages/otp"
 import { SettingsPage } from "~/pages/settings"
 
@@ -42,6 +44,8 @@ const router = createBrowserRouter([
                 children: [
                   { path: routeMap.auth, element: <AuthPage /> },
                   { path: routeMap.verifyOtp, element: <VerifyOtpPage /> },
+                  { path: routeMap.onboardingSettingName, element: <OnboardingSettingNamePage /> },
+                  { path: routeMap.onboardingSettingWorkspace, element: <OnboardingSettingWorkspacePage /> },
                   {
                     element: <DashboardLayout />,
                     children: [

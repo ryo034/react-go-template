@@ -17,6 +17,10 @@ type APIV1MeGetRes interface {
 	aPIV1MeGetRes()
 }
 
+type APIV1MeProfilePutRes interface {
+	aPIV1MeProfilePutRes()
+}
+
 type APIV1PingGetRes interface {
 	aPIV1PingGetRes()
 }
@@ -31,8 +35,4 @@ type APIV1WorkspacesPostRes interface {
 
 type LoginRes interface {
 	loginRes()
-}
-
-type UpdateNameRes interface {
-	updateNameRes()
 }

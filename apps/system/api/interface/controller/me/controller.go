@@ -2,6 +2,7 @@ package me
 
 import (
 	"context"
+	"fmt"
 	infraShared "github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/shared"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
@@ -10,7 +11,7 @@ import (
 
 type Controller interface {
 	Find(ctx context.Context) (openapi.APIV1MeGetRes, error)
-	UpdateName(ctx context.Context, i UpdateNameInput) (openapi.UpdateNameRes, error)
+	UpdateProfile(ctx context.Context, i openapi.User) (openapi.APIV1MeProfilePutRes, error)
 }
 
 type controller struct {
@@ -31,18 +32,18 @@ func (c *controller) Find(ctx context.Context) (openapi.APIV1MeGetRes, error) {
 	return c.uc.Find(ctx, aID)
 }
 
-type UpdateNameInput struct {
-	Name string
-}
-
-func (c *controller) UpdateName(ctx context.Context, i UpdateNameInput) (openapi.UpdateNameRes, error) {
+func (c *controller) UpdateProfile(ctx context.Context, i openapi.User) (openapi.APIV1MeProfilePutRes, error) {
 	aID, err := c.co.GetUID(ctx)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.UpdateNameRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePutRes), nil
 	}
-	in, err := meUc.NewUpdateNameInput(aID, i.Name)
+	if i.UserId != aID.Value() {
+		// TODO: Return BadRequest
+		return c.resl.Error(ctx, fmt.Errorf("Invalid Input")).(openapi.APIV1MeProfilePutRes), nil
+	}
+	in, err := meUc.NewUpdateProfileInput(i)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.UpdateNameRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePutRes), nil
 	}
-	return c.uc.UpdateName(ctx, in)
+	return c.uc.UpdateProfile(ctx, in)
 }

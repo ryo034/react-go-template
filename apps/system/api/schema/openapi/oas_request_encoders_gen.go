@@ -39,8 +39,8 @@ func encodeAPIV1AuthOtpVerifyPostRequest(
 	return nil
 }
 
-func encodeAPIV1WorkspacesPostRequest(
-	req *APIV1WorkspacesPostReq,
+func encodeAPIV1MeProfilePutRequest(
+	req *APIV1MeProfilePutReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -53,8 +53,8 @@ func encodeAPIV1WorkspacesPostRequest(
 	return nil
 }
 
-func encodeUpdateNameRequest(
-	req *UpdateNameReq,
+func encodeAPIV1WorkspacesPostRequest(
+	req *APIV1WorkspacesPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

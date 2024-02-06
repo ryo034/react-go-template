@@ -2,21 +2,21 @@ import i18n from "i18next"
 import { initReactI18next } from "react-i18next"
 
 import translationActionEn from "~/infrastructure/i18n/locales/en/action.json"
+import translationFormEn from "~/infrastructure/i18n/locales/en/form.json"
 import translationPageEn from "~/infrastructure/i18n/locales/en/page.json"
 import translationRouterEn from "~/infrastructure/i18n/locales/en/router.json"
-import translationValidationEn from "~/infrastructure/i18n/locales/en/validation.json"
 import translationWordEn from "~/infrastructure/i18n/locales/en/word.json"
 import translationActionJa from "~/infrastructure/i18n/locales/ja/action.json"
+import translationFormJa from "~/infrastructure/i18n/locales/ja/form.json"
 import translationPageJa from "~/infrastructure/i18n/locales/ja/page.json"
 import translationRouterJa from "~/infrastructure/i18n/locales/ja/router.json"
-import translationValidationJa from "~/infrastructure/i18n/locales/ja/validation.json"
 import translationWordJa from "~/infrastructure/i18n/locales/ja/word.json"
 
 const resources = {
   en: {
     translation: {
       ...translationWordEn,
-      ...translationValidationEn,
+      ...translationFormEn,
       ...translationPageEn,
       ...translationActionEn,
       ...translationRouterEn
@@ -25,7 +25,7 @@ const resources = {
   ja: {
     translation: {
       ...translationWordJa,
-      ...translationValidationJa,
+      ...translationFormJa,
       ...translationPageJa,
       ...translationActionJa,
       ...translationRouterJa
@@ -61,7 +61,8 @@ export const i18nKeys = {
       unknown: `${i18nRootKeys.word}.error.unknown`
     },
     submit: `${i18nRootKeys.word}.submit`,
-    otp: `${i18nRootKeys.word}.otp`
+    otp: `${i18nRootKeys.word}.otp`,
+    accountName: `${i18nRootKeys.word}.accountName`
   },
   action: {
     submit: `${i18nRootKeys.action}.submit`,
@@ -81,7 +82,10 @@ export const i18nKeys = {
     regex: `${i18nRootKeys.form}.regex`,
     max: `${i18nRootKeys.form}.max`,
     min: `${i18nRootKeys.form}.min`,
-    passwordRegex: `${i18nRootKeys.form}.passwordRegex`
+    passwordRegex: `${i18nRootKeys.form}.passwordRegex`,
+    placeholder: {
+      input: `${i18nRootKeys.form}.placeholder.input`
+    }
   },
   page: {
     auth: {
@@ -89,6 +93,14 @@ export const i18nKeys = {
     },
     verifyOtp: {
       enterOtpMessage: `${i18nRootKeys.page}.verifyOtp.enterOtpMessage`
+    },
+    onboardingSettingName: {
+      title: `${i18nRootKeys.page}.onboardingSettingName.title`,
+      description: `${i18nRootKeys.page}.onboardingSettingName.description`
+    },
+    onboardingSettingWorkspace: {
+      title: `${i18nRootKeys.page}.onboardingSettingWorkspace.title`,
+      description: `${i18nRootKeys.page}.onboardingSettingWorkspace.description`
     }
   }
 }

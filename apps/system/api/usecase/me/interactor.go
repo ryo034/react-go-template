@@ -2,37 +2,30 @@ package me
 
 import (
 	"context"
+	"fmt"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
+	"github.com/uptrace/bun"
 )
 
 type UseCase interface {
-	Login(ctx context.Context, aID account.ID, wID workspace.ID) (openapi.LoginRes, error)
 	Find(ctx context.Context, aID account.ID) (openapi.APIV1MeGetRes, error)
-	Update(ctx context.Context, me *me.Me) (*openapi.Me, error)
-	UpdateName(ctx context.Context, i *UpdateNameInput) (*openapi.Me, error)
+	UpdateProfile(ctx context.Context, i *UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error)
 }
 
 type useCase struct {
-	txp  core.TransactionProvider
-	dbp  core.Provider
-	repo me.Repository
-	op   OutputPort
+	txp   core.TransactionProvider
+	dbp   core.Provider
+	repo  me.Repository
+	wRepo workspace.Repository
+	op    OutputPort
 }
 
-func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo me.Repository, op OutputPort) UseCase {
-	return &useCase{txp, dbp, acRepo, op}
-}
-
-func (u *useCase) Login(ctx context.Context, aID account.ID, wID workspace.ID) (openapi.LoginRes, error) {
-	res, err := u.repo.Find(ctx, u.dbp.GetExecutor(ctx, true), aID, wID)
-	if err != nil {
-		return nil, err
-	}
-	return u.op.Find(res), nil
+func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo me.Repository, wRepo workspace.Repository, op OutputPort) UseCase {
+	return &useCase{txp, dbp, acRepo, wRepo, op}
 }
 
 func (u *useCase) Find(ctx context.Context, aID account.ID) (openapi.APIV1MeGetRes, error) {
@@ -50,14 +43,29 @@ func (u *useCase) Find(ctx context.Context, aID account.ID) (openapi.APIV1MeGetR
 	return u.op.Find(m), nil
 }
 
-func (u *useCase) Update(ctx context.Context, m *me.Me) (*openapi.Me, error) {
+func (u *useCase) UpdateProfile(ctx context.Context, i *UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
 		return nil, err
 	}
 	fn := func() (*me.Me, error) {
-		return u.repo.Update(ctx, p, m)
+		current, err := u.repo.FindProfile(ctx, p, i.user.AccountID())
+		if err != nil {
+			return nil, err
+		}
+		updateEmail := i.user.Email().ToString() != current.Self().Email().ToString()
+		if i.user.HasNotName() {
+			return nil, fmt.Errorf("name is required")
+		}
+		updateName := i.user.Name().ToString() != current.Self().Name().ToString()
+		if !updateEmail && !updateName {
+			return nil, nil
+		}
+		if err = u.repo.UpdateProfile(pr, p, i.user); err != nil {
+			return nil, err
+		}
+		return u.repo.FindLastLogin(pr, p, i.user.AccountID())
 	}
 	result := pr.Transactional(fn)()
 	if err = result.Error(); err != nil {
@@ -66,18 +74,17 @@ func (u *useCase) Update(ctx context.Context, m *me.Me) (*openapi.Me, error) {
 	return u.op.Find(result.Value(0).(*me.Me)), nil
 }
 
-func (u *useCase) UpdateName(ctx context.Context, i *UpdateNameInput) (*openapi.Me, error) {
-	p := u.dbp.GetExecutor(ctx, false)
-	pr, err := u.txp.Provide(ctx)
-	if err != nil {
-		return nil, err
+// updateMember check if the member's information has changed and update it if necessary.
+func (u *useCase) updateMember(ctx context.Context, exec bun.IDB, m *me.Me, current *me.Me) error {
+	change := false
+	if m.Member().DisplayName().ToString() != current.Member().DisplayName().ToString() {
+		change = true
 	}
-	fn := func() (*me.Me, error) {
-		return u.repo.UpdateName(pr, p, i.accountID, i.name)
+	if m.Member().IDNumber().ToString() != current.Member().IDNumber().ToString() {
+		change = true
 	}
-	result := pr.Transactional(fn)()
-	if err = result.Error(); err != nil {
-		return nil, err
+	if !change {
+		return nil
 	}
-	return u.op.Find(result.Value(0).(*me.Me)), nil
+	return u.repo.UpdateMember(ctx, exec, m)
 }

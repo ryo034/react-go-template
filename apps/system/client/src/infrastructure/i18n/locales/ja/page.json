@@ -5,6 +5,14 @@
     },
     "verifyOtp": {
       "enterOtpMessage": "メールアドレスに送信された認証コードを入力してください"
+    },
+    "onboardingSettingName": {
+      "title": "こんにちは！あなたの名前を教えてください",
+      "description": "あなたのことを少しだけ教えてください🙏"
+    },
+    "onboardingSettingWorkspace": {
+      "title": "ワークスペースのドメイン設定",
+      "description": "あなたのワークスペースのドメインを設定してください"
     }
   }
 }

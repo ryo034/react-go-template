@@ -56,7 +56,7 @@ func (u *useCase) Create(ctx context.Context, i *CreateInput) (openapi.APIV1Work
 			return nil, err
 		}
 
-		reMeRes, err := u.meRepo.Find(pr, p, meRes.Self().AccountID(), wres.ID())
+		reMeRes, err := u.meRepo.Find(pr, p, meRes.Member().ID())
 		if err != nil {
 			return nil, err
 		}

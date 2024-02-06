@@ -21,7 +21,11 @@ export class User extends Entity<Props> {
   }
 
   get hasName(): boolean {
-    return this.value.name !== null
+    return !!this.value.name
+  }
+
+  get hasNotName(): boolean {
+    return !this.hasName
   }
 
   get email(): Email {

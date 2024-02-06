@@ -49,3 +49,11 @@ func (g *gateway) AddMember(ctx context.Context, exec bun.IDB, w *workspace.Work
 	}
 	return g.ma.Adapt(res)
 }
+
+func (g *gateway) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*member.Member, error) {
+	res, err := g.d.FindMember(ctx, exec, aID, wID)
+	if err != nil {
+		return nil, err
+	}
+	return g.ma.Adapt(res)
+}

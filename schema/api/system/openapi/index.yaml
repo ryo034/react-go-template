@@ -14,8 +14,8 @@ paths:
     $ref: "./paths/auth.yaml#/oauth"
   /api/v1/me:
     $ref: "./paths/me.yaml#/me"
-  /api/v1/me/update-name:
-    $ref: "./paths/me.yaml#/updateName"
+  /api/v1/me/profile:
+    $ref: "./paths/me.yaml#/profile"
   /api/v1/login:
     $ref: "./paths/login.yaml#/login"
   /api/v1/workspaces:
@@ -50,8 +50,8 @@ components:
       $ref: "./components/requestBodies/auth.yaml#/AuthVerifyPost"
     CreateWorkspace:
       $ref: "./components/requestBodies/workspace.yaml#/CreateWorkspace"
-    UpdateName:
-      $ref: "./components/requestBodies/me.yaml#/UpdateName"
+    UpdateMeProfile:
+      $ref: "./components/requestBodies/me.yaml#/UpdateMeProfile"
   responses:
     GeneralError:
       $ref: "./components/responses/error.yaml#/components/responses/GeneralError"

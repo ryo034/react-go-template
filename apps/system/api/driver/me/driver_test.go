@@ -8,6 +8,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	"github.com/ryo034/react-go-template/apps/system/api/util/test"
@@ -28,26 +29,20 @@ func Test_driver_Find_OK(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to parse defaultTime: %v", err)
 	}
-	accountID, _ := account.NewID(systemAccountID)
-	workspaceModelID := uuid.MustParse("c1bd2603-b9cd-4f84-8b83-3548f6ae150b")
 	memberID := uuid.MustParse("377eba35-5560-4f48-a99d-19cbd6a82b0d")
 
-	workspaceID := workspace.NewIDFromUUID(workspaceModelID)
+	workspaceID := uuid.MustParse("c1bd2603-b9cd-4f84-8b83-3548f6ae150b")
+	wID := workspace.NewIDFromUUID(workspaceID)
 
 	want := &models.Member{
 		MemberID:        memberID,
-		WorkspaceID:     workspaceModelID,
+		WorkspaceID:     wID.Value(),
 		SystemAccountID: systemAccountIDUUID,
 		CreatedAt:       defaultTime,
 		SystemAccount: &models.SystemAccount{
 			SystemAccountID: systemAccountIDUUID,
 			CreatedAt:       defaultTime,
-			PhoneNumber: &models.SystemAccountPhoneNumber{
-				SystemAccountID: systemAccountIDUUID,
-				PhoneNumber:     "09012345678",
-				CreatedAt:       defaultTime,
-				UpdatedAt:       defaultTime,
-			},
+			PhoneNumber:     nil,
 			Profile: &models.SystemAccountProfile{
 				SystemAccountID: systemAccountIDUUID,
 				Name:            "John Doe",
@@ -63,13 +58,25 @@ func Test_driver_Find_OK(t *testing.T) {
 			CreatedAt:      defaultTime,
 			UpdatedAt:      defaultTime,
 		},
+		Workspace: &models.Workspace{
+			WorkspaceID: wID.Value(),
+			CreatedAt:   defaultTime,
+			Detail: &models.WorkspaceDetail{
+				WorkspaceID: wID.Value(),
+				Name:        "Example",
+				Subdomain:   "example",
+				CreatedAt:   defaultTime,
+				UpdatedAt:   defaultTime,
+			},
+			Members: nil,
+		},
 	}
 	wantErr := false
 	ctx := context.Background()
 	t.Run("Find", func(t *testing.T) {
 		db := bun.NewDB(test.SetupTestDB(t, ctx).DB, pgdialect.New())
 		pr := core.NewDatabaseProvider(db, db)
-		got, err := NewDriver().Find(ctx, pr.GetExecutor(ctx, true), accountID, workspaceID)
+		got, err := NewDriver().Find(ctx, pr.GetExecutor(ctx, true), member.NewIDFromUUID(memberID))
 		if (err != nil) != wantErr {
 			t.Errorf("Find() error = %v, wantErr %v", err, wantErr)
 			return

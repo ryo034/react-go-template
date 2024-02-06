@@ -179,9 +179,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				switch elem[0] {
-				case '/': // Prefix: "/update-name"
+				case '/': // Prefix: "/profile"
 					origElem := elem
-					if l := len("/update-name"); len(elem) >= l && elem[0:l] == "/update-name" {
+					if l := len("/profile"); len(elem) >= l && elem[0:l] == "/profile" {
 						elem = elem[l:]
 					} else {
 						break
@@ -190,10 +190,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					if len(elem) == 0 {
 						// Leaf node.
 						switch r.Method {
-						case "POST":
-							s.handleUpdateNameRequest([0]string{}, elemIsEscaped, w, r)
+						case "PUT":
+							s.handleAPIV1MeProfilePutRequest([0]string{}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "POST")
+							s.notAllowed(w, r, "PUT")
 						}
 
 						return
@@ -481,9 +481,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 				}
 				switch elem[0] {
-				case '/': // Prefix: "/update-name"
+				case '/': // Prefix: "/profile"
 					origElem := elem
-					if l := len("/update-name"); len(elem) >= l && elem[0:l] == "/update-name" {
+					if l := len("/profile"); len(elem) >= l && elem[0:l] == "/profile" {
 						elem = elem[l:]
 					} else {
 						break
@@ -491,12 +491,12 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 					if len(elem) == 0 {
 						switch method {
-						case "POST":
-							// Leaf: UpdateName
-							r.name = "UpdateName"
-							r.summary = "Update Name"
-							r.operationID = "updateName"
-							r.pathPattern = "/api/v1/me/update-name"
+						case "PUT":
+							// Leaf: APIV1MeProfilePut
+							r.name = "APIV1MeProfilePut"
+							r.summary = "Update Profile"
+							r.operationID = ""
+							r.pathPattern = "/api/v1/me/profile"
 							r.args = args
 							r.count = 0
 							return r, true

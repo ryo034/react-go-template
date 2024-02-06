@@ -49,6 +49,15 @@ func (UnimplementedHandler) APIV1MeGet(ctx context.Context) (r APIV1MeGetRes, _ 
 	return r, ht.ErrNotImplemented
 }
 
+// APIV1MeProfilePut implements PUT /api/v1/me/profile operation.
+//
+// Updates the user profile.
+//
+// PUT /api/v1/me/profile
+func (UnimplementedHandler) APIV1MeProfilePut(ctx context.Context, req *APIV1MeProfilePutReq) (r APIV1MeProfilePutRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIV1PingGet implements GET /api/v1/ping operation.
 //
 // Checks if the server is running.
@@ -82,14 +91,5 @@ func (UnimplementedHandler) APIV1WorkspacesPost(ctx context.Context, req *APIV1W
 //
 // POST /api/v1/login
 func (UnimplementedHandler) Login(ctx context.Context) (r LoginRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// UpdateName implements updateName operation.
-//
-// Update Name.
-//
-// POST /api/v1/me/update-name
-func (UnimplementedHandler) UpdateName(ctx context.Context, req *UpdateNameReq) (r UpdateNameRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

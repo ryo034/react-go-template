@@ -2,6 +2,7 @@ package me
 
 import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
+	userDomain "github.com/ryo034/react-go-template/apps/system/api/domain/user"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/member"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/user"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/workspace"
@@ -37,4 +38,9 @@ func (p *presenter) Find(m *me.Me) *openapi.Me {
 		CurrentWorkspace: cw,
 		JoinedWorkspaces: p.wa.AdaptAll(m.JoinedWorkspaces()),
 	}
+}
+
+func (p *presenter) Profile(usr *userDomain.User) *openapi.User {
+	res := p.ua.Adapt(usr)
+	return &res
 }

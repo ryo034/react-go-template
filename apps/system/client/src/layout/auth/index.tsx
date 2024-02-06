@@ -26,14 +26,27 @@ export const AuthLayout = () => {
       if (!user && isAuthenticatedRoute) {
         navigate(unprotectedInitialPagePath)
       } else if (user && !isAuthenticatedRoute && meRef.current !== null) {
+        if (meRef.current.self.hasNotName) {
+          navigate(routeMap.onboardingSettingName)
+          return
+        }
         navigate(routeMap.home)
         return
+      } else if (user && isAuthenticatedRoute && meRef.current !== null) {
+        if (meRef.current.self.hasNotName) {
+          navigate(routeMap.onboardingSettingName)
+          return
+        }
+        if (meRef.current.hasNotWorkspace) {
+          navigate(routeMap.onboardingSettingWorkspace)
+          return
+        }
+        return
       }
-
       await controller.me.find()
     })
     return () => unsubscribed()
-  }, [loading, navigate, location.pathname, store.me])
+  }, [loading, navigate, location.pathname, me])
 
   if (loading) {
     return <div />
