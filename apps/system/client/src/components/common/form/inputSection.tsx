@@ -30,7 +30,7 @@ export const FormInputSection = ({
   rootClass
 }: Props) => {
   return (
-    <div className={`space-y-2 ${rootClass?.join(" ")}`}>
+    <div className={`${showLabel ? "space-y-2" : ""} ${rootClass ? rootClass.join(" ") : ""}`.trim() || undefined}>
       <Label htmlFor={id} title={title} className={showLabel ? "" : "sr-only"}>
         {title}
       </Label>

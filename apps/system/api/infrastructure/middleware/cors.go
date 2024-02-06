@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"github.com/rs/cors"
 	"net/http"
 )
 
@@ -17,34 +18,28 @@ func (c *CORSInfo) isMatch(origin string) bool {
 	return false
 }
 
-func Cors(info *CORSInfo, w http.ResponseWriter, r *http.Request) {
-	origin := r.Header.Get("Origin")
-	if info.isMatch(origin) {
-		w.Header().Set("Access-Control-Allow-Origin", origin)
-	}
-	w.Header().Set("Access-Control-Allow-Credentials", "true")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With, Set-Cookie, Content-Disposition")
-	w.Header().Set("Access-Control-Expose-Headers", "Content-Disposition")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
-}
-
 type CorsMiddleware interface {
 	Handler(h http.Handler) http.Handler
 }
 
 type corsMiddleware struct {
-	info *CORSInfo
+	info    *CORSInfo
+	isLocal bool
+}
+
+func NewCorsMiddleware(info *CORSInfo, isLocal bool) CorsMiddleware {
+	return &corsMiddleware{info, isLocal}
 }
 
 func (cm *corsMiddleware) Handler(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		Cors(cm.info, w, r)
-		//TODO:
-		if r.Method == "OPTIONS" {
-			// if Preflight Request, return response here
-			w.WriteHeader(http.StatusOK)
-			return
-		}
-		h.ServeHTTP(w, r)
+		c := cors.New(cors.Options{
+			AllowedOrigins:   cm.info.AllowOrigins,
+			AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+			AllowedHeaders:   []string{"Authorization", "Content-Type"},
+			AllowCredentials: true,
+			Debug:            cm.isLocal,
+		})
+		c.Handler(h).ServeHTTP(w, r)
 	})
 }

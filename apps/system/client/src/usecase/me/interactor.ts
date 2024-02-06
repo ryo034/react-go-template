@@ -36,11 +36,14 @@ export class MeInteractor implements MeUseCase {
   }
 
   async updateProfile(i: UpdateProfileInput): Promise<Error | null> {
+    this.presenter.setIsLoading(true)
     const res = await this.repository.updateProfile(i.user)
     if (res.isErr) {
+      this.presenter.setIsLoading(false)
       return res.error
     }
     this.presenter.set(res.value)
+    this.presenter.setIsLoading(false)
     return null
   }
 }

@@ -62,7 +62,8 @@ export const i18nKeys = {
     },
     submit: `${i18nRootKeys.word}.submit`,
     otp: `${i18nRootKeys.word}.otp`,
-    accountName: `${i18nRootKeys.word}.accountName`
+    accountName: `${i18nRootKeys.word}.accountName`,
+    subdomain: `${i18nRootKeys.word}.subdomain`
   },
   action: {
     submit: `${i18nRootKeys.action}.submit`,

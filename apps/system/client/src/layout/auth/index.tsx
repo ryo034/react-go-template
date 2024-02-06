@@ -1,6 +1,7 @@
 import { useContext, useLayoutEffect, useRef } from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { Outlet, useNavigate } from "react-router-dom"
+import { AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
 import { firebaseAuth } from "~/infrastructure/firebase"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { authRoutes, routeMap, unprotectedInitialPagePath } from "~/infrastructure/route/path"
@@ -22,31 +23,43 @@ export const AuthLayout = () => {
         return
       }
       const isAuthenticatedRoute = authRoutes.includes(window.location.pathname)
-
       if (!user && isAuthenticatedRoute) {
         navigate(unprotectedInitialPagePath)
+      } else if (!user && !isAuthenticatedRoute) {
+        return
       } else if (user && !isAuthenticatedRoute && meRef.current !== null) {
-        if (meRef.current.self.hasNotName) {
+        if (meRef.current.self.hasNotName && window.location.pathname !== routeMap.onboardingSettingName) {
           navigate(routeMap.onboardingSettingName)
           return
         }
-        navigate(routeMap.home)
+        if (meRef.current.hasNotWorkspace && window.location.pathname !== routeMap.onboardingSettingWorkspace) {
+          navigate(routeMap.onboardingSettingWorkspace)
+          return
+        }
         return
       } else if (user && isAuthenticatedRoute && meRef.current !== null) {
-        if (meRef.current.self.hasNotName) {
+        if (meRef.current.self.hasNotName && window.location.pathname !== routeMap.onboardingSettingName) {
           navigate(routeMap.onboardingSettingName)
           return
         }
-        if (meRef.current.hasNotWorkspace) {
+        if (meRef.current.hasNotWorkspace && window.location.pathname !== routeMap.onboardingSettingWorkspace) {
           navigate(routeMap.onboardingSettingWorkspace)
           return
         }
         return
       }
-      await controller.me.find()
+      const res = await controller.me.find()
+      if (!res) return
+      if (res !== null) {
+        // TODO: sign out
+        if (res instanceof AuthProviderCurrentUserNotFoundError) {
+          navigate(unprotectedInitialPagePath)
+          return
+        }
+      }
     })
     return () => unsubscribed()
-  }, [loading, navigate, location.pathname, me])
+  }, [loading, navigate, me])
 
   if (loading) {
     return <div />

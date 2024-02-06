@@ -14,14 +14,14 @@ const fetchRequestInterceptor = async (config: RequestInit | undefined) => {
   if (!token) {
     return config
   }
-  return { ...config, headers: { ...headers, Authorization: `Bearer ${token}` } }
+  return { ...config, headers: { ...headers, Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
 }
 
 export const openapiFetchClient = createClient<paths>({
   baseUrl: import.meta.env.VITE_API_BASE_URL,
   fetch: async (input, init) => {
     const options = await fetchRequestInterceptor(init)
-    return fetch(input, options)
+    return fetch(input, { ...options })
   }
 })
 

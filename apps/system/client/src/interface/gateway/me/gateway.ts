@@ -1,6 +1,8 @@
+import { AuthenticationError } from "shared-network"
 import { Result } from "true-myth"
 import { AccountName, Me, MeRepository, User } from "~/domain"
 import { AuthProviderDriver, MeDriver } from "~/driver"
+import { AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
 import { PromiseResult } from "~/infrastructure/shared/result"
 import { MeGatewayAdapter } from "~/interface/gateway/me/adapter"
 
@@ -17,7 +19,7 @@ export class MeGateway implements MeRepository {
 
   async find(): PromiseResult<Me, Error> {
     if (this.apDriver.currentUser === null) {
-      return Result.err(new Error("user is not logged in"))
+      return Result.err(new AuthProviderCurrentUserNotFoundError("current user not found"))
     }
     const res = await this.driver.find()
     if (res.isErr) {

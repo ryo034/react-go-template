@@ -32,7 +32,7 @@ func (m *mid) Global(h http.Handler, conf config.Reader, zl logger.Logger, rds *
 		NewRequestIDMiddleware().Handler,
 		NewLangMiddleware(conf.DefaultLanguage()).Handler,
 		NewLogMiddleware(zl, conf.IsLocal()).Handler,
-		conf.Cors().Handler,
+		NewCorsMiddleware(&CORSInfo{AllowOrigins: conf.AllowOrigins()}, conf.IsLocal()).Handler,
 		NewOtpRateLimitMiddleware(rds, OtpRateLimitConfig()).Handler,
 	)
 }

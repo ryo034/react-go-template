@@ -1,6 +1,6 @@
 import { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
-import { AccountName, User } from "~/domain"
+import { User } from "~/domain"
 import { components } from "~/generated/schema/openapi/systemApi"
 import { SystemAPIClient } from "~/infrastructure/openapi/client"
 import { PromiseResult } from "~/infrastructure/shared/result"

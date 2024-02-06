@@ -1,10 +1,10 @@
-import { AccountId, AccountName, Email, User } from "~/domain"
+import { AccountName, Me, User } from "~/domain"
+import { AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
 import { MeUseCase } from "~/usecase"
 
-export interface UpdateProfileInput {
+export interface UpdateProfileNameInput {
+  current: Me | null
   user: {
-    userId: string
-    email: string
     name: string
   }
 }
@@ -20,21 +20,16 @@ export class MeController {
     return await this.useCase.find()
   }
 
-  async updateProfile(i: UpdateProfileInput): Promise<null | Error> {
-    const uId = AccountId.fromString(i.user.userId)
-    if (uId.isErr) {
-      return uId.error
+  async updateProfileName(i: UpdateProfileNameInput): Promise<null | Error> {
+    if (i.current === null) {
+      return new AuthProviderCurrentUserNotFoundError("current user not found")
     }
     const name = AccountName.create(i.user.name)
     if (name.isErr) {
       return name.error
     }
-    const email = Email.create(i.user.email)
-    if (email.isErr) {
-      return email.error
-    }
     return await this.useCase.updateProfile({
-      user: User.create({ id: uId.value, name: name.value, email: email.value })
+      user: User.create({ id: i.current?.self.id, name: name.value, email: i.current.self.email })
     })
   }
 }

@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react"
+import { useContext, useState } from "react"
 import { SubmitHandler } from "react-hook-form"
 import {
   OnboardingSettingWorkspacePageForm,
@@ -12,24 +12,9 @@ export const onboardingSettingWorkspacePageRoute = "/onboarding/workspace"
 export const OnboardingSettingWorkspacePage = () => {
   const { controller, store } = useContext(ContainerContext)
   const [errorMessage, setErrorMessage] = useState("")
-
-  const me = store.me((state) => state.me)
-  const meRef = useRef(me)
-
   const message = useOnboardingSettingWorkspacePageMessage()
 
   const onSubmit: SubmitHandler<OnboardingSettingWorkspacePageFormValues> = async (d) => {
-    if (me === null || me.self === undefined || me.self.id === undefined || me.self.email === undefined) {
-      setErrorMessage("Failed to update profile")
-      return
-    }
-    controller.me.updateProfile({
-      user: {
-        userId: me.self.id.value.asString,
-        name: d.subdomain,
-        email: me.self.email.value
-      }
-    })
     console.log("onSubmit", d)
   }
 

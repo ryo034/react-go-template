@@ -45,16 +45,16 @@ export const OnboardingSettingWorkspacePageForm = ({ onSubmit, errorMessage, isL
 
   return (
     <form
-      className="space-y-6 max-w-[320px] m-auto"
+      className="space-y-12 m-auto flex flex-wrap justify-center"
       id={onboardingSettingWorkspacePageFormId}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="space-y-2 flex items-center">
+      <div className="flex items-center justify-center">
         <span className="text-gray-700 mr-3">example.com/</span>
         <FormInputSection
           fullWidth
           required
-          title={message.word.accountName}
+          title={message.word.subdomain}
           id="subdomain"
           showLabel={false}
           placeholder={message.form.placeholder.name}
@@ -64,9 +64,14 @@ export const OnboardingSettingWorkspacePageForm = ({ onSubmit, errorMessage, isL
       </div>
       <FormResultErrorMessage message={errorMessage} />
       {isLoading ? (
-        <LoadingButton fullWidth data-testid="loadingButton" />
+        <LoadingButton className="max-w-[320px] w-full" data-testid="loadingButton" />
       ) : (
-        <Button fullWidth type="submit" form={onboardingSettingWorkspacePageFormId} data-testid="nextButton">
+        <Button
+          className="max-w-[320px] w-full"
+          type="submit"
+          form={onboardingSettingWorkspacePageFormId}
+          data-testid="nextButton"
+        >
           {message.action.submit}
         </Button>
       )}

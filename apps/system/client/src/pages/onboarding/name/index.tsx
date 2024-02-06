@@ -1,37 +1,37 @@
-import { useContext, useRef, useState } from "react"
+import { useContext, useState } from "react"
 import { SubmitHandler } from "react-hook-form"
-import { useToast } from "shared-ui"
+import { useNavigate } from "react-router-dom"
 import { OnboardingSettingNamePageForm, OnboardingSettingNamePageFormValues } from "~/components/onboarding/name/form"
+import { AuthProviderUserNotFoundError } from "~/infrastructure/error"
 import { ContainerContext } from "~/infrastructure/injector/context"
+import { onboardingSettingWorkspacePageRoute } from "../workspace"
 import { useOnboardingSettingNamePageMessage } from "./message"
 
 export const onboardingSettingNamePageRoute = "/onboarding/name"
 
 export const OnboardingSettingNamePage = () => {
   const { controller, store } = useContext(ContainerContext)
+  const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = useState("")
 
   const message = useOnboardingSettingNamePageMessage()
   const me = store.me((state) => state.me)
-  const meRef = useRef(me)
+  const isLoading = store.me((state) => state.isLoading)
 
   const onSubmit: SubmitHandler<OnboardingSettingNamePageFormValues> = async (d) => {
-    console.log("onSubmit", d)
-    if (me === null || me.self === undefined || me.self.id === undefined || me.self.email === undefined) {
-      setErrorMessage("Failed to update profile")
-      return
-    }
-    const res = await controller.me.updateProfile({
-      user: {
-        userId: me.self.id.value.asString,
-        name: d.name,
-        email: me.self.email.value
-      }
+    const res = await controller.me.updateProfileName({
+      current: me,
+      user: { name: d.name }
     })
-    if (!res) {
+    if (res) {
+      if (res instanceof AuthProviderUserNotFoundError) {
+        navigate(onboardingSettingNamePageRoute)
+        return
+      }
       setErrorMessage("Failed to update name")
       return
     }
+    navigate(onboardingSettingWorkspacePageRoute)
   }
 
   return (
@@ -41,7 +41,7 @@ export const OnboardingSettingNamePage = () => {
           <h1 className="text-4xl font-bold">{message.title}</h1>
           <p className="text-gray-500 dark:text-gray-400">{message.description}</p>
         </div>
-        <OnboardingSettingNamePageForm onSubmit={onSubmit} errorMessage={errorMessage} isLoading={false} />
+        <OnboardingSettingNamePageForm onSubmit={onSubmit} errorMessage={errorMessage} isLoading={isLoading} />
       </div>
     </div>
   )
