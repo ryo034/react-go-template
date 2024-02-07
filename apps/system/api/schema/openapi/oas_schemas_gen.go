@@ -82,25 +82,13 @@ func (s *APIV1PingGetOK) SetMessage(val OptString) {
 func (*APIV1PingGetOK) aPIV1PingGetRes() {}
 
 type APIV1WorkspacesPostReq struct {
-	// Workspace name.
-	Name string `json:"name"`
 	// Workspace subdomain (e.x. example-test).
 	Subdomain string `json:"subdomain"`
-}
-
-// GetName returns the value of Name.
-func (s *APIV1WorkspacesPostReq) GetName() string {
-	return s.Name
 }
 
 // GetSubdomain returns the value of Subdomain.
 func (s *APIV1WorkspacesPostReq) GetSubdomain() string {
 	return s.Subdomain
-}
-
-// SetName sets the value of Name.
-func (s *APIV1WorkspacesPostReq) SetName(val string) {
-	s.Name = val
 }
 
 // SetSubdomain sets the value of Subdomain.

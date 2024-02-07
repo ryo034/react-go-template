@@ -1,11 +1,9 @@
-import { AccountId, AccountName } from "@/domain/account"
-import { Entity } from "@/domain/shared"
-import { WorkspaceId } from "./id"
-import { WorkspaceName } from "./name"
+import { AccountId, AccountName, Entity, WorkspaceId, WorkspaceName, WorkspaceSubdomain } from "~/domain"
 
 interface Props {
   id: WorkspaceId
   name: WorkspaceName
+  subdomain: WorkspaceSubdomain
 }
 
 export class Workspace extends Entity<Props> {
@@ -19,5 +17,9 @@ export class Workspace extends Entity<Props> {
 
   get name(): AccountName | null {
     return this.value.name
+  }
+
+  get subdomain(): WorkspaceSubdomain {
+    return this.value.subdomain
   }
 }

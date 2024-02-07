@@ -10,12 +10,15 @@ export const AuthLayout = () => {
   const { controller, store } = useContext(ContainerContext)
   const navigate = useNavigate()
   const me = store.me((state) => state.me)
+  const meIsLoading = store.me((state) => state.isLoading)
   const meRef = useRef(me)
+  const meIsLoadingRef = useRef(meIsLoading)
   const [_, loading] = useAuthState(firebaseAuth)
 
   useLayoutEffect(() => {
     store.me.subscribe((state) => {
       meRef.current = state.me
+      meIsLoadingRef.current = state.isLoading
     })
 
     const unsubscribed = firebaseAuth.onAuthStateChanged(async (user) => {
@@ -61,7 +64,7 @@ export const AuthLayout = () => {
     return () => unsubscribed()
   }, [loading, navigate, me])
 
-  if (loading) {
+  if (loading || meIsLoadingRef.current) {
     return <div />
   }
 

@@ -51,16 +51,16 @@ func (u *useCase) Create(ctx context.Context, i *CreateInput) (openapi.APIV1Work
 		}
 
 		m := member.NewMember(meID, meRes.Self(), dn, nil)
-		_, err = u.repo.AddMember(pr, p, wres, m)
+		memRes, err := u.repo.AddMember(pr, p, wres, m)
 		if err != nil {
 			return nil, err
 		}
 
-		reMeRes, err := u.meRepo.Find(pr, p, meRes.Member().ID())
+		meRes, err = u.meRepo.Find(pr, p, memRes.ID())
 		if err != nil {
 			return nil, err
 		}
-		if err = u.meRepo.LastLogin(pr, p, reMeRes); err != nil {
+		if err = u.meRepo.LastLogin(pr, p, meRes); err != nil {
 			return nil, err
 		}
 		return wres, nil

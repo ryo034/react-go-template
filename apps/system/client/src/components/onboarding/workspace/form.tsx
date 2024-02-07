@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { Button, FormResultErrorMessage, LoadingButton } from "shared-ui"
 import { FormInputSection } from "~/components/common/form/inputSection"
-import { AccountName } from "~/domain"
+import { WorkspaceSubdomain } from "~/domain"
 import { useOnboardingSettingWorkspacePageFormMessage } from "./message"
 
 export type OnboardingSettingWorkspacePageFormValues = {
@@ -30,11 +30,11 @@ export const OnboardingSettingWorkspacePageForm = ({ onSubmit, errorMessage, isL
   const subdomainInputField = register("subdomain", {
     required: message.form.validation.subdomain.required,
     maxLength: {
-      value: AccountName.max,
+      value: WorkspaceSubdomain.max,
       message: message.form.validation.subdomain.max
     },
     pattern: {
-      value: AccountName.pattern,
+      value: WorkspaceSubdomain.pattern,
       message: message.form.validation.subdomain.regex
     }
   })
@@ -59,7 +59,7 @@ export const OnboardingSettingWorkspacePageForm = ({ onSubmit, errorMessage, isL
           showLabel={false}
           placeholder={message.form.placeholder.name}
           reactHookForm={subdomainInputField}
-          errorMessage={errors.subdomain?.message ?? ""}
+          errorMessage={""} // hide error
         />
       </div>
       <FormResultErrorMessage message={errorMessage} />

@@ -5,6 +5,7 @@
     "submit": "送信",
     "otp": "認証コード",
     "accountName": "名前",
-    "subdomain": "ドメイン"
+    "subdomain": "ドメイン",
+    "url": "URL"
   }
 }

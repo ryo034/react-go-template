@@ -15,19 +15,6 @@ import { SettingsPage } from "~/pages/settings"
 
 export const accountInitialPagePath = routeMap.home
 
-// const LazyLoadedPage = (
-//   pageName: string,
-// ): React.LazyExoticComponent<React.ComponentType> => {
-//   return lazy(() => import(`@/pages/${pageName}`));
-// };
-
-// {
-//   path: routeMap.login, lazy: async () => {
-//     // @ts-ignore
-//     return { Component: (await import("~/pages/login/index.tsx")).LoginPage }
-//   }
-// },
-
 const router = createBrowserRouter([
   {
     path: "/",

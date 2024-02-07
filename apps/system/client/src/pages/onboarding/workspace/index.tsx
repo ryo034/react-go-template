@@ -1,10 +1,13 @@
 import { useContext, useState } from "react"
 import { SubmitHandler } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
 import {
   OnboardingSettingWorkspacePageForm,
   OnboardingSettingWorkspacePageFormValues
 } from "~/components/onboarding/workspace/form"
 import { ContainerContext } from "~/infrastructure/injector/context"
+import { routeMap } from "~/infrastructure/route/path"
+import { homePageRoute } from "~/pages/home"
 import { useOnboardingSettingWorkspacePageMessage } from "./message"
 
 export const onboardingSettingWorkspacePageRoute = "/onboarding/workspace"
@@ -12,10 +15,18 @@ export const onboardingSettingWorkspacePageRoute = "/onboarding/workspace"
 export const OnboardingSettingWorkspacePage = () => {
   const { controller, store } = useContext(ContainerContext)
   const [errorMessage, setErrorMessage] = useState("")
+  const navigate = useNavigate()
   const message = useOnboardingSettingWorkspacePageMessage()
 
   const onSubmit: SubmitHandler<OnboardingSettingWorkspacePageFormValues> = async (d) => {
-    console.log("onSubmit", d)
+    const res = await controller.workspace.create({
+      subdomain: d.subdomain
+    })
+    if (res) {
+      setErrorMessage("Failed to create workspace")
+      return
+    }
+    navigate(routeMap.home)
   }
 
   return (

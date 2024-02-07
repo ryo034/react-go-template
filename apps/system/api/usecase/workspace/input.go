@@ -10,12 +10,12 @@ type CreateInput struct {
 	accountID account.ID
 }
 
-func NewCreateInput(name string, subdomain string, aID account.ID) (*CreateInput, error) {
-	n, err := workspace.NewName(name)
+func NewCreateInput(subdomain string, aID account.ID) (*CreateInput, error) {
+	s, err := workspace.NewSubdomain(subdomain)
 	if err != nil {
 		return nil, err
 	}
-	s, err := workspace.NewSubdomain(subdomain)
+	n, err := workspace.NewName(s.ToString())
 	if err != nil {
 		return nil, err
 	}

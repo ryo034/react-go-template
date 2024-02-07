@@ -12,7 +12,6 @@ func (s *service) APIV1WorkspacesGet(ctx context.Context) (openapi.APIV1Workspac
 
 func (s *service) APIV1WorkspacesPost(ctx context.Context, req *openapi.APIV1WorkspacesPostReq) (openapi.APIV1WorkspacesPostRes, error) {
 	return s.ctrl.Workspace.Create(ctx, workspace.CreateInput{
-		WorkspaceName:      req.Name,
 		WorkspaceSubdomain: req.Subdomain,
 	})
 }

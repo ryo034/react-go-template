@@ -2,6 +2,7 @@ export const domainKeys = {
   Otp: "Otp",
   Jwt: "Jwt",
   AppDateTime: "AppDateTime",
+  WorkspaceSubdomain: "WorkspaceSubdomain",
   Photo: "Photo",
   PhotoPath: "PhotoPath",
   Password: "Password",

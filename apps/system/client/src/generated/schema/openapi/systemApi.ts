@@ -430,8 +430,6 @@ export interface components {
     CreateWorkspace: {
       content: {
         "application/json": {
-          /** @description workspace name */
-          name: string;
           /** @description workspace subdomain (e.x. example-test) */
           subdomain: string;
         };

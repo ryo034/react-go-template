@@ -4,16 +4,19 @@ import { AuthDriver, ThemeDriver } from "~/driver"
 import { FirebaseDriver } from "~/driver"
 import { GoogleAnalyticsDriver } from "~/driver/analytics/ga/driver"
 import { MeDriver } from "~/driver/me/driver"
+import { WorkspaceDriver } from "~/driver/workspace/driver"
 import { MessageProvider } from "~/infrastructure/error/message"
 import { firebaseAuth } from "~/infrastructure/firebase"
 import { ReactI18nextProvider } from "~/infrastructure/i18n"
 import { openapiFetchClient } from "~/infrastructure/openapi/client"
 import { MeController, ThemeController } from "~/interface/controller"
 import { AuthController } from "~/interface/controller/auth/controller"
+import { WorkspaceController } from "~/interface/controller/workspace/controller"
 import { MeGateway, MeGatewayAdapter } from "~/interface/gateway"
 import { AuthGateway, AuthGatewayAdapter } from "~/interface/gateway/auth"
 import { UserGatewayAdapter } from "~/interface/gateway/user"
 import { WorkspaceGatewayAdapter } from "~/interface/gateway/workspace"
+import { WorkspaceGateway } from "~/interface/gateway/workspace/gateway"
 import { MemberGatewayAdapter } from "~/interface/gateway/workspace/member"
 import { AuthPresenter } from "~/interface/presenter/auth/presenter"
 import { MePresenter } from "~/interface/presenter/me/presenter"
@@ -21,6 +24,7 @@ import { ThemePresenter } from "~/interface/presenter/theme/presenter"
 import { authStore, meStore, themeStore } from "~/store"
 import { MeInteractor, ThemeInteractor } from "~/usecase"
 import { AuthInteractor } from "~/usecase/auth"
+import { WorkspaceInteractor } from "~/usecase/workspace"
 import { SystemNetworkErrorInterpreter } from "../error"
 
 const setupStore = () => {
@@ -44,7 +48,8 @@ const setupDriver = () => {
     ga: new GoogleAnalyticsDriver(ga4, apiErrorHandler),
     theme: new ThemeDriver(ls),
     me: new MeDriver(openapiFetchClient, apiErrorHandler),
-    auth: new AuthDriver(openapiFetchClient, apiErrorHandler)
+    auth: new AuthDriver(openapiFetchClient, apiErrorHandler),
+    workspace: new WorkspaceDriver(openapiFetchClient, apiErrorHandler)
   }
 }
 
@@ -68,7 +73,8 @@ const gatewayAdapter = setupGatewayAdapter()
 const setupGateway = () => {
   return {
     me: new MeGateway(driver.me, driver.firebase, gatewayAdapter.me),
-    auth: new AuthGateway(driver.auth, driver.firebase, gatewayAdapter.auth)
+    auth: new AuthGateway(driver.auth, driver.firebase, gatewayAdapter.auth),
+    workspace: new WorkspaceGateway(driver.workspace, gatewayAdapter.workspace)
   }
 }
 
@@ -89,7 +95,8 @@ const setupUseCase = () => {
   return {
     theme: new ThemeInteractor(driver.theme, presenter.theme),
     me,
-    auth: new AuthInteractor(gateway.auth, me, presenter.auth)
+    auth: new AuthInteractor(gateway.auth, me, presenter.auth),
+    workspace: new WorkspaceInteractor(gateway.workspace, me)
   }
 }
 const useCase = setupUseCase()
@@ -97,8 +104,9 @@ const useCase = setupUseCase()
 const setupController = () => {
   return {
     theme: new ThemeController(useCase.theme),
+    auth: new AuthController(useCase.auth),
     me: new MeController(useCase.me),
-    auth: new AuthController(useCase.auth)
+    workspace: new WorkspaceController(useCase.workspace)
   }
 }
 const controller = setupController()

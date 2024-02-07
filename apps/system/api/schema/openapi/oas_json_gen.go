@@ -389,18 +389,13 @@ func (s *APIV1WorkspacesPostReq) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *APIV1WorkspacesPostReq) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("name")
-		e.Str(s.Name)
-	}
-	{
 		e.FieldStart("subdomain")
 		e.Str(s.Subdomain)
 	}
 }
 
-var jsonFieldsNameOfAPIV1WorkspacesPostReq = [2]string{
-	0: "name",
-	1: "subdomain",
+var jsonFieldsNameOfAPIV1WorkspacesPostReq = [1]string{
+	0: "subdomain",
 }
 
 // Decode decodes APIV1WorkspacesPostReq from json.
@@ -412,20 +407,8 @@ func (s *APIV1WorkspacesPostReq) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "name":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Str()
-				s.Name = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"name\"")
-			}
 		case "subdomain":
-			requiredBitSet[0] |= 1 << 1
+			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
 				v, err := d.Str()
 				s.Subdomain = string(v)
@@ -446,7 +429,7 @@ func (s *APIV1WorkspacesPostReq) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00000001,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

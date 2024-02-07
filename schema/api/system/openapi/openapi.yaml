@@ -328,12 +328,8 @@ components:
           schema:
             type: object
             required:
-              - name
               - subdomain
             properties:
-              name:
-                type: string
-                description: workspace name
               subdomain:
                 type: string
                 description: workspace subdomain (e.x. example-test)

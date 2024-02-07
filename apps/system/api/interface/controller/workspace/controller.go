@@ -23,7 +23,6 @@ func NewController(wuc workspaceUc.UseCase, resl shared.Resolver, co infraShared
 }
 
 type CreateInput struct {
-	WorkspaceName      string
 	WorkspaceSubdomain string
 }
 
@@ -32,7 +31,7 @@ func (c *controller) Create(ctx context.Context, i CreateInput) (openapi.APIV1Wo
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1WorkspacesPostRes), nil
 	}
-	in, err := workspaceUc.NewCreateInput(i.WorkspaceName, i.WorkspaceSubdomain, aID)
+	in, err := workspaceUc.NewCreateInput(i.WorkspaceSubdomain, aID)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1WorkspacesPostRes), nil
 	}

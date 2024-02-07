@@ -5,6 +5,7 @@
     "submit": "submit",
     "otp": "Authentication Code",
     "accountName": "Account Name",
-    "subdomain": "Domain"
+    "subdomain": "Domain",
+    "url": "URL"
   }
 }
