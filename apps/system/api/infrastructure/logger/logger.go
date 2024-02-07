@@ -14,8 +14,8 @@ type Logger interface {
 	Warn(msg string, keysAndValues ...interface{})
 	Error(msg string, keysAndValues ...interface{})
 	With(fields ...interface{}) Logger
-	LogRequest(ctx context.Context, req *http.Request) time.Time
-	LogResponse(ctx context.Context, req *http.Request, st time.Time, sc int)
+	LogRequest(ctx context.Context, req *http.Request, bodyBytes []byte) time.Time
+	LogResponse(ctx context.Context, req *http.Request, st time.Time, sc int, body string)
 }
 
 type Config struct {

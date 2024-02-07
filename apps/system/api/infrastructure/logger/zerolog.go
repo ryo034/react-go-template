@@ -10,8 +10,9 @@ import (
 )
 
 type zeroLogger struct {
-	logger zerolog.Logger
-	conf   Config
+	logger  zerolog.Logger
+	conf    Config
+	isLocal bool
 }
 
 func NewZeroLogger(conf Config, isLocal bool, serviceName string) Logger {
@@ -27,7 +28,7 @@ func NewZeroLogger(conf Config, isLocal bool, serviceName string) Logger {
 	}
 	logger := zerolog.New(output).With().Timestamp().Logger()
 	logger.Info().Str("service", serviceName).Msg("User service started")
-	return &zeroLogger{logger, conf}
+	return &zeroLogger{logger, conf, isLocal}
 }
 
 func (z *zeroLogger) Info(msg string, fields ...interface{}) {
@@ -50,10 +51,10 @@ func (z *zeroLogger) With(fields ...interface{}) Logger {
 	return &zeroLogger{logger: z.logger.With().Fields(convertToMap(fields)).Logger()}
 }
 
-func (z *zeroLogger) LogRequest(ctx context.Context, req *http.Request) time.Time {
+func (z *zeroLogger) LogRequest(ctx context.Context, req *http.Request, bodyBytes []byte) time.Time {
 	st := time.Now()
 	fields := z.baseFields(ctx, req)
-	fields = append(fields, "body", req.Body)
+	fields = append(fields, "request_body", string(bodyBytes))
 	fields = append(fields, "time", st.Format(z.conf.TimeFormat))
 	z.logger.Info().Fields(convertToMap(fields)).Msg("Request")
 	return st
@@ -69,8 +70,11 @@ func (z *zeroLogger) baseLogResponse(ctx context.Context, req *http.Request, st 
 	return append(fields, "latency", latency)
 }
 
-func (z *zeroLogger) LogResponse(ctx context.Context, req *http.Request, st time.Time, sc int) {
+func (z *zeroLogger) LogResponse(ctx context.Context, req *http.Request, st time.Time, sc int, body string) {
 	fields := z.baseLogResponse(ctx, req, st)
+	if z.isLocal {
+		fields = append(fields, "response_body", body)
+	}
 	fn := z.logger.Info
 	if sc >= 0 {
 		fields = append(fields, "status", sc)
