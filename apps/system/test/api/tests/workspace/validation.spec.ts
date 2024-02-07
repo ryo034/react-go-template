@@ -10,7 +10,6 @@ test.describe("Workspace Validation", () => {
     const res = await client.POST("/api/v1/workspaces", {
       headers: authHeaders(authInfo.token),
       body: {
-        name: "Example",
         subdomain: "test-example-subdomain"
       }
     })
@@ -24,7 +23,6 @@ test.describe("Workspace Validation", () => {
     const res = await client.POST("/api/v1/workspaces", {
       headers: hs,
       body: {
-        name: "test",
         subdomain: "example"
       }
     })
