@@ -12,7 +12,10 @@
     },
     "onboardingSettingWorkspace": {
       "title": "ワークスペースのURL設定",
-      "description": "あなたのワークスペースのURLを設定してください"
+      "description": "あなたのワークスペースのURLを設定してください",
+      "error": {
+        "alreadyExists": "このURLは既に使用されています"
+      }
     }
   }
 }

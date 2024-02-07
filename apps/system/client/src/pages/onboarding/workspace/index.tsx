@@ -1,13 +1,13 @@
 import { useContext, useState } from "react"
 import { SubmitHandler } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
+import { AlreadyExistError } from "shared-network"
 import {
   OnboardingSettingWorkspacePageForm,
   OnboardingSettingWorkspacePageFormValues
 } from "~/components/onboarding/workspace/form"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { routeMap } from "~/infrastructure/route/path"
-import { homePageRoute } from "~/pages/home"
 import { useOnboardingSettingWorkspacePageMessage } from "./message"
 
 export const onboardingSettingWorkspacePageRoute = "/onboarding/workspace"
@@ -23,7 +23,11 @@ export const OnboardingSettingWorkspacePage = () => {
       subdomain: d.subdomain
     })
     if (res) {
-      setErrorMessage("Failed to create workspace")
+      if (res instanceof AlreadyExistError) {
+        setErrorMessage(message.error.alreadyExist)
+        return
+      }
+      setErrorMessage(res.message)
       return
     }
     navigate(routeMap.home)

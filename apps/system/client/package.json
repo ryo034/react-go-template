@@ -11,7 +11,7 @@
     "lint": "biome check --apply-unsafe ./",
     "lint:fix": "biome check --apply ./",
     "lint:fix-unsafe": "biome check --apply-unsafe ./",
-    "format": "biome format --apply-unsafe ./",
+    "format": "biome format ./",
     "preview": "vite preview",
     "test": "vitest run --reporter verbose",
     "test-coverage": "vitest run --reporter verbose --coverage",
@@ -76,9 +76,5 @@
     "yarn": "use pnpm please!",
     "pnpm": "8.15.0"
   },
-  "browserslist": [
-    "> 0.2%, not dead",
-    "not IE 11",
-    "Safari > 11, iOS > 11"
-  ]
+  "browserslist": ["> 0.2%, not dead", "not IE 11", "Safari > 11, iOS > 11"]
 }

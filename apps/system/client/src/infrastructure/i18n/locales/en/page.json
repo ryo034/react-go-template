@@ -12,7 +12,10 @@
     },
     "onboardingSettingWorkspace": {
       "title": "Your workspace unique link.",
-      "description": "This will be your unique link to access your workspace."
+      "description": "This will be your unique link to access your workspace.",
+      "error": {
+        "alreadyExists": "This workspace URL is already taken. Please try another one."
+      }
     }
   }
 }

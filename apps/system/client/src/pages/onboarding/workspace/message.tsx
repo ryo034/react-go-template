@@ -6,6 +6,9 @@ export const useOnboardingSettingWorkspacePageMessage = () => {
   const { i18n } = useContext(ContainerContext)
   return {
     title: i18n.translate(`${i18nKeys.page.onboardingSettingWorkspace.title}`),
-    description: i18n.translate(`${i18nKeys.page.onboardingSettingWorkspace.description}`)
+    description: i18n.translate(`${i18nKeys.page.onboardingSettingWorkspace.description}`),
+    error: {
+      alreadyExist: i18n.translate(`${i18nKeys.page.onboardingSettingWorkspace.error.alreadyExist}`)
+    }
   }
 }

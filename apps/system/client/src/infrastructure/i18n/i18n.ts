@@ -101,7 +101,10 @@ export const i18nKeys = {
     },
     onboardingSettingWorkspace: {
       title: `${i18nRootKeys.page}.onboardingSettingWorkspace.title`,
-      description: `${i18nRootKeys.page}.onboardingSettingWorkspace.description`
+      description: `${i18nRootKeys.page}.onboardingSettingWorkspace.description`,
+      error: {
+        alreadyExist: `${i18nRootKeys.page}.onboardingSettingWorkspace.error.alreadyExist`
+      }
     }
   }
 }
