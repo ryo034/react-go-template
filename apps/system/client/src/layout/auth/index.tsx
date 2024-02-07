@@ -1,6 +1,7 @@
 import { useContext, useLayoutEffect, useRef } from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { Outlet, useNavigate } from "react-router-dom"
+import { Loading } from "~/components/loading/loading"
 import { AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
 import { firebaseAuth } from "~/infrastructure/firebase"
 import { ContainerContext } from "~/infrastructure/injector/context"
@@ -65,7 +66,7 @@ export const AuthLayout = () => {
   }, [loading, navigate, me])
 
   if (loading || meIsLoadingRef.current) {
-    return <div />
+    return <Loading />
   }
 
   return <Outlet />
