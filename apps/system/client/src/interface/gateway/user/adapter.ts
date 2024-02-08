@@ -1,5 +1,5 @@
 import { Result } from "true-myth"
-import { AccountId, AccountName } from "~/domain/account"
+import { AccountFullName, AccountId } from "~/domain/account"
 import { Email } from "~/domain/shared"
 import { User } from "~/domain/user"
 import { components } from "~/generated/schema/openapi/systemApi"
@@ -22,9 +22,9 @@ export class UserGatewayAdapter {
       return Result.err(email.error)
     }
 
-    let name: AccountName | undefined = undefined
+    let name: AccountFullName | undefined = undefined
     if (user.name) {
-      const tmpName = AccountName.create(user.name)
+      const tmpName = AccountFullName.create(user.name)
       if (tmpName.isErr) {
         return Result.err(tmpName.error)
       }

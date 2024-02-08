@@ -37,7 +37,6 @@ export const VerifyOtpPage = () => {
       setErrorMessage(errorMessageProvider.translate(res))
       return
     }
-    navigate(routeMap.home)
   }
 
   return (

@@ -1,6 +1,5 @@
-import { AuthenticationError } from "shared-network"
 import { Result } from "true-myth"
-import { AccountName, Me, MeRepository, User } from "~/domain"
+import { Me, MeRepository, User } from "~/domain"
 import { AuthProviderDriver, MeDriver } from "~/driver"
 import { AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
 import { PromiseResult } from "~/infrastructure/shared/result"

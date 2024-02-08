@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { AccountName } from "~/domain"
+import { WorkspaceSubdomain } from "~/domain"
 import { i18nKeys } from "~/infrastructure/i18n"
 import { ContainerContext } from "~/infrastructure/injector/context"
 
@@ -25,7 +25,7 @@ export const useOnboardingSettingWorkspacePageFormMessage = () => {
           }),
           max: i18n.translate(`${i18nKeys.form.max}`, {
             field: i18n.translate(`${i18nKeys.word.email}`),
-            max: AccountName.max
+            max: WorkspaceSubdomain.max
           }),
           regex: i18n.translate(`${i18nKeys.form.regex}`, { field: i18n.translate(`${i18nKeys.word.subdomain}`) })
         }

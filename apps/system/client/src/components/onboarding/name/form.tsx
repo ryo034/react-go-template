@@ -1,8 +1,8 @@
-import { useEffect, useLayoutEffect } from "react"
+import { useEffect } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { Button, FormResultErrorMessage, Input, Label, LoadingButton } from "shared-ui"
+import { Button, FormResultErrorMessage, LoadingButton } from "shared-ui"
 import { FormInputSection } from "~/components/common/form/inputSection"
-import { AccountName } from "~/domain"
+import { AccountFullName } from "~/domain"
 import { useOnboardingSettingNamePageFormMessage } from "./message"
 
 export type OnboardingSettingNamePageFormValues = {
@@ -30,11 +30,11 @@ export const OnboardingSettingNamePageForm = ({ onSubmit, errorMessage, isLoadin
   const nameInputField = register("name", {
     required: message.form.validation.name.required,
     maxLength: {
-      value: AccountName.max,
+      value: AccountFullName.max,
       message: message.form.validation.name.max
     },
     pattern: {
-      value: AccountName.pattern,
+      value: AccountFullName.pattern,
       message: message.form.validation.name.regex
     }
   })

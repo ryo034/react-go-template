@@ -194,3 +194,12 @@ update-node-version:
 	@asdf install nodejs $(VERSION)
 	@asdf local nodejs $(VERSION)
 	@corepack enable pnpm
+
+
+# ====================
+#  Test
+# ====================
+.PHONY: test-all
+test-all:
+	@cd ./apps/system/test/api && corepack pnpm run test:stateless && corepack pnpm run test:stateful
+	@cd ./apps/system/test/e2e && corepack pnpm run test:stateless && corepack pnpm run test:stateful

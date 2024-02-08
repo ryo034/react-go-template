@@ -4,15 +4,15 @@ import { DomainError } from "~/domain/shared"
 
 describe("AccountName", () => {
   describe("create", () => {
-    it("should fail to create an instance of AccountName with invalid input", () => {
+    it("should fail to create an instance of AccountName with invalid input %s", () => {
       const actual = "a".repeat(AccountName.max + 1)
       const result = AccountName.create(actual)
       expect(result.isErr).toBe(true)
       result.mapErr((e) => expect(e).instanceOf(DomainError))
     })
 
-    it.each(["一郎", "いちろう", "イチロウ", "ichiroh", "あい　う"])(
-      "should create an instance of AccountName with valid input",
+    it.each(["一郎", "いちろう", "イチロウ", "ichiroh", "あい　う", "John Due"])(
+      "should create an instance of AccountName with valid input %s",
       (actual) => {
         const result = AccountName.create(actual)
         expect(result.isOk).toBe(true)

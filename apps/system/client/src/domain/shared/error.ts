@@ -19,6 +19,7 @@ export const domainKeys = {
   MemberDisplayName: "MemberDisplayName",
   MemberIdNumber: "MemberIdNumber",
   AccountName: "AccountName",
+  AccountFullName: "AccountFullName",
   StringId: "StringId",
   MFAAuthCode: "MFAAuthCode"
 } as const

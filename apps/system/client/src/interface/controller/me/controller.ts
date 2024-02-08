@@ -1,4 +1,4 @@
-import { AccountName, Me, User } from "~/domain"
+import { AccountFullName, Me, User } from "~/domain"
 import { AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
 import { MeUseCase } from "~/usecase"
 
@@ -24,7 +24,7 @@ export class MeController {
     if (i.current === null) {
       return new AuthProviderCurrentUserNotFoundError("current user not found")
     }
-    const name = AccountName.create(i.user.name)
+    const name = AccountFullName.create(i.user.name)
     if (name.isErr) {
       return name.error
     }
