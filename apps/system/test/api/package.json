@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.41.2",
-    "@types/node": "^20.11.16",
+    "@types/node": "^20.11.17",
     "@types/pg": "^8.11.0",
     "csv-parse": "^5.5.3"
   },
