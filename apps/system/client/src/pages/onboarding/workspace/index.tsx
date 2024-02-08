@@ -2,6 +2,7 @@ import { useContext, useState } from "react"
 import { SubmitHandler } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { AlreadyExistError } from "shared-network"
+import { useToast } from "shared-ui"
 import {
   OnboardingSettingWorkspacePageForm,
   OnboardingSettingWorkspacePageFormValues
@@ -13,9 +14,10 @@ import { useOnboardingSettingWorkspacePageMessage } from "./message"
 export const onboardingSettingWorkspacePageRoute = "/onboarding/workspace"
 
 export const OnboardingSettingWorkspacePage = () => {
-  const { controller, store } = useContext(ContainerContext)
+  const { controller } = useContext(ContainerContext)
   const [errorMessage, setErrorMessage] = useState("")
   const navigate = useNavigate()
+  const { toast } = useToast()
   const message = useOnboardingSettingWorkspacePageMessage()
 
   const onSubmit: SubmitHandler<OnboardingSettingWorkspacePageFormValues> = async (d) => {
@@ -30,6 +32,7 @@ export const OnboardingSettingWorkspacePage = () => {
       setErrorMessage(res.message)
       return
     }
+    toast({ title: "ワークスペースを作成しました🎉" })
     navigate(routeMap.home)
   }
 

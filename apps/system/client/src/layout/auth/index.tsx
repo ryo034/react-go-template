@@ -27,31 +27,26 @@ export const AuthLayout = () => {
         return
       }
       const isAuthenticatedRoute = authRoutes.includes(window.location.pathname)
-      if (!user && isAuthenticatedRoute) {
-        navigate(unprotectedInitialPagePath)
-      } else if (!user && !isAuthenticatedRoute) {
-        return
-      } else if (user && !isAuthenticatedRoute && meRef.current !== null) {
-        if (meRef.current.self.hasNotName && window.location.pathname !== routeMap.onboardingSettingName) {
-          navigate(routeMap.onboardingSettingName)
-          return
-        }
-        if (meRef.current.hasNotWorkspace && window.location.pathname !== routeMap.onboardingSettingWorkspace) {
-          navigate(routeMap.onboardingSettingWorkspace)
+      if (!user) {
+        if (isAuthenticatedRoute) {
+          navigate(unprotectedInitialPagePath)
           return
         }
         return
-      } else if (user && isAuthenticatedRoute && meRef.current !== null) {
-        if (meRef.current.self.hasNotName && window.location.pathname !== routeMap.onboardingSettingName) {
+      }
+
+      if (meRef.current !== null) {
+        if (meRef.current.self.hasNotName) {
           navigate(routeMap.onboardingSettingName)
           return
         }
-        if (meRef.current.hasNotWorkspace && window.location.pathname !== routeMap.onboardingSettingWorkspace) {
+        if (meRef.current.hasNotWorkspace) {
           navigate(routeMap.onboardingSettingWorkspace)
           return
         }
         return
       }
+
       const res = await controller.me.find()
       if (!res) return
       if (res !== null) {
