@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/rs/cors"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/datasource"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/redis"
 	"os"
@@ -26,6 +27,10 @@ type Reader interface {
 	RedisConfig() *redis.Config
 	FirebaseStorageBucket() string
 	ServerPort() string
+	NoReplyEmail() account.Email
+	MailHost() string
+	MailPort() int
+	ResendAPIKey() string
 }
 
 type Env string
@@ -108,7 +113,7 @@ func (r *reader) fromEnvInt(key Key) int {
 	if result, err := strconv.Atoi(r.fromEnv(key)); err != nil {
 		panic(err)
 	} else {
-		return int(result)
+		return result
 	}
 }
 

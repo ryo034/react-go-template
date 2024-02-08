@@ -4,6 +4,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/config"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/logger"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"net/http"
 )
 
@@ -17,7 +18,9 @@ type Middleware interface {
 
 type HttpMiddleware func(http.Handler) http.Handler
 
-type mid struct{}
+type mid struct {
+	co shared.ContextOperator
+}
 
 func applyMiddlewares(h http.Handler, middlewares ...HttpMiddleware) http.Handler {
 	for i := len(middlewares) - 1; i >= 0; i-- {
@@ -30,13 +33,13 @@ func (m *mid) Global(h http.Handler, conf config.Reader, zl logger.Logger, rds *
 	return applyMiddlewares(
 		h,
 		NewRequestIDMiddleware().Handler,
-		NewLangMiddleware(conf.DefaultLanguage()).Handler,
+		NewLangMiddleware(conf.DefaultLanguage(), m.co).Handler,
 		NewLogMiddleware(zl, conf.IsLocal()).Handler,
 		NewCorsMiddleware(&CORSInfo{AllowOrigins: conf.AllowOrigins()}, conf.IsLocal()).Handler,
 		NewOtpRateLimitMiddleware(rds, OtpRateLimitConfig()).Handler,
 	)
 }
 
-func NewMiddlewares() Middlewares {
-	return &mid{}
+func NewMiddlewares(co shared.ContextOperator) Middlewares {
+	return &mid{co}
 }

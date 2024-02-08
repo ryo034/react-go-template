@@ -38,7 +38,7 @@ func (u *useCase) AuthByOTP(ctx context.Context, i ByOTPInput) (openapi.APIV1Aut
 	if err != nil {
 		return nil, err
 	}
-	if err = u.emailDr.Send(ctx, i.Email, code); err != nil {
+	if err = u.emailDr.SendOTP(ctx, i.Email, code); err != nil {
 		return nil, err
 	}
 	return &openapi.APIV1AuthOtpPostOK{}, nil

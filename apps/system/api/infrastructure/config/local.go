@@ -20,4 +20,11 @@ var localValues = map[Key]string{
 	redisAddr: "host.docker.internal:6379",
 	redisDB:   "0",
 	redisPass: "root",
+	// mail
+	mailHost: "mailhog",
+	mailPort: "1025",
+	// email
+	noReplyEmail: "no-reply@example.com",
+	// resend api key
+	resendAPIKey: "",
 }

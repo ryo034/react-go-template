@@ -5,6 +5,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/config"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	fb "github.com/ryo034/react-go-template/apps/system/api/infrastructure/firebase"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/mailer"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/message"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	sharedPresenter "github.com/ryo034/react-go-template/apps/system/api/interface/presenter/shared"
@@ -26,9 +27,10 @@ func NewInjector(
 	co shared.ContextOperator,
 	conf config.Reader,
 	rc *redis.Client,
+	mc mailer.Client,
 ) (*Injector, error) {
 	defaultLang := conf.DefaultLanguage()
-	di := newDriverInjector(rc, f)
+	di := newDriverInjector(rc, f, co, mc, conf.NoReplyEmail())
 	ri := newRepositoryInjector(di, newGatewayAdapterInjector())
 	pi := newPresenterInjector()
 	la := sharedPresenter.NewLanguageAdapter(defaultLang)

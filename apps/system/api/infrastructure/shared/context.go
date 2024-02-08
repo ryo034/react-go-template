@@ -13,6 +13,7 @@ type ContextOperator interface {
 	SetUID(ctx context.Context, uID string) context.Context
 	GetUID(ctx context.Context) (account.ID, error)
 	GetLang(ctx context.Context) (language.Tag, error)
+	SetLang(ctx context.Context, lang language.Tag) context.Context
 }
 
 type contextOperator struct{}
@@ -54,28 +55,6 @@ func (co contextOperator) GetLang(ctx context.Context) (language.Tag, error) {
 	return language.Parse(cast.ToString(v))
 }
 
-func SetLang(ctx context.Context) context.Context {
-	//md, ok := metadata.FromIncomingContext(ctx)
-	//if !ok {
-	//	panic("metadata.FromIncomingContext(ctx)")
-	//}
-	//langKey := md.Get(string(ContextLanguageKey))
-	//if len(langKey) == 0 {
-	//	// Return Japanese if lang is not included in the request
-	//	return context.WithValue(ctx, ContextLanguageKey, language.Japanese.String())
-	//}
-	//la := langKey[0]
-	//if la == "" {
-	//	return context.WithValue(ctx, ContextLanguageKey, language.Japanese.String())
-	//}
-	//
-	//// Accept only Japanese / English
-	//switch la {
-	//case language.Japanese.String():
-	//	la = language.Japanese.String()
-	//case language.English.String():
-	//	la = language.English.String()
-	//}
-	//return context.WithValue(ctx, ContextLanguageKey, la)
-	return ctx
+func (co contextOperator) SetLang(ctx context.Context, lang language.Tag) context.Context {
+	return context.WithValue(ctx, ContextLanguageKey, lang)
 }

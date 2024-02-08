@@ -8,6 +8,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/injector"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/logger"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/mailer"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/middleware"
 	openapiMiddleware "github.com/ryo034/react-go-template/apps/system/api/infrastructure/openapi/middleware"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/openapi/service"
@@ -32,7 +33,14 @@ func Start(conf config.Reader) {
 
 	rc := redis.NewRedisClient(conf.RedisConfig())
 
-	inj, err := injector.NewInjector(fb, p, txp, co, conf, rc)
+	var mc mailer.Client
+	if conf.IsLocal() {
+		mc = mailer.NewMailhogMailer(conf.MailHost(), conf.MailPort())
+	} else {
+		mc = mailer.NewResendMailer(conf.ResendAPIKey())
+	}
+
+	inj, err := injector.NewInjector(fb, p, txp, co, conf, rc, mc)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -50,7 +58,7 @@ func Start(conf config.Reader) {
 
 	server := &http.Server{
 		Addr:         endpoint,
-		Handler:      middleware.NewMiddlewares().Global(h, conf, zl, rc),
+		Handler:      middleware.NewMiddlewares(co).Global(h, conf, zl, rc),
 		ReadTimeout:  15 * time.Second,
 		WriteTimeout: 15 * time.Second,
 		IdleTimeout:  15 * time.Second,
