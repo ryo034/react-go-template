@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useLayoutEffect } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { Button, FormResultErrorMessage } from "shared-ui"
 import { useVerifyOtpPageFormMessage } from "~/components/auth/otp/message"
@@ -40,6 +40,7 @@ export const VerifyOTPPageForm = ({ onSubmit, errorMessage }: Props) => {
       otpInput6: ""
     }
   })
+
   const { otpInput1, otpInput2, otpInput3, otpInput4, otpInput5, otpInput6 } = watch()
 
   const otpInput1Field = register("otpInput1", {
@@ -97,6 +98,25 @@ export const VerifyOTPPageForm = ({ onSubmit, errorMessage }: Props) => {
 
   useEffect(() => {
     setFocus("otpInput1")
+  }, [])
+
+  useLayoutEffect(() => {
+    const handlePaste = async (e: ClipboardEvent) => {
+      e.preventDefault()
+      const text = await navigator.clipboard.readText()
+      if (/^\d{6}$/.test(text)) {
+        const otp = text.split("")
+        setValue("otpInput1", otp[0])
+        setValue("otpInput2", otp[1])
+        setValue("otpInput3", otp[2])
+        setValue("otpInput4", otp[3])
+        setValue("otpInput5", otp[4])
+        setValue("otpInput6", otp[5])
+      }
+    }
+
+    window.addEventListener("paste", handlePaste)
+    return () => window.removeEventListener("paste", handlePaste)
   }, [])
 
   useEffect(() => {
