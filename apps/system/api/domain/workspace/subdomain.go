@@ -5,6 +5,7 @@ import (
 	domainError "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/validation"
 	"regexp"
+	"strings"
 )
 
 type Subdomain struct {
@@ -15,11 +16,11 @@ const (
 	InvalidWorkspaceSubdomain domainError.MessageKey = "invalid.workspace.subdomain"
 )
 
-const maxSubdomainLength = 63
-const minSubdomainLength = 1
+const maxLength = 63
+const minLength = 1
 
 func isValidSubdomain(subdomain string) (bool, error) {
-	if len(subdomain) < minSubdomainLength || len(subdomain) > maxSubdomainLength {
+	if len(subdomain) < minLength || len(subdomain) > maxLength {
 		return false, nil
 	}
 	return regexp.MatchString(`^[a-z0-9]+(-[a-z0-9]+)*$`, subdomain)
@@ -27,12 +28,13 @@ func isValidSubdomain(subdomain string) (bool, error) {
 
 func NewSubdomain(v string) (Subdomain, error) {
 	errs := validation.NewErrors()
-	ok, err := isValidSubdomain(v)
+	trimmed := strings.TrimSpace(v)
+	ok, err := isValidSubdomain(trimmed)
 	if err != nil || !ok {
 		errs.Append(InvalidWorkspaceSubdomain, fmt.Sprintf("invalid workspace domain: %s", v))
 		return Subdomain{}, errs
 	}
-	return Subdomain{v}, nil
+	return Subdomain{trimmed}, nil
 }
 
 func (d Subdomain) ToString() string {

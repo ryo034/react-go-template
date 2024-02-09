@@ -103,24 +103,40 @@ func (d Datetime) ToDatetimeString() string {
 	return d.ToDate().Format("2006-01-02 15:04:05")
 }
 
-func (d Datetime) ToLocalDate() time.Time {
+func (d Datetime) ToLocalDate() (time.Time, error) {
+	errs := validation.NewErrors()
 	loc, err := time.LoadLocation(CountryTz["Tokyo"])
 	if err != nil {
-		log.Println(err)
 		log.Printf("ToLocalTime Error: %s", CountryTz["Tokyo"])
-		panic(err)
+		errs.Append(InvalidDatetime, d.value.String())
 	}
+
+	if d.value.IsZero() {
+		errs.Append(InvalidDatetime, d.value.String())
+	}
+
+	if errs.IsNotEmpty() {
+		return time.Time{}, errs
+	}
+
 	t := d.value
-	return t.Truncate(time.Hour).Add(-time.Duration(t.Hour()) * time.Hour).In(loc)
+	return t.Truncate(time.Hour).Add(-time.Duration(t.Hour()) * time.Hour).In(loc), nil
 }
 
-func (d Datetime) ToLocalTime() time.Time {
+func (d Datetime) ToLocalTime() (time.Time, error) {
+	errs := validation.NewErrors()
 	tz := CountryTz["Tokyo"]
 	loc, err := time.LoadLocation(tz)
 	if err != nil {
-		log.Println(err)
 		log.Printf("LoadLocation Error: %s", tz)
-		panic(err)
+		errs.Append(InvalidDatetime, d.value.String())
 	}
-	return d.value.In(loc)
+
+	if d.value.IsZero() {
+		errs.Append(InvalidDatetime, d.value.String())
+	}
+	if errs.IsNotEmpty() {
+		return time.Time{}, errs
+	}
+	return d.value.In(loc), nil
 }

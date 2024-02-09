@@ -1,39 +1,69 @@
 package id
 
 import (
+	"github.com/google/uuid"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/validation"
+	"github.com/ryo034/react-go-template/apps/system/api/util/test"
+	"reflect"
 	"testing"
 )
 
-func TestUUID_ToFriendlyString_OK(t *testing.T) {
-	type fields struct {
-		v string
-	}
+func TestUUID_ToFriendlyString(t *testing.T) {
 	tests := []struct {
-		name   string
-		fields fields
-		want   string
+		name    string
+		value   string
+		want    UUID
+		wantErr validation.Errors
 	}{
-		{
-			name:   "success",
-			fields: fields{v: "018d59d6-6f02-7016-a115-141537640232"},
-			want:   "aggvtvtpajybniivcqktozacgi",
-		},
-		{
-			name:   "success",
-			fields: fields{v: "018d59d7-eba0-7c93-b7c0-3bef66657bac"},
-			want:   "aggvtv7lub6jhn6ahpxwmzl3vq",
-		},
+		{name: "success", value: "aggvtvtpajybniivcqktozacgi", want: UUID{uuid.MustParse("018d59d6-6f02-7016-a115-141537640232")}, wantErr: nil},
+		{name: "success", value: "aggvtv7lub6jhn6ahpxwmzl3vq", want: UUID{uuid.MustParse("018d59d7-eba0-7c93-b7c0-3bef66657bac")}, wantErr: nil},
+		{name: "Empty", value: "", want: UUID{}, wantErr: test.NewValidationErrors(InvalidUUID, "").Errs},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			u, _ := NewUUIDFromString(tt.fields.v)
-			if got := u.ToFriendlyString(); got != tt.want {
-				t.Errorf("ToFriendlyString() = %v, want %v", got, tt.want)
+			got, err := NewFromFriendlyString(tt.value)
+			if err == nil {
+				if tt.wantErr != nil {
+					t.Errorf("NewFromFriendlyString() got = %v, want %v", got, tt.want)
+					return
+				}
+				if !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("NewFromFriendlyString() got = %v, want %v", got, tt.want)
+				}
+			} else {
+				if !test.ValidationErrorEquals(err.(validation.Errors), tt.wantErr) {
+					t.Errorf("NewFromFriendlyString() error = %v, wantErr %v", err, tt.wantErr)
+				}
 			}
+		})
+	}
+}
 
-			fs, _ := NewFromFriendlyString(tt.want)
-			if got := fs.ToString(); got != tt.fields.v {
-				t.Errorf("String() = %v, want %v", got, tt.fields.v)
+func TestNewUUIDFromString(t *testing.T) {
+	tests := []struct {
+		name    string
+		value   string
+		want    UUID
+		wantErr validation.Errors
+	}{
+		{"success", "018d59d6-6f02-7016-a115-141537640232", UUID{uuid.MustParse("018d59d6-6f02-7016-a115-141537640232")}, nil},
+		{"empty", "", UUID{}, test.NewValidationErrors(InvalidUUID, "").Errs},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := NewUUIDFromString(tt.value)
+			if err == nil {
+				if tt.wantErr != nil {
+					t.Errorf("NewUUIDFromString() got = %v, want %v", got, tt.want)
+					return
+				}
+				if !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("NewUUIDFromString() got = %v, want %v", got, tt.want)
+				}
+			} else {
+				if !test.ValidationErrorEquals(err.(validation.Errors), tt.wantErr) {
+					t.Errorf("NewUUIDFromString() error = %v, wantErr %v", err, tt.wantErr)
+				}
 			}
 		})
 	}

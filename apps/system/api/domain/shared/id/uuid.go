@@ -16,9 +16,6 @@ const InvalidUUID domainError.MessageKey = "invalid.uuid"
 
 func NewUUIDFromString(v string) (UUID, error) {
 	errs := validation.NewErrors()
-	if v == "" {
-		errs.Append(InvalidUUID, v)
-	}
 	if uuid.Validate(v) != nil {
 		errs.Append(InvalidUUID, v)
 	}
@@ -32,6 +29,7 @@ func NewFromFriendlyString(v string) (UUID, error) {
 	errs := validation.NewErrors()
 	if v == "" {
 		errs.Append(InvalidUUID, v)
+		return UUID{}, errs
 	}
 	uuid4Binary, err := base32.StdEncoding.WithPadding(base32.NoPadding).DecodeString(strings.ToUpper(v))
 	if err != nil {
