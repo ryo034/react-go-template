@@ -3,6 +3,27 @@ import { WorkspaceSubdomain } from "~/domain"
 import { i18nKeys } from "~/infrastructure/i18n"
 import { ContainerContext } from "~/infrastructure/injector/context"
 
+export type OnboardingSettingWorkspacePageFormMessage = {
+  word: {
+    subdomain: string
+  }
+  action: {
+    submit: string
+  }
+  form: {
+    placeholder: {
+      name: string
+    }
+    validation: {
+      subdomain: {
+        required: string
+        max: string
+        regex: string
+      }
+    }
+  }
+}
+
 export const useOnboardingSettingWorkspacePageFormMessage = () => {
   const { i18n } = useContext(ContainerContext)
   return {

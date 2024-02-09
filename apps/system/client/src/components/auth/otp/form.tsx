@@ -18,7 +18,7 @@ interface Props {
   errorMessage: string
 }
 
-const verifyOtpFormId = "verifyOtpForm"
+export const verifyOtpFormId = "verifyOtpForm"
 
 export const VerifyOTPPageForm = ({ onSubmit, errorMessage }: Props) => {
   const message = useVerifyOtpPageFormMessage()
@@ -153,7 +153,12 @@ export const VerifyOTPPageForm = ({ onSubmit, errorMessage }: Props) => {
   ])
 
   return (
-    <form className="mt-8 space-y-6" id={verifyOtpFormId} onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="mt-8 space-y-6"
+      id={verifyOtpFormId}
+      onSubmit={handleSubmit(onSubmit)}
+      data-testid={verifyOtpFormId}
+    >
       <div className="flex justify-between">
         <OptDigitInput reactHookForm={otpInput1Field} data-testid="otpInput1" />
         <OptDigitInput reactHookForm={otpInput2Field} data-testid="otpInput2" />

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom"
 import { OtpFormValues, VerifyOTPPageForm } from "~/components/auth/otp/form"
 import { i18nKeys } from "~/infrastructure/i18n"
 import { ContainerContext } from "~/infrastructure/injector/context"
-import { routeMap } from "~/infrastructure/route/path"
 
 export const verifyOtpPageRoute = "/verify-otp"
 

@@ -58,6 +58,7 @@ describe("LoginForm", () => {
             onSubmit={mockOnSubmit}
             errorMessage=""
             onClickGoogleLoginButton={mockOnClickGoogleLoginButton}
+            isLoading={false}
           />
         )
         const { getByTestId } = render(elm)
@@ -79,14 +80,24 @@ describe("LoginForm", () => {
 
   test("focuses on email field when opened", async () => {
     render(
-      <AuthPageForm onSubmit={mockOnSubmit} errorMessage="" onClickGoogleLoginButton={mockOnClickGoogleLoginButton} />
+      <AuthPageForm
+        onSubmit={mockOnSubmit}
+        errorMessage=""
+        onClickGoogleLoginButton={mockOnClickGoogleLoginButton}
+        isLoading={false}
+      />
     )
     expect(screen.getByTestId("email")).toEqual(document.activeElement)
   })
 
   test("submits correct values when form is filled out and submit is clicked", async () => {
     const elm = (
-      <AuthPageForm onSubmit={mockOnSubmit} errorMessage="" onClickGoogleLoginButton={mockOnClickGoogleLoginButton} />
+      <AuthPageForm
+        onSubmit={mockOnSubmit}
+        errorMessage=""
+        onClickGoogleLoginButton={mockOnClickGoogleLoginButton}
+        isLoading={false}
+      />
     )
     const { getByTestId } = render(elm)
     const emailField = getByTestId("email")
@@ -96,5 +107,20 @@ describe("LoginForm", () => {
     await userEvent.click(submitButton)
 
     await waitFor(() => expect(mockOnSubmit).toHaveBeenCalledTimes(1))
+  })
+
+  test("displays loading button when loading", () => {
+    const elm = (
+      <AuthPageForm
+        onSubmit={mockOnSubmit}
+        errorMessage=""
+        onClickGoogleLoginButton={mockOnClickGoogleLoginButton}
+        isLoading={true}
+      />
+    )
+    render(elm)
+    const nextButton = screen.queryByTestId("startButton")
+    expect(nextButton).toBeNull()
+    expect(screen.getByTestId("authPageFormStartLoadingButton")).toBeInTheDocument()
   })
 })

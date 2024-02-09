@@ -21,6 +21,12 @@ interface GenericError {
  * example:
  * ```ts
 class MyNetworkErrorInterpreter extends NetworkErrorInterpreter {
+  constructor() {
+    super()
+    this.convertToSpecificError = this.convertToSpecificError.bind(this)
+    this.isValidGenericError = this.isValidGenericError.bind(this)
+  }
+
   convertToSpecificError(error: unknown): Error | null {
     if (!this.isValidGenericError(error)) {
       return null

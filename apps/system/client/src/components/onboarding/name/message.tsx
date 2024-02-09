@@ -3,7 +3,28 @@ import { AccountFullName } from "~/domain"
 import { i18nKeys } from "~/infrastructure/i18n"
 import { ContainerContext } from "~/infrastructure/injector/context"
 
-export const useOnboardingSettingNamePageFormMessage = () => {
+export type OnboardingSettingNamePageFormMessage = {
+  word: {
+    accountName: string
+  }
+  action: {
+    submit: string
+  }
+  form: {
+    placeholder: {
+      name: string
+    }
+    validation: {
+      name: {
+        required: string
+        max: string
+        regex: string
+      }
+    }
+  }
+}
+
+export const useOnboardingSettingNamePageFormMessage: () => OnboardingSettingNamePageFormMessage = () => {
   const { i18n } = useContext(ContainerContext)
   return {
     word: {
