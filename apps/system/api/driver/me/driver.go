@@ -40,7 +40,7 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*models
 		Relation("SystemAccount").
 		Relation("SystemAccount.Profile").
 		Relation("SystemAccount.PhoneNumber").
-		Where("m.member_id = ?", mID.Value()).
+		Where("ms.member_id = ?", mID.Value()).
 		Scan(ctx)
 	if err != nil {
 		return nil, err

@@ -9,12 +9,14 @@ const fetchRequestInterceptor = async (config: RequestInit | undefined) => {
   if (firebaseAuth.currentUser === null) {
     return config
   }
-  const headers = new Headers(config.headers)
   const token = await firebaseAuth.currentUser.getIdToken()
   if (!token) {
     return config
   }
-  return { ...config, headers: { ...headers, Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
+  return {
+    ...config,
+    headers: { ...new Headers(config.headers), Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
+  }
 }
 
 export const openapiFetchClient = createClient<paths>({

@@ -2,6 +2,7 @@ package firebase
 
 import (
 	"context"
+	"fmt"
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
@@ -20,11 +21,16 @@ type Driver interface {
 	GetUser(ctx context.Context, aID account.ID) (*auth.UserRecord, error)
 	CreateUser(ctx context.Context, aID account.ID, email account.Email) error
 	SetCurrentWorkspaceToCustomClaim(ctx context.Context, aID account.ID, wID workspace.ID) error
+	GetCurrentWorkspaceFromCustomClaim(ctx context.Context, aID account.ID) (*workspace.ID, error)
 	UpdateProfile(ctx context.Context, usr *user.User) error
 	UpdateEmail(ctx context.Context, aID account.ID, em account.Email) error
 	UpdateName(ctx context.Context, aID account.ID, n account.Name) error
 	UpdatePhoneNumber(ctx context.Context, aID account.ID, ph phone.Number) error
 }
+
+const (
+	CustomClaimCurrentWorkspaceIDKey string = "current_workspace_id"
+)
 
 type driver struct {
 	f *firebase.Firebase
@@ -68,7 +74,32 @@ func (d *driver) UpdateProfile(ctx context.Context, usr *user.User) error {
 }
 
 func (d *driver) SetCurrentWorkspaceToCustomClaim(ctx context.Context, aID account.ID, wID workspace.ID) error {
-	return d.f.Auth.SetCustomUserClaims(ctx, aID.ToString(), map[string]interface{}{"current_workspace_id": wID.ToFriendlyString()})
+	return d.f.Auth.SetCustomUserClaims(ctx, aID.ToString(), map[string]interface{}{
+		CustomClaimCurrentWorkspaceIDKey: wID.ToFriendlyString(),
+	})
+}
+
+func (d *driver) GetCurrentWorkspaceFromCustomClaim(ctx context.Context, aID account.ID) (*workspace.ID, error) {
+	ur, err := d.f.Auth.GetUser(ctx, aID.ToString())
+	if err != nil {
+		return nil, err
+	}
+	claims := ur.CustomClaims
+	if claims == nil {
+		return nil, nil
+	}
+	ccWID, ok := claims[CustomClaimCurrentWorkspaceIDKey].(string)
+	if !ok {
+		return nil, fmt.Errorf("invalid custom claim")
+	}
+	if ccWID == "" {
+		return nil, nil
+	}
+	wID, err := workspace.NewIDFromFriendlyString(ccWID)
+	if err != nil {
+		return nil, err
+	}
+	return &wID, err
 }
 
 func (d *driver) CreateUser(ctx context.Context, aID account.ID, email account.Email) error {

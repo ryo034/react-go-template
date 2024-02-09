@@ -10,7 +10,7 @@ import { useOnboardingSettingNamePageMessage } from "./message"
 export const onboardingSettingNamePageRoute = "/onboarding/name"
 
 export const OnboardingSettingNamePage = () => {
-  const { controller, store } = useContext(ContainerContext)
+  const { controller, store, errorMessageProvider } = useContext(ContainerContext)
   const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = useState("")
 
@@ -28,7 +28,7 @@ export const OnboardingSettingNamePage = () => {
         navigate(onboardingSettingNamePageRoute)
         return
       }
-      setErrorMessage("Failed to update name")
+      setErrorMessage(errorMessageProvider.resolve(res))
       return
     }
     navigate(onboardingSettingWorkspacePageRoute)

@@ -94,8 +94,8 @@ func (p *driver) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, w
 		Relation("SystemAccount.Profile").
 		Relation("SystemAccount.PhoneNumber").
 		Relation("Workspace").
-		Where("members.system_account_id = ?", aID.ToString()).
-		Where("members.workspace_id = ?", wID.Value()).
+		Where("ms.system_account_id = ?", aID.ToString()).
+		Where("ms.workspace_id = ?", wID.Value()).
 		Scan(ctx)
 	if err != nil {
 		return nil, err

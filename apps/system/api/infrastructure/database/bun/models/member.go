@@ -7,7 +7,7 @@ import (
 )
 
 type Member struct {
-	bun.BaseModel `bun:"table:members,alias:m"`
+	bun.BaseModel `bun:"table:members,alias:ms"`
 
 	MemberID        uuid.UUID `bun:"member_id,pk"`
 	WorkspaceID     uuid.UUID `bun:"workspace_id,notnull"`

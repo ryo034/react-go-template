@@ -38,50 +38,62 @@ export interface FirebaseTestConfig {
 
 const firebaseAuthEmulatorHost = "http://localhost:9099"
 
+let firebaseAdminAuth: ReturnType<typeof getAuth> | null
+let firebaseClientAuth: ReturnType<typeof fb.getAuth> | null
+
 export class Firebase {
-  private firebaseAdminAuth: ReturnType<typeof getAuth>
-  private firebaseClientAuth: ReturnType<typeof fb.getAuth>
+  // private firebaseAdminAuth: ReturnType<typeof getAuth>
+  // private firebaseClientAuth: ReturnType<typeof fb.getAuth>
 
   constructor(
     private readonly config: FirebaseConfig,
     private readonly testConfig: FirebaseTestConfig = { showConsole: false }
   ) {
-    if (this.config.localConfig) {
-      if (testConfig.showConsole) console.log("Setting up Firebase Emulator...")
-      process.env.FIREBASE_AUTH_EMULATOR_HOST = this.config.localConfig.firebaseEmulatorHost
-      process.env.FIRESTORE_EMULATOR_HOST = this.config.localConfig.firestoreEmulatorHost
+    if (!firebaseAdminAuth) {
+      if (this.config.localConfig) {
+        if (testConfig.showConsole) console.log("Setting up Firebase Emulator...")
+        process.env.FIREBASE_AUTH_EMULATOR_HOST = this.config.localConfig.firebaseEmulatorHost
+        process.env.FIRESTORE_EMULATOR_HOST = this.config.localConfig.firestoreEmulatorHost
+      }
+      const firebase = getApps().length === 0 ? initializeApp(config) : getApp()
+      firebaseAdminAuth = getAuth(firebase)
     }
-    const firebase = getApps().length === 0 ? initializeApp(config) : getApp()
-    this.firebaseAdminAuth = getAuth(firebase)
 
-    // Firebase Client
-    const fbc = fba.initializeApp(firebaseClientConfig)
-    const firebaseAuth = fb.getAuth(fbc)
-    if (this.config.localConfig) {
-      fb.connectAuthEmulator(firebaseAuth, firebaseAuthEmulatorHost, { disableWarnings: true })
+    if (!firebaseClientAuth) {
+      // Firebase Client
+      const fbc = fba.initializeApp(firebaseClientConfig)
+      const firebaseAuth = fb.getAuth(fbc)
+
+      if (this.config.localConfig) {
+        fb.connectAuthEmulator(firebaseAuth, firebaseAuthEmulatorHost, { disableWarnings: true })
+      }
+      firebaseClientAuth = firebaseAuth
     }
-    this.firebaseClientAuth = firebaseAuth
   }
 
   async clear() {
+    if (firebaseAdminAuth === null) throw new Error("Firebase Admin Auth is not initialized")
     if (this.testConfig.showConsole) console.log("Clearing firebase...")
-    const users = await this.firebaseAdminAuth.listUsers()
+    const users = await firebaseAdminAuth.listUsers()
     for (const u of users.users) {
-      await this.firebaseAdminAuth.revokeRefreshTokens(u.uid)
+      await firebaseAdminAuth.revokeRefreshTokens(u.uid)
     }
-    await this.firebaseAdminAuth.deleteUsers(users.users.map((u: any) => u.uid))
+    await firebaseAdminAuth.deleteUsers(users.users.map((u: any) => u.uid))
   }
 
   async signInWithCustomToken(token: string) {
-    const res = await fb.signInWithCustomToken(this.firebaseClientAuth, token)
+    if (firebaseClientAuth === null) throw new Error("Firebase Client Auth is not initialized")
+    const res = await fb.signInWithCustomToken(firebaseClientAuth, token)
     return await res.user.getIdTokenResult()
   }
 
   get authInstance() {
-    return this.firebaseAdminAuth
+    return firebaseAdminAuth
   }
 
   async setup() {
+    if (firebaseAdminAuth === null) throw new Error("Firebase Admin Auth is not initialized")
+
     const jsonData = JSON.parse(readFileSync("./setup/firebase/auth/users.json", "utf8").toString())
     const users = jsonData.users as FirebaseUser[]
     if (this.testConfig.showConsole) console.log("Setting up firebase...")
@@ -101,7 +113,7 @@ export class Firebase {
       }
       // const password = users[idx].passwordHash.split(":")[2].split("=")[1]
       try {
-        await this.firebaseAdminAuth.createUser({
+        await firebaseAdminAuth.createUser({
           uid: users[idx].localId,
           email: users[idx].email,
           emailVerified: users[idx].emailVerified,
