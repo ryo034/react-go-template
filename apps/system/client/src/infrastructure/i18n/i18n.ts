@@ -51,7 +51,8 @@ export const i18nRootKeys = {
   word: "word",
   action: "action",
   form: "form",
-  page: "page"
+  page: "page",
+  network: "network"
 }
 
 export const i18nKeys = {
@@ -106,5 +107,15 @@ export const i18nKeys = {
         alreadyExist: `${i18nRootKeys.page}.onboardingSettingWorkspace.error.alreadyExist`
       }
     }
+  },
+  network: {
+    cannotConnect: `${i18nRootKeys.network}.error.cannotConnect`,
+    requestTimeout: `${i18nRootKeys.network}.error.requestTimeout`,
+    badRequest: `${i18nRootKeys.network}.error.badRequest`,
+    forbidden: `${i18nRootKeys.network}.error.forbidden`,
+    authentication: `${i18nRootKeys.network}.error.authentication`,
+    notFound: `${i18nRootKeys.network}.error.notFound`,
+    alreadyExist: `${i18nRootKeys.network}.error.alreadyExist`,
+    internalServer: `${i18nRootKeys.network}.error.internalServer`
   }
 }

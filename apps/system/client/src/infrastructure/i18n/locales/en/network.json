@@ -1,0 +1,12 @@
+{
+  "error": {
+    "cannotConnect": "can not connect to server",
+    "requestTimeout": "timeout",
+    "badRequest": "request is invalid",
+    "forbidden": "forbidden",
+    "authentication": "authentication error",
+    "notFound": "not found",
+    "alreadyExist": "already exist",
+    "internalServer": "internal server error"
+  }
+}

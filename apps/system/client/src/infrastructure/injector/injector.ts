@@ -1,5 +1,5 @@
 import ga4 from "react-ga4"
-import { ApiErrorHandler } from "shared-network"
+import { ApiErrorHandler, ErrorHandlingServiceMessageProvider } from "shared-network"
 import { AuthDriver, ThemeDriver } from "~/driver"
 import { FirebaseDriver } from "~/driver"
 import { GoogleAnalyticsDriver } from "~/driver/analytics/ga/driver"
@@ -7,7 +7,7 @@ import { MeDriver } from "~/driver/me/driver"
 import { WorkspaceDriver } from "~/driver/workspace/driver"
 import { MessageProvider } from "~/infrastructure/error/message"
 import { firebaseAuth } from "~/infrastructure/firebase"
-import { ReactI18nextProvider } from "~/infrastructure/i18n"
+import { ReactI18nextProvider, i18nKeys } from "~/infrastructure/i18n"
 import { openapiFetchClient } from "~/infrastructure/openapi/client"
 import { MeController, ThemeController } from "~/interface/controller"
 import { AuthController } from "~/interface/controller/auth/controller"
@@ -112,7 +112,21 @@ const setupController = () => {
 const controller = setupController()
 
 const i18n = new ReactI18nextProvider()
-const errorMessageProvider = new MessageProvider(i18n)
+const systemErrorMessageProvider = new MessageProvider(i18n)
+
+const errorMessageProvider = new ErrorHandlingServiceMessageProvider(
+  {
+    CannotConnectNetworkError: (_err) => i18n.translate(i18nKeys.network.cannotConnect),
+    RequestTimeoutError: (_err) => i18n.translate(i18nKeys.network.requestTimeout),
+    BadRequestError: (_err) => i18n.translate(i18nKeys.network.badRequest),
+    ForbiddenError: (_err) => i18n.translate(i18nKeys.network.forbidden),
+    AuthenticationError: (_err) => i18n.translate(i18nKeys.network.authentication),
+    NotFoundError: (_err) => i18n.translate(i18nKeys.network.notFound),
+    AlreadyExistError: (_err) => i18n.translate(i18nKeys.network.alreadyExist),
+    InternalServerError: (_err) => i18n.translate(i18nKeys.network.internalServer)
+  },
+  systemErrorMessageProvider.translate
+)
 
 export const di = {
   driver,
