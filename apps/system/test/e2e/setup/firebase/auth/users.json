@@ -12,6 +12,16 @@
       "displayName": "John Doe"
     },
     {
+      "localId": "018d91d4-5a5e-799c-9cfa-de8d0c02d7f2",
+      "lastLoginAt": "1706825570547",
+      "emailVerified": true,
+      "email": "login_logout_login@example.com",
+      "createdAt": "1706825570522",
+      "customAuth": true,
+      "lastRefreshAt": "2024-02-01T22:12:50.547Z",
+      "displayName": "Login LogoutRetry"
+    },
+    {
       "localId": "018d6189-9ad0-7b72-801b-1e0de0d3c214",
       "lastLoginAt": "1706825570547",
       "emailVerified": true,

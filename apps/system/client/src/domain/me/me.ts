@@ -19,6 +19,10 @@ export class Me extends Entity<Props> {
     return this.value.self
   }
 
+  get doneOnboarding(): boolean {
+    return this.value.self.hasName && this.hasWorkspace
+  }
+
   get workspace(): Workspace | undefined {
     return this.value.workspace
   }

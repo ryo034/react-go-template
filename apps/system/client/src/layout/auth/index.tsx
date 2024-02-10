@@ -2,7 +2,6 @@ import { useContext, useLayoutEffect, useRef } from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { Outlet, useNavigate } from "react-router-dom"
 import { Loading } from "~/components/loading/loading"
-import { AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
 import { firebaseAuth } from "~/infrastructure/firebase"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { authRoutes, routeMap, unprotectedInitialPagePath } from "~/infrastructure/route/path"
@@ -44,17 +43,17 @@ export const AuthLayout = () => {
           navigate(routeMap.onboardingSettingWorkspace)
           return
         }
+        if (meRef.current.doneOnboarding) {
+          navigate(routeMap.home)
+        }
         return
       }
 
       const res = await controller.me.find()
       if (!res) return
       if (res !== null) {
-        // TODO: sign out
-        if (res instanceof AuthProviderCurrentUserNotFoundError) {
-          navigate(unprotectedInitialPagePath)
-          return
-        }
+        await controller.me.signOut()
+        navigate(unprotectedInitialPagePath)
       }
     })
     return () => unsubscribed()

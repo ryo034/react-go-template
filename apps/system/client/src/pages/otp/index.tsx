@@ -33,7 +33,7 @@ export const VerifyOtpPage = () => {
     const opt = `${d.otpInput1}${d.otpInput2}${d.otpInput3}${d.otpInput4}${d.otpInput5}${d.otpInput6}`
     const res = await controller.auth.verifyOtp(email, opt)
     if (res) {
-      setErrorMessage(errorMessageProvider.translate(res))
+      setErrorMessage(errorMessageProvider.resolve(res))
       return
     }
   }

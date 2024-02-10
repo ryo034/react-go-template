@@ -1,2 +1,3 @@
 workspace_id,name,subdomain,created_at,updated_at
 c1bd2603-b9cd-4f84-8b83-3548f6ae150b,Example,example,2024-01-10 12:00:00.000000 +00:00,2024-01-10 12:00:00.000000 +00:00
+018d91d5-2ed0-7211-b2e6-cf26182ac4f9,LoginLogoutRetry,login-logout-retry,2024-01-10 12:00:00.000000 +00:00,2024-01-10 12:00:00.000000 +00:00

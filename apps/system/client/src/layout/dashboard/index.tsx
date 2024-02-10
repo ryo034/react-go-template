@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import { useContext, useState } from "react"
 import { Outlet } from "react-router-dom"
 import {
   ResizableHandle,
@@ -12,6 +12,7 @@ import {
   cn
 } from "shared-ui"
 import { Nav } from "~/components/sidebar/nav"
+import { SidebarUserNav } from "~/components/sidebar/userNav"
 import { WorkspaceSwitcher } from "~/components/sidebar/workspaceSwitcher"
 import { ContainerContext } from "~/infrastructure/injector/context"
 
@@ -26,8 +27,8 @@ export const DashboardLayout = ({
   defaultCollapsed = false,
   navCollapsedSize = 4
 }: DashboardLayoutProps) => {
-  const { store } = React.useContext(ContainerContext)
-  const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed)
+  const { store } = useContext(ContainerContext)
+  const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed)
   const me = store.me((state) => state.me)
 
   return (
@@ -45,12 +46,8 @@ export const DashboardLayout = ({
           collapsible={true}
           minSize={15}
           maxSize={20}
-          onExpand={() => {
-            setIsCollapsed(false)
-          }}
-          onCollapse={() => {
-            setIsCollapsed(true)
-          }}
+          onExpand={() => setIsCollapsed(false)}
+          onCollapse={() => setIsCollapsed(true)}
           className={cn(isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out")}
         >
           <div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? "h-[52px]" : "px-2")}>
@@ -62,6 +59,7 @@ export const DashboardLayout = ({
           </div>
           <Separator />
           <Nav isCollapsed={isCollapsed} />
+          <SidebarUserNav />
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={defaultLayout[2]}>

@@ -10,7 +10,7 @@ RUN addgroup -S -g $GID $GROUPNAME && adduser -u $UID -S $USERNAME -G $GROUPNAME
 ARG GITHUB_TOKEN
 
 RUN apk update && \
-    apk add --no-cache git=2.43.0-r0 ca-certificates=20230506-r0 tzdata=2023d-r0 && \
+    apk add --no-cache git ca-certificates tzdata && \
     git config --global url."https://${GITHUB_TOKEN}:x-oauth-basic@github.com/ryo034/".insteadOf "https://github.com/ryo034/"
 
 # Create and change to the app directory.

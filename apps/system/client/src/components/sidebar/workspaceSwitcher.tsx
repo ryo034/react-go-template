@@ -59,7 +59,7 @@ export const WorkspaceSwitcher = ({ className, isCollapsed, workspaces, currentW
               <AvatarImage src={""} alt={selectedTeam.name.value} className="grayscale" />
               <AvatarFallback>{selectedTeam.subdomain.value.slice(0, 1).toUpperCase()}</AvatarFallback>
             </Avatar>
-            {!isCollapsed && selectedTeam.name.value}
+            {!isCollapsed && <p className="truncate">{selectedTeam.name.value}</p>}
             {!isCollapsed && <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />}
           </Button>
         </PopoverTrigger>

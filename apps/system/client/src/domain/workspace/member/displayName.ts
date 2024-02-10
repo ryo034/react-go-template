@@ -16,4 +16,8 @@ export class MemberDisplayName extends ValueObject<string> {
     }
     return Result.ok(new MemberDisplayName(trimmed))
   }
+
+  get firstTwoCharacters(): string {
+    return this.value.slice(0, 2).toUpperCase() ?? ""
+  }
 }

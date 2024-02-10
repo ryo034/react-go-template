@@ -138,4 +138,10 @@ export default class PagesStep {
     const isMatch = this.testURL(currentURL, url)
     expect(isMatch).toBeTruthy()
   }
+
+  @Step("サイドバーのユーザーアイコンをクリック")
+  async clickSidebarUserIcon() {
+    const target = page.getByTestId("userNavigationOnSidebar")
+    await target.click()
+  }
 }

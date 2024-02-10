@@ -26,7 +26,7 @@ export const AuthPage = () => {
   const onSubmit: SubmitHandler<LoginFormValues> = async (d) => {
     const res = await controller.auth.startWithEmail(d.email)
     if (res) {
-      setErrorMessage(errorMessageProvider.translate(res))
+      setErrorMessage(errorMessageProvider.resolve(res))
       return
     }
     navigate(routeMap.verifyOtp)
