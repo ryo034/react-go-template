@@ -39,11 +39,13 @@ export class MeGatewayAdapter {
       workspace = tmpWorkspace.value
     }
 
+    const joinedWorkspaces = this.workspaceAdapter.adaptAll(me.joinedWorkspaces)
+
     const user = this.userAdapter.adapt(me.self)
     if (user.isErr) {
       return Result.err(user.error)
     }
 
-    return Result.ok(Me.create({ self: user.value, workspace, member }))
+    return Result.ok(Me.create({ self: user.value, workspace, member, joinedWorkspaces }))
   }
 }

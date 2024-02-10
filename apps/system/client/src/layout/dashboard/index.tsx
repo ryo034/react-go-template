@@ -11,8 +11,9 @@ import {
   TooltipProvider,
   cn
 } from "shared-ui"
-import { AccountSwitcher } from "~/components/sidebar/accountSwitcher"
 import { Nav } from "~/components/sidebar/nav"
+import { WorkspaceSwitcher } from "~/components/sidebar/workspaceSwitcher"
+import { ContainerContext } from "~/infrastructure/injector/context"
 
 interface DashboardLayoutProps {
   defaultLayout?: number[] | undefined
@@ -25,7 +26,9 @@ export const DashboardLayout = ({
   defaultCollapsed = false,
   navCollapsedSize = 4
 }: DashboardLayoutProps) => {
+  const { store } = React.useContext(ContainerContext)
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed)
+  const me = store.me((state) => state.me)
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -51,7 +54,11 @@ export const DashboardLayout = ({
           className={cn(isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out")}
         >
           <div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? "h-[52px]" : "px-2")}>
-            {/* <AccountSwitcher isCollapsed={isCollapsed} accounts={[]} /> */}
+            <WorkspaceSwitcher
+              isCollapsed={isCollapsed}
+              workspaces={me?.joinedWorkspaces}
+              currentWorkspace={me?.workspace}
+            />
           </div>
           <Separator />
           <Nav isCollapsed={isCollapsed} />

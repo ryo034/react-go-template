@@ -1,5 +1,5 @@
 import { Result } from "true-myth"
-import { Workspace, WorkspaceId, WorkspaceName } from "~/domain/workspace"
+import { Workspace, WorkspaceId, WorkspaceName, WorkspaceSubdomain, Workspaces } from "~/domain/workspace"
 import { components } from "~/generated/schema/openapi/systemApi"
 import { AdapterError } from "~/infrastructure/error"
 
@@ -20,6 +20,22 @@ export class WorkspaceGatewayAdapter {
       return Result.err(name.error)
     }
 
-    return Result.ok(Workspace.create({ id: id.value, name: name.value }))
+    const subdomain = WorkspaceSubdomain.create(workspace.subdomain)
+    if (subdomain.isErr) {
+      return Result.err(subdomain.error)
+    }
+
+    return Result.ok(Workspace.create({ id: id.value, name: name.value, subdomain: subdomain.value }))
+  }
+
+  adaptAll(workspaces: components["schemas"]["Workspaces"]): Workspaces {
+    const vs = workspaces.map((workspace) => {
+      const res = this.adapt(workspace)
+      if (res.isErr) {
+        throw res.error
+      }
+      return res.value
+    })
+    return Workspaces.create(vs)
   }
 }

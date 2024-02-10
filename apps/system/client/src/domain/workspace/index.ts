@@ -1,4 +1,5 @@
 export * from "./workspace"
+export * from "./workspaces"
 export * from "./subdomain"
 export * from "./id"
 export * from "./name"
