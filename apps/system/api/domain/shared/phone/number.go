@@ -52,9 +52,12 @@ func (e Number) ToString() string {
 	return e.value
 }
 
-func (e Number) ToInternationalNumberString() string {
-	num, _ := libphonenumber.Parse(e.ToString(), "JP")
+func (e Number) ToInternationalNumberString() (string, error) {
+	num, err := libphonenumber.Parse(e.ToString(), "JP")
+	if err != nil {
+		return "", err
+	}
 	formatted := libphonenumber.Format(num, libphonenumber.INTERNATIONAL)
 	noHyphen := strings.ReplaceAll(formatted, "-", "")
-	return strings.ReplaceAll(noHyphen, " ", "")
+	return strings.ReplaceAll(noHyphen, " ", ""), nil
 }

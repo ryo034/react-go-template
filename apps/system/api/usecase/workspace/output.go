@@ -9,4 +9,5 @@ import (
 type OutputPort interface {
 	Create(w *workspace.Workspace) *openapi.Workspace
 	FindAllMembers(ms member.Members) *openapi.Members
+	InviteMembers(ms member.InvitedMembers, registeredMembers member.InvitedMembers, failedMembers member.InvitedMembers) *openapi.BulkInvitedResult
 }

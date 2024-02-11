@@ -139,6 +139,7 @@ export interface paths {
             "application/json": components["schemas"]["Workspaces"];
           };
         };
+        401: components["responses"]["UnauthorizedError"];
         500: components["responses"]["InternalServerError"];
       };
     };
@@ -156,6 +157,7 @@ export interface paths {
           };
         };
         400: components["responses"]["BadRequestError"];
+        401: components["responses"]["UnauthorizedError"];
         409: components["responses"]["ConflictError"];
         500: components["responses"]["InternalServerError"];
       };
@@ -174,9 +176,18 @@ export interface paths {
             "application/json": components["schemas"]["Members"];
           };
         };
+        401: components["responses"]["UnauthorizedError"];
         500: components["responses"]["InternalServerError"];
       };
     };
+  };
+  "/api/v1/members/invitations/bulk": {
+    /** Invite multiple users to the workspace by email */
+    post: operations["inviteMultipleUsersToWorkspace"];
+  };
+  "/api/v1/members/invitations/verify": {
+    /** Verify invitation */
+    post: operations["verifyInvitation"];
   };
 }
 
@@ -227,6 +238,16 @@ export interface components {
       idNumber?: string;
     };
     Members: components["schemas"]["Member"][];
+    InvitedMember: {
+      /** Format: email */
+      email: string;
+    };
+    InvitedMembers: components["schemas"]["InvitedMember"][];
+    BulkInvitedResult: {
+      invitedCount: number;
+      failedMembers: components["schemas"]["InvitedMembers"];
+      registeredMembers?: components["schemas"]["InvitedMembers"];
+    };
     MembershipPeriod: {
       /** Format: date-time */
       start: string;
@@ -462,6 +483,15 @@ export interface components {
         };
       };
     };
+    /** @description Verify invitation */
+    MembersInvitationsVerify: {
+      content: {
+        "application/json": {
+          /** @description Invitation token */
+          token?: string;
+        };
+      };
+    };
   };
   headers: never;
   pathItems: never;
@@ -485,6 +515,44 @@ export interface operations {
           "application/json": components["schemas"]["Me"];
         };
       };
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /** Invite multiple users to the workspace by email */
+  inviteMultipleUsersToWorkspace: {
+    requestBody: {
+      content: {
+        "application/json": {
+          invitedMembers?: components["schemas"]["InvitedMembers"];
+        };
+      };
+    };
+    responses: {
+      /** @description Successfully sent invitations */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BulkInvitedResult"];
+        };
+      };
+      400: components["responses"]["BadRequestError"];
+      401: components["responses"]["UnauthorizedError"];
+      409: components["responses"]["ConflictError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /** Verify invitation */
+  verifyInvitation: {
+    requestBody: components["requestBodies"]["MembersInvitationsVerify"];
+    responses: {
+      /** @description Invitation verified */
+      200: {
+        content: {
+          "application/json": components["schemas"]["InvitedMember"];
+        };
+      };
+      400: components["responses"]["BadRequestError"];
+      401: components["responses"]["UnauthorizedError"];
+      404: components["responses"]["NotFoundError"];
       500: components["responses"]["InternalServerError"];
     };
   };

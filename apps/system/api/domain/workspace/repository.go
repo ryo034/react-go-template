@@ -13,4 +13,6 @@ type Repository interface {
 	AddMember(ctx context.Context, exec bun.IDB, w *Workspace, m *member.Member) (*member.Member, error)
 	FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID ID) (*member.Member, error)
 	FindAllMembers(ctx context.Context, exec bun.IDB, wID ID) (member.Members, error)
+	BulkInviteMembers(ctx context.Context, exec bun.IDB, wID ID, ms member.InvitedMembers) error
+	InviteMember(ctx context.Context, exec bun.IDB, wID ID, invitedBy member.InvitedBy, m *member.InvitedMember) error
 }

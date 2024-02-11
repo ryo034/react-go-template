@@ -77,12 +77,24 @@ type Invoker interface {
 	//
 	// POST /api/v1/workspaces
 	APIV1WorkspacesPost(ctx context.Context, request *APIV1WorkspacesPostReq) (APIV1WorkspacesPostRes, error)
+	// InviteMultipleUsersToWorkspace invokes inviteMultipleUsersToWorkspace operation.
+	//
+	// Invite multiple users to the workspace by email.
+	//
+	// POST /api/v1/members/invitations/bulk
+	InviteMultipleUsersToWorkspace(ctx context.Context, request *InviteMultipleUsersToWorkspaceReq) (InviteMultipleUsersToWorkspaceRes, error)
 	// Login invokes login operation.
 	//
 	// Login.
 	//
 	// POST /api/v1/login
 	Login(ctx context.Context) (LoginRes, error)
+	// VerifyInvitation invokes verifyInvitation operation.
+	//
+	// Verify invitation.
+	//
+	// POST /api/v1/members/invitations/verify
+	VerifyInvitation(ctx context.Context, request *VerifyInvitationReq) (VerifyInvitationRes, error)
 }
 
 // Client implements OAS client.
@@ -984,6 +996,81 @@ func (c *Client) sendAPIV1WorkspacesPost(ctx context.Context, request *APIV1Work
 	return result, nil
 }
 
+// InviteMultipleUsersToWorkspace invokes inviteMultipleUsersToWorkspace operation.
+//
+// Invite multiple users to the workspace by email.
+//
+// POST /api/v1/members/invitations/bulk
+func (c *Client) InviteMultipleUsersToWorkspace(ctx context.Context, request *InviteMultipleUsersToWorkspaceReq) (InviteMultipleUsersToWorkspaceRes, error) {
+	res, err := c.sendInviteMultipleUsersToWorkspace(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendInviteMultipleUsersToWorkspace(ctx context.Context, request *InviteMultipleUsersToWorkspaceReq) (res InviteMultipleUsersToWorkspaceRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("inviteMultipleUsersToWorkspace"),
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/v1/members/invitations/bulk"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "InviteMultipleUsersToWorkspace",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/members/invitations/bulk"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeInviteMultipleUsersToWorkspaceRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeInviteMultipleUsersToWorkspaceResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // Login invokes login operation.
 //
 // Login.
@@ -1049,6 +1136,81 @@ func (c *Client) sendLogin(ctx context.Context) (res LoginRes, err error) {
 
 	stage = "DecodeResponse"
 	result, err := decodeLoginResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// VerifyInvitation invokes verifyInvitation operation.
+//
+// Verify invitation.
+//
+// POST /api/v1/members/invitations/verify
+func (c *Client) VerifyInvitation(ctx context.Context, request *VerifyInvitationReq) (VerifyInvitationRes, error) {
+	res, err := c.sendVerifyInvitation(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendVerifyInvitation(ctx context.Context, request *VerifyInvitationReq) (res VerifyInvitationRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("verifyInvitation"),
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/v1/members/invitations/verify"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "VerifyInvitation",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/members/invitations/verify"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeVerifyInvitationRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeVerifyInvitationResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

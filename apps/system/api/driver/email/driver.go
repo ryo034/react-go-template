@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/mailer"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"golang.org/x/text/language"
@@ -12,16 +13,17 @@ import (
 
 type Driver interface {
 	SendOTP(ctx context.Context, mailTo account.Email, code string) error
+	SendInvite(ctx context.Context, from member.InvitedBy, mailTo *member.InvitedMember) error
 }
 
 type driver struct {
 	co           shared.ContextOperator
 	mc           mailer.Client
-	noreplyEmail account.Email
+	noReplyEmail account.Email
 }
 
-func NewDriver(co shared.ContextOperator, mc mailer.Client, noreplyEmail account.Email) Driver {
-	return &driver{co, mc, noreplyEmail}
+func NewDriver(co shared.ContextOperator, mc mailer.Client, noReplyEmail account.Email) Driver {
+	return &driver{co, mc, noReplyEmail}
 }
 
 type otpTemplateData struct {
@@ -60,7 +62,7 @@ func (d *driver) SendOTP(ctx context.Context, mailTo account.Email, code string)
 	}
 
 	conf := mailer.Config{
-		From:    d.noreplyEmail.ToString(),
+		From:    d.noReplyEmail.ToString(),
 		To:      []string{mailTo.ToString()},
 		Subject: subject,
 		Body:    body.String(),
@@ -70,4 +72,9 @@ func (d *driver) SendOTP(ctx context.Context, mailTo account.Email, code string)
 		IsHTML:  true,
 	}
 	return d.mc.Send(conf)
+}
+
+func (d *driver) SendInvite(ctx context.Context, from member.InvitedBy, mailTo *member.InvitedMember) error {
+	// TODO: implement
+	return nil
 }

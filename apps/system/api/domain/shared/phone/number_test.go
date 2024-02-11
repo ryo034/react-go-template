@@ -92,7 +92,7 @@ func TestPhoneNumber_ToInternationalNumberString_OK(t *testing.T) {
 			e := Number{
 				value: tt.fields.value,
 			}
-			if got := e.ToInternationalNumberString(); got != tt.want {
+			if got, _ := e.ToInternationalNumberString(); got != tt.want {
 				t.Errorf("ToInternationalNumberString() = %v, want %v", got, tt.want)
 			}
 		})

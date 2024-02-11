@@ -209,7 +209,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
 						switch r.Method {
 						case "GET":
 							s.handleAPIV1MembersGetRequest([0]string{}, elemIsEscaped, w, r)
@@ -218,6 +217,65 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						return
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/invitations/"
+						origElem := elem
+						if l := len("/invitations/"); len(elem) >= l && elem[0:l] == "/invitations/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'b': // Prefix: "bulk"
+							origElem := elem
+							if l := len("bulk"); len(elem) >= l && elem[0:l] == "bulk" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleInviteMultipleUsersToWorkspaceRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 'v': // Prefix: "verify"
+							origElem := elem
+							if l := len("verify"); len(elem) >= l && elem[0:l] == "verify" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleVerifyInvitationRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
@@ -538,7 +596,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "GET":
-							// Leaf: APIV1MembersGet
 							r.name = "APIV1MembersGet"
 							r.summary = "Get Members"
 							r.operationID = ""
@@ -549,6 +606,73 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						default:
 							return
 						}
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/invitations/"
+						origElem := elem
+						if l := len("/invitations/"); len(elem) >= l && elem[0:l] == "/invitations/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'b': // Prefix: "bulk"
+							origElem := elem
+							if l := len("bulk"); len(elem) >= l && elem[0:l] == "bulk" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch method {
+								case "POST":
+									// Leaf: InviteMultipleUsersToWorkspace
+									r.name = "InviteMultipleUsersToWorkspace"
+									r.summary = "Invite multiple users to the workspace by email"
+									r.operationID = "inviteMultipleUsersToWorkspace"
+									r.pathPattern = "/api/v1/members/invitations/bulk"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'v': // Prefix: "verify"
+							origElem := elem
+							if l := len("verify"); len(elem) >= l && elem[0:l] == "verify" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch method {
+								case "POST":
+									// Leaf: VerifyInvitation
+									r.name = "VerifyInvitation"
+									r.summary = "Verify invitation"
+									r.operationID = "verifyInvitation"
+									r.pathPattern = "/api/v1/members/invitations/verify"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem

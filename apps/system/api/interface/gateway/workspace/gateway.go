@@ -65,3 +65,12 @@ func (g *gateway) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspac
 	}
 	return g.ma.AdaptAll(res)
 }
+
+func (g *gateway) BulkInviteMembers(ctx context.Context, exec bun.IDB, wID workspace.ID, ms member.InvitedMembers) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (g *gateway) InviteMember(ctx context.Context, exec bun.IDB, wID workspace.ID, invitedBy member.InvitedBy, m *member.InvitedMember) error {
+	return g.d.InviteMember(ctx, exec, wID, invitedBy, m)
+}

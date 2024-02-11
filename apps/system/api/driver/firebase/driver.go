@@ -68,7 +68,11 @@ func (d *driver) UpdateProfile(ctx context.Context, usr *user.User) error {
 		params = params.DisplayName(usr.Name().ToString())
 	}
 	if usr.HasPhoneNumber() {
-		params = params.PhoneNumber(usr.PhoneNumber().ToInternationalNumberString())
+		ph, err := usr.PhoneNumber().ToInternationalNumberString()
+		if err != nil {
+			return err
+		}
+		params = params.PhoneNumber(ph)
 	}
 	_, err := d.f.Auth.UpdateUser(ctx, usr.AccountID().ToString(), params)
 	return err
@@ -128,8 +132,12 @@ func (d *driver) UpdateName(ctx context.Context, aID account.ID, n account.Name)
 }
 
 func (d *driver) UpdatePhoneNumber(ctx context.Context, aID account.ID, ph phone.Number) error {
-	params := (&auth.UserToUpdate{}).PhoneNumber(ph.ToInternationalNumberString())
-	_, err := d.f.Auth.UpdateUser(ctx, aID.ToString(), params)
+	pho, err := ph.ToInternationalNumberString()
+	if err != nil {
+		return err
+	}
+	params := (&auth.UserToUpdate{}).PhoneNumber(pho)
+	_, err = d.f.Auth.UpdateUser(ctx, aID.ToString(), params)
 	if err != nil {
 		if auth.IsPhoneNumberAlreadyExists(err) {
 			return domainErr.NewPhoneNumberAlreadyInUse(ph.ToString())

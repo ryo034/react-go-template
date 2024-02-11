@@ -26,3 +26,24 @@ func (p *presenter) FindAllMembers(ms member.Members) *openapi.Members {
 	res := p.ma.AdaptAll(ms)
 	return &res
 }
+
+func (p *presenter) InviteMembers(ms member.InvitedMembers, registeredMembers member.InvitedMembers, failedMembers member.InvitedMembers) *openapi.BulkInvitedResult {
+	rims := make([]openapi.InvitedMember, 0, registeredMembers.Size())
+	for _, ivm := range registeredMembers.AsSlice() {
+		rims = append(rims, openapi.InvitedMember{
+			Email: ivm.Email().ToString(),
+		})
+	}
+
+	fims := make([]openapi.InvitedMember, 0, failedMembers.Size())
+	for _, ivm := range failedMembers.AsSlice() {
+		fims = append(fims, openapi.InvitedMember{
+			Email: ivm.Email().ToString(),
+		})
+	}
+	return &openapi.BulkInvitedResult{
+		InvitedCount:      ms.Size(),
+		RegisteredMembers: rims,
+		FailedMembers:     fims,
+	}
+}

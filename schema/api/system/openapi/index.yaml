@@ -22,6 +22,10 @@ paths:
     $ref: "./paths/workspace.yaml#/workspaces"
   /api/v1/members:
     $ref: "./paths/member.yaml#/members"
+  /api/v1/members/invitations/bulk:
+    $ref: "./paths/member.yaml#/invitationsBulk"
+  /api/v1/members/invitations/verify:
+    $ref: "./paths/member.yaml#/invitationsVerify"
 
 components:
   securitySchemes:
@@ -43,6 +47,12 @@ components:
       $ref: "./components/schemas/member.yaml#/MemberProfile"
     Members:
       $ref: "./components/schemas/member.yaml#/Members"
+    InvitedMember:
+      $ref: "./components/schemas/member.yaml#/InvitedMember"
+    InvitedMembers:
+      $ref: "./components/schemas/member.yaml#/InvitedMembers"
+    BulkInvitedResult:
+      $ref: "./components/schemas/member.yaml#/BulkInvitedResult"
     MembershipPeriod:
       $ref: "./components/schemas/membership.yaml#/MembershipPeriod"
     Me:
@@ -56,6 +66,8 @@ components:
       $ref: "./components/requestBodies/workspace.yaml#/CreateWorkspace"
     UpdateMeProfile:
       $ref: "./components/requestBodies/me.yaml#/UpdateMeProfile"
+    MembersInvitationsVerify:
+      $ref: "./components/requestBodies/member.yaml#/MembersInvitationsVerify"
   responses:
     GeneralError:
       $ref: "./components/responses/error.yaml#/components/responses/GeneralError"

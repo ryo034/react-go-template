@@ -2,15 +2,19 @@ package workspace
 
 import (
 	"context"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	infraShared "github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/shared"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 	workspaceUc "github.com/ryo034/react-go-template/apps/system/api/usecase/workspace"
+	"time"
 )
 
 type Controller interface {
 	Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error)
 	FindAllMembers(ctx context.Context) (openapi.APIV1MembersGetRes, error)
+	InviteMembers(ctx context.Context, i InvitedMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error)
 }
 
 type controller struct {
@@ -25,6 +29,14 @@ func NewController(wuc workspaceUc.UseCase, resl shared.Resolver, co infraShared
 
 type CreateInput struct {
 	WorkspaceSubdomain string
+}
+
+type InvitedMember struct {
+	Email string
+}
+
+type InvitedMembersInput struct {
+	InvitedMembers []InvitedMember
 }
 
 func (c *controller) Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error) {
@@ -52,6 +64,42 @@ func (c *controller) FindAllMembers(ctx context.Context) (openapi.APIV1MembersGe
 	res, err := c.wuc.FindAllMembers(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MembersGetRes), nil
+	}
+	return res, nil
+}
+
+func NewInviteMembersInput(aID account.ID, ims []InvitedMember) *workspaceUc.InviteMembersInput {
+	expiredAt := time.Now()
+	ivs := make([]*member.InvitedMember, len(ims))
+	for _, im := range ims {
+		em, err := account.NewEmail(im.Email)
+		if err != nil {
+			return nil
+		}
+		m, err := member.NewInvitedMemberFromEmail(em, expiredAt)
+		if err != nil {
+			return nil
+		}
+		ivs = append(ivs, m)
+	}
+	return &workspaceUc.InviteMembersInput{
+		AccountID:      aID,
+		InvitedMembers: member.NewInvitedMembers(ivs),
+	}
+}
+
+func (c *controller) InviteMembers(ctx context.Context, i InvitedMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error) {
+	aID, err := c.co.GetUID(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.InviteMultipleUsersToWorkspaceRes), nil
+	}
+	in := NewInviteMembersInput(aID, i.InvitedMembers)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.InviteMultipleUsersToWorkspaceRes), nil
+	}
+	res, err := c.wuc.InviteMembers(ctx, in)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.InviteMultipleUsersToWorkspaceRes), nil
 	}
 	return res, nil
 }

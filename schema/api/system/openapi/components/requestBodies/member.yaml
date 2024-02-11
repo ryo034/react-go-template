@@ -1,0 +1,11 @@
+MembersInvitationsVerify:
+  description: Verify invitation
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          token:
+            type: string
+            description: Invitation token

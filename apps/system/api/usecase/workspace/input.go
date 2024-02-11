@@ -3,11 +3,12 @@ package workspace
 import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 )
 
 type CreateInput struct {
-	workspace *workspace.Workspace
-	accountID account.ID
+	Workspace *workspace.Workspace
+	AccountID account.ID
 }
 
 func NewCreateInput(subdomain string, aID account.ID) (*CreateInput, error) {
@@ -25,17 +26,9 @@ func NewCreateInput(subdomain string, aID account.ID) (*CreateInput, error) {
 	}
 	d := workspace.NewDetail(n, s)
 	return &CreateInput{
-		workspace: workspace.NewWorkspace(id, d),
-		accountID: aID,
+		workspace.NewWorkspace(id, d),
+		aID,
 	}, nil
-}
-
-func (i *CreateInput) Workspace() *workspace.Workspace {
-	return i.workspace
-}
-
-func (i *CreateInput) AccountID() account.ID {
-	return i.accountID
 }
 
 type FindAllMembersInput struct {
@@ -44,4 +37,9 @@ type FindAllMembersInput struct {
 
 func NewFindAllMembersInput(aID account.ID) *FindAllMembersInput {
 	return &FindAllMembersInput{aID}
+}
+
+type InviteMembersInput struct {
+	AccountID      account.ID
+	InvitedMembers member.InvitedMembers
 }

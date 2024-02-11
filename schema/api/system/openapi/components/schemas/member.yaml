@@ -28,3 +28,40 @@ Members:
   type: array
   items:
     $ref: "#/components/schemas/Member"
+
+InvitedMember:
+  type: object
+  required:
+    - email
+  properties:
+    email:
+      type: string
+      format: email
+
+InvitedMembers:
+  type: array
+  items:
+    $ref: "#/components/schemas/InvitedMember"
+
+BulkInvitedResult:
+  type: object
+  required:
+    - invitedCount
+    - failedMembers
+  properties:
+    invitedCount:
+      type: integer
+    failedMembers:
+      $ref: "#/components/schemas/InvitedMembers"
+    registeredMembers:
+      $ref: "#/components/schemas/InvitedMembers"
+# まだワークスペースに所属していないユーザーが招待された場合
+# verifyOTPをする際に、ラストログイン情報がなく、招待情報があり(true)、そのワークスペースに所属していない場合、
+# そのユーザーのワークスペースに追加しメンバーにする
+# jwtにcurrentWorkspaceIdが入るが、名前がないのでオンボーディングの流れになる。
+# すでにワークスペースには所属しているので、ワークスペースの入力情報はスキップされる
+
+# すでにワークスペースに所属しており別のワークスペースに招待された場合
+# verifyOTPをする際に、ラストログイン情報があり、招待情報があり(true)、そのワークスペースに所属していない場合、
+# そのユーザーのワークスペースに追加しメンバーにする
+# jwtのcurrentWorkspaceIdが更新され、そのままワークスペースに参加する

@@ -62,12 +62,24 @@ type Handler interface {
 	//
 	// POST /api/v1/workspaces
 	APIV1WorkspacesPost(ctx context.Context, req *APIV1WorkspacesPostReq) (APIV1WorkspacesPostRes, error)
+	// InviteMultipleUsersToWorkspace implements inviteMultipleUsersToWorkspace operation.
+	//
+	// Invite multiple users to the workspace by email.
+	//
+	// POST /api/v1/members/invitations/bulk
+	InviteMultipleUsersToWorkspace(ctx context.Context, req *InviteMultipleUsersToWorkspaceReq) (InviteMultipleUsersToWorkspaceRes, error)
 	// Login implements login operation.
 	//
 	// Login.
 	//
 	// POST /api/v1/login
 	Login(ctx context.Context) (LoginRes, error)
+	// VerifyInvitation implements verifyInvitation operation.
+	//
+	// Verify invitation.
+	//
+	// POST /api/v1/members/invitations/verify
+	VerifyInvitation(ctx context.Context, req *VerifyInvitationReq) (VerifyInvitationRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

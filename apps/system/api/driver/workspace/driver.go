@@ -17,6 +17,7 @@ type Driver interface {
 	AddMember(ctx context.Context, exec bun.IDB, w *workspace.Workspace, m *member.Member) (*models.Member, error)
 	FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error)
 	FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace.ID) (models.Members, error)
+	InviteMember(ctx context.Context, exec bun.IDB, wID workspace.ID, invitedBy member.InvitedBy, m *member.InvitedMember) error
 }
 
 type driver struct {
@@ -120,4 +121,20 @@ func (p *driver) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace
 		return nil, err
 	}
 	return ms, nil
+}
+
+func (p *driver) InviteMember(ctx context.Context, exec bun.IDB, wID workspace.ID, invitedBy member.InvitedBy, m *member.InvitedMember) error {
+	im := models.InvitedMember{
+		InvitedMemberID: m.ID(),
+		WorkspaceID:     wID.Value(),
+		Email:           m.Email().ToString(),
+		Used:            false,
+		Token:           m.Token(),
+		ExpiredAt:       m.ExpiredAt(),
+		InvitedBy:       invitedBy.ID().Value(),
+	}
+	if _, err := exec.NewInsert().Model(&im).Exec(ctx); err != nil {
+		return err
+	}
+	return nil
 }

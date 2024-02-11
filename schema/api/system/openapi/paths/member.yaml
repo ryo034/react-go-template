@@ -13,5 +13,62 @@ members:
           application/json:
             schema:
               $ref: "#/components/schemas/Members"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+
+invitationsBulk:
+  post:
+    summary: Invite multiple users to the workspace by email
+    operationId: inviteMultipleUsersToWorkspace
+    tags:
+      - Members
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              invitedMembers:
+                $ref: "#/components/schemas/InvitedMembers"
+    responses:
+      "200":
+        description: Successfully sent invitations
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BulkInvitedResult"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "409":
+        $ref: "#/components/responses/ConflictError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+
+invitationsVerify:
+  post:
+    summary: Verify invitation
+    operationId: verifyInvitation
+    tags:
+      - Members
+    requestBody:
+      $ref: "#/components/requestBodies/MembersInvitationsVerify"
+    responses:
+      "200":
+        description: Invitation verified
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InvitedMember"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "404":
+        $ref: "#/components/responses/NotFoundError"
       "500":
         $ref: "#/components/responses/InternalServerError"

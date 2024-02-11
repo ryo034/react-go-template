@@ -153,3 +153,22 @@ CREATE TABLE membership_periods (
 CREATE TRIGGER refresh_membership_periods_updated_at_step1 BEFORE UPDATE ON membership_periods FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step1();
 CREATE TRIGGER refresh_membership_periods_updated_at_step2 BEFORE UPDATE OF updated_at ON membership_periods FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step2();
 CREATE TRIGGER refresh_membership_periods_updated_at_step3 BEFORE UPDATE ON membership_periods FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step3();
+
+CREATE TABLE invited_members (
+  invited_member_id uuid NOT NULL,
+  workspace_id uuid NOT NULL,
+  email VARCHAR(256) NOT NULL,
+  token uuid NOT NULL,
+  used BOOLEAN NOT NULL DEFAULT FALSE,
+  expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+  invited_by uuid NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (invited_member_id),
+  CONSTRAINT fk_invited_members_workspaces_workspace_id FOREIGN KEY (workspace_id) REFERENCES workspaces(workspace_id),
+  CONSTRAINT fk_invited_members_members_invited_by FOREIGN KEY (invited_by) REFERENCES members(member_id)
+);
+
+CREATE TRIGGER refresh_invited_members_updated_at_step1 BEFORE UPDATE ON invited_members FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step1();
+CREATE TRIGGER refresh_invited_members_updated_at_step2 BEFORE UPDATE OF updated_at ON invited_members FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step2();
+CREATE TRIGGER refresh_invited_members_updated_at_step3 BEFORE UPDATE ON invited_members FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step3();

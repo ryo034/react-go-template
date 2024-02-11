@@ -151,6 +151,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Workspaces'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
@@ -171,6 +173,8 @@ paths:
                 $ref: '#/components/schemas/Workspace'
         '400':
           $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
         '409':
           $ref: '#/components/responses/ConflictError'
         '500':
@@ -190,6 +194,61 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Members'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v1/members/invitations/bulk:
+    post:
+      summary: Invite multiple users to the workspace by email
+      operationId: inviteMultipleUsersToWorkspace
+      tags:
+        - Members
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                invitedMembers:
+                  $ref: '#/components/schemas/InvitedMembers'
+      responses:
+        '200':
+          description: Successfully sent invitations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkInvitedResult'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v1/members/invitations/verify:
+    post:
+      summary: Verify invitation
+      operationId: verifyInvitation
+      tags:
+        - Members
+      requestBody:
+        $ref: '#/components/requestBodies/MembersInvitationsVerify'
+      responses:
+        '200':
+          description: Invitation verified
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvitedMember'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -284,6 +343,30 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Member'
+    InvitedMember:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+    InvitedMembers:
+      type: array
+      items:
+        $ref: '#/components/schemas/InvitedMember'
+    BulkInvitedResult:
+      type: object
+      required:
+        - invitedCount
+        - failedMembers
+      properties:
+        invitedCount:
+          type: integer
+        failedMembers:
+          $ref: '#/components/schemas/InvitedMembers'
+        registeredMembers:
+          $ref: '#/components/schemas/InvitedMembers'
     MembershipPeriod:
       type: object
       required:
@@ -367,6 +450,17 @@ components:
             properties:
               user:
                 $ref: '#/components/schemas/User'
+    MembersInvitationsVerify:
+      description: Verify invitation
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                description: Invitation token
   responses:
     GeneralError:
       description: General Error

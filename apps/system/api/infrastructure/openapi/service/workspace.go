@@ -19,3 +19,15 @@ func (s *service) APIV1WorkspacesPost(ctx context.Context, req *openapi.APIV1Wor
 func (s *service) APIV1MembersGet(ctx context.Context) (openapi.APIV1MembersGetRes, error) {
 	return s.ctrl.Workspace.FindAllMembers(ctx)
 }
+
+func (s *service) InviteMultipleUsersToWorkspace(ctx context.Context, req *openapi.InviteMultipleUsersToWorkspaceReq) (openapi.InviteMultipleUsersToWorkspaceRes, error) {
+	ims := make([]workspace.InvitedMember, len(req.InvitedMembers))
+	for _, m := range req.InvitedMembers {
+		ims = append(ims, workspace.InvitedMember{
+			Email: m.Email,
+		})
+	}
+	return s.ctrl.Workspace.InviteMembers(ctx, workspace.InvitedMembersInput{
+		InvitedMembers: ims,
+	})
+}

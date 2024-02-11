@@ -94,11 +94,29 @@ func (UnimplementedHandler) APIV1WorkspacesPost(ctx context.Context, req *APIV1W
 	return r, ht.ErrNotImplemented
 }
 
+// InviteMultipleUsersToWorkspace implements inviteMultipleUsersToWorkspace operation.
+//
+// Invite multiple users to the workspace by email.
+//
+// POST /api/v1/members/invitations/bulk
+func (UnimplementedHandler) InviteMultipleUsersToWorkspace(ctx context.Context, req *InviteMultipleUsersToWorkspaceReq) (r InviteMultipleUsersToWorkspaceRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // Login implements login operation.
 //
 // Login.
 //
 // POST /api/v1/login
 func (UnimplementedHandler) Login(ctx context.Context) (r LoginRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// VerifyInvitation implements verifyInvitation operation.
+//
+// Verify invitation.
+//
+// POST /api/v1/members/invitations/verify
+func (UnimplementedHandler) VerifyInvitation(ctx context.Context, req *VerifyInvitationReq) (r VerifyInvitationRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
