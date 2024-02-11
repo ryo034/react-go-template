@@ -1358,6 +1358,56 @@ func (s *MemberProfile) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes Members as json.
+func (s Members) Encode(e *jx.Encoder) {
+	unwrapped := []Member(s)
+
+	e.ArrStart()
+	for _, elem := range unwrapped {
+		elem.Encode(e)
+	}
+	e.ArrEnd()
+}
+
+// Decode decodes Members from json.
+func (s *Members) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode Members to nil")
+	}
+	var unwrapped []Member
+	if err := func() error {
+		unwrapped = make([]Member, 0)
+		if err := d.Arr(func(d *jx.Decoder) error {
+			var elem Member
+			if err := elem.Decode(d); err != nil {
+				return err
+			}
+			unwrapped = append(unwrapped, elem)
+			return nil
+		}); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = Members(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s Members) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *Members) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes int as json.
 func (o OptInt) Encode(e *jx.Encoder) {
 	if !o.Set {
@@ -1914,7 +1964,7 @@ func (s *Workspace) Encode(e *jx.Encoder) {
 func (s *Workspace) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("workspaceId")
-		e.Str(s.WorkspaceId)
+		json.EncodeUUID(e, s.WorkspaceId)
 	}
 	{
 		e.FieldStart("name")
@@ -1944,8 +1994,8 @@ func (s *Workspace) Decode(d *jx.Decoder) error {
 		case "workspaceId":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				v, err := d.Str()
-				s.WorkspaceId = string(v)
+				v, err := json.DecodeUUID(d)
+				s.WorkspaceId = v
 				if err != nil {
 					return err
 				}

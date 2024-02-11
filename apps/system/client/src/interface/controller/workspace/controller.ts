@@ -15,4 +15,8 @@ export class WorkspaceController {
     }
     return await this.useCase.create({ subdomain: subdomain.value })
   }
+
+  async findAllMembers(): Promise<null | Error> {
+    return await this.useCase.findAllMembers()
+  }
 }

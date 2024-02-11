@@ -1,7 +1,7 @@
-import { Me } from "~/domain"
+import { Me, Members } from "~/domain"
 
-export interface MeUseCaseOutput {
-  set: (v: Me) => void
-  setIsLoading: (v: boolean) => void
+export interface WorkspaceUseCaseOutput {
+  setMembers: (vs: Members) => void
+  setMembersIsLoading: (v: boolean) => void
   clear: () => void
 }

@@ -15,3 +15,7 @@ func (s *service) APIV1WorkspacesPost(ctx context.Context, req *openapi.APIV1Wor
 		WorkspaceSubdomain: req.Subdomain,
 	})
 }
+
+func (s *service) APIV1MembersGet(ctx context.Context) (openapi.APIV1MembersGetRes, error) {
+	return s.ctrl.Workspace.FindAllMembers(ctx)
+}

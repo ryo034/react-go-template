@@ -37,3 +37,11 @@ func (i *CreateInput) Workspace() *workspace.Workspace {
 func (i *CreateInput) AccountID() account.ID {
 	return i.accountID
 }
+
+type FindAllMembersInput struct {
+	accountID account.ID
+}
+
+func NewFindAllMembersInput(aID account.ID) *FindAllMembersInput {
+	return &FindAllMembersInput{aID}
+}

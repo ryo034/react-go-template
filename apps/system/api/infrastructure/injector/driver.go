@@ -15,7 +15,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 )
 
-type driver struct {
+type Driver struct {
 	KeyValue  keyvalue.Store
 	Firebase  firebaseDriver.Driver
 	Email     email.Driver
@@ -31,9 +31,9 @@ func newDriverInjector(
 	co shared.ContextOperator,
 	mc mailer.Client,
 	noreplyEmail account.Email,
-) driver {
+) Driver {
 	meDr := me.NewDriver()
-	return driver{
+	return Driver{
 		keyvalue.NewRedisDriver(rc),
 		firebaseDriver.NewDriver(f),
 		email.NewDriver(co, mc, noreplyEmail),

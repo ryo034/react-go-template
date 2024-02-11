@@ -21,6 +21,10 @@ type APIV1MeProfilePutRes interface {
 	aPIV1MeProfilePutRes()
 }
 
+type APIV1MembersGetRes interface {
+	aPIV1MembersGetRes()
+}
+
 type APIV1PingGetRes interface {
 	aPIV1PingGetRes()
 }

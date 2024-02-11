@@ -8,6 +8,7 @@ import (
 
 type Adapter interface {
 	Adapt(m *member.Member) openapi.Member
+	AdaptAll(ms member.Members) openapi.Members
 }
 
 type adapter struct {
@@ -33,4 +34,12 @@ func (a *adapter) Adapt(m *member.Member) openapi.Member {
 		},
 		User: a.ua.Adapt(m.User()),
 	}
+}
+
+func (a *adapter) AdaptAll(ms member.Members) openapi.Members {
+	res := make(openapi.Members, ms.Size())
+	for i, m := range ms.AsSlice() {
+		res[i] = a.Adapt(m)
+	}
+	return res
 }

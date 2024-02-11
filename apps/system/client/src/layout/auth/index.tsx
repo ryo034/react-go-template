@@ -44,6 +44,10 @@ export const AuthLayout = () => {
           return
         }
         if (meRef.current.doneOnboarding) {
+          if (isAuthenticatedRoute) {
+            navigate(window.location.pathname)
+            return
+          }
           navigate(routeMap.home)
         }
         return

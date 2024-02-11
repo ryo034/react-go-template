@@ -1,4 +1,4 @@
-import { Workspace, WorkspaceSubdomain } from "~/domain"
+import { Members, Workspace, WorkspaceSubdomain } from "~/domain"
 import { PromiseResult } from "~/infrastructure/shared"
 
 export interface WorkspaceCreateInput {
@@ -7,4 +7,5 @@ export interface WorkspaceCreateInput {
 
 export interface WorkspaceRepository {
   create(i: WorkspaceCreateInput): PromiseResult<Workspace, Error>
+  findAllMembers(): PromiseResult<Members, Error>
 }

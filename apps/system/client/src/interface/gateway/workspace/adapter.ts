@@ -28,14 +28,15 @@ export class WorkspaceGatewayAdapter {
     return Result.ok(Workspace.create({ id: id.value, name: name.value, subdomain: subdomain.value }))
   }
 
-  adaptAll(workspaces: components["schemas"]["Workspaces"]): Workspaces {
-    const vs = workspaces.map((workspace) => {
-      const res = this.adapt(workspace)
+  adaptAll(workspaces: components["schemas"]["Workspaces"]): Result<Workspaces, Error> {
+    const vs: Workspace[] = []
+    for (const w of workspaces) {
+      const res = this.adapt(w)
       if (res.isErr) {
-        throw res.error
+        return Result.err(res.error)
       }
-      return res.value
-    })
-    return Workspaces.create(vs)
+      vs.push(res.value)
+    }
+    return Result.ok(Workspaces.create(vs))
   }
 }

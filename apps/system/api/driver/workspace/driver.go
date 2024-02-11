@@ -16,6 +16,7 @@ type Driver interface {
 	Create(ctx context.Context, exec bun.IDB, w *workspace.Workspace) (*models.Workspace, error)
 	AddMember(ctx context.Context, exec bun.IDB, w *workspace.Workspace, m *member.Member) (*models.Member, error)
 	FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error)
+	FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace.ID) (models.Members, error)
 }
 
 type driver struct {
@@ -101,4 +102,22 @@ func (p *driver) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, w
 		return nil, err
 	}
 	return m, nil
+}
+
+func (p *driver) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace.ID) (models.Members, error) {
+	var ms models.Members
+	err := exec.
+		NewSelect().
+		Model(&ms).
+		Relation("Profile").
+		Relation("SystemAccount").
+		Relation("SystemAccount.Profile").
+		Relation("SystemAccount.PhoneNumber").
+		Relation("Workspace").
+		Where("ms.workspace_id = ?", wID.Value()).
+		Scan(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return ms, nil
 }

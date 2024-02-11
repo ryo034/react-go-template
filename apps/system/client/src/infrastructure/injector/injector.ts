@@ -21,7 +21,9 @@ import { MemberGatewayAdapter } from "~/interface/gateway/workspace/member"
 import { AuthPresenter } from "~/interface/presenter/auth/presenter"
 import { MePresenter } from "~/interface/presenter/me/presenter"
 import { ThemePresenter } from "~/interface/presenter/theme/presenter"
+import { WorkspacePresenter } from "~/interface/presenter/workspace/presenter"
 import { authStore, meStore, themeStore } from "~/store"
+import { workspaceStore } from "~/store/workspace/store"
 import { MeInteractor, ThemeInteractor } from "~/usecase"
 import { AuthInteractor } from "~/usecase/auth"
 import { WorkspaceInteractor } from "~/usecase/workspace"
@@ -31,7 +33,8 @@ const setupStore = () => {
   return {
     theme: themeStore,
     me: meStore,
-    auth: authStore
+    auth: authStore,
+    workspace: workspaceStore
   }
 }
 
@@ -74,7 +77,7 @@ const setupGateway = () => {
   return {
     me: new MeGateway(driver.me, driver.firebase, gatewayAdapter.me),
     auth: new AuthGateway(driver.auth, driver.firebase, gatewayAdapter.auth),
-    workspace: new WorkspaceGateway(driver.workspace, gatewayAdapter.workspace)
+    workspace: new WorkspaceGateway(driver.workspace, gatewayAdapter.workspace, gatewayAdapter.member)
   }
 }
 
@@ -84,7 +87,8 @@ const setupPresenter = () => {
   return {
     theme: new ThemePresenter(store.theme),
     me: new MePresenter(store.me),
-    auth: new AuthPresenter(store.auth)
+    auth: new AuthPresenter(store.auth),
+    workspace: new WorkspacePresenter(store.workspace)
   }
 }
 
@@ -96,7 +100,7 @@ const setupUseCase = () => {
     theme: new ThemeInteractor(driver.theme, presenter.theme),
     me,
     auth: new AuthInteractor(gateway.auth, me, presenter.auth),
-    workspace: new WorkspaceInteractor(gateway.workspace, me)
+    workspace: new WorkspaceInteractor(gateway.workspace, me, presenter.workspace)
   }
 }
 const useCase = setupUseCase()

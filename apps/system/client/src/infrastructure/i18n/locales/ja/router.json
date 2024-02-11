@@ -1,6 +1,7 @@
 {
   "router": {
     "home": "ホーム",
-    "setting": "設定"
+    "setting": "設定",
+    "member": "メンバー"
   }
 }

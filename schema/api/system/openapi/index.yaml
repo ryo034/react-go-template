@@ -20,6 +20,8 @@ paths:
     $ref: "./paths/login.yaml#/login"
   /api/v1/workspaces:
     $ref: "./paths/workspace.yaml#/workspaces"
+  /api/v1/members:
+    $ref: "./paths/member.yaml#/members"
 
 components:
   securitySchemes:
@@ -39,6 +41,8 @@ components:
       $ref: "./components/schemas/member.yaml#/Member"
     MemberProfile:
       $ref: "./components/schemas/member.yaml#/MemberProfile"
+    Members:
+      $ref: "./components/schemas/member.yaml#/Members"
     MembershipPeriod:
       $ref: "./components/schemas/membership.yaml#/MembershipPeriod"
     Me:

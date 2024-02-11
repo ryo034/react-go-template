@@ -9,24 +9,8 @@ type ID struct {
 	id.UUID
 }
 
-func NewID(v string) (ID, error) {
-	i, err := id.NewUUIDFromString(v)
-	if err != nil {
-		return ID{}, err
-	}
-	return ID{i}, nil
-}
-
 func NewIDFromUUID(v uuid.UUID) ID {
 	return ID{id.NewUUID(v)}
-}
-
-func NewIDFromFriendlyString(v string) (ID, error) {
-	i, err := id.NewFromFriendlyString(v)
-	if err != nil {
-		return ID{}, err
-	}
-	return ID{i}, nil
 }
 
 func GenerateID() (ID, error) {

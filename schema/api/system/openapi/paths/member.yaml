@@ -1,0 +1,17 @@
+members:
+  get:
+    summary: Get Members
+    description: Returns the members of the workspace
+    tags:
+      - Admin
+    security:
+      - bearer: []
+    responses:
+      "200":
+        description: Members
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Members"
+      "500":
+        $ref: "#/components/responses/InternalServerError"

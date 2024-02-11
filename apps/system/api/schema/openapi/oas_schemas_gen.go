@@ -315,6 +315,7 @@ func (*InternalServerError) aPIV1AuthOtpPostRes()       {}
 func (*InternalServerError) aPIV1AuthOtpVerifyPostRes() {}
 func (*InternalServerError) aPIV1MeGetRes()             {}
 func (*InternalServerError) aPIV1MeProfilePutRes()      {}
+func (*InternalServerError) aPIV1MembersGetRes()        {}
 func (*InternalServerError) aPIV1PingGetRes()           {}
 func (*InternalServerError) aPIV1WorkspacesGetRes()     {}
 func (*InternalServerError) aPIV1WorkspacesPostRes()    {}
@@ -453,6 +454,10 @@ func (s *MemberProfile) SetDisplayName(val string) {
 func (s *MemberProfile) SetIdNumber(val OptString) {
 	s.IdNumber = val
 }
+
+type Members []Member
+
+func (*Members) aPIV1MembersGetRes() {}
 
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {
@@ -824,8 +829,8 @@ func (*User) aPIV1AuthOAuthPostRes() {}
 
 // Ref: #/components/schemas/Workspace
 type Workspace struct {
-	// Base32 encoded UUID.
-	WorkspaceId string `json:"workspaceId"`
+	// Workspace id in the format of UUID v7.
+	WorkspaceId uuid.UUID `json:"workspaceId"`
 	// Workspace name.
 	Name string `json:"name"`
 	// Workspace subdomain (e.x. example-test).
@@ -833,7 +838,7 @@ type Workspace struct {
 }
 
 // GetWorkspaceId returns the value of WorkspaceId.
-func (s *Workspace) GetWorkspaceId() string {
+func (s *Workspace) GetWorkspaceId() uuid.UUID {
 	return s.WorkspaceId
 }
 
@@ -848,7 +853,7 @@ func (s *Workspace) GetSubdomain() string {
 }
 
 // SetWorkspaceId sets the value of WorkspaceId.
-func (s *Workspace) SetWorkspaceId(val string) {
+func (s *Workspace) SetWorkspaceId(val uuid.UUID) {
 	s.WorkspaceId = val
 }
 

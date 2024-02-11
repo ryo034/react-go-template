@@ -38,6 +38,12 @@ type Handler interface {
 	//
 	// PUT /api/v1/me/profile
 	APIV1MeProfilePut(ctx context.Context, req *APIV1MeProfilePutReq) (APIV1MeProfilePutRes, error)
+	// APIV1MembersGet implements GET /api/v1/members operation.
+	//
+	// Returns the members of the workspace.
+	//
+	// GET /api/v1/members
+	APIV1MembersGet(ctx context.Context) (APIV1MembersGetRes, error)
 	// APIV1PingGet implements GET /api/v1/ping operation.
 	//
 	// Checks if the server is running.

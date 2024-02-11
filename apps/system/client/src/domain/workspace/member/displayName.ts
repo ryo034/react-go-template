@@ -4,7 +4,7 @@ import { DomainError, ValueObject, domainKeys } from "~/domain/shared"
 export class MemberDisplayName extends ValueObject<string> {
   static max = 50
   static create(v: string): Result<MemberDisplayName, Error> {
-    const trimmed = v.replace(/[\s　]/g, "")
+    const trimmed = v.trim()
     if (trimmed.length > MemberDisplayName.max) {
       return Result.err(
         new DomainError({

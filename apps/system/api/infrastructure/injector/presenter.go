@@ -19,10 +19,11 @@ type Presenter struct {
 
 func newPresenterInjector() Presenter {
 	pa := newPresenterAdapter()
+	m := member.NewAdapter(pa.User)
 	return Presenter{
 		auth.NewPresenter(),
 		me.NewPresenter(pa.User, pa.Member, pa.Workspace),
-		workspace.NewPresenter(pa.Workspace),
+		workspace.NewPresenter(pa.Workspace, m),
 	}
 }
 

@@ -57,3 +57,11 @@ func (g *gateway) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, 
 	}
 	return g.ma.Adapt(res)
 }
+
+func (g *gateway) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace.ID) (member.Members, error) {
+	res, err := g.d.FindAllMembers(ctx, exec, wID)
+	if err != nil {
+		return nil, err
+	}
+	return g.ma.AdaptAll(res)
+}

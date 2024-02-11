@@ -23,3 +23,8 @@ MemberProfile:
       type: string
     idNumber:
       type: string
+
+Members:
+  type: array
+  items:
+    $ref: "#/components/schemas/Member"

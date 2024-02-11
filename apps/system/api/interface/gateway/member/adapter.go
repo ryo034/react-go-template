@@ -8,6 +8,7 @@ import (
 
 type Adapter interface {
 	Adapt(m *models.Member) (*member.Member, error)
+	AdaptAll(ms models.Members) (member.Members, error)
 }
 
 type adapter struct {
@@ -34,4 +35,16 @@ func (a *adapter) Adapt(m *models.Member) (*member.Member, error) {
 	}
 	id := member.NewIDFromUUID(m.MemberID)
 	return member.NewMember(id, u, dn, &idNumber), nil
+}
+
+func (a *adapter) AdaptAll(ms models.Members) (member.Members, error) {
+	mws := make([]*member.Member, 0, len(ms))
+	for _, m := range ms {
+		aw, err := a.Adapt(m)
+		if err != nil {
+			return nil, err
+		}
+		mws = append(mws, aw)
+	}
+	return member.NewMembers(mws), nil
 }

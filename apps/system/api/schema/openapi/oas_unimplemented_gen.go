@@ -58,6 +58,15 @@ func (UnimplementedHandler) APIV1MeProfilePut(ctx context.Context, req *APIV1MeP
 	return r, ht.ErrNotImplemented
 }
 
+// APIV1MembersGet implements GET /api/v1/members operation.
+//
+// Returns the members of the workspace.
+//
+// GET /api/v1/members
+func (UnimplementedHandler) APIV1MembersGet(ctx context.Context) (r APIV1MembersGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIV1PingGet implements GET /api/v1/ping operation.
 //
 // Checks if the server is running.

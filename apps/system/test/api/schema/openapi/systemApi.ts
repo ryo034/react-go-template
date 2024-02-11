@@ -161,6 +161,23 @@ export interface paths {
       };
     };
   };
+  "/api/v1/members": {
+    /**
+     * Get Members
+     * @description Returns the members of the workspace
+     */
+    get: {
+      responses: {
+        /** @description Members */
+        200: {
+          content: {
+            "application/json": components["schemas"]["Members"];
+          };
+        };
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -185,8 +202,9 @@ export interface components {
     };
     Workspace: {
       /**
-       * @description base32 encoded UUID
-       * @example 3VZ6ZJ2Z6VZ6ZJ2Z
+       * Format: uuid
+       * @description workspace id in the format of UUID v7.
+       * @example 123e4567-e89b-12d3-a456-426614174000
        */
       workspaceId: string;
       /** @description workspace name */
@@ -208,6 +226,7 @@ export interface components {
       displayName: string;
       idNumber?: string;
     };
+    Members: components["schemas"]["Member"][];
     MembershipPeriod: {
       /** Format: date-time */
       start: string;

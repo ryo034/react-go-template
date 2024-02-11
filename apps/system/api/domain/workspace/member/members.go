@@ -2,16 +2,16 @@ package member
 
 type Members interface {
 	Size() int
-	AsSlice() []Member
+	AsSlice() []*Member
 	IsEmpty() bool
 	IsNotEmpty() bool
 }
 
 type members struct {
-	wrapped []Member
+	wrapped []*Member
 }
 
-func NewMembers(wrapped []Member) Members {
+func NewMembers(wrapped []*Member) Members {
 	return &members{wrapped}
 }
 
@@ -27,6 +27,6 @@ func (ms *members) Size() int {
 	return len(ms.wrapped)
 }
 
-func (ms *members) AsSlice() []Member {
-	return append(make([]Member, 0, ms.Size()), ms.wrapped...)
+func (ms *members) AsSlice() []*Member {
+	return append(make([]*Member, 0, ms.Size()), ms.wrapped...)
 }

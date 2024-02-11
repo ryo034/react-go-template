@@ -7,8 +7,9 @@ Workspace:
   properties:
     workspaceId:
       type: string
-      description: base32 encoded UUID
-      example: 3VZ6ZJ2Z6VZ6ZJ2Z
+      format: uuid
+      description: workspace id in the format of UUID v7.
+      example: 123e4567-e89b-12d3-a456-426614174000
     name:
       type: string
       description: workspace name

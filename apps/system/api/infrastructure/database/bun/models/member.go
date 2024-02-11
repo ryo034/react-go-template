@@ -18,3 +18,5 @@ type Member struct {
 	Profile       *MemberProfile `bun:"rel:has-one"`
 	Workspace     *Workspace     `bun:"rel:belongs-to"`
 }
+
+type Members []*Member

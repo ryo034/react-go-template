@@ -1,5 +1,5 @@
 import { Result } from "true-myth"
-import { Member, MemberDisplayName, MemberId, MemberIdNumber, MemberProfile } from "~/domain/workspace/member"
+import { Member, MemberDisplayName, MemberId, MemberIdNumber, MemberProfile, Members } from "~/domain/workspace/member"
 import { components } from "~/generated/schema/openapi/systemApi"
 import { AdapterError } from "~/infrastructure/error"
 import { UserGatewayAdapter } from "~/interface/gateway/user"
@@ -39,5 +39,17 @@ export class MemberGatewayAdapter {
     })
 
     return Result.ok(Member.create({ user: user.value, profile }))
+  }
+
+  adaptAll(members: components["schemas"]["Members"]): Result<Members, Error> {
+    const vs: Member[] = []
+    for (const m of members) {
+      const res = this.adapt(m)
+      if (res.isErr) {
+        return Result.err(res.error)
+      }
+      vs.push(res.value)
+    }
+    return Result.ok(Members.create(vs))
   }
 }

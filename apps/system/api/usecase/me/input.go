@@ -35,10 +35,7 @@ func NewUpdateInput(i openapi.Me) (*UpdateInput, error) {
 
 	var w *workspace.Workspace
 	if i.CurrentWorkspace.Set {
-		wID, err := workspace.NewID(i.CurrentWorkspace.Value.WorkspaceId)
-		if err != nil {
-			return nil, err
-		}
+		wID := workspace.NewIDFromUUID(i.CurrentWorkspace.Value.WorkspaceId)
 		wn, err := workspace.NewName(i.CurrentWorkspace.Value.Name)
 		if err != nil {
 			return nil, err
@@ -74,10 +71,7 @@ func NewUpdateInput(i openapi.Me) (*UpdateInput, error) {
 
 	jws := make([]*workspace.Workspace, 0, len(i.JoinedWorkspaces))
 	for _, jw := range i.JoinedWorkspaces {
-		wID, err := workspace.NewID(jw.WorkspaceId)
-		if err != nil {
-			return nil, err
-		}
+		wID := workspace.NewIDFromUUID(jw.WorkspaceId)
 		wn, err := workspace.NewName(jw.Name)
 		if err != nil {
 			return nil, err

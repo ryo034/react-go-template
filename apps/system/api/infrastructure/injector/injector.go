@@ -15,7 +15,7 @@ type Injector struct {
 	f          *fb.Firebase
 	conf       config.Reader
 	co         shared.ContextOperator
-	driverInj  driver
+	driverInj  Driver
 	useCaseInj UseCase
 	ctrl       Controller
 }
@@ -52,4 +52,8 @@ func (i *Injector) UseCase() UseCase {
 }
 func (i *Injector) Controller() Controller {
 	return i.ctrl
+}
+
+func (i *Injector) Driver() Driver {
+	return i.driverInj
 }

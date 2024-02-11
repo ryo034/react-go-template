@@ -10,6 +10,7 @@ import (
 
 type Controller interface {
 	Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error)
+	FindAllMembers(ctx context.Context) (openapi.APIV1MembersGetRes, error)
 }
 
 type controller struct {
@@ -38,6 +39,19 @@ func (c *controller) Create(ctx context.Context, i CreateInput) (openapi.APIV1Wo
 	res, err := c.wuc.Create(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1WorkspacesPostRes), nil
+	}
+	return res, nil
+}
+
+func (c *controller) FindAllMembers(ctx context.Context) (openapi.APIV1MembersGetRes, error) {
+	aID, err := c.co.GetUID(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MembersGetRes), nil
+	}
+	in := workspaceUc.NewFindAllMembersInput(aID)
+	res, err := c.wuc.FindAllMembers(ctx, in)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MembersGetRes), nil
 	}
 	return res, nil
 }

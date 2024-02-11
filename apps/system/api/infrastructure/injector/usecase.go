@@ -18,7 +18,7 @@ func newUseCaseInjector(
 	isLocal bool,
 	co shared.ContextOperator,
 	ri RepositoryInjector,
-	di driver,
+	di Driver,
 	pi Presenter,
 	p core.Provider,
 	txp core.TransactionProvider,
@@ -26,6 +26,6 @@ func newUseCaseInjector(
 	return UseCase{
 		me.NewUseCase(txp, p, ri.Me, ri.Workspace, di.Firebase, pi.Me),
 		auth.NewUseCase(txp, p, ri.Auth, ri.Me, di.Email, di.Firebase, pi.Auth),
-		workspace.NewUseCase(txp, p, ri.Workspace, ri.Me, pi.Workspace),
+		workspace.NewUseCase(txp, p, ri.Workspace, ri.Me, di.Firebase, pi.Workspace),
 	}
 }

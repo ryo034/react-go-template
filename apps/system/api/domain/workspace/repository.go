@@ -12,4 +12,5 @@ type Repository interface {
 	Create(ctx context.Context, exec bun.IDB, w *Workspace) (*Workspace, error)
 	AddMember(ctx context.Context, exec bun.IDB, w *Workspace, m *member.Member) (*member.Member, error)
 	FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID ID) (*member.Member, error)
+	FindAllMembers(ctx context.Context, exec bun.IDB, wID ID) (member.Members, error)
 }

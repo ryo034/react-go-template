@@ -8,6 +8,7 @@ import { TrackingLayout } from "~/layout/tracking"
 import { AuthPage } from "~/pages/auth"
 import { NotFoundPage } from "~/pages/error/notFound"
 import { HomePage } from "~/pages/home"
+import { MembersPage } from "~/pages/members"
 import { OnboardingSettingNamePage } from "~/pages/onboarding/name"
 import { OnboardingSettingWorkspacePage } from "~/pages/onboarding/workspace"
 import { VerifyOtpPage } from "~/pages/otp"
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
                     element: <DashboardLayout />,
                     children: [
                       { path: routeMap.home, element: <HomePage /> },
+                      { path: routeMap.members, element: <MembersPage /> },
                       { path: routeMap.settings, element: <SettingsPage /> }
                     ]
                   }

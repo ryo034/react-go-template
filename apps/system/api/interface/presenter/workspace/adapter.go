@@ -23,7 +23,7 @@ func (a *adapter) Adapt(w *workspace.Workspace) openapi.Workspace {
 	}
 	d := w.Detail()
 	return openapi.Workspace{
-		WorkspaceId: w.ID().ToFriendlyString(),
+		WorkspaceId: w.ID().Value(),
 		Name:        d.Name().ToString(),
 		Subdomain:   d.Subdomain().ToString(),
 	}

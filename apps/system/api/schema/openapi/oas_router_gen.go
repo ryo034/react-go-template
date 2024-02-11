@@ -200,6 +200,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
+				case 'm': // Prefix: "mbers"
+					origElem := elem
+					if l := len("mbers"); len(elem) >= l && elem[0:l] == "mbers" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleAPIV1MembersGetRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
@@ -497,6 +518,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.summary = "Update Profile"
 							r.operationID = ""
 							r.pathPattern = "/api/v1/me/profile"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'm': // Prefix: "mbers"
+					origElem := elem
+					if l := len("mbers"); len(elem) >= l && elem[0:l] == "mbers" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch method {
+						case "GET":
+							// Leaf: APIV1MembersGet
+							r.name = "APIV1MembersGet"
+							r.summary = "Get Members"
+							r.operationID = ""
+							r.pathPattern = "/api/v1/members"
 							r.args = args
 							r.count = 0
 							return r, true

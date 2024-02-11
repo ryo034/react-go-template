@@ -1,14 +1,10 @@
-import { MeRepository, User } from "~/domain"
-import { MeUseCaseOutput } from "~/usecase"
+import { MeRepository } from "~/domain"
+import { MeUseCaseOutput, UpdateProfileInput } from "~/usecase"
 
 export interface MeUseCase {
   signOut(): Promise<Error | null>
   find(): Promise<Error | null>
   updateProfile(i: UpdateProfileInput): Promise<Error | null>
-}
-
-export type UpdateProfileInput = {
-  user: User
 }
 
 export class MeInteractor implements MeUseCase {

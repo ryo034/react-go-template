@@ -40,12 +40,15 @@ export class MeGatewayAdapter {
     }
 
     const joinedWorkspaces = this.workspaceAdapter.adaptAll(me.joinedWorkspaces)
+    if (joinedWorkspaces.isErr) {
+      return Result.err(joinedWorkspaces.error)
+    }
 
     const user = this.userAdapter.adapt(me.self)
     if (user.isErr) {
       return Result.err(user.error)
     }
 
-    return Result.ok(Me.create({ self: user.value, workspace, member, joinedWorkspaces }))
+    return Result.ok(Me.create({ self: user.value, workspace, member, joinedWorkspaces: joinedWorkspaces.value }))
   }
 }
