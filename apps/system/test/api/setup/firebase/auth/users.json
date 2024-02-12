@@ -30,6 +30,26 @@
       "customAuth": true,
       "lastRefreshAt": "2024-02-01T22:12:50.547Z",
       "displayName": "Unfinished Onboarding"
+    },
+    {
+      "localId": "018d96bf-8dce-7f68-a926-b5d7ed6ed883",
+      "lastLoginAt": "1706825570547",
+      "emailVerified": true,
+      "email": "invite_test_1@example.com",
+      "createdAt": "1706825570522",
+      "customAuth": true,
+      "lastRefreshAt": "2024-02-01T22:12:50.547Z",
+      "displayName": "Invite TestOne"
+    },
+    {
+      "localId": "018d9b4d-9438-79ac-b533-1323d4ec9b9f",
+      "lastLoginAt": "1706825570547",
+      "emailVerified": true,
+      "email": "invite_test_2@example.com",
+      "createdAt": "1706825570522",
+      "customAuth": true,
+      "lastRefreshAt": "2024-02-01T22:12:50.547Z",
+      "displayName": "Invite TestTwo"
     }
   ]
 }
