@@ -2,6 +2,7 @@ package workspace
 
 import (
 	"context"
+	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
@@ -73,4 +74,12 @@ func (g *gateway) BulkInviteMembers(ctx context.Context, exec bun.IDB, wID works
 
 func (g *gateway) InviteMember(ctx context.Context, exec bun.IDB, wID workspace.ID, invitedBy member.InvitedBy, m *member.InvitedMember) error {
 	return g.d.InviteMember(ctx, exec, wID, invitedBy, m)
+}
+
+func (g *gateway) VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uuid.UUID) (*member.InvitedMember, error) {
+	res, err := g.d.VerifyInvitedMember(ctx, exec, token)
+	if err != nil {
+		return nil, err
+	}
+	return g.ma.AdaptInvitedMember(res)
 }

@@ -24,6 +24,8 @@ invitationsBulk:
     operationId: inviteMultipleUsersToWorkspace
     tags:
       - Members
+    security:
+      - bearer: []
     requestBody:
       required: true
       content:
@@ -50,13 +52,19 @@ invitationsBulk:
         $ref: "#/components/responses/InternalServerError"
 
 invitationsVerify:
-  post:
-    summary: Verify invitation
+  get:
+    summary: Verify Invitation
     operationId: verifyInvitation
     tags:
       - Members
-    requestBody:
-      $ref: "#/components/requestBodies/MembersInvitationsVerify"
+    parameters:
+      - name: token
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Invitation token
     responses:
       "200":
         description: Invitation verified

@@ -186,8 +186,8 @@ export interface paths {
     post: operations["inviteMultipleUsersToWorkspace"];
   };
   "/api/v1/members/invitations/verify": {
-    /** Verify invitation */
-    post: operations["verifyInvitation"];
+    /** Verify Invitation */
+    get: operations["verifyInvitation"];
   };
 }
 
@@ -241,6 +241,7 @@ export interface components {
     InvitedMember: {
       /** Format: email */
       email: string;
+      verified: boolean;
     };
     InvitedMembers: components["schemas"]["InvitedMember"][];
     BulkInvitedResult: {
@@ -483,15 +484,6 @@ export interface components {
         };
       };
     };
-    /** @description Verify invitation */
-    MembersInvitationsVerify: {
-      content: {
-        "application/json": {
-          /** @description Invitation token */
-          token?: string;
-        };
-      };
-    };
   };
   headers: never;
   pathItems: never;
@@ -540,9 +532,14 @@ export interface operations {
       500: components["responses"]["InternalServerError"];
     };
   };
-  /** Verify invitation */
+  /** Verify Invitation */
   verifyInvitation: {
-    requestBody: components["requestBodies"]["MembersInvitationsVerify"];
+    parameters: {
+      query: {
+        /** @description Invitation token */
+        token: string;
+      };
+    };
     responses: {
       /** @description Invitation verified */
       200: {

@@ -15,6 +15,7 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.19.0"
 	"go.opentelemetry.io/otel/trace"
 
+	"github.com/ogen-go/ogen/conv"
 	ht "github.com/ogen-go/ogen/http"
 	"github.com/ogen-go/ogen/ogenerrors"
 	"github.com/ogen-go/ogen/otelogen"
@@ -91,10 +92,10 @@ type Invoker interface {
 	Login(ctx context.Context) (LoginRes, error)
 	// VerifyInvitation invokes verifyInvitation operation.
 	//
-	// Verify invitation.
+	// Verify Invitation.
 	//
-	// POST /api/v1/members/invitations/verify
-	VerifyInvitation(ctx context.Context, request *VerifyInvitationReq) (VerifyInvitationRes, error)
+	// GET /api/v1/members/invitations/verify
+	VerifyInvitation(ctx context.Context, params VerifyInvitationParams) (VerifyInvitationRes, error)
 }
 
 // Client implements OAS client.
@@ -1055,6 +1056,39 @@ func (c *Client) sendInviteMultipleUsersToWorkspace(ctx context.Context, request
 		return res, errors.Wrap(err, "encode request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "InviteMultipleUsersToWorkspace", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -1145,18 +1179,18 @@ func (c *Client) sendLogin(ctx context.Context) (res LoginRes, err error) {
 
 // VerifyInvitation invokes verifyInvitation operation.
 //
-// Verify invitation.
+// Verify Invitation.
 //
-// POST /api/v1/members/invitations/verify
-func (c *Client) VerifyInvitation(ctx context.Context, request *VerifyInvitationReq) (VerifyInvitationRes, error) {
-	res, err := c.sendVerifyInvitation(ctx, request)
+// GET /api/v1/members/invitations/verify
+func (c *Client) VerifyInvitation(ctx context.Context, params VerifyInvitationParams) (VerifyInvitationRes, error) {
+	res, err := c.sendVerifyInvitation(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendVerifyInvitation(ctx context.Context, request *VerifyInvitationReq) (res VerifyInvitationRes, err error) {
+func (c *Client) sendVerifyInvitation(ctx context.Context, params VerifyInvitationParams) (res VerifyInvitationRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("verifyInvitation"),
-		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/api/v1/members/invitations/verify"),
 	}
 
@@ -1193,13 +1227,28 @@ func (c *Client) sendVerifyInvitation(ctx context.Context, request *VerifyInvita
 	pathParts[0] = "/api/v1/members/invitations/verify"
 	uri.AddPathParts(u, pathParts[:]...)
 
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "token" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "token",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			return e.EncodeValue(conv.UUIDToString(params.Token))
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeVerifyInvitationRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
 	}
 
 	stage = "SendRequest"

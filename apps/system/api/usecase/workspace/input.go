@@ -1,6 +1,7 @@
 package workspace
 
 import (
+	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
@@ -42,4 +43,8 @@ func NewFindAllMembersInput(aID account.ID) *FindAllMembersInput {
 type InviteMembersInput struct {
 	AccountID      account.ID
 	InvitedMembers member.InvitedMembers
+}
+
+type VerifyInvitationTokenInput struct {
+	Token uuid.UUID
 }

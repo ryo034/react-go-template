@@ -66,8 +66,6 @@ components:
       $ref: "./components/requestBodies/workspace.yaml#/CreateWorkspace"
     UpdateMeProfile:
       $ref: "./components/requestBodies/me.yaml#/UpdateMeProfile"
-    MembersInvitationsVerify:
-      $ref: "./components/requestBodies/member.yaml#/MembersInvitationsVerify"
   responses:
     GeneralError:
       $ref: "./components/responses/error.yaml#/components/responses/GeneralError"

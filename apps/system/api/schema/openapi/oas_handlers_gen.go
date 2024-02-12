@@ -1192,6 +1192,50 @@ func (s *Server) handleInviteMultipleUsersToWorkspaceRequest(args [0]string, arg
 			ID:   "inviteMultipleUsersToWorkspace",
 		}
 	)
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			sctx, ok, err := s.securityBearer(ctx, "InviteMultipleUsersToWorkspace", r)
+			if err != nil {
+				err = &ogenerrors.SecurityError{
+					OperationContext: opErrContext,
+					Security:         "Bearer",
+					Err:              err,
+				}
+				recordError("Security:Bearer", err)
+				s.cfg.ErrorHandler(ctx, w, r, err)
+				return
+			}
+			if ok {
+				satisfied[0] |= 1 << 0
+				ctx = sctx
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			err = &ogenerrors.SecurityError{
+				OperationContext: opErrContext,
+				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+			}
+			recordError("Security", err)
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+	}
 	request, close, err := s.decodeInviteMultipleUsersToWorkspaceRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
@@ -1345,13 +1389,13 @@ func (s *Server) handleLoginRequest(args [0]string, argsEscaped bool, w http.Res
 
 // handleVerifyInvitationRequest handles verifyInvitation operation.
 //
-// Verify invitation.
+// Verify Invitation.
 //
-// POST /api/v1/members/invitations/verify
+// GET /api/v1/members/invitations/verify
 func (s *Server) handleVerifyInvitationRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("verifyInvitation"),
-		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/api/v1/members/invitations/verify"),
 	}
 
@@ -1385,37 +1429,37 @@ func (s *Server) handleVerifyInvitationRequest(args [0]string, argsEscaped bool,
 			ID:   "verifyInvitation",
 		}
 	)
-	request, close, err := s.decodeVerifyInvitationRequest(r)
+	params, err := decodeVerifyInvitationParams(args, argsEscaped, r)
 	if err != nil {
-		err = &ogenerrors.DecodeRequestError{
+		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
 			Err:              err,
 		}
-		recordError("DecodeRequest", err)
+		recordError("DecodeParams", err)
 		s.cfg.ErrorHandler(ctx, w, r, err)
 		return
 	}
-	defer func() {
-		if err := close(); err != nil {
-			recordError("CloseRequest", err)
-		}
-	}()
 
 	var response VerifyInvitationRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
 			OperationName:    "VerifyInvitation",
-			OperationSummary: "Verify invitation",
+			OperationSummary: "Verify Invitation",
 			OperationID:      "verifyInvitation",
-			Body:             request,
-			Params:           middleware.Parameters{},
-			Raw:              r,
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "token",
+					In:   "query",
+				}: params.Token,
+			},
+			Raw: r,
 		}
 
 		type (
-			Request  = *VerifyInvitationReq
-			Params   = struct{}
+			Request  = struct{}
+			Params   = VerifyInvitationParams
 			Response = VerifyInvitationRes
 		)
 		response, err = middleware.HookMiddleware[
@@ -1425,14 +1469,14 @@ func (s *Server) handleVerifyInvitationRequest(args [0]string, argsEscaped bool,
 		](
 			m,
 			mreq,
-			nil,
+			unpackVerifyInvitationParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.VerifyInvitation(ctx, request)
+				response, err = s.h.VerifyInvitation(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.VerifyInvitation(ctx, request)
+		response, err = s.h.VerifyInvitation(ctx, params)
 	}
 	if err != nil {
 		recordError("Internal", err)

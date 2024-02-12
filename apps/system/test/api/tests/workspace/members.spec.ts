@@ -4,7 +4,7 @@ import { genAPIClient, getAuthInfo } from "../../scripts"
 
 const client = genAPIClient()
 
-test.describe("Workspace", () => {
+test.describe("Workspace members", () => {
   test("get workspace members", async () => {
     const authInfo = await getAuthInfo("system_account@example.com")
     const hs = authHeaders(authInfo.token)

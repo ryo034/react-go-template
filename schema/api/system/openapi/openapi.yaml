@@ -204,6 +204,8 @@ paths:
       operationId: inviteMultipleUsersToWorkspace
       tags:
         - Members
+      security:
+        - bearer: []
       requestBody:
         required: true
         content:
@@ -229,13 +231,19 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /api/v1/members/invitations/verify:
-    post:
-      summary: Verify invitation
+    get:
+      summary: Verify Invitation
       operationId: verifyInvitation
       tags:
         - Members
-      requestBody:
-        $ref: '#/components/requestBodies/MembersInvitationsVerify'
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Invitation token
       responses:
         '200':
           description: Invitation verified
@@ -347,10 +355,13 @@ components:
       type: object
       required:
         - email
+        - verified
       properties:
         email:
           type: string
           format: email
+        verified:
+          type: boolean
     InvitedMembers:
       type: array
       items:
@@ -450,17 +461,6 @@ components:
             properties:
               user:
                 $ref: '#/components/schemas/User'
-    MembersInvitationsVerify:
-      description: Verify invitation
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              token:
-                type: string
-                description: Invitation token
   responses:
     GeneralError:
       description: General Error

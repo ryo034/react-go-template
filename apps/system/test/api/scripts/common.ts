@@ -67,3 +67,13 @@ export const statefulTest = test.extend({
     await use(page)
   }
 })
+
+export const getInviteToken = async (email: string) => {
+  const db = new MainDb()
+  const conn = await db.getConnection()
+  const res = await conn.query(`SELECT token FROM invited_members WHERE email = '${email}'`)
+  if (res.rows.length === 0) {
+    throw new Error("res is empty")
+  }
+  return res.rows[0].token as string
+}

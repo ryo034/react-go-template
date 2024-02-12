@@ -47,3 +47,10 @@ func (p *presenter) InviteMembers(ms member.InvitedMembers, registeredMembers me
 		FailedMembers:     fims,
 	}
 }
+
+func (p *presenter) VerifyInvitationToken(m *member.InvitedMember) openapi.VerifyInvitationRes {
+	return &openapi.InvitedMember{
+		Email:    m.Email().ToString(),
+		Verified: m.Verified(),
+	}
+}

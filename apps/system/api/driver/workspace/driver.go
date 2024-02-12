@@ -2,6 +2,7 @@ package workspace
 
 import (
 	"context"
+	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
@@ -18,6 +19,7 @@ type Driver interface {
 	FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error)
 	FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace.ID) (models.Members, error)
 	InviteMember(ctx context.Context, exec bun.IDB, wID workspace.ID, invitedBy member.InvitedBy, m *member.InvitedMember) error
+	VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.InvitedMember, error)
 }
 
 type driver struct {
@@ -137,4 +139,18 @@ func (p *driver) InviteMember(ctx context.Context, exec bun.IDB, wID workspace.I
 		return err
 	}
 	return nil
+}
+
+func (p *driver) VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.InvitedMember, error) {
+	im := &models.InvitedMember{}
+	err := exec.
+		NewSelect().
+		Model(im).
+		Where("token = ?", token).
+		Limit(1).
+		Scan(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return im, nil
 }

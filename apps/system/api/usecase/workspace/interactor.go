@@ -16,6 +16,7 @@ type UseCase interface {
 	Create(ctx context.Context, i *CreateInput) (openapi.APIV1WorkspacesPostRes, error)
 	FindAllMembers(ctx context.Context, i *FindAllMembersInput) (openapi.APIV1MembersGetRes, error)
 	InviteMembers(ctx context.Context, i *InviteMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error)
+	VerifyInvitationToken(ctx context.Context, i *VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error)
 }
 
 type useCase struct {
@@ -160,4 +161,20 @@ func (u *useCase) InviteMembers(ctx context.Context, i *InviteMembersInput) (ope
 		member.NewInvitedMembers(alreadyRegisteredMembers),
 		member.NewInvitedMembers(failedMembers),
 	), nil
+}
+
+func (u *useCase) VerifyInvitationToken(ctx context.Context, i *VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error) {
+	p := u.dbp.GetExecutor(ctx, false)
+	pr, err := u.txp.Provide(ctx)
+	if err != nil {
+		return nil, err
+	}
+	fn := func() (*member.InvitedMember, error) {
+		return u.repo.VerifyInvitedMember(pr, p, i.Token)
+	}
+	result := pr.Transactional(fn)()
+	if err = result.Error(); err != nil {
+		return nil, err
+	}
+	return u.op.VerifyInvitationToken(result.Value(0).(*member.InvitedMember)), nil
 }

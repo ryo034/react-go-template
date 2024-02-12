@@ -20,7 +20,7 @@ type InvitedMember struct {
 	UpdatedAt       time.Time `bun:"updated_at,notnull,default:current_timestamp"`
 
 	Workspace *Workspace `bun:"rel:belongs-to"`
-	Member    *Member    `bun:"rel:belongs-to,join:invited_by=id"`
+	Member    *Member    `bun:"rel:belongs-to,join:invited_by=member_id"`
 }
 
 type InvitedMembers []*InvitedMember

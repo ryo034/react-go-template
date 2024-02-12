@@ -1,6 +1,7 @@
 package member
 
 import (
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	userGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/user"
@@ -9,6 +10,7 @@ import (
 type Adapter interface {
 	Adapt(m *models.Member) (*member.Member, error)
 	AdaptAll(ms models.Members) (member.Members, error)
+	AdaptInvitedMember(m *models.InvitedMember) (*member.InvitedMember, error)
 }
 
 type adapter struct {
@@ -47,4 +49,12 @@ func (a *adapter) AdaptAll(ms models.Members) (member.Members, error) {
 		mws = append(mws, aw)
 	}
 	return member.NewMembers(mws), nil
+}
+
+func (a *adapter) AdaptInvitedMember(m *models.InvitedMember) (*member.InvitedMember, error) {
+	ema, err := account.NewEmail(m.Email)
+	if err != nil {
+		return nil, err
+	}
+	return member.NewInvitedMember(m.InvitedMemberID, ema, m.Token, m.Used, m.ExpiredAt), nil
 }

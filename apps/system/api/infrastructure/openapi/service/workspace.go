@@ -31,3 +31,9 @@ func (s *service) InviteMultipleUsersToWorkspace(ctx context.Context, req *opena
 		InvitedMembers: ims,
 	})
 }
+
+func (s *service) VerifyInvitation(ctx context.Context, params openapi.VerifyInvitationParams) (openapi.VerifyInvitationRes, error) {
+	return s.ctrl.Workspace.VerifyInvitationToken(ctx, workspace.VerifyInvitationTokenInput{
+		Token: params.Token,
+	})
+}

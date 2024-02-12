@@ -381,7 +381,8 @@ func (s *InviteMultipleUsersToWorkspaceReq) SetInvitedMembers(val InvitedMembers
 
 // Ref: #/components/schemas/InvitedMember
 type InvitedMember struct {
-	Email string `json:"email"`
+	Email    string `json:"email"`
+	Verified bool   `json:"verified"`
 }
 
 // GetEmail returns the value of Email.
@@ -389,9 +390,19 @@ func (s *InvitedMember) GetEmail() string {
 	return s.Email
 }
 
+// GetVerified returns the value of Verified.
+func (s *InvitedMember) GetVerified() bool {
+	return s.Verified
+}
+
 // SetEmail sets the value of Email.
 func (s *InvitedMember) SetEmail(val string) {
 	s.Email = val
+}
+
+// SetVerified sets the value of Verified.
+func (s *InvitedMember) SetVerified(val bool) {
+	s.Verified = val
 }
 
 func (*InvitedMember) verifyInvitationRes() {}
@@ -974,21 +985,6 @@ func (s *User) SetPhoneNumber(val OptString) {
 }
 
 func (*User) aPIV1AuthOAuthPostRes() {}
-
-type VerifyInvitationReq struct {
-	// Invitation token.
-	Token OptString `json:"token"`
-}
-
-// GetToken returns the value of Token.
-func (s *VerifyInvitationReq) GetToken() OptString {
-	return s.Token
-}
-
-// SetToken sets the value of Token.
-func (s *VerifyInvitationReq) SetToken(val OptString) {
-	s.Token = val
-}
 
 // Ref: #/components/schemas/Workspace
 type Workspace struct {

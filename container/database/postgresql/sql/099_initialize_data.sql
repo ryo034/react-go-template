@@ -72,7 +72,7 @@ VALUES
 ('018d96b9-f674-7ff6-83eb-506eca6452be', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
 ('018d9b4e-d8fb-73be-95c5-46fbc7a37a7d', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00');
 
-INSERT INTO invited_members (invited_member_id, workspace_id, email, token, used, expires_at, invited_by, created_at, updated_at)
+INSERT INTO invited_members (invited_member_id, workspace_id, email, token, used, expired_at, invited_by, created_at, updated_at)
 VALUES
 ('018d96b8-0bb6-7822-b3b5-78a5d0e8790e', 'c1bd2603-b9cd-4f84-8b83-3548f6ae150b', 'invite_test_expired@example.com', '018d96b7-587c-7614-b234-e086b1944e74' , FALSE, '2023-01-10 12:00:00', '377eba35-5560-4f48-a99d-19cbd6a82b0d', '2023-01-09 12:00:00', '2023-01-09 12:00:00'),
 ('018d96b8-2211-7862-bcbe-e9f4d002a8fc', 'c1bd2603-b9cd-4f84-8b83-3548f6ae150b', 'invite_test_not_expired@example.com', '018d96b7-df68-792f-97d0-d6a044c2b4a2' , FALSE, '2050-01-10 12:00:00', '377eba35-5560-4f48-a99d-19cbd6a82b0d', '2024-01-10 12:00:00', '2023-01-09 12:00:00'),

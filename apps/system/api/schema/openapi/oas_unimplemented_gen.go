@@ -114,9 +114,9 @@ func (UnimplementedHandler) Login(ctx context.Context) (r LoginRes, _ error) {
 
 // VerifyInvitation implements verifyInvitation operation.
 //
-// Verify invitation.
+// Verify Invitation.
 //
-// POST /api/v1/members/invitations/verify
-func (UnimplementedHandler) VerifyInvitation(ctx context.Context, req *VerifyInvitationReq) (r VerifyInvitationRes, _ error) {
+// GET /api/v1/members/invitations/verify
+func (UnimplementedHandler) VerifyInvitation(ctx context.Context, params VerifyInvitationParams) (r VerifyInvitationRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

@@ -76,10 +76,10 @@ type Handler interface {
 	Login(ctx context.Context) (LoginRes, error)
 	// VerifyInvitation implements verifyInvitation operation.
 	//
-	// Verify invitation.
+	// Verify Invitation.
 	//
-	// POST /api/v1/members/invitations/verify
-	VerifyInvitation(ctx context.Context, req *VerifyInvitationReq) (VerifyInvitationRes, error)
+	// GET /api/v1/members/invitations/verify
+	VerifyInvitation(ctx context.Context, params VerifyInvitationParams) (VerifyInvitationRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

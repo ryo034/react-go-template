@@ -263,10 +263,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							if len(elem) == 0 {
 								// Leaf node.
 								switch r.Method {
-								case "POST":
+								case "GET":
 									s.handleVerifyInvitationRequest([0]string{}, elemIsEscaped, w, r)
 								default:
-									s.notAllowed(w, r, "POST")
+									s.notAllowed(w, r, "GET")
 								}
 
 								return
@@ -655,10 +655,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 							if len(elem) == 0 {
 								switch method {
-								case "POST":
+								case "GET":
 									// Leaf: VerifyInvitation
 									r.name = "VerifyInvitation"
-									r.summary = "Verify invitation"
+									r.summary = "Verify Invitation"
 									r.operationID = "verifyInvitation"
 									r.pathPattern = "/api/v1/members/invitations/verify"
 									r.args = args

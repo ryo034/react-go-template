@@ -10,6 +10,7 @@ type InvitedMember struct {
 	id        uuid.UUID
 	email     account.Email
 	token     uuid.UUID
+	verified  bool
 	expiredAt time.Time
 }
 
@@ -22,7 +23,11 @@ func NewInvitedMemberFromEmail(email account.Email, expiredAt time.Time) (*Invit
 	if err != nil {
 		return nil, err
 	}
-	return &InvitedMember{id, email, token, expiredAt}, nil
+	return &InvitedMember{id, email, token, false, expiredAt}, nil
+}
+
+func NewInvitedMember(id uuid.UUID, email account.Email, token uuid.UUID, verified bool, expiredAt time.Time) *InvitedMember {
+	return &InvitedMember{id, email, token, verified, expiredAt}
 }
 
 func (m *InvitedMember) Email() account.Email {
@@ -35,6 +40,10 @@ func (m *InvitedMember) ID() uuid.UUID {
 
 func (m *InvitedMember) Token() uuid.UUID {
 	return m.token
+}
+
+func (m *InvitedMember) Verified() bool {
+	return m.verified
 }
 
 func (m *InvitedMember) ExpiredAt() time.Time {
