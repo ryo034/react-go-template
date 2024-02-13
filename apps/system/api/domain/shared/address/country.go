@@ -17,7 +17,7 @@ const (
 func NewCountry(code ID, v string) (Country, error) {
 	errs := validation.NewErrors()
 	if v == "" {
-		errs.Append(InvalidAddressCountry, v)
+		errs.Append(InvalidAddressCountry, nil, v)
 	}
 	if errs.IsNotEmpty() {
 		return Country{}, errs

@@ -15,3 +15,7 @@ func (dn DisplayName) ToString() string {
 func (dn DisplayName) IsEmpty() bool {
 	return dn.v == ""
 }
+
+func (dn DisplayName) IsNotEmpty() bool {
+	return !dn.IsEmpty()
+}

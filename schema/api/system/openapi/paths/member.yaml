@@ -42,10 +42,10 @@ invitationsBulk:
           application/json:
             schema:
               $ref: "#/components/schemas/BulkInvitedResult"
-      "401":
-        $ref: "#/components/responses/UnauthorizedError"
       "400":
         $ref: "#/components/responses/BadRequestError"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
       "409":
         $ref: "#/components/responses/ConflictError"
       "500":
@@ -71,12 +71,28 @@ invitationsVerify:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/InvitedMember"
-      "401":
-        $ref: "#/components/responses/UnauthorizedError"
+              $ref: "#/components/responses/InvitationInfo"
       "400":
         $ref: "#/components/responses/BadRequestError"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
       "404":
         $ref: "#/components/responses/NotFoundError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+
+invitationsProcess:
+  post:
+    summary: Process an invitation by verifying token and email, and register or add user to workspace.
+    operationId: processInvitation
+    tags:
+      - Invitations
+    requestBody:
+      $ref: "#/components/requestBodies/InvitationsProcess"
+    responses:
+      "200":
+        description: OTP has been sent successfully.
+      "400":
+        $ref: "#/components/responses/BadRequestError"
       "500":
         $ref: "#/components/responses/InternalServerError"

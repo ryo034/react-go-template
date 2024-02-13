@@ -21,3 +21,7 @@ func (e *EmailAlreadyInUse) Error() string {
 func (e *EmailAlreadyInUse) MessageKey() MessageKey {
 	return EmailAlreadyInUseMessageKey
 }
+
+func (e *EmailAlreadyInUse) Code() string {
+	return "400-" + string(EmailAlreadyInUseCodeKey)
+}

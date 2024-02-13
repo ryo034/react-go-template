@@ -19,6 +19,10 @@ var instanceMessages = map[domainError.MessageKey]map[language.Tag]string{
 		language.Japanese: "不正なメールアドレスです",
 		language.English:  "Invalid email",
 	},
+	domainError.ExpiredInviteTokenMessageKey: {
+		language.Japanese: "招待トークンの有効期限が切れています",
+		language.English:  "Invite token is expired",
+	},
 	domainError.PhoneNumberAlreadyInUseMessageKey: {
 		language.Japanese: "すでにその電話番号は使用されています",
 		language.English:  "Phone number already in use",

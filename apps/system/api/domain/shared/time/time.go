@@ -37,7 +37,7 @@ func NewTimeFromWithSecondString(st string) (Time, error) {
 	errs := validation.NewErrors()
 	ct, err := time.Parse("15:04:05", st)
 	if err != nil {
-		errs.Append(InvalidTime, st)
+		errs.Append(InvalidTime, nil, st)
 	}
 	if errs.IsNotEmpty() {
 		return Time{}, errs

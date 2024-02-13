@@ -34,7 +34,8 @@ type CreateInput struct {
 }
 
 type InvitedMember struct {
-	Email string
+	Email       string
+	DisplayName string
 }
 
 type InvitedMembersInput struct {
@@ -82,7 +83,7 @@ func NewInviteMembersInput(aID account.ID, ims []InvitedMember) *workspaceUc.Inv
 		if err != nil {
 			return nil
 		}
-		m, err := member.NewInvitedMemberFromEmail(em, expiredAt)
+		m, err := member.NewInvitedMemberFromEmail(em, im.DisplayName, expiredAt)
 		if err != nil {
 			return nil
 		}
@@ -112,5 +113,9 @@ func (c *controller) InviteMembers(ctx context.Context, i InvitedMembersInput) (
 
 func (c *controller) VerifyInvitationToken(ctx context.Context, i VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error) {
 	in := &workspaceUc.VerifyInvitationTokenInput{Token: i.Token}
-	return c.wuc.VerifyInvitationToken(ctx, in)
+	res, err := c.wuc.VerifyInvitationToken(ctx, in)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.VerifyInvitationRes), nil
+	}
+	return res, nil
 }

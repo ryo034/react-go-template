@@ -3,4 +3,5 @@ system_account_id,name,email,created_at,updated_at
 018d91d4-5a5e-799c-9cfa-de8d0c02d7f2,Login LogoutRetry,login_logout_login@example.com,2024-01-10 12:00:00.000000 +00:00,2024-01-10 12:00:00.000000 +00:00
 018d6189-9ad0-7b72-801b-1e0de0d3c214,Unfinished Onboarding,unfinished_onboarding@example.com,2024-01-10 12:00:00.000000 +00:00,2024-01-10 12:00:00.000000 +00:00
 018d96bf-8dce-7f68-a926-b5d7ed6ed883,Invite TestOne,invite_test_1@example.com,2024-01-10 12:00:00.000000 +00:00,2024-01-10 12:00:00.000000 +00:00
-018d9b4d-9438-79ac-b533-1323d4ec9b9f,Invite TestTwo,invite_test_2@example.com,2024-01-10 12:00:00.000000 +00:00,2024-01-10 12:00:00.000000 +00:00
+018d9b4d-9438-79ac-b533-1323d4ec9b9f,Invite TestTwo,invite_test_already_joined_any_workspace@example.com,2024-01-10 12:00:00.000000 +00:00,2024-01-10 12:00:00.000000 +00:00
+018da09e-c6ca-795e-878d-32bb8c1e5cac,Invite TestThree,invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com,2024-01-10 12:00:00.000000 +00:00,2024-01-10 12:00:00.000000 +00:00

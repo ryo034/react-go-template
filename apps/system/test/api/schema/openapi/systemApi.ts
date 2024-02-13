@@ -189,6 +189,10 @@ export interface paths {
     /** Verify Invitation */
     get: operations["verifyInvitation"];
   };
+  "/api/v1/members/invitations/process": {
+    /** Process an invitation by verifying token and email, and register or add user to workspace. */
+    post: operations["processInvitation"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -241,6 +245,7 @@ export interface components {
     InvitedMember: {
       /** Format: email */
       email: string;
+      displayName: string;
       verified: boolean;
     };
     InvitedMembers: components["schemas"]["InvitedMember"][];
@@ -282,8 +287,8 @@ export interface components {
           /** @description A human-readable explanation specific to this occurrence of the problem. */
           detail?: string;
           /**
-           * @description error code
-           * @example invalid_item_id
+           * @description A custom code identifying the specific error.
+           * @example 400-001
            */
           code?: string;
         };
@@ -308,8 +313,8 @@ export interface components {
           /** @description A human-readable explanation specific to this occurrence of the problem. */
           detail?: string;
           /**
-           * @description error code
-           * @example invalid_item_id
+           * @description A custom code identifying the specific error.
+           * @example 400-001
            */
           code?: string;
         };
@@ -334,8 +339,8 @@ export interface components {
           /** @description A human-readable explanation specific to this occurrence of the problem. */
           detail?: string;
           /**
-           * @description error code
-           * @example invalid_item_id
+           * @description A custom code identifying the specific error.
+           * @example 400-001
            */
           code?: string;
         };
@@ -360,8 +365,8 @@ export interface components {
           /** @description A human-readable explanation specific to this occurrence of the problem. */
           detail?: string;
           /**
-           * @description error code
-           * @example invalid_item_id
+           * @description A custom code identifying the specific error.
+           * @example 400-001
            */
           code?: string;
         };
@@ -386,8 +391,8 @@ export interface components {
           /** @description A human-readable explanation specific to this occurrence of the problem. */
           detail?: string;
           /**
-           * @description error code
-           * @example invalid_item_id
+           * @description A custom code identifying the specific error.
+           * @example 400-001
            */
           code?: string;
         };
@@ -412,8 +417,8 @@ export interface components {
           /** @description A human-readable explanation specific to this occurrence of the problem. */
           detail?: string;
           /**
-           * @description error code
-           * @example invalid_item_id
+           * @description A custom code identifying the specific error.
+           * @example 400-001
            */
           code?: string;
         };
@@ -438,12 +443,15 @@ export interface components {
           /** @description A human-readable explanation specific to this occurrence of the problem. */
           detail?: string;
           /**
-           * @description error code
-           * @example invalid_item_id
+           * @description A custom code identifying the specific error.
+           * @example 400-001
            */
           code?: string;
         };
       };
+    };
+    InvitationInfo: {
+      content: never;
     };
   };
   parameters: never;
@@ -481,6 +489,22 @@ export interface components {
       content: {
         "application/json": {
           user: components["schemas"]["User"];
+        };
+      };
+    };
+    /** @description Process an invitation by verifying token and email, and register or add user to workspace. */
+    InvitationsProcess: {
+      content: {
+        "application/json": {
+          /** @description The invitation token. */
+          token: string;
+          /**
+           * Format: email
+           * @description The user's email address.
+           */
+          email: string;
+          /** @description The user's full name or workspace display name. */
+          name?: string | null;
         };
       };
     };
@@ -544,12 +568,24 @@ export interface operations {
       /** @description Invitation verified */
       200: {
         content: {
-          "application/json": components["schemas"]["InvitedMember"];
+          "application/json": components["responses"]["InvitationInfo"];
         };
       };
       400: components["responses"]["BadRequestError"];
       401: components["responses"]["UnauthorizedError"];
       404: components["responses"]["NotFoundError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /** Process an invitation by verifying token and email, and register or add user to workspace. */
+  processInvitation: {
+    requestBody: components["requestBodies"]["InvitationsProcess"];
+    responses: {
+      /** @description OTP has been sent successfully. */
+      200: {
+        content: never;
+      };
+      400: components["responses"]["BadRequestError"];
       500: components["responses"]["InternalServerError"];
     };
   };

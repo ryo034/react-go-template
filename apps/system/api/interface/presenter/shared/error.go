@@ -5,6 +5,7 @@ type ErrorResponse struct {
 	Detail string      `json:"detail"`
 	Type   string      `json:"type"`
 	Errors []errDetail `json:"errors"`
+	Code   string      `json:"code"`
 }
 
 type errDetail struct {

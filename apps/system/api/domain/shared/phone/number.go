@@ -22,7 +22,7 @@ const phoneNumberRegex = `^0[789]0\d{8}$`
 func NewPhoneNumber(v string) (Number, error) {
 	errs := validation.NewErrors()
 	if !regexp.MustCompile(phoneNumberRegex).MatchString(v) {
-		errs.Append(InvalidPhoneNumber, v)
+		errs.Append(InvalidPhoneNumber, nil, v)
 	}
 	if errs.IsNotEmpty() {
 		return Number{}, errs
@@ -40,7 +40,7 @@ func NewInternationalPhoneNumber(v string) (Number, error) {
 	noHyphen := strings.ReplaceAll(formatted, "-", "")
 	ph, err := NewPhoneNumber(noHyphen)
 	if err != nil {
-		errs.Append(InvalidPhoneNumber, v)
+		errs.Append(InvalidPhoneNumber, nil, v)
 	}
 	if errs.IsNotEmpty() {
 		return Number{}, errs

@@ -18,5 +18,5 @@ GeneralError:
       description: A human-readable explanation specific to this occurrence of the problem.
     code:
       type: string
-      example: "invalid_item_id"
-      description: error code
+      example: "400-001"
+      description: A custom code identifying the specific error.

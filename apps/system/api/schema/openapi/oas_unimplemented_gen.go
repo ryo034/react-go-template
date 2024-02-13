@@ -112,6 +112,15 @@ func (UnimplementedHandler) Login(ctx context.Context) (r LoginRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
+// ProcessInvitation implements processInvitation operation.
+//
+// Process an invitation by verifying token and email, and register or add user to workspace.
+//
+// POST /api/v1/members/invitations/process
+func (UnimplementedHandler) ProcessInvitation(ctx context.Context, req *ProcessInvitationReq) (r ProcessInvitationRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // VerifyInvitation implements verifyInvitation operation.
 //
 // Verify Invitation.

@@ -9,11 +9,13 @@ import (
 type Error interface {
 	error
 	MessageKey() domainError.MessageKey
+	Code() domainError.Code
 	Args() []interface{}
 }
 
 type err struct {
 	messageKey domainError.MessageKey
+	code       domainError.Code
 	args       []interface{}
 }
 
@@ -25,12 +27,16 @@ func (e *err) MessageKey() domainError.MessageKey {
 	return e.messageKey
 }
 
+func (e *err) Code() domainError.Code {
+	return e.code
+}
+
 func (e *err) Args() []interface{} {
 	return e.args
 }
 
 type Errors interface {
-	Append(messageKey domainError.MessageKey, args ...interface{})
+	Append(messageKey domainError.MessageKey, code *domainError.Code, args ...interface{})
 	AppendAll(errs Errors)
 	NilIfEmpty() error
 	AsSlice() []error
@@ -61,8 +67,12 @@ func (v *errors) AppendAll(errs Errors) {
 	v.errors = append(v.errors, errs.AsSlice()...)
 }
 
-func (v *errors) Append(messageKey domainError.MessageKey, args ...interface{}) {
-	v.errors = append(v.errors, &err{messageKey, args})
+func (v *errors) Append(messageKey domainError.MessageKey, code *domainError.Code, args ...interface{}) {
+	c := domainError.BasicCodeKey
+	if code != nil {
+		c = *code
+	}
+	v.errors = append(v.errors, &err{messageKey, c, args})
 }
 
 func (v *errors) AsSlice() []error {

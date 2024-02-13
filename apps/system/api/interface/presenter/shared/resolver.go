@@ -39,6 +39,7 @@ func (r *resolver) errTitle(tag language.Tag, err error, msgArgs ...interface{})
 	var t domainValidation.Error
 	var conflictErr *domainErr.Conflicted
 	var noSuchData *domainErr.NoSuchData
+	var expiredInviteToken *domainErr.ExpiredInviteToken
 	switch {
 	case errors.As(err, &t):
 		msg = r.mr.TitleMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
@@ -46,6 +47,8 @@ func (r *resolver) errTitle(tag language.Tag, err error, msgArgs ...interface{})
 		msg = r.mr.TitleMessage(string(domainErr.ConflictedMessageKey)).WithLang(tag)
 	case errors.As(err, &noSuchData):
 		msg = r.mr.TitleMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
+	case errors.As(err, &expiredInviteToken):
+		msg = r.mr.TitleMessage(string(domainErr.ExpiredInviteTokenMessageKey)).WithLang(tag)
 	}
 	return msg
 }
@@ -55,6 +58,7 @@ func (r *resolver) errDetail(tag language.Tag, err error, msgArgs ...interface{}
 	var t domainValidation.Error
 	var conflictErr *domainErr.Conflicted
 	var noSuchData *domainErr.NoSuchData
+	var expiredInviteToken *domainErr.ExpiredInviteToken
 	switch {
 	case errors.As(err, &t):
 		msg = r.mr.DetailMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
@@ -62,6 +66,8 @@ func (r *resolver) errDetail(tag language.Tag, err error, msgArgs ...interface{}
 		msg = r.mr.DetailMessage(string(domainErr.ConflictedMessageKey)).WithLang(tag)
 	case errors.As(err, &noSuchData):
 		msg = r.mr.DetailMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
+	case errors.As(err, &expiredInviteToken):
+		msg = r.mr.DetailMessage(string(domainErr.ExpiredInviteTokenMessageKey)).WithLang(tag)
 	}
 	return msg
 }
@@ -71,6 +77,7 @@ func (r *resolver) errType(tag language.Tag, err error, msgArgs ...interface{}) 
 	var t domainValidation.Error
 	var conflictErr *domainErr.Conflicted
 	var noSuchData *domainErr.NoSuchData
+	var expiredInviteToken *domainErr.ExpiredInviteToken
 	switch {
 	case errors.As(err, &t):
 		msg = r.mr.TypeMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
@@ -78,8 +85,30 @@ func (r *resolver) errType(tag language.Tag, err error, msgArgs ...interface{}) 
 		msg = r.mr.TypeMessage(string(domainErr.ConflictedMessageKey)).WithLang(tag)
 	case errors.As(err, &noSuchData):
 		msg = r.mr.TypeMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
+	case errors.As(err, &expiredInviteToken):
+		msg = r.mr.TypeMessage(string(domainErr.ExpiredInviteTokenMessageKey)).WithLang(tag)
 	}
 	return msg
+}
+
+func (r *resolver) errCode(err error) string {
+	code := "500-000"
+	var t domainValidation.Error
+	var conflictErr *domainErr.Conflicted
+	var noSuchData *domainErr.NoSuchData
+	var expiredInviteToken *domainErr.ExpiredInviteToken
+
+	switch {
+	case errors.As(err, &t):
+		code = string(t.Code())
+	case errors.As(err, &conflictErr):
+		code = conflictErr.Code()
+	case errors.As(err, &noSuchData):
+		code = noSuchData.Code()
+	case errors.As(err, &expiredInviteToken):
+		code = expiredInviteToken.Code()
+	}
+	return code
 }
 
 func (r *resolver) Error(c context.Context, err error) interface{} {
@@ -88,19 +117,22 @@ func (r *resolver) Error(c context.Context, err error) interface{} {
 	var t domainValidation.Error
 	var conflictErr *domainErr.Conflicted
 	var noSuchData *domainErr.NoSuchData
+	var inviteTokenExpired *domainErr.ExpiredInviteToken
 
 	switch {
-	case errors.As(err, &t):
+	case errors.As(err, &t), errors.As(err, &inviteTokenExpired):
 		return &openapi.BadRequestError{
 			Type:   openapi.OptString{Value: er.Type, Set: true},
 			Title:  openapi.OptString{Value: er.Title, Set: true},
 			Detail: openapi.OptString{Value: er.Detail, Set: true},
+			Code:   openapi.OptString{Value: er.Code, Set: true},
 		}
 	case errors.As(err, &conflictErr):
 		return &openapi.ConflictError{
 			Type:   openapi.OptString{Value: er.Type, Set: true},
 			Title:  openapi.OptString{Value: er.Title, Set: true},
 			Detail: openapi.OptString{Value: er.Detail, Set: true},
+			Code:   openapi.OptString{Value: er.Code, Set: true},
 		}
 	case errors.As(err, &noSuchData):
 	}
@@ -108,6 +140,7 @@ func (r *resolver) Error(c context.Context, err error) interface{} {
 		Type:   openapi.OptString{Value: er.Type, Set: true},
 		Title:  openapi.OptString{Value: er.Title, Set: true},
 		Detail: openapi.OptString{Value: er.Detail, Set: true},
+		Code:   openapi.OptString{Value: er.Code, Set: true},
 	}
 }
 
@@ -121,6 +154,7 @@ func (r *resolver) newErrorResponse(tag language.Tag, err error) ErrorResponse {
 		r.errDetail(tag, err),
 		r.errType(tag, err),
 		r.details(tag, err),
+		r.errCode(err),
 	}
 }
 
@@ -149,6 +183,7 @@ func (r *resolver) detail(tag language.Tag, err error) errDetail {
 	var t domainValidation.Error
 	var conflictErr *domainErr.Conflicted
 	var noSuchData *domainErr.NoSuchData
+	var expiredInviteToken *domainErr.ExpiredInviteToken
 	switch {
 	case errors.As(err, &t):
 		msg = r.mr.ErrorMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
@@ -156,6 +191,8 @@ func (r *resolver) detail(tag language.Tag, err error) errDetail {
 		msg = r.mr.ErrorMessage(string(domainErr.ConflictedMessageKey)).WithLang(tag)
 	case errors.As(err, &noSuchData):
 		msg = r.mr.ErrorMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
+	case errors.As(err, &expiredInviteToken):
+		msg = r.mr.ErrorMessage(string(domainErr.ExpiredInviteTokenMessageKey)).WithLang(tag)
 	}
 	return errDetail{msg}
 }

@@ -12,6 +12,7 @@ type InvitedMember struct {
 	InvitedMemberID uuid.UUID `bun:"invited_member_id,pk"`
 	WorkspaceID     uuid.UUID `bun:"workspace_id,notnull"`
 	Email           string    `bun:"email,notnull"`
+	DisplayName     string    `bun:"display_name,nullzero"`
 	Used            bool      `bun:"used,notnull,default:false"`
 	Token           uuid.UUID `bun:"token,notnull"`
 	ExpiredAt       time.Time `bun:"expired_at,notnull"`

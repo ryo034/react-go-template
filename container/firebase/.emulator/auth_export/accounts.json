@@ -45,11 +45,21 @@
       "localId": "018d9b4d-9438-79ac-b533-1323d4ec9b9f",
       "lastLoginAt": "1706825570547",
       "emailVerified": true,
-      "email": "invite_test_2@example.com",
+      "email": "invite_test_already_joined_any_workspace@example.com",
       "createdAt": "1706825570522",
       "customAuth": true,
       "lastRefreshAt": "2024-02-01T22:12:50.547Z",
       "displayName": "Invite TestTwo"
+    },
+    {
+      "localId": "018da09e-c6ca-795e-878d-32bb8c1e5cac",
+      "lastLoginAt": "1706825570547",
+      "emailVerified": true,
+      "email": "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com",
+      "createdAt": "1706825570522",
+      "customAuth": true,
+      "lastRefreshAt": "2024-02-01T22:12:50.547Z",
+      "displayName": "Invite TestThree"
     }
   ]
 }

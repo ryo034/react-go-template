@@ -17,4 +17,6 @@ type Repository interface {
 	BulkInviteMembers(ctx context.Context, exec bun.IDB, wID ID, ms member.InvitedMembers) error
 	InviteMember(ctx context.Context, exec bun.IDB, wID ID, invitedBy member.InvitedBy, m *member.InvitedMember) error
 	VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uuid.UUID) (*member.InvitedMember, error)
+	FindInviteeWorkspaceFromToken(ctx context.Context, exec bun.IDB, token uuid.UUID) (*Workspace, error)
+	FindActiveInvitation(ctx context.Context, exec bun.IDB, email account.Email) (*member.InvitedMember, *Workspace, error)
 }

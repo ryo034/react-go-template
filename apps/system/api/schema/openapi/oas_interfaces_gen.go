@@ -45,6 +45,10 @@ type LoginRes interface {
 	loginRes()
 }
 
+type ProcessInvitationRes interface {
+	processInvitationRes()
+}
+
 type VerifyInvitationRes interface {
 	verifyInvitationRes()
 }

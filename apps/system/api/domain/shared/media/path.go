@@ -14,10 +14,10 @@ const (
 func NewPath(v string) (Path, error) {
 	errs := validation.NewErrors()
 	if v == "" {
-		errs.Append(InvalidMediaPath, v)
+		errs.Append(InvalidMediaPath, nil, v)
 	}
 	if v[0] == '/' {
-		errs.Append(InvalidMediaPath, v)
+		errs.Append(InvalidMediaPath, nil, v)
 	}
 	if errs.IsNotEmpty() {
 		return "", errs

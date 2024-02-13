@@ -158,6 +158,7 @@ CREATE TABLE invited_members (
   invited_member_id uuid NOT NULL,
   workspace_id uuid NOT NULL,
   email VARCHAR(256) NOT NULL,
+  display_name VARCHAR(50),
   token uuid NOT NULL,
   used BOOLEAN NOT NULL DEFAULT FALSE,
   expired_at TIMESTAMP WITH TIME ZONE NOT NULL,

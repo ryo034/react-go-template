@@ -18,6 +18,7 @@ type Driver interface {
 	FindLastLogin(ctx context.Context, exec bun.IDB, aID account.ID) (*models.MemberLoginHistory, error)
 	FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*models.SystemAccount, error)
 	FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) (*models.SystemAccount, error)
+	FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.SystemAccount, error)
 	UpdateMember(ctx context.Context, exec bun.IDB, m *me.Me) error
 	UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User) error
 }
@@ -103,6 +104,21 @@ func (d *driver) FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) 
 		Relation("Profile").
 		Relation("PhoneNumber").
 		Where("sa.system_account_id = ?", aID.ToString()).
+		Scan(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return sysAcc, nil
+}
+
+func (d *driver) FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.SystemAccount, error) {
+	sysAcc := &models.SystemAccount{}
+	err := exec.
+		NewSelect().
+		Model(sysAcc).
+		Relation("Profile").
+		Relation("PhoneNumber").
+		Where("email = ?", email.ToString()).
 		Scan(ctx)
 	if err != nil {
 		return nil, err

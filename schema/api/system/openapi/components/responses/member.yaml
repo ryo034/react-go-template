@@ -1,0 +1,16 @@
+InvitationInfo:
+  type: object
+  required:
+    - workspaceName
+    - verified
+    - hasRealName
+    - hasDisplayNameAtInvitation
+  properties:
+    workspaceName:
+      type: string
+    verified:
+      type: boolean
+    hasRealName:
+      type: boolean
+    hasDisplayNameAtInvitation:
+      type: boolean

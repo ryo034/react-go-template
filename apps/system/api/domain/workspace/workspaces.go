@@ -5,6 +5,8 @@ type Workspaces interface {
 	AsSlice() []*Workspace
 	IsEmpty() bool
 	IsNotEmpty() bool
+	Exists(wID ID) bool
+	NotExists(wID ID) bool
 }
 
 type workspaces struct {
@@ -29,4 +31,17 @@ func (ws *workspaces) Size() int {
 
 func (ws *workspaces) AsSlice() []*Workspace {
 	return append(make([]*Workspace, 0, ws.Size()), ws.wrapped...)
+}
+
+func (ws *workspaces) Exists(wID ID) bool {
+	for _, w := range ws.wrapped {
+		if w.ID() == wID {
+			return true
+		}
+	}
+	return false
+}
+
+func (ws *workspaces) NotExists(wID ID) bool {
+	return !ws.Exists(wID)
 }

@@ -56,5 +56,9 @@ func (a *adapter) AdaptInvitedMember(m *models.InvitedMember) (*member.InvitedMe
 	if err != nil {
 		return nil, err
 	}
-	return member.NewInvitedMember(m.InvitedMemberID, ema, m.Token, m.Used, m.ExpiredAt), nil
+	dn, err := member.NewDisplayName(m.DisplayName)
+	if err != nil {
+		return nil, err
+	}
+	return member.NewInvitedMember(m.InvitedMemberID, ema, dn, m.Token, m.Used, m.ExpiredAt)
 }

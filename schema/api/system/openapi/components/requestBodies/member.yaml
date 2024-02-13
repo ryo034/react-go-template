@@ -1,0 +1,22 @@
+InvitationsProcess:
+  description: Process an invitation by verifying token and email, and register or add user to workspace.
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          token:
+            type: string
+            description: The invitation token.
+          email:
+            type: string
+            format: email
+            description: The user's email address.
+          name:
+            type: string
+            nullable: true
+            description: The user's full name or workspace display name.
+        required:
+          - token
+          - email

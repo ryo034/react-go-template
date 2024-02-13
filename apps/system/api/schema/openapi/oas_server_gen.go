@@ -74,6 +74,12 @@ type Handler interface {
 	//
 	// POST /api/v1/login
 	Login(ctx context.Context) (LoginRes, error)
+	// ProcessInvitation implements processInvitation operation.
+	//
+	// Process an invitation by verifying token and email, and register or add user to workspace.
+	//
+	// POST /api/v1/members/invitations/process
+	ProcessInvitation(ctx context.Context, req *ProcessInvitationReq) (ProcessInvitationRes, error)
 	// VerifyInvitation implements verifyInvitation operation.
 	//
 	// Verify Invitation.

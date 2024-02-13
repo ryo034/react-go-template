@@ -21,13 +21,13 @@ func NewName(v string) (Name, error) {
 	errs := validation.NewErrors()
 	trimmed := strings.TrimSpace(v)
 	if trimmed == "" {
-		errs.Append(InvalidWorkspaceName, v)
+		errs.Append(InvalidWorkspaceName, nil, v)
 	} else if len(trimmed) > MaxLength {
-		errs.Append(InvalidWorkspaceName, v)
+		errs.Append(InvalidWorkspaceName, nil, v)
 	} else {
 		ok, err := regexp.MatchString(Regex, trimmed)
 		if err != nil || !ok {
-			errs.Append(InvalidWorkspaceName, v)
+			errs.Append(InvalidWorkspaceName, nil, v)
 		}
 	}
 	if errs.IsNotEmpty() {

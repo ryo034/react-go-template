@@ -14,7 +14,7 @@ const InvalidStringID domainError.MessageKey = "invalid.string_id"
 func NewStringID(v string) (StringID, error) {
 	errs := validation.NewErrors()
 	if v == "" {
-		errs.Append(InvalidStringID, v)
+		errs.Append(InvalidStringID, nil, v)
 	}
 	if errs.IsNotEmpty() {
 		return StringID{}, errs

@@ -26,3 +26,7 @@ func (c *Conflicted) Error() string {
 func (c *Conflicted) MessageKey() MessageKey {
 	return ConflictedMessageKey
 }
+
+func (c *Conflicted) Code() string {
+	return "409-000"
+}

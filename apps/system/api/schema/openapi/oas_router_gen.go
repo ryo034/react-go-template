@@ -252,6 +252,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							elem = origElem
+						case 'p': // Prefix: "process"
+							origElem := elem
+							if l := len("process"); len(elem) >= l && elem[0:l] == "process" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleProcessInvitationRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
 						case 'v': // Prefix: "verify"
 							origElem := elem
 							if l := len("verify"); len(elem) >= l && elem[0:l] == "verify" {
@@ -636,6 +657,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.summary = "Invite multiple users to the workspace by email"
 									r.operationID = "inviteMultipleUsersToWorkspace"
 									r.pathPattern = "/api/v1/members/invitations/bulk"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'p': // Prefix: "process"
+							origElem := elem
+							if l := len("process"); len(elem) >= l && elem[0:l] == "process" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch method {
+								case "POST":
+									// Leaf: ProcessInvitation
+									r.name = "ProcessInvitation"
+									r.summary = "Process an invitation by verifying token and email, and register or add user to workspace."
+									r.operationID = "processInvitation"
+									r.pathPattern = "/api/v1/members/invitations/process"
 									r.args = args
 									r.count = 0
 									return r, true

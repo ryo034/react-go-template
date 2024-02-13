@@ -2,6 +2,7 @@ package message
 
 import (
 	"fmt"
+	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 
 	"golang.org/x/text/language"
 )
@@ -14,6 +15,7 @@ type Resource interface {
 	SuccessMessage(key string) Message
 	FieldName(key string) Message
 	FieldNameFromTag(tag FieldNameTag) Message
+	ErrorCode(key domainErr.Code) string
 }
 
 type Message interface {
@@ -126,4 +128,8 @@ func (m *resource) FieldName(key string) Message {
 
 func (m *resource) FieldNameFromTag(tag FieldNameTag) Message {
 	return m.fieldNames[string(tag)]
+}
+
+func (m *resource) ErrorCode(key domainErr.Code) string {
+	return string(key)
 }

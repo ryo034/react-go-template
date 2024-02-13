@@ -106,7 +106,7 @@ type BadRequestError struct {
 	Title OptString `json:"title"`
 	// A human-readable explanation specific to this occurrence of the problem.
 	Detail OptString `json:"detail"`
-	// Error code.
+	// A custom code identifying the specific error.
 	Code OptString `json:"code"`
 }
 
@@ -166,6 +166,7 @@ func (*BadRequestError) aPIV1AuthOtpVerifyPostRes()         {}
 func (*BadRequestError) aPIV1MeProfilePutRes()              {}
 func (*BadRequestError) aPIV1WorkspacesPostRes()            {}
 func (*BadRequestError) inviteMultipleUsersToWorkspaceRes() {}
+func (*BadRequestError) processInvitationRes()              {}
 func (*BadRequestError) verifyInvitationRes()               {}
 
 type Bearer struct {
@@ -231,7 +232,7 @@ type ConflictError struct {
 	Title OptString `json:"title"`
 	// A human-readable explanation specific to this occurrence of the problem.
 	Detail OptString `json:"detail"`
-	// Error code.
+	// A custom code identifying the specific error.
 	Code OptString `json:"code"`
 }
 
@@ -298,7 +299,7 @@ type InternalServerError struct {
 	Title OptString `json:"title"`
 	// A human-readable explanation specific to this occurrence of the problem.
 	Detail OptString `json:"detail"`
-	// Error code.
+	// A custom code identifying the specific error.
 	Code OptString `json:"code"`
 }
 
@@ -363,7 +364,58 @@ func (*InternalServerError) aPIV1WorkspacesGetRes()             {}
 func (*InternalServerError) aPIV1WorkspacesPostRes()            {}
 func (*InternalServerError) inviteMultipleUsersToWorkspaceRes() {}
 func (*InternalServerError) loginRes()                          {}
+func (*InternalServerError) processInvitationRes()              {}
 func (*InternalServerError) verifyInvitationRes()               {}
+
+// Ref: #/components/responses/InvitationInfo
+type InvitationInfo struct {
+	WorkspaceName              string `json:"workspaceName"`
+	Verified                   bool   `json:"verified"`
+	HasRealName                bool   `json:"hasRealName"`
+	HasDisplayNameAtInvitation bool   `json:"hasDisplayNameAtInvitation"`
+}
+
+// GetWorkspaceName returns the value of WorkspaceName.
+func (s *InvitationInfo) GetWorkspaceName() string {
+	return s.WorkspaceName
+}
+
+// GetVerified returns the value of Verified.
+func (s *InvitationInfo) GetVerified() bool {
+	return s.Verified
+}
+
+// GetHasRealName returns the value of HasRealName.
+func (s *InvitationInfo) GetHasRealName() bool {
+	return s.HasRealName
+}
+
+// GetHasDisplayNameAtInvitation returns the value of HasDisplayNameAtInvitation.
+func (s *InvitationInfo) GetHasDisplayNameAtInvitation() bool {
+	return s.HasDisplayNameAtInvitation
+}
+
+// SetWorkspaceName sets the value of WorkspaceName.
+func (s *InvitationInfo) SetWorkspaceName(val string) {
+	s.WorkspaceName = val
+}
+
+// SetVerified sets the value of Verified.
+func (s *InvitationInfo) SetVerified(val bool) {
+	s.Verified = val
+}
+
+// SetHasRealName sets the value of HasRealName.
+func (s *InvitationInfo) SetHasRealName(val bool) {
+	s.HasRealName = val
+}
+
+// SetHasDisplayNameAtInvitation sets the value of HasDisplayNameAtInvitation.
+func (s *InvitationInfo) SetHasDisplayNameAtInvitation(val bool) {
+	s.HasDisplayNameAtInvitation = val
+}
+
+func (*InvitationInfo) verifyInvitationRes() {}
 
 type InviteMultipleUsersToWorkspaceReq struct {
 	InvitedMembers InvitedMembers `json:"invitedMembers"`
@@ -381,13 +433,19 @@ func (s *InviteMultipleUsersToWorkspaceReq) SetInvitedMembers(val InvitedMembers
 
 // Ref: #/components/schemas/InvitedMember
 type InvitedMember struct {
-	Email    string `json:"email"`
-	Verified bool   `json:"verified"`
+	Email       string `json:"email"`
+	DisplayName string `json:"displayName"`
+	Verified    bool   `json:"verified"`
 }
 
 // GetEmail returns the value of Email.
 func (s *InvitedMember) GetEmail() string {
 	return s.Email
+}
+
+// GetDisplayName returns the value of DisplayName.
+func (s *InvitedMember) GetDisplayName() string {
+	return s.DisplayName
 }
 
 // GetVerified returns the value of Verified.
@@ -400,12 +458,15 @@ func (s *InvitedMember) SetEmail(val string) {
 	s.Email = val
 }
 
+// SetDisplayName sets the value of DisplayName.
+func (s *InvitedMember) SetDisplayName(val string) {
+	s.DisplayName = val
+}
+
 // SetVerified sets the value of Verified.
 func (s *InvitedMember) SetVerified(val bool) {
 	s.Verified = val
 }
-
-func (*InvitedMember) verifyInvitationRes() {}
 
 type InvitedMembers []InvitedMember
 
@@ -557,7 +618,7 @@ type NotFoundError struct {
 	Title OptString `json:"title"`
 	// A human-readable explanation specific to this occurrence of the problem.
 	Detail OptString `json:"detail"`
-	// Error code.
+	// A custom code identifying the specific error.
 	Code OptString `json:"code"`
 }
 
@@ -705,6 +766,69 @@ func (o OptMember) Or(d Member) Member {
 	return d
 }
 
+// NewOptNilString returns new OptNilString with value set to v.
+func NewOptNilString(v string) OptNilString {
+	return OptNilString{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptNilString is optional nullable string.
+type OptNilString struct {
+	Value string
+	Set   bool
+	Null  bool
+}
+
+// IsSet returns true if OptNilString was set.
+func (o OptNilString) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptNilString) Reset() {
+	var v string
+	o.Value = v
+	o.Set = false
+	o.Null = false
+}
+
+// SetTo sets value to v.
+func (o *OptNilString) SetTo(v string) {
+	o.Set = true
+	o.Null = false
+	o.Value = v
+}
+
+// IsSet returns true if value is Null.
+func (o OptNilString) IsNull() bool { return o.Null }
+
+// SetNull sets value to null.
+func (o *OptNilString) SetToNull() {
+	o.Set = true
+	o.Null = true
+	var v string
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptNilString) Get() (v string, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptNilString) Or(d string) string {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptString returns new OptString with value set to v.
 func NewOptString(v string) OptString {
 	return OptString{
@@ -797,6 +921,50 @@ func (o OptWorkspace) Or(d Workspace) Workspace {
 	return d
 }
 
+// ProcessInvitationOK is response for ProcessInvitation operation.
+type ProcessInvitationOK struct{}
+
+func (*ProcessInvitationOK) processInvitationRes() {}
+
+type ProcessInvitationReq struct {
+	// The invitation token.
+	Token string `json:"token"`
+	// The user's email address.
+	Email string `json:"email"`
+	// The user's full name or workspace display name.
+	Name OptNilString `json:"name"`
+}
+
+// GetToken returns the value of Token.
+func (s *ProcessInvitationReq) GetToken() string {
+	return s.Token
+}
+
+// GetEmail returns the value of Email.
+func (s *ProcessInvitationReq) GetEmail() string {
+	return s.Email
+}
+
+// GetName returns the value of Name.
+func (s *ProcessInvitationReq) GetName() OptNilString {
+	return s.Name
+}
+
+// SetToken sets the value of Token.
+func (s *ProcessInvitationReq) SetToken(val string) {
+	s.Token = val
+}
+
+// SetEmail sets the value of Email.
+func (s *ProcessInvitationReq) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetName sets the value of Name.
+func (s *ProcessInvitationReq) SetName(val OptNilString) {
+	s.Name = val
+}
+
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type TooManyRequestsError struct {
 	// The HTTP status code generated for this occurrence of the problem.
@@ -807,7 +975,7 @@ type TooManyRequestsError struct {
 	Title OptString `json:"title"`
 	// A human-readable explanation specific to this occurrence of the problem.
 	Detail OptString `json:"detail"`
-	// Error code.
+	// A custom code identifying the specific error.
 	Code OptString `json:"code"`
 }
 
@@ -874,7 +1042,7 @@ type UnauthorizedError struct {
 	Title OptString `json:"title"`
 	// A human-readable explanation specific to this occurrence of the problem.
 	Detail OptString `json:"detail"`
-	// Error code.
+	// A custom code identifying the specific error.
 	Code OptString `json:"code"`
 }
 

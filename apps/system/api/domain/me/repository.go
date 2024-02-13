@@ -14,6 +14,7 @@ type Repository interface {
 	LastLogin(ctx context.Context, exec bun.IDB, m *Me) error
 	FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*Me, error)
 	FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) (*Me, error)
+	FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*Me, error)
 	UpdateMember(ctx context.Context, exec bun.IDB, me *Me) error
 	UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User) error
 }

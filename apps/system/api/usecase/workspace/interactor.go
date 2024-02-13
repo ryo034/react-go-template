@@ -2,7 +2,9 @@ package workspace
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
+	"github.com/go-faster/errors"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
@@ -57,7 +59,6 @@ func (u *useCase) Create(ctx context.Context, i *CreateInput) (openapi.APIV1Work
 		if err != nil {
 			return nil, err
 		}
-
 		m := member.NewMember(meID, meRes.Self(), dn, nil)
 		memRes, err := u.repo.AddMember(pr, p, wres, m)
 		if err != nil {
@@ -164,17 +165,23 @@ func (u *useCase) InviteMembers(ctx context.Context, i *InviteMembersInput) (ope
 }
 
 func (u *useCase) VerifyInvitationToken(ctx context.Context, i *VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error) {
-	p := u.dbp.GetExecutor(ctx, false)
-	pr, err := u.txp.Provide(ctx)
+	p := u.dbp.GetExecutor(ctx, true)
+	res, err := u.repo.VerifyInvitedMember(ctx, p, i.Token)
 	if err != nil {
 		return nil, err
 	}
-	fn := func() (*member.InvitedMember, error) {
-		return u.repo.VerifyInvitedMember(pr, p, i.Token)
-	}
-	result := pr.Transactional(fn)()
-	if err = result.Error(); err != nil {
+	meRes, err := u.meRepo.FindByEmail(ctx, p, res.Email())
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		return nil, err
 	}
-	return u.op.VerifyInvitationToken(result.Value(0).(*member.InvitedMember)), nil
+	hasRealName := false
+	if meRes != nil && meRes.Self().Name() != nil {
+		hasRealName = true
+	}
+
+	w, err := u.repo.FindInviteeWorkspaceFromToken(ctx, p, i.Token)
+	if err != nil {
+		return nil, err
+	}
+	return u.op.VerifyInvitationToken(w, res, hasRealName), nil
 }

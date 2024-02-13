@@ -25,3 +25,7 @@ func (c *ConflictVersion) Error() string {
 func (c *ConflictVersion) MessageKey() MessageKey {
 	return ConflictVersionMessageKey
 }
+
+func (c *ConflictVersion) Code() string {
+	return "400-" + string(ConflictVersionCodeKey)
+}

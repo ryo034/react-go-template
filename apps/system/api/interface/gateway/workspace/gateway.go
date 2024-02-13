@@ -83,3 +83,27 @@ func (g *gateway) VerifyInvitedMember(ctx context.Context, exec bun.IDB, token u
 	}
 	return g.ma.AdaptInvitedMember(res)
 }
+
+func (g *gateway) FindInviteeWorkspaceFromToken(ctx context.Context, exec bun.IDB, token uuid.UUID) (*workspace.Workspace, error) {
+	res, err := g.d.FindInviteeWorkspaceFromToken(ctx, exec, token)
+	if err != nil {
+		return nil, err
+	}
+	return g.adp.Adapt(res)
+}
+
+func (g *gateway) FindActiveInvitation(ctx context.Context, exec bun.IDB, email account.Email) (*member.InvitedMember, *workspace.Workspace, error) {
+	res, err := g.d.FindActiveInvitation(ctx, exec, email)
+	if err != nil {
+		return nil, nil, err
+	}
+	im, err := g.ma.AdaptInvitedMember(res)
+	if err != nil {
+		return nil, nil, err
+	}
+	w, err := g.adp.Adapt(res.Workspace)
+	if err != nil {
+		return nil, nil, err
+	}
+	return im, w, nil
+}

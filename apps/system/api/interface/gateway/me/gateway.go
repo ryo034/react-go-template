@@ -68,6 +68,14 @@ func (g *gateway) FindProfile(ctx context.Context, exec bun.IDB, aID account.ID)
 	return g.a.AdaptSystemAccount(res)
 }
 
+func (g *gateway) FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*me.Me, error) {
+	res, err := g.md.FindByEmail(ctx, exec, email)
+	if err != nil {
+		return nil, err
+	}
+	return g.a.AdaptSystemAccount(res)
+}
+
 func (g *gateway) UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User) error {
 	if err := g.md.UpdateProfile(ctx, exec, usr); err != nil {
 		return err

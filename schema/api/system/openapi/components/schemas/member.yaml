@@ -33,11 +33,14 @@ InvitedMember:
   type: object
   required:
     - email
+    - displayName
     - verified
   properties:
     email:
       type: string
       format: email
+    displayName:
+      type: string
     verified:
       type: boolean
 

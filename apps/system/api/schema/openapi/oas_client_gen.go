@@ -90,6 +90,12 @@ type Invoker interface {
 	//
 	// POST /api/v1/login
 	Login(ctx context.Context) (LoginRes, error)
+	// ProcessInvitation invokes processInvitation operation.
+	//
+	// Process an invitation by verifying token and email, and register or add user to workspace.
+	//
+	// POST /api/v1/members/invitations/process
+	ProcessInvitation(ctx context.Context, request *ProcessInvitationReq) (ProcessInvitationRes, error)
 	// VerifyInvitation invokes verifyInvitation operation.
 	//
 	// Verify Invitation.
@@ -1170,6 +1176,81 @@ func (c *Client) sendLogin(ctx context.Context) (res LoginRes, err error) {
 
 	stage = "DecodeResponse"
 	result, err := decodeLoginResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// ProcessInvitation invokes processInvitation operation.
+//
+// Process an invitation by verifying token and email, and register or add user to workspace.
+//
+// POST /api/v1/members/invitations/process
+func (c *Client) ProcessInvitation(ctx context.Context, request *ProcessInvitationReq) (ProcessInvitationRes, error) {
+	res, err := c.sendProcessInvitation(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendProcessInvitation(ctx context.Context, request *ProcessInvitationReq) (res ProcessInvitationRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("processInvitation"),
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/v1/members/invitations/process"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "ProcessInvitation",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/members/invitations/process"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeProcessInvitationRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeProcessInvitationResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

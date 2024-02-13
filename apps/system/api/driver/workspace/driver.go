@@ -10,6 +10,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	dbErr "github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/error"
 	"github.com/uptrace/bun"
+	"time"
 )
 
 type Driver interface {
@@ -20,6 +21,8 @@ type Driver interface {
 	FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace.ID) (models.Members, error)
 	InviteMember(ctx context.Context, exec bun.IDB, wID workspace.ID, invitedBy member.InvitedBy, m *member.InvitedMember) error
 	VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.InvitedMember, error)
+	FindInviteeWorkspaceFromToken(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.Workspace, error)
+	FindActiveInvitation(ctx context.Context, exec bun.IDB, email account.Email) (*models.InvitedMember, error)
 }
 
 type driver struct {
@@ -147,6 +150,39 @@ func (p *driver) VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uu
 		NewSelect().
 		Model(im).
 		Where("token = ?", token).
+		Limit(1).
+		Scan(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return im, nil
+}
+
+func (p *driver) FindInviteeWorkspaceFromToken(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.Workspace, error) {
+	im := &models.InvitedMember{}
+	err := exec.
+		NewSelect().
+		Model(im).
+		Relation("Workspace").
+		Relation("Workspace.Detail").
+		Where("token = ?", token).
+		Scan(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return im.Workspace, nil
+}
+
+func (p *driver) FindActiveInvitation(ctx context.Context, exec bun.IDB, email account.Email) (*models.InvitedMember, error) {
+	im := &models.InvitedMember{}
+	err := exec.
+		NewSelect().
+		Model(im).
+		Where("email = ?", email.ToString()).
+		Where("used = ?", false).
+		Where("expired_at > ?", time.Now()).
+		Relation("Workspace").
+		Relation("Workspace.Detail").
 		Limit(1).
 		Scan(ctx)
 	if err != nil {

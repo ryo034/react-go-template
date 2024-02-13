@@ -48,9 +48,12 @@ func (p *presenter) InviteMembers(ms member.InvitedMembers, registeredMembers me
 	}
 }
 
-func (p *presenter) VerifyInvitationToken(m *member.InvitedMember) openapi.VerifyInvitationRes {
-	return &openapi.InvitedMember{
-		Email:    m.Email().ToString(),
-		Verified: m.Verified(),
+func (p *presenter) VerifyInvitationToken(w *workspace.Workspace, im *member.InvitedMember, hasRealName bool) openapi.VerifyInvitationRes {
+	d := w.Detail()
+	return &openapi.InvitationInfo{
+		WorkspaceName:              d.Name().ToString(),
+		Verified:                   im.Verified(),
+		HasRealName:                hasRealName,
+		HasDisplayNameAtInvitation: im.DisplayName().IsNotEmpty(),
 	}
 }

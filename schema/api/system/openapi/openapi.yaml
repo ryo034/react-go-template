@@ -250,13 +250,30 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InvitedMember'
+                $ref: '#/components/responses/InvitationInfo'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
           $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v1/members/invitations/process:
+    post:
+      summary: >-
+        Process an invitation by verifying token and email, and register or add
+        user to workspace.
+      operationId: processInvitation
+      tags:
+        - Invitations
+      requestBody:
+        $ref: '#/components/requestBodies/InvitationsProcess'
+      responses:
+        '200':
+          description: OTP has been sent successfully.
+        '400':
+          $ref: '#/components/responses/BadRequestError'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -355,11 +372,14 @@ components:
       type: object
       required:
         - email
+        - displayName
         - verified
       properties:
         email:
           type: string
           format: email
+        displayName:
+          type: string
         verified:
           type: boolean
     InvitedMembers:
@@ -461,6 +481,30 @@ components:
             properties:
               user:
                 $ref: '#/components/schemas/User'
+    InvitationsProcess:
+      description: >-
+        Process an invitation by verifying token and email, and register or add
+        user to workspace.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                description: The invitation token.
+              email:
+                type: string
+                format: email
+                description: The user's email address.
+              name:
+                type: string
+                nullable: true
+                description: The user's full name or workspace display name.
+            required:
+              - token
+              - email
   responses:
     GeneralError:
       description: General Error
@@ -490,8 +534,8 @@ components:
                   the problem.
               code:
                 type: string
-                example: invalid_item_id
-                description: error code
+                example: 400-001
+                description: A custom code identifying the specific error.
     BadRequestError:
       description: Bad request
       content:
@@ -520,8 +564,8 @@ components:
                   the problem.
               code:
                 type: string
-                example: invalid_item_id
-                description: error code
+                example: 400-001
+                description: A custom code identifying the specific error.
     NotFoundError:
       description: Entity not found.
       content:
@@ -550,8 +594,8 @@ components:
                   the problem.
               code:
                 type: string
-                example: invalid_item_id
-                description: error code
+                example: 400-001
+                description: A custom code identifying the specific error.
     UnauthorizedError:
       description: Unauthorized
       content:
@@ -580,8 +624,8 @@ components:
                   the problem.
               code:
                 type: string
-                example: invalid_item_id
-                description: error code
+                example: 400-001
+                description: A custom code identifying the specific error.
     ConflictError:
       description: Conflict
       content:
@@ -610,8 +654,8 @@ components:
                   the problem.
               code:
                 type: string
-                example: invalid_item_id
-                description: error code
+                example: 400-001
+                description: A custom code identifying the specific error.
     TooManyRequestsError:
       description: Too many requests
       content:
@@ -640,8 +684,8 @@ components:
                   the problem.
               code:
                 type: string
-                example: invalid_item_id
-                description: error code
+                example: 400-001
+                description: A custom code identifying the specific error.
     InternalServerError:
       description: Internal server error
       content:
@@ -670,5 +714,21 @@ components:
                   the problem.
               code:
                 type: string
-                example: invalid_item_id
-                description: error code
+                example: 400-001
+                description: A custom code identifying the specific error.
+    InvitationInfo:
+      type: object
+      required:
+        - workspaceName
+        - verified
+        - hasRealName
+        - hasDisplayNameAtInvitation
+      properties:
+        workspaceName:
+          type: string
+        verified:
+          type: boolean
+        hasRealName:
+          type: boolean
+        hasDisplayNameAtInvitation:
+          type: boolean

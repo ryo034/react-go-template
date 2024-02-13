@@ -21,3 +21,7 @@ func (p *PhoneNumberAlreadyInUse) Error() string {
 func (p *PhoneNumberAlreadyInUse) MessageKey() MessageKey {
 	return PhoneNumberAlreadyInUseMessageKey
 }
+
+func (p *PhoneNumberAlreadyInUse) Code() string {
+	return "400-" + string(PhoneNumberInUseCodeKey)
+}

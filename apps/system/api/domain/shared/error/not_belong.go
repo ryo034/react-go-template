@@ -14,3 +14,7 @@ func (u *NotBelong) Error() string {
 func (u *NotBelong) MessageKey() MessageKey {
 	return NotBelongMessageKey
 }
+
+func (u *NotBelong) Code() string {
+	return "400-" + string(NotBelongCodeKey)
+}

@@ -21,3 +21,7 @@ func (n *NoSuchData) Target() string {
 func (n *NoSuchData) MessageKey() MessageKey {
 	return NoSuchDataMessageKey
 }
+
+func (n *NoSuchData) Code() string {
+	return "404-000"
+}
