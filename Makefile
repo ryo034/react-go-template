@@ -50,16 +50,17 @@ update-all-typescript-package:
 
 .PHONY: update-pnpm-version
 update-pnpm-version:
+	@sed -i '' 's/"pnpm": "[^"]*"/"pnpm": "$(VERSION)"/' package.json
 	@cd ./packages/typescript/ui && sed -i '' 's/"pnpm": "[^"]*"/"pnpm": "$(VERSION)"/' package.json
 	@cd ./packages/typescript/network && sed -i '' 's/"pnpm": "[^"]*"/"pnpm": "$(VERSION)"/' package.json
 	@cd ./apps/system/client && sed -i '' 's/"pnpm": "[^"]*"/"pnpm": "$(VERSION)"/' package.json
 	@cd ./apps/system/test/api && sed -i '' 's/"pnpm": "[^"]*"/"pnpm": "$(VERSION)"/' package.json
+	@cd ./apps/system/test/e2e && sed -i '' 's/"pnpm": "[^"]*"/"pnpm": "$(VERSION)"/' package.json
 	@cd ./packages/typescript/ui && corepack use pnpm@$(VERSION)
 	@cd ./packages/typescript/network && corepack use pnpm@$(VERSION)
 	@cd ./apps/system/client && corepack use pnpm@$(VERSION)
 	@cd ./apps/system/test/api && corepack use pnpm@$(VERSION)
 	@cd ./apps/system/test/e2e && corepack use pnpm@$(VERSION)
-	@sed -i '' 's/"pnpm": "[^"]*"/"pnpm": "$(VERSION)"/' package.json
 	@corepack pnpm install -r
 
 .PHONY: update-client-shared-package

@@ -21,8 +21,8 @@ importers:
   apps/system/client:
     dependencies:
       '@devcycle/react-client-sdk':
-        specifier: ^1.18.1
-        version: 1.18.1(react@18.2.0)
+        specifier: ^1.19.0
+        version: 1.19.0(react@18.2.0)
       '@hookform/resolvers':
         specifier: ^3.3.4
         version: 3.3.4(react-hook-form@7.50.1)
@@ -48,8 +48,8 @@ importers:
         specifier: ^10.0.3
         version: 10.0.3
       lucide-react:
-        specifier: ^0.323.0
-        version: 0.323.0(react@18.2.0)
+        specifier: ^0.330.0
+        version: 0.330.0(react@18.2.0)
       openapi-fetch:
         specifier: ^0.8.2
         version: 0.8.2
@@ -128,7 +128,7 @@ importers:
         version: 18.2.19
       '@vitejs/plugin-react':
         specifier: ^4.2.1
-        version: 4.2.1(vite@5.1.0)
+        version: 4.2.1(vite@5.1.2)
       '@vitest/coverage-v8':
         specifier: ^1.2.2
         version: 1.2.2(vitest@1.2.2)
@@ -154,11 +154,11 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
       vite:
-        specifier: ^5.1.0
-        version: 5.1.0(@types/node@20.11.17)(lightningcss@1.23.0)
+        specifier: ^5.1.2
+        version: 5.1.2(@types/node@20.11.17)(lightningcss@1.23.0)
       vite-plugin-compression:
         specifier: ^0.5.1
-        version: 0.5.1(vite@5.1.0)
+        version: 0.5.1(vite@5.1.2)
       vitest:
         specifier: ^1.2.2
         version: 1.2.2(@types/node@20.11.17)(jsdom@24.0.0)(lightningcss@1.23.0)
@@ -178,11 +178,11 @@ importers:
         specifier: ^24.0.0
         version: 24.0.0
       vite:
-        specifier: ^5.1.0
-        version: 5.1.0(@types/node@20.11.17)(lightningcss@1.23.0)
+        specifier: ^5.1.2
+        version: 5.1.2(@types/node@20.11.17)(lightningcss@1.23.0)
       vite-plugin-compression:
         specifier: ^0.5.1
-        version: 0.5.1(vite@5.1.0)
+        version: 0.5.1(vite@5.1.2)
       vitest:
         specifier: ^1.2.2
         version: 1.2.2(@types/node@20.11.17)(jsdom@24.0.0)(lightningcss@1.23.0)
@@ -247,8 +247,8 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0)
       lucide-react:
-        specifier: ^0.323.0
-        version: 0.323.0(react@18.2.0)
+        specifier: ^0.330.0
+        version: 0.330.0(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -262,8 +262,8 @@ importers:
         specifier: ^5.0.1
         version: 5.0.1(react@18.2.0)
       react-resizable-panels:
-        specifier: ^2.0.3
-        version: 2.0.3(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^2.0.8
+        version: 2.0.8(react-dom@18.2.0)(react@18.2.0)
       tailwind-merge:
         specifier: ^2.2.1
         version: 2.2.1
@@ -297,7 +297,7 @@ importers:
         version: 18.2.19
       '@vitejs/plugin-react':
         specifier: ^4.2.1
-        version: 4.2.1(vite@5.1.0)
+        version: 4.2.1(vite@5.1.2)
       jsdom:
         specifier: ^24.0.0
         version: 24.0.0
@@ -314,11 +314,11 @@ importers:
         specifier: ^1.8.8
         version: 1.8.8
       vite:
-        specifier: ^5.1.0
-        version: 5.1.0(@types/node@20.11.17)(lightningcss@1.23.0)
+        specifier: ^5.1.2
+        version: 5.1.2(@types/node@20.11.17)(lightningcss@1.23.0)
       vite-plugin-compression:
         specifier: ^0.5.1
-        version: 0.5.1(vite@5.1.0)
+        version: 0.5.1(vite@5.1.2)
       vitest:
         specifier: ^1.2.2
         version: 1.2.2(@types/node@20.11.17)(jsdom@24.0.0)(lightningcss@1.23.0)
@@ -649,10 +649,10 @@ packages:
     dev: true
     optional: true
 
-  /@devcycle/js-client-sdk@1.20.1:
-    resolution: {integrity: sha512-qDGe2QjGU8BDItA8MVqo2ukiT0G8E9o6N23k60iCFsqbdl8Kz7sLrimEc0vCA3V7iRc+evlrL7lJOGjacb+2sA==}
+  /@devcycle/js-client-sdk@1.21.0:
+    resolution: {integrity: sha512-ajGU14diZjCuZTYXkMwRjQgpCZw4FM4XT8mfpsESK0esFeuBVoXBcGTqEGVucjIMv7XKjomJoSb3ouxVPvgD/g==}
     dependencies:
-      '@devcycle/types': 1.8.1
+      '@devcycle/types': 1.9.0
       axios: 1.6.2
       axios-retry: 3.9.1
       lodash: 4.17.21
@@ -662,21 +662,21 @@ packages:
       - debug
     dev: false
 
-  /@devcycle/react-client-sdk@1.18.1(react@18.2.0):
-    resolution: {integrity: sha512-48t/iakQP0V2vwwc9OZ3tJfHfuj1RDRQgRp7M9MOuU1n7EZR++vrQ7Z57VlCZgbZrIYFBs+BL6W6B71UUHodeA==}
+  /@devcycle/react-client-sdk@1.19.0(react@18.2.0):
+    resolution: {integrity: sha512-nzlt0qT4l/IVMP6i+tfVCcGT0wteaJPJmXI/amrVie6/xsvwICjoUxaANVuIaT89e0pC5qGEKlkyj8JyFZ6qxQ==}
     peerDependencies:
       react: '>=16.8.0'
     dependencies:
-      '@devcycle/js-client-sdk': 1.20.1
-      '@devcycle/types': 1.8.1
+      '@devcycle/js-client-sdk': 1.21.0
+      '@devcycle/types': 1.9.0
       hoist-non-react-statics: 3.3.2
       react: 18.2.0
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /@devcycle/types@1.8.1:
-    resolution: {integrity: sha512-3ywHtqYijvPu9CCiuRtwldFlZXwCnjNPfo4ZJTgBi/eVyMUUIMK/0g4ztY6rMMTy7f+AfWbj3hXy4CVe52O+dQ==}
+  /@devcycle/types@1.9.0:
+    resolution: {integrity: sha512-OwyvnxSwtPulqcDGstLDpGev2jEWcpjym+Lk0hyQjx8IqVnRZsafz8hwJp7w4o74up5ORBpczF/v7Pg8vC6AHQ==}
     dependencies:
       class-transformer: 0.5.1
       class-validator: 0.14.1
@@ -3003,7 +3003,7 @@ packages:
   /@ungap/structured-clone@1.2.0:
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
 
-  /@vitejs/plugin-react@4.2.1(vite@5.1.0):
+  /@vitejs/plugin-react@4.2.1(vite@5.1.2):
     resolution: {integrity: sha512-oojO9IDc4nCUUi8qIR11KoQm0XFFLIwsRBwHRR4d/88IWghn1y6ckz/bJ8GHDCsYEJee8mDzqtJxh15/cisJNQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -3014,7 +3014,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.23.3(@babel/core@7.23.6)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.0
-      vite: 5.1.0(@types/node@20.11.17)(lightningcss@1.23.0)
+      vite: 5.1.2(@types/node@20.11.17)(lightningcss@1.23.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -4856,8 +4856,8 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /lucide-react@0.323.0(react@18.2.0):
-    resolution: {integrity: sha512-rTXZFILl2Y4d1SG9p1Mdcf17AcPvPvpc/egFIzUrp7IUy60MUQo3Oi1mu8LGYXUVwuRZYsSMt3csHRW5mAovJg==}
+  /lucide-react@0.330.0(react@18.2.0):
+    resolution: {integrity: sha512-CQwY+Fpbt2kxCoVhuN0RCZDCYlbYnqB870Bl/vIQf3ER/cnDDQ6moLmEkguRyruAUGd4j3Lc4mtnJosXnqHheA==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
@@ -6056,14 +6056,15 @@ packages:
       use-sidecar: 1.1.2(@types/react@18.2.55)(react@18.2.0)
     dev: false
 
-  /react-resizable-panels@2.0.3(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-m0upi03cdqCt/g/dUxRQkHiBzo0UDtMIYwcf8qhKM+QG0cnpusOVFKOD2ElpGrtxB/oIxTItuKYsDOeu76JHvg==}
+  /react-resizable-panels@2.0.8(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-iAazXPOZJcH7wF9V0S7VoloXoDvz1UZqkcGjz4tCF6vxZjA9hkccns5ItXPxrJ5m+qZOARaf8OczYi9C+eZr7g==}
     peerDependencies:
       react: ^16.14.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.14.0 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+      stacking-order: 1.0.1
     dev: false
 
   /react-router-dom@6.22.0(react-dom@18.2.0)(react@18.2.0):
@@ -6403,6 +6404,10 @@ packages:
   /stackback@0.0.2:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
     dev: true
+
+  /stacking-order@1.0.1:
+    resolution: {integrity: sha512-IxD2jw+DDiQ3FaXr6QcvSt5uE2vDWBYcC7bbCWfI5R9kEoj8Zgi4rFwPXALOjTtE96iIdZjcJFLQVr7r7xIdAA==}
+    dev: false
 
   /std-env@3.7.0:
     resolution: {integrity: sha512-JPbdCEQLj1w5GilpiHAx3qJvFndqybBysA3qUOnznweH4QbNYUsW/ea8QzSrnh0vNsezMMw5bcVool8lM0gwzg==}
@@ -7057,7 +7062,7 @@ packages:
       debug: 4.3.4
       pathe: 1.1.1
       picocolors: 1.0.0
-      vite: 5.1.0(@types/node@20.11.17)(lightningcss@1.23.0)
+      vite: 5.1.2(@types/node@20.11.17)(lightningcss@1.23.0)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -7069,7 +7074,7 @@ packages:
       - terser
     dev: true
 
-  /vite-plugin-compression@0.5.1(vite@5.1.0):
+  /vite-plugin-compression@0.5.1(vite@5.1.2):
     resolution: {integrity: sha512-5QJKBDc+gNYVqL/skgFAP81Yuzo9R+EAf19d+EtsMF/i8kFUpNi3J/H01QD3Oo8zBQn+NzoCIFkpPLynoOzaJg==}
     peerDependencies:
       vite: '>=2.0.0'
@@ -7077,13 +7082,13 @@ packages:
       chalk: 4.1.2
       debug: 4.3.4
       fs-extra: 10.1.0
-      vite: 5.1.0(@types/node@20.11.17)(lightningcss@1.23.0)
+      vite: 5.1.2(@types/node@20.11.17)(lightningcss@1.23.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite@5.1.0(@types/node@20.11.17)(lightningcss@1.23.0):
-    resolution: {integrity: sha512-STmSFzhY4ljuhz14bg9LkMTk3d98IO6DIArnTY6MeBwiD1Za2StcQtz7fzOUnRCqrHSD5+OS2reg4HOz1eoLnw==}
+  /vite@5.1.2(@types/node@20.11.17)(lightningcss@1.23.0):
+    resolution: {integrity: sha512-uwiFebQbTWRIGbCaTEBVAfKqgqKNKMJ2uPXsXeLIZxM8MVMjoS3j0cG8NrPxdDIadaWnPSjrkLWffLSC+uiP3Q==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -7164,7 +7169,7 @@ packages:
       strip-literal: 1.3.0
       tinybench: 2.5.1
       tinypool: 0.8.2
-      vite: 5.1.0(@types/node@20.11.17)(lightningcss@1.23.0)
+      vite: 5.1.2(@types/node@20.11.17)(lightningcss@1.23.0)
       vite-node: 1.2.2(@types/node@20.11.17)(lightningcss@1.23.0)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
