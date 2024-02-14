@@ -90,20 +90,16 @@ func (g *gateway) FindInviteeWorkspaceFromToken(ctx context.Context, exec bun.ID
 	return g.adp.Adapt(res)
 }
 
-func (g *gateway) FindActiveInvitationByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*invitation.Invitation, *workspace.Workspace, error) {
+func (g *gateway) FindActiveInvitationByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*invitation.Invitation, error) {
 	res, err := g.d.FindActiveInvitationByEmail(ctx, exec, email)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	im, err := g.ia.Adapt(res)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	w, err := g.adp.Adapt(res.Workspace)
-	if err != nil {
-		return nil, nil, err
-	}
-	return im, w, nil
+	return im, nil
 }
 
 func (g *gateway) FindActiveInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) (*invitation.Invitation, *workspace.Workspace, error) {

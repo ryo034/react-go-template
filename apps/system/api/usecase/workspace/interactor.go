@@ -2,8 +2,8 @@ package workspace
 
 import (
 	"context"
-	"fmt"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
+	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
@@ -14,10 +14,10 @@ import (
 )
 
 type UseCase interface {
-	Create(ctx context.Context, i *CreateInput) (openapi.APIV1WorkspacesPostRes, error)
-	FindAllMembers(ctx context.Context, i *FindAllMembersInput) (openapi.APIV1MembersGetRes, error)
-	InviteMembers(ctx context.Context, i *InviteMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error)
-	VerifyInvitationToken(ctx context.Context, i *VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error)
+	Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error)
+	FindAllMembers(ctx context.Context, i FindAllMembersInput) (openapi.APIV1MembersGetRes, error)
+	InviteMembers(ctx context.Context, i InviteMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error)
+	VerifyInvitationToken(ctx context.Context, i VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error)
 }
 
 type useCase struct {
@@ -34,7 +34,7 @@ func NewUseCase(txp core.TransactionProvider, dbp core.Provider, repo workspace.
 	return &useCase{txp, dbp, repo, meRepo, fbDriver, emailDriver, op}
 }
 
-func (u *useCase) Create(ctx context.Context, i *CreateInput) (openapi.APIV1WorkspacesPostRes, error) {
+func (u *useCase) Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
@@ -81,13 +81,13 @@ func (u *useCase) Create(ctx context.Context, i *CreateInput) (openapi.APIV1Work
 	return u.op.Create(res), nil
 }
 
-func (u *useCase) FindAllMembers(ctx context.Context, i *FindAllMembersInput) (openapi.APIV1MembersGetRes, error) {
+func (u *useCase) FindAllMembers(ctx context.Context, i FindAllMembersInput) (openapi.APIV1MembersGetRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
-	currentWorkspaceID, err := u.fbDriver.GetCurrentWorkspaceFromCustomClaim(ctx, i.accountID)
+	currentWorkspaceID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx, i.accountID)
 	if err != nil {
 		return nil, err
 	}
-	ms, err := u.repo.FindAllMembers(ctx, exec, *currentWorkspaceID)
+	ms, err := u.repo.FindAllMembers(ctx, exec, currentWorkspaceID)
 	if err != nil {
 		return nil, err
 	}
@@ -110,18 +110,14 @@ func (u *useCase) inviteMember(ctx context.Context, inviter workspace.Inviter, i
 	return result.Error()
 }
 
-func (u *useCase) InviteMembers(ctx context.Context, i *InviteMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error) {
+func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error) {
 	// Exclude already registered members
 	exec := u.dbp.GetExecutor(ctx, true)
-	currentWorkspaceID, err := u.fbDriver.GetCurrentWorkspaceFromCustomClaim(ctx, i.AccountID)
+	currentWorkspaceID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx, i.AccountID)
 	if err != nil {
 		return nil, err
 	}
-	if currentWorkspaceID == nil {
-		//TODO: error handling
-		return nil, fmt.Errorf("current workspace is not found")
-	}
-	members, err := u.repo.FindAllMembers(ctx, exec, *currentWorkspaceID)
+	members, err := u.repo.FindAllMembers(ctx, exec, currentWorkspaceID)
 	if err != nil {
 		return nil, err
 	}
@@ -156,11 +152,14 @@ func (u *useCase) InviteMembers(ctx context.Context, i *InviteMembersInput) (ope
 	), nil
 }
 
-func (u *useCase) VerifyInvitationToken(ctx context.Context, i *VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error) {
+func (u *useCase) VerifyInvitationToken(ctx context.Context, i VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error) {
 	p := u.dbp.GetExecutor(ctx, true)
 	res, err := u.repo.VerifyInvitedMember(ctx, p, i.Token)
 	if err != nil {
 		return nil, err
+	}
+	if res.ExpiredAt().IsExpired() {
+		return nil, domainErr.NewExpiredInviteToken(res.Token().Value())
 	}
 	w, err := u.repo.FindInviteeWorkspaceFromToken(ctx, p, i.Token)
 	if err != nil {

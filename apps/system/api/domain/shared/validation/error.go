@@ -9,7 +9,7 @@ import (
 type Error interface {
 	error
 	MessageKey() domainError.MessageKey
-	Code() domainError.Code
+	Code() string
 	Args() []interface{}
 }
 
@@ -27,8 +27,8 @@ func (e *err) MessageKey() domainError.MessageKey {
 	return e.messageKey
 }
 
-func (e *err) Code() domainError.Code {
-	return e.code
+func (e *err) Code() string {
+	return string(e.code)
 }
 
 func (e *err) Args() []interface{} {

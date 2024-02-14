@@ -23,6 +23,7 @@ type Driver interface {
 	CreateUser(ctx context.Context, aID account.ID, email account.Email) error
 	SetCurrentWorkspaceToCustomClaim(ctx context.Context, aID account.ID, wID workspace.ID) error
 	GetCurrentWorkspaceFromCustomClaim(ctx context.Context, aID account.ID) (*workspace.ID, error)
+	MustGetCurrentWorkspaceFromCustomClaim(ctx context.Context, aID account.ID) (workspace.ID, error)
 	UpdateProfile(ctx context.Context, usr *user.User) error
 	UpdateEmail(ctx context.Context, aID account.ID, em account.Email) error
 	UpdateName(ctx context.Context, aID account.ID, n account.Name) error
@@ -103,6 +104,17 @@ func (d *driver) GetCurrentWorkspaceFromCustomClaim(ctx context.Context, aID acc
 	}
 	wID := workspace.NewIDFromUUID(ccUID)
 	return &wID, err
+}
+
+func (d *driver) MustGetCurrentWorkspaceFromCustomClaim(ctx context.Context, aID account.ID) (workspace.ID, error) {
+	wID, err := d.GetCurrentWorkspaceFromCustomClaim(ctx, aID)
+	if err != nil {
+		return workspace.ID{}, err
+	}
+	if wID == nil {
+		return workspace.ID{}, domainErr.NewUnauthenticated()
+	}
+	return *wID, nil
 }
 
 func (d *driver) CreateUser(ctx context.Context, aID account.ID, email account.Email) error {

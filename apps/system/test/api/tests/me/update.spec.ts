@@ -5,7 +5,7 @@ import { genAPIClient, getAuthInfo, statefulTest } from "../../scripts"
 const client = genAPIClient()
 
 test.describe("Update me success", () => {
-  statefulTest("update me @stateful", async () => {
+  statefulTest("update me @stateful", async ({ page }) => {
     const authInfo = await getAuthInfo("system_account@example.com")
     const data: components["schemas"]["User"] = {
       userId: "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",

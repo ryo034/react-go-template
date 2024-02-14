@@ -10,6 +10,8 @@ import { RedisClient } from "./redis"
 const APIBaseURL = "http://localhost:19004"
 
 export const statefulBeforeEach = async () => {
+  console.log("statefulBeforeEach")
+
   const fb = new Firebase(firebaseConfig, { showConsole: false })
   const db = new MainDb()
   await Promise.all([fb.clear(), db.clear()])

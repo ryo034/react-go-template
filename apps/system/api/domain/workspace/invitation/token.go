@@ -23,3 +23,7 @@ func (t Token) Value() uuid.UUID {
 func (t Token) Equals(v Token) bool {
 	return t.UUID == v.UUID
 }
+
+func (t Token) NotEquals(v Token) bool {
+	return !t.Equals(v)
+}

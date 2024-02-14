@@ -15,7 +15,7 @@ test.describe("Create Workspace", () => {
     expect(res.response.status).toBe(409)
   })
 
-  statefulTest("Workspace can be created with already exists name @stateful", async () => {
+  statefulTest("Workspace can be created with already exists name @stateful", async ({ page }) => {
     const authInfo = await getAuthInfo("system_account@example.com")
     const res = await client.POST("/api/v1/workspaces", {
       headers: authHeaders(authInfo.token),

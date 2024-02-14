@@ -74,16 +74,16 @@ func (c *controller) FindAllMembers(ctx context.Context) (openapi.APIV1MembersGe
 	return res, nil
 }
 
-func NewInviteMembersInput(aID account.ID, ims []InvitedMember) *workspaceUc.InviteMembersInput {
+func NewInviteMembersInput(aID account.ID, ims []InvitedMember) workspaceUc.InviteMembersInput {
 	ivs := make([]*invitation.Invitation, len(ims))
 	for _, im := range ims {
 		i, err := invitation.GenInvitation(im.Email, im.DisplayName)
 		if err != nil {
-			return nil
+			return workspaceUc.InviteMembersInput{}
 		}
 		ivs = append(ivs, i)
 	}
-	return &workspaceUc.InviteMembersInput{
+	return workspaceUc.InviteMembersInput{
 		AccountID:   aID,
 		Invitations: invitation.NewInvitations(ivs),
 	}
@@ -106,7 +106,7 @@ func (c *controller) InviteMembers(ctx context.Context, i InvitedMembersInput) (
 }
 
 func (c *controller) VerifyInvitationToken(ctx context.Context, i VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error) {
-	in := &workspaceUc.VerifyInvitationTokenInput{Token: i.Token}
+	in := workspaceUc.VerifyInvitationTokenInput{Token: i.Token}
 	res, err := c.wuc.VerifyInvitationToken(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.VerifyInvitationRes), nil

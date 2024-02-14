@@ -12,21 +12,21 @@ type CreateInput struct {
 	AccountID account.ID
 }
 
-func NewCreateInput(subdomain string, aID account.ID) (*CreateInput, error) {
+func NewCreateInput(subdomain string, aID account.ID) (CreateInput, error) {
 	s, err := workspace.NewSubdomain(subdomain)
 	if err != nil {
-		return nil, err
+		return CreateInput{}, err
 	}
 	n, err := workspace.NewName(s.ToString())
 	if err != nil {
-		return nil, err
+		return CreateInput{}, err
 	}
 	id, err := workspace.GenerateID()
 	if err != nil {
-		return nil, err
+		return CreateInput{}, err
 	}
 	d := workspace.NewDetail(n, s)
-	return &CreateInput{
+	return CreateInput{
 		workspace.NewWorkspace(id, d),
 		aID,
 	}, nil
@@ -36,8 +36,8 @@ type FindAllMembersInput struct {
 	accountID account.ID
 }
 
-func NewFindAllMembersInput(aID account.ID) *FindAllMembersInput {
-	return &FindAllMembersInput{aID}
+func NewFindAllMembersInput(aID account.ID) FindAllMembersInput {
+	return FindAllMembersInput{aID}
 }
 
 type InviteMembersInput struct {

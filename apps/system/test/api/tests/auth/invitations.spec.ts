@@ -16,7 +16,7 @@ test.describe("Invalidations", () => {
     expect(processRes.error?.title).toBe("不正な招待トークンです")
   })
 
-  statefulTest("send valid token and email, return 200 and invite verified @stateful", async () => {
+  statefulTest("send valid token and email, return 200 and invite verified @stateful", async ({ page }) => {
     const email = "invite_test_not_expired@example.com"
     const token = await getInviteToken(email)
     const processRes = await client.POST("/api/v1/auth/invitations/process", {
@@ -28,7 +28,7 @@ test.describe("Invalidations", () => {
     expect(await checkVerifyInvitation(email, token)).toBeTruthy()
   })
 
-  statefulTest("invite flow @stateful", async () => {
+  statefulTest("invite flow @stateful", async ({ page }) => {
     const email = "invite_test_not_expired@example.com"
     const inviteToken = await getInviteToken(email)
     const processRes = await client.POST("/api/v1/auth/invitations/process", {

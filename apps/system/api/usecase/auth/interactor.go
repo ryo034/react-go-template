@@ -90,6 +90,9 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 		if err != nil {
 			return "", err
 		}
+		if err = u.memberLastLogin(pr, p, usr.AccountID()); err != nil {
+			return "", err
+		}
 		return tk, nil
 	}
 	result := pr.Transactional(fn)()
@@ -113,11 +116,11 @@ func (u *useCase) verifyOTP(ctx context.Context, aID account.ID, email account.E
 
 func (u *useCase) ProcessInvitation(ctx context.Context, i ProcessInvitationInput) (openapi.ProcessInvitationRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
-	invRes, _, err := u.wRepo.FindActiveInvitationByEmail(ctx, p, i.Email)
+	invRes, err := u.wRepo.FindActiveInvitationByEmail(ctx, p, i.Email)
 	if err != nil {
 		return nil, err
 	}
-	if invRes.Token().Equals(i.Token) {
+	if invRes.Token().NotEquals(i.Token) {
 		return nil, domainError.NewInvalidInviteToken(i.Token.Value())
 	}
 
