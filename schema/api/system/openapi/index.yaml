@@ -10,6 +10,8 @@ paths:
     $ref: "./paths/auth.yaml#/authByOtp"
   /api/v1/auth/otp/verify:
     $ref: "./paths/auth.yaml#/verify"
+  /api/v1/auth/invitations/process:
+    $ref: "./paths/auth.yaml#/invitationsProcess"
   /api/v1/auth/oauth:
     $ref: "./paths/auth.yaml#/oauth"
   /api/v1/me:
@@ -26,8 +28,8 @@ paths:
     $ref: "./paths/member.yaml#/invitationsBulk"
   /api/v1/members/invitations/verify:
     $ref: "./paths/member.yaml#/invitationsVerify"
-  /api/v1/members/invitations/process:
-    $ref: "./paths/member.yaml#/invitationsProcess"
+  /api/v1/members/invitations/accept:
+    $ref: "./paths/member.yaml#/invitationsAccept"
 
 components:
   securitySchemes:
@@ -43,22 +45,24 @@ components:
       $ref: "./components/schemas/workspace.yaml#/Workspace"
     Workspaces:
       $ref: "./components/schemas/workspace.yaml#/Workspaces"
+    Inviter:
+      $ref: "./components/schemas/workspace.yaml#/Inviter"
     Member:
       $ref: "./components/schemas/member.yaml#/Member"
     MemberProfile:
       $ref: "./components/schemas/member.yaml#/MemberProfile"
     Members:
       $ref: "./components/schemas/member.yaml#/Members"
-    InvitedMember:
-      $ref: "./components/schemas/member.yaml#/InvitedMember"
-    InvitedMembers:
-      $ref: "./components/schemas/member.yaml#/InvitedMembers"
-    BulkInvitedResult:
-      $ref: "./components/schemas/member.yaml#/BulkInvitedResult"
+    Invitation:
+      $ref: "./components/schemas/invitation.yaml#/Invitation"
+    Invitations:
+      $ref: "./components/schemas/invitation.yaml#/Invitations"
     MembershipPeriod:
       $ref: "./components/schemas/membership.yaml#/MembershipPeriod"
     Me:
       $ref: "./components/schemas/me.yaml#/Me"
+    ReceivedInvitation:
+      $ref: "./components/schemas/me.yaml#/ReceivedInvitation"
   requestBodies:
     AuthByOtpPost:
       $ref: "./components/requestBodies/auth.yaml#/AuthByOtpPost"
@@ -69,7 +73,7 @@ components:
     UpdateMeProfile:
       $ref: "./components/requestBodies/me.yaml#/UpdateMeProfile"
     InvitationsProcess:
-      $ref: "./components/requestBodies/member.yaml#/InvitationsProcess"
+      $ref: "./components/requestBodies/me.yaml#/InvitationsProcess"
   responses:
     GeneralError:
       $ref: "./components/responses/error.yaml#/components/responses/GeneralError"
@@ -87,3 +91,5 @@ components:
       $ref: "./components/responses/error.yaml#/components/responses/InternalServerError"
     InvitationInfo:
       $ref: "./components/responses/member.yaml#/InvitationInfo"
+    BulkInvitedResult:
+      $ref: "./components/responses/member.yaml#/BulkInvitedResult"

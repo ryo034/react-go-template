@@ -94,6 +94,15 @@ func (UnimplementedHandler) APIV1WorkspacesPost(ctx context.Context, req *APIV1W
 	return r, ht.ErrNotImplemented
 }
 
+// AcceptInvitation implements acceptInvitation operation.
+//
+// Accept an invitation to join a workspace.
+//
+// POST /api/v1/members/invitations/accept
+func (UnimplementedHandler) AcceptInvitation(ctx context.Context) (r AcceptInvitationRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // InviteMultipleUsersToWorkspace implements inviteMultipleUsersToWorkspace operation.
 //
 // Invite multiple users to the workspace by email.
@@ -114,9 +123,9 @@ func (UnimplementedHandler) Login(ctx context.Context) (r LoginRes, _ error) {
 
 // ProcessInvitation implements processInvitation operation.
 //
-// Process an invitation by verifying token and email, and register or add user to workspace.
+// Process an invitation by verifying token and email.
 //
-// POST /api/v1/members/invitations/process
+// POST /api/v1/auth/invitations/process
 func (UnimplementedHandler) ProcessInvitation(ctx context.Context, req *ProcessInvitationReq) (r ProcessInvitationRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

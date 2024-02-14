@@ -2,6 +2,7 @@ package workspace
 
 import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 )
@@ -9,6 +10,6 @@ import (
 type OutputPort interface {
 	Create(w *workspace.Workspace) *openapi.Workspace
 	FindAllMembers(ms member.Members) *openapi.Members
-	InviteMembers(ms member.InvitedMembers, registeredMembers member.InvitedMembers, failedMembers member.InvitedMembers) *openapi.BulkInvitedResult
-	VerifyInvitationToken(w *workspace.Workspace, im *member.InvitedMember, hasRealName bool) openapi.VerifyInvitationRes
+	InviteMembers(is invitation.Invitations, registered invitation.Invitations, failed invitation.Invitations) *openapi.BulkInvitedResult
+	VerifyInvitationToken(w *workspace.Workspace, i *invitation.Invitation) openapi.VerifyInvitationRes
 }

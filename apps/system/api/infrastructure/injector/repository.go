@@ -19,6 +19,6 @@ func newRepositoryInjector(di Driver, gw GatewayAdapter) RepositoryInjector {
 	return RepositoryInjector{
 		meGw.NewGateway(di.Me, di.Firebase, di.Workspace, gw.Me),
 		authGw.NewGateway(di.KeyValue, di.Auth, gw.Auth),
-		workspaceGw.NewGateway(di.Workspace, di.Member, gw.Workspace, gw.Member),
+		workspaceGw.NewGateway(di.Workspace, di.Member, gw.Workspace, gw.Member, gw.Invitation),
 	}
 }

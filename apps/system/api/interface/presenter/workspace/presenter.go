@@ -2,6 +2,7 @@ package workspace
 
 import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	memberPresenter "github.com/ryo034/react-go-template/apps/system/api/interface/presenter/member"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
@@ -27,33 +28,39 @@ func (p *presenter) FindAllMembers(ms member.Members) *openapi.Members {
 	return &res
 }
 
-func (p *presenter) InviteMembers(ms member.InvitedMembers, registeredMembers member.InvitedMembers, failedMembers member.InvitedMembers) *openapi.BulkInvitedResult {
-	rims := make([]openapi.InvitedMember, 0, registeredMembers.Size())
-	for _, ivm := range registeredMembers.AsSlice() {
-		rims = append(rims, openapi.InvitedMember{
-			Email: ivm.Email().ToString(),
+func (p *presenter) InviteMembers(ms invitation.Invitations, registeredList invitation.Invitations, failedList invitation.Invitations) *openapi.BulkInvitedResult {
+	rims := make([]openapi.Invitation, 0, registeredList.Size())
+	for _, ivm := range registeredList.AsSlice() {
+		rims = append(rims, openapi.Invitation{
+			ID:           ivm.ID().Value(),
+			Verified:     ivm.Verified(),
+			ExpiredAt:    ivm.ExpiredAt().Value().ToTime(),
+			InviteeEmail: ivm.InviteeEmail().ToString(),
+			DisplayName:  ivm.DisplayName().ToString(),
 		})
 	}
 
-	fims := make([]openapi.InvitedMember, 0, failedMembers.Size())
-	for _, ivm := range failedMembers.AsSlice() {
-		fims = append(fims, openapi.InvitedMember{
-			Email: ivm.Email().ToString(),
+	fims := make([]openapi.Invitation, 0, failedList.Size())
+	for _, ivm := range failedList.AsSlice() {
+		fims = append(fims, openapi.Invitation{
+			ID:           ivm.ID().Value(),
+			Verified:     ivm.Verified(),
+			ExpiredAt:    ivm.ExpiredAt().Value().ToTime(),
+			InviteeEmail: ivm.InviteeEmail().ToString(),
+			DisplayName:  ivm.DisplayName().ToString(),
 		})
 	}
 	return &openapi.BulkInvitedResult{
-		InvitedCount:      ms.Size(),
-		RegisteredMembers: rims,
-		FailedMembers:     fims,
+		InvitedCount:          ms.Size(),
+		RegisteredInvitations: rims,
+		FailedInvitations:     fims,
 	}
 }
 
-func (p *presenter) VerifyInvitationToken(w *workspace.Workspace, im *member.InvitedMember, hasRealName bool) openapi.VerifyInvitationRes {
+func (p *presenter) VerifyInvitationToken(w *workspace.Workspace, i *invitation.Invitation) openapi.VerifyInvitationRes {
 	d := w.Detail()
 	return &openapi.InvitationInfo{
-		WorkspaceName:              d.Name().ToString(),
-		Verified:                   im.Verified(),
-		HasRealName:                hasRealName,
-		HasDisplayNameAtInvitation: im.DisplayName().IsNotEmpty(),
+		WorkspaceName: d.Name().ToString(),
+		Verified:      i.Verified(),
 	}
 }

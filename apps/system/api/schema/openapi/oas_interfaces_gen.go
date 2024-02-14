@@ -37,6 +37,10 @@ type APIV1WorkspacesPostRes interface {
 	aPIV1WorkspacesPostRes()
 }
 
+type AcceptInvitationRes interface {
+	acceptInvitationRes()
+}
+
 type InviteMultipleUsersToWorkspaceRes interface {
 	inviteMultipleUsersToWorkspaceRes()
 }

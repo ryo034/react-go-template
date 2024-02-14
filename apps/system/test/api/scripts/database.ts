@@ -36,7 +36,7 @@ export const targetTables = [
   "member_profiles",
   "member_addresses",
   "membership_periods",
-  "invited_members"
+  "invitations"
 ]
 
 export class MainDb implements Database {

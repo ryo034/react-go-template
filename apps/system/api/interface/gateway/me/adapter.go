@@ -37,7 +37,8 @@ func (a *adapter) Adapt(m *models.Member, ws models.Workspaces) (*me.Me, error) 
 	if err != nil {
 		return nil, err
 	}
-	return me.NewMe(u, w, mem, aws), nil
+	//TODO: invitations
+	return me.NewMe(u, w, mem, aws, nil), nil
 }
 
 func (a *adapter) AdaptSystemAccount(m *models.SystemAccount) (*me.Me, error) {
@@ -45,5 +46,5 @@ func (a *adapter) AdaptSystemAccount(m *models.SystemAccount) (*me.Me, error) {
 	if err != nil {
 		return nil, err
 	}
-	return me.NewMe(u, nil, nil, nil), nil
+	return me.NewMe(u, nil, nil, nil, nil), nil
 }

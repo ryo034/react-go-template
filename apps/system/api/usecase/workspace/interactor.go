@@ -2,11 +2,10 @@ package workspace
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
-	"github.com/go-faster/errors"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/email"
 	fbDr "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
@@ -95,17 +94,17 @@ func (u *useCase) FindAllMembers(ctx context.Context, i *FindAllMembersInput) (o
 	return u.op.FindAllMembers(ms), nil
 }
 
-func (u *useCase) inviteMember(ctx context.Context, wID workspace.ID, wName workspace.Name, invitedBy member.InvitedBy, ivm *member.InvitedMember) error {
+func (u *useCase) inviteMember(ctx context.Context, inviter workspace.Inviter, i *invitation.Invitation) error {
 	p := u.dbp.GetExecutor(ctx, false)
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
 		return err
 	}
 	fn := func() error {
-		if err = u.repo.InviteMember(pr, p, wID, invitedBy, ivm); err != nil {
+		if err = u.repo.InviteMember(pr, p, inviter, i); err != nil {
 			return err
 		}
-		return u.emailDriver.SendInvite(pr, invitedBy, ivm)
+		return u.emailDriver.SendInvite(pr, inviter, i)
 	}
 	result := pr.Transactional(fn)()
 	return result.Error()
@@ -127,13 +126,13 @@ func (u *useCase) InviteMembers(ctx context.Context, i *InviteMembersInput) (ope
 		return nil, err
 	}
 
-	targetMembers := make([]*member.InvitedMember, 0)
-	alreadyRegisteredMembers := make([]*member.InvitedMember, 0)
-	for _, im := range i.InvitedMembers.AsSlice() {
-		if members.Exist(im.Email()) {
-			alreadyRegisteredMembers = append(alreadyRegisteredMembers, im)
+	targets := make([]*invitation.Invitation, 0)
+	alreadyRegisteredList := make([]*invitation.Invitation, 0)
+	for _, im := range i.Invitations.AsSlice() {
+		if members.Exist(im.InviteeEmail()) {
+			alreadyRegisteredList = append(alreadyRegisteredList, im)
 		} else {
-			targetMembers = append(targetMembers, im)
+			targets = append(targets, im)
 		}
 	}
 
@@ -141,26 +140,19 @@ func (u *useCase) InviteMembers(ctx context.Context, i *InviteMembersInput) (ope
 	if err != nil {
 		return nil, err
 	}
-	wd := meRes.Workspace().Detail()
 
-	failedMembers := make([]*member.InvitedMember, 0)
-	invitedBy := member.NewInvitedBy(meRes.Member().ID(), meRes.Member().DisplayName())
-	for _, im := range targetMembers {
-		if err = u.inviteMember(
-			ctx,
-			meRes.Workspace().ID(),
-			wd.Name(),
-			invitedBy,
-			im,
-		); err != nil {
-			failedMembers = append(failedMembers, im)
+	failedList := make([]*invitation.Invitation, 0)
+	inviter := workspace.NewInviter(meRes.Member(), meRes.Workspace())
+	for _, im := range targets {
+		if err = u.inviteMember(ctx, inviter, im); err != nil {
+			failedList = append(failedList, im)
 		}
 	}
 
 	return u.op.InviteMembers(
-		i.InvitedMembers,
-		member.NewInvitedMembers(alreadyRegisteredMembers),
-		member.NewInvitedMembers(failedMembers),
+		i.Invitations,
+		invitation.NewInvitations(alreadyRegisteredList),
+		invitation.NewInvitations(failedList),
 	), nil
 }
 
@@ -170,18 +162,9 @@ func (u *useCase) VerifyInvitationToken(ctx context.Context, i *VerifyInvitation
 	if err != nil {
 		return nil, err
 	}
-	meRes, err := u.meRepo.FindByEmail(ctx, p, res.Email())
-	if err != nil && !errors.Is(err, sql.ErrNoRows) {
-		return nil, err
-	}
-	hasRealName := false
-	if meRes != nil && meRes.Self().Name() != nil {
-		hasRealName = true
-	}
-
 	w, err := u.repo.FindInviteeWorkspaceFromToken(ctx, p, i.Token)
 	if err != nil {
 		return nil, err
 	}
-	return u.op.VerifyInvitationToken(w, res, hasRealName), nil
+	return u.op.VerifyInvitationToken(w, res), nil
 }

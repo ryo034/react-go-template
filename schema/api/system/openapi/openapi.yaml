@@ -61,6 +61,21 @@ paths:
           $ref: '#/components/responses/TooManyRequestsError'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /api/v1/auth/invitations/process:
+    post:
+      summary: Process an invitation by verifying token and email
+      operationId: processInvitation
+      tags:
+        - Invitations
+      requestBody:
+        $ref: '#/components/requestBodies/InvitationsProcess'
+      responses:
+        '200':
+          description: OTP has been sent successfully.
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /api/v1/auth/oauth:
     post:
       summary: Auth by OAuth
@@ -214,14 +229,14 @@ paths:
               type: object
               properties:
                 invitedMembers:
-                  $ref: '#/components/schemas/InvitedMembers'
+                  $ref: '#/components/schemas/Invitations'
       responses:
         '200':
           description: Successfully sent invitations
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BulkInvitedResult'
+                $ref: '#/components/responses/BulkInvitedResult'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '401':
@@ -259,21 +274,19 @@ paths:
           $ref: '#/components/responses/NotFoundError'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /api/v1/members/invitations/process:
+  /api/v1/members/invitations/accept:
     post:
-      summary: >-
-        Process an invitation by verifying token and email, and register or add
-        user to workspace.
-      operationId: processInvitation
+      summary: Accept an invitation to join a workspace
+      operationId: acceptInvitation
       tags:
-        - Invitations
-      requestBody:
-        $ref: '#/components/requestBodies/InvitationsProcess'
+        - Members
+      security:
+        - bearer: []
       responses:
         '200':
-          description: OTP has been sent successfully.
-        '400':
-          $ref: '#/components/responses/BadRequestError'
+          description: Invitation accepted and user added to the workspace
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -340,6 +353,16 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Workspace'
+    Inviter:
+      type: object
+      required:
+        - member
+        - workspace
+      properties:
+        member:
+          $ref: '#/components/schemas/Member'
+        workspace:
+          $ref: '#/components/schemas/Workspace'
     Member:
       type: object
       required:
@@ -368,36 +391,35 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Member'
-    InvitedMember:
+    Invitation:
       type: object
       required:
-        - email
-        - displayName
+        - id
         - verified
+        - expiredAt
+        - inviteeEmail
+        - displayName
       properties:
-        email:
+        id:
           type: string
-          format: email
-        displayName:
-          type: string
+          format: uuid
+          description: Invitation ID
         verified:
           type: boolean
-    InvitedMembers:
+        expiredAt:
+          type: string
+          format: date-time
+        inviteeEmail:
+          type: string
+          format: email
+          description: Email of the invitee
+        displayName:
+          type: string
+          description: Display name of the invitee
+    Invitations:
       type: array
       items:
-        $ref: '#/components/schemas/InvitedMember'
-    BulkInvitedResult:
-      type: object
-      required:
-        - invitedCount
-        - failedMembers
-      properties:
-        invitedCount:
-          type: integer
-        failedMembers:
-          $ref: '#/components/schemas/InvitedMembers'
-        registeredMembers:
-          $ref: '#/components/schemas/InvitedMembers'
+        $ref: '#/components/schemas/Invitation'
     MembershipPeriod:
       type: object
       required:
@@ -426,6 +448,20 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Workspace'
+        receivedInvitations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReceivedInvitation'
+    ReceivedInvitation:
+      type: object
+      required:
+        - invitation
+        - inviter
+      properties:
+        invitation:
+          $ref: '#/components/schemas/Invitation'
+        inviter:
+          $ref: '#/components/schemas/Inviter'
   requestBodies:
     AuthByOtpPost:
       description: Authenticate user by OTP.
@@ -493,15 +529,12 @@ components:
             properties:
               token:
                 type: string
+                format: uuid
                 description: The invitation token.
               email:
                 type: string
                 format: email
                 description: The user's email address.
-              name:
-                type: string
-                nullable: true
-                description: The user's full name or workspace display name.
             required:
               - token
               - email
@@ -721,14 +754,21 @@ components:
       required:
         - workspaceName
         - verified
-        - hasRealName
-        - hasDisplayNameAtInvitation
       properties:
         workspaceName:
           type: string
         verified:
           type: boolean
-        hasRealName:
-          type: boolean
-        hasDisplayNameAtInvitation:
-          type: boolean
+    BulkInvitedResult:
+      type: object
+      required:
+        - invitedCount
+        - failedInvitations
+        - registeredInvitations
+      properties:
+        invitedCount:
+          type: integer
+        failedInvitations:
+          $ref: '#/components/schemas/Invitations'
+        registeredInvitations:
+          $ref: '#/components/schemas/Invitations'

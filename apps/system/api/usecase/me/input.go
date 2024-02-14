@@ -84,7 +84,7 @@ func NewUpdateInput(i openapi.Me) (*UpdateInput, error) {
 		jws = append(jws, workspace.NewWorkspace(wID, d))
 	}
 
-	m := me.NewMe(u, w, mem, workspace.NewWorkspaces(jws))
+	m := me.NewMe(u, w, mem, workspace.NewWorkspaces(jws), nil)
 	return &UpdateInput{me: m}, nil
 }
 

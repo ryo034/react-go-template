@@ -7,6 +7,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	fbDr "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	meDr "github.com/ryo034/react-go-template/apps/system/api/driver/me"
@@ -85,4 +86,8 @@ func (g *gateway) UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.Use
 
 func (g *gateway) UpdateMember(ctx context.Context, exec bun.IDB, m *me.Me) error {
 	return g.md.UpdateMember(ctx, exec, m)
+}
+
+func (g *gateway) AcceptInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) error {
+	return g.md.AcceptInvitation(ctx, exec, id)
 }

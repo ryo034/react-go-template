@@ -40,6 +40,7 @@ func (r *resolver) errTitle(tag language.Tag, err error, msgArgs ...interface{})
 	var conflictErr *domainErr.Conflicted
 	var noSuchData *domainErr.NoSuchData
 	var expiredInviteToken *domainErr.ExpiredInviteToken
+	var invalidInviteToken *domainErr.InvalidInviteToken
 	switch {
 	case errors.As(err, &t):
 		msg = r.mr.TitleMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
@@ -49,6 +50,8 @@ func (r *resolver) errTitle(tag language.Tag, err error, msgArgs ...interface{})
 		msg = r.mr.TitleMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
 	case errors.As(err, &expiredInviteToken):
 		msg = r.mr.TitleMessage(string(domainErr.ExpiredInviteTokenMessageKey)).WithLang(tag)
+	case errors.As(err, &invalidInviteToken):
+		msg = r.mr.TitleMessage(string(domainErr.InvalidInviteTokenMessageKey)).WithLang(tag)
 	}
 	return msg
 }
@@ -59,6 +62,7 @@ func (r *resolver) errDetail(tag language.Tag, err error, msgArgs ...interface{}
 	var conflictErr *domainErr.Conflicted
 	var noSuchData *domainErr.NoSuchData
 	var expiredInviteToken *domainErr.ExpiredInviteToken
+	var invalidInviteToken *domainErr.InvalidInviteToken
 	switch {
 	case errors.As(err, &t):
 		msg = r.mr.DetailMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
@@ -68,6 +72,8 @@ func (r *resolver) errDetail(tag language.Tag, err error, msgArgs ...interface{}
 		msg = r.mr.DetailMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
 	case errors.As(err, &expiredInviteToken):
 		msg = r.mr.DetailMessage(string(domainErr.ExpiredInviteTokenMessageKey)).WithLang(tag)
+	case errors.As(err, &invalidInviteToken):
+		msg = r.mr.DetailMessage(string(domainErr.InvalidInviteTokenMessageKey)).WithLang(tag)
 	}
 	return msg
 }
@@ -78,6 +84,8 @@ func (r *resolver) errType(tag language.Tag, err error, msgArgs ...interface{}) 
 	var conflictErr *domainErr.Conflicted
 	var noSuchData *domainErr.NoSuchData
 	var expiredInviteToken *domainErr.ExpiredInviteToken
+	var invalidInviteToken *domainErr.InvalidInviteToken
+
 	switch {
 	case errors.As(err, &t):
 		msg = r.mr.TypeMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
@@ -87,6 +95,8 @@ func (r *resolver) errType(tag language.Tag, err error, msgArgs ...interface{}) 
 		msg = r.mr.TypeMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
 	case errors.As(err, &expiredInviteToken):
 		msg = r.mr.TypeMessage(string(domainErr.ExpiredInviteTokenMessageKey)).WithLang(tag)
+	case errors.As(err, &invalidInviteToken):
+		msg = r.mr.TypeMessage(string(domainErr.InvalidInviteTokenMessageKey)).WithLang(tag)
 	}
 	return msg
 }
@@ -97,6 +107,7 @@ func (r *resolver) errCode(err error) string {
 	var conflictErr *domainErr.Conflicted
 	var noSuchData *domainErr.NoSuchData
 	var expiredInviteToken *domainErr.ExpiredInviteToken
+	var invalidInviteToken *domainErr.InvalidInviteToken
 
 	switch {
 	case errors.As(err, &t):
@@ -107,6 +118,8 @@ func (r *resolver) errCode(err error) string {
 		code = noSuchData.Code()
 	case errors.As(err, &expiredInviteToken):
 		code = expiredInviteToken.Code()
+	case errors.As(err, &invalidInviteToken):
+		code = invalidInviteToken.Code()
 	}
 	return code
 }
@@ -118,9 +131,10 @@ func (r *resolver) Error(c context.Context, err error) interface{} {
 	var conflictErr *domainErr.Conflicted
 	var noSuchData *domainErr.NoSuchData
 	var inviteTokenExpired *domainErr.ExpiredInviteToken
+	var invalidInviteToken *domainErr.InvalidInviteToken
 
 	switch {
-	case errors.As(err, &t), errors.As(err, &inviteTokenExpired):
+	case errors.As(err, &t), errors.As(err, &inviteTokenExpired), errors.As(err, &invalidInviteToken):
 		return &openapi.BadRequestError{
 			Type:   openapi.OptString{Value: er.Type, Set: true},
 			Title:  openapi.OptString{Value: er.Title, Set: true},
@@ -184,6 +198,7 @@ func (r *resolver) detail(tag language.Tag, err error) errDetail {
 	var conflictErr *domainErr.Conflicted
 	var noSuchData *domainErr.NoSuchData
 	var expiredInviteToken *domainErr.ExpiredInviteToken
+	var invalidInviteToken *domainErr.InvalidInviteToken
 	switch {
 	case errors.As(err, &t):
 		msg = r.mr.ErrorMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
@@ -193,6 +208,8 @@ func (r *resolver) detail(tag language.Tag, err error) errDetail {
 		msg = r.mr.ErrorMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
 	case errors.As(err, &expiredInviteToken):
 		msg = r.mr.ErrorMessage(string(domainErr.ExpiredInviteTokenMessageKey)).WithLang(tag)
+	case errors.As(err, &invalidInviteToken):
+		msg = r.mr.ErrorMessage(string(domainErr.InvalidInviteTokenMessageKey)).WithLang(tag)
 	}
 	return errDetail{msg}
 }

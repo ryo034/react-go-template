@@ -63,6 +63,10 @@ export interface paths {
       };
     };
   };
+  "/api/v1/auth/invitations/process": {
+    /** Process an invitation by verifying token and email */
+    post: operations["processInvitation"];
+  };
   "/api/v1/auth/oauth": {
     /**
      * Auth by OAuth
@@ -189,9 +193,9 @@ export interface paths {
     /** Verify Invitation */
     get: operations["verifyInvitation"];
   };
-  "/api/v1/members/invitations/process": {
-    /** Process an invitation by verifying token and email, and register or add user to workspace. */
-    post: operations["processInvitation"];
+  "/api/v1/members/invitations/accept": {
+    /** Accept an invitation to join a workspace */
+    post: operations["acceptInvitation"];
   };
 }
 
@@ -228,6 +232,10 @@ export interface components {
       subdomain: string;
     };
     Workspaces: components["schemas"]["Workspace"][];
+    Inviter: {
+      member: components["schemas"]["Member"];
+      workspace: components["schemas"]["Workspace"];
+    };
     Member: {
       profile: components["schemas"]["MemberProfile"];
       user: components["schemas"]["User"];
@@ -242,18 +250,24 @@ export interface components {
       idNumber?: string;
     };
     Members: components["schemas"]["Member"][];
-    InvitedMember: {
-      /** Format: email */
-      email: string;
-      displayName: string;
+    Invitation: {
+      /**
+       * Format: uuid
+       * @description Invitation ID
+       */
+      id: string;
       verified: boolean;
+      /** Format: date-time */
+      expiredAt: string;
+      /**
+       * Format: email
+       * @description Email of the invitee
+       */
+      inviteeEmail: string;
+      /** @description Display name of the invitee */
+      displayName: string;
     };
-    InvitedMembers: components["schemas"]["InvitedMember"][];
-    BulkInvitedResult: {
-      invitedCount: number;
-      failedMembers: components["schemas"]["InvitedMembers"];
-      registeredMembers?: components["schemas"]["InvitedMembers"];
-    };
+    Invitations: components["schemas"]["Invitation"][];
     MembershipPeriod: {
       /** Format: date-time */
       start: string;
@@ -265,6 +279,11 @@ export interface components {
       member?: components["schemas"]["Member"];
       currentWorkspace?: components["schemas"]["Workspace"];
       joinedWorkspaces: components["schemas"]["Workspace"][];
+      receivedInvitations?: components["schemas"]["ReceivedInvitation"][];
+    };
+    ReceivedInvitation: {
+      invitation: components["schemas"]["Invitation"];
+      inviter: components["schemas"]["Inviter"];
     };
   };
   responses: {
@@ -453,6 +472,9 @@ export interface components {
     InvitationInfo: {
       content: never;
     };
+    BulkInvitedResult: {
+      content: never;
+    };
   };
   parameters: never;
   requestBodies: {
@@ -496,15 +518,16 @@ export interface components {
     InvitationsProcess: {
       content: {
         "application/json": {
-          /** @description The invitation token. */
+          /**
+           * Format: uuid
+           * @description The invitation token.
+           */
           token: string;
           /**
            * Format: email
            * @description The user's email address.
            */
           email: string;
-          /** @description The user's full name or workspace display name. */
-          name?: string | null;
         };
       };
     };
@@ -519,6 +542,18 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /** Process an invitation by verifying token and email */
+  processInvitation: {
+    requestBody: components["requestBodies"]["InvitationsProcess"];
+    responses: {
+      /** @description OTP has been sent successfully. */
+      200: {
+        content: never;
+      };
+      400: components["responses"]["BadRequestError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
   /**
    * Login
    * @description Login
@@ -539,7 +574,7 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
-          invitedMembers?: components["schemas"]["InvitedMembers"];
+          invitedMembers?: components["schemas"]["Invitations"];
         };
       };
     };
@@ -547,7 +582,7 @@ export interface operations {
       /** @description Successfully sent invitations */
       200: {
         content: {
-          "application/json": components["schemas"]["BulkInvitedResult"];
+          "application/json": components["responses"]["BulkInvitedResult"];
         };
       };
       400: components["responses"]["BadRequestError"];
@@ -577,15 +612,14 @@ export interface operations {
       500: components["responses"]["InternalServerError"];
     };
   };
-  /** Process an invitation by verifying token and email, and register or add user to workspace. */
-  processInvitation: {
-    requestBody: components["requestBodies"]["InvitationsProcess"];
+  /** Accept an invitation to join a workspace */
+  acceptInvitation: {
     responses: {
-      /** @description OTP has been sent successfully. */
+      /** @description Invitation accepted and user added to the workspace */
       200: {
         content: never;
       };
-      400: components["responses"]["BadRequestError"];
+      401: components["responses"]["UnauthorizedError"];
       500: components["responses"]["InternalServerError"];
     };
   };

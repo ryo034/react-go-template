@@ -7,6 +7,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/auth"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	domainError "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/email"
@@ -17,8 +18,10 @@ import (
 )
 
 type UseCase interface {
-	AuthByOTP(ctx context.Context, input ByOTPInput) (openapi.APIV1AuthOtpPostRes, error)
-	VerifyOTP(ctx context.Context, input VerifyOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error)
+	AuthByOTP(ctx context.Context, i ByOTPInput) (openapi.APIV1AuthOtpPostRes, error)
+	VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error)
+	ProcessInvitation(ctx context.Context, i ProcessInvitationInput) (openapi.ProcessInvitationRes, error)
+	AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error)
 }
 
 type useCase struct {
@@ -87,58 +90,6 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 		if err != nil {
 			return "", err
 		}
-
-		//TODO: tkを一度返して、フロント側で認証したらjwtにcurrentWorkspaceIdがセットできるようになる
-
-		// check active invitation
-		invRes, wRes, err := u.wRepo.FindActiveInvitation(pr, p, i.Email)
-		if err != nil && !errors.Is(err, sql.ErrNoRows) {
-			return "", err
-		}
-		if errors.Is(err, sql.ErrNoRows) || invRes == nil {
-			if err = u.memberLastLogin(pr, p, usr.AccountID()); err != nil {
-				return "", err
-			}
-			return tk, nil
-		}
-
-		// if the user not joined the workspace, add the user to the workspace
-		mem, err := u.wRepo.FindMember(pr, p, usr.AccountID(), wRes.ID())
-		if err != nil && !errors.Is(err, sql.ErrNoRows) {
-			return "", err
-		}
-
-		if errors.Is(err, sql.ErrNoRows) || mem == nil {
-			meRes, err := u.meRepo.FindBeforeOnboard(pr, p, usr.AccountID())
-			if err != nil {
-				return "", err
-			}
-			meID, err := member.GenerateID()
-			if err != nil {
-				return "", err
-			}
-			n := ""
-			if meRes.Self().Name() != nil {
-				n = meRes.Self().Name().ToString()
-			}
-			dn, err := member.NewDisplayName(n)
-			if err != nil {
-				return "", err
-			}
-			m := member.NewMember(meID, meRes.Self(), dn, nil)
-			mem, err = u.wRepo.AddMember(pr, p, wRes, m)
-			if err != nil {
-				return "", err
-			}
-		}
-
-		//meRes, err := u.meRepo.Find(pr, p, mem.ID())
-		//if err != nil {
-		//	return "", err
-		//}
-		//if err = u.meRepo.LastLogin(pr, p, meRes); err != nil {
-		//	return "", err
-		//}
 		return tk, nil
 	}
 	result := pr.Transactional(fn)()
@@ -158,4 +109,62 @@ func (u *useCase) verifyOTP(ctx context.Context, aID account.ID, email account.E
 		return "", err
 	}
 	return u.fbDr.CustomToken(ctx, aID)
+}
+
+func (u *useCase) ProcessInvitation(ctx context.Context, i ProcessInvitationInput) (openapi.ProcessInvitationRes, error) {
+	p := u.dbp.GetExecutor(ctx, false)
+	invRes, _, err := u.wRepo.FindActiveInvitationByEmail(ctx, p, i.Email)
+	if err != nil {
+		return nil, err
+	}
+	if invRes.Token().Equals(i.Token) {
+		return nil, domainError.NewInvalidInviteToken(i.Token.Value())
+	}
+
+	pr, err := u.txp.Provide(ctx)
+	if err != nil {
+		return nil, err
+	}
+	fn := func() error {
+		if err = u.wRepo.VerifyInvitationToken(pr, p, i.Email, i.Token); err != nil {
+			return err
+		}
+		code, err := u.repo.GenTOTP(pr, i.Email)
+		if err != nil {
+			return err
+		}
+		return u.emailDr.SendOTP(pr, i.Email, code)
+	}
+	return &openapi.ProcessInvitationOK{}, pr.Transactional(fn)().Error()
+}
+
+func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error) {
+	p := u.dbp.GetExecutor(ctx, false)
+	pr, err := u.txp.Provide(ctx)
+	if err != nil {
+		return nil, err
+	}
+	fn := func() error {
+		invRes, wRes, err := u.wRepo.FindActiveInvitation(ctx, p, i.InvitationID)
+		if err != nil {
+			return err
+		}
+		usr, err := u.repo.Find(pr, p, invRes.InviteeEmail())
+		if err != nil {
+			return err
+		}
+		m, err := member.NewMemberFromUser(usr, invRes.DisplayName())
+		if err != nil {
+			return err
+		}
+		m, err = u.wRepo.AddMember(pr, p, wRes, m)
+		if err != nil {
+			return err
+		}
+		if err = u.meRepo.AcceptInvitation(pr, p, invRes.ID()); err != nil {
+			return err
+		}
+		return u.memberLastLogin(pr, p, usr.AccountID())
+	}
+	return &openapi.AcceptInvitationOK{}, pr.Transactional(fn)().Error()
 }

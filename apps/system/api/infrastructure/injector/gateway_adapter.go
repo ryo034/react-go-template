@@ -6,14 +6,16 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/interface/gateway/member"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/gateway/user"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/gateway/workspace"
+	"github.com/ryo034/react-go-template/apps/system/api/interface/gateway/workspace/invitation"
 )
 
 type GatewayAdapter struct {
-	User      user.Adapter
-	Member    member.Adapter
-	Me        me.Adapter
-	Workspace workspace.Adapter
-	Auth      auth.Adapter
+	User       user.Adapter
+	Member     member.Adapter
+	Me         me.Adapter
+	Workspace  workspace.Adapter
+	Auth       auth.Adapter
+	Invitation invitation.Adapter
 }
 
 func newGatewayAdapterInjector() GatewayAdapter {
@@ -22,6 +24,11 @@ func newGatewayAdapterInjector() GatewayAdapter {
 	workspaceGw := workspace.NewAdapter()
 	meGw := me.NewAdapter(userGw, workspaceGw, memberGw)
 	return GatewayAdapter{
-		userGw, memberGw, meGw, workspaceGw, auth.NewAdapter(),
+		userGw,
+		memberGw,
+		meGw,
+		workspaceGw,
+		auth.NewAdapter(),
+		invitation.NewAdapter(),
 	}
 }

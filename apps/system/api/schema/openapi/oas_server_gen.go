@@ -62,6 +62,12 @@ type Handler interface {
 	//
 	// POST /api/v1/workspaces
 	APIV1WorkspacesPost(ctx context.Context, req *APIV1WorkspacesPostReq) (APIV1WorkspacesPostRes, error)
+	// AcceptInvitation implements acceptInvitation operation.
+	//
+	// Accept an invitation to join a workspace.
+	//
+	// POST /api/v1/members/invitations/accept
+	AcceptInvitation(ctx context.Context) (AcceptInvitationRes, error)
 	// InviteMultipleUsersToWorkspace implements inviteMultipleUsersToWorkspace operation.
 	//
 	// Invite multiple users to the workspace by email.
@@ -76,9 +82,9 @@ type Handler interface {
 	Login(ctx context.Context) (LoginRes, error)
 	// ProcessInvitation implements processInvitation operation.
 	//
-	// Process an invitation by verifying token and email, and register or add user to workspace.
+	// Process an invitation by verifying token and email.
 	//
-	// POST /api/v1/members/invitations/process
+	// POST /api/v1/auth/invitations/process
 	ProcessInvitation(ctx context.Context, req *ProcessInvitationReq) (ProcessInvitationRes, error)
 	// VerifyInvitation implements verifyInvitation operation.
 	//

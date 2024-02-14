@@ -21,3 +21,14 @@ Workspaces:
   type: array
   items:
     $ref: "#/components/schemas/Workspace"
+
+Inviter:
+  type: object
+  required:
+    - member
+    - workspace
+  properties:
+    member:
+      $ref: "#/components/schemas/Member"
+    workspace:
+      $ref: "#/components/schemas/Workspace"

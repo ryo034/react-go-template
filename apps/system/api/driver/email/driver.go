@@ -4,7 +4,8 @@ import (
 	"bytes"
 	"context"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/mailer"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"golang.org/x/text/language"
@@ -13,7 +14,7 @@ import (
 
 type Driver interface {
 	SendOTP(ctx context.Context, mailTo account.Email, code string) error
-	SendInvite(ctx context.Context, from member.InvitedBy, mailTo *member.InvitedMember) error
+	SendInvite(ctx context.Context, inviter workspace.Inviter, i *invitation.Invitation) error
 }
 
 type driver struct {
@@ -74,7 +75,7 @@ func (d *driver) SendOTP(ctx context.Context, mailTo account.Email, code string)
 	return d.mc.Send(conf)
 }
 
-func (d *driver) SendInvite(ctx context.Context, from member.InvitedBy, mailTo *member.InvitedMember) error {
+func (d *driver) SendInvite(ctx context.Context, inviter workspace.Inviter, i *invitation.Invitation) error {
 	// TODO: implement
 	return nil
 }

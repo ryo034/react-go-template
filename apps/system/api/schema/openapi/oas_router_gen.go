@@ -60,9 +60,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
-			case 'a': // Prefix: "auth/o"
+			case 'a': // Prefix: "auth/"
 				origElem := elem
-				if l := len("auth/o"); len(elem) >= l && elem[0:l] == "auth/o" {
+				if l := len("auth/"); len(elem) >= l && elem[0:l] == "auth/" {
 					elem = elem[l:]
 				} else {
 					break
@@ -72,9 +72,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
-				case 'a': // Prefix: "auth"
+				case 'i': // Prefix: "invitations/process"
 					origElem := elem
-					if l := len("auth"); len(elem) >= l && elem[0:l] == "auth" {
+					if l := len("invitations/process"); len(elem) >= l && elem[0:l] == "invitations/process" {
 						elem = elem[l:]
 					} else {
 						break
@@ -84,7 +84,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						// Leaf node.
 						switch r.Method {
 						case "POST":
-							s.handleAPIV1AuthOAuthPostRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleProcessInvitationRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "POST")
 						}
@@ -93,28 +93,21 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
-				case 't': // Prefix: "tp"
+				case 'o': // Prefix: "o"
 					origElem := elem
-					if l := len("tp"); len(elem) >= l && elem[0:l] == "tp" {
+					if l := len("o"); len(elem) >= l && elem[0:l] == "o" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						switch r.Method {
-						case "POST":
-							s.handleAPIV1AuthOtpPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
-						}
-
-						return
+						break
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/verify"
+					case 'a': // Prefix: "auth"
 						origElem := elem
-						if l := len("/verify"); len(elem) >= l && elem[0:l] == "/verify" {
+						if l := len("auth"); len(elem) >= l && elem[0:l] == "auth" {
 							elem = elem[l:]
 						} else {
 							break
@@ -124,12 +117,55 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							// Leaf node.
 							switch r.Method {
 							case "POST":
-								s.handleAPIV1AuthOtpVerifyPostRequest([0]string{}, elemIsEscaped, w, r)
+								s.handleAPIV1AuthOAuthPostRequest([0]string{}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, "POST")
 							}
 
 							return
+						}
+
+						elem = origElem
+					case 't': // Prefix: "tp"
+						origElem := elem
+						if l := len("tp"); len(elem) >= l && elem[0:l] == "tp" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch r.Method {
+							case "POST":
+								s.handleAPIV1AuthOtpPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/verify"
+							origElem := elem
+							if l := len("/verify"); len(elem) >= l && elem[0:l] == "/verify" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleAPIV1AuthOtpVerifyPostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
@@ -231,6 +267,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							break
 						}
 						switch elem[0] {
+						case 'a': // Prefix: "accept"
+							origElem := elem
+							if l := len("accept"); len(elem) >= l && elem[0:l] == "accept" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleAcceptInvitationRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
 						case 'b': // Prefix: "bulk"
 							origElem := elem
 							if l := len("bulk"); len(elem) >= l && elem[0:l] == "bulk" {
@@ -244,27 +301,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								switch r.Method {
 								case "POST":
 									s.handleInviteMultipleUsersToWorkspaceRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
-
-								return
-							}
-
-							elem = origElem
-						case 'p': // Prefix: "process"
-							origElem := elem
-							if l := len("process"); len(elem) >= l && elem[0:l] == "process" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleProcessInvitationRequest([0]string{}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "POST")
 								}
@@ -442,9 +478,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
-			case 'a': // Prefix: "auth/o"
+			case 'a': // Prefix: "auth/"
 				origElem := elem
-				if l := len("auth/o"); len(elem) >= l && elem[0:l] == "auth/o" {
+				if l := len("auth/"); len(elem) >= l && elem[0:l] == "auth/" {
 					elem = elem[l:]
 				} else {
 					break
@@ -454,9 +490,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
-				case 'a': // Prefix: "auth"
+				case 'i': // Prefix: "invitations/process"
 					origElem := elem
-					if l := len("auth"); len(elem) >= l && elem[0:l] == "auth" {
+					if l := len("invitations/process"); len(elem) >= l && elem[0:l] == "invitations/process" {
 						elem = elem[l:]
 					} else {
 						break
@@ -465,11 +501,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "POST":
-							// Leaf: APIV1AuthOAuthPost
-							r.name = "APIV1AuthOAuthPost"
-							r.summary = "Auth by OAuth"
-							r.operationID = ""
-							r.pathPattern = "/api/v1/auth/oauth"
+							// Leaf: ProcessInvitation
+							r.name = "ProcessInvitation"
+							r.summary = "Process an invitation by verifying token and email"
+							r.operationID = "processInvitation"
+							r.pathPattern = "/api/v1/auth/invitations/process"
 							r.args = args
 							r.count = 0
 							return r, true
@@ -479,32 +515,21 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
-				case 't': // Prefix: "tp"
+				case 'o': // Prefix: "o"
 					origElem := elem
-					if l := len("tp"); len(elem) >= l && elem[0:l] == "tp" {
+					if l := len("o"); len(elem) >= l && elem[0:l] == "o" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						switch method {
-						case "POST":
-							r.name = "APIV1AuthOtpPost"
-							r.summary = "Send OTP"
-							r.operationID = ""
-							r.pathPattern = "/api/v1/auth/otp"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
+						break
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/verify"
+					case 'a': // Prefix: "auth"
 						origElem := elem
-						if l := len("/verify"); len(elem) >= l && elem[0:l] == "/verify" {
+						if l := len("auth"); len(elem) >= l && elem[0:l] == "auth" {
 							elem = elem[l:]
 						} else {
 							break
@@ -513,17 +538,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						if len(elem) == 0 {
 							switch method {
 							case "POST":
-								// Leaf: APIV1AuthOtpVerifyPost
-								r.name = "APIV1AuthOtpVerifyPost"
-								r.summary = "Verify OTP"
+								// Leaf: APIV1AuthOAuthPost
+								r.name = "APIV1AuthOAuthPost"
+								r.summary = "Auth by OAuth"
 								r.operationID = ""
-								r.pathPattern = "/api/v1/auth/otp/verify"
+								r.pathPattern = "/api/v1/auth/oauth"
 								r.args = args
 								r.count = 0
 								return r, true
 							default:
 								return
 							}
+						}
+
+						elem = origElem
+					case 't': // Prefix: "tp"
+						origElem := elem
+						if l := len("tp"); len(elem) >= l && elem[0:l] == "tp" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch method {
+							case "POST":
+								r.name = "APIV1AuthOtpPost"
+								r.summary = "Send OTP"
+								r.operationID = ""
+								r.pathPattern = "/api/v1/auth/otp"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/verify"
+							origElem := elem
+							if l := len("/verify"); len(elem) >= l && elem[0:l] == "/verify" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch method {
+								case "POST":
+									// Leaf: APIV1AuthOtpVerifyPost
+									r.name = "APIV1AuthOtpVerifyPost"
+									r.summary = "Verify OTP"
+									r.operationID = ""
+									r.pathPattern = "/api/v1/auth/otp/verify"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
@@ -641,6 +717,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							break
 						}
 						switch elem[0] {
+						case 'a': // Prefix: "accept"
+							origElem := elem
+							if l := len("accept"); len(elem) >= l && elem[0:l] == "accept" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch method {
+								case "POST":
+									// Leaf: AcceptInvitation
+									r.name = "AcceptInvitation"
+									r.summary = "Accept an invitation to join a workspace"
+									r.operationID = "acceptInvitation"
+									r.pathPattern = "/api/v1/members/invitations/accept"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
 						case 'b': // Prefix: "bulk"
 							origElem := elem
 							if l := len("bulk"); len(elem) >= l && elem[0:l] == "bulk" {
@@ -657,31 +758,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.summary = "Invite multiple users to the workspace by email"
 									r.operationID = "inviteMultipleUsersToWorkspace"
 									r.pathPattern = "/api/v1/members/invitations/bulk"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
-						case 'p': // Prefix: "process"
-							origElem := elem
-							if l := len("process"); len(elem) >= l && elem[0:l] == "process" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								switch method {
-								case "POST":
-									// Leaf: ProcessInvitation
-									r.name = "ProcessInvitation"
-									r.summary = "Process an invitation by verifying token and email, and register or add user to workspace."
-									r.operationID = "processInvitation"
-									r.pathPattern = "/api/v1/members/invitations/process"
 									r.args = args
 									r.count = 0
 									return r, true

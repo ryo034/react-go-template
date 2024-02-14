@@ -3,6 +3,8 @@
 package openapi
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 )
 
@@ -96,6 +98,11 @@ func (s *APIV1WorkspacesPostReq) SetSubdomain(val string) {
 	s.Subdomain = val
 }
 
+// AcceptInvitationOK is response for AcceptInvitation operation.
+type AcceptInvitationOK struct{}
+
+func (*AcceptInvitationOK) acceptInvitationRes() {}
+
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type BadRequestError struct {
 	// The HTTP status code generated for this occurrence of the problem.
@@ -183,11 +190,11 @@ func (s *Bearer) SetToken(val string) {
 	s.Token = val
 }
 
-// Ref: #/components/schemas/BulkInvitedResult
+// Ref: #/components/responses/BulkInvitedResult
 type BulkInvitedResult struct {
-	InvitedCount      int            `json:"invitedCount"`
-	FailedMembers     InvitedMembers `json:"failedMembers"`
-	RegisteredMembers InvitedMembers `json:"registeredMembers"`
+	InvitedCount          int         `json:"invitedCount"`
+	FailedInvitations     Invitations `json:"failedInvitations"`
+	RegisteredInvitations Invitations `json:"registeredInvitations"`
 }
 
 // GetInvitedCount returns the value of InvitedCount.
@@ -195,14 +202,14 @@ func (s *BulkInvitedResult) GetInvitedCount() int {
 	return s.InvitedCount
 }
 
-// GetFailedMembers returns the value of FailedMembers.
-func (s *BulkInvitedResult) GetFailedMembers() InvitedMembers {
-	return s.FailedMembers
+// GetFailedInvitations returns the value of FailedInvitations.
+func (s *BulkInvitedResult) GetFailedInvitations() Invitations {
+	return s.FailedInvitations
 }
 
-// GetRegisteredMembers returns the value of RegisteredMembers.
-func (s *BulkInvitedResult) GetRegisteredMembers() InvitedMembers {
-	return s.RegisteredMembers
+// GetRegisteredInvitations returns the value of RegisteredInvitations.
+func (s *BulkInvitedResult) GetRegisteredInvitations() Invitations {
+	return s.RegisteredInvitations
 }
 
 // SetInvitedCount sets the value of InvitedCount.
@@ -210,14 +217,14 @@ func (s *BulkInvitedResult) SetInvitedCount(val int) {
 	s.InvitedCount = val
 }
 
-// SetFailedMembers sets the value of FailedMembers.
-func (s *BulkInvitedResult) SetFailedMembers(val InvitedMembers) {
-	s.FailedMembers = val
+// SetFailedInvitations sets the value of FailedInvitations.
+func (s *BulkInvitedResult) SetFailedInvitations(val Invitations) {
+	s.FailedInvitations = val
 }
 
-// SetRegisteredMembers sets the value of RegisteredMembers.
-func (s *BulkInvitedResult) SetRegisteredMembers(val InvitedMembers) {
-	s.RegisteredMembers = val
+// SetRegisteredInvitations sets the value of RegisteredInvitations.
+func (s *BulkInvitedResult) SetRegisteredInvitations(val Invitations) {
+	s.RegisteredInvitations = val
 }
 
 func (*BulkInvitedResult) inviteMultipleUsersToWorkspaceRes() {}
@@ -362,17 +369,78 @@ func (*InternalServerError) aPIV1MembersGetRes()                {}
 func (*InternalServerError) aPIV1PingGetRes()                   {}
 func (*InternalServerError) aPIV1WorkspacesGetRes()             {}
 func (*InternalServerError) aPIV1WorkspacesPostRes()            {}
+func (*InternalServerError) acceptInvitationRes()               {}
 func (*InternalServerError) inviteMultipleUsersToWorkspaceRes() {}
 func (*InternalServerError) loginRes()                          {}
 func (*InternalServerError) processInvitationRes()              {}
 func (*InternalServerError) verifyInvitationRes()               {}
 
+// Ref: #/components/schemas/Invitation
+type Invitation struct {
+	// Invitation ID.
+	ID        uuid.UUID `json:"id"`
+	Verified  bool      `json:"verified"`
+	ExpiredAt time.Time `json:"expiredAt"`
+	// Email of the invitee.
+	InviteeEmail string `json:"inviteeEmail"`
+	// Display name of the invitee.
+	DisplayName string `json:"displayName"`
+}
+
+// GetID returns the value of ID.
+func (s *Invitation) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetVerified returns the value of Verified.
+func (s *Invitation) GetVerified() bool {
+	return s.Verified
+}
+
+// GetExpiredAt returns the value of ExpiredAt.
+func (s *Invitation) GetExpiredAt() time.Time {
+	return s.ExpiredAt
+}
+
+// GetInviteeEmail returns the value of InviteeEmail.
+func (s *Invitation) GetInviteeEmail() string {
+	return s.InviteeEmail
+}
+
+// GetDisplayName returns the value of DisplayName.
+func (s *Invitation) GetDisplayName() string {
+	return s.DisplayName
+}
+
+// SetID sets the value of ID.
+func (s *Invitation) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetVerified sets the value of Verified.
+func (s *Invitation) SetVerified(val bool) {
+	s.Verified = val
+}
+
+// SetExpiredAt sets the value of ExpiredAt.
+func (s *Invitation) SetExpiredAt(val time.Time) {
+	s.ExpiredAt = val
+}
+
+// SetInviteeEmail sets the value of InviteeEmail.
+func (s *Invitation) SetInviteeEmail(val string) {
+	s.InviteeEmail = val
+}
+
+// SetDisplayName sets the value of DisplayName.
+func (s *Invitation) SetDisplayName(val string) {
+	s.DisplayName = val
+}
+
 // Ref: #/components/responses/InvitationInfo
 type InvitationInfo struct {
-	WorkspaceName              string `json:"workspaceName"`
-	Verified                   bool   `json:"verified"`
-	HasRealName                bool   `json:"hasRealName"`
-	HasDisplayNameAtInvitation bool   `json:"hasDisplayNameAtInvitation"`
+	WorkspaceName string `json:"workspaceName"`
+	Verified      bool   `json:"verified"`
 }
 
 // GetWorkspaceName returns the value of WorkspaceName.
@@ -385,16 +453,6 @@ func (s *InvitationInfo) GetVerified() bool {
 	return s.Verified
 }
 
-// GetHasRealName returns the value of HasRealName.
-func (s *InvitationInfo) GetHasRealName() bool {
-	return s.HasRealName
-}
-
-// GetHasDisplayNameAtInvitation returns the value of HasDisplayNameAtInvitation.
-func (s *InvitationInfo) GetHasDisplayNameAtInvitation() bool {
-	return s.HasDisplayNameAtInvitation
-}
-
 // SetWorkspaceName sets the value of WorkspaceName.
 func (s *InvitationInfo) SetWorkspaceName(val string) {
 	s.WorkspaceName = val
@@ -405,70 +463,49 @@ func (s *InvitationInfo) SetVerified(val bool) {
 	s.Verified = val
 }
 
-// SetHasRealName sets the value of HasRealName.
-func (s *InvitationInfo) SetHasRealName(val bool) {
-	s.HasRealName = val
-}
-
-// SetHasDisplayNameAtInvitation sets the value of HasDisplayNameAtInvitation.
-func (s *InvitationInfo) SetHasDisplayNameAtInvitation(val bool) {
-	s.HasDisplayNameAtInvitation = val
-}
-
 func (*InvitationInfo) verifyInvitationRes() {}
 
+type Invitations []Invitation
+
 type InviteMultipleUsersToWorkspaceReq struct {
-	InvitedMembers InvitedMembers `json:"invitedMembers"`
+	InvitedMembers Invitations `json:"invitedMembers"`
 }
 
 // GetInvitedMembers returns the value of InvitedMembers.
-func (s *InviteMultipleUsersToWorkspaceReq) GetInvitedMembers() InvitedMembers {
+func (s *InviteMultipleUsersToWorkspaceReq) GetInvitedMembers() Invitations {
 	return s.InvitedMembers
 }
 
 // SetInvitedMembers sets the value of InvitedMembers.
-func (s *InviteMultipleUsersToWorkspaceReq) SetInvitedMembers(val InvitedMembers) {
+func (s *InviteMultipleUsersToWorkspaceReq) SetInvitedMembers(val Invitations) {
 	s.InvitedMembers = val
 }
 
-// Ref: #/components/schemas/InvitedMember
-type InvitedMember struct {
-	Email       string `json:"email"`
-	DisplayName string `json:"displayName"`
-	Verified    bool   `json:"verified"`
+// Ref: #/components/schemas/Inviter
+type Inviter struct {
+	Member    Member    `json:"member"`
+	Workspace Workspace `json:"workspace"`
 }
 
-// GetEmail returns the value of Email.
-func (s *InvitedMember) GetEmail() string {
-	return s.Email
+// GetMember returns the value of Member.
+func (s *Inviter) GetMember() Member {
+	return s.Member
 }
 
-// GetDisplayName returns the value of DisplayName.
-func (s *InvitedMember) GetDisplayName() string {
-	return s.DisplayName
+// GetWorkspace returns the value of Workspace.
+func (s *Inviter) GetWorkspace() Workspace {
+	return s.Workspace
 }
 
-// GetVerified returns the value of Verified.
-func (s *InvitedMember) GetVerified() bool {
-	return s.Verified
+// SetMember sets the value of Member.
+func (s *Inviter) SetMember(val Member) {
+	s.Member = val
 }
 
-// SetEmail sets the value of Email.
-func (s *InvitedMember) SetEmail(val string) {
-	s.Email = val
+// SetWorkspace sets the value of Workspace.
+func (s *Inviter) SetWorkspace(val Workspace) {
+	s.Workspace = val
 }
-
-// SetDisplayName sets the value of DisplayName.
-func (s *InvitedMember) SetDisplayName(val string) {
-	s.DisplayName = val
-}
-
-// SetVerified sets the value of Verified.
-func (s *InvitedMember) SetVerified(val bool) {
-	s.Verified = val
-}
-
-type InvitedMembers []InvitedMember
 
 // Ref: #/components/schemas/JwtToken
 type JwtToken struct {
@@ -490,10 +527,11 @@ func (*JwtToken) aPIV1AuthOtpVerifyPostRes() {}
 
 // Ref: #/components/schemas/Me
 type Me struct {
-	Self             User         `json:"self"`
-	Member           OptMember    `json:"member"`
-	CurrentWorkspace OptWorkspace `json:"currentWorkspace"`
-	JoinedWorkspaces []Workspace  `json:"joinedWorkspaces"`
+	Self                User                 `json:"self"`
+	Member              OptMember            `json:"member"`
+	CurrentWorkspace    OptWorkspace         `json:"currentWorkspace"`
+	JoinedWorkspaces    []Workspace          `json:"joinedWorkspaces"`
+	ReceivedInvitations []ReceivedInvitation `json:"receivedInvitations"`
 }
 
 // GetSelf returns the value of Self.
@@ -516,6 +554,11 @@ func (s *Me) GetJoinedWorkspaces() []Workspace {
 	return s.JoinedWorkspaces
 }
 
+// GetReceivedInvitations returns the value of ReceivedInvitations.
+func (s *Me) GetReceivedInvitations() []ReceivedInvitation {
+	return s.ReceivedInvitations
+}
+
 // SetSelf sets the value of Self.
 func (s *Me) SetSelf(val User) {
 	s.Self = val
@@ -534,6 +577,11 @@ func (s *Me) SetCurrentWorkspace(val OptWorkspace) {
 // SetJoinedWorkspaces sets the value of JoinedWorkspaces.
 func (s *Me) SetJoinedWorkspaces(val []Workspace) {
 	s.JoinedWorkspaces = val
+}
+
+// SetReceivedInvitations sets the value of ReceivedInvitations.
+func (s *Me) SetReceivedInvitations(val []ReceivedInvitation) {
+	s.ReceivedInvitations = val
 }
 
 func (*Me) aPIV1MeGetRes()        {}
@@ -766,69 +814,6 @@ func (o OptMember) Or(d Member) Member {
 	return d
 }
 
-// NewOptNilString returns new OptNilString with value set to v.
-func NewOptNilString(v string) OptNilString {
-	return OptNilString{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptNilString is optional nullable string.
-type OptNilString struct {
-	Value string
-	Set   bool
-	Null  bool
-}
-
-// IsSet returns true if OptNilString was set.
-func (o OptNilString) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptNilString) Reset() {
-	var v string
-	o.Value = v
-	o.Set = false
-	o.Null = false
-}
-
-// SetTo sets value to v.
-func (o *OptNilString) SetTo(v string) {
-	o.Set = true
-	o.Null = false
-	o.Value = v
-}
-
-// IsSet returns true if value is Null.
-func (o OptNilString) IsNull() bool { return o.Null }
-
-// SetNull sets value to null.
-func (o *OptNilString) SetToNull() {
-	o.Set = true
-	o.Null = true
-	var v string
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptNilString) Get() (v string, ok bool) {
-	if o.Null {
-		return v, false
-	}
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptNilString) Or(d string) string {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // NewOptString returns new OptString with value set to v.
 func NewOptString(v string) OptString {
 	return OptString{
@@ -928,15 +913,13 @@ func (*ProcessInvitationOK) processInvitationRes() {}
 
 type ProcessInvitationReq struct {
 	// The invitation token.
-	Token string `json:"token"`
+	Token uuid.UUID `json:"token"`
 	// The user's email address.
 	Email string `json:"email"`
-	// The user's full name or workspace display name.
-	Name OptNilString `json:"name"`
 }
 
 // GetToken returns the value of Token.
-func (s *ProcessInvitationReq) GetToken() string {
+func (s *ProcessInvitationReq) GetToken() uuid.UUID {
 	return s.Token
 }
 
@@ -945,13 +928,8 @@ func (s *ProcessInvitationReq) GetEmail() string {
 	return s.Email
 }
 
-// GetName returns the value of Name.
-func (s *ProcessInvitationReq) GetName() OptNilString {
-	return s.Name
-}
-
 // SetToken sets the value of Token.
-func (s *ProcessInvitationReq) SetToken(val string) {
+func (s *ProcessInvitationReq) SetToken(val uuid.UUID) {
 	s.Token = val
 }
 
@@ -960,9 +938,30 @@ func (s *ProcessInvitationReq) SetEmail(val string) {
 	s.Email = val
 }
 
-// SetName sets the value of Name.
-func (s *ProcessInvitationReq) SetName(val OptNilString) {
-	s.Name = val
+// Ref: #/components/schemas/ReceivedInvitation
+type ReceivedInvitation struct {
+	Invitation Invitation `json:"invitation"`
+	Inviter    Inviter    `json:"inviter"`
+}
+
+// GetInvitation returns the value of Invitation.
+func (s *ReceivedInvitation) GetInvitation() Invitation {
+	return s.Invitation
+}
+
+// GetInviter returns the value of Inviter.
+func (s *ReceivedInvitation) GetInviter() Inviter {
+	return s.Inviter
+}
+
+// SetInvitation sets the value of Invitation.
+func (s *ReceivedInvitation) SetInvitation(val Invitation) {
+	s.Invitation = val
+}
+
+// SetInviter sets the value of Inviter.
+func (s *ReceivedInvitation) SetInviter(val Inviter) {
+	s.Inviter = val
 }
 
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
@@ -1101,6 +1100,7 @@ func (*UnauthorizedError) aPIV1MeProfilePutRes()              {}
 func (*UnauthorizedError) aPIV1MembersGetRes()                {}
 func (*UnauthorizedError) aPIV1WorkspacesGetRes()             {}
 func (*UnauthorizedError) aPIV1WorkspacesPostRes()            {}
+func (*UnauthorizedError) acceptInvitationRes()               {}
 func (*UnauthorizedError) inviteMultipleUsersToWorkspaceRes() {}
 func (*UnauthorizedError) verifyInvitationRes()               {}
 

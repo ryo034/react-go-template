@@ -13,6 +13,24 @@ func NewMember(id ID, u *user.User, displayName DisplayName, idNumber *IDNumber)
 	return &Member{id, u, displayName, idNumber}
 }
 
+func NewMemberFromUser(u *user.User, displayName DisplayName) (*Member, error) {
+	var dn DisplayName
+	var err error
+	if displayName.IsNotEmpty() {
+		dn = displayName
+	} else {
+		dn, err = NewDisplayName(u.Name().ToString())
+		if err != nil {
+			return nil, err
+		}
+	}
+	id, err := GenerateID()
+	if err != nil {
+		return nil, err
+	}
+	return &Member{id, u, dn, nil}, nil
+}
+
 func (w *Member) ID() ID {
 	return w.id
 }

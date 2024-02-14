@@ -4,7 +4,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 )
 
 type CreateInput struct {
@@ -41,8 +41,8 @@ func NewFindAllMembersInput(aID account.ID) *FindAllMembersInput {
 }
 
 type InviteMembersInput struct {
-	AccountID      account.ID
-	InvitedMembers member.InvitedMembers
+	AccountID   account.ID
+	Invitations invitation.Invitations
 }
 
 type VerifyInvitationTokenInput struct {

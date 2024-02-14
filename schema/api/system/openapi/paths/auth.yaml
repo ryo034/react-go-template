@@ -57,3 +57,19 @@ oauth:
         $ref: "#/components/responses/BadRequestError"
       "500":
         $ref: "#/components/responses/InternalServerError"
+
+invitationsProcess:
+  post:
+    summary: Process an invitation by verifying token and email
+    operationId: processInvitation
+    tags:
+      - Invitations
+    requestBody:
+      $ref: "#/components/requestBodies/InvitationsProcess"
+    responses:
+      "200":
+        description: OTP has been sent successfully.
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"

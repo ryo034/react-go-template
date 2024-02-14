@@ -24,7 +24,8 @@ func (s *service) InviteMultipleUsersToWorkspace(ctx context.Context, req *opena
 	ims := make([]workspace.InvitedMember, len(req.InvitedMembers))
 	for _, m := range req.InvitedMembers {
 		ims = append(ims, workspace.InvitedMember{
-			Email: m.Email,
+			Email:       m.InviteeEmail,
+			DisplayName: m.DisplayName,
 		})
 	}
 	return s.ctrl.Workspace.InviteMembers(ctx, workspace.InvitedMembersInput{

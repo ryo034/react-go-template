@@ -28,36 +28,3 @@ Members:
   type: array
   items:
     $ref: "#/components/schemas/Member"
-
-InvitedMember:
-  type: object
-  required:
-    - email
-    - displayName
-    - verified
-  properties:
-    email:
-      type: string
-      format: email
-    displayName:
-      type: string
-    verified:
-      type: boolean
-
-InvitedMembers:
-  type: array
-  items:
-    $ref: "#/components/schemas/InvitedMember"
-
-BulkInvitedResult:
-  type: object
-  required:
-    - invitedCount
-    - failedMembers
-  properties:
-    invitedCount:
-      type: integer
-    failedMembers:
-      $ref: "#/components/schemas/InvitedMembers"
-    registeredMembers:
-      $ref: "#/components/schemas/InvitedMembers"

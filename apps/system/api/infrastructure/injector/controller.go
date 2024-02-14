@@ -24,7 +24,7 @@ func newControllerInjector(
 	sr := sharedPresenter.NewResolver(mr, la)
 	return Controller{
 		me.NewController(ui.Me, sr, co),
-		auth.NewController(ui.Auth, sr),
+		auth.NewController(ui.Auth, sr, co),
 		workspace.NewController(ui.Workspace, sr, co),
 	}
 }

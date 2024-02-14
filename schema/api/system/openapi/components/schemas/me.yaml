@@ -25,3 +25,18 @@ Me:
       type: array
       items:
         $ref: "#/components/schemas/Workspace"
+    receivedInvitations:
+      type: array
+      items:
+        $ref: "#/components/schemas/ReceivedInvitation"
+
+ReceivedInvitation:
+  type: object
+  required:
+    - invitation
+    - inviter
+  properties:
+    invitation:
+      $ref: "#/components/schemas/Invitation"
+    inviter:
+      $ref: "#/components/schemas/Inviter"

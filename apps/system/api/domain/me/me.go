@@ -9,14 +9,15 @@ import (
 )
 
 type Me struct {
-	self             *user.User
-	workspace        *workspace.Workspace
-	member           *member.Member
-	joinedWorkspaces workspace.Workspaces
+	self                *user.User
+	workspace           *workspace.Workspace
+	member              *member.Member
+	joinedWorkspaces    workspace.Workspaces
+	receivedInvitations ReceivedInvitations
 }
 
-func NewMe(self *user.User, workspace *workspace.Workspace, member *member.Member, joinedWorkspaces workspace.Workspaces) *Me {
-	return &Me{self, workspace, member, joinedWorkspaces}
+func NewMe(self *user.User, workspace *workspace.Workspace, member *member.Member, joinedWorkspaces workspace.Workspaces, receivedInvitations ReceivedInvitations) *Me {
+	return &Me{self, workspace, member, joinedWorkspaces, receivedInvitations}
 }
 
 func (m *Me) Self() *user.User {
@@ -45,6 +46,11 @@ func (m *Me) HasMember() bool {
 
 func (m *Me) JoinedWorkspaces() workspace.Workspaces {
 	return m.joinedWorkspaces
+}
+
+func (m *Me) ReceivedInvitations() ReceivedInvitations {
+	return m.receivedInvitations
+
 }
 
 func (m *Me) CheckJoined(wID workspace.ID) bool {

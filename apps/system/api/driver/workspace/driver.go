@@ -2,10 +2,14 @@ package workspace
 
 import (
 	"context"
+	"database/sql"
+	"fmt"
+	"github.com/go-faster/errors"
 	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	dbErr "github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/error"
@@ -19,10 +23,12 @@ type Driver interface {
 	AddMember(ctx context.Context, exec bun.IDB, w *workspace.Workspace, m *member.Member) (*models.Member, error)
 	FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error)
 	FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace.ID) (models.Members, error)
-	InviteMember(ctx context.Context, exec bun.IDB, wID workspace.ID, invitedBy member.InvitedBy, m *member.InvitedMember) error
-	VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.InvitedMember, error)
+	InviteMember(ctx context.Context, exec bun.IDB, inviter workspace.Inviter, i *invitation.Invitation) error
+	VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.Invitation, error)
 	FindInviteeWorkspaceFromToken(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.Workspace, error)
-	FindActiveInvitation(ctx context.Context, exec bun.IDB, email account.Email) (*models.InvitedMember, error)
+	FindActiveInvitationByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.Invitation, error)
+	FindActiveInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) (*models.Invitation, error)
+	VerifyInvitationToken(ctx context.Context, exec bun.IDB, email account.Email, token invitation.Token) error
 }
 
 type driver struct {
@@ -128,15 +134,15 @@ func (p *driver) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace
 	return ms, nil
 }
 
-func (p *driver) InviteMember(ctx context.Context, exec bun.IDB, wID workspace.ID, invitedBy member.InvitedBy, m *member.InvitedMember) error {
-	im := models.InvitedMember{
-		InvitedMemberID: m.ID(),
-		WorkspaceID:     wID.Value(),
-		Email:           m.Email().ToString(),
-		Used:            false,
-		Token:           m.Token(),
-		ExpiredAt:       m.ExpiredAt(),
-		InvitedBy:       invitedBy.ID().Value(),
+func (p *driver) InviteMember(ctx context.Context, exec bun.IDB, inviter workspace.Inviter, i *invitation.Invitation) error {
+	im := models.Invitation{
+		InvitationID: i.ID().Value(),
+		WorkspaceID:  inviter.Workspace().ID().Value(),
+		Email:        i.InviteeEmail().ToString(),
+		Used:         false,
+		Token:        i.Token().Value(),
+		ExpiredAt:    i.ExpiredAt().Value().ToTime(),
+		InvitedBy:    inviter.ID().Value(),
 	}
 	if _, err := exec.NewInsert().Model(&im).Exec(ctx); err != nil {
 		return err
@@ -144,8 +150,8 @@ func (p *driver) InviteMember(ctx context.Context, exec bun.IDB, wID workspace.I
 	return nil
 }
 
-func (p *driver) VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.InvitedMember, error) {
-	im := &models.InvitedMember{}
+func (p *driver) VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.Invitation, error) {
+	im := &models.Invitation{}
 	err := exec.
 		NewSelect().
 		Model(im).
@@ -159,7 +165,7 @@ func (p *driver) VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uu
 }
 
 func (p *driver) FindInviteeWorkspaceFromToken(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.Workspace, error) {
-	im := &models.InvitedMember{}
+	im := &models.Invitation{}
 	err := exec.
 		NewSelect().
 		Model(im).
@@ -173,8 +179,8 @@ func (p *driver) FindInviteeWorkspaceFromToken(ctx context.Context, exec bun.IDB
 	return im.Workspace, nil
 }
 
-func (p *driver) FindActiveInvitation(ctx context.Context, exec bun.IDB, email account.Email) (*models.InvitedMember, error) {
-	im := &models.InvitedMember{}
+func (p *driver) FindActiveInvitationByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.Invitation, error) {
+	im := &models.Invitation{}
 	err := exec.
 		NewSelect().
 		Model(im).
@@ -186,7 +192,58 @@ func (p *driver) FindActiveInvitation(ctx context.Context, exec bun.IDB, email a
 		Limit(1).
 		Scan(ctx)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, domainErr.NewNoSuchData(fmt.Sprintf("invited_member: email=%s and used=false and expired_at > now()", email.ToString()))
+		}
 		return nil, err
 	}
 	return im, nil
+}
+
+func (p *driver) FindActiveInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) (*models.Invitation, error) {
+	im := &models.Invitation{}
+	err := exec.
+		NewSelect().
+		Model(im).
+		Where("invitation_id = ?", id.Value()).
+		Where("used = ?", false).
+		Where("expired_at > ?", time.Now()).
+		Relation("Workspace").
+		Relation("Workspace.Detail").
+		Limit(1).
+		Scan(ctx)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, domainErr.NewNoSuchData(fmt.Sprintf("invited_member: id=%s and used=false and expired_at > now()", id.Value()))
+		}
+		return nil, err
+	}
+	return im, nil
+
+}
+
+func (p *driver) VerifyInvitationToken(ctx context.Context, exec bun.IDB, email account.Email, token invitation.Token) error {
+	im := &models.Invitation{}
+	err := exec.
+		NewSelect().
+		Model(im).
+		Where("email = ?", email.ToString()).
+		Where("token = ?", token.Value()).
+		Where("verified = ?", false).
+		Where("used = ?", false).
+		Limit(1).
+		Scan(ctx)
+	if err != nil {
+		return err
+	}
+	im.Verified = true
+	if _, err = exec.
+		NewUpdate().
+		Model(im).
+		Column("verified").
+		WherePK().
+		Exec(ctx); err != nil {
+		return err
+	}
+	return nil
 }

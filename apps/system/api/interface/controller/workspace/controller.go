@@ -4,12 +4,11 @@ import (
 	"context"
 	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	infraShared "github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/shared"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 	workspaceUc "github.com/ryo034/react-go-template/apps/system/api/usecase/workspace"
-	"time"
 )
 
 type Controller interface {
@@ -76,22 +75,17 @@ func (c *controller) FindAllMembers(ctx context.Context) (openapi.APIV1MembersGe
 }
 
 func NewInviteMembersInput(aID account.ID, ims []InvitedMember) *workspaceUc.InviteMembersInput {
-	expiredAt := time.Now()
-	ivs := make([]*member.InvitedMember, len(ims))
+	ivs := make([]*invitation.Invitation, len(ims))
 	for _, im := range ims {
-		em, err := account.NewEmail(im.Email)
+		i, err := invitation.GenInvitation(im.Email, im.DisplayName)
 		if err != nil {
 			return nil
 		}
-		m, err := member.NewInvitedMemberFromEmail(em, im.DisplayName, expiredAt)
-		if err != nil {
-			return nil
-		}
-		ivs = append(ivs, m)
+		ivs = append(ivs, i)
 	}
 	return &workspaceUc.InviteMembersInput{
-		AccountID:      aID,
-		InvitedMembers: member.NewInvitedMembers(ivs),
+		AccountID:   aID,
+		Invitations: invitation.NewInvitations(ivs),
 	}
 }
 

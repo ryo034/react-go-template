@@ -3,14 +3,22 @@ InvitationInfo:
   required:
     - workspaceName
     - verified
-    - hasRealName
-    - hasDisplayNameAtInvitation
   properties:
     workspaceName:
       type: string
     verified:
       type: boolean
-    hasRealName:
-      type: boolean
-    hasDisplayNameAtInvitation:
-      type: boolean
+
+BulkInvitedResult:
+  type: object
+  required:
+    - invitedCount
+    - failedInvitations
+    - registeredInvitations
+  properties:
+    invitedCount:
+      type: integer
+    failedInvitations:
+      $ref: "#/components/schemas/Invitations"
+    registeredInvitations:
+      $ref: "#/components/schemas/Invitations"

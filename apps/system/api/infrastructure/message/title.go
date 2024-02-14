@@ -19,6 +19,10 @@ var titleMessages = map[domainError.MessageKey]map[language.Tag]string{
 		language.Japanese: "不正なメールアドレスです",
 		language.English:  "Invalid email",
 	},
+	domainError.InvalidInviteTokenMessageKey: {
+		language.Japanese: "不正な招待トークンです",
+		language.English:  "Invalid invite token",
+	},
 	domainError.ExpiredInviteTokenMessageKey: {
 		language.Japanese: "招待トークンの有効期限が切れています",
 		language.English:  "Invite token is expired",
