@@ -19,4 +19,5 @@ type Repository interface {
 	UpdateMember(ctx context.Context, exec bun.IDB, me *Me) error
 	UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User) error
 	AcceptInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) error
+	FindAllActiveReceivedInvitations(ctx context.Context, exec bun.IDB, aID account.ID) (ReceivedInvitations, error)
 }

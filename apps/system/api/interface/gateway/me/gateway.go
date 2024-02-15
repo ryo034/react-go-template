@@ -12,18 +12,20 @@ import (
 	fbDr "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	meDr "github.com/ryo034/react-go-template/apps/system/api/driver/me"
 	workspaceDr "github.com/ryo034/react-go-template/apps/system/api/driver/workspace"
+	invitationGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/workspace/invitation"
 	"github.com/uptrace/bun"
 )
 
 type gateway struct {
-	md meDr.Driver
-	fd fbDr.Driver
-	wd workspaceDr.Driver
-	a  Adapter
+	md   meDr.Driver
+	fd   fbDr.Driver
+	wd   workspaceDr.Driver
+	a    Adapter
+	inva invitationGw.Adapter
 }
 
-func NewGateway(md meDr.Driver, fd fbDr.Driver, wd workspaceDr.Driver, a Adapter) me.Repository {
-	return &gateway{md, fd, wd, a}
+func NewGateway(md meDr.Driver, fd fbDr.Driver, wd workspaceDr.Driver, a Adapter, inva invitationGw.Adapter) me.Repository {
+	return &gateway{md, fd, wd, a, inva}
 }
 
 func (g *gateway) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*me.Me, error) {
@@ -35,7 +37,11 @@ func (g *gateway) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*me.Me
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		return nil, err
 	}
-	return g.a.Adapt(res, ws)
+	ris, err := g.md.FindAllActiveInvitations(ctx, exec, account.NewIDFromUUID(res.SystemAccountID))
+	if err != nil {
+		return nil, err
+	}
+	return g.a.Adapt(res, ws, ris)
 }
 
 func (g *gateway) FindLastLogin(ctx context.Context, exec bun.IDB, aID account.ID) (*me.Me, error) {
@@ -90,4 +96,12 @@ func (g *gateway) UpdateMember(ctx context.Context, exec bun.IDB, m *me.Me) erro
 
 func (g *gateway) AcceptInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) error {
 	return g.md.AcceptInvitation(ctx, exec, id)
+}
+
+func (g *gateway) FindAllActiveReceivedInvitations(ctx context.Context, exec bun.IDB, aID account.ID) (me.ReceivedInvitations, error) {
+	res, err := g.md.FindAllActiveInvitations(ctx, exec, aID)
+	if err != nil {
+		return nil, err
+	}
+	return g.a.AdaptAllReceivedInvitation(res)
 }

@@ -110,15 +110,12 @@ func (d Datetime) ToLocalDate() (time.Time, error) {
 		log.Printf("ToLocalTime Error: %s", CountryTz["Tokyo"])
 		errs.Append(InvalidDatetime, nil, d.value.String())
 	}
-
 	if d.value.IsZero() {
 		errs.Append(InvalidDatetime, nil, d.value.String())
 	}
-
 	if errs.IsNotEmpty() {
 		return time.Time{}, errs
 	}
-
 	t := d.value
 	return t.Truncate(time.Hour).Add(-time.Duration(t.Hour()) * time.Hour).In(loc), nil
 }
@@ -131,7 +128,6 @@ func (d Datetime) ToLocalTime() (time.Time, error) {
 		log.Printf("LoadLocation Error: %s", tz)
 		errs.Append(InvalidDatetime, nil, d.value.String())
 	}
-
 	if d.value.IsZero() {
 		errs.Append(InvalidDatetime, nil, d.value.String())
 	}

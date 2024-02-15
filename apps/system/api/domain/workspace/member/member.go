@@ -14,11 +14,9 @@ func NewMember(id ID, u *user.User, displayName DisplayName, idNumber *IDNumber)
 }
 
 func NewMemberFromUser(u *user.User, displayName DisplayName) (*Member, error) {
-	var dn DisplayName
 	var err error
-	if displayName.IsNotEmpty() {
-		dn = displayName
-	} else {
+	dn := displayName
+	if displayName.IsEmpty() {
 		dn, err = NewDisplayName(u.Name().ToString())
 		if err != nil {
 			return nil, err

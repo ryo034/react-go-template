@@ -2,16 +2,16 @@ package me
 
 type ReceivedInvitations interface {
 	Size() int
-	AsSlice() []*ReceivedInvitation
+	AsSlice() []ReceivedInvitation
 	IsEmpty() bool
 	IsNotEmpty() bool
 }
 
 type workspaces struct {
-	wrapped []*ReceivedInvitation
+	wrapped []ReceivedInvitation
 }
 
-func NewReceivedInvitations(wrapped []*ReceivedInvitation) ReceivedInvitations {
+func NewReceivedInvitations(wrapped []ReceivedInvitation) ReceivedInvitations {
 	return &workspaces{wrapped}
 }
 
@@ -27,6 +27,6 @@ func (ws *workspaces) Size() int {
 	return len(ws.wrapped)
 }
 
-func (ws *workspaces) AsSlice() []*ReceivedInvitation {
-	return append(make([]*ReceivedInvitation, 0, ws.Size()), ws.wrapped...)
+func (ws *workspaces) AsSlice() []ReceivedInvitation {
+	return append(make([]ReceivedInvitation, 0, ws.Size()), ws.wrapped...)
 }

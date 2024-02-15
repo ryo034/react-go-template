@@ -274,7 +274,7 @@ paths:
           $ref: '#/components/responses/NotFoundError'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /api/v1/members/invitations/accept:
+  /api/v1/members/invitations/{invitationId}/accept:
     post:
       summary: Accept an invitation to join a workspace
       operationId: acceptInvitation
@@ -282,9 +282,21 @@ paths:
         - Members
       security:
         - bearer: []
+      parameters:
+        - name: invitationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Invitation token
       responses:
         '200':
           description: Invitation accepted and user added to the workspace
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '500':

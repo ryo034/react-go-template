@@ -26,7 +26,7 @@ func TestAdapter_Adapt(t *testing.T) {
 	adapter := NewAdapter()
 
 	t.Run("Valid conversion", func(t *testing.T) {
-		u, err := adapter.Adapt(&systemAccount)
+		u, err := adapter.AdaptTmp(&systemAccount)
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)
 		}
@@ -38,7 +38,7 @@ func TestAdapter_Adapt(t *testing.T) {
 	t.Run("PhoneNumber is nil", func(t *testing.T) {
 		invalidSystemAccount := systemAccount
 		invalidSystemAccount.PhoneNumber = nil
-		u, err := adapter.Adapt(&invalidSystemAccount)
+		u, err := adapter.AdaptTmp(&invalidSystemAccount)
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)
 		}
@@ -50,7 +50,7 @@ func TestAdapter_Adapt(t *testing.T) {
 	t.Run("Name is empty", func(t *testing.T) {
 		invalidSystemAccount := systemAccount
 		invalidSystemAccount.Profile.Name = ""
-		u, err := adapter.Adapt(&invalidSystemAccount)
+		u, err := adapter.AdaptTmp(&invalidSystemAccount)
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)
 		}

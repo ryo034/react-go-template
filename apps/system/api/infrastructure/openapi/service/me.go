@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/ryo034/react-go-template/apps/system/api/interface/controller/me"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 )
 
@@ -11,4 +12,8 @@ func (s *service) APIV1MeGet(ctx context.Context) (openapi.APIV1MeGetRes, error)
 
 func (s *service) APIV1MeProfilePut(ctx context.Context, req *openapi.APIV1MeProfilePutReq) (openapi.APIV1MeProfilePutRes, error) {
 	return s.ctrl.Me.UpdateProfile(ctx, req.User)
+}
+
+func (s *service) AcceptInvitation(ctx context.Context, params openapi.AcceptInvitationParams) (openapi.AcceptInvitationRes, error) {
+	return s.ctrl.Me.AcceptInvitation(ctx, me.AcceptInvitationInput{InvitationID: params.InvitationId})
 }

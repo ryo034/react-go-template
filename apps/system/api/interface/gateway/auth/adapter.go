@@ -2,12 +2,13 @@ package auth
 
 import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 )
 
 type Adapter interface {
-	Adapt(sa *models.SystemAccount) (*user.User, error)
+	AdaptTmp(sa *models.SystemAccount) (*user.User, error)
 }
 
 type adapter struct {
@@ -17,10 +18,29 @@ func NewAdapter() Adapter {
 	return &adapter{}
 }
 
-func (a *adapter) Adapt(sa *models.SystemAccount) (*user.User, error) {
+func (a *adapter) AdaptTmp(sa *models.SystemAccount) (*user.User, error) {
 	em, err := account.NewEmail(sa.Profile.Email)
 	if err != nil {
 		return nil, err
 	}
-	return user.NewTmpUser(account.NewIDFromUUID(sa.SystemAccountID), em), nil
+	aID := account.NewIDFromUUID(sa.SystemAccountID)
+
+	var an *account.Name = nil
+	if sa.Profile != nil && sa.Profile.Name != "" {
+		tmpAn, err := account.NewName(sa.Profile.Name)
+		if err != nil {
+			return nil, err
+		}
+		an = &tmpAn
+	}
+
+	var pn *phone.Number = nil
+	if sa.PhoneNumber != nil {
+		tmpPn, err := phone.NewPhoneNumber(sa.PhoneNumber.PhoneNumber)
+		if err != nil {
+			return nil, err
+		}
+		pn = &tmpPn
+	}
+	return user.NewUser(aID, em, an, pn), nil
 }

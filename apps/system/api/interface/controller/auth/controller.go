@@ -16,7 +16,6 @@ type Controller interface {
 	VerifyOTP(ctx context.Context, req *openapi.APIV1AuthOtpVerifyPostReq) (openapi.APIV1AuthOtpVerifyPostRes, error)
 	AuthByOAuth(ctx context.Context) (openapi.APIV1AuthOAuthPostRes, error)
 	ProcessInvitation(ctx context.Context, i ProcessInvitationInput) (openapi.ProcessInvitationRes, error)
-	AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error)
 }
 
 type controller struct {
@@ -28,10 +27,6 @@ type controller struct {
 type ProcessInvitationInput struct {
 	Token uuid.UUID
 	Email string
-}
-
-type AcceptInvitationInput struct {
-	InvitationID uuid.UUID
 }
 
 func NewController(auc authUc.UseCase, resl shared.Resolver, co infraShared.ContextOperator) Controller {
@@ -84,22 +79,6 @@ func (c *controller) ProcessInvitation(ctx context.Context, i ProcessInvitationI
 	res, err := c.auc.ProcessInvitation(ctx, inp)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.ProcessInvitationRes), nil
-	}
-	return res, nil
-}
-
-func (c *controller) AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error) {
-	aID, err := c.co.GetUID(ctx)
-	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.AcceptInvitationRes), nil
-	}
-	inp := authUc.AcceptInvitationInput{
-		AccountID:    aID,
-		InvitationID: invitation.NewID(i.InvitationID),
-	}
-	res, err := c.auc.AcceptInvitation(ctx, inp)
-	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.AcceptInvitationRes), nil
 	}
 	return res, nil
 }

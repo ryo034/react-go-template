@@ -98,8 +98,8 @@ func (UnimplementedHandler) APIV1WorkspacesPost(ctx context.Context, req *APIV1W
 //
 // Accept an invitation to join a workspace.
 //
-// POST /api/v1/members/invitations/accept
-func (UnimplementedHandler) AcceptInvitation(ctx context.Context) (r AcceptInvitationRes, _ error) {
+// POST /api/v1/members/invitations/{invitationId}/accept
+func (UnimplementedHandler) AcceptInvitation(ctx context.Context, params AcceptInvitationParams) (r AcceptInvitationRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

@@ -50,13 +50,13 @@ func (g *gateway) Create(ctx context.Context, exec bun.IDB, aID account.ID, emai
 	if err != nil {
 		return nil, err
 	}
-	return g.adp.Adapt(res)
+	return g.adp.AdaptTmp(res)
 }
 
-func (g *gateway) Find(ctx context.Context, exec bun.IDB, email account.Email) (*user.User, error) {
+func (g *gateway) FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*user.User, error) {
 	res, err := g.ad.Find(ctx, exec, email)
 	if err != nil {
 		return nil, err
 	}
-	return g.adp.Adapt(res)
+	return g.adp.AdaptTmp(res)
 }

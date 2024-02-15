@@ -80,19 +80,3 @@ invitationsVerify:
         $ref: "#/components/responses/NotFoundError"
       "500":
         $ref: "#/components/responses/InternalServerError"
-
-invitationsAccept:
-  post:
-    summary: Accept an invitation to join a workspace
-    operationId: acceptInvitation
-    tags:
-      - Members
-    security:
-      - bearer: []
-    responses:
-      "200":
-        description: Invitation accepted and user added to the workspace
-      "401":
-        $ref: "#/components/responses/UnauthorizedError"
-      "500":
-        $ref: "#/components/responses/InternalServerError"

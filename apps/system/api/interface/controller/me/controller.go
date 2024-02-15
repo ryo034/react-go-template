@@ -3,6 +3,8 @@ package me
 import (
 	"context"
 	"fmt"
+	"github.com/google/uuid"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	infraShared "github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/shared"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
@@ -12,12 +14,17 @@ import (
 type Controller interface {
 	Find(ctx context.Context) (openapi.APIV1MeGetRes, error)
 	UpdateProfile(ctx context.Context, i openapi.User) (openapi.APIV1MeProfilePutRes, error)
+	AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error)
 }
 
 type controller struct {
 	uc   meUc.UseCase
 	resl shared.Resolver
 	co   infraShared.ContextOperator
+}
+
+type AcceptInvitationInput struct {
+	InvitationID uuid.UUID
 }
 
 func NewController(uc meUc.UseCase, resl shared.Resolver, co infraShared.ContextOperator) Controller {
@@ -46,4 +53,13 @@ func (c *controller) UpdateProfile(ctx context.Context, i openapi.User) (openapi
 		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePutRes), nil
 	}
 	return c.uc.UpdateProfile(ctx, in)
+}
+
+func (c *controller) AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error) {
+	aID, err := c.co.GetUID(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.AcceptInvitationRes), nil
+	}
+	in := meUc.AcceptInvitationInput{AccountID: aID, InvitationID: invitation.NewID(i.InvitationID)}
+	return c.uc.AcceptInvitation(ctx, in)
 }

@@ -20,7 +20,7 @@ func NewAdapter(uga userGw.Adapter) Adapter {
 }
 
 func (a *adapter) Adapt(m *models.Member) (*member.Member, error) {
-	u, err := a.uga.Adapt(m.SystemAccount)
+	u, err := a.uga.AdaptTmp(m.SystemAccount)
 	if err != nil {
 		return nil, err
 	}

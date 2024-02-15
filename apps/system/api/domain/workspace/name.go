@@ -14,7 +14,7 @@ type Name struct {
 const (
 	InvalidWorkspaceName domainError.MessageKey = "invalid.workspace.name"
 	MaxLength                                   = 255
-	Regex                                       = `^[a-zA-Z0-9ぁ-んァ-ヶー一-龠\-]+$`
+	Regex                                       = `^[a-zA-Z0-9ぁ-んァ-ヶー一-龠\-_\s　]+$`
 )
 
 func NewName(v string) (Name, error) {

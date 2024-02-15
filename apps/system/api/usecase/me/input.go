@@ -5,6 +5,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 )
@@ -104,4 +105,9 @@ func NewUpdateProfileInput(i openapi.User) (*UpdateProfileInput, error) {
 	}
 	u := user.NewUser(aID, email, na, nil)
 	return &UpdateProfileInput{user: u}, nil
+}
+
+type AcceptInvitationInput struct {
+	AccountID    account.ID
+	InvitationID invitation.ID
 }

@@ -98,11 +98,6 @@ func (s *APIV1WorkspacesPostReq) SetSubdomain(val string) {
 	s.Subdomain = val
 }
 
-// AcceptInvitationOK is response for AcceptInvitation operation.
-type AcceptInvitationOK struct{}
-
-func (*AcceptInvitationOK) acceptInvitationRes() {}
-
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type BadRequestError struct {
 	// The HTTP status code generated for this occurrence of the problem.
@@ -586,6 +581,7 @@ func (s *Me) SetReceivedInvitations(val []ReceivedInvitation) {
 
 func (*Me) aPIV1MeGetRes()        {}
 func (*Me) aPIV1MeProfilePutRes() {}
+func (*Me) acceptInvitationRes()  {}
 func (*Me) loginRes()             {}
 
 // Ref: #/components/schemas/Member

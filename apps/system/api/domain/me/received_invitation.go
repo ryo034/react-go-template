@@ -10,8 +10,8 @@ type ReceivedInvitation struct {
 	inviter    workspace.Inviter
 }
 
-func NewReceivedInvitation(invitation *invitation.Invitation, inviter workspace.Inviter) *ReceivedInvitation {
-	return &ReceivedInvitation{invitation, inviter}
+func NewReceivedInvitation(invitation *invitation.Invitation, inviter workspace.Inviter) ReceivedInvitation {
+	return ReceivedInvitation{invitation, inviter}
 }
 
 func (r *ReceivedInvitation) Invitation() *invitation.Invitation {

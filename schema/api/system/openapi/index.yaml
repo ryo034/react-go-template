@@ -28,8 +28,8 @@ paths:
     $ref: "./paths/member.yaml#/invitationsBulk"
   /api/v1/members/invitations/verify:
     $ref: "./paths/member.yaml#/invitationsVerify"
-  /api/v1/members/invitations/accept:
-    $ref: "./paths/member.yaml#/invitationsAccept"
+  /api/v1/members/invitations/{invitationId}/accept:
+    $ref: "./paths/me.yaml#/invitationsAccept"
 
 components:
   securitySchemes:

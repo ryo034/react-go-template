@@ -9,7 +9,6 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	domainError "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/email"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
@@ -21,7 +20,6 @@ type UseCase interface {
 	AuthByOTP(ctx context.Context, i ByOTPInput) (openapi.APIV1AuthOtpPostRes, error)
 	VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error)
 	ProcessInvitation(ctx context.Context, i ProcessInvitationInput) (openapi.ProcessInvitationRes, error)
-	AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error)
 }
 
 type useCase struct {
@@ -69,7 +67,7 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 		return nil, err
 	}
 	fn := func() (string, error) {
-		usr, err := u.repo.Find(pr, p, i.Email)
+		usr, err := u.repo.FindByEmail(pr, p, i.Email)
 		if err != nil && !errors.Is(err, sql.ErrNoRows) {
 			return "", err
 		}
@@ -139,35 +137,4 @@ func (u *useCase) ProcessInvitation(ctx context.Context, i ProcessInvitationInpu
 		return u.emailDr.SendOTP(pr, i.Email, code)
 	}
 	return &openapi.ProcessInvitationOK{}, pr.Transactional(fn)().Error()
-}
-
-func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error) {
-	p := u.dbp.GetExecutor(ctx, false)
-	pr, err := u.txp.Provide(ctx)
-	if err != nil {
-		return nil, err
-	}
-	fn := func() error {
-		invRes, wRes, err := u.wRepo.FindActiveInvitation(ctx, p, i.InvitationID)
-		if err != nil {
-			return err
-		}
-		usr, err := u.repo.Find(pr, p, invRes.InviteeEmail())
-		if err != nil {
-			return err
-		}
-		m, err := member.NewMemberFromUser(usr, invRes.DisplayName())
-		if err != nil {
-			return err
-		}
-		m, err = u.wRepo.AddMember(pr, p, wRes, m)
-		if err != nil {
-			return err
-		}
-		if err = u.meRepo.AcceptInvitation(pr, p, invRes.ID()); err != nil {
-			return err
-		}
-		return u.memberLastLogin(pr, p, usr.AccountID())
-	}
-	return &openapi.AcceptInvitationOK{}, pr.Transactional(fn)().Error()
 }

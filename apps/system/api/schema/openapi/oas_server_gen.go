@@ -66,8 +66,8 @@ type Handler interface {
 	//
 	// Accept an invitation to join a workspace.
 	//
-	// POST /api/v1/members/invitations/accept
-	AcceptInvitation(ctx context.Context) (AcceptInvitationRes, error)
+	// POST /api/v1/members/invitations/{invitationId}/accept
+	AcceptInvitation(ctx context.Context, params AcceptInvitationParams) (AcceptInvitationRes, error)
 	// InviteMultipleUsersToWorkspace implements inviteMultipleUsersToWorkspace operation.
 	//
 	// Invite multiple users to the workspace by email.

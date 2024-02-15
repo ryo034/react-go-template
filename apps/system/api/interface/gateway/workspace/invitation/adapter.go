@@ -10,6 +10,7 @@ import (
 
 type Adapter interface {
 	Adapt(m *models.Invitation) (*invitation.Invitation, error)
+	AdaptAll(m []*models.Invitation) (invitation.Invitations, error)
 }
 
 type adapter struct {
@@ -31,5 +32,17 @@ func (a *adapter) Adapt(i *models.Invitation) (*invitation.Invitation, error) {
 	if err != nil {
 		return nil, err
 	}
-	return invitation.NewInvitation(id, token, i.Verified, ex, ema, dn), nil
+	return invitation.NewInvitation(id, token, i.Verified, i.Used, ex, ema, dn), nil
+}
+
+func (a *adapter) AdaptAll(is []*models.Invitation) (invitation.Invitations, error) {
+	mws := make([]*invitation.Invitation, 0, len(is))
+	for _, i := range is {
+		aw, err := a.Adapt(i)
+		if err != nil {
+			return nil, err
+		}
+		mws = append(mws, aw)
+	}
+	return invitation.NewInvitations(mws), nil
 }

@@ -9,13 +9,14 @@ type Invitation struct {
 	id           ID
 	token        Token
 	verified     bool
+	used         bool
 	expiredAt    ExpiredAt
 	inviteeEmail account.Email
 	displayName  member.DisplayName
 }
 
-func NewInvitation(id ID, token Token, verified bool, expiredAt ExpiredAt, inviteeEmail account.Email, displayName member.DisplayName) *Invitation {
-	return &Invitation{id, token, verified, expiredAt, inviteeEmail, displayName}
+func NewInvitation(id ID, token Token, verified bool, used bool, expiredAt ExpiredAt, inviteeEmail account.Email, displayName member.DisplayName) *Invitation {
+	return &Invitation{id, token, verified, used, expiredAt, inviteeEmail, displayName}
 }
 
 func GenInvitation(inviteeEmail string, displayName string) (*Invitation, error) {
@@ -35,7 +36,7 @@ func GenInvitation(inviteeEmail string, displayName string) (*Invitation, error)
 	if err != nil {
 		return nil, err
 	}
-	return &Invitation{id, token, false, GenerateExpiredAt(), em, dn}, nil
+	return &Invitation{id, token, false, false, GenerateExpiredAt(), em, dn}, nil
 }
 
 func (i *Invitation) ID() ID {
@@ -48,6 +49,11 @@ func (i *Invitation) Token() Token {
 
 func (i *Invitation) Verified() bool {
 	return i.verified
+}
+
+func (i *Invitation) Used() bool {
+	return i.used
+
 }
 
 func (i *Invitation) ExpiredAt() ExpiredAt {

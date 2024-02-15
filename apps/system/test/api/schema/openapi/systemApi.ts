@@ -193,7 +193,7 @@ export interface paths {
     /** Verify Invitation */
     get: operations["verifyInvitation"];
   };
-  "/api/v1/members/invitations/accept": {
+  "/api/v1/members/invitations/{invitationId}/accept": {
     /** Accept an invitation to join a workspace */
     post: operations["acceptInvitation"];
   };
@@ -614,10 +614,18 @@ export interface operations {
   };
   /** Accept an invitation to join a workspace */
   acceptInvitation: {
+    parameters: {
+      path: {
+        /** @description Invitation token */
+        invitationId: string;
+      };
+    };
     responses: {
       /** @description Invitation accepted and user added to the workspace */
       200: {
-        content: never;
+        content: {
+          "application/json": components["schemas"]["Me"];
+        };
       };
       401: components["responses"]["UnauthorizedError"];
       500: components["responses"]["InternalServerError"];

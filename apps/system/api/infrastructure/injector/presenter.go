@@ -6,6 +6,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/member"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/user"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/workspace"
+	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/workspace/invitation"
 	authUc "github.com/ryo034/react-go-template/apps/system/api/usecase/auth"
 	meUc "github.com/ryo034/react-go-template/apps/system/api/usecase/me"
 	workspaceUc "github.com/ryo034/react-go-template/apps/system/api/usecase/workspace"
@@ -20,9 +21,11 @@ type Presenter struct {
 func newPresenterInjector() Presenter {
 	pa := newPresenterAdapter()
 	m := member.NewAdapter(pa.User)
+	inv := invitation.NewAdapter()
+	meAdapter := me.NewAdapter(pa.Workspace, inv)
 	return Presenter{
 		auth.NewPresenter(),
-		me.NewPresenter(pa.User, pa.Member, pa.Workspace),
+		me.NewPresenter(meAdapter, pa.User, pa.Member, pa.Workspace),
 		workspace.NewPresenter(pa.Workspace, m),
 	}
 }
@@ -35,9 +38,10 @@ type PresenterAdapter struct {
 
 func newPresenterAdapter() PresenterAdapter {
 	ua := user.NewAdapter()
+	ma := member.NewAdapter(ua)
 	return PresenterAdapter{
 		ua,
-		member.NewAdapter(ua),
-		workspace.NewAdapter(),
+		ma,
+		workspace.NewAdapter(ma),
 	}
 }

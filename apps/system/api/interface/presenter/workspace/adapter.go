@@ -2,19 +2,22 @@ package workspace
 
 import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
+	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/member"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 )
 
 type Adapter interface {
 	Adapt(w *workspace.Workspace) openapi.Workspace
 	AdaptAll(ws workspace.Workspaces) []openapi.Workspace
+	AdaptInviter(i workspace.Inviter) openapi.Inviter
 }
 
 type adapter struct {
+	ma member.Adapter
 }
 
-func NewAdapter() Adapter {
-	return &adapter{}
+func NewAdapter(ma member.Adapter) Adapter {
+	return &adapter{ma}
 }
 
 func (a *adapter) Adapt(w *workspace.Workspace) openapi.Workspace {
@@ -38,4 +41,11 @@ func (a *adapter) AdaptAll(ws workspace.Workspaces) []openapi.Workspace {
 		res = append(res, a.Adapt(w))
 	}
 	return res
+}
+
+func (a *adapter) AdaptInviter(i workspace.Inviter) openapi.Inviter {
+	return openapi.Inviter{
+		Member:    a.ma.Adapt(i.Member),
+		Workspace: a.Adapt(i.Workspace()),
+	}
 }

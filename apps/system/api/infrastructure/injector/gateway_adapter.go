@@ -21,14 +21,15 @@ type GatewayAdapter struct {
 func newGatewayAdapterInjector() GatewayAdapter {
 	userGw := user.NewAdapter()
 	memberGw := member.NewAdapter(userGw)
-	workspaceGw := workspace.NewAdapter()
-	meGw := me.NewAdapter(userGw, workspaceGw, memberGw)
+	inv := invitation.NewAdapter()
+	workspaceGw := workspace.NewAdapter(memberGw)
+	meGw := me.NewAdapter(userGw, workspaceGw, memberGw, inv)
 	return GatewayAdapter{
 		userGw,
 		memberGw,
 		meGw,
 		workspaceGw,
 		auth.NewAdapter(),
-		invitation.NewAdapter(),
+		inv,
 	}
 }

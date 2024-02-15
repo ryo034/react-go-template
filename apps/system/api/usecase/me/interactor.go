@@ -7,6 +7,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	fbDr "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
@@ -15,6 +16,7 @@ import (
 type UseCase interface {
 	Find(ctx context.Context, aID account.ID) (openapi.APIV1MeGetRes, error)
 	UpdateProfile(ctx context.Context, i *UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error)
+	AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error)
 }
 
 type useCase struct {
@@ -37,7 +39,7 @@ func (u *useCase) Find(ctx context.Context, aID account.ID) (openapi.APIV1MeGetR
 		return u.op.Find(lastLoginRes), nil
 	}
 	// If there is no last login information,
-	//　it is considered that the user has not joined the workspace.
+	// it is considered that the user has not joined the workspace.
 	m, err := u.repo.FindBeforeOnboard(ctx, exec, aID)
 	if err != nil {
 		return nil, err
@@ -79,6 +81,48 @@ func (u *useCase) UpdateProfile(ctx context.Context, i *UpdateProfileInput) (ope
 			return u.repo.FindBeforeOnboard(pr, p, i.user.AccountID())
 		}
 		return u.repo.FindLastLogin(pr, p, i.user.AccountID())
+	}
+	result := pr.Transactional(fn)()
+	if err = result.Error(); err != nil {
+		return nil, err
+	}
+	return u.op.Find(result.Value(0).(*me.Me)), nil
+}
+
+func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error) {
+	p := u.dbp.GetExecutor(ctx, false)
+	pr, err := u.txp.Provide(ctx)
+	if err != nil {
+		return nil, err
+	}
+	fn := func() (*me.Me, error) {
+		invRes, wRes, err := u.wRepo.FindActiveInvitation(ctx, p, i.InvitationID)
+		if err != nil {
+			return nil, err
+		}
+		m, err := u.repo.FindByEmail(pr, p, invRes.InviteeEmail())
+		if err != nil {
+			return nil, err
+		}
+		mem, err := member.NewMemberFromUser(m.Self(), invRes.DisplayName())
+		if err != nil {
+			return nil, err
+		}
+		mem, err = u.wRepo.AddMember(pr, p, wRes, mem)
+		if err != nil {
+			return nil, err
+		}
+		if err = u.repo.AcceptInvitation(pr, p, invRes.ID()); err != nil {
+			return nil, err
+		}
+		m, err = u.repo.Find(pr, p, mem.ID())
+		if err != nil {
+			return nil, err
+		}
+		if err = u.repo.LastLogin(pr, p, m); err != nil {
+			return nil, err
+		}
+		return m, nil
 	}
 	result := pr.Transactional(fn)()
 	if err = result.Error(); err != nil {

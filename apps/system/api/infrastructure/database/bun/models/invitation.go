@@ -7,7 +7,7 @@ import (
 )
 
 type Invitation struct {
-	bun.BaseModel `bun:"table:invitations,alias:ims"`
+	bun.BaseModel `bun:"table:invitations,alias:invs"`
 
 	InvitationID uuid.UUID `bun:"invitation_id,pk"`
 	WorkspaceID  uuid.UUID `bun:"workspace_id,notnull"`

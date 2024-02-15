@@ -4,7 +4,9 @@ package openapi
 
 import (
 	"net/http"
+	"net/url"
 
+	"github.com/go-faster/errors"
 	"github.com/google/uuid"
 
 	"github.com/ogen-go/ogen/conv"
@@ -13,6 +15,72 @@ import (
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 )
+
+// AcceptInvitationParams is parameters of acceptInvitation operation.
+type AcceptInvitationParams struct {
+	// Invitation token.
+	InvitationId uuid.UUID
+}
+
+func unpackAcceptInvitationParams(packed middleware.Parameters) (params AcceptInvitationParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "invitationId",
+			In:   "path",
+		}
+		params.InvitationId = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeAcceptInvitationParams(args [1]string, argsEscaped bool, r *http.Request) (params AcceptInvitationParams, _ error) {
+	// Decode path: invitationId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "invitationId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.InvitationId = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "invitationId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
 
 // VerifyInvitationParams is parameters of verifyInvitation operation.
 type VerifyInvitationParams struct {

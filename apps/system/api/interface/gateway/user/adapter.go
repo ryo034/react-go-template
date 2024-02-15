@@ -8,7 +8,7 @@ import (
 )
 
 type Adapter interface {
-	Adapt(u *models.SystemAccount) (*user.User, error)
+	AdaptTmp(u *models.SystemAccount) (*user.User, error)
 }
 
 type adapter struct {
@@ -18,7 +18,7 @@ func NewAdapter() Adapter {
 	return &adapter{}
 }
 
-func (a *adapter) Adapt(u *models.SystemAccount) (*user.User, error) {
+func (a *adapter) AdaptTmp(u *models.SystemAccount) (*user.User, error) {
 	aID, err := account.NewID(u.SystemAccountID.String())
 	if err != nil {
 		return nil, err

@@ -82,8 +82,8 @@ type Invoker interface {
 	//
 	// Accept an invitation to join a workspace.
 	//
-	// POST /api/v1/members/invitations/accept
-	AcceptInvitation(ctx context.Context) (AcceptInvitationRes, error)
+	// POST /api/v1/members/invitations/{invitationId}/accept
+	AcceptInvitation(ctx context.Context, params AcceptInvitationParams) (AcceptInvitationRes, error)
 	// InviteMultipleUsersToWorkspace invokes inviteMultipleUsersToWorkspace operation.
 	//
 	// Invite multiple users to the workspace by email.
@@ -1013,17 +1013,17 @@ func (c *Client) sendAPIV1WorkspacesPost(ctx context.Context, request *APIV1Work
 //
 // Accept an invitation to join a workspace.
 //
-// POST /api/v1/members/invitations/accept
-func (c *Client) AcceptInvitation(ctx context.Context) (AcceptInvitationRes, error) {
-	res, err := c.sendAcceptInvitation(ctx)
+// POST /api/v1/members/invitations/{invitationId}/accept
+func (c *Client) AcceptInvitation(ctx context.Context, params AcceptInvitationParams) (AcceptInvitationRes, error) {
+	res, err := c.sendAcceptInvitation(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendAcceptInvitation(ctx context.Context) (res AcceptInvitationRes, err error) {
+func (c *Client) sendAcceptInvitation(ctx context.Context, params AcceptInvitationParams) (res AcceptInvitationRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("acceptInvitation"),
 		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/v1/members/invitations/accept"),
+		semconv.HTTPRouteKey.String("/api/v1/members/invitations/{invitationId}/accept"),
 	}
 
 	// Run stopwatch.
@@ -1055,8 +1055,27 @@ func (c *Client) sendAcceptInvitation(ctx context.Context) (res AcceptInvitation
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/members/invitations/accept"
+	var pathParts [3]string
+	pathParts[0] = "/api/v1/members/invitations/"
+	{
+		// Encode "invitationId" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "invitationId",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.InvitationId))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/accept"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"

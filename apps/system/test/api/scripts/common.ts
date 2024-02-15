@@ -80,6 +80,16 @@ export const getInviteToken = async (email: string) => {
   return res.rows[0].token as string
 }
 
+export const getInvitationIdByToken = async (token: string) => {
+  const db = new MainDb()
+  const conn = await db.getConnection()
+  const res = await conn.query(`SELECT invitation_id FROM invitations WHERE token = '${token}'`)
+  if (res.rows.length === 0) {
+    throw new Error("res is empty")
+  }
+  return res.rows[0].invitation_id as string
+}
+
 export const checkVerifyInvitation = async (email: string, token: string) => {
   const db = new MainDb()
   const conn = await db.getConnection()

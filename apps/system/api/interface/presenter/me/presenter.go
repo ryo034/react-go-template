@@ -10,14 +10,15 @@ import (
 	meUc "github.com/ryo034/react-go-template/apps/system/api/usecase/me"
 )
 
-func NewPresenter(ua user.Adapter, ma member.Adapter, wa workspace.Adapter) meUc.OutputPort {
-	return &presenter{ua, ma, wa}
-}
-
 type presenter struct {
+	a  Adapter
 	ua user.Adapter
 	ma member.Adapter
 	wa workspace.Adapter
+}
+
+func NewPresenter(a Adapter, ua user.Adapter, ma member.Adapter, wa workspace.Adapter) meUc.OutputPort {
+	return &presenter{a, ua, ma, wa}
 }
 
 func (p *presenter) Find(m *me.Me) *openapi.Me {
@@ -32,11 +33,17 @@ func (p *presenter) Find(m *me.Me) *openapi.Me {
 		cw.Value = p.wa.Adapt(m.Workspace())
 	}
 
+	ris, err := p.a.AdaptAllReceivedInvitation(m.ReceivedInvitations())
+	if err != nil {
+		return nil
+	}
+
 	return &openapi.Me{
-		Self:             p.ua.Adapt(m.Self()),
-		Member:           mem,
-		CurrentWorkspace: cw,
-		JoinedWorkspaces: p.wa.AdaptAll(m.JoinedWorkspaces()),
+		Self:                p.ua.Adapt(m.Self()),
+		Member:              mem,
+		CurrentWorkspace:    cw,
+		JoinedWorkspaces:    p.wa.AdaptAll(m.JoinedWorkspaces()),
+		ReceivedInvitations: ris,
 	}
 }
 

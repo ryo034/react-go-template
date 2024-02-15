@@ -11,6 +11,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	"github.com/uptrace/bun"
+	"time"
 )
 
 type Driver interface {
@@ -23,6 +24,7 @@ type Driver interface {
 	UpdateMember(ctx context.Context, exec bun.IDB, m *me.Me) error
 	UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User) error
 	AcceptInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) error
+	FindAllActiveInvitations(ctx context.Context, exec bun.IDB, aID account.ID) ([]*models.Invitation, error)
 }
 
 type driver struct {
@@ -171,4 +173,29 @@ func (d *driver) AcceptInvitation(ctx context.Context, exec bun.IDB, id invitati
 		return err
 	}
 	return nil
+}
+
+func (d *driver) FindAllActiveInvitations(ctx context.Context, exec bun.IDB, aID account.ID) ([]*models.Invitation, error) {
+	p, err := d.FindProfile(ctx, exec, aID)
+	if err != nil {
+		return nil, err
+	}
+	var ims []*models.Invitation
+	if err = exec.
+		NewSelect().
+		Model(&ims).
+		Relation("Workspace").
+		Relation("Workspace.Detail").
+		Relation("Member").
+		Relation("Member.Profile").
+		Relation("Member.SystemAccount").
+		Relation("Member.SystemAccount.Profile").
+		Relation("Member.SystemAccount.PhoneNumber").
+		Where("invs.email = ?", p.Profile.Email).
+		Where("invs.used = ?", false).
+		Where("invs.expired_at > ?", time.Now()).
+		Scan(ctx); err != nil {
+		return nil, err
+	}
+	return ims, nil
 }

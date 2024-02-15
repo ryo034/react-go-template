@@ -1154,12 +1154,12 @@ func (s *Server) handleAPIV1WorkspacesPostRequest(args [0]string, argsEscaped bo
 //
 // Accept an invitation to join a workspace.
 //
-// POST /api/v1/members/invitations/accept
-func (s *Server) handleAcceptInvitationRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// POST /api/v1/members/invitations/{invitationId}/accept
+func (s *Server) handleAcceptInvitationRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("acceptInvitation"),
 		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/v1/members/invitations/accept"),
+		semconv.HTTPRouteKey.String("/api/v1/members/invitations/{invitationId}/accept"),
 	}
 
 	// Start a span for this request.
@@ -1236,6 +1236,16 @@ func (s *Server) handleAcceptInvitationRequest(args [0]string, argsEscaped bool,
 			return
 		}
 	}
+	params, err := decodeAcceptInvitationParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
 
 	var response AcceptInvitationRes
 	if m := s.cfg.Middleware; m != nil {
@@ -1245,13 +1255,18 @@ func (s *Server) handleAcceptInvitationRequest(args [0]string, argsEscaped bool,
 			OperationSummary: "Accept an invitation to join a workspace",
 			OperationID:      "acceptInvitation",
 			Body:             nil,
-			Params:           middleware.Parameters{},
-			Raw:              r,
+			Params: middleware.Parameters{
+				{
+					Name: "invitationId",
+					In:   "path",
+				}: params.InvitationId,
+			},
+			Raw: r,
 		}
 
 		type (
 			Request  = struct{}
-			Params   = struct{}
+			Params   = AcceptInvitationParams
 			Response = AcceptInvitationRes
 		)
 		response, err = middleware.HookMiddleware[
@@ -1261,14 +1276,14 @@ func (s *Server) handleAcceptInvitationRequest(args [0]string, argsEscaped bool,
 		](
 			m,
 			mreq,
-			nil,
+			unpackAcceptInvitationParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.AcceptInvitation(ctx)
+				response, err = s.h.AcceptInvitation(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.AcceptInvitation(ctx)
+		response, err = s.h.AcceptInvitation(ctx, params)
 	}
 	if err != nil {
 		recordError("Internal", err)
