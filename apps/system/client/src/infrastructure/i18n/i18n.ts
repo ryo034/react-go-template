@@ -64,7 +64,9 @@ export const i18nKeys = {
     submit: `${i18nRootKeys.word}.submit`,
     otp: `${i18nRootKeys.word}.otp`,
     accountName: `${i18nRootKeys.word}.accountName`,
-    subdomain: `${i18nRootKeys.word}.subdomain`
+    subdomain: `${i18nRootKeys.word}.subdomain`,
+    displayName: `${i18nRootKeys.word}.displayName`,
+    member: `${i18nRootKeys.word}.member`
   },
   action: {
     submit: `${i18nRootKeys.action}.submit`,
@@ -77,7 +79,10 @@ export const i18nKeys = {
     logout: `${i18nRootKeys.action}.logout`,
     inputField: `${i18nRootKeys.action}.inputField`,
     doAction: `${i18nRootKeys.action}.doAction`,
-    enter: `${i18nRootKeys.action}.enter`
+    add: `${i18nRootKeys.action}.add`,
+    enter: `${i18nRootKeys.action}.enter`,
+    invite: `${i18nRootKeys.action}.invite`,
+    inviteTarget: `${i18nRootKeys.action}.inviteTarget`
   },
   form: {
     required: `${i18nRootKeys.form}.required`,
@@ -86,7 +91,8 @@ export const i18nKeys = {
     min: `${i18nRootKeys.form}.min`,
     passwordRegex: `${i18nRootKeys.form}.passwordRegex`,
     placeholder: {
-      input: `${i18nRootKeys.form}.placeholder.input`
+      input: `${i18nRootKeys.form}.placeholder.input`,
+      optional: `${i18nRootKeys.form}.placeholder.optional`
     }
   },
   page: {

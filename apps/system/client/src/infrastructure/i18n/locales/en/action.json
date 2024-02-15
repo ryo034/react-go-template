@@ -10,6 +10,9 @@
     "inputField": "input {{field}}",
     "submitField": "Submit {{field}}",
     "doAction": "{{action}}",
-    "enter": "Enter {{field}}"
+    "add": "Add",
+    "enter": "Enter {{field}}",
+    "invite": "Invite",
+    "inviteTarget": "Invite {{target}}"
   }
 }

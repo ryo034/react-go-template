@@ -5,7 +5,8 @@
     "max": "{{field}} must be less than {{max}}",
     "passwordRegex": "Password must be 6-128 characters with one uppercase, one lowercase, and one number.",
     "placeholder": {
-      "input": "Enter {{field}}"
+      "input": "Enter {{field}}",
+      "optional": "{{value}}(optional)"
     }
   }
 }

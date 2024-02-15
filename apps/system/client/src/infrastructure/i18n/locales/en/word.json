@@ -6,6 +6,9 @@
     "otp": "Authentication Code",
     "accountName": "Account Name",
     "subdomain": "Domain",
-    "url": "URL"
+    "url": "URL",
+    "displayName": "Display Name",
+    "member": "Member",
+    "invitation": "Invitation"
   }
 }

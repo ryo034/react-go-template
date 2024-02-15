@@ -10,6 +10,9 @@
     "inputField": "{{field}}を入力",
     "submitField": "{{field}}を送信",
     "doAction": "{{action}}をする",
-    "enter": "{{field}}を入力"
+    "add": "追加",
+    "enter": "{{field}}を入力",
+    "invite": "招待する",
+    "inviteTarget": "{{target}}を招待する"
   }
 }

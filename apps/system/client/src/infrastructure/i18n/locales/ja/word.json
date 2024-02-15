@@ -6,6 +6,9 @@
     "otp": "認証コード",
     "accountName": "名前",
     "subdomain": "ドメイン",
-    "url": "URL"
+    "url": "URL",
+    "displayName": "表示名",
+    "member": "メンバー",
+    "invitation": "招待"
   }
 }
