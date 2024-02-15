@@ -1,5 +1,6 @@
 import { useContext, useLayoutEffect, useRef } from "react"
 import { MemberCard } from "~/components/member/card"
+import { MemberCardListLoading } from "~/components/member/cardListLoading"
 import { ContainerContext } from "~/infrastructure/injector/context"
 
 export const membersPageRoute = "/members"
@@ -9,6 +10,7 @@ export const MembersPage = () => {
 
   const me = store.me((s) => s.me)
   const members = store.workspace((s) => s.members)
+  const membersIsLoading = store.workspace((s) => s.membersIsLoading)
   const membersRef = useRef(members)
 
   useLayoutEffect(() => {
@@ -35,9 +37,11 @@ export const MembersPage = () => {
         <h1 className="text-2xl font-bold tracking-tight">Members</h1>
       </header>
       <div className="grid grid-cols-4 gap-8">
-        {members.values.map((m) => {
-          return <MemberCard key={m.profile.id.value.asString} member={m} />
-        })}
+        {membersIsLoading && <MemberCardListLoading count={10} />}
+        {!membersIsLoading &&
+          members.values.map((m) => {
+            return <MemberCard key={m.profile.id.value.asString} member={m} />
+          })}
       </div>
     </div>
   )

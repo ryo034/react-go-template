@@ -3,19 +3,17 @@ import { paths } from "~/generated/schema/openapi/systemApi"
 import { firebaseAuth } from "~/infrastructure/firebase"
 
 const fetchRequestInterceptor = async (config: RequestInit | undefined) => {
-  let newConfig = { ...config }
-
-  newConfig = config === undefined ? {} : { ...config }
+  const newConfig = config === undefined ? {} : { ...config }
 
   if (firebaseAuth.currentUser === null) {
     return newConfig
   }
   const token = await firebaseAuth.currentUser.getIdToken()
   if (!token) {
-    return config
+    return newConfig
   }
   return {
-    ...config,
+    ...newConfig,
     headers: { ...new Headers(newConfig.headers), Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
   }
 }
