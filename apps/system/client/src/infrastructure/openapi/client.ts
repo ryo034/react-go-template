@@ -1,13 +1,14 @@
 import createClient from "openapi-fetch"
 import { paths } from "~/generated/schema/openapi/systemApi"
-import { firebaseAuth } from "../firebase"
+import { firebaseAuth } from "~/infrastructure/firebase"
 
 const fetchRequestInterceptor = async (config: RequestInit | undefined) => {
-  if (!config) {
-    return config
-  }
+  let newConfig = { ...config }
+
+  newConfig = config === undefined ? {} : { ...config }
+
   if (firebaseAuth.currentUser === null) {
-    return config
+    return newConfig
   }
   const token = await firebaseAuth.currentUser.getIdToken()
   if (!token) {
@@ -15,7 +16,7 @@ const fetchRequestInterceptor = async (config: RequestInit | undefined) => {
   }
   return {
     ...config,
-    headers: { ...new Headers(config.headers), Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
+    headers: { ...new Headers(newConfig.headers), Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
   }
 }
 
