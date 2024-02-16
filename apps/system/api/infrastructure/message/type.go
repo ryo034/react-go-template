@@ -63,4 +63,8 @@ var typeMessages = map[domainError.MessageKey]map[language.Tag]string{
 		language.Japanese: "不正な日付です",
 		language.English:  "datetime is invalid",
 	},
+	domainError.InternalServerErrorMessageKey: {
+		language.Japanese: "サーバーエラーが発生しました",
+		language.English:  "Internal server error",
+	},
 }

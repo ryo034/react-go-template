@@ -32,3 +32,22 @@ Inviter:
       $ref: "#/components/schemas/Member"
     workspace:
       $ref: "#/components/schemas/Workspace"
+
+Invitee:
+  type: object
+  required:
+    - name
+    - email
+  properties:
+    name:
+      type: string
+      description: Display name of the invitee
+    email:
+      type: string
+      format: email
+      description: Email of the invitee
+
+Invitees:
+  type: array
+  items:
+    $ref: "#/components/schemas/Invitee"

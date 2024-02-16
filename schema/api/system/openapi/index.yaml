@@ -24,6 +24,8 @@ paths:
     $ref: "./paths/workspace.yaml#/workspaces"
   /api/v1/members:
     $ref: "./paths/member.yaml#/members"
+  /api/v1/invitations:
+    $ref: "./paths/member.yaml#/invitations"
   /api/v1/members/invitations/bulk:
     $ref: "./paths/member.yaml#/invitationsBulk"
   /api/v1/members/invitations/verify:
@@ -57,6 +59,10 @@ components:
       $ref: "./components/schemas/invitation.yaml#/Invitation"
     Invitations:
       $ref: "./components/schemas/invitation.yaml#/Invitations"
+    Invitee:
+      $ref: "./components/schemas/workspace.yaml#/Invitee"
+    Invitees:
+      $ref: "./components/schemas/workspace.yaml#/Invitees"
     MembershipPeriod:
       $ref: "./components/schemas/membership.yaml#/MembershipPeriod"
     Me:
@@ -74,6 +80,8 @@ components:
       $ref: "./components/requestBodies/me.yaml#/UpdateMeProfile"
     InvitationsProcess:
       $ref: "./components/requestBodies/me.yaml#/InvitationsProcess"
+    InvitationsBulk:
+      $ref: "./components/requestBodies/member.yaml#/InvitationsBulk"
   responses:
     GeneralError:
       $ref: "./components/responses/error.yaml#/components/responses/GeneralError"
@@ -89,7 +97,7 @@ components:
       $ref: "./components/responses/error.yaml#/components/responses/TooManyRequestsError"
     InternalServerError:
       $ref: "./components/responses/error.yaml#/components/responses/InternalServerError"
-    InvitationInfo:
-      $ref: "./components/responses/member.yaml#/InvitationInfo"
-    BulkInvitedResult:
-      $ref: "./components/responses/member.yaml#/BulkInvitedResult"
+    InvitationInfoResponse:
+      $ref: "./components/responses/member.yaml#/InvitationInfoResponse"
+    InvitationsBulkResponse:
+      $ref: "./components/responses/member.yaml#/InvitationsBulkResponse"

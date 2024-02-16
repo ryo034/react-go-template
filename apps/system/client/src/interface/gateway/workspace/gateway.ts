@@ -1,5 +1,5 @@
 import { Result } from "true-myth"
-import { Members, Workspace, WorkspaceCreateInput, WorkspaceRepository } from "~/domain"
+import { Invitees, Members, Workspace, WorkspaceCreateInput, WorkspaceRepository } from "~/domain"
 import { WorkspaceDriver } from "~/driver/workspace/driver"
 import { PromiseResult } from "~/infrastructure/shared/result"
 import { WorkspaceGatewayAdapter } from "./adapter"
@@ -26,5 +26,13 @@ export class WorkspaceGateway implements WorkspaceRepository {
       return Result.err(res.error)
     }
     return this.memberAdapter.adaptAll(res.value)
+  }
+
+  async inviteMembers(invitees: Invitees): PromiseResult<null, Error> {
+    const res = await this.driver.inviteMembers(invitees)
+    if (res.isErr) {
+      return Result.err(res.error)
+    }
+    return Result.ok(null)
   }
 }

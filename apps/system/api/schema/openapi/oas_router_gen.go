@@ -176,6 +176,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
+			case 'i': // Prefix: "invitations"
+				origElem := elem
+				if l := len("invitations"); len(elem) >= l && elem[0:l] == "invitations" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "GET":
+						s.handleAPIV1InvitationsGetRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET")
+					}
+
+					return
+				}
+
+				elem = origElem
 			case 'l': // Prefix: "login"
 				origElem := elem
 				if l := len("login"); len(elem) >= l && elem[0:l] == "login" {
@@ -623,6 +644,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
+				}
+
+				elem = origElem
+			case 'i': // Prefix: "invitations"
+				origElem := elem
+				if l := len("invitations"); len(elem) >= l && elem[0:l] == "invitations" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch method {
+					case "GET":
+						// Leaf: APIV1InvitationsGet
+						r.name = "APIV1InvitationsGet"
+						r.summary = "Get pending invitations"
+						r.operationID = ""
+						r.pathPattern = "/api/v1/invitations"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 
 				elem = origElem

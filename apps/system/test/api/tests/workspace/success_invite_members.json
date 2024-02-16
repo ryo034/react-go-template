@@ -1,0 +1,14 @@
+{
+  "invitedCount": 1,
+  "failedInvitations": [],
+  "registeredInvitations": [],
+  "successfulInvitations": [
+    {
+      "id": "018db1f0-926a-7608-a0a1-384948ad3ea2",
+      "displayName": "test",
+      "expiredAt": "2024-02-23T12:42:29Z",
+      "inviteeEmail": "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com",
+      "verified": false
+    }
+  ]
+}

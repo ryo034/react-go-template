@@ -21,16 +21,11 @@ func (s *service) APIV1MembersGet(ctx context.Context) (openapi.APIV1MembersGetR
 }
 
 func (s *service) InviteMultipleUsersToWorkspace(ctx context.Context, req *openapi.InviteMultipleUsersToWorkspaceReq) (openapi.InviteMultipleUsersToWorkspaceRes, error) {
-	ims := make([]workspace.InvitedMember, len(req.InvitedMembers))
-	for _, m := range req.InvitedMembers {
-		ims = append(ims, workspace.InvitedMember{
-			Email:       m.InviteeEmail,
-			DisplayName: m.DisplayName,
-		})
+	ims := make([]workspace.Invitee, 0, len(req.Invitees))
+	for _, m := range req.Invitees {
+		ims = append(ims, workspace.Invitee{Email: m.Email, DisplayName: m.Name})
 	}
-	return s.ctrl.Workspace.InviteMembers(ctx, workspace.InvitedMembersInput{
-		InvitedMembers: ims,
-	})
+	return s.ctrl.Workspace.InviteMembers(ctx, workspace.InviteesInput{InvitedMembers: ims})
 }
 
 func (s *service) VerifyInvitation(ctx context.Context, params openapi.VerifyInvitationParams) (openapi.VerifyInvitationRes, error) {

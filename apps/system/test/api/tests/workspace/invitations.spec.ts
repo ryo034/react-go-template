@@ -1,10 +1,10 @@
 import { expect, test } from "@playwright/test"
-import { defaultPostHeaders } from "../../config/config"
-import { genAPIClient, getInviteToken } from "../../scripts"
+import { authHeaders, defaultPostHeaders } from "../../config/config"
+import { genAPIClient, getAuthInfo, getInviteToken, statefulTest } from "../../scripts"
 
 const client = genAPIClient()
 
-test.describe("Invite members", () => {
+test.describe("verify invitations", () => {
   test("user is already member of any workspace and display name is not set when invited", async () => {
     const email = "invite_test_already_joined_any_workspace@example.com"
     const token = await getInviteToken(email)
@@ -33,31 +33,61 @@ test.describe("Invite members", () => {
     expect(res.response.status).toBe(400)
     expect(res.error?.code).toBe("400-001")
   })
+})
 
-  // // verifyOTPをする際に、招待情報があり(true)、そのワークスペースに所属していない場合、
-  // // そのユーザーのワークスペースに追加しメンバーにする
-  // // jwtのcurrentWorkspaceIdが更新され、そのままワークスペースに参加する
-  // statefulTest(
-  //   "if user is a member of another workspace, user is added to the invited workspace @stateful",
-  //   async () => {
-  //     const email = "invite_test_already_joined_any_workspace@example.com"
-  //     const token = await getInviteToken(email)
-
-  //     const res = await client.GET("/api/v1/members/invitations/verify", {
-  //       headers: defaultPostHeaders,
-  //       params: { query: { token } }
-  //     })
-  //     expect(res.response.status).toBe(200)
-  //     expect(res.error).toBeUndefined()
-
-  //     const authInfo = await getAuthInfo(email)
-  //     const hs = authHeaders(authInfo.token)
-  //     const meRes = await client.GET("/api/v1/me", {
-  //       headers: hs
-  //     })
-  //     expect(meRes.response.status).toBe(200)
-  //     expect(meRes.error).toBeUndefined()
-  //     expect(meRes.data).toStrictEqual((await import("./invite_already_a_member_of_another_workspace.json")).default)
-  //   }
-  // )
+test.describe("invite members", () => {
+  statefulTest("success to invite members @stateful", async () => {
+    const email = "system_account@example.com"
+    const authInfo = await getAuthInfo(email)
+    const res = await client.POST("/api/v1/members/invitations/bulk", {
+      headers: authHeaders(authInfo.token),
+      body: {
+        invitees: [
+          { email: "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com", name: "test" }
+        ]
+      }
+    })
+    expect(res.response.status).toBe(200)
+    expect(res.data?.total).toBe(1)
+    expect(res.data?.successfulInvitations.length).toBe(1)
+    expect(res.data?.failedInvitations.length).toBe(0)
+    expect(
+      res.data?.successfulInvitations.filter(
+        (i) => i.inviteeEmail === "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com"
+      ).length
+    ).toBe(1)
+  })
+  statefulTest("Already joined any workspace @stateful", async () => {
+    const email = "invite_test_already_joined_any_workspace@example.com"
+    const authInfo = await getAuthInfo(email)
+    const res = await client.POST("/api/v1/members/invitations/bulk", {
+      headers: authHeaders(authInfo.token),
+      body: {
+        invitees: [
+          { email: "invite_test_not_exist@example.com", name: "Not Exist" },
+          { email: "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com", name: "test" }
+        ]
+      }
+    })
+    expect(res.response.status).toBe(200)
+    expect(res.data?.total).toBe(2)
+    expect(res.data?.successfulInvitations.length).toBe(1)
+    expect(res.data?.failedInvitations.length).toBe(0)
+    expect(
+      res.data?.registeredInvitations.filter(
+        (i) => i.inviteeEmail === "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com"
+      ).length
+    ).toBe(1)
+  })
+  test("Contains invalid email", async () => {
+    const email = "invite_test_already_joined_any_workspace@example.com"
+    const authInfo = await getAuthInfo(email)
+    const res = await client.POST("/api/v1/members/invitations/bulk", {
+      headers: authHeaders(authInfo.token),
+      body: {
+        invitees: [{ email: "invalid_example_test", name: "Invalid Email" }]
+      }
+    })
+    expect(res.response.status).toBe(400)
+  })
 })

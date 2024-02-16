@@ -35,7 +35,8 @@ func (r *resolver) SuccessMessage(c context.Context, msgKey string, msgArgs ...i
 }
 
 func (r *resolver) errTitle(tag language.Tag, err error, msgArgs ...interface{}) string {
-	msg := ""
+	msg := r.mr.TitleMessage(string(domainErr.InternalServerErrorMessageKey)).WithLang(tag)
+
 	var t domainValidation.Error
 	var invalidInviteToken *domainErr.InvalidInviteToken
 	var inviteTokenExpired *domainErr.ExpiredInviteToken
@@ -61,7 +62,7 @@ func (r *resolver) errTitle(tag language.Tag, err error, msgArgs ...interface{})
 }
 
 func (r *resolver) errDetail(tag language.Tag, err error, msgArgs ...interface{}) string {
-	msg := ""
+	msg := r.mr.DetailMessage(string(domainErr.InternalServerErrorMessageKey)).WithLang(tag)
 	var t domainValidation.Error
 	var invalidInviteToken *domainErr.InvalidInviteToken
 	var inviteTokenExpired *domainErr.ExpiredInviteToken
@@ -87,7 +88,7 @@ func (r *resolver) errDetail(tag language.Tag, err error, msgArgs ...interface{}
 }
 
 func (r *resolver) errType(tag language.Tag, err error, msgArgs ...interface{}) string {
-	msg := ""
+	msg := r.mr.TypeMessage(string(domainErr.InternalServerErrorMessageKey)).WithLang(tag)
 	var t domainValidation.Error
 	var invalidInviteToken *domainErr.InvalidInviteToken
 	var inviteTokenExpired *domainErr.ExpiredInviteToken
@@ -221,7 +222,7 @@ func (r *resolver) details(tag language.Tag, err error) []errDetail {
 }
 
 func (r *resolver) detail(tag language.Tag, err error) errDetail {
-	msg := ""
+	msg := r.mr.ErrorMessage(string(domainErr.InternalServerErrorMessageKey)).WithLang(tag)
 	var t domainValidation.Error
 	var conflictErr *domainErr.Conflicted
 	var noSuchData *domainErr.NoSuchData

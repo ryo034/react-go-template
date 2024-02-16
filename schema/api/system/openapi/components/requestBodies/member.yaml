@@ -1,0 +1,12 @@
+InvitationsBulk:
+  required: true
+  description: Bulk invite users to workspace
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          invitees:
+            type: array
+            items:
+              $ref: "#/components/schemas/Invitee"

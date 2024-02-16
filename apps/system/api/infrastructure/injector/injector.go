@@ -30,7 +30,7 @@ func NewInjector(
 	mc mailer.Client,
 ) (*Injector, error) {
 	defaultLang := conf.DefaultLanguage()
-	di := newDriverInjector(rc, f, co, mc, conf.NoReplyEmail())
+	di := newDriverInjector(conf, rc, f, co, mc, conf.NoReplyEmail())
 	ri := newRepositoryInjector(di, newGatewayAdapterInjector())
 	pi := newPresenterInjector()
 	la := sharedPresenter.NewLanguageAdapter(defaultLang)

@@ -213,6 +213,25 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /api/v1/invitations:
+    get:
+      summary: Get pending invitations
+      description: Returns the pending invitations (not used yet)
+      tags:
+        - Members
+      security:
+        - bearer: []
+      responses:
+        '200':
+          description: Invitations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invitations'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /api/v1/members/invitations/bulk:
     post:
       summary: Invite multiple users to the workspace by email
@@ -222,27 +241,14 @@ paths:
       security:
         - bearer: []
       requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                invitedMembers:
-                  $ref: '#/components/schemas/Invitations'
+        $ref: '#/components/requestBodies/InvitationsBulk'
       responses:
         '200':
-          description: Successfully sent invitations
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/BulkInvitedResult'
+          $ref: '#/components/responses/InvitationsBulkResponse'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-        '409':
-          $ref: '#/components/responses/ConflictError'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /api/v1/members/invitations/verify:
@@ -261,11 +267,7 @@ paths:
           description: Invitation token
       responses:
         '200':
-          description: Invitation verified
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/InvitationInfo'
+          $ref: '#/components/responses/InvitationInfoResponse'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '401':
@@ -432,6 +434,23 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Invitation'
+    Invitee:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+          description: Display name of the invitee
+        email:
+          type: string
+          format: email
+          description: Email of the invitee
+    Invitees:
+      type: array
+      items:
+        $ref: '#/components/schemas/Invitee'
     MembershipPeriod:
       type: object
       required:
@@ -550,6 +569,18 @@ components:
             required:
               - token
               - email
+    InvitationsBulk:
+      required: true
+      description: Bulk invite users to workspace
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              invitees:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invitee'
   responses:
     GeneralError:
       description: General Error
@@ -761,26 +792,38 @@ components:
                 type: string
                 example: 400-001
                 description: A custom code identifying the specific error.
-    InvitationInfo:
-      type: object
-      required:
-        - workspaceName
-        - verified
-      properties:
-        workspaceName:
-          type: string
-        verified:
-          type: boolean
-    BulkInvitedResult:
-      type: object
-      required:
-        - invitedCount
-        - failedInvitations
-        - registeredInvitations
-      properties:
-        invitedCount:
-          type: integer
-        failedInvitations:
-          $ref: '#/components/schemas/Invitations'
-        registeredInvitations:
-          $ref: '#/components/schemas/Invitations'
+    InvitationInfoResponse:
+      description: Invitation verified
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - workspaceName
+              - verified
+            properties:
+              workspaceName:
+                type: string
+              verified:
+                type: boolean
+    InvitationsBulkResponse:
+      description: Successfully sent invitations
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - total
+              - successfulInvitations
+              - failedInvitations
+              - registeredInvitations
+            properties:
+              total:
+                type: integer
+                description: Total number of invitations
+              successfulInvitations:
+                $ref: '#/components/schemas/Invitations'
+              failedInvitations:
+                $ref: '#/components/schemas/Invitations'
+              registeredInvitations:
+                $ref: '#/components/schemas/Invitations'

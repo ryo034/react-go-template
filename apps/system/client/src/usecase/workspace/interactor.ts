@@ -1,9 +1,10 @@
 import { WorkspaceRepository } from "~/domain"
-import { CreateWorkspaceInput, MeUseCase, WorkspaceUseCaseOutput } from "~/usecase"
+import { CreateWorkspaceInput, InviteMembersInput, MeUseCase, WorkspaceUseCaseOutput } from "~/usecase"
 
 export interface WorkspaceUseCase {
   create(i: CreateWorkspaceInput): Promise<Error | null>
   findAllMembers(): Promise<Error | null>
+  inviteMembers(i: InviteMembersInput): Promise<Error | null>
 }
 
 export class WorkspaceInteractor implements WorkspaceUseCase {
@@ -34,6 +35,14 @@ export class WorkspaceInteractor implements WorkspaceUseCase {
     }
     this.presenter.setMembers(res.value)
     this.presenter.setMembersIsLoading(false)
+    return null
+  }
+
+  async inviteMembers(i: InviteMembersInput): Promise<Error | null> {
+    const res = await this.repository.inviteMembers(i)
+    if (res.isErr) {
+      return res.error
+    }
     return null
   }
 }

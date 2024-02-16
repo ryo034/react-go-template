@@ -18,6 +18,26 @@ members:
       "500":
         $ref: "#/components/responses/InternalServerError"
 
+invitations:
+  get:
+    summary: Get pending invitations
+    description: Returns the pending invitations (not used yet)
+    tags:
+      - Members
+    security:
+      - bearer: []
+    responses:
+      "200":
+        description: Invitations
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Invitations"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+
 invitationsBulk:
   post:
     summary: Invite multiple users to the workspace by email
@@ -27,27 +47,14 @@ invitationsBulk:
     security:
       - bearer: []
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              invitedMembers:
-                $ref: "#/components/schemas/Invitations"
+      $ref: "#/components/requestBodies/InvitationsBulk"
     responses:
       "200":
-        description: Successfully sent invitations
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/responses/BulkInvitedResult"
+        $ref: "#/components/responses/InvitationsBulkResponse"
       "400":
         $ref: "#/components/responses/BadRequestError"
       "401":
         $ref: "#/components/responses/UnauthorizedError"
-      "409":
-        $ref: "#/components/responses/ConflictError"
       "500":
         $ref: "#/components/responses/InternalServerError"
 
@@ -67,11 +74,7 @@ invitationsVerify:
         description: Invitation token
     responses:
       "200":
-        description: Invitation verified
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/responses/InvitationInfo"
+        $ref: "#/components/responses/InvitationInfoResponse"
       "400":
         $ref: "#/components/responses/BadRequestError"
       "401":

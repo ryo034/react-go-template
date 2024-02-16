@@ -185,6 +185,24 @@ export interface paths {
       };
     };
   };
+  "/api/v1/invitations": {
+    /**
+     * Get pending invitations
+     * @description Returns the pending invitations (not used yet)
+     */
+    get: {
+      responses: {
+        /** @description Invitations */
+        200: {
+          content: {
+            "application/json": components["schemas"]["Invitations"];
+          };
+        };
+        401: components["responses"]["UnauthorizedError"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+  };
   "/api/v1/members/invitations/bulk": {
     /** Invite multiple users to the workspace by email */
     post: operations["inviteMultipleUsersToWorkspace"];
@@ -268,6 +286,16 @@ export interface components {
       displayName: string;
     };
     Invitations: components["schemas"]["Invitation"][];
+    Invitee: {
+      /** @description Display name of the invitee */
+      name: string;
+      /**
+       * Format: email
+       * @description Email of the invitee
+       */
+      email: string;
+    };
+    Invitees: components["schemas"]["Invitee"][];
     MembershipPeriod: {
       /** Format: date-time */
       start: string;
@@ -469,11 +497,26 @@ export interface components {
         };
       };
     };
-    InvitationInfo: {
-      content: never;
+    /** @description Invitation verified */
+    InvitationInfoResponse: {
+      content: {
+        "application/json": {
+          workspaceName: string;
+          verified: boolean;
+        };
+      };
     };
-    BulkInvitedResult: {
-      content: never;
+    /** @description Successfully sent invitations */
+    InvitationsBulkResponse: {
+      content: {
+        "application/json": {
+          /** @description Total number of invitations */
+          total: number;
+          successfulInvitations: components["schemas"]["Invitations"];
+          failedInvitations: components["schemas"]["Invitations"];
+          registeredInvitations: components["schemas"]["Invitations"];
+        };
+      };
     };
   };
   parameters: never;
@@ -531,6 +574,14 @@ export interface components {
         };
       };
     };
+    /** @description Bulk invite users to workspace */
+    InvitationsBulk: {
+      content: {
+        "application/json": {
+          invitees?: components["schemas"]["Invitee"][];
+        };
+      };
+    };
   };
   headers: never;
   pathItems: never;
@@ -571,23 +622,11 @@ export interface operations {
   };
   /** Invite multiple users to the workspace by email */
   inviteMultipleUsersToWorkspace: {
-    requestBody: {
-      content: {
-        "application/json": {
-          invitedMembers?: components["schemas"]["Invitations"];
-        };
-      };
-    };
+    requestBody: components["requestBodies"]["InvitationsBulk"];
     responses: {
-      /** @description Successfully sent invitations */
-      200: {
-        content: {
-          "application/json": components["responses"]["BulkInvitedResult"];
-        };
-      };
+      200: components["responses"]["InvitationsBulkResponse"];
       400: components["responses"]["BadRequestError"];
       401: components["responses"]["UnauthorizedError"];
-      409: components["responses"]["ConflictError"];
       500: components["responses"]["InternalServerError"];
     };
   };
@@ -600,12 +639,7 @@ export interface operations {
       };
     };
     responses: {
-      /** @description Invitation verified */
-      200: {
-        content: {
-          "application/json": components["responses"]["InvitationInfo"];
-        };
-      };
+      200: components["responses"]["InvitationInfoResponse"];
       400: components["responses"]["BadRequestError"];
       401: components["responses"]["UnauthorizedError"];
       404: components["responses"]["NotFoundError"];

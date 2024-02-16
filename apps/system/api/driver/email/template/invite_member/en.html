@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.ServiceName}} Invitation Email</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; }
+        .container { width: 100%; max-width: 600px; margin: auto; }
+        .header { background: #F4F4F4; padding: 10px; text-align: center; }
+        .content { padding: 20px; text-align: center; }
+        .footer { font-size: 12px; color: #666; text-align: center; padding: 20px; }
+        .button { background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Slack_icon_2019.svg/254px-Slack_icon_2019.svg.png" alt="Slack Logo" width="100">
+    </div>
+    <div class="content">
+        <h1>Join Your {{.ServiceName}} Workspace</h1>
+        <p><strong>{{.InviterName}}</strong> has invited you to join the {{.ServiceName}} workspace {{.WorkspaceName}}. Sign up now to start collaborating!</p>
+        <a href="{{.URL}}" class="button">Join Now</a>
+    </div>
+    <div class="footer">
+        This is a send-only email. You cannot reply to this message.
+    </div>
+</div>
+</body>
+</html>

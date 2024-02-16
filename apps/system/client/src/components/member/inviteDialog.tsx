@@ -1,6 +1,6 @@
 import { PlusCircledIcon } from "@radix-ui/react-icons"
 import { Plus, Trash } from "lucide-react"
-import { useMemo } from "react"
+import { useContext, useMemo } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
 import {
   Button,
@@ -14,6 +14,7 @@ import {
   ScrollArea
 } from "shared-ui"
 import { Email } from "~/domain"
+import { ContainerContext } from "~/infrastructure/injector/context"
 import { FormInputSection } from "../common/form/inputSection"
 import { useInviteMembersFormMessage } from "./message"
 
@@ -61,6 +62,8 @@ const InviteMemberEmailInput = ({
 }
 
 export const InviteMembersDialog = () => {
+  const { controller } = useContext(ContainerContext)
+
   const {
     register,
     control,
@@ -89,8 +92,8 @@ export const InviteMembersDialog = () => {
     remove(index)
   }
 
-  const onSubmit = (data: InviteMembersFormValues) => {
-    console.log(data)
+  const onSubmit = async (data: InviteMembersFormValues) => {
+    await controller.workspace.inviteMembers({ invitees: data.members })
   }
 
   return (

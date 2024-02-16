@@ -16,13 +16,14 @@ const InvalidUUID domainError.MessageKey = "invalid.uuid"
 
 func NewUUIDFromString(v string) (UUID, error) {
 	errs := validation.NewErrors()
-	if uuid.Validate(v) != nil {
+	res, err := uuid.Parse(v)
+	if err != nil {
 		errs.Append(InvalidUUID, nil, v)
 	}
 	if errs.IsNotEmpty() {
 		return UUID{}, errs
 	}
-	return UUID{uuid.MustParse(v)}, nil
+	return UUID{res}, nil
 }
 
 func NewFromFriendlyString(v string) (UUID, error) {

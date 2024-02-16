@@ -26,6 +26,12 @@ type Handler interface {
 	//
 	// POST /api/v1/auth/otp/verify
 	APIV1AuthOtpVerifyPost(ctx context.Context, req *APIV1AuthOtpVerifyPostReq) (APIV1AuthOtpVerifyPostRes, error)
+	// APIV1InvitationsGet implements GET /api/v1/invitations operation.
+	//
+	// Returns the pending invitations (not used yet).
+	//
+	// GET /api/v1/invitations
+	APIV1InvitationsGet(ctx context.Context) (APIV1InvitationsGetRes, error)
 	// APIV1MeGet implements GET /api/v1/me operation.
 	//
 	// Returns the admin user.

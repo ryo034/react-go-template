@@ -1,24 +1,36 @@
-InvitationInfo:
-  type: object
-  required:
-    - workspaceName
-    - verified
-  properties:
-    workspaceName:
-      type: string
-    verified:
-      type: boolean
+InvitationInfoResponse:
+  description: Invitation verified
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - workspaceName
+          - verified
+        properties:
+          workspaceName:
+            type: string
+          verified:
+            type: boolean
 
-BulkInvitedResult:
-  type: object
-  required:
-    - invitedCount
-    - failedInvitations
-    - registeredInvitations
-  properties:
-    invitedCount:
-      type: integer
-    failedInvitations:
-      $ref: "#/components/schemas/Invitations"
-    registeredInvitations:
-      $ref: "#/components/schemas/Invitations"
+InvitationsBulkResponse:
+  description: Successfully sent invitations
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - total
+          - successfulInvitations
+          - failedInvitations
+          - registeredInvitations
+        properties:
+          total:
+            type: integer
+            description: Total number of invitations
+          successfulInvitations:
+            $ref: "#/components/schemas/Invitations"
+          failedInvitations:
+            $ref: "#/components/schemas/Invitations"
+          registeredInvitations:
+            $ref: "#/components/schemas/Invitations"

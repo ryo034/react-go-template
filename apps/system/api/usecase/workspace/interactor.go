@@ -11,6 +11,7 @@ import (
 	fbDr "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
+	"github.com/uptrace/bun"
 )
 
 type UseCase interface {
@@ -94,14 +95,13 @@ func (u *useCase) FindAllMembers(ctx context.Context, i FindAllMembersInput) (op
 	return u.op.FindAllMembers(ms), nil
 }
 
-func (u *useCase) inviteMember(ctx context.Context, inviter workspace.Inviter, i *invitation.Invitation) error {
-	p := u.dbp.GetExecutor(ctx, false)
+func (u *useCase) inviteMember(ctx context.Context, exec bun.IDB, inviter workspace.Inviter, i *invitation.Invitation) error {
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
 		return err
 	}
 	fn := func() error {
-		if err = u.repo.InviteMember(pr, p, inviter, i); err != nil {
+		if err = u.repo.InviteMember(pr, exec, inviter, i); err != nil {
 			return err
 		}
 		return u.emailDriver.SendInvite(pr, inviter, i)
@@ -112,11 +112,11 @@ func (u *useCase) inviteMember(ctx context.Context, inviter workspace.Inviter, i
 
 func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error) {
 	// Exclude already registered members
-	exec := u.dbp.GetExecutor(ctx, true)
 	currentWorkspaceID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx, i.AccountID)
 	if err != nil {
 		return nil, err
 	}
+	exec := u.dbp.GetExecutor(ctx, false)
 	members, err := u.repo.FindAllMembers(ctx, exec, currentWorkspaceID)
 	if err != nil {
 		return nil, err
@@ -138,15 +138,19 @@ func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (open
 	}
 
 	failedList := make([]*invitation.Invitation, 0)
+	successList := make([]*invitation.Invitation, 0)
 	inviter := workspace.NewInviter(meRes.Member(), meRes.Workspace())
 	for _, im := range targets {
-		if err = u.inviteMember(ctx, inviter, im); err != nil {
+		if err = u.inviteMember(ctx, exec, inviter, im); err != nil {
 			failedList = append(failedList, im)
+		} else {
+			successList = append(successList, im)
 		}
 	}
 
 	return u.op.InviteMembers(
 		i.Invitations,
+		invitation.NewInvitations(successList),
 		invitation.NewInvitations(alreadyRegisteredList),
 		invitation.NewInvitations(failedList),
 	), nil

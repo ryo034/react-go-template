@@ -47,6 +47,7 @@ func TestNewUUIDFromString(t *testing.T) {
 		wantErr validation.Errors
 	}{
 		{"success", "018d59d6-6f02-7016-a115-141537640232", UUID{uuid.MustParse("018d59d6-6f02-7016-a115-141537640232")}, nil},
+		{"success", "018d9b4d-9438-79ac-b533-1323d4ec9b9f", UUID{uuid.MustParse("018d9b4d-9438-79ac-b533-1323d4ec9b9f")}, nil},
 		{"empty", "", UUID{}, test.NewValidationErrors(InvalidUUID, "").Errs},
 	}
 	for _, tt := range tests {

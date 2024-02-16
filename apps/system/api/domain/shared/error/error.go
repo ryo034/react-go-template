@@ -15,6 +15,7 @@ const (
 	NoSuchDataMessageKey              MessageKey = "NoSuchData"
 	UnauthenticatedMessageKey         MessageKey = "Unauthenticated"
 	NotBelongMessageKey               MessageKey = "NotBelong"
+	InternalServerErrorMessageKey     MessageKey = "InternalServerError"
 )
 
 type Error interface {

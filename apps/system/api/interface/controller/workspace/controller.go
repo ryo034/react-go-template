@@ -14,7 +14,7 @@ import (
 type Controller interface {
 	Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error)
 	FindAllMembers(ctx context.Context) (openapi.APIV1MembersGetRes, error)
-	InviteMembers(ctx context.Context, i InvitedMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error)
+	InviteMembers(ctx context.Context, i InviteesInput) (openapi.InviteMultipleUsersToWorkspaceRes, error)
 	VerifyInvitationToken(ctx context.Context, i VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error)
 }
 
@@ -32,13 +32,13 @@ type CreateInput struct {
 	WorkspaceSubdomain string
 }
 
-type InvitedMember struct {
+type Invitee struct {
 	Email       string
 	DisplayName string
 }
 
-type InvitedMembersInput struct {
-	InvitedMembers []InvitedMember
+type InviteesInput struct {
+	InvitedMembers []Invitee
 }
 
 type VerifyInvitationTokenInput struct {
@@ -74,27 +74,27 @@ func (c *controller) FindAllMembers(ctx context.Context) (openapi.APIV1MembersGe
 	return res, nil
 }
 
-func NewInviteMembersInput(aID account.ID, ims []InvitedMember) workspaceUc.InviteMembersInput {
-	ivs := make([]*invitation.Invitation, len(ims))
+func NewInviteMembersInput(aID account.ID, ims []Invitee) (workspaceUc.InviteMembersInput, error) {
+	ivs := make([]*invitation.Invitation, 0, len(ims))
 	for _, im := range ims {
 		i, err := invitation.GenInvitation(im.Email, im.DisplayName)
 		if err != nil {
-			return workspaceUc.InviteMembersInput{}
+			return workspaceUc.InviteMembersInput{}, err
 		}
 		ivs = append(ivs, i)
 	}
 	return workspaceUc.InviteMembersInput{
 		AccountID:   aID,
 		Invitations: invitation.NewInvitations(ivs),
-	}
+	}, nil
 }
 
-func (c *controller) InviteMembers(ctx context.Context, i InvitedMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error) {
+func (c *controller) InviteMembers(ctx context.Context, i InviteesInput) (openapi.InviteMultipleUsersToWorkspaceRes, error) {
 	aID, err := c.co.GetUID(ctx)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.InviteMultipleUsersToWorkspaceRes), nil
 	}
-	in := NewInviteMembersInput(aID, i.InvitedMembers)
+	in, err := NewInviteMembersInput(aID, i.InvitedMembers)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.InviteMultipleUsersToWorkspaceRes), nil
 	}

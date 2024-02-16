@@ -13,6 +13,10 @@ type APIV1AuthOtpVerifyPostRes interface {
 	aPIV1AuthOtpVerifyPostRes()
 }
 
+type APIV1InvitationsGetRes interface {
+	aPIV1InvitationsGetRes()
+}
+
 type APIV1MeGetRes interface {
 	aPIV1MeGetRes()
 }

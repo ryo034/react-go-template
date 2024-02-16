@@ -95,40 +95,6 @@ func (s *APIV1MeProfilePutReq) Validate() error {
 	return nil
 }
 
-func (s *BulkInvitedResult) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if err := s.FailedInvitations.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "failedInvitations",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if err := s.RegisteredInvitations.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "registeredInvitations",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
 func (s *Invitation) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -162,6 +128,9 @@ func (s *Invitation) Validate() error {
 
 func (s Invitations) Validate() error {
 	alias := ([]Invitation)(s)
+	if alias == nil {
+		return errors.New("nil is invalid value")
+	}
 	var failures []validate.FieldError
 	for i, elem := range alias {
 		if err := func() error {
@@ -182,6 +151,51 @@ func (s Invitations) Validate() error {
 	return nil
 }
 
+func (s *InvitationsBulkResponse) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.SuccessfulInvitations.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "successfulInvitations",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.FailedInvitations.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "failedInvitations",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.RegisteredInvitations.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "registeredInvitations",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
 func (s *InviteMultipleUsersToWorkspaceReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -189,13 +203,58 @@ func (s *InviteMultipleUsersToWorkspaceReq) Validate() error {
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.InvitedMembers.Validate(); err != nil {
-			return err
+		var failures []validate.FieldError
+		for i, elem := range s.Invitees {
+			if err := func() error {
+				if err := elem.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				failures = append(failures, validate.FieldError{
+					Name:  fmt.Sprintf("[%d]", i),
+					Error: err,
+				})
+			}
+		}
+		if len(failures) > 0 {
+			return &validate.Error{Fields: failures}
 		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "invitedMembers",
+			Name:  "invitees",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *Invitee) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := (validate.String{
+			MinLength:    0,
+			MinLengthSet: false,
+			MaxLength:    0,
+			MaxLengthSet: false,
+			Email:        true,
+			Hostname:     false,
+			Regex:        nil,
+		}).Validate(string(s.Email)); err != nil {
+			return errors.Wrap(err, "string")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "email",
 			Error: err,
 		})
 	}

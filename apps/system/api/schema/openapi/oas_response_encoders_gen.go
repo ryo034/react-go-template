@@ -168,6 +168,52 @@ func encodeAPIV1AuthOtpVerifyPostResponse(response APIV1AuthOtpVerifyPostRes, w 
 	}
 }
 
+func encodeAPIV1InvitationsGetResponse(response APIV1InvitationsGetRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *Invitations:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
+
+		e := new(jx.Encoder)
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *UnauthorizedError:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(401)
+		span.SetStatus(codes.Error, http.StatusText(401))
+
+		e := new(jx.Encoder)
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *InternalServerError:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(500)
+		span.SetStatus(codes.Error, http.StatusText(500))
+
+		e := new(jx.Encoder)
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
 func encodeAPIV1MeGetResponse(response APIV1MeGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *Me:
@@ -518,7 +564,7 @@ func encodeAcceptInvitationResponse(response AcceptInvitationRes, w http.Respons
 
 func encodeInviteMultipleUsersToWorkspaceResponse(response InviteMultipleUsersToWorkspaceRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *BulkInvitedResult:
+	case *InvitationsBulkResponse:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
@@ -548,19 +594,6 @@ func encodeInviteMultipleUsersToWorkspaceResponse(response InviteMultipleUsersTo
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(401)
 		span.SetStatus(codes.Error, http.StatusText(401))
-
-		e := new(jx.Encoder)
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-
-	case *ConflictError:
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(409)
-		span.SetStatus(codes.Error, http.StatusText(409))
 
 		e := new(jx.Encoder)
 		response.Encode(e)
@@ -662,7 +695,7 @@ func encodeProcessInvitationResponse(response ProcessInvitationRes, w http.Respo
 
 func encodeVerifyInvitationResponse(response VerifyInvitationRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *InvitationInfo:
+	case *InvitationInfoResponse:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))

@@ -607,136 +607,6 @@ func (s *BadRequestError) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
-func (s *BulkInvitedResult) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *BulkInvitedResult) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("invitedCount")
-		e.Int(s.InvitedCount)
-	}
-	{
-		if s.FailedInvitations != nil {
-			e.FieldStart("failedInvitations")
-			s.FailedInvitations.Encode(e)
-		}
-	}
-	{
-		if s.RegisteredInvitations != nil {
-			e.FieldStart("registeredInvitations")
-			s.RegisteredInvitations.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfBulkInvitedResult = [3]string{
-	0: "invitedCount",
-	1: "failedInvitations",
-	2: "registeredInvitations",
-}
-
-// Decode decodes BulkInvitedResult from json.
-func (s *BulkInvitedResult) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode BulkInvitedResult to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "invitedCount":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Int()
-				s.InvitedCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"invitedCount\"")
-			}
-		case "failedInvitations":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				if err := s.FailedInvitations.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"failedInvitations\"")
-			}
-		case "registeredInvitations":
-			requiredBitSet[0] |= 1 << 2
-			if err := func() error {
-				if err := s.RegisteredInvitations.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"registeredInvitations\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode BulkInvitedResult")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000111,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfBulkInvitedResult) {
-					name = jsonFieldsNameOfBulkInvitedResult[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *BulkInvitedResult) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *BulkInvitedResult) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
 func (s *ConflictError) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -1163,14 +1033,14 @@ func (s *Invitation) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
-func (s *InvitationInfo) Encode(e *jx.Encoder) {
+func (s *InvitationInfoResponse) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *InvitationInfo) encodeFields(e *jx.Encoder) {
+func (s *InvitationInfoResponse) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("workspaceName")
 		e.Str(s.WorkspaceName)
@@ -1181,15 +1051,15 @@ func (s *InvitationInfo) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfInvitationInfo = [2]string{
+var jsonFieldsNameOfInvitationInfoResponse = [2]string{
 	0: "workspaceName",
 	1: "verified",
 }
 
-// Decode decodes InvitationInfo from json.
-func (s *InvitationInfo) Decode(d *jx.Decoder) error {
+// Decode decodes InvitationInfoResponse from json.
+func (s *InvitationInfoResponse) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode InvitationInfo to nil")
+		return errors.New("invalid: unable to decode InvitationInfoResponse to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -1224,7 +1094,7 @@ func (s *InvitationInfo) Decode(d *jx.Decoder) error {
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode InvitationInfo")
+		return errors.Wrap(err, "decode InvitationInfoResponse")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -1241,8 +1111,8 @@ func (s *InvitationInfo) Decode(d *jx.Decoder) error {
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfInvitationInfo) {
-					name = jsonFieldsNameOfInvitationInfo[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfInvitationInfoResponse) {
+					name = jsonFieldsNameOfInvitationInfoResponse[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -1263,14 +1133,14 @@ func (s *InvitationInfo) Decode(d *jx.Decoder) error {
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *InvitationInfo) MarshalJSON() ([]byte, error) {
+func (s *InvitationInfoResponse) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *InvitationInfo) UnmarshalJSON(data []byte) error {
+func (s *InvitationInfoResponse) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -1278,17 +1148,12 @@ func (s *InvitationInfo) UnmarshalJSON(data []byte) error {
 // Encode encodes Invitations as json.
 func (s Invitations) Encode(e *jx.Encoder) {
 	unwrapped := []Invitation(s)
-	if unwrapped == nil {
-		e.ArrEmpty()
-		return
+
+	e.ArrStart()
+	for _, elem := range unwrapped {
+		elem.Encode(e)
 	}
-	if unwrapped != nil {
-		e.ArrStart()
-		for _, elem := range unwrapped {
-			elem.Encode(e)
-		}
-		e.ArrEnd()
-	}
+	e.ArrEnd()
 }
 
 // Decode decodes Invitations from json.
@@ -1331,6 +1196,147 @@ func (s *Invitations) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
+func (s *InvitationsBulkResponse) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *InvitationsBulkResponse) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("total")
+		e.Int(s.Total)
+	}
+	{
+		e.FieldStart("successfulInvitations")
+		s.SuccessfulInvitations.Encode(e)
+	}
+	{
+		e.FieldStart("failedInvitations")
+		s.FailedInvitations.Encode(e)
+	}
+	{
+		e.FieldStart("registeredInvitations")
+		s.RegisteredInvitations.Encode(e)
+	}
+}
+
+var jsonFieldsNameOfInvitationsBulkResponse = [4]string{
+	0: "total",
+	1: "successfulInvitations",
+	2: "failedInvitations",
+	3: "registeredInvitations",
+}
+
+// Decode decodes InvitationsBulkResponse from json.
+func (s *InvitationsBulkResponse) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode InvitationsBulkResponse to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "total":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.Total = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"total\"")
+			}
+		case "successfulInvitations":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				if err := s.SuccessfulInvitations.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"successfulInvitations\"")
+			}
+		case "failedInvitations":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				if err := s.FailedInvitations.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"failedInvitations\"")
+			}
+		case "registeredInvitations":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				if err := s.RegisteredInvitations.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"registeredInvitations\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode InvitationsBulkResponse")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00001111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfInvitationsBulkResponse) {
+					name = jsonFieldsNameOfInvitationsBulkResponse[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *InvitationsBulkResponse) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *InvitationsBulkResponse) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
 func (s *InviteMultipleUsersToWorkspaceReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -1340,15 +1346,19 @@ func (s *InviteMultipleUsersToWorkspaceReq) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *InviteMultipleUsersToWorkspaceReq) encodeFields(e *jx.Encoder) {
 	{
-		if s.InvitedMembers != nil {
-			e.FieldStart("invitedMembers")
-			s.InvitedMembers.Encode(e)
+		if s.Invitees != nil {
+			e.FieldStart("invitees")
+			e.ArrStart()
+			for _, elem := range s.Invitees {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
 		}
 	}
 }
 
 var jsonFieldsNameOfInviteMultipleUsersToWorkspaceReq = [1]string{
-	0: "invitedMembers",
+	0: "invitees",
 }
 
 // Decode decodes InviteMultipleUsersToWorkspaceReq from json.
@@ -1359,14 +1369,22 @@ func (s *InviteMultipleUsersToWorkspaceReq) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "invitedMembers":
+		case "invitees":
 			if err := func() error {
-				if err := s.InvitedMembers.Decode(d); err != nil {
+				s.Invitees = make([]Invitee, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem Invitee
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Invitees = append(s.Invitees, elem)
+					return nil
+				}); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"invitedMembers\"")
+				return errors.Wrap(err, "decode field \"invitees\"")
 			}
 		default:
 			return d.Skip()
@@ -1388,6 +1406,119 @@ func (s *InviteMultipleUsersToWorkspaceReq) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *InviteMultipleUsersToWorkspaceReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *Invitee) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *Invitee) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+	{
+		e.FieldStart("email")
+		e.Str(s.Email)
+	}
+}
+
+var jsonFieldsNameOfInvitee = [2]string{
+	0: "name",
+	1: "email",
+}
+
+// Decode decodes Invitee from json.
+func (s *Invitee) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode Invitee to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "name":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "email":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Email = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"email\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode Invitee")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfInvitee) {
+					name = jsonFieldsNameOfInvitee[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *Invitee) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *Invitee) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

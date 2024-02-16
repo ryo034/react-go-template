@@ -40,6 +40,15 @@ func (UnimplementedHandler) APIV1AuthOtpVerifyPost(ctx context.Context, req *API
 	return r, ht.ErrNotImplemented
 }
 
+// APIV1InvitationsGet implements GET /api/v1/invitations operation.
+//
+// Returns the pending invitations (not used yet).
+//
+// GET /api/v1/invitations
+func (UnimplementedHandler) APIV1InvitationsGet(ctx context.Context) (r APIV1InvitationsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIV1MeGet implements GET /api/v1/me operation.
 //
 // Returns the admin user.

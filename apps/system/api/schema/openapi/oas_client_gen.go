@@ -42,6 +42,12 @@ type Invoker interface {
 	//
 	// POST /api/v1/auth/otp/verify
 	APIV1AuthOtpVerifyPost(ctx context.Context, request *APIV1AuthOtpVerifyPostReq) (APIV1AuthOtpVerifyPostRes, error)
+	// APIV1InvitationsGet invokes GET /api/v1/invitations operation.
+	//
+	// Returns the pending invitations (not used yet).
+	//
+	// GET /api/v1/invitations
+	APIV1InvitationsGet(ctx context.Context) (APIV1InvitationsGetRes, error)
 	// APIV1MeGet invokes GET /api/v1/me operation.
 	//
 	// Returns the admin user.
@@ -405,6 +411,110 @@ func (c *Client) sendAPIV1AuthOtpVerifyPost(ctx context.Context, request *APIV1A
 
 	stage = "DecodeResponse"
 	result, err := decodeAPIV1AuthOtpVerifyPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1InvitationsGet invokes GET /api/v1/invitations operation.
+//
+// Returns the pending invitations (not used yet).
+//
+// GET /api/v1/invitations
+func (c *Client) APIV1InvitationsGet(ctx context.Context) (APIV1InvitationsGetRes, error) {
+	res, err := c.sendAPIV1InvitationsGet(ctx)
+	return res, err
+}
+
+func (c *Client) sendAPIV1InvitationsGet(ctx context.Context) (res APIV1InvitationsGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/api/v1/invitations"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1InvitationsGet",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/invitations"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1InvitationsGet", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1InvitationsGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

@@ -23,7 +23,6 @@ VALUES
 ('018d9b4d-9438-79ac-b533-1323d4ec9b9f', 'Invite TestTwo', 'invite_test_already_joined_any_workspace@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018da09e-c6ca-795e-878d-32bb8c1e5cac', 'Invite TestThree', 'invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
 
-
 -- INSERT INTO system_account_phone_numbers (system_account_id, phone_number, created_at, updated_at)
 -- VALUES
 -- ('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', '09012345678', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),

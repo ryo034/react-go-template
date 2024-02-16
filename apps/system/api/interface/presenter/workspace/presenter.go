@@ -28,7 +28,7 @@ func (p *presenter) FindAllMembers(ms member.Members) *openapi.Members {
 	return &res
 }
 
-func (p *presenter) InviteMembers(ms invitation.Invitations, registeredList invitation.Invitations, failedList invitation.Invitations) *openapi.BulkInvitedResult {
+func (p *presenter) InviteMembers(ms invitation.Invitations, successList invitation.Invitations, registeredList invitation.Invitations, failedList invitation.Invitations) *openapi.InvitationsBulkResponse {
 	rims := make([]openapi.Invitation, 0, registeredList.Size())
 	for _, ivm := range registeredList.AsSlice() {
 		rims = append(rims, openapi.Invitation{
@@ -50,8 +50,20 @@ func (p *presenter) InviteMembers(ms invitation.Invitations, registeredList invi
 			DisplayName:  ivm.DisplayName().ToString(),
 		})
 	}
-	return &openapi.BulkInvitedResult{
-		InvitedCount:          ms.Size(),
+
+	sis := make([]openapi.Invitation, 0, successList.Size())
+	for _, ivm := range successList.AsSlice() {
+		sis = append(sis, openapi.Invitation{
+			ID:           ivm.ID().Value(),
+			Verified:     ivm.Verified(),
+			ExpiredAt:    ivm.ExpiredAt().Value().ToTime(),
+			InviteeEmail: ivm.InviteeEmail().ToString(),
+			DisplayName:  ivm.DisplayName().ToString(),
+		})
+	}
+	return &openapi.InvitationsBulkResponse{
+		Total:                 ms.Size(),
+		SuccessfulInvitations: sis,
 		RegisteredInvitations: rims,
 		FailedInvitations:     fims,
 	}
@@ -59,7 +71,7 @@ func (p *presenter) InviteMembers(ms invitation.Invitations, registeredList invi
 
 func (p *presenter) VerifyInvitationToken(w *workspace.Workspace, i *invitation.Invitation) openapi.VerifyInvitationRes {
 	d := w.Detail()
-	return &openapi.InvitationInfo{
+	return &openapi.InvitationInfoResponse{
 		WorkspaceName: d.Name().ToString(),
 		Verified:      i.Verified(),
 	}

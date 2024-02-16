@@ -17,7 +17,7 @@ ARG GOARCH=amd64
 RUN go mod tidy && \
 	go install github.com/cosmtrek/air@latest && \
 	go get github.com/go-delve/delve/cmd/dlv && \
-	go build -buildvcs=false -o /go/bin/dlv github.com/go-delve/delve/cmd/dlv
+	go build -gcflags="all=-N -l" -buildvcs=false -o /go/bin/dlv github.com/go-delve/delve/cmd/dlv
 
 EXPOSE 19004
 

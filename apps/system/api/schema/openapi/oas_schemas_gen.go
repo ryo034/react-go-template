@@ -185,45 +185,6 @@ func (s *Bearer) SetToken(val string) {
 	s.Token = val
 }
 
-// Ref: #/components/responses/BulkInvitedResult
-type BulkInvitedResult struct {
-	InvitedCount          int         `json:"invitedCount"`
-	FailedInvitations     Invitations `json:"failedInvitations"`
-	RegisteredInvitations Invitations `json:"registeredInvitations"`
-}
-
-// GetInvitedCount returns the value of InvitedCount.
-func (s *BulkInvitedResult) GetInvitedCount() int {
-	return s.InvitedCount
-}
-
-// GetFailedInvitations returns the value of FailedInvitations.
-func (s *BulkInvitedResult) GetFailedInvitations() Invitations {
-	return s.FailedInvitations
-}
-
-// GetRegisteredInvitations returns the value of RegisteredInvitations.
-func (s *BulkInvitedResult) GetRegisteredInvitations() Invitations {
-	return s.RegisteredInvitations
-}
-
-// SetInvitedCount sets the value of InvitedCount.
-func (s *BulkInvitedResult) SetInvitedCount(val int) {
-	s.InvitedCount = val
-}
-
-// SetFailedInvitations sets the value of FailedInvitations.
-func (s *BulkInvitedResult) SetFailedInvitations(val Invitations) {
-	s.FailedInvitations = val
-}
-
-// SetRegisteredInvitations sets the value of RegisteredInvitations.
-func (s *BulkInvitedResult) SetRegisteredInvitations(val Invitations) {
-	s.RegisteredInvitations = val
-}
-
-func (*BulkInvitedResult) inviteMultipleUsersToWorkspaceRes() {}
-
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type ConflictError struct {
 	// The HTTP status code generated for this occurrence of the problem.
@@ -288,8 +249,7 @@ func (s *ConflictError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*ConflictError) aPIV1WorkspacesPostRes()            {}
-func (*ConflictError) inviteMultipleUsersToWorkspaceRes() {}
+func (*ConflictError) aPIV1WorkspacesPostRes() {}
 
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type InternalServerError struct {
@@ -358,6 +318,7 @@ func (s *InternalServerError) SetCode(val OptString) {
 func (*InternalServerError) aPIV1AuthOAuthPostRes()             {}
 func (*InternalServerError) aPIV1AuthOtpPostRes()               {}
 func (*InternalServerError) aPIV1AuthOtpVerifyPostRes()         {}
+func (*InternalServerError) aPIV1InvitationsGetRes()            {}
 func (*InternalServerError) aPIV1MeGetRes()                     {}
 func (*InternalServerError) aPIV1MeProfilePutRes()              {}
 func (*InternalServerError) aPIV1MembersGetRes()                {}
@@ -432,48 +393,127 @@ func (s *Invitation) SetDisplayName(val string) {
 	s.DisplayName = val
 }
 
-// Ref: #/components/responses/InvitationInfo
-type InvitationInfo struct {
+type InvitationInfoResponse struct {
 	WorkspaceName string `json:"workspaceName"`
 	Verified      bool   `json:"verified"`
 }
 
 // GetWorkspaceName returns the value of WorkspaceName.
-func (s *InvitationInfo) GetWorkspaceName() string {
+func (s *InvitationInfoResponse) GetWorkspaceName() string {
 	return s.WorkspaceName
 }
 
 // GetVerified returns the value of Verified.
-func (s *InvitationInfo) GetVerified() bool {
+func (s *InvitationInfoResponse) GetVerified() bool {
 	return s.Verified
 }
 
 // SetWorkspaceName sets the value of WorkspaceName.
-func (s *InvitationInfo) SetWorkspaceName(val string) {
+func (s *InvitationInfoResponse) SetWorkspaceName(val string) {
 	s.WorkspaceName = val
 }
 
 // SetVerified sets the value of Verified.
-func (s *InvitationInfo) SetVerified(val bool) {
+func (s *InvitationInfoResponse) SetVerified(val bool) {
 	s.Verified = val
 }
 
-func (*InvitationInfo) verifyInvitationRes() {}
+func (*InvitationInfoResponse) verifyInvitationRes() {}
 
 type Invitations []Invitation
 
+func (*Invitations) aPIV1InvitationsGetRes() {}
+
+type InvitationsBulkResponse struct {
+	// Total number of invitations.
+	Total                 int         `json:"total"`
+	SuccessfulInvitations Invitations `json:"successfulInvitations"`
+	FailedInvitations     Invitations `json:"failedInvitations"`
+	RegisteredInvitations Invitations `json:"registeredInvitations"`
+}
+
+// GetTotal returns the value of Total.
+func (s *InvitationsBulkResponse) GetTotal() int {
+	return s.Total
+}
+
+// GetSuccessfulInvitations returns the value of SuccessfulInvitations.
+func (s *InvitationsBulkResponse) GetSuccessfulInvitations() Invitations {
+	return s.SuccessfulInvitations
+}
+
+// GetFailedInvitations returns the value of FailedInvitations.
+func (s *InvitationsBulkResponse) GetFailedInvitations() Invitations {
+	return s.FailedInvitations
+}
+
+// GetRegisteredInvitations returns the value of RegisteredInvitations.
+func (s *InvitationsBulkResponse) GetRegisteredInvitations() Invitations {
+	return s.RegisteredInvitations
+}
+
+// SetTotal sets the value of Total.
+func (s *InvitationsBulkResponse) SetTotal(val int) {
+	s.Total = val
+}
+
+// SetSuccessfulInvitations sets the value of SuccessfulInvitations.
+func (s *InvitationsBulkResponse) SetSuccessfulInvitations(val Invitations) {
+	s.SuccessfulInvitations = val
+}
+
+// SetFailedInvitations sets the value of FailedInvitations.
+func (s *InvitationsBulkResponse) SetFailedInvitations(val Invitations) {
+	s.FailedInvitations = val
+}
+
+// SetRegisteredInvitations sets the value of RegisteredInvitations.
+func (s *InvitationsBulkResponse) SetRegisteredInvitations(val Invitations) {
+	s.RegisteredInvitations = val
+}
+
+func (*InvitationsBulkResponse) inviteMultipleUsersToWorkspaceRes() {}
+
 type InviteMultipleUsersToWorkspaceReq struct {
-	InvitedMembers Invitations `json:"invitedMembers"`
+	Invitees []Invitee `json:"invitees"`
 }
 
-// GetInvitedMembers returns the value of InvitedMembers.
-func (s *InviteMultipleUsersToWorkspaceReq) GetInvitedMembers() Invitations {
-	return s.InvitedMembers
+// GetInvitees returns the value of Invitees.
+func (s *InviteMultipleUsersToWorkspaceReq) GetInvitees() []Invitee {
+	return s.Invitees
 }
 
-// SetInvitedMembers sets the value of InvitedMembers.
-func (s *InviteMultipleUsersToWorkspaceReq) SetInvitedMembers(val Invitations) {
-	s.InvitedMembers = val
+// SetInvitees sets the value of Invitees.
+func (s *InviteMultipleUsersToWorkspaceReq) SetInvitees(val []Invitee) {
+	s.Invitees = val
+}
+
+// Ref: #/components/schemas/Invitee
+type Invitee struct {
+	// Display name of the invitee.
+	Name string `json:"name"`
+	// Email of the invitee.
+	Email string `json:"email"`
+}
+
+// GetName returns the value of Name.
+func (s *Invitee) GetName() string {
+	return s.Name
+}
+
+// GetEmail returns the value of Email.
+func (s *Invitee) GetEmail() string {
+	return s.Email
+}
+
+// SetName sets the value of Name.
+func (s *Invitee) SetName(val string) {
+	s.Name = val
+}
+
+// SetEmail sets the value of Email.
+func (s *Invitee) SetEmail(val string) {
+	s.Email = val
 }
 
 // Ref: #/components/schemas/Inviter
@@ -1091,6 +1131,7 @@ func (s *UnauthorizedError) SetCode(val OptString) {
 	s.Code = val
 }
 
+func (*UnauthorizedError) aPIV1InvitationsGetRes()            {}
 func (*UnauthorizedError) aPIV1MeGetRes()                     {}
 func (*UnauthorizedError) aPIV1MeProfilePutRes()              {}
 func (*UnauthorizedError) aPIV1MembersGetRes()                {}
