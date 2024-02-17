@@ -28,7 +28,7 @@ type Driver interface {
 	FindInviteeWorkspaceFromToken(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.Workspace, error)
 	FindActiveInvitationByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.Invitation, error)
 	FindActiveInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) (*models.Invitation, error)
-	VerifyInvitationToken(ctx context.Context, exec bun.IDB, email account.Email, token invitation.Token) error
+	VerifyInvitationToken(ctx context.Context, exec bun.IDB, i *invitation.Invitation) error
 }
 
 type driver struct {
@@ -222,27 +222,12 @@ func (p *driver) FindActiveInvitation(ctx context.Context, exec bun.IDB, id invi
 
 }
 
-func (p *driver) VerifyInvitationToken(ctx context.Context, exec bun.IDB, email account.Email, token invitation.Token) error {
-	im := &models.Invitation{}
-	err := exec.
-		NewSelect().
-		Model(im).
-		Where("email = ?", email.ToString()).
-		Where("token = ?", token.Value()).
-		Where("verified = ?", false).
-		Where("used = ?", false).
-		Limit(1).
-		Scan(ctx)
-	if err != nil {
-		return err
+func (p *driver) VerifyInvitationToken(ctx context.Context, exec bun.IDB, i *invitation.Invitation) error {
+	im := &models.InvitationEvent{
+		InvitationID: i.ID().Value(),
+		EventType:    "verified",
 	}
-	im.Verified = true
-	if _, err = exec.
-		NewUpdate().
-		Model(im).
-		Column("verified").
-		WherePK().
-		Exec(ctx); err != nil {
+	if _, err := exec.NewInsert().Model(im).Exec(ctx); err != nil {
 		return err
 	}
 	return nil

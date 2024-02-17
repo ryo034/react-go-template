@@ -22,17 +22,30 @@ func NewAdapter() Adapter {
 
 func (a *adapter) Adapt(i *models.Invitation) (*invitation.Invitation, error) {
 	id := invitation.NewID(i.InvitationID)
-	token := invitation.NewToken(i.Token)
-	ex := invitation.NewExpiredAt(datetime.NewDatetime(i.ExpiredAt))
-	ema, err := account.NewEmail(i.Email)
+	token := invitation.NewToken(i.Tokens[0].Token)
+	ex := invitation.NewExpiredAt(datetime.NewDatetime(i.Tokens[0].ExpiredAt))
+	ema, err := account.NewEmail(i.Invitee.Email)
 	if err != nil {
 		return nil, err
 	}
-	dn, err := member.NewDisplayName(i.DisplayName)
-	if err != nil {
-		return nil, err
+	var dn *member.DisplayName
+	if i.InviteeName != nil {
+		tmpDn, err := member.NewDisplayName(i.InviteeName.DisplayName)
+		if err != nil {
+			return nil, err
+		}
+		dn = &tmpDn
 	}
-	return invitation.NewInvitation(id, token, i.Verified, i.Used, ex, ema, dn), nil
+
+	var vf *invitation.VerifiedAt
+	if i.Events != nil && len(i.Events) > 0 && i.Events[0].EventType == "verified" {
+		tmpVf := invitation.NewVerifiedAt(datetime.NewDatetime(i.Events[0].CreatedAt))
+		vf = &tmpVf
+	} else {
+		vf = nil
+	}
+
+	return invitation.NewInvitation(id, token, vf, ex, ema, dn), nil
 }
 
 func (a *adapter) AdaptAll(is []*models.Invitation) (invitation.Invitations, error) {

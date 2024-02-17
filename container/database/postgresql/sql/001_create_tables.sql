@@ -154,23 +154,51 @@ CREATE TRIGGER refresh_membership_periods_updated_at_step1 BEFORE UPDATE ON memb
 CREATE TRIGGER refresh_membership_periods_updated_at_step2 BEFORE UPDATE OF updated_at ON membership_periods FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step2();
 CREATE TRIGGER refresh_membership_periods_updated_at_step3 BEFORE UPDATE ON membership_periods FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step3();
 
-CREATE TABLE invitations (
-  invitation_id uuid NOT NULL,
+CREATE TABLE invitation_units (
+  invitation_unit_id uuid NOT NULL,
   workspace_id uuid NOT NULL,
-  email VARCHAR(256) NOT NULL,
-  display_name VARCHAR(50),
-  token uuid NOT NULL,
-  verified BOOLEAN NOT NULL DEFAULT FALSE,
-  used BOOLEAN NOT NULL DEFAULT FALSE,
-  expired_at TIMESTAMP WITH TIME ZONE NOT NULL,
   invited_by uuid NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (invitation_id),
-  CONSTRAINT fk_invitations_workspaces_workspace_id FOREIGN KEY (workspace_id) REFERENCES workspaces(workspace_id),
-  CONSTRAINT fk_invitations_members_invited_by FOREIGN KEY (invited_by) REFERENCES members(member_id)
+  PRIMARY KEY (invitation_unit_id),
+  CONSTRAINT fk_invitation_units_workspaces_workspace_id FOREIGN KEY (workspace_id) REFERENCES workspaces(workspace_id),
+  CONSTRAINT fk_invitation_units_members_invited_by FOREIGN KEY (invited_by) REFERENCES members(member_id)
 );
 
-CREATE TRIGGER refresh_invitations_updated_at_step1 BEFORE UPDATE ON invitations FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step1();
-CREATE TRIGGER refresh_invitations_updated_at_step2 BEFORE UPDATE OF updated_at ON invitations FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step2();
-CREATE TRIGGER refresh_invitations_updated_at_step3 BEFORE UPDATE ON invitations FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step3();
+CREATE TABLE invitations (
+  invitation_id uuid NOT NULL,
+  invitation_unit_id uuid NOT NULL,
+  PRIMARY KEY (invitation_id),
+  CONSTRAINT fk_invitations_invitation_units_invitation_unit_id FOREIGN KEY (invitation_unit_id) REFERENCES invitation_units(invitation_unit_id)
+);
+
+CREATE TRIGGER invitation_tokens (
+  invitation_id uuid NOT NULL,
+  token uuid NOT NULL,
+  expired_at TIMESTAMP WITH TIME ZONE NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (invitation_id),
+  CONSTRAINT fk_invitations_invitation_tokens_invitation_id FOREIGN KEY (invitation_id) REFERENCES invitations(invitation_id)
+);
+
+CREATE TABLE invitees (
+  invitation_id uuid NOT NULL,
+  email VARCHAR(256) NOT NULL,
+  PRIMARY KEY (invitation_id),
+  CONSTRAINT fk_invitees_invitations_invitation_id FOREIGN KEY (invitation_id) REFERENCES invitations(invitation_id)
+);
+
+CREATE TABLE invitee_names (
+  invitation_id uuid NOT NULL,
+  display_name VARCHAR(50),
+  PRIMARY KEY (invitation_id),
+  CONSTRAINT fk_invitee_names_invitations_invitation_id FOREIGN KEY (invitation_id) REFERENCES invitations(invitation_id)
+);
+
+CREATE TABLE invitations_events (
+  invitations_event_id uuid NOT NULL,
+  invitation_id uuid NOT NULL,
+  event_type enum('verified', 'revoked', 'reissued') NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (invitations_event_id),
+  CONSTRAINT fk_invitations_events_invitations_invitation_id FOREIGN KEY (invitation_id) REFERENCES invitations(invitation_id)
+);

@@ -127,6 +127,7 @@ func (u *useCase) ProcessInvitation(ctx context.Context, i ProcessInvitationInpu
 		return nil, err
 	}
 	fn := func() error {
+		//u.wRepo.FindInviteeWorkspaceFromToken(ctx, p, i.Token)
 		if err = u.wRepo.VerifyInvitationToken(pr, p, i.Email, i.Token); err != nil {
 			return err
 		}

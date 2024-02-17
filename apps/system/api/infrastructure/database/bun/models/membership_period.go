@@ -6,6 +6,10 @@ import (
 	"time"
 )
 
+const (
+	MembershipPeriodTableName = "membership_periods"
+)
+
 type MembershipPeriod struct {
 	bun.BaseModel `bun:"table:membership_periods,alias:msp"`
 

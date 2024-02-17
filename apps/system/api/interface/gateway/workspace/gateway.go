@@ -118,6 +118,6 @@ func (g *gateway) FindActiveInvitation(ctx context.Context, exec bun.IDB, id inv
 	return im, w, nil
 }
 
-func (g *gateway) VerifyInvitationToken(ctx context.Context, exec bun.IDB, email account.Email, token invitation.Token) error {
-	return g.d.VerifyInvitationToken(ctx, exec, email, token)
+func (g *gateway) VerifyInvitationToken(ctx context.Context, exec bun.IDB, i *invitation.Invitation) error {
+	return g.d.VerifyInvitationToken(ctx, exec, i)
 }
