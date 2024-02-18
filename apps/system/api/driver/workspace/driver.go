@@ -23,12 +23,10 @@ type Driver interface {
 	AddMember(ctx context.Context, exec bun.IDB, w *workspace.Workspace, m *member.Member) (*models.Member, error)
 	FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error)
 	FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace.ID) (models.Members, error)
-	InviteMember(ctx context.Context, exec bun.IDB, inviter workspace.Inviter, i *invitation.Invitation) error
+	InviteMembers(ctx context.Context, exec bun.IDB, inviter workspace.Inviter, is invitation.Invitations) error
 	VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.Invitation, error)
 	FindInviteeWorkspaceFromToken(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.Workspace, error)
 	FindActiveInvitationByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.Invitation, error)
-	FindActiveInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) (*models.Invitation, error)
-	VerifyInvitationToken(ctx context.Context, exec bun.IDB, i *invitation.Invitation) error
 }
 
 type driver struct {
@@ -86,10 +84,14 @@ func (p *driver) AddMember(ctx context.Context, exec bun.IDB, w *workspace.Works
 		return nil, err
 	}
 
+	dn := ""
+	if m.HasDisplayName() {
+		dn = m.DisplayName().ToString()
+	}
 	mp := &models.MemberProfile{
 		MemberID:       m.ID().Value(),
 		MemberIDNumber: "",
-		DisplayName:    m.DisplayName().ToString(),
+		DisplayName:    dn,
 	}
 	if _, err := exec.NewInsert().Model(mp).Exec(ctx); err != nil {
 		return nil, err
@@ -134,18 +136,52 @@ func (p *driver) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace
 	return ms, nil
 }
 
-func (p *driver) InviteMember(ctx context.Context, exec bun.IDB, inviter workspace.Inviter, i *invitation.Invitation) error {
-	im := models.Invitation{
-		InvitationID: i.ID().Value(),
-		WorkspaceID:  inviter.Workspace().ID().Value(),
-		Email:        i.InviteeEmail().ToString(),
-		Used:         false,
-		Token:        i.Token().Value(),
-		ExpiredAt:    i.ExpiredAt().Value().ToTime(),
-		InvitedBy:    inviter.ID().Value(),
-	}
-	if _, err := exec.NewInsert().Model(&im).Exec(ctx); err != nil {
+func (p *driver) InviteMembers(ctx context.Context, exec bun.IDB, inviter workspace.Inviter, is invitation.Invitations) error {
+	uid, err := uuid.NewV7()
+	if err != nil {
 		return err
+	}
+	invu := &models.InvitationUnit{
+		InvitationUnitID: uid,
+		WorkspaceID:      inviter.Workspace().ID().Value(),
+		InvitedBy:        inviter.Member.ID().Value(),
+	}
+	if _, err = exec.NewInsert().Model(invu).Exec(ctx); err != nil {
+		return err
+	}
+
+	invs := make([]*models.Invitation, 0, is.Size())
+	invitees := make([]*models.Invitee, 0, is.Size())
+	invns := make([]*models.InviteeName, 0)
+	for _, i := range is.AsSlice() {
+		invs = append(invs, &models.Invitation{
+			InvitationID:     i.ID().Value(),
+			InvitationUnitID: invu.InvitationUnitID,
+		})
+
+		invitees = append(invitees, &models.Invitee{
+			InvitationID: i.ID().Value(),
+			Email:        i.InviteeEmail().ToString(),
+		})
+
+		if i.DisplayName() != nil {
+			invns = append(invns, &models.InviteeName{
+				InvitationID: i.ID().Value(),
+				DisplayName:  i.DisplayName().ToString(),
+			})
+		}
+	}
+	//TODO: Parallel insert
+	if _, err = exec.NewInsert().Model(&invs).Exec(ctx); err != nil {
+		return err
+	}
+	if _, err = exec.NewInsert().Model(&invitees).Exec(ctx); err != nil {
+		return err
+	}
+	if len(invns) > 0 {
+		if _, err = exec.NewInsert().Model(&invns).Exec(ctx); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -176,7 +212,7 @@ func (p *driver) FindInviteeWorkspaceFromToken(ctx context.Context, exec bun.IDB
 	if err != nil {
 		return nil, err
 	}
-	return im.Workspace, nil
+	return im.InvitationUnit.Workspace, nil
 }
 
 func (p *driver) FindActiveInvitationByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.Invitation, error) {
@@ -198,37 +234,4 @@ func (p *driver) FindActiveInvitationByEmail(ctx context.Context, exec bun.IDB, 
 		return nil, err
 	}
 	return im, nil
-}
-
-func (p *driver) FindActiveInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) (*models.Invitation, error) {
-	im := &models.Invitation{}
-	err := exec.
-		NewSelect().
-		Model(im).
-		Where("invitation_id = ?", id.Value()).
-		Where("used = ?", false).
-		Where("expired_at > ?", time.Now()).
-		Relation("Workspace").
-		Relation("Workspace.Detail").
-		Limit(1).
-		Scan(ctx)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, domainErr.NewNoSuchData(fmt.Sprintf("invited_member: id=%s and used=false and expired_at > now()", id.Value()))
-		}
-		return nil, err
-	}
-	return im, nil
-
-}
-
-func (p *driver) VerifyInvitationToken(ctx context.Context, exec bun.IDB, i *invitation.Invitation) error {
-	im := &models.InvitationEvent{
-		InvitationID: i.ID().Value(),
-		EventType:    "verified",
-	}
-	if _, err := exec.NewInsert().Model(im).Exec(ctx); err != nil {
-		return err
-	}
-	return nil
 }

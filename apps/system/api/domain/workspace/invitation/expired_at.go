@@ -23,6 +23,10 @@ func (e ExpiredAt) IsExpired() bool {
 	return e.v.IsBefore(time.Now())
 }
 
+func (e ExpiredAt) IsNotExpired() bool {
+	return !e.IsExpired()
+}
+
 func GenerateExpiredAt() ExpiredAt {
 	return ExpiredAt{datetime.NewDatetime(time.Now().AddDate(0, 0, ExpiredDays))}
 }

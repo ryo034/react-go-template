@@ -7,6 +7,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/logger"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/mailer"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"golang.org/x/text/language"
@@ -15,7 +16,8 @@ import (
 
 type Driver interface {
 	SendOTP(ctx context.Context, mailTo account.Email, code string) error
-	SendInvite(ctx context.Context, inviter workspace.Inviter, i *invitation.Invitation) error
+	SendInvitation(ctx context.Context, inviter workspace.Inviter, i *invitation.Invitation) error
+	SendInvitations(ctx context.Context, inviter workspace.Inviter, is invitation.Invitations) (invitation.Invitations, invitation.Invitations)
 }
 
 type driver struct {
@@ -23,10 +25,11 @@ type driver struct {
 	co           shared.ContextOperator
 	mc           mailer.Client
 	noReplyEmail account.Email
+	logger       logger.Logger
 }
 
-func NewDriver(serviceName string, co shared.ContextOperator, mc mailer.Client, noReplyEmail account.Email) Driver {
-	return &driver{serviceName, co, mc, noReplyEmail}
+func NewDriver(serviceName string, co shared.ContextOperator, mc mailer.Client, noReplyEmail account.Email, logger logger.Logger) Driver {
+	return &driver{serviceName, co, mc, noReplyEmail, logger}
 }
 
 type otpTemplateData struct {
@@ -84,7 +87,7 @@ type inviteMemberTemplateData struct {
 	InviterName   string
 }
 
-func (d *driver) SendInvite(ctx context.Context, inviter workspace.Inviter, i *invitation.Invitation) error {
+func (d *driver) SendInvitation(ctx context.Context, inviter workspace.Inviter, i *invitation.Invitation) error {
 	lang, err := d.co.GetLang(ctx)
 	if err != nil {
 		return err
@@ -132,4 +135,18 @@ func (d *driver) SendInvite(ctx context.Context, inviter workspace.Inviter, i *i
 		IsHTML:  true,
 	}
 	return d.mc.Send(conf)
+}
+
+func (d *driver) SendInvitations(ctx context.Context, inviter workspace.Inviter, is invitation.Invitations) (invitation.Invitations, invitation.Invitations) {
+	success := make([]*invitation.Invitation, 0)
+	failed := make([]*invitation.Invitation, 0)
+	for _, i := range is.AsSlice() {
+		if err := d.SendInvitation(ctx, inviter, i); err != nil {
+			d.logger.Error(fmt.Sprintf("failed to send invitation email to %s, error: %s", i.InviteeEmail().ToString(), err.Error()))
+			failed = append(failed, i)
+		} else {
+			success = append(success, i)
+		}
+	}
+	return invitation.NewInvitations(success), invitation.NewInvitations(failed)
 }

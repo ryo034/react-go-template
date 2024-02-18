@@ -12,6 +12,7 @@ import (
 	fbDr "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	meDr "github.com/ryo034/react-go-template/apps/system/api/driver/me"
 	workspaceDr "github.com/ryo034/react-go-template/apps/system/api/driver/workspace"
+	invitationDr "github.com/ryo034/react-go-template/apps/system/api/driver/workspace/invitation"
 	invitationGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/workspace/invitation"
 	"github.com/uptrace/bun"
 )
@@ -20,12 +21,13 @@ type gateway struct {
 	md   meDr.Driver
 	fd   fbDr.Driver
 	wd   workspaceDr.Driver
+	invd invitationDr.Driver
 	a    Adapter
 	inva invitationGw.Adapter
 }
 
-func NewGateway(md meDr.Driver, fd fbDr.Driver, wd workspaceDr.Driver, a Adapter, inva invitationGw.Adapter) me.Repository {
-	return &gateway{md, fd, wd, a, inva}
+func NewGateway(md meDr.Driver, fd fbDr.Driver, wd workspaceDr.Driver, invd invitationDr.Driver, a Adapter, inva invitationGw.Adapter) me.Repository {
+	return &gateway{md, fd, wd, invd, a, inva}
 }
 
 func (g *gateway) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*me.Me, error) {
@@ -37,7 +39,15 @@ func (g *gateway) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*me.Me
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		return nil, err
 	}
-	ris, err := g.md.FindAllActiveInvitations(ctx, exec, account.NewIDFromUUID(res.SystemAccountID))
+	p, err := g.md.FindProfile(ctx, exec, account.NewIDFromUUID(res.SystemAccountID))
+	if err != nil {
+		return nil, err
+	}
+	em, err := account.NewEmail(p.Profile.Email)
+	if err != nil {
+		return nil, err
+	}
+	ris, err := g.invd.FindActiveAllByEmail(ctx, exec, em)
 	if err != nil {
 		return nil, err
 	}
@@ -95,7 +105,7 @@ func (g *gateway) UpdateMember(ctx context.Context, exec bun.IDB, m *me.Me) erro
 }
 
 func (g *gateway) AcceptInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) error {
-	return g.md.AcceptInvitation(ctx, exec, id)
+	return g.invd.Accept(ctx, exec, id)
 }
 
 func (g *gateway) FindAllActiveReceivedInvitations(ctx context.Context, exec bun.IDB, aID account.ID) (me.ReceivedInvitations, error) {

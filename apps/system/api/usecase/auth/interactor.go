@@ -8,7 +8,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	domainError "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/email"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
@@ -27,14 +27,14 @@ type useCase struct {
 	dbp     core.Provider
 	repo    auth.Repository
 	meRepo  me.Repository
-	wRepo   workspace.Repository
+	invRepo invitation.Repository
 	emailDr email.Driver
 	fbDr    firebase.Driver
 	op      OutputPort
 }
 
-func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo auth.Repository, meRepo me.Repository, wRepo workspace.Repository, emailDr email.Driver, fbDr firebase.Driver, op OutputPort) UseCase {
-	return &useCase{txp, dbp, acRepo, meRepo, wRepo, emailDr, fbDr, op}
+func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo auth.Repository, meRepo me.Repository, invRepo invitation.Repository, emailDr email.Driver, fbDr firebase.Driver, op OutputPort) UseCase {
+	return &useCase{txp, dbp, acRepo, meRepo, invRepo, emailDr, fbDr, op}
 }
 
 func (u *useCase) AuthByOTP(ctx context.Context, i ByOTPInput) (openapi.APIV1AuthOtpPostRes, error) {
@@ -114,7 +114,7 @@ func (u *useCase) verifyOTP(ctx context.Context, aID account.ID, email account.E
 
 func (u *useCase) ProcessInvitation(ctx context.Context, i ProcessInvitationInput) (openapi.ProcessInvitationRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
-	invRes, err := u.wRepo.FindActiveInvitationByEmail(ctx, p, i.Email)
+	invRes, err := u.invRepo.FindActiveByEmail(ctx, p, i.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,7 @@ func (u *useCase) ProcessInvitation(ctx context.Context, i ProcessInvitationInpu
 		return nil, err
 	}
 	fn := func() error {
-		//u.wRepo.FindInviteeWorkspaceFromToken(ctx, p, i.Token)
-		if err = u.wRepo.VerifyInvitationToken(pr, p, i.Email, i.Token); err != nil {
+		if err = u.invRepo.VerifyByToken(pr, p, i.Token); err != nil {
 			return err
 		}
 		code, err := u.repo.GenTOTP(pr, i.Email)

@@ -18,8 +18,8 @@ type SystemAccount struct {
 	SystemAccountID uuid.UUID `bun:"system_account_id,pk"`
 	CreatedAt       time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	PhoneNumber *SystemAccountPhoneNumber `bun:"rel:has-one"`
-	Profile     *SystemAccountProfile     `bun:"rel:has-one"`
+	PhoneNumber *SystemAccountPhoneNumber `bun:"sapn,rel:has-one"`
+	Profile     *SystemAccountProfile     `bun:"saps,rel:has-one"`
 }
 
 type SystemAccountPhoneNumber struct {

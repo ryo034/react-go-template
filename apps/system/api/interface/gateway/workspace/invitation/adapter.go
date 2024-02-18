@@ -1,6 +1,7 @@
 package invitation
 
 import (
+	"fmt"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/datetime"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
@@ -30,22 +31,20 @@ func (a *adapter) Adapt(i *models.Invitation) (*invitation.Invitation, error) {
 	}
 	var dn *member.DisplayName
 	if i.InviteeName != nil {
-		tmpDn, err := member.NewDisplayName(i.InviteeName.DisplayName)
-		if err != nil {
-			return nil, err
+		dn = member.NewDisplayName(i.InviteeName.DisplayName)
+	}
+	evs := make([]invitation.Event, 0, len(i.Events))
+	for _, ev := range i.Events {
+		if ev.EventType == "verified" {
+			evs = append(evs, invitation.NewAsVerified(datetime.NewDatetime(ev.CreatedAt)))
+		} else if ev.EventType == "revoked" {
+			evs = append(evs, invitation.NewAsRevoked(datetime.NewDatetime(ev.CreatedAt)))
+		} else {
+			//TODO: Error handling
+			return nil, fmt.Errorf("unknown event type: %s", ev.EventType)
 		}
-		dn = &tmpDn
 	}
-
-	var vf *invitation.VerifiedAt
-	if i.Events != nil && len(i.Events) > 0 && i.Events[0].EventType == "verified" {
-		tmpVf := invitation.NewVerifiedAt(datetime.NewDatetime(i.Events[0].CreatedAt))
-		vf = &tmpVf
-	} else {
-		vf = nil
-	}
-
-	return invitation.NewInvitation(id, token, vf, ex, ema, dn), nil
+	return invitation.NewInvitation(id, token, invitation.NewEvents(evs), ex, ema, dn), nil
 }
 
 func (a *adapter) AdaptAll(is []*models.Invitation) (invitation.Invitations, error) {

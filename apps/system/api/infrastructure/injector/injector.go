@@ -5,6 +5,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/config"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	fb "github.com/ryo034/react-go-template/apps/system/api/infrastructure/firebase"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/logger"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/mailer"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/message"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
@@ -28,9 +29,10 @@ func NewInjector(
 	conf config.Reader,
 	rc *redis.Client,
 	mc mailer.Client,
+	logger logger.Logger,
 ) (*Injector, error) {
 	defaultLang := conf.DefaultLanguage()
-	di := newDriverInjector(conf, rc, f, co, mc, conf.NoReplyEmail())
+	di := newDriverInjector(conf, logger, rc, f, co, mc, conf.NoReplyEmail())
 	ri := newRepositoryInjector(di, newGatewayAdapterInjector())
 	pi := newPresenterInjector()
 	la := sharedPresenter.NewLanguageAdapter(defaultLang)

@@ -17,8 +17,8 @@ type Workspace struct {
 	WorkspaceID uuid.UUID `bun:"workspace_id,pk"`
 	CreatedAt   time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	Detail  *WorkspaceDetail `bun:"rel:has-one"`
-	Members []*Member        `bun:"rel:has-many"`
+	Detail  *WorkspaceDetail `bun:"wd,rel:has-one"`
+	Members []*Member        `bun:"ms,rel:has-many"`
 }
 
 type Workspaces []*Workspace

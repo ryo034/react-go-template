@@ -50,7 +50,6 @@ func (m *Me) JoinedWorkspaces() workspace.Workspaces {
 
 func (m *Me) ReceivedInvitations() ReceivedInvitations {
 	return m.receivedInvitations
-
 }
 
 func (m *Me) CheckJoined(wID workspace.ID) bool {

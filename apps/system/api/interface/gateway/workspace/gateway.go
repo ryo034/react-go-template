@@ -8,6 +8,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	workspaceDr "github.com/ryo034/react-go-template/apps/system/api/driver/workspace"
+	invitationDr "github.com/ryo034/react-go-template/apps/system/api/driver/workspace/invitation"
 	memberDr "github.com/ryo034/react-go-template/apps/system/api/driver/workspace/member"
 	memberGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/member"
 	invitationGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/workspace/invitation"
@@ -15,15 +16,16 @@ import (
 )
 
 type gateway struct {
-	d   workspaceDr.Driver
-	md  memberDr.Driver
-	adp Adapter
-	ma  memberGw.Adapter
-	ia  invitationGw.Adapter
+	d    workspaceDr.Driver
+	md   memberDr.Driver
+	invd invitationDr.Driver
+	adp  Adapter
+	ma   memberGw.Adapter
+	ia   invitationGw.Adapter
 }
 
-func NewGateway(d workspaceDr.Driver, md memberDr.Driver, adp Adapter, ma memberGw.Adapter, ia invitationGw.Adapter) workspace.Repository {
-	return &gateway{d, md, adp, ma, ia}
+func NewGateway(d workspaceDr.Driver, md memberDr.Driver, invd invitationDr.Driver, adp Adapter, ma memberGw.Adapter, ia invitationGw.Adapter) workspace.Repository {
+	return &gateway{d, md, invd, adp, ma, ia}
 }
 
 func (g *gateway) FindAll(ctx context.Context, exec bun.IDB, aID account.ID) (workspace.Workspaces, error) {
@@ -70,8 +72,8 @@ func (g *gateway) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspac
 	return g.ma.AdaptAll(res)
 }
 
-func (g *gateway) InviteMember(ctx context.Context, exec bun.IDB, inviter workspace.Inviter, i *invitation.Invitation) error {
-	return g.d.InviteMember(ctx, exec, inviter, i)
+func (g *gateway) InviteMembers(ctx context.Context, exec bun.IDB, inviter workspace.Inviter, is invitation.Invitations) error {
+	return g.d.InviteMembers(ctx, exec, inviter, is)
 }
 
 func (g *gateway) VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uuid.UUID) (*invitation.Invitation, error) {
@@ -103,7 +105,7 @@ func (g *gateway) FindActiveInvitationByEmail(ctx context.Context, exec bun.IDB,
 }
 
 func (g *gateway) FindActiveInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) (*invitation.Invitation, *workspace.Workspace, error) {
-	res, err := g.d.FindActiveInvitation(ctx, exec, id)
+	res, err := g.invd.Find(ctx, exec, id)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -111,13 +113,9 @@ func (g *gateway) FindActiveInvitation(ctx context.Context, exec bun.IDB, id inv
 	if err != nil {
 		return nil, nil, err
 	}
-	w, err := g.adp.Adapt(res.Workspace)
+	w, err := g.adp.Adapt(res.InvitationUnit.Workspace)
 	if err != nil {
 		return nil, nil, err
 	}
 	return im, w, nil
-}
-
-func (g *gateway) VerifyInvitationToken(ctx context.Context, exec bun.IDB, i *invitation.Invitation) error {
-	return g.d.VerifyInvitationToken(ctx, exec, i)
 }

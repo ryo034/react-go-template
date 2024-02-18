@@ -2,12 +2,15 @@ package invitation
 
 import (
 	"context"
-	"github.com/google/uuid"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/uptrace/bun"
 )
 
 type Repository interface {
 	Find(ctx context.Context, exec bun.IDB, iID ID) (*Invitation, error)
-	FindByToken(ctx context.Context, exec bun.IDB, token uuid.UUID) (*Invitation, error)
-	VerifyByToken(ctx context.Context, exec bun.IDB, token uuid.UUID) error
+	FindActiveByToken(ctx context.Context, exec bun.IDB, token Token) (*Invitation, error)
+	VerifyByToken(ctx context.Context, exec bun.IDB, token Token) error
+	FindActiveByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*Invitation, error)
+	FindActiveAllByEmail(ctx context.Context, exec bun.IDB, email account.Email) (Invitations, error)
+	Accept(ctx context.Context, exec bun.IDB, id ID) error
 }

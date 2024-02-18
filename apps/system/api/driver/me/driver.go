@@ -7,8 +7,8 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/id"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
+	invitationDr "github.com/ryo034/react-go-template/apps/system/api/driver/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	"github.com/uptrace/bun"
 	"time"
@@ -23,15 +23,15 @@ type Driver interface {
 	FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.SystemAccount, error)
 	UpdateMember(ctx context.Context, exec bun.IDB, m *me.Me) error
 	UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User) error
-	AcceptInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) error
 	FindAllActiveInvitations(ctx context.Context, exec bun.IDB, aID account.ID) ([]*models.Invitation, error)
 }
 
 type driver struct {
+	invd invitationDr.Driver
 }
 
-func NewDriver() Driver {
-	return &driver{}
+func NewDriver(invd invitationDr.Driver) Driver {
+	return &driver{invd}
 }
 
 func (d *driver) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*models.Member, error) {
@@ -157,22 +157,6 @@ func (d *driver) UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User
 		Exec(ctx)
 	fmt.Println(res)
 	return err
-}
-
-func (d *driver) AcceptInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) error {
-	im := &models.Invitation{
-		InvitationID: id.Value(),
-		Used:         true,
-	}
-	if _, err := exec.
-		NewUpdate().
-		Model(im).
-		Column("used").
-		WherePK().
-		Exec(ctx); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (d *driver) FindAllActiveInvitations(ctx context.Context, exec bun.IDB, aID account.ID) ([]*models.Invitation, error) {

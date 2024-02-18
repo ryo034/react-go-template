@@ -10,6 +10,6 @@ import (
 type OutputPort interface {
 	Create(w *workspace.Workspace) *openapi.Workspace
 	FindAllMembers(ms member.Members) *openapi.Members
-	InviteMembers(is invitation.Invitations, success invitation.Invitations, registered invitation.Invitations, failed invitation.Invitations) *openapi.InvitationsBulkResponse
+	InviteMembers(is invitation.Invitations, registered invitation.Invitations, success invitation.Invitations, failed invitation.Invitations) (*openapi.InvitationsBulkResponse, error)
 	VerifyInvitationToken(w *workspace.Workspace, i *invitation.Invitation) openapi.VerifyInvitationRes
 }

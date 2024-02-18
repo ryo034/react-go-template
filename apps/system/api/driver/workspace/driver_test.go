@@ -133,7 +133,7 @@ func Test_driver_AddMember_OK(t *testing.T) {
 	email, _ := account.NewEmail("system_account@example.com")
 	name, _ := account.NewName("John Doe")
 	u := user.NewUser(aID, email, &name, nil)
-	dn, _ := member.NewDisplayName("John Doe")
+	dn := member.NewDisplayName("John Doe")
 	m := member.NewMember(mID, u, dn, nil)
 
 	want := &models.Member{

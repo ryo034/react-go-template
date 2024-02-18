@@ -21,9 +21,9 @@ type Member struct {
 	SystemAccountID uuid.UUID `bun:"system_account_id,notnull"`
 	CreatedAt       time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	SystemAccount *SystemAccount `bun:"rel:belongs-to"`
-	Profile       *MemberProfile `bun:"rel:has-one"`
-	Workspace     *Workspace     `bun:"rel:belongs-to"`
+	SystemAccount *SystemAccount `bun:"sa,rel:belongs-to"`
+	Profile       *MemberProfile `bun:"mp,rel:has-one"`
+	Workspace     *Workspace     `bun:"ws,rel:belongs-to"`
 }
 
 type Members []*Member

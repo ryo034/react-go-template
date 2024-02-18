@@ -11,7 +11,6 @@ import (
 	fbDr "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
-	"github.com/uptrace/bun"
 )
 
 type UseCase interface {
@@ -55,10 +54,7 @@ func (u *useCase) Create(ctx context.Context, i CreateInput) (openapi.APIV1Works
 		if err != nil {
 			return nil, err
 		}
-		dn, err := member.NewDisplayName(meRes.Self().Name().ToString())
-		if err != nil {
-			return nil, err
-		}
+		dn := member.NewDisplayName(meRes.Self().Name().ToString())
 		m := member.NewMember(meID, meRes.Self(), dn, nil)
 		memRes, err := u.repo.AddMember(pr, p, wres, m)
 		if err != nil {
@@ -95,21 +91,6 @@ func (u *useCase) FindAllMembers(ctx context.Context, i FindAllMembersInput) (op
 	return u.op.FindAllMembers(ms), nil
 }
 
-func (u *useCase) inviteMember(ctx context.Context, exec bun.IDB, inviter workspace.Inviter, i *invitation.Invitation) error {
-	pr, err := u.txp.Provide(ctx)
-	if err != nil {
-		return err
-	}
-	fn := func() error {
-		if err = u.repo.InviteMember(pr, exec, inviter, i); err != nil {
-			return err
-		}
-		return u.emailDriver.SendInvite(pr, inviter, i)
-	}
-	result := pr.Transactional(fn)()
-	return result.Error()
-}
-
 func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error) {
 	// Exclude already registered members
 	currentWorkspaceID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx, i.AccountID)
@@ -137,23 +118,20 @@ func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (open
 		return nil, err
 	}
 
-	failedList := make([]*invitation.Invitation, 0)
-	successList := make([]*invitation.Invitation, 0)
 	inviter := workspace.NewInviter(meRes.Member(), meRes.Workspace())
-	for _, im := range targets {
-		if err = u.inviteMember(ctx, exec, inviter, im); err != nil {
-			failedList = append(failedList, im)
-		} else {
-			successList = append(successList, im)
-		}
+
+	is := invitation.NewInvitations(targets)
+	successSendMailList, failedSendMailList := u.emailDriver.SendInvitations(ctx, inviter, is)
+	if err = u.repo.InviteMembers(ctx, exec, inviter, successSendMailList); err != nil {
+		return nil, err
 	}
 
 	return u.op.InviteMembers(
 		i.Invitations,
-		invitation.NewInvitations(successList),
 		invitation.NewInvitations(alreadyRegisteredList),
-		invitation.NewInvitations(failedList),
-	), nil
+		successSendMailList,
+		failedSendMailList,
+	)
 }
 
 func (u *useCase) VerifyInvitationToken(ctx context.Context, i VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error) {

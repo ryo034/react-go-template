@@ -8,14 +8,14 @@ import (
 type Invitation struct {
 	id           ID
 	token        Token
-	verifiedAt   *VerifiedAt
+	events       Events
 	expiredAt    ExpiredAt
 	inviteeEmail account.Email
 	displayName  *member.DisplayName
 }
 
-func NewInvitation(id ID, token Token, verified *VerifiedAt, expiredAt ExpiredAt, inviteeEmail account.Email, displayName *member.DisplayName) *Invitation {
-	return &Invitation{id, token, verified, expiredAt, inviteeEmail, displayName}
+func NewInvitation(id ID, token Token, events Events, expiredAt ExpiredAt, inviteeEmail account.Email, displayName *member.DisplayName) *Invitation {
+	return &Invitation{id, token, events, expiredAt, inviteeEmail, displayName}
 }
 
 func GenInvitation(inviteeEmail string, displayName string) (*Invitation, error) {
@@ -23,14 +23,7 @@ func GenInvitation(inviteeEmail string, displayName string) (*Invitation, error)
 	if err != nil {
 		return nil, err
 	}
-	var dn *member.DisplayName
-	if displayName != "" {
-		tmpDn, err := member.NewDisplayName(displayName)
-		if err != nil {
-			return nil, err
-		}
-		dn = &tmpDn
-	}
+	dn := member.NewDisplayName(displayName)
 	id, err := GenerateID()
 	if err != nil {
 		return nil, err
@@ -50,8 +43,8 @@ func (i *Invitation) Token() Token {
 	return i.token
 }
 
-func (i *Invitation) Verified() *VerifiedAt {
-	return i.verifiedAt
+func (i *Invitation) Events() Events {
+	return i.events
 }
 
 func (i *Invitation) ExpiredAt() ExpiredAt {
@@ -64,4 +57,18 @@ func (i *Invitation) InviteeEmail() account.Email {
 
 func (i *Invitation) DisplayName() *member.DisplayName {
 	return i.displayName
+}
+
+func (i *Invitation) IsActive() bool {
+	return i.expiredAt.IsNotExpired() &&
+		i.Events().IsNotEmpty() &&
+		i.Events().Latest() != nil &&
+		i.Events().Latest().IsActive()
+}
+
+func (i *Invitation) IsVerified() bool {
+	return i.Events() != nil &&
+		i.Events().IsNotEmpty() &&
+		i.Events().Latest() != nil &&
+		i.Events().Latest().IsVerified()
 }

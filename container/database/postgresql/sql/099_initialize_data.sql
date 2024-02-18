@@ -50,7 +50,6 @@ VALUES
 ('018d9b4e-d8fb-73be-95c5-46fbc7a37a7d', '018d9b4d-9438-79ac-b533-1323d4ec9b9f', '018d9b4d-e340-74f7-914c-2476eff949bb', '2024-01-10 12:00:00'),
 ('018da0dc-dad2-7ac8-95cc-9c3afdd0dbd5', '018da09e-c6ca-795e-878d-32bb8c1e5cac', '018d9b4d-e340-74f7-914c-2476eff949bb', '2024-01-10 12:00:00');
 
-
 INSERT INTO member_login_histories (member_login_history_id, member_id, login_at)
 VALUES
 ('018d6bc0-3884-7420-a802-f857192c7e24', '377eba35-5560-4f48-a99d-19cbd6a82b0d', '2024-01-10 12:00:00'),
@@ -116,6 +115,6 @@ VALUES
 ('018d9fb4-641f-72f9-bdeb-a493a974dba1', 'Invite Test'),
 ('018da09b-ed0c-7688-a8e3-4573104e006f', 'Invite TestThreeChanged');
 
-INSERT INTO invitations_events (invitations_event_id, invitation_id, event_type, created_at)
+INSERT INTO invitation_events (invitation_event_id, invitation_id, event_type, created_at)
 VALUES
 ('018db3ff-2a1a-7445-b464-3a84071b9549', '018d96bb-2a6e-70ed-bd74-8565ac2960ac', 'verified', '2023-01-10 15:00:00');

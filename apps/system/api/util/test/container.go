@@ -12,14 +12,16 @@ import (
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/extra/bundebug"
+	"log"
 	"path/filepath"
+	"runtime"
 	"testing"
 	"time"
 )
 
 const testContainerPort = "65432"
-const testContainerDBPwd = "password"
 const testContainerDBUser = "postgres"
+const testContainerDBPwd = "password"
 
 var PsqlTestContainerConnQueryStr = fmt.Sprintf("user=%s&password=%s&sslmode=disable", testContainerDBUser, testContainerDBPwd)
 var PsqlTestContainerConnStr = fmt.Sprintf("postgres://%s:%s?%s", "localhost", testContainerPort, PsqlTestContainerConnQueryStr)
@@ -29,15 +31,38 @@ type PostgresContainer struct {
 	ConnectionString string
 }
 
-var CreateSystemTablesPath = filepath.Join("../../../../../", "container/database/postgresql/sql", "001_create_tables.sql")
-var CreateSystemBaseDataPath = filepath.Join("../../../../../", "container/database/postgresql/sql", "099_initialize_data.sql")
-var PsqlTestContainerConfPath = filepath.Join("../../../../../", "container/database/postgresql/primary", "postgresql.conf")
+func getProjectRoot() string {
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		log.Fatal("runtime.Caller(0) failed to get current file path")
+	}
+	projectRoot := filepath.Dir(filename)
+	for projectRoot != "" && filepath.Base(projectRoot) != "test" {
+		projectRoot = filepath.Dir(projectRoot)
+	}
+	if projectRoot == "" {
+		log.Fatal("Unable to find the project root directory")
+	}
+	return projectRoot
+}
+
+func createSystemTablesPath() string {
+	return filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/sql/001_create_tables.sql")
+}
+
+func createSystemBaseDataPath() string {
+	return filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/sql/099_initialize_data.sql")
+}
+
+func psqlTestContainerConfPath() string {
+	return filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/primary/postgresql.conf")
+}
 
 func PSQLTestContainer(ctx context.Context, scripts ...string) (*PostgresContainer, error) {
 	pgContainer, err := postgres.RunContainer(ctx,
 		testcontainers.WithImage("postgres:latest"),
 		postgres.WithInitScripts(scripts...),
-		postgres.WithConfigFile(PsqlTestContainerConfPath),
+		postgres.WithConfigFile(psqlTestContainerConfPath()),
 		postgres.WithDatabase("main"),
 		postgres.WithUsername(testContainerDBUser),
 		postgres.WithPassword(testContainerDBPwd),
@@ -61,7 +86,7 @@ func PSQLTestContainer(ctx context.Context, scripts ...string) (*PostgresContain
 }
 
 func SetupTestDB(t *testing.T, ctx context.Context) *bun.DB {
-	pgContainer, err := PSQLTestContainer(ctx, CreateSystemTablesPath, CreateSystemBaseDataPath)
+	pgContainer, err := PSQLTestContainer(ctx, createSystemTablesPath(), createSystemBaseDataPath())
 	if err != nil {
 		t.Fatalf("failed to PSQLContainer creation: %v", err)
 	}

@@ -1,0 +1,7 @@
+invitation_id,email
+018d96b8-0bb6-7822-b3b5-78a5d0e8790e,invite_test_expired@example.com
+018d96b8-2211-7862-bcbe-e9f4d002a8fc,invite_test_not_expired@example.com
+018d96bb-2a6e-70ed-bd74-8565ac2960ac,invite_test_already_used@example.com
+018d9fb4-641f-72f9-bdeb-a493a974dba1,invite_test_not_expired_with_display_name@example.com
+018d9b6d-01cf-7d3e-8328-76736b6db971,invite_test_already_joined_any_workspace@example.com
+018da09b-ed0c-7688-a8e3-4573104e006f,invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com

@@ -26,14 +26,15 @@ func newPresenterInjector() Presenter {
 	return Presenter{
 		auth.NewPresenter(),
 		me.NewPresenter(meAdapter, pa.User, pa.Member, pa.Workspace),
-		workspace.NewPresenter(pa.Workspace, m),
+		workspace.NewPresenter(pa.Workspace, pa.Invitation, m),
 	}
 }
 
 type PresenterAdapter struct {
-	User      user.Adapter
-	Member    member.Adapter
-	Workspace workspace.Adapter
+	User       user.Adapter
+	Member     member.Adapter
+	Workspace  workspace.Adapter
+	Invitation invitation.Adapter
 }
 
 func newPresenterAdapter() PresenterAdapter {
@@ -43,5 +44,6 @@ func newPresenterAdapter() PresenterAdapter {
 		ua,
 		ma,
 		workspace.NewAdapter(ma),
+		invitation.NewAdapter(),
 	}
 }

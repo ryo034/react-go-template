@@ -40,7 +40,9 @@ func Start(conf config.Reader) {
 		mc = mailer.NewResendMailer(conf.ResendAPIKey())
 	}
 
-	inj, err := injector.NewInjector(fb, p, txp, co, conf, rc, mc)
+	zl := logger.NewZeroLogger(logger.Config{TimeFormat: time.RFC3339, UTC: true}, conf.IsLocal(), conf.ServiceName())
+
+	inj, err := injector.NewInjector(fb, p, txp, co, conf, rc, mc, zl)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -53,8 +55,6 @@ func Start(conf config.Reader) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	zl := logger.NewZeroLogger(logger.Config{TimeFormat: time.RFC3339, UTC: true}, conf.IsLocal(), conf.ServiceName())
 
 	server := &http.Server{
 		Addr:         endpoint,

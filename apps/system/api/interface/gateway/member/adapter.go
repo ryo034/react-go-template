@@ -29,7 +29,7 @@ func (a *adapter) Adapt(m *models.Member) (*member.Member, error) {
 		return nil, err
 	}
 
-	dn, err := member.NewDisplayName(m.Profile.DisplayName)
+	dn := member.NewDisplayName(m.Profile.DisplayName)
 	if err != nil {
 		return nil, err
 	}

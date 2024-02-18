@@ -78,7 +78,13 @@ export const statefulTest = test.extend({
 export const getInviteToken = async (email: string) => {
   const db = new MainDb()
   const conn = await db.getConnection()
-  const res = await conn.query(`SELECT token FROM invitations WHERE email = '${email}'`)
+  const inviteesRes = await conn.query(`SELECT invitation_id FROM invitees WHERE email = '${email}'`)
+  if (inviteesRes.rows.length === 0) {
+    throw new Error("inviteesRes is empty")
+  }
+  const res = await conn.query(
+    `SELECT token FROM invitation_tokens WHERE invitation_id = '${inviteesRes.rows[0].invitation_id}'`
+  )
   if (res.rows.length === 0) {
     throw new Error("res is empty")
   }
@@ -88,7 +94,10 @@ export const getInviteToken = async (email: string) => {
 export const getInvitationIdByToken = async (token: string) => {
   const db = new MainDb()
   const conn = await db.getConnection()
-  const res = await conn.query(`SELECT invitation_id FROM invitations WHERE token = '${token}'`)
+  const res = await conn.query(`SELECT invitation_id FROM invitation_tokens WHERE token = '${token}'`)
+  if (res.rows.length === 0) {
+    throw new Error("tokenRes is empty")
+  }
   if (res.rows.length === 0) {
     throw new Error("res is empty")
   }
@@ -98,9 +107,16 @@ export const getInvitationIdByToken = async (token: string) => {
 export const checkVerifyInvitation = async (email: string, token: string) => {
   const db = new MainDb()
   const conn = await db.getConnection()
-  const res = await conn.query(`SELECT * FROM invitations WHERE email = '${email}' AND token = '${token}'`)
+  const res = await conn.query(`SELECT * FROM invitation_tokens WHERE token = '${token}'`)
   if (res.rows.length === 0) {
     throw new Error("res is empty")
   }
-  return (res.rows[0].verified as boolean) ?? false
+  // invitation_events
+  const eventsRes = await conn.query(
+    `SELECT * FROM invitation_events WHERE invitation_id = '${res.rows[0].invitation_id}' ORDER BY created_at DESC LIMIT 1`
+  )
+  if (eventsRes.rows.length === 0) {
+    throw new Error("eventsRes is empty")
+  }
+  return (eventsRes.rows[0].event_type as string) === "verified"
 }

@@ -171,12 +171,12 @@ CREATE TABLE invitations (
   CONSTRAINT fk_invitations_invitation_units_invitation_unit_id FOREIGN KEY (invitation_unit_id) REFERENCES invitation_units(invitation_unit_id)
 );
 
-CREATE TRIGGER invitation_tokens (
+CREATE TABLE invitation_tokens (
   invitation_id uuid NOT NULL,
-  token uuid NOT NULL,
+  token uuid NOT NULL UNIQUE,
   expired_at TIMESTAMP WITH TIME ZONE NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (invitation_id),
+  PRIMARY KEY (invitation_id, token),
   CONSTRAINT fk_invitations_invitation_tokens_invitation_id FOREIGN KEY (invitation_id) REFERENCES invitations(invitation_id)
 );
 
@@ -194,11 +194,13 @@ CREATE TABLE invitee_names (
   CONSTRAINT fk_invitee_names_invitations_invitation_id FOREIGN KEY (invitation_id) REFERENCES invitations(invitation_id)
 );
 
-CREATE TABLE invitations_events (
-  invitations_event_id uuid NOT NULL,
+CREATE TYPE invitation_event_types AS ENUM ('verified', 'revoked', 'reissued');
+
+CREATE TABLE invitation_events (
+  invitation_event_id uuid NOT NULL,
   invitation_id uuid NOT NULL,
-  event_type enum('verified', 'revoked', 'reissued') NOT NULL,
+  event_type invitation_event_types NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (invitations_event_id),
-  CONSTRAINT fk_invitations_events_invitations_invitation_id FOREIGN KEY (invitation_id) REFERENCES invitations(invitation_id)
+  PRIMARY KEY (invitation_event_id),
+  CONSTRAINT fk_invitation_events_invitations_invitation_id FOREIGN KEY (invitation_id) REFERENCES invitations(invitation_id)
 );

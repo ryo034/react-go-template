@@ -15,10 +15,9 @@ type Repository interface {
 	AddMember(ctx context.Context, exec bun.IDB, w *Workspace, m *member.Member) (*member.Member, error)
 	FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID ID) (*member.Member, error)
 	FindAllMembers(ctx context.Context, exec bun.IDB, wID ID) (member.Members, error)
-	InviteMember(ctx context.Context, exec bun.IDB, inviter Inviter, i *invitation.Invitation) error
+	InviteMembers(ctx context.Context, exec bun.IDB, inviter Inviter, is invitation.Invitations) error
 	VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uuid.UUID) (*invitation.Invitation, error)
 	FindInviteeWorkspaceFromToken(ctx context.Context, exec bun.IDB, token uuid.UUID) (*Workspace, error)
 	FindActiveInvitationByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*invitation.Invitation, error)
 	FindActiveInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) (*invitation.Invitation, *Workspace, error)
-	VerifyInvitationToken(ctx context.Context, exec bun.IDB, i *invitation.Invitation) error
 }

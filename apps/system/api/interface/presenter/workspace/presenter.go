@@ -5,17 +5,19 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	memberPresenter "github.com/ryo034/react-go-template/apps/system/api/interface/presenter/member"
+	invitation2 "github.com/ryo034/react-go-template/apps/system/api/interface/presenter/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 	workspaceUc "github.com/ryo034/react-go-template/apps/system/api/usecase/workspace"
 )
 
-func NewPresenter(wa Adapter, ma memberPresenter.Adapter) workspaceUc.OutputPort {
-	return &presenter{wa, ma}
+func NewPresenter(wa Adapter, inva invitation2.Adapter, ma memberPresenter.Adapter) workspaceUc.OutputPort {
+	return &presenter{wa, inva, ma}
 }
 
 type presenter struct {
-	wa Adapter
-	ma memberPresenter.Adapter
+	wa   Adapter
+	inva invitation2.Adapter
+	ma   memberPresenter.Adapter
 }
 
 func (p *presenter) Create(w *workspace.Workspace) *openapi.Workspace {
@@ -28,51 +30,31 @@ func (p *presenter) FindAllMembers(ms member.Members) *openapi.Members {
 	return &res
 }
 
-func (p *presenter) InviteMembers(ms invitation.Invitations, successList invitation.Invitations, registeredList invitation.Invitations, failedList invitation.Invitations) *openapi.InvitationsBulkResponse {
-	rims := make([]openapi.Invitation, 0, registeredList.Size())
-	for _, ivm := range registeredList.AsSlice() {
-		rims = append(rims, openapi.Invitation{
-			ID:           ivm.ID().Value(),
-			Verified:     ivm.Verified(),
-			ExpiredAt:    ivm.ExpiredAt().Value().ToTime(),
-			InviteeEmail: ivm.InviteeEmail().ToString(),
-			DisplayName:  ivm.DisplayName().ToString(),
-		})
+func (p *presenter) InviteMembers(ms invitation.Invitations, registeredList invitation.Invitations, successList invitation.Invitations, failedList invitation.Invitations) (*openapi.InvitationsBulkResponse, error) {
+	rims, err := p.inva.AdaptAll(registeredList)
+	if err != nil {
+		return nil, err
 	}
-
-	fims := make([]openapi.Invitation, 0, failedList.Size())
-	for _, ivm := range failedList.AsSlice() {
-		fims = append(fims, openapi.Invitation{
-			ID:           ivm.ID().Value(),
-			Verified:     ivm.Verified(),
-			ExpiredAt:    ivm.ExpiredAt().Value().ToTime(),
-			InviteeEmail: ivm.InviteeEmail().ToString(),
-			DisplayName:  ivm.DisplayName().ToString(),
-		})
+	fims, err := p.inva.AdaptAll(failedList)
+	if err != nil {
+		return nil, err
 	}
-
-	sis := make([]openapi.Invitation, 0, successList.Size())
-	for _, ivm := range successList.AsSlice() {
-		sis = append(sis, openapi.Invitation{
-			ID:           ivm.ID().Value(),
-			Verified:     ivm.Verified(),
-			ExpiredAt:    ivm.ExpiredAt().Value().ToTime(),
-			InviteeEmail: ivm.InviteeEmail().ToString(),
-			DisplayName:  ivm.DisplayName().ToString(),
-		})
+	sis, err := p.inva.AdaptAll(successList)
+	if err != nil {
+		return nil, err
 	}
 	return &openapi.InvitationsBulkResponse{
 		Total:                 ms.Size(),
 		SuccessfulInvitations: sis,
 		RegisteredInvitations: rims,
 		FailedInvitations:     fims,
-	}
+	}, nil
 }
 
 func (p *presenter) VerifyInvitationToken(w *workspace.Workspace, i *invitation.Invitation) openapi.VerifyInvitationRes {
 	d := w.Detail()
 	return &openapi.InvitationInfoResponse{
 		WorkspaceName: d.Name().ToString(),
-		Verified:      i.Verified(),
+		Verified:      i.IsVerified(),
 	}
 }

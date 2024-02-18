@@ -23,10 +23,14 @@ func (a *adapter) Adapt(m *member.Member) openapi.Member {
 	if m == nil {
 		return openapi.Member{}
 	}
+	dn := ""
+	if m.HasDisplayName() {
+		dn = m.DisplayName().ToString()
+	}
 	return openapi.Member{
 		Profile: openapi.MemberProfile{
 			ID:          m.ID().ToFriendlyString(),
-			DisplayName: m.DisplayName().ToString(),
+			DisplayName: dn,
 			IdNumber: openapi.OptString{
 				Value: m.IDNumber().ToString(),
 				Set:   m.HasIDNumber(),

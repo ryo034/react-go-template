@@ -25,12 +25,16 @@ func (a *adapter) Adapt(i *invitation.Invitation) (openapi.Invitation, error) {
 	if err != nil {
 		return openapi.Invitation{}, err
 	}
+	dn := ""
+	if i.DisplayName() != nil {
+		dn = i.DisplayName().ToString()
+	}
 	return openapi.Invitation{
 		ID:           i.ID().Value(),
-		Verified:     i.Verified(),
+		Verified:     i.IsVerified(),
 		ExpiredAt:    lt,
 		InviteeEmail: i.InviteeEmail().ToString(),
-		DisplayName:  i.DisplayName().ToString(),
+		DisplayName:  dn,
 	}, nil
 }
 

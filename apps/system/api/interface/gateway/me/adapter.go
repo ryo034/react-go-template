@@ -57,7 +57,7 @@ func (a *adapter) AdaptSystemAccount(m *models.SystemAccount) (*me.Me, error) {
 }
 
 func (a *adapter) AdaptReceivedInvitation(i *models.Invitation) (me.ReceivedInvitation, error) {
-	inviter, err := a.wga.AdaptInviter(i.Workspace, i.Member)
+	inviter, err := a.wga.AdaptInviter(i.InvitationUnit.Workspace, i.InvitationUnit.Member)
 	if err != nil {
 		return me.ReceivedInvitation{}, err
 	}

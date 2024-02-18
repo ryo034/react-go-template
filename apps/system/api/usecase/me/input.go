@@ -55,10 +55,7 @@ func NewUpdateInput(i openapi.Me) (*UpdateInput, error) {
 		if err != nil {
 			return nil, err
 		}
-		mdn, err := member.NewDisplayName(i.Member.Value.Profile.DisplayName)
-		if err != nil {
-			return nil, err
-		}
+		mdn := member.NewDisplayName(i.Member.Value.Profile.DisplayName)
 		var mid *member.IDNumber
 		if i.Member.Value.Profile.IdNumber.Set {
 			tmpMid, err := member.NewIDNumber(i.Member.Value.Profile.IdNumber.Value)

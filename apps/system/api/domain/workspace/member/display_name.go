@@ -4,8 +4,11 @@ type DisplayName struct {
 	v string
 }
 
-func NewDisplayName(v string) (DisplayName, error) {
-	return DisplayName{v}, nil
+func NewDisplayName(v string) *DisplayName {
+	if v == "" {
+		return nil
+	}
+	return &DisplayName{v}
 }
 
 func (dn DisplayName) ToString() string {
