@@ -190,7 +190,7 @@ func (d *driver) FindActiveAllByEmail(ctx context.Context, exec bun.IDB, email a
 		}
 		return nil, err
 	}
-	if invitees == nil || len(invitees) == 0 {
+	if invitees == nil {
 		return nil, nil
 	}
 
@@ -213,7 +213,7 @@ func (d *driver) FindActiveAllByEmail(ctx context.Context, exec bun.IDB, email a
 		}
 		return nil, err
 	}
-	if ts == nil || len(ts) == 0 {
+	if ts == nil {
 		return nil, nil
 	}
 
@@ -224,7 +224,6 @@ func (d *driver) FindActiveAllByEmail(ctx context.Context, exec bun.IDB, email a
 
 	//check event
 	var inves []*models.InvitationEvent
-	var targetInves []*models.InvitationEvent
 	var targetInvetInvIDs []uuid.UUID
 	err := exec.
 		NewSelect().
@@ -240,13 +239,10 @@ func (d *driver) FindActiveAllByEmail(ctx context.Context, exec bun.IDB, email a
 			return nil, err
 		}
 	}
-	if inves != nil && len(inves) > 0 {
+	if inves != nil {
 		// exclude latest event type "verified"
 		for _, inv := range inves {
-			if inv.EventType != "verified" {
-				targetInves = append(targetInves, inv)
-			} else {
-				targetInves = append(targetInves, inv)
+			if inv.EventType == "verified" {
 				targetInvetInvIDs = append(targetInvetInvIDs, inv.InvitationID)
 			}
 		}
