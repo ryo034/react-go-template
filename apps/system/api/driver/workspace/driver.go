@@ -2,9 +2,6 @@ package workspace
 
 import (
 	"context"
-	"database/sql"
-	"fmt"
-	"github.com/go-faster/errors"
 	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
@@ -14,7 +11,6 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	dbErr "github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/error"
 	"github.com/uptrace/bun"
-	"time"
 )
 
 type Driver interface {
@@ -24,8 +20,6 @@ type Driver interface {
 	FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error)
 	FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace.ID) (models.Members, error)
 	InviteMembers(ctx context.Context, exec bun.IDB, inviter workspace.Inviter, is invitation.Invitations) error
-	FindInviterWorkspaceFromToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*models.Workspace, error)
-	FindActiveInvitationByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.Invitation, error)
 }
 
 type driver struct {
@@ -183,42 +177,4 @@ func (p *driver) InviteMembers(ctx context.Context, exec bun.IDB, inviter worksp
 		}
 	}
 	return nil
-}
-
-func (p *driver) FindInviterWorkspaceFromToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*models.Workspace, error) {
-	invt := &models.InvitationToken{}
-	err := exec.
-		NewSelect().
-		Model(invt).
-		Relation("Invitation").
-		Relation("Invitation.InvitationUnit").
-		Relation("Invitation.InvitationUnit.Workspace").
-		Relation("Invitation.InvitationUnit.Workspace.Detail").
-		Where(fmt.Sprintf("%s.token = ?", models.InvitationTokenTableAliasName), token.Value()).
-		Scan(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return invt.Invitation.InvitationUnit.Workspace, nil
-}
-
-func (p *driver) FindActiveInvitationByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.Invitation, error) {
-	im := &models.Invitation{}
-	err := exec.
-		NewSelect().
-		Model(im).
-		Where("email = ?", email.ToString()).
-		Where("used = ?", false).
-		Where("expired_at > ?", time.Now()).
-		Relation("Workspace").
-		Relation("Workspace.Detail").
-		Limit(1).
-		Scan(ctx)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, domainErr.NewNoSuchData(fmt.Sprintf("invited_member: email=%s and used=false and expired_at > now()", email.ToString()))
-		}
-		return nil, err
-	}
-	return im, nil
 }

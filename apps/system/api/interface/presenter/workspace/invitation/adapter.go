@@ -7,7 +7,7 @@ import (
 
 type Adapter interface {
 	Adapt(i *invitation.Invitation) (openapi.Invitation, error)
-	AdaptAll(is invitation.Invitations) ([]openapi.Invitation, error)
+	AdaptAll(is invitation.Invitations) (openapi.Invitations, error)
 }
 
 type adapter struct {
@@ -38,7 +38,7 @@ func (a *adapter) Adapt(i *invitation.Invitation) (openapi.Invitation, error) {
 	}, nil
 }
 
-func (a *adapter) AdaptAll(is invitation.Invitations) ([]openapi.Invitation, error) {
+func (a *adapter) AdaptAll(is invitation.Invitations) (openapi.Invitations, error) {
 	if is == nil {
 		return nil, nil
 	}

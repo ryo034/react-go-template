@@ -5,18 +5,18 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	memberPresenter "github.com/ryo034/react-go-template/apps/system/api/interface/presenter/member"
-	invitation2 "github.com/ryo034/react-go-template/apps/system/api/interface/presenter/workspace/invitation"
+	invitationPresenter "github.com/ryo034/react-go-template/apps/system/api/interface/presenter/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 	workspaceUc "github.com/ryo034/react-go-template/apps/system/api/usecase/workspace"
 )
 
-func NewPresenter(wa Adapter, inva invitation2.Adapter, ma memberPresenter.Adapter) workspaceUc.OutputPort {
+func NewPresenter(wa Adapter, inva invitationPresenter.Adapter, ma memberPresenter.Adapter) workspaceUc.OutputPort {
 	return &presenter{wa, inva, ma}
 }
 
 type presenter struct {
 	wa   Adapter
-	inva invitation2.Adapter
+	inva invitationPresenter.Adapter
 	ma   memberPresenter.Adapter
 }
 
@@ -57,4 +57,20 @@ func (p *presenter) VerifyInvitationToken(w *workspace.Workspace, i *invitation.
 		WorkspaceName: d.Name().ToString(),
 		Verified:      i.IsVerified(),
 	}
+}
+
+func (p *presenter) RevokeInvitation(is invitation.Invitations) (openapi.RevokeInvitationRes, error) {
+	rs, err := p.inva.AdaptAll(is)
+	if err != nil {
+		return nil, err
+	}
+	return &rs, err
+}
+
+func (p *presenter) FindAllInvitation(is invitation.Invitations) (openapi.APIV1InvitationsGetRes, error) {
+	rs, err := p.inva.AdaptAll(is)
+	if err != nil {
+		return nil, err
+	}
+	return &rs, err
 }

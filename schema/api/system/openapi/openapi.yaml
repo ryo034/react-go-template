@@ -221,6 +221,14 @@ paths:
         - Members
       security:
         - bearer: []
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum:
+              - verified
+          description: Invitation status
       responses:
         '200':
           description: Invitations
@@ -299,6 +307,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Me'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v1/members/invitations/{invitationId}/revoke:
+    post:
+      summary: Revoke an invitation to join a workspace
+      operationId: revokeInvitation
+      tags:
+        - Members
+      security:
+        - bearer: []
+      parameters:
+        - name: invitationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Invitation id
+      responses:
+        '200':
+          $ref: '#/components/responses/RevokeInvitationResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '500':
@@ -827,3 +858,9 @@ components:
                 $ref: '#/components/schemas/Invitations'
               registeredInvitations:
                 $ref: '#/components/schemas/Invitations'
+    RevokeInvitationResponse:
+      description: Invitations without the revoked one
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Invitations'

@@ -18,6 +18,8 @@ type UseCase interface {
 	FindAllMembers(ctx context.Context, i FindAllMembersInput) (openapi.APIV1MembersGetRes, error)
 	InviteMembers(ctx context.Context, i InviteMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error)
 	VerifyInvitationToken(ctx context.Context, i VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error)
+	RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error)
+	FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error)
 }
 
 type useCase struct {
@@ -149,4 +151,44 @@ func (u *useCase) VerifyInvitationToken(ctx context.Context, i VerifyInvitationT
 		return nil, err
 	}
 	return u.op.VerifyInvitationToken(w, res), nil
+}
+
+func (u *useCase) RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error) {
+	p := u.dbp.GetExecutor(ctx, false)
+	pr, err := u.txp.Provide(ctx)
+	if err != nil {
+		return nil, err
+	}
+	fn := func() (invitation.Invitations, error) {
+		wID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(pr, i.AccountID)
+		if err != nil {
+			return nil, err
+		}
+		if err = u.invRepo.Revoke(pr, p, i.InvitationID); err != nil {
+			return nil, err
+		}
+		return u.repo.FindAllInvitations(pr, p, wID)
+	}
+	result := pr.Transactional(fn)()
+	if err = result.Error(); err != nil {
+		return nil, err
+	}
+	res := result.Value(0).(invitation.Invitations)
+	return u.op.RevokeInvitation(res)
+}
+
+func (u *useCase) FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error) {
+	p := u.dbp.GetExecutor(ctx, true)
+	wID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx, i.AccountID)
+	if err != nil {
+		return nil, err
+	}
+	res, err := u.repo.FindAllInvitations(ctx, p, wID)
+	if err != nil {
+		return nil, err
+	}
+	if i.IsVerified {
+		return u.op.FindAllInvitation(res.OnlyVerified())
+	}
+	return u.op.FindAllInvitation(res.ExcludeRevoked().ExcludeVerified())
 }

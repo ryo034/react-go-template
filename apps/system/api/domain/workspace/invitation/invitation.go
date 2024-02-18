@@ -76,3 +76,10 @@ func (i *Invitation) IsVerified() bool {
 func (i *Invitation) IsExpired() bool {
 	return i.expiredAt.IsExpired()
 }
+
+func (i *Invitation) IsRevoked() bool {
+	return i.Events() != nil &&
+		i.Events().IsNotEmpty() &&
+		i.Events().Latest() != nil &&
+		i.Events().Latest().IsRevoked()
+}

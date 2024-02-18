@@ -12,6 +12,6 @@ test.describe("Workspace members", () => {
       headers: hs
     })
     expect(res.response.status).toBe(200)
-    expect(res.data).toStrictEqual((await import("./get_members_success.json")).default)
+    expect(res.data).toStrictEqual((await import("./success_get_members.json")).default)
   })
 })

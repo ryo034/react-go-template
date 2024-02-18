@@ -2,8 +2,6 @@ package me
 
 import (
 	"context"
-	"database/sql"
-	"github.com/go-faster/errors"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
@@ -54,8 +52,9 @@ func (u *useCase) UpdateProfile(ctx context.Context, i *UpdateProfileInput) (ope
 		return nil, err
 	}
 	fn := func() (*me.Me, error) {
-		currentWorkspaceID, err := u.fbDriver.GetCurrentWorkspaceFromCustomClaim(ctx, i.user.AccountID())
-		if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		var currentWorkspaceID *workspace.ID
+		currentWorkspaceID, err = u.fbDriver.GetCurrentWorkspaceFromCustomClaim(ctx, i.user.AccountID())
+		if err != nil {
 			return nil, err
 		}
 		var current *me.Me

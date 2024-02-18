@@ -34,3 +34,10 @@ InvitationsBulkResponse:
             $ref: "#/components/schemas/Invitations"
           registeredInvitations:
             $ref: "#/components/schemas/Invitations"
+
+RevokeInvitationResponse:
+  description: Invitations without the revoked one
+  content:
+    application/json:
+      schema:
+        $ref: "#/components/schemas/Invitations"

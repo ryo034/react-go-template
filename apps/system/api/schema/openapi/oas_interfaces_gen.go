@@ -57,6 +57,10 @@ type ProcessInvitationRes interface {
 	processInvitationRes()
 }
 
+type RevokeInvitationRes interface {
+	revokeInvitationRes()
+}
+
 type VerifyInvitationRes interface {
 	verifyInvitationRes()
 }

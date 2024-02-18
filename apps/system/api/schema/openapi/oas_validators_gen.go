@@ -72,6 +72,15 @@ func (s *APIV1AuthOtpVerifyPostReq) Validate() error {
 	return nil
 }
 
+func (s APIV1InvitationsGetStatus) Validate() error {
+	switch s {
+	case "verified":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
 func (s *APIV1MeProfilePutReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer

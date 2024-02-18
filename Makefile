@@ -61,12 +61,12 @@ update-pnpm-version:
 	@cd ./apps/system/client && corepack use pnpm@$(VERSION)
 	@cd ./apps/system/test/api && corepack use pnpm@$(VERSION)
 	@cd ./apps/system/test/e2e && corepack use pnpm@$(VERSION)
-	@corepack pnpm install -r
+	@corepack pnpm install --force
 
 .PHONY: update-client-shared-package
 update-client-shared-package:
 	@corepack pnpm run package:build
-	@corepack pnpm install
+	@corepack pnpm install --force
 
 .PHONY: update-all-go-package
 update-all-go-package:

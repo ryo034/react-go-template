@@ -1,2 +1,3 @@
 invitation_event_id,invitation_id,event_type,created_at
 018db3ff-2a1a-7445-b464-3a84071b9549,018d96bb-2a6e-70ed-bd74-8565ac2960ac,verified,2023-01-10 15:00:00.000000 +00:00
+018dbe29-c687-7a1d-b93d-bb3502c32988,018dbe26-f91d-7b0b-9a18-ff5181136ffb,revoked,2024-01-10 15:00:00.000000 +00:00

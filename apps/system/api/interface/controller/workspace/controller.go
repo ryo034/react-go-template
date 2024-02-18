@@ -16,6 +16,8 @@ type Controller interface {
 	FindAllMembers(ctx context.Context) (openapi.APIV1MembersGetRes, error)
 	InviteMembers(ctx context.Context, i InviteesInput) (openapi.InviteMultipleUsersToWorkspaceRes, error)
 	VerifyInvitationToken(ctx context.Context, i VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error)
+	RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error)
+	FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error)
 }
 
 type controller struct {
@@ -43,6 +45,14 @@ type InviteesInput struct {
 
 type VerifyInvitationTokenInput struct {
 	Token uuid.UUID
+}
+
+type RevokeInvitationInput struct {
+	InvitationID uuid.UUID
+}
+
+type FindAllInvitationInput struct {
+	Status string
 }
 
 func (c *controller) Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error) {
@@ -110,6 +120,33 @@ func (c *controller) VerifyInvitationToken(ctx context.Context, i VerifyInvitati
 	res, err := c.wuc.VerifyInvitationToken(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.VerifyInvitationRes), nil
+	}
+	return res, nil
+}
+
+func (c *controller) RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error) {
+	in := workspaceUc.RevokeInvitationInput{InvitationID: invitation.NewID(i.InvitationID)}
+	res, err := c.wuc.RevokeInvitation(ctx, in)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.RevokeInvitationRes), nil
+	}
+	return res, nil
+}
+
+func (c *controller) FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error) {
+	aID, err := c.co.GetUID(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1InvitationsGetRes), nil
+	}
+
+	verified := false
+	if i.Status == "verified" {
+		verified = true
+	}
+	in := workspaceUc.FindAllInvitationInput{AccountID: aID, IsVerified: verified}
+	res, err := c.wuc.FindAllInvitation(ctx, in)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1InvitationsGetRes), nil
 	}
 	return res, nil
 }

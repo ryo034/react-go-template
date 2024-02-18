@@ -31,7 +31,7 @@ type Handler interface {
 	// Returns the pending invitations (not used yet).
 	//
 	// GET /api/v1/invitations
-	APIV1InvitationsGet(ctx context.Context) (APIV1InvitationsGetRes, error)
+	APIV1InvitationsGet(ctx context.Context, params APIV1InvitationsGetParams) (APIV1InvitationsGetRes, error)
 	// APIV1MeGet implements GET /api/v1/me operation.
 	//
 	// Returns the admin user.
@@ -92,6 +92,12 @@ type Handler interface {
 	//
 	// POST /api/v1/auth/invitations/process
 	ProcessInvitation(ctx context.Context, req *ProcessInvitationReq) (ProcessInvitationRes, error)
+	// RevokeInvitation implements revokeInvitation operation.
+	//
+	// Revoke an invitation to join a workspace.
+	//
+	// POST /api/v1/members/invitations/{invitationId}/revoke
+	RevokeInvitation(ctx context.Context, params RevokeInvitationParams) (RevokeInvitationRes, error)
 	// VerifyInvitation implements verifyInvitation operation.
 	//
 	// Verify Invitation.

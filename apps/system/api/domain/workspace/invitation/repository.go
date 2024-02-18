@@ -14,4 +14,5 @@ type Repository interface {
 	FindActiveByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*Invitation, error)
 	FindActiveAllByEmail(ctx context.Context, exec bun.IDB, email account.Email) (Invitations, error)
 	Accept(ctx context.Context, exec bun.IDB, id ID) error
+	Revoke(ctx context.Context, exec bun.IDB, id ID) error
 }

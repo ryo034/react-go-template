@@ -191,6 +191,12 @@ export interface paths {
      * @description Returns the pending invitations (not used yet)
      */
     get: {
+      parameters: {
+        query?: {
+          /** @description Invitation status */
+          status?: "verified";
+        };
+      };
       responses: {
         /** @description Invitations */
         200: {
@@ -214,6 +220,10 @@ export interface paths {
   "/api/v1/members/invitations/{invitationId}/accept": {
     /** Accept an invitation to join a workspace */
     post: operations["acceptInvitation"];
+  };
+  "/api/v1/members/invitations/{invitationId}/revoke": {
+    /** Revoke an invitation to join a workspace */
+    post: operations["revokeInvitation"];
   };
 }
 
@@ -518,6 +528,12 @@ export interface components {
         };
       };
     };
+    /** @description Invitations without the revoked one */
+    RevokeInvitationResponse: {
+      content: {
+        "application/json": components["schemas"]["Invitations"];
+      };
+    };
   };
   parameters: never;
   requestBodies: {
@@ -661,6 +677,20 @@ export interface operations {
           "application/json": components["schemas"]["Me"];
         };
       };
+      401: components["responses"]["UnauthorizedError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /** Revoke an invitation to join a workspace */
+  revokeInvitation: {
+    parameters: {
+      path: {
+        /** @description Invitation id */
+        invitationId: string;
+      };
+    };
+    responses: {
+      200: components["responses"]["RevokeInvitationResponse"];
       401: components["responses"]["UnauthorizedError"];
       500: components["responses"]["InternalServerError"];
     };

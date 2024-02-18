@@ -47,3 +47,13 @@ type InviteMembersInput struct {
 type VerifyInvitationTokenInput struct {
 	Token invitation.Token
 }
+
+type RevokeInvitationInput struct {
+	AccountID    account.ID
+	InvitationID invitation.ID
+}
+
+type FindAllInvitationInput struct {
+	AccountID  account.ID
+	IsVerified bool
+}

@@ -5,6 +5,7 @@ package openapi
 import (
 	"time"
 
+	"github.com/go-faster/errors"
 	"github.com/google/uuid"
 )
 
@@ -50,6 +51,40 @@ func (s *APIV1AuthOtpVerifyPostReq) SetEmail(val string) {
 // SetOtp sets the value of Otp.
 func (s *APIV1AuthOtpVerifyPostReq) SetOtp(val string) {
 	s.Otp = val
+}
+
+type APIV1InvitationsGetStatus string
+
+const (
+	APIV1InvitationsGetStatusVerified APIV1InvitationsGetStatus = "verified"
+)
+
+// AllValues returns all APIV1InvitationsGetStatus values.
+func (APIV1InvitationsGetStatus) AllValues() []APIV1InvitationsGetStatus {
+	return []APIV1InvitationsGetStatus{
+		APIV1InvitationsGetStatusVerified,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APIV1InvitationsGetStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case APIV1InvitationsGetStatusVerified:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APIV1InvitationsGetStatus) UnmarshalText(data []byte) error {
+	switch APIV1InvitationsGetStatus(data) {
+	case APIV1InvitationsGetStatusVerified:
+		*s = APIV1InvitationsGetStatusVerified
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 type APIV1MeProfilePutReq struct {
@@ -329,6 +364,7 @@ func (*InternalServerError) acceptInvitationRes()               {}
 func (*InternalServerError) inviteMultipleUsersToWorkspaceRes() {}
 func (*InternalServerError) loginRes()                          {}
 func (*InternalServerError) processInvitationRes()              {}
+func (*InternalServerError) revokeInvitationRes()               {}
 func (*InternalServerError) verifyInvitationRes()               {}
 
 // Ref: #/components/schemas/Invitation
@@ -423,6 +459,7 @@ func (*InvitationInfoResponse) verifyInvitationRes() {}
 type Invitations []Invitation
 
 func (*Invitations) aPIV1InvitationsGetRes() {}
+func (*Invitations) revokeInvitationRes()    {}
 
 type InvitationsBulkResponse struct {
 	// Total number of invitations.
@@ -757,6 +794,52 @@ func (s *NotFoundError) SetCode(val OptString) {
 }
 
 func (*NotFoundError) verifyInvitationRes() {}
+
+// NewOptAPIV1InvitationsGetStatus returns new OptAPIV1InvitationsGetStatus with value set to v.
+func NewOptAPIV1InvitationsGetStatus(v APIV1InvitationsGetStatus) OptAPIV1InvitationsGetStatus {
+	return OptAPIV1InvitationsGetStatus{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptAPIV1InvitationsGetStatus is optional APIV1InvitationsGetStatus.
+type OptAPIV1InvitationsGetStatus struct {
+	Value APIV1InvitationsGetStatus
+	Set   bool
+}
+
+// IsSet returns true if OptAPIV1InvitationsGetStatus was set.
+func (o OptAPIV1InvitationsGetStatus) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptAPIV1InvitationsGetStatus) Reset() {
+	var v APIV1InvitationsGetStatus
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptAPIV1InvitationsGetStatus) SetTo(v APIV1InvitationsGetStatus) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptAPIV1InvitationsGetStatus) Get() (v APIV1InvitationsGetStatus, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptAPIV1InvitationsGetStatus) Or(d APIV1InvitationsGetStatus) APIV1InvitationsGetStatus {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
 
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {
@@ -1139,6 +1222,7 @@ func (*UnauthorizedError) aPIV1WorkspacesGetRes()             {}
 func (*UnauthorizedError) aPIV1WorkspacesPostRes()            {}
 func (*UnauthorizedError) acceptInvitationRes()               {}
 func (*UnauthorizedError) inviteMultipleUsersToWorkspaceRes() {}
+func (*UnauthorizedError) revokeInvitationRes()               {}
 func (*UnauthorizedError) verifyInvitationRes()               {}
 
 // Ref: #/components/schemas/User

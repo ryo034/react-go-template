@@ -45,7 +45,7 @@ func (UnimplementedHandler) APIV1AuthOtpVerifyPost(ctx context.Context, req *API
 // Returns the pending invitations (not used yet).
 //
 // GET /api/v1/invitations
-func (UnimplementedHandler) APIV1InvitationsGet(ctx context.Context) (r APIV1InvitationsGetRes, _ error) {
+func (UnimplementedHandler) APIV1InvitationsGet(ctx context.Context, params APIV1InvitationsGetParams) (r APIV1InvitationsGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -136,6 +136,15 @@ func (UnimplementedHandler) Login(ctx context.Context) (r LoginRes, _ error) {
 //
 // POST /api/v1/auth/invitations/process
 func (UnimplementedHandler) ProcessInvitation(ctx context.Context, req *ProcessInvitationReq) (r ProcessInvitationRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// RevokeInvitation implements revokeInvitation operation.
+//
+// Revoke an invitation to join a workspace.
+//
+// POST /api/v1/members/invitations/{invitationId}/revoke
+func (UnimplementedHandler) RevokeInvitation(ctx context.Context, params RevokeInvitationParams) (r RevokeInvitationRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

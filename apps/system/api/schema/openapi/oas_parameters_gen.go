@@ -16,6 +16,86 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
+// APIV1InvitationsGetParams is parameters of GET /api/v1/invitations operation.
+type APIV1InvitationsGetParams struct {
+	// Invitation status.
+	Status OptAPIV1InvitationsGetStatus
+}
+
+func unpackAPIV1InvitationsGetParams(packed middleware.Parameters) (params APIV1InvitationsGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "status",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Status = v.(OptAPIV1InvitationsGetStatus)
+		}
+	}
+	return params
+}
+
+func decodeAPIV1InvitationsGetParams(args [0]string, argsEscaped bool, r *http.Request) (params APIV1InvitationsGetParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: status.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "status",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotStatusVal APIV1InvitationsGetStatus
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotStatusVal = APIV1InvitationsGetStatus(c)
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Status.SetTo(paramsDotStatusVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if value, ok := params.Status.Get(); ok {
+					if err := func() error {
+						if err := value.Validate(); err != nil {
+							return err
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "status",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // AcceptInvitationParams is parameters of acceptInvitation operation.
 type AcceptInvitationParams struct {
 	// Invitation token.
@@ -34,6 +114,72 @@ func unpackAcceptInvitationParams(packed middleware.Parameters) (params AcceptIn
 }
 
 func decodeAcceptInvitationParams(args [1]string, argsEscaped bool, r *http.Request) (params AcceptInvitationParams, _ error) {
+	// Decode path: invitationId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "invitationId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.InvitationId = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "invitationId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// RevokeInvitationParams is parameters of revokeInvitation operation.
+type RevokeInvitationParams struct {
+	// Invitation id.
+	InvitationId uuid.UUID
+}
+
+func unpackRevokeInvitationParams(packed middleware.Parameters) (params RevokeInvitationParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "invitationId",
+			In:   "path",
+		}
+		params.InvitationId = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeRevokeInvitationParams(args [1]string, argsEscaped bool, r *http.Request) (params RevokeInvitationParams, _ error) {
 	// Decode path: invitationId.
 	if err := func() error {
 		param := args[0]

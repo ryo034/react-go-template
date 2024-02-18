@@ -76,23 +76,11 @@ func (g *gateway) InviteMembers(ctx context.Context, exec bun.IDB, inviter works
 }
 
 func (g *gateway) FindInviterWorkspaceFromToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*workspace.Workspace, error) {
-	res, err := g.d.FindInviterWorkspaceFromToken(ctx, exec, token)
+	res, err := g.invd.FindActiveByToken(ctx, exec, token)
 	if err != nil {
 		return nil, err
 	}
-	return g.adp.Adapt(res)
-}
-
-func (g *gateway) FindActiveInvitationByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*invitation.Invitation, error) {
-	res, err := g.d.FindActiveInvitationByEmail(ctx, exec, email)
-	if err != nil {
-		return nil, err
-	}
-	im, err := g.ia.Adapt(res)
-	if err != nil {
-		return nil, err
-	}
-	return im, nil
+	return g.adp.Adapt(res.InvitationUnit.Workspace)
 }
 
 func (g *gateway) FindActiveInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) (*invitation.Invitation, *workspace.Workspace, error) {
@@ -109,4 +97,12 @@ func (g *gateway) FindActiveInvitation(ctx context.Context, exec bun.IDB, id inv
 		return nil, nil, err
 	}
 	return im, w, nil
+}
+
+func (g *gateway) FindAllInvitations(ctx context.Context, exec bun.IDB, wID workspace.ID) (invitation.Invitations, error) {
+	res, err := g.invd.FindAllByWorkspace(ctx, exec, wID)
+	if err != nil {
+		return nil, err
+	}
+	return g.ia.AdaptAll(res)
 }

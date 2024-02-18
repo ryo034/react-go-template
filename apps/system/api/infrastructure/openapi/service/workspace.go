@@ -33,3 +33,18 @@ func (s *service) VerifyInvitation(ctx context.Context, params openapi.VerifyInv
 		Token: params.Token,
 	})
 }
+
+func (s *service) RevokeInvitation(ctx context.Context, params openapi.RevokeInvitationParams) (openapi.RevokeInvitationRes, error) {
+	return s.ctrl.Workspace.RevokeInvitation(ctx, workspace.RevokeInvitationInput{
+		InvitationID: params.InvitationId,
+	})
+}
+
+func (s *service) APIV1InvitationsGet(ctx context.Context, params openapi.APIV1InvitationsGetParams) (openapi.APIV1InvitationsGetRes, error) {
+	status := ""
+	if params.Status.IsSet() {
+		//v, _ := params.Status.Get()
+		status = string(params.Status.Value)
+	}
+	return s.ctrl.Workspace.FindAllInvitation(ctx, workspace.FindAllInvitationInput{Status: status})
+}

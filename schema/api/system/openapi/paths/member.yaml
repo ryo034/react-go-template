@@ -26,6 +26,14 @@ invitations:
       - Members
     security:
       - bearer: []
+    parameters:
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum:
+            - verified
+        description: Invitation status
     responses:
       "200":
         description: Invitations
@@ -81,5 +89,29 @@ invitationsVerify:
         $ref: "#/components/responses/UnauthorizedError"
       "404":
         $ref: "#/components/responses/NotFoundError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+
+invitationsRevoke:
+  post:
+    summary: Revoke an invitation to join a workspace
+    operationId: revokeInvitation
+    tags:
+      - Members
+    security:
+      - bearer: []
+    parameters:
+      - name: invitationId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Invitation id
+    responses:
+      "200":
+        $ref: "#/components/responses/RevokeInvitationResponse"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
       "500":
         $ref: "#/components/responses/InternalServerError"

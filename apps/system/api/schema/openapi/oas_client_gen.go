@@ -47,7 +47,7 @@ type Invoker interface {
 	// Returns the pending invitations (not used yet).
 	//
 	// GET /api/v1/invitations
-	APIV1InvitationsGet(ctx context.Context) (APIV1InvitationsGetRes, error)
+	APIV1InvitationsGet(ctx context.Context, params APIV1InvitationsGetParams) (APIV1InvitationsGetRes, error)
 	// APIV1MeGet invokes GET /api/v1/me operation.
 	//
 	// Returns the admin user.
@@ -108,6 +108,12 @@ type Invoker interface {
 	//
 	// POST /api/v1/auth/invitations/process
 	ProcessInvitation(ctx context.Context, request *ProcessInvitationReq) (ProcessInvitationRes, error)
+	// RevokeInvitation invokes revokeInvitation operation.
+	//
+	// Revoke an invitation to join a workspace.
+	//
+	// POST /api/v1/members/invitations/{invitationId}/revoke
+	RevokeInvitation(ctx context.Context, params RevokeInvitationParams) (RevokeInvitationRes, error)
 	// VerifyInvitation invokes verifyInvitation operation.
 	//
 	// Verify Invitation.
@@ -423,12 +429,12 @@ func (c *Client) sendAPIV1AuthOtpVerifyPost(ctx context.Context, request *APIV1A
 // Returns the pending invitations (not used yet).
 //
 // GET /api/v1/invitations
-func (c *Client) APIV1InvitationsGet(ctx context.Context) (APIV1InvitationsGetRes, error) {
-	res, err := c.sendAPIV1InvitationsGet(ctx)
+func (c *Client) APIV1InvitationsGet(ctx context.Context, params APIV1InvitationsGetParams) (APIV1InvitationsGetRes, error) {
+	res, err := c.sendAPIV1InvitationsGet(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendAPIV1InvitationsGet(ctx context.Context) (res APIV1InvitationsGetRes, err error) {
+func (c *Client) sendAPIV1InvitationsGet(ctx context.Context, params APIV1InvitationsGetParams) (res APIV1InvitationsGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/api/v1/invitations"),
@@ -466,6 +472,27 @@ func (c *Client) sendAPIV1InvitationsGet(ctx context.Context) (res APIV1Invitati
 	var pathParts [1]string
 	pathParts[0] = "/api/v1/invitations"
 	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "status" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "status",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.Status.Get(); ok {
+				return e.EncodeValue(conv.StringToString(string(val)))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "GET", u)
@@ -1491,6 +1518,130 @@ func (c *Client) sendProcessInvitation(ctx context.Context, request *ProcessInvi
 
 	stage = "DecodeResponse"
 	result, err := decodeProcessInvitationResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// RevokeInvitation invokes revokeInvitation operation.
+//
+// Revoke an invitation to join a workspace.
+//
+// POST /api/v1/members/invitations/{invitationId}/revoke
+func (c *Client) RevokeInvitation(ctx context.Context, params RevokeInvitationParams) (RevokeInvitationRes, error) {
+	res, err := c.sendRevokeInvitation(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendRevokeInvitation(ctx context.Context, params RevokeInvitationParams) (res RevokeInvitationRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("revokeInvitation"),
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/v1/members/invitations/{invitationId}/revoke"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "RevokeInvitation",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [3]string
+	pathParts[0] = "/api/v1/members/invitations/"
+	{
+		// Encode "invitationId" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "invitationId",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.InvitationId))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/revoke"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "RevokeInvitation", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeRevokeInvitationResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

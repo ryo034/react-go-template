@@ -64,3 +64,7 @@ func (g *gateway) FindActiveAllByEmail(ctx context.Context, exec bun.IDB, email 
 func (g *gateway) Accept(ctx context.Context, exec bun.IDB, iID invitation.ID) error {
 	return g.d.Accept(ctx, exec, iID)
 }
+
+func (g *gateway) Revoke(ctx context.Context, exec bun.IDB, iID invitation.ID) error {
+	return g.d.Revoke(ctx, exec, iID)
+}

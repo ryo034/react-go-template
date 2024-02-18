@@ -32,6 +32,8 @@ paths:
     $ref: "./paths/member.yaml#/invitationsVerify"
   /api/v1/members/invitations/{invitationId}/accept:
     $ref: "./paths/me.yaml#/invitationsAccept"
+  /api/v1/members/invitations/{invitationId}/revoke:
+    $ref: "./paths/member.yaml#/invitationsRevoke"
 
 components:
   securitySchemes:
@@ -101,3 +103,5 @@ components:
       $ref: "./components/responses/member.yaml#/InvitationInfoResponse"
     InvitationsBulkResponse:
       $ref: "./components/responses/member.yaml#/InvitationsBulkResponse"
+    RevokeInvitationResponse:
+      $ref: "./components/responses/member.yaml#/RevokeInvitationResponse"

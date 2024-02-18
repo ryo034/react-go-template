@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	"github.com/uptrace/bun"
@@ -21,8 +22,10 @@ type Driver interface {
 	FindActiveByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.Invitation, error)
 	FindActiveAllByEmail(ctx context.Context, exec bun.IDB, email account.Email) ([]*models.Invitation, error)
 	FindActiveByToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*models.Invitation, error)
+	FindAllByWorkspace(ctx context.Context, exec bun.IDB, wID workspace.ID) ([]*models.Invitation, error)
 	VerifyByToken(ctx context.Context, exec bun.IDB, token invitation.Token) error
 	Accept(ctx context.Context, exec bun.IDB, id invitation.ID) error
+	Revoke(ctx context.Context, exec bun.IDB, id invitation.ID) error
 }
 
 type driver struct {
@@ -358,6 +361,32 @@ func (d *driver) VerifyByToken(ctx context.Context, exec bun.IDB, token invitati
 	return err
 }
 
+func (d *driver) FindAllByWorkspace(ctx context.Context, exec bun.IDB, wID workspace.ID) ([]*models.Invitation, error) {
+	var invs []*models.Invitation
+	err := exec.
+		NewSelect().
+		Model(&invs).
+		Relation("InviteeName").
+		Relation("InvitationUnit").
+		Relation("InvitationUnit.Workspace").
+		Relation("InvitationUnit.Workspace.Detail").
+		Relation("InvitationUnit.Member").
+		Relation("InvitationUnit.Member.Profile").
+		Relation("InvitationUnit.Member.SystemAccount").
+		Relation("InvitationUnit.Member.SystemAccount.Profile").
+		Relation("InvitationUnit.Member.SystemAccount.Profile").
+		Relation("InvitationUnit.Member.SystemAccount.PhoneNumber").
+		Relation("Invitee").
+		Relation("Tokens").
+		Relation("Events").
+		Where(fmt.Sprintf("%s.workspace_id = ?", models.InvitationUnitTableAliasName), wID.Value()).
+		Scan(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return invs, nil
+}
+
 func (d *driver) Accept(ctx context.Context, exec bun.IDB, id invitation.ID) error {
 	eid, err := uuid.NewV7()
 	if err != nil {
@@ -367,6 +396,19 @@ func (d *driver) Accept(ctx context.Context, exec bun.IDB, id invitation.ID) err
 		InvitationEventID: eid,
 		InvitationID:      id.Value(),
 		EventType:         "verified",
+	}).Exec(ctx)
+	return err
+}
+
+func (d *driver) Revoke(ctx context.Context, exec bun.IDB, id invitation.ID) error {
+	eid, err := uuid.NewV7()
+	if err != nil {
+		return err
+	}
+	_, err = exec.NewInsert().Model(&models.InvitationEvent{
+		InvitationEventID: eid,
+		InvitationID:      id.Value(),
+		EventType:         "revoked",
 	}).Exec(ctx)
 	return err
 }
