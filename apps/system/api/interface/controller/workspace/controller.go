@@ -106,7 +106,7 @@ func (c *controller) InviteMembers(ctx context.Context, i InviteesInput) (openap
 }
 
 func (c *controller) VerifyInvitationToken(ctx context.Context, i VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error) {
-	in := workspaceUc.VerifyInvitationTokenInput{Token: i.Token}
+	in := workspaceUc.VerifyInvitationTokenInput{Token: invitation.NewToken(i.Token)}
 	res, err := c.wuc.VerifyInvitationToken(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.VerifyInvitationRes), nil

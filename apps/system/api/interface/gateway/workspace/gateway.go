@@ -2,7 +2,6 @@ package workspace
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
@@ -76,16 +75,8 @@ func (g *gateway) InviteMembers(ctx context.Context, exec bun.IDB, inviter works
 	return g.d.InviteMembers(ctx, exec, inviter, is)
 }
 
-func (g *gateway) VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uuid.UUID) (*invitation.Invitation, error) {
-	res, err := g.d.VerifyInvitedMember(ctx, exec, token)
-	if err != nil {
-		return nil, err
-	}
-	return g.ia.Adapt(res)
-}
-
-func (g *gateway) FindInviteeWorkspaceFromToken(ctx context.Context, exec bun.IDB, token uuid.UUID) (*workspace.Workspace, error) {
-	res, err := g.d.FindInviteeWorkspaceFromToken(ctx, exec, token)
+func (g *gateway) FindInviterWorkspaceFromToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*workspace.Workspace, error) {
+	res, err := g.d.FindInviterWorkspaceFromToken(ctx, exec, token)
 	if err != nil {
 		return nil, err
 	}

@@ -72,3 +72,7 @@ func (i *Invitation) IsVerified() bool {
 		i.Events().Latest() != nil &&
 		i.Events().Latest().IsVerified()
 }
+
+func (i *Invitation) IsExpired() bool {
+	return i.expiredAt.IsExpired()
+}

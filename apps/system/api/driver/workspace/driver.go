@@ -24,8 +24,7 @@ type Driver interface {
 	FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error)
 	FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace.ID) (models.Members, error)
 	InviteMembers(ctx context.Context, exec bun.IDB, inviter workspace.Inviter, is invitation.Invitations) error
-	VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.Invitation, error)
-	FindInviteeWorkspaceFromToken(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.Workspace, error)
+	FindInviterWorkspaceFromToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*models.Workspace, error)
 	FindActiveInvitationByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.Invitation, error)
 }
 
@@ -186,33 +185,21 @@ func (p *driver) InviteMembers(ctx context.Context, exec bun.IDB, inviter worksp
 	return nil
 }
 
-func (p *driver) VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.Invitation, error) {
-	im := &models.Invitation{}
+func (p *driver) FindInviterWorkspaceFromToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*models.Workspace, error) {
+	invt := &models.InvitationToken{}
 	err := exec.
 		NewSelect().
-		Model(im).
-		Where("token = ?", token).
-		Limit(1).
+		Model(invt).
+		Relation("Invitation").
+		Relation("Invitation.InvitationUnit").
+		Relation("Invitation.InvitationUnit.Workspace").
+		Relation("Invitation.InvitationUnit.Workspace.Detail").
+		Where(fmt.Sprintf("%s.token = ?", models.InvitationTokenTableAliasName), token.Value()).
 		Scan(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return im, nil
-}
-
-func (p *driver) FindInviteeWorkspaceFromToken(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.Workspace, error) {
-	im := &models.Invitation{}
-	err := exec.
-		NewSelect().
-		Model(im).
-		Relation("Workspace").
-		Relation("Workspace.Detail").
-		Where("token = ?", token).
-		Scan(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return im.InvitationUnit.Workspace, nil
+	return invt.Invitation.InvitationUnit.Workspace, nil
 }
 
 func (p *driver) FindActiveInvitationByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.Invitation, error) {

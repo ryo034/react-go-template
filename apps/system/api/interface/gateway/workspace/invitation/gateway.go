@@ -23,7 +23,14 @@ func (g *gateway) Find(ctx context.Context, exec bun.IDB, iID invitation.ID) (*i
 		return nil, err
 	}
 	return g.ia.Adapt(res)
+}
 
+func (g *gateway) FindByToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*invitation.Invitation, error) {
+	res, err := g.d.FindByToken(ctx, exec, token)
+	if err != nil {
+		return nil, err
+	}
+	return g.ia.Adapt(res)
 }
 
 func (g *gateway) FindActiveByToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*invitation.Invitation, error) {
@@ -32,7 +39,6 @@ func (g *gateway) FindActiveByToken(ctx context.Context, exec bun.IDB, token inv
 		return nil, err
 	}
 	return g.ia.Adapt(res)
-
 }
 
 func (g *gateway) VerifyByToken(ctx context.Context, exec bun.IDB, token invitation.Token) error {

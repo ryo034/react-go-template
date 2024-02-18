@@ -17,6 +17,7 @@ import (
 
 type Driver interface {
 	Find(ctx context.Context, exec bun.IDB, id invitation.ID) (*models.Invitation, error)
+	FindByToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*models.Invitation, error)
 	FindActiveByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.Invitation, error)
 	FindActiveAllByEmail(ctx context.Context, exec bun.IDB, email account.Email) ([]*models.Invitation, error)
 	FindActiveByToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*models.Invitation, error)
@@ -61,6 +62,25 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, id invitation.ID) (*mod
 		return nil, err
 	}
 	return inv, nil
+}
+
+func (d *driver) FindByToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*models.Invitation, error) {
+	invt := &models.InvitationToken{}
+	err := exec.
+		NewSelect().
+		Model(invt).
+		Where("token = ?", token.Value()).
+		Order("expired_at DESC").
+		Limit(1).
+		Scan(ctx)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, domainErr.NewNoSuchData(fmt.Sprintf("invitation not found. token: %s", token.String()))
+		}
+		return nil, err
+	}
+	return d.Find(ctx, exec, invitation.NewID(invt.InvitationID))
+
 }
 
 func (d *driver) FindActiveByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.Invitation, error) {

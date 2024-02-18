@@ -2,7 +2,6 @@ package workspace
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
@@ -16,8 +15,7 @@ type Repository interface {
 	FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID ID) (*member.Member, error)
 	FindAllMembers(ctx context.Context, exec bun.IDB, wID ID) (member.Members, error)
 	InviteMembers(ctx context.Context, exec bun.IDB, inviter Inviter, is invitation.Invitations) error
-	VerifyInvitedMember(ctx context.Context, exec bun.IDB, token uuid.UUID) (*invitation.Invitation, error)
-	FindInviteeWorkspaceFromToken(ctx context.Context, exec bun.IDB, token uuid.UUID) (*Workspace, error)
+	FindInviterWorkspaceFromToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*Workspace, error)
 	FindActiveInvitationByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*invitation.Invitation, error)
 	FindActiveInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) (*invitation.Invitation, *Workspace, error)
 }

@@ -1,7 +1,6 @@
 package workspace
 
 import (
-	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
@@ -46,5 +45,5 @@ type InviteMembersInput struct {
 }
 
 type VerifyInvitationTokenInput struct {
-	Token uuid.UUID
+	Token invitation.Token
 }

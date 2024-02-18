@@ -26,6 +26,6 @@ func newUseCaseInjector(
 	return UseCase{
 		me.NewUseCase(txp, p, ri.Me, ri.Workspace, di.Firebase, pi.Me),
 		auth.NewUseCase(txp, p, ri.Auth, ri.Me, ri.Invitation, di.Email, di.Firebase, pi.Auth),
-		workspace.NewUseCase(txp, p, ri.Workspace, ri.Me, di.Firebase, di.Email, pi.Workspace),
+		workspace.NewUseCase(txp, p, ri.Workspace, ri.Me, ri.Invitation, di.Firebase, di.Email, pi.Workspace),
 	}
 }

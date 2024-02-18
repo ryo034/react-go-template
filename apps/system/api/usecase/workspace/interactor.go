@@ -25,13 +25,14 @@ type useCase struct {
 	dbp         core.Provider
 	repo        workspace.Repository
 	meRepo      me.Repository
+	invRepo     invitation.Repository
 	fbDriver    fbDr.Driver
 	emailDriver email.Driver
 	op          OutputPort
 }
 
-func NewUseCase(txp core.TransactionProvider, dbp core.Provider, repo workspace.Repository, meRepo me.Repository, fbDriver fbDr.Driver, emailDriver email.Driver, op OutputPort) UseCase {
-	return &useCase{txp, dbp, repo, meRepo, fbDriver, emailDriver, op}
+func NewUseCase(txp core.TransactionProvider, dbp core.Provider, repo workspace.Repository, meRepo me.Repository, invRepo invitation.Repository, fbDriver fbDr.Driver, emailDriver email.Driver, op OutputPort) UseCase {
+	return &useCase{txp, dbp, repo, meRepo, invRepo, fbDriver, emailDriver, op}
 }
 
 func (u *useCase) Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error) {
@@ -136,14 +137,14 @@ func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (open
 
 func (u *useCase) VerifyInvitationToken(ctx context.Context, i VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error) {
 	p := u.dbp.GetExecutor(ctx, true)
-	res, err := u.repo.VerifyInvitedMember(ctx, p, i.Token)
+	res, err := u.invRepo.FindByToken(ctx, p, i.Token)
 	if err != nil {
 		return nil, err
 	}
-	if res.ExpiredAt().IsExpired() {
+	if res.IsExpired() {
 		return nil, domainErr.NewExpiredInviteToken(res.Token().Value())
 	}
-	w, err := u.repo.FindInviteeWorkspaceFromToken(ctx, p, i.Token)
+	w, err := u.repo.FindInviterWorkspaceFromToken(ctx, p, i.Token)
 	if err != nil {
 		return nil, err
 	}
