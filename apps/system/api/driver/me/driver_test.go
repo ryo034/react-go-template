@@ -8,6 +8,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
+	invitationDr "github.com/ryo034/react-go-template/apps/system/api/driver/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	"github.com/ryo034/react-go-template/apps/system/api/util/test"
@@ -75,7 +76,7 @@ func Test_driver_Find_OK(t *testing.T) {
 	t.Run("Find", func(t *testing.T) {
 		db := bun.NewDB(test.SetupTestDB(t, ctx).DB, pgdialect.New())
 		pr := core.NewDatabaseProvider(db, db)
-		got, err := NewDriver().Find(ctx, pr.GetExecutor(ctx, true), member.NewIDFromUUID(memberID))
+		got, err := NewDriver(invitationDr.NewDriver()).Find(ctx, pr.GetExecutor(ctx, true), member.NewIDFromUUID(memberID))
 		if (err != nil) != wantErr {
 			t.Errorf("Find() error = %v, wantErr %v", err, wantErr)
 			return

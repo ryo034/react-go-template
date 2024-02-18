@@ -1,10 +1,12 @@
+//go:build testcontainers
+
 package invitation
 
 import (
 	"context"
 	"github.com/google/uuid"
 	_ "github.com/lib/pq"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	"github.com/ryo034/react-go-template/apps/system/api/util/test"
@@ -107,9 +109,7 @@ func Test_driver_FindByToken_OK(t *testing.T) {
 		db := bun.NewDB(test.SetupTestDB(t, ctx).DB, pgdialect.New())
 		db.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
 		pr := core.NewDatabaseProvider(db, db)
-		//got, err := NewDriver().FindActiveByToken(ctx, pr.GetExecutor(ctx, true), token)
-		em, _ := account.NewEmail("invite_test_not_expired@example.com")
-		got, err := NewDriver().FindActiveAllByEmail(ctx, pr.GetExecutor(ctx, true), em)
+		got, err := NewDriver().FindActiveByToken(ctx, pr.GetExecutor(ctx, true), invitation.NewToken(token))
 		if (err != nil) != wantErr {
 			t.Errorf("FindActiveByToken() error = %v, wantErr %v", err, wantErr)
 			return
