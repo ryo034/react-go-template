@@ -309,6 +309,10 @@ paths:
                 $ref: '#/components/schemas/Me'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '410':
+          $ref: '#/components/responses/GoneError'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /api/v1/members/invitations/{invitationId}/revoke:
@@ -735,6 +739,36 @@ components:
                 description: A custom code identifying the specific error.
     ConflictError:
       description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            description: RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807
+            properties:
+              status:
+                type: integer
+                example: 400
+                description: >-
+                  The HTTP status code generated for this occurrence of the
+                  problem.
+              type:
+                type: string
+                example: invalid_item_id
+                description: error type
+              title:
+                type: string
+                description: A short, human-readable summary of the problem type
+              detail:
+                type: string
+                description: >-
+                  A human-readable explanation specific to this occurrence of
+                  the problem.
+              code:
+                type: string
+                example: 400-001
+                description: A custom code identifying the specific error.
+    GoneError:
+      description: Gone
       content:
         application/json:
           schema:

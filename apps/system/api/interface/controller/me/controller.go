@@ -36,7 +36,11 @@ func (c *controller) Find(ctx context.Context) (openapi.APIV1MeGetRes, error) {
 	if err != nil {
 		return nil, err
 	}
-	return c.uc.Find(ctx, aID)
+	res, err := c.uc.Find(ctx, aID)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MeGetRes), nil
+	}
+	return res, nil
 }
 
 func (c *controller) UpdateProfile(ctx context.Context, i openapi.User) (openapi.APIV1MeProfilePutRes, error) {
@@ -52,7 +56,11 @@ func (c *controller) UpdateProfile(ctx context.Context, i openapi.User) (openapi
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePutRes), nil
 	}
-	return c.uc.UpdateProfile(ctx, in)
+	res, err := c.uc.UpdateProfile(ctx, in)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePutRes), nil
+	}
+	return res, nil
 }
 
 func (c *controller) AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error) {
@@ -61,5 +69,9 @@ func (c *controller) AcceptInvitation(ctx context.Context, i AcceptInvitationInp
 		return c.resl.Error(ctx, err).(openapi.AcceptInvitationRes), nil
 	}
 	in := meUc.AcceptInvitationInput{AccountID: aID, InvitationID: invitation.NewID(i.InvitationID)}
-	return c.uc.AcceptInvitation(ctx, in)
+	res, err := c.uc.AcceptInvitation(ctx, in)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.AcceptInvitationRes), nil
+	}
+	return res, nil
 }

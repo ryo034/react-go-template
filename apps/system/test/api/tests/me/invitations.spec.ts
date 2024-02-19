@@ -106,4 +106,37 @@ test.describe("Me Invitations", () => {
       expect(acceptInvitationRes.data.currentWorkspace?.workspaceId).toBe("c1bd2603-b9cd-4f84-8b83-3548f6ae150b")
     }
   )
+
+  test("failed to accept already accepted invitation return ConflictError", async () => {
+    const email = "invite_test_already_used@example.com"
+    const inviteToken = await getInviteToken(email)
+    const authInfo = await getAuthInfo(email)
+    const res = await client.POST("/api/v1/members/invitations/{invitationId}/accept", {
+      headers: authHeaders(authInfo.token),
+      params: { path: { invitationId: await getInvitationIdByToken(inviteToken) } }
+    })
+    expect(res.response.status).toBe(409)
+  })
+
+  test("failed to accept already expired invitation return BadRequestError", async () => {
+    const email = "invite_test_expired@example.com"
+    const inviteToken = await getInviteToken(email)
+    const authInfo = await getAuthInfo(email)
+    const res = await client.POST("/api/v1/members/invitations/{invitationId}/accept", {
+      headers: authHeaders(authInfo.token),
+      params: { path: { invitationId: await getInvitationIdByToken(inviteToken) } }
+    })
+    expect(res.response.status).toBe(410)
+  })
+
+  test("failed to accept revoked invitation return BadRequestError", async () => {
+    const email = "invite_test_revoked@example.com"
+    const inviteToken = await getInviteToken(email)
+    const authInfo = await getAuthInfo(email)
+    const res = await client.POST("/api/v1/members/invitations/{invitationId}/accept", {
+      headers: authHeaders(authInfo.token),
+      params: { path: { invitationId: await getInvitationIdByToken(inviteToken) } }
+    })
+    expect(res.response.status).toBe(410)
+  })
 })

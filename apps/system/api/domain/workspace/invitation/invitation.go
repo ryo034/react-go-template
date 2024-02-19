@@ -59,11 +59,17 @@ func (i *Invitation) DisplayName() *member.DisplayName {
 	return i.displayName
 }
 
-func (i *Invitation) IsActive() bool {
-	return i.expiredAt.IsNotExpired() &&
-		i.Events().IsNotEmpty() &&
-		i.Events().Latest() != nil &&
-		i.Events().Latest().IsActive()
+func (i *Invitation) CheckActive() error {
+	if i.IsVerified() {
+		return NewAlreadyVerifiedInvitation(i.ID(), i.Token().Value())
+	}
+	if i.IsExpired() {
+		return NewAlreadyExpiredInvitation(i.ID(), i.Token().Value())
+	}
+	if i.IsRevoked() {
+		return NewAlreadyRevokedInvitation(i.ID(), i.Token().Value())
+	}
+	return nil
 }
 
 func (i *Invitation) IsVerified() bool {
@@ -75,6 +81,10 @@ func (i *Invitation) IsVerified() bool {
 
 func (i *Invitation) IsExpired() bool {
 	return i.expiredAt.IsExpired()
+}
+
+func (i *Invitation) IsNotExpired() bool {
+	return i.expiredAt.IsNotExpired()
 }
 
 func (i *Invitation) IsRevoked() bool {

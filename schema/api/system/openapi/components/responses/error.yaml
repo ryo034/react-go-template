@@ -30,6 +30,12 @@ components:
         application/json:
           schema:
             $ref: "../schemas/error.yaml#/GeneralError"
+    GoneError:
+      description: Gone
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/error.yaml#/GeneralError"
     TooManyRequestsError:
       description: Too many requests
       content:

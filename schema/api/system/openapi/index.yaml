@@ -95,6 +95,8 @@ components:
       $ref: "./components/responses/error.yaml#/components/responses/UnauthorizedError"
     ConflictError:
       $ref: "./components/responses/error.yaml#/components/responses/ConflictError"
+    GoneError:
+      $ref: "./components/responses/error.yaml#/components/responses/GoneError"
     TooManyRequestsError:
       $ref: "./components/responses/error.yaml#/components/responses/TooManyRequestsError"
     InternalServerError:

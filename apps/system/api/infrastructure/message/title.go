@@ -3,6 +3,7 @@ package message
 import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/datetime"
 	domainError "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"golang.org/x/text/language"
 )
 
@@ -23,9 +24,21 @@ var titleMessages = map[domainError.MessageKey]map[language.Tag]string{
 		language.Japanese: "不正な招待トークンです",
 		language.English:  "Invalid invite token",
 	},
-	domainError.ExpiredInviteTokenMessageKey: {
+	invitation.ExpiredInviteTokenMessageKey: {
 		language.Japanese: "招待トークンの有効期限が切れています",
 		language.English:  "Invite token is expired",
+	},
+	invitation.AlreadyRevokedInvitationMessageKey: {
+		language.Japanese: "招待が既に取り消されています",
+		language.English:  "Invite is already revoked",
+	},
+	invitation.AlreadyVerifiedInvitationMessageKey: {
+		language.Japanese: "招待が既に承認されています",
+		language.English:  "Invite is already verified",
+	},
+	invitation.AlreadyExpiredInvitationMessageKey: {
+		language.Japanese: "招待が既に期限切れです",
+		language.English:  "Invite is already expired",
 	},
 	domainError.PhoneNumberAlreadyInUseMessageKey: {
 		language.Japanese: "すでにその電話番号は使用されています",

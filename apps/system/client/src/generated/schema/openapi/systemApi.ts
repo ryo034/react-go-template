@@ -455,6 +455,32 @@ export interface components {
         };
       };
     };
+    /** @description Gone */
+    GoneError: {
+      content: {
+        "application/json": {
+          /**
+           * @description The HTTP status code generated for this occurrence of the problem.
+           * @example 400
+           */
+          status?: number;
+          /**
+           * @description error type
+           * @example invalid_item_id
+           */
+          type?: string;
+          /** @description A short, human-readable summary of the problem type */
+          title?: string;
+          /** @description A human-readable explanation specific to this occurrence of the problem. */
+          detail?: string;
+          /**
+           * @description A custom code identifying the specific error.
+           * @example 400-001
+           */
+          code?: string;
+        };
+      };
+    };
     /** @description Too many requests */
     TooManyRequestsError: {
       content: {
@@ -678,6 +704,8 @@ export interface operations {
         };
       };
       401: components["responses"]["UnauthorizedError"];
+      409: components["responses"]["ConflictError"];
+      410: components["responses"]["GoneError"];
       500: components["responses"]["InternalServerError"];
     };
   };

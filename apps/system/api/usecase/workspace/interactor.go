@@ -3,7 +3,6 @@ package workspace
 import (
 	"context"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
-	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
@@ -144,7 +143,7 @@ func (u *useCase) VerifyInvitationToken(ctx context.Context, i VerifyInvitationT
 		return nil, err
 	}
 	if res.IsExpired() {
-		return nil, domainErr.NewExpiredInviteToken(res.Token().Value())
+		return nil, invitation.NewExpiredInvitation(res.Token().Value())
 	}
 	w, err := u.repo.FindInviterWorkspaceFromToken(ctx, p, i.Token)
 	if err != nil {

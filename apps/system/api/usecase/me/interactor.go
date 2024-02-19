@@ -94,11 +94,17 @@ func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput)
 	if err != nil {
 		return nil, err
 	}
+
+	invRes, wRes, err := u.wRepo.FindActiveInvitation(ctx, p, i.InvitationID)
+	if err != nil {
+		return nil, err
+	}
+
+	if err = invRes.CheckActive(); err != nil {
+		return nil, err
+	}
+
 	fn := func() (*me.Me, error) {
-		invRes, wRes, err := u.wRepo.FindActiveInvitation(ctx, p, i.InvitationID)
-		if err != nil {
-			return nil, err
-		}
 		m, err := u.repo.FindByEmail(pr, p, invRes.InviteeEmail())
 		if err != nil {
 			return nil, err
