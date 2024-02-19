@@ -7,7 +7,6 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/auth"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
-	domainError "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/email"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
@@ -119,7 +118,7 @@ func (u *useCase) ProcessInvitation(ctx context.Context, i ProcessInvitationInpu
 		return nil, err
 	}
 	if invRes.Token().NotEquals(i.Token) {
-		return nil, domainError.NewInvalidInviteToken(i.Token.Value())
+		return nil, invitation.NewInvalidInviteToken(i.Token.Value())
 	}
 
 	pr, err := u.txp.Provide(ctx)

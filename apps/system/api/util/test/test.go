@@ -20,13 +20,13 @@ type ValidationErrorBuilder struct {
 }
 
 func (v *ValidationErrorBuilder) Append(messageKey domainError.MessageKey, args ...interface{}) *ValidationErrorBuilder {
-	v.Errs.Append(messageKey, nil, args...)
+	v.Errs.Append(messageKey, args...)
 	return v
 }
 
 func NewValidationErrors(messageKey domainError.MessageKey, args ...interface{}) *ValidationErrorBuilder {
 	errs := validation.NewErrors()
-	errs.Append(messageKey, nil, args...)
+	errs.Append(messageKey, args...)
 	return &ValidationErrorBuilder{errs}
 }
 

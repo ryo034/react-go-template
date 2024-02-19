@@ -17,7 +17,7 @@ const (
 func NewPrefecture(id ID, v string) (Prefecture, error) {
 	errs := validation.NewErrors()
 	if v == "" {
-		errs.Append(InvalidAddressPrefecture, nil, v)
+		errs.Append(InvalidAddressPrefecture, v)
 	}
 	if errs.IsNotEmpty() {
 		return Prefecture{}, errs

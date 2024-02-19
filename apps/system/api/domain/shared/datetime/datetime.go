@@ -35,7 +35,7 @@ func NewDatetimeFromString(st string) (Datetime, error) {
 	errs := validation.NewErrors()
 	ct, err := time.Parse("2006-01-02 15:04:05", st)
 	if err != nil {
-		errs.Append(InvalidDatetime, nil, st)
+		errs.Append(InvalidDatetime, st)
 	}
 	if errs.IsNotEmpty() {
 		return Datetime{}, errs
@@ -47,7 +47,7 @@ func NewDateFromString(st string) (Datetime, error) {
 	errs := validation.NewErrors()
 	ct, err := time.Parse("2006-01-02", st)
 	if err != nil {
-		errs.Append(InvalidDate, nil, st)
+		errs.Append(InvalidDate, st)
 	}
 	if errs.IsNotEmpty() {
 		return Datetime{}, errs
@@ -63,7 +63,7 @@ func NewDateRFC3339FromString(st string) (Datetime, error) {
 	errs := validation.NewErrors()
 	ct, err := time.Parse(time.RFC3339, st)
 	if err != nil {
-		errs.Append(InvalidDate, nil, st)
+		errs.Append(InvalidDate, st)
 	}
 	if errs.IsNotEmpty() {
 		return Datetime{}, errs
@@ -108,10 +108,10 @@ func (d Datetime) ToLocalDate() (time.Time, error) {
 	loc, err := time.LoadLocation(CountryTz["Tokyo"])
 	if err != nil {
 		log.Printf("ToLocalTime Error: %s", CountryTz["Tokyo"])
-		errs.Append(InvalidDatetime, nil, d.value.String())
+		errs.Append(InvalidDatetime, d.value.String())
 	}
 	if d.value.IsZero() {
-		errs.Append(InvalidDatetime, nil, d.value.String())
+		errs.Append(InvalidDatetime, d.value.String())
 	}
 	if errs.IsNotEmpty() {
 		return time.Time{}, errs
@@ -126,10 +126,10 @@ func (d Datetime) ToLocalTime() (time.Time, error) {
 	loc, err := time.LoadLocation(tz)
 	if err != nil {
 		log.Printf("LoadLocation Error: %s", tz)
-		errs.Append(InvalidDatetime, nil, d.value.String())
+		errs.Append(InvalidDatetime, d.value.String())
 	}
 	if d.value.IsZero() {
-		errs.Append(InvalidDatetime, nil, d.value.String())
+		errs.Append(InvalidDatetime, d.value.String())
 	}
 	if errs.IsNotEmpty() {
 		return time.Time{}, errs

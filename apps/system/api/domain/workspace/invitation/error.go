@@ -8,13 +8,10 @@ import (
 
 const (
 	ExpiredInviteTokenMessageKey        domainErr.MessageKey = "ExpiredInvitation"
+	InvalidInviteTokenMessageKey        domainErr.MessageKey = "InvalidInviteToken"
 	AlreadyExpiredInvitationMessageKey  domainErr.MessageKey = "AlreadyExpiredInvitation"
 	AlreadyRevokedInvitationMessageKey  domainErr.MessageKey = "AlreadyRevokedInvitation"
 	AlreadyVerifiedInvitationMessageKey domainErr.MessageKey = "AlreadyVerifiedInvitation"
-	ExpiredInvitationCodeKey            domainErr.Code       = "001"
-	AlreadyExpiredInvitationCodeKey     domainErr.Code       = "000"
-	AlreadyRevokedInvitationCodeKey     domainErr.Code       = "000"
-	AlreadyVerifiedInvitationCodeKey    domainErr.Code       = "000"
 )
 
 type ExpiredInvitation struct {
@@ -31,10 +28,6 @@ func (e *ExpiredInvitation) Error() string {
 
 func (e *ExpiredInvitation) MessageKey() domainErr.MessageKey {
 	return ExpiredInviteTokenMessageKey
-}
-
-func (e *ExpiredInvitation) Code() string {
-	return "400-" + string(ExpiredInvitationCodeKey)
 }
 
 type AlreadyExpiredInvitation struct {
@@ -54,10 +47,6 @@ func (e *AlreadyExpiredInvitation) MessageKey() domainErr.MessageKey {
 	return AlreadyExpiredInvitationMessageKey
 }
 
-func (e *AlreadyExpiredInvitation) Code() string {
-	return "410-" + string(AlreadyExpiredInvitationCodeKey)
-}
-
 type AlreadyRevokedInvitation struct {
 	ID    ID
 	Token uuid.UUID
@@ -73,10 +62,6 @@ func (e *AlreadyRevokedInvitation) Error() string {
 
 func (e *AlreadyRevokedInvitation) MessageKey() domainErr.MessageKey {
 	return AlreadyRevokedInvitationMessageKey
-}
-
-func (e *AlreadyRevokedInvitation) Code() string {
-	return "410-" + string(AlreadyRevokedInvitationCodeKey)
 }
 
 type AlreadyVerifiedInvitation struct {
@@ -96,6 +81,31 @@ func (e *AlreadyVerifiedInvitation) MessageKey() domainErr.MessageKey {
 	return AlreadyVerifiedInvitationMessageKey
 }
 
-func (e *AlreadyVerifiedInvitation) Code() string {
-	return "409-" + string(AlreadyVerifiedInvitationCodeKey)
+type ExpiredInviteToken struct {
+	ID    ID
+	Token uuid.UUID
+}
+
+func NewExpiredInviteToken(id ID, token uuid.UUID) *ExpiredInviteToken {
+	return &ExpiredInviteToken{id, token}
+}
+
+func (e *ExpiredInviteToken) Error() string {
+	return fmt.Sprintf("id:%s token:%s is expired", e.ID.ToString(), e.Token.String())
+}
+
+type InvalidInviteToken struct {
+	Token uuid.UUID
+}
+
+func NewInvalidInviteToken(token uuid.UUID) *InvalidInviteToken {
+	return &InvalidInviteToken{token}
+}
+
+func (e *InvalidInviteToken) Error() string {
+	return fmt.Sprintf("token:%s is invalid", e.Token.String())
+}
+
+func (e *InvalidInviteToken) MessageKey() domainErr.MessageKey {
+	return InvalidInviteTokenMessageKey
 }

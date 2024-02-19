@@ -16,7 +16,7 @@ type ZipCode struct {
 func NewZipCode(v string) (ZipCode, error) {
 	errs := validation.NewErrors()
 	if v == "" {
-		errs.Append(InvalidAddressZipCode, nil, v)
+		errs.Append(InvalidAddressZipCode, v)
 	}
 	if errs.IsNotEmpty() {
 		return ZipCode{}, errs

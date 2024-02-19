@@ -16,7 +16,7 @@ ARG GOOS=linux
 ARG GOARCH=amd64
 RUN go mod tidy && \
 	go get github.com/cosmtrek/air@latest && \
-	go get github.com/go-delve/delve/cmd/dlv && \
+	go get github.com/go-delve/delve/cmd/dlv@latest && \
 	go build -gcflags="all=-N -l" -buildvcs=false -o /go/bin/dlv github.com/go-delve/delve/cmd/dlv && \
 	go build -o /go/bin/air github.com/cosmtrek/air
 

@@ -20,7 +20,7 @@ const emailRegex = `^(?i:[^ @"<>]+|".*")@(?i:[a-z1-9.])+.(?i:[a-z])+$`
 func NewEmail(v string) (Email, error) {
 	errs := validation.NewErrors()
 	if !regexp.MustCompile(emailRegex).MatchString(v) {
-		errs.Append(InvalidEmail, nil, v)
+		errs.Append(InvalidEmail, v)
 	}
 	if errs.IsNotEmpty() {
 		return Email{}, errs

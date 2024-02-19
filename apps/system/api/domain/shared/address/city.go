@@ -17,7 +17,7 @@ const (
 func NewCity(id ID, v string) (City, error) {
 	errs := validation.NewErrors()
 	if v == "" {
-		errs.Append(InvalidAddressCity, nil, v)
+		errs.Append(InvalidAddressCity, v)
 	}
 	if errs.IsNotEmpty() {
 		return City{}, errs

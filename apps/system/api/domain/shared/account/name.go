@@ -16,7 +16,7 @@ const (
 func NewName(v string) (Name, error) {
 	errs := validation.NewErrors()
 	if v == "" {
-		errs.Append(InvalidAccountName, nil, v)
+		errs.Append(InvalidAccountName, v)
 	}
 	if errs.IsNotEmpty() {
 		return Name{}, errs

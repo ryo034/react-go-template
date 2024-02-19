@@ -6,7 +6,6 @@ const (
 	PhoneNumberAlreadyInUseMessageKey MessageKey = "PhoneNumberInUse"
 	EmailAlreadyInUseMessageKey       MessageKey = "EmailAlreadyInUse"
 	InvalidEmailMessageKey            MessageKey = "InvalidEmail"
-	InvalidInviteTokenMessageKey      MessageKey = "InvalidInviteToken"
 	EmailNotVerifiedMessageKey        MessageKey = "EmailNotVerified"
 	InvalidAddressMessageKey          MessageKey = "InvalidAddress"
 	ConflictedMessageKey              MessageKey = "Conflicted"

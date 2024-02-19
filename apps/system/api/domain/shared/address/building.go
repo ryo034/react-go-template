@@ -17,7 +17,7 @@ const (
 func NewBuilding(id ID, v string) (Building, error) {
 	errs := validation.NewErrors()
 	if v == "" {
-		errs.Append(InvalidAddressBuilding, nil, v)
+		errs.Append(InvalidAddressBuilding, v)
 	}
 	if errs.IsNotEmpty() {
 		return Building{}, errs

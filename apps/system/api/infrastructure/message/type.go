@@ -20,7 +20,7 @@ var typeMessages = map[domainError.MessageKey]map[language.Tag]string{
 		language.Japanese: "不正なメールアドレスです",
 		language.English:  "Invalid email",
 	},
-	domainError.InvalidInviteTokenMessageKey: {
+	invitation.InvalidInviteTokenMessageKey: {
 		language.Japanese: "不正な招待トークンです",
 		language.English:  "Invalid invite token",
 	},

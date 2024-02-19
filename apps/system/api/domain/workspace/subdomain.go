@@ -31,7 +31,7 @@ func NewSubdomain(v string) (Subdomain, error) {
 	trimmed := strings.TrimSpace(v)
 	ok, err := isValidSubdomain(trimmed)
 	if err != nil || !ok {
-		errs.Append(InvalidWorkspaceSubdomain, nil, fmt.Sprintf("invalid workspace domain: %s", v))
+		errs.Append(InvalidWorkspaceSubdomain, fmt.Sprintf("invalid workspace domain: %s", v))
 		return Subdomain{}, errs
 	}
 	return Subdomain{trimmed}, nil

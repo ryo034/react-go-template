@@ -18,7 +18,7 @@ func NewUUIDFromString(v string) (UUID, error) {
 	errs := validation.NewErrors()
 	res, err := uuid.Parse(v)
 	if err != nil {
-		errs.Append(InvalidUUID, nil, v)
+		errs.Append(InvalidUUID, v)
 	}
 	if errs.IsNotEmpty() {
 		return UUID{}, errs
@@ -29,12 +29,12 @@ func NewUUIDFromString(v string) (UUID, error) {
 func NewFromFriendlyString(v string) (UUID, error) {
 	errs := validation.NewErrors()
 	if v == "" {
-		errs.Append(InvalidUUID, nil, v)
+		errs.Append(InvalidUUID, v)
 		return UUID{}, errs
 	}
 	uuid4Binary, err := base32.StdEncoding.WithPadding(base32.NoPadding).DecodeString(strings.ToUpper(v))
 	if err != nil {
-		errs.Append(InvalidUUID, nil, v)
+		errs.Append(InvalidUUID, v)
 	}
 	if errs.IsNotEmpty() {
 		return UUID{}, errs
@@ -50,7 +50,7 @@ func GenerateUUID() (UUID, error) {
 	errs := validation.NewErrors()
 	i, err := uuid.NewV7()
 	if err != nil {
-		errs.Append(InvalidUUID, nil, i)
+		errs.Append(InvalidUUID, i)
 	}
 	if errs.IsNotEmpty() {
 		return UUID{}, errs
