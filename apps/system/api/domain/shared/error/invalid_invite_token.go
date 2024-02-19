@@ -24,7 +24,3 @@ func (e *InvalidInviteToken) Error() string {
 func (e *InvalidInviteToken) MessageKey() MessageKey {
 	return InvalidInviteTokenMessageKey
 }
-
-func (e *InvalidInviteToken) Code() string {
-	return "400-000"
-}

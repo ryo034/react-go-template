@@ -14,7 +14,3 @@ func (u *Unauthenticated) Error() string {
 func (u *Unauthenticated) MessageKey() MessageKey {
 	return UnauthenticatedMessageKey
 }
-
-func (u *Unauthenticated) Code() string {
-	return "401-000"
-}

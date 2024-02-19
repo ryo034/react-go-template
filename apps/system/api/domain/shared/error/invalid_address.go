@@ -23,7 +23,3 @@ func (e *InvalidAddress) Error() string {
 func (e *InvalidAddress) MessageKey() MessageKey {
 	return InvalidAddressMessageKey
 }
-
-func (e *InvalidAddress) Code() string {
-	return "400-" + string(InvalidAddressCodeKey)
-}

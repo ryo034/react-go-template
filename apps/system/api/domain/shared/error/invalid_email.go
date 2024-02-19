@@ -21,7 +21,3 @@ func (e *InvalidEmail) Error() string {
 func (e *InvalidEmail) MessageKey() MessageKey {
 	return InvalidEmailMessageKey
 }
-
-func (e *InvalidEmail) Code() string {
-	return "400-" + string(InvalidEmailCodeKey)
-}

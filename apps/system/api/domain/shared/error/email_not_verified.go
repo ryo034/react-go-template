@@ -21,7 +21,3 @@ func (e *EmailNotVerified) Error() string {
 func (e *EmailNotVerified) MessageKey() MessageKey {
 	return EmailNotVerifiedMessageKey
 }
-
-func (e *EmailNotVerified) Code() string {
-	return "400-" + string(EmailNotVerifiedCodeKey)
-}

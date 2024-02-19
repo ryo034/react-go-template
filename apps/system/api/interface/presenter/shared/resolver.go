@@ -48,9 +48,18 @@ func (r *resolver) errTitle(tag language.Tag, err error, msgArgs ...interface{})
 	var alreadyRevokedInvitation *invitation.AlreadyRevokedInvitation
 	var alreadyVerifiedInvitation *invitation.AlreadyVerifiedInvitation
 
+	var invalidInviteToken *domainErr.InvalidInviteToken
+	var inviteTokenExpired *invitation.ExpiredInviteToken
+
 	switch {
 	case errors.As(err, &t):
 		msg = r.mr.TitleMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
+	case errors.As(err, &noSuchData):
+		msg = r.mr.TitleMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
+	case errors.As(err, &unauthenticatedErr):
+		msg = r.mr.TitleMessage(string(domainErr.UnauthenticatedMessageKey)).WithLang(tag)
+	case errors.As(err, &conflictErr):
+		msg = r.mr.TitleMessage(string(domainErr.ConflictedMessageKey)).WithLang(tag)
 	case errors.As(err, &inviteTokenExpired):
 		msg = r.mr.TitleMessage(string(invitation.ExpiredInviteTokenMessageKey)).WithLang(tag)
 	case errors.As(err, &invalidInviteToken):
@@ -87,6 +96,12 @@ func (r *resolver) errDetail(tag language.Tag, err error, msgArgs ...interface{}
 	switch {
 	case errors.As(err, &t):
 		msg = r.mr.DetailMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
+	case errors.As(err, &noSuchData):
+		msg = r.mr.DetailMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
+	case errors.As(err, &unauthenticatedErr):
+		msg = r.mr.DetailMessage(string(domainErr.UnauthenticatedMessageKey)).WithLang(tag)
+	case errors.As(err, &conflictErr):
+		msg = r.mr.DetailMessage(string(domainErr.ConflictedMessageKey)).WithLang(tag)
 	case errors.As(err, &inviteTokenExpired):
 		msg = r.mr.DetailMessage(string(invitation.ExpiredInviteTokenMessageKey)).WithLang(tag)
 	case errors.As(err, &invalidInviteToken):
@@ -119,9 +134,18 @@ func (r *resolver) errType(tag language.Tag, err error, msgArgs ...interface{}) 
 	var alreadyRevokedInvitation *invitation.AlreadyRevokedInvitation
 	var alreadyVerifiedInvitation *invitation.AlreadyVerifiedInvitation
 
+	var invalidInviteToken *domainErr.InvalidInviteToken
+	var inviteTokenExpired *invitation.ExpiredInviteToken
+
 	switch {
 	case errors.As(err, &t):
 		msg = r.mr.TypeMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
+	case errors.As(err, &noSuchData):
+		msg = r.mr.TypeMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
+	case errors.As(err, &unauthenticatedErr):
+		msg = r.mr.TypeMessage(string(domainErr.UnauthenticatedMessageKey)).WithLang(tag)
+	case errors.As(err, &conflictErr):
+		msg = r.mr.TypeMessage(string(domainErr.ConflictedMessageKey)).WithLang(tag)
 	case errors.As(err, &inviteTokenExpired):
 		msg = r.mr.TypeMessage(string(invitation.ExpiredInviteTokenMessageKey)).WithLang(tag)
 	case errors.As(err, &invalidInviteToken):
@@ -154,17 +178,23 @@ func (r *resolver) errCode(err error) string {
 	var alreadyRevokedInvitation *invitation.AlreadyRevokedInvitation
 	var alreadyVerifiedInvitation *invitation.AlreadyVerifiedInvitation
 
+	var invalidInviteToken *domainErr.InvalidInviteToken
+	var inviteTokenExpired *invitation.ExpiredInviteToken
+
+	// テストの修正
+	// E2Eテストの作成
+
 	switch {
 	case errors.As(err, &t):
-		code = t.Code()
+		code = "400-000"
 	case errors.As(err, &unauthenticatedErr):
-		code = unauthenticatedErr.Code()
+		code = "401-000"
 	case errors.As(err, &conflictErr):
-		code = conflictErr.Code()
+		code = "409-000"
 	case errors.As(err, &noSuchData):
-		code = noSuchData.Code()
+		code = "404-000"
 	case errors.As(err, &inviteTokenExpired):
-		code = inviteTokenExpired.Code()
+		code = "400-001"
 	case errors.As(err, &invalidInviteToken):
 		code = invalidInviteToken.Code()
 	case errors.As(err, &alreadyExpiredInvitation):
@@ -190,16 +220,12 @@ func (r *resolver) Error(c context.Context, err error) interface{} {
 	var alreadyRevokedInvitation *invitation.AlreadyRevokedInvitation
 	var alreadyVerifiedInvitation *invitation.AlreadyVerifiedInvitation
 
+	var invalidInviteToken *domainErr.InvalidInviteToken
+	var inviteTokenExpired *invitation.ExpiredInviteToken
+
 	switch {
 	case errors.As(err, &t), errors.As(err, &inviteTokenExpired), errors.As(err, &invalidInviteToken):
 		return &openapi.BadRequestError{
-			Type:   openapi.OptString{Value: er.Type, Set: true},
-			Title:  openapi.OptString{Value: er.Title, Set: true},
-			Detail: openapi.OptString{Value: er.Detail, Set: true},
-			Code:   openapi.OptString{Value: er.Code, Set: true},
-		}
-	case errors.As(err, &unauthenticatedErr):
-		return &openapi.UnauthorizedError{
 			Type:   openapi.OptString{Value: er.Type, Set: true},
 			Title:  openapi.OptString{Value: er.Title, Set: true},
 			Detail: openapi.OptString{Value: er.Detail, Set: true},
@@ -273,17 +299,20 @@ func (r *resolver) details(tag language.Tag, err error) []errDetail {
 func (r *resolver) detail(tag language.Tag, err error) errDetail {
 	msg := r.mr.ErrorMessage(string(domainErr.InternalServerErrorMessageKey)).WithLang(tag)
 	var t domainValidation.Error
-	var conflictErr *domainErr.Conflicted
 	var noSuchData *domainErr.NoSuchData
 	var inviteTokenExpired *invitation.ExpiredInvitation
 	var invalidInviteToken *domainErr.InvalidInviteToken
+	var inviteTokenExpired *invitation.ExpiredInviteToken
+
 	switch {
 	case errors.As(err, &t):
 		msg = r.mr.ErrorMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
-	case errors.As(err, &conflictErr):
-		msg = r.mr.ErrorMessage(string(domainErr.ConflictedMessageKey)).WithLang(tag)
 	case errors.As(err, &noSuchData):
 		msg = r.mr.ErrorMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
+	case errors.As(err, &unauthenticatedErr):
+		msg = r.mr.ErrorMessage(string(domainErr.UnauthenticatedMessageKey)).WithLang(tag)
+	case errors.As(err, &conflictErr):
+		msg = r.mr.ErrorMessage(string(domainErr.ConflictedMessageKey)).WithLang(tag)
 	case errors.As(err, &inviteTokenExpired):
 		msg = r.mr.ErrorMessage(string(invitation.ExpiredInviteTokenMessageKey)).WithLang(tag)
 	case errors.As(err, &invalidInviteToken):

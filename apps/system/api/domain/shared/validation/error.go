@@ -9,13 +9,11 @@ import (
 type Error interface {
 	error
 	MessageKey() domainError.MessageKey
-	Code() string
 	Args() []interface{}
 }
 
 type err struct {
 	messageKey domainError.MessageKey
-	code       domainError.Code
 	args       []interface{}
 }
 
@@ -27,16 +25,12 @@ func (e *err) MessageKey() domainError.MessageKey {
 	return e.messageKey
 }
 
-func (e *err) Code() string {
-	return string(e.code)
-}
-
 func (e *err) Args() []interface{} {
 	return e.args
 }
 
 type Errors interface {
-	Append(messageKey domainError.MessageKey, code *domainError.Code, args ...interface{})
+	Append(messageKey domainError.MessageKey, args ...interface{})
 	AppendAll(errs Errors)
 	NilIfEmpty() error
 	AsSlice() []error
@@ -51,9 +45,7 @@ type errors struct {
 }
 
 func NewErrors() Errors {
-	return &errors{
-		errors: make([]error, 0, 10),
-	}
+	return &errors{errors: make([]error, 0, 10)}
 }
 
 func (v *errors) NilIfEmpty() error {
@@ -67,12 +59,8 @@ func (v *errors) AppendAll(errs Errors) {
 	v.errors = append(v.errors, errs.AsSlice()...)
 }
 
-func (v *errors) Append(messageKey domainError.MessageKey, code *domainError.Code, args ...interface{}) {
-	c := domainError.BasicCodeKey
-	if code != nil {
-		c = *code
-	}
-	v.errors = append(v.errors, &err{messageKey, c, args})
+func (v *errors) Append(messageKey domainError.MessageKey, args ...interface{}) {
+	v.errors = append(v.errors, &err{messageKey, args})
 }
 
 func (v *errors) AsSlice() []error {
