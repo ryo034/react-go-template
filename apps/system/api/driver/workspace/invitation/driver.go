@@ -242,12 +242,10 @@ func (d *driver) FindActiveAllByEmail(ctx context.Context, exec bun.IDB, email a
 			return nil, err
 		}
 	}
-	if inves != nil {
-		// exclude latest event type "verified"
-		for _, inv := range inves {
-			if inv.EventType == "verified" {
-				targetInvetInvIDs = append(targetInvetInvIDs, inv.InvitationID)
-			}
+	// exclude latest event type "verified"
+	for _, inv := range inves {
+		if inv.EventType == "verified" {
+			targetInvetInvIDs = append(targetInvetInvIDs, inv.InvitationID)
 		}
 	}
 
