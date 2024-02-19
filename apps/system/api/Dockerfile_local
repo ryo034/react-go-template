@@ -5,8 +5,8 @@ WORKDIR /app
 ARG GITHUB_TOKEN
 
 RUN apk update && \
-    apk add --no-cache git ca-certificates tzdata && \
-    git config --global url."https://${GITHUB_TOKEN}:x-oauth-basic@github.com/ryo034/".insteadOf "https://github.com/ryo034/"
+	apk add --no-cache git ca-certificates tzdata && \
+	git config --global url."https://${GITHUB_TOKEN}:x-oauth-basic@github.com/ryo034/".insteadOf "https://github.com/ryo034/"
 
 COPY . .
 
@@ -15,9 +15,10 @@ ARG CGO_ENABLED=0
 ARG GOOS=linux
 ARG GOARCH=amd64
 RUN go mod tidy && \
-	go install github.com/cosmtrek/air@latest && \
+	go get github.com/cosmtrek/air@latest && \
 	go get github.com/go-delve/delve/cmd/dlv && \
-	go build -gcflags="all=-N -l" -buildvcs=false -o /go/bin/dlv github.com/go-delve/delve/cmd/dlv
+	go build -gcflags="all=-N -l" -buildvcs=false -o /go/bin/dlv github.com/go-delve/delve/cmd/dlv && \
+	go build -o /go/bin/air github.com/cosmtrek/air
 
 EXPOSE 19004
 

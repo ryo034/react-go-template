@@ -6,6 +6,8 @@ setup-git-secrets:
 .PHONY: setup
 setup:
 	@make setup-git-secrets
+	@cd ./apps/system/client && make setup
+	@echo "Success!🎉"
 
 .PHONY: init-system
 init-react:
