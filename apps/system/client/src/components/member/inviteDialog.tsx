@@ -15,7 +15,6 @@ import {
 } from "shared-ui"
 import { Email } from "~/domain"
 import { ContainerContext } from "~/infrastructure/injector/context"
-import { FormInputSection } from "../common/form/inputSection"
 import { useInviteMembersFormMessage } from "./message"
 
 export type InviteMembersFormValues = {
@@ -57,6 +56,28 @@ const InviteMemberEmailInput = ({
           message: message.form.email.regex
         }
       })}
+    />
+  )
+}
+
+interface InviteMemberNameInputProps {
+  register: any
+  fieldArrayName: string
+  fieldName: string
+  index: number
+  errors: any
+}
+
+const InviteMemberNameInput = ({ fieldArrayName, fieldName, index, errors, register }: InviteMemberNameInputProps) => {
+  const message = useInviteMembersFormMessage()
+  const fn = `${fieldArrayName}.${index}.${fieldName}`
+  return (
+    <Input
+      autoComplete={"name"}
+      id={fn}
+      type={"text"}
+      placeholder={message.form.displayName.placeholder}
+      reactHookForm={register(fn)}
     />
   )
 }
@@ -124,7 +145,13 @@ export const InviteMembersDialog = () => {
                   register={register}
                   errors={errors}
                 />
-                <Input id="name" placeholder={message.form.displayName.placeholder} />
+                <InviteMemberNameInput
+                  fieldArrayName={"members"}
+                  fieldName="name"
+                  index={index}
+                  register={register}
+                  errors={errors}
+                />
                 <Button variant="ghost" type="button" onClick={() => onClickDeleteButton(index)}>
                   <Trash color="red" className="h-4 w-4" />
                 </Button>
