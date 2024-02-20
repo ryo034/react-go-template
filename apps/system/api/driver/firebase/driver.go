@@ -3,12 +3,13 @@ package firebase
 import (
 	"context"
 	"fmt"
+	"log"
+
 	"github.com/google/uuid"
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
-	"log"
 
 	"firebase.google.com/go/v4/auth"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
@@ -81,7 +82,7 @@ func (d *driver) UpdateProfile(ctx context.Context, usr *user.User) error {
 
 func (d *driver) SetCurrentWorkspaceToCustomClaim(ctx context.Context, aID account.ID, wID workspace.ID) error {
 	return d.f.Auth.SetCustomUserClaims(ctx, aID.ToString(), map[string]interface{}{
-		CustomClaimCurrentWorkspaceIDKey: wID.Value().String(),
+		CustomClaimCurrentWorkspaceIDKey: wID.Value(),
 	})
 }
 
@@ -98,11 +99,7 @@ func (d *driver) GetCurrentWorkspaceFromCustomClaim(ctx context.Context, aID acc
 	if !ok {
 		return nil, fmt.Errorf("invalid custom claim")
 	}
-	ccUID, err := uuid.Parse(ccWID)
-	if err != nil {
-		return nil, err
-	}
-	wID := workspace.NewIDFromUUID(ccUID)
+	wID := workspace.NewIDFromUUID(uuid.MustParse(ccWID))
 	return &wID, err
 }
 

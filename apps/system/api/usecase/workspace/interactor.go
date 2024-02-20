@@ -2,6 +2,7 @@ package workspace
 
 import (
 	"context"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
@@ -138,6 +139,7 @@ func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (open
 
 func (u *useCase) VerifyInvitationToken(ctx context.Context, i VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error) {
 	p := u.dbp.GetExecutor(ctx, true)
+
 	res, err := u.invRepo.FindByToken(ctx, p, i.Token)
 	if err != nil {
 		return nil, err
@@ -187,7 +189,7 @@ func (u *useCase) FindAllInvitation(ctx context.Context, i FindAllInvitationInpu
 		return nil, err
 	}
 	if i.IsVerified {
-		return u.op.FindAllInvitation(res.OnlyVerified())
+		return u.op.FindAllInvitation(res.OnlyVerified().SortByExpiryAt())
 	}
-	return u.op.FindAllInvitation(res.ExcludeRevoked().ExcludeVerified())
+	return u.op.FindAllInvitation(res.ExcludeRevoked().ExcludeVerified().SortByExpiryAt())
 }

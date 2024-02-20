@@ -1,5 +1,7 @@
 package invitation
 
+import "sort"
+
 type Invitations interface {
 	Size() int
 	AsSlice() []*Invitation
@@ -8,6 +10,7 @@ type Invitations interface {
 	ExcludeRevoked() Invitations
 	ExcludeVerified() Invitations
 	OnlyVerified() Invitations
+	SortByExpiryAt() Invitations
 }
 
 type workspaces struct {
@@ -62,4 +65,12 @@ func (ws *workspaces) OnlyVerified() Invitations {
 		}
 	}
 	return NewInvitations(filtered)
+}
+
+func (ws *workspaces) SortByExpiryAt() Invitations {
+	sorted := append(make([]*Invitation, 0, ws.Size()), ws.wrapped...)
+	sort.Slice(sorted, func(i, j int) bool {
+		return sorted[i].ExpiredAt().Value().ToTime().Before(sorted[j].ExpiredAt().Value().ToTime())
+	})
+	return NewInvitations(sorted)
 }

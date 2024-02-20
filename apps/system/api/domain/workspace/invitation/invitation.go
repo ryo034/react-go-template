@@ -60,9 +60,6 @@ func (i *Invitation) DisplayName() *member.DisplayName {
 }
 
 func (i *Invitation) CheckActive() error {
-	if i.IsVerified() {
-		return NewAlreadyVerifiedInvitation(i.ID(), i.Token().Value())
-	}
 	if i.IsExpired() {
 		return NewAlreadyExpiredInvitation(i.ID(), i.Token().Value())
 	}

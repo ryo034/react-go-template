@@ -36,7 +36,7 @@ test.describe("verify invitations", () => {
 })
 
 test.describe("invite members", () => {
-  statefulTest("success to invite members @stateful", async () => {
+  statefulTest("success to invite members @stateful", async ({ page }) => {
     const email = "system_account@example.com"
     const authInfo = await getAuthInfo(email)
     const res = await client.POST("/api/v1/members/invitations/bulk", {
@@ -57,7 +57,7 @@ test.describe("invite members", () => {
       ).length
     ).toBe(1)
   })
-  statefulTest("Already joined any workspace @stateful", async () => {
+  statefulTest("Already joined any workspace @stateful", async ({ page }) => {
     const email = "invite_test_already_joined_any_workspace@example.com"
     const authInfo = await getAuthInfo(email)
     const res = await client.POST("/api/v1/members/invitations/bulk", {
@@ -109,21 +109,22 @@ test.describe("get invitations", () => {
     const res = await client.GET("/api/v1/invitations", {
       headers: authHeaders(authInfo.token)
     })
-    console.log("res.data", res.data)
-
     expect(res.response.status).toBe(200)
     expect(res.error).toBeUndefined()
     expect(res.data).toStrictEqual((await import("./success_get_invitations.json")).default)
   })
-  test("success to get verified invitations without revoked and already registered", async () => {
-    const email = "system_account@example.com"
-    const authInfo = await getAuthInfo(email)
-    const res = await client.GET("/api/v1/invitations", {
-      headers: authHeaders(authInfo.token),
-      params: { query: { status: "verified" } }
-    })
-    expect(res.response.status).toBe(200)
-    expect(res.error).toBeUndefined()
-    expect(res.data).toStrictEqual((await import("./success_get_verified_invitations.json")).default)
-  })
+  statefulTest(
+    "success to get verified invitations without revoked and already registered @stateful",
+    async ({ page }) => {
+      const email = "system_account@example.com"
+      const authInfo = await getAuthInfo(email)
+      const res = await client.GET("/api/v1/invitations", {
+        headers: authHeaders(authInfo.token),
+        params: { query: { status: "verified" } }
+      })
+      expect(res.response.status).toBe(200)
+      expect(res.error).toBeUndefined()
+      expect(res.data).toStrictEqual((await import("./success_get_verified_invitations.json")).default)
+    }
+  )
 })

@@ -35,6 +35,9 @@ func (a *adapter) Adapt(w *models.Workspace) (*workspace.Workspace, error) {
 }
 
 func (a *adapter) AdaptAll(ws []*models.Workspace) (workspace.Workspaces, error) {
+	if ws == nil {
+		return nil, nil
+	}
 	mws := make([]*workspace.Workspace, 0, len(ws))
 	for _, w := range ws {
 		aw, err := a.Adapt(w)

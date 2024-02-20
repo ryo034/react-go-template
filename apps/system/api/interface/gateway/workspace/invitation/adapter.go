@@ -2,6 +2,7 @@ package invitation
 
 import (
 	"fmt"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/datetime"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
@@ -48,6 +49,9 @@ func (a *adapter) Adapt(i *models.Invitation) (*invitation.Invitation, error) {
 }
 
 func (a *adapter) AdaptAll(is []*models.Invitation) (invitation.Invitations, error) {
+	if is == nil {
+		return nil, nil
+	}
 	mws := make([]*invitation.Invitation, 0, len(is))
 	for _, i := range is {
 		aw, err := a.Adapt(i)

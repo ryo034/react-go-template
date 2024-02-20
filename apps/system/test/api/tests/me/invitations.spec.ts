@@ -115,7 +115,7 @@ test.describe("Me Invitations", () => {
       headers: authHeaders(authInfo.token),
       params: { path: { invitationId: await getInvitationIdByToken(inviteToken) } }
     })
-    expect(res.response.status).toBe(409)
+    expect(res.response.status).toBe(410)
   })
 
   test("failed to accept already expired invitation return BadRequestError", async () => {

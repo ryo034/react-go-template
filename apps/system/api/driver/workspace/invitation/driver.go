@@ -4,6 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"slices"
+	"time"
+
 	"github.com/go-faster/errors"
 	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
@@ -12,8 +15,6 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	"github.com/uptrace/bun"
-	"slices"
-	"time"
 )
 
 type Driver interface {
@@ -360,7 +361,7 @@ func (d *driver) VerifyByToken(ctx context.Context, exec bun.IDB, token invitati
 }
 
 func (d *driver) FindAllByWorkspace(ctx context.Context, exec bun.IDB, wID workspace.ID) ([]*models.Invitation, error) {
-	var invs []*models.Invitation
+	var invs []*models.Invitation = nil
 	err := exec.
 		NewSelect().
 		Model(&invs).
