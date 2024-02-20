@@ -66,7 +66,7 @@ export const AuthPageForm = ({ onSubmit, onClickGoogleLoginButton, errorMessage,
       />
       <FormResultErrorMessage message={errorMessage} />
       {isLoading ? (
-        <LoadingButton fullWidth data-testid="authPageFormStartLoadingButton" />
+        <LoadingButton fullWidth />
       ) : (
         <Button fullWidth type="submit" form={authFormId} data-testid="startButton">
           {message.action.startWithEmail}

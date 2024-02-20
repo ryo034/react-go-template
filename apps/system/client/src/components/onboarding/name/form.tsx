@@ -64,7 +64,7 @@ export const OnboardingSettingNamePageForm = ({ onSubmit, errorMessage, isLoadin
       </div>
       <FormResultErrorMessage message={errorMessage} />
       {isLoading ? (
-        <LoadingButton fullWidth data-testid="loadingButton" />
+        <LoadingButton fullWidth />
       ) : (
         <Button fullWidth type="submit" form={onboardingSettingNamePageFormId} data-testid="nextButton">
           {message.action.submit}

@@ -13,6 +13,7 @@
     "add": "Add",
     "enter": "Enter {{field}}",
     "invite": "Invite",
+    "inviting": "Inviting",
     "inviteTarget": "Invite {{target}}"
   }
 }

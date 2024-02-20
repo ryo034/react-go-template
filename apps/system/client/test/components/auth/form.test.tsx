@@ -121,6 +121,6 @@ describe("LoginForm", () => {
     render(elm)
     const nextButton = screen.queryByTestId("startButton")
     expect(nextButton).toBeNull()
-    expect(screen.getByTestId("authPageFormStartLoadingButton")).toBeInTheDocument()
+    expect(screen.getByTestId("loadingButton")).toBeInTheDocument()
   })
 })

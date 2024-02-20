@@ -52,6 +52,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, Va
 
 export interface LoadingButtonProps extends ButtonProps {
   text?: string
+  dataTestId?: string
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -63,9 +64,15 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 Button.displayName = "Button"
 
 const LoadingButton = forwardRef<HTMLButtonElement, LoadingButtonProps>(
-  ({ className, fullWidth, text = "Loading...", ...props }, ref) => {
+  ({ className, fullWidth, text = "Loading...", dataTestId = "loadingButton", ...props }, ref) => {
     return (
-      <Button disabled ref={ref} {...props} className={cn(buttonVariants({ className, fullWidth }))}>
+      <Button
+        disabled
+        ref={ref}
+        {...props}
+        className={cn(buttonVariants({ className, fullWidth }))}
+        data-testid={dataTestId}
+      >
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         {text}
       </Button>

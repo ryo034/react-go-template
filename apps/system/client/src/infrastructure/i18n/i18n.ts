@@ -82,6 +82,7 @@ export const i18nKeys = {
     add: `${i18nRootKeys.action}.add`,
     enter: `${i18nRootKeys.action}.enter`,
     invite: `${i18nRootKeys.action}.invite`,
+    inviting: `${i18nRootKeys.action}.inviting`,
     inviteTarget: `${i18nRootKeys.action}.inviteTarget`
   },
   form: {

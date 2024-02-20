@@ -64,7 +64,7 @@ export const OnboardingSettingWorkspacePageForm = ({ onSubmit, errorMessage, isL
       </div>
       <FormResultErrorMessage message={errorMessage} />
       {isLoading ? (
-        <LoadingButton className="max-w-[320px] w-full" data-testid="loadingButton" />
+        <LoadingButton className="max-w-[320px] w-full" />
       ) : (
         <Button
           className="max-w-[320px] w-full"

@@ -1,6 +1,6 @@
 import { PlusCircledIcon } from "@radix-ui/react-icons"
 import { Plus, Trash } from "lucide-react"
-import { useContext, useMemo } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
 import {
   Button,
@@ -11,7 +11,9 @@ import {
   DialogTitle,
   DialogTrigger,
   Input,
-  ScrollArea
+  LoadingButton,
+  ScrollArea,
+  useToast
 } from "shared-ui"
 import { Email } from "~/domain"
 import { ContainerContext } from "~/infrastructure/injector/context"
@@ -84,6 +86,9 @@ const InviteMemberNameInput = ({ fieldArrayName, fieldName, index, errors, regis
 
 export const InviteMembersDialog = () => {
   const { controller } = useContext(ContainerContext)
+  const [open, setOpen] = useState(false)
+  const [inviting, setInviting] = useState(false)
+  const { toast } = useToast()
 
   const {
     register,
@@ -100,10 +105,11 @@ export const InviteMembersDialog = () => {
 
   const message = useInviteMembersFormMessage()
 
-  useMemo(() => {
+  useEffect(() => {
+    remove()
     append({ email: "", name: "" })
     setFocus("members.0.email")
-  }, [])
+  }, [open, setFocus, append, remove])
 
   const onClickAddButton = () => {
     append({ email: "", name: "" })
@@ -113,12 +119,25 @@ export const InviteMembersDialog = () => {
     remove(index)
   }
 
+  const close = () => {
+    setInviting(false)
+    setOpen(false)
+  }
+
   const onSubmit = async (data: InviteMembersFormValues) => {
-    await controller.workspace.inviteMembers({ invitees: data.members })
+    setInviting(true)
+    const res = await controller.workspace.inviteMembers({ invitees: data.members })
+    if (res) {
+      toast({ title: "ユーザーの招待に失敗しました" })
+      close()
+      return
+    }
+    toast({ title: "ユーザーを招待しました" })
+    close()
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">
           <PlusCircledIcon className="mr-2 h-4 w-4" />
@@ -164,9 +183,13 @@ export const InviteMembersDialog = () => {
           </form>
         </ScrollArea>
         <DialogFooter>
-          <Button type="submit" form={inviteMembersFormId}>
-            {message.action.invite}
-          </Button>
+          {inviting ? (
+            <LoadingButton text={`${message.action.inviting}...`} />
+          ) : (
+            <Button type="submit" form={inviteMembersFormId} disabled={fields.length === 0}>
+              {message.action.invite}
+            </Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>

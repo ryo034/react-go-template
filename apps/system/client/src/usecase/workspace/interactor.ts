@@ -39,7 +39,7 @@ export class WorkspaceInteractor implements WorkspaceUseCase {
   }
 
   async inviteMembers(i: InviteMembersInput): Promise<Error | null> {
-    const res = await this.repository.inviteMembers(i)
+    const res = await this.repository.inviteMembers(i.invitees)
     if (res.isErr) {
       return res.error
     }

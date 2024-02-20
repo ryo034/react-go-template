@@ -10,7 +10,8 @@ export const useInviteMembersFormMessage = () => {
       inviteMember: i18n.translate(`${i18nKeys.action.inviteTarget}`, {
         target: i18n.translate(`${i18nKeys.word.member}`)
       }),
-      add: i18n.translate(`${i18nKeys.action.add}`)
+      add: i18n.translate(`${i18nKeys.action.add}`),
+      inviting: i18n.translate(`${i18nKeys.action.inviting}`)
     },
     form: {
       email: {

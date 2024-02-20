@@ -13,6 +13,7 @@
     "add": "追加",
     "enter": "{{field}}を入力",
     "invite": "招待する",
+    "inviting": "招待中",
     "inviteTarget": "{{target}}を招待する"
   }
 }
