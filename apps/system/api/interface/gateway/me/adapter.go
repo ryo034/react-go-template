@@ -61,15 +61,17 @@ func (a *adapter) AdaptReceivedInvitation(i *models.Invitation) (me.ReceivedInvi
 	if err != nil {
 		return me.ReceivedInvitation{}, err
 	}
-
 	inv, err := a.inva.Adapt(i)
 	if err != nil {
 		return me.ReceivedInvitation{}, err
 	}
-	return me.NewReceivedInvitation(inv, inviter), nil
+	return me.NewReceivedInvitation(inv, inviter)
 }
 
 func (a *adapter) AdaptAllReceivedInvitation(is []*models.Invitation) (me.ReceivedInvitations, error) {
+	if is == nil {
+		return me.NewReceivedInvitations(nil), nil
+	}
 	mis := make([]me.ReceivedInvitation, 0, len(is))
 	for _, i := range is {
 		ai, err := a.AdaptReceivedInvitation(i)

@@ -160,11 +160,18 @@ func (u *useCase) RevokeInvitation(ctx context.Context, i RevokeInvitationInput)
 	if err != nil {
 		return nil, err
 	}
+	wID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx, i.AccountID)
+	if err != nil {
+		return nil, err
+	}
+	inv, err := u.invRepo.Find(ctx, p, i.InvitationID)
+	if err != nil {
+		return nil, err
+	}
+	if err = inv.ValidateCanRevoke(); err != nil {
+		return nil, err
+	}
 	fn := func() (invitation.Invitations, error) {
-		wID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(pr, i.AccountID)
-		if err != nil {
-			return nil, err
-		}
 		if err = u.invRepo.Revoke(pr, p, i.InvitationID); err != nil {
 			return nil, err
 		}

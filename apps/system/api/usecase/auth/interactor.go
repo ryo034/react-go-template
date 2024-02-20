@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"database/sql"
+
 	"github.com/go-faster/errors"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/auth"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
@@ -119,6 +120,9 @@ func (u *useCase) ProcessInvitation(ctx context.Context, i ProcessInvitationInpu
 	}
 	if invRes.Token().NotEquals(i.Token) {
 		return nil, invitation.NewInvalidInviteToken(i.Token.Value())
+	}
+	if err = invRes.ValidateCanVerify(); err != nil {
+		return nil, invitation.NewAlreadyExpiredInvitation(invRes.ID(), invRes.Token().Value())
 	}
 
 	pr, err := u.txp.Provide(ctx)

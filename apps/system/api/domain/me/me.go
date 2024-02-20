@@ -1,11 +1,12 @@
 package me
 
 import (
+	"slices"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
-	"slices"
 )
 
 type Me struct {
@@ -50,6 +51,11 @@ func (m *Me) JoinedWorkspaces() workspace.Workspaces {
 
 func (m *Me) ReceivedInvitations() ReceivedInvitations {
 	return m.receivedInvitations
+}
+
+func (m *Me) UpdateReceivedInvitations(ris ReceivedInvitations) *Me {
+	m.receivedInvitations = ris
+	return m
 }
 
 func (m *Me) CheckJoined(wID workspace.ID) bool {

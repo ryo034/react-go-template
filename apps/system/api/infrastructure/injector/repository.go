@@ -20,7 +20,7 @@ type RepositoryInjector struct {
 
 func newRepositoryInjector(di Driver, gw GatewayAdapter) RepositoryInjector {
 	return RepositoryInjector{
-		meGw.NewGateway(di.Me, di.Firebase, di.Workspace, di.Invitation, gw.Me, gw.Invitation),
+		meGw.NewGateway(di.Me, di.Firebase, di.Workspace, di.Invitation, gw.Me),
 		authGw.NewGateway(di.KeyValue, di.Auth, gw.Auth),
 		workspaceGw.NewGateway(di.Workspace, di.Member, di.Invitation, gw.Workspace, gw.Member, gw.Invitation),
 		invitationGw.NewGateway(di.Invitation, gw.Invitation),

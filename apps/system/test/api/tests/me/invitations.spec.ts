@@ -25,7 +25,28 @@ test.describe("Me Invitations", () => {
       expect(res.data?.self.userId).not.toBeNull()
       expect(res.data?.member).toBeUndefined()
       expect(res.data?.currentWorkspace).toBeUndefined()
-      expect(res.data?.receivedInvitations).toBeUndefined()
+      expect(res.data?.receivedInvitations).toEqual([
+        {
+          invitation: {
+            displayName: "",
+            expiredAt: "2200-01-10T21:00:00+09:00",
+            id: "018d96b8-2211-7862-bcbe-e9f4d002a8fc",
+            inviteeEmail: "invite_test_not_expired@example.com",
+            verified: true
+          },
+          inviter: {
+            member: {
+              profile: { displayName: "John Doe", id: "g57lunkvmbhurkm5dhf5nkblbu", idNumber: "DEV-12345" },
+              user: {
+                email: "system_account@example.com",
+                name: "John Doe",
+                userId: "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
+              }
+            },
+            workspace: { name: "Example", subdomain: "example", workspaceId: "c1bd2603-b9cd-4f84-8b83-3548f6ae150b" }
+          }
+        }
+      ])
 
       if (res.data === undefined) {
         throw new Error("res.data is undefined")
@@ -107,7 +128,7 @@ test.describe("Me Invitations", () => {
     }
   )
 
-  test("failed to accept already accepted invitation return ConflictError", async () => {
+  test("failed to accept already accepted invitation return GoneError", async () => {
     const email = "invite_test_already_used@example.com"
     const inviteToken = await getInviteToken(email)
     const authInfo = await getAuthInfo(email)
@@ -118,7 +139,7 @@ test.describe("Me Invitations", () => {
     expect(res.response.status).toBe(410)
   })
 
-  test("failed to accept already expired invitation return BadRequestError", async () => {
+  test("failed to accept already expired invitation return GoneError", async () => {
     const email = "invite_test_expired@example.com"
     const inviteToken = await getInviteToken(email)
     const authInfo = await getAuthInfo(email)
@@ -129,7 +150,7 @@ test.describe("Me Invitations", () => {
     expect(res.response.status).toBe(410)
   })
 
-  test("failed to accept revoked invitation return BadRequestError", async () => {
+  test("failed to accept revoked invitation return GoneError", async () => {
     const email = "invite_test_revoked@example.com"
     const inviteToken = await getInviteToken(email)
     const authInfo = await getAuthInfo(email)

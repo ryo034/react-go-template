@@ -2,6 +2,7 @@ package me
 
 import (
 	"context"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
@@ -100,7 +101,7 @@ func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput)
 		return nil, err
 	}
 
-	if err = invRes.CheckActive(); err != nil {
+	if err = invRes.ValidateCanAccept(); err != nil {
 		return nil, err
 	}
 

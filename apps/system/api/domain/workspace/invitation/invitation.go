@@ -59,12 +59,38 @@ func (i *Invitation) DisplayName() *member.DisplayName {
 	return i.displayName
 }
 
-func (i *Invitation) CheckActive() error {
+func (i *Invitation) ValidateCanAccept() error {
 	if i.IsExpired() {
 		return NewAlreadyExpiredInvitation(i.ID(), i.Token().Value())
 	}
 	if i.IsRevoked() {
 		return NewAlreadyRevokedInvitation(i.ID(), i.Token().Value())
+	}
+	return nil
+}
+
+func (i *Invitation) ValidateCanRevoke() error {
+	if i.IsVerified() {
+		return NewAlreadyVerifiedInvitation(i.ID(), i.Token().Value())
+	}
+	if i.IsExpired() {
+		return NewAlreadyExpiredInvitation(i.ID(), i.Token().Value())
+	}
+	if i.IsRevoked() {
+		return NewAlreadyRevokedInvitation(i.ID(), i.Token().Value())
+	}
+	return nil
+}
+
+func (i *Invitation) ValidateCanVerify() error {
+	if i.IsExpired() {
+		return NewAlreadyExpiredInvitation(i.ID(), i.Token().Value())
+	}
+	if i.IsRevoked() {
+		return NewAlreadyRevokedInvitation(i.ID(), i.Token().Value())
+	}
+	if i.IsVerified() {
+		return NewAlreadyVerifiedInvitation(i.ID(), i.Token().Value())
 	}
 	return nil
 }

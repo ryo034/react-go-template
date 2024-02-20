@@ -10,8 +10,14 @@ type ReceivedInvitation struct {
 	inviter    workspace.Inviter
 }
 
-func NewReceivedInvitation(invitation *invitation.Invitation, inviter workspace.Inviter) ReceivedInvitation {
-	return ReceivedInvitation{invitation, inviter}
+func NewReceivedInvitation(inv *invitation.Invitation, inviter workspace.Inviter) (ReceivedInvitation, error) {
+	if inv.IsRevoked() {
+		return ReceivedInvitation{}, invitation.NewAlreadyRevokedInvitation(inv.ID(), inv.Token().Value())
+	}
+	if inv.IsExpired() {
+		return ReceivedInvitation{}, invitation.NewAlreadyExpiredInvitation(inv.ID(), inv.Token().Value())
+	}
+	return ReceivedInvitation{inv, inviter}, nil
 }
 
 func (r *ReceivedInvitation) Invitation() *invitation.Invitation {

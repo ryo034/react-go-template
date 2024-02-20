@@ -111,7 +111,7 @@ test.describe("get invitations", () => {
     })
     expect(res.response.status).toBe(200)
     expect(res.error).toBeUndefined()
-    expect(res.data).toStrictEqual((await import("./success_get_invitations.json")).default)
+    expect(JSON.stringify(res.data)).toEqual(JSON.stringify((await import("./success_get_invitations.json")).default));
   })
   statefulTest(
     "success to get verified invitations without revoked and already registered @stateful",

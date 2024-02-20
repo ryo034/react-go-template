@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
@@ -13,7 +14,6 @@ import (
 	meDr "github.com/ryo034/react-go-template/apps/system/api/driver/me"
 	workspaceDr "github.com/ryo034/react-go-template/apps/system/api/driver/workspace"
 	invitationDr "github.com/ryo034/react-go-template/apps/system/api/driver/workspace/invitation"
-	invitationGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/workspace/invitation"
 	"github.com/uptrace/bun"
 )
 
@@ -23,11 +23,10 @@ type gateway struct {
 	wd   workspaceDr.Driver
 	invd invitationDr.Driver
 	a    Adapter
-	inva invitationGw.Adapter
 }
 
-func NewGateway(md meDr.Driver, fd fbDr.Driver, wd workspaceDr.Driver, invd invitationDr.Driver, a Adapter, inva invitationGw.Adapter) me.Repository {
-	return &gateway{md, fd, wd, invd, a, inva}
+func NewGateway(md meDr.Driver, fd fbDr.Driver, wd workspaceDr.Driver, invd invitationDr.Driver, a Adapter) me.Repository {
+	return &gateway{md, fd, wd, invd, a}
 }
 
 func (g *gateway) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*me.Me, error) {
@@ -74,7 +73,19 @@ func (g *gateway) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID accou
 	if err != nil {
 		return nil, err
 	}
-	return g.a.AdaptSystemAccount(res)
+	m, err := g.a.AdaptSystemAccount(res)
+	if err != nil {
+		return nil, err
+	}
+	invs, err := g.invd.FindActiveAllByEmail(ctx, exec, m.Self().Email())
+	if err != nil {
+		return nil, err
+	}
+	ainvs, err := g.a.AdaptAllReceivedInvitation(invs)
+	if err != nil {
+		return nil, err
+	}
+	return m.UpdateReceivedInvitations(ainvs), nil
 }
 
 func (g *gateway) FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) (*me.Me, error) {
@@ -109,7 +120,15 @@ func (g *gateway) AcceptInvitation(ctx context.Context, exec bun.IDB, id invitat
 }
 
 func (g *gateway) FindAllActiveReceivedInvitations(ctx context.Context, exec bun.IDB, aID account.ID) (me.ReceivedInvitations, error) {
-	res, err := g.md.FindAllActiveInvitations(ctx, exec, aID)
+	p, err := g.md.FindProfile(ctx, exec, aID)
+	if err != nil {
+		return nil, err
+	}
+	em, err := account.NewEmail(p.Profile.Email)
+	if err != nil {
+		return nil, err
+	}
+	res, err := g.invd.FindActiveAllByEmail(ctx, exec, em)
 	if err != nil {
 		return nil, err
 	}
