@@ -32,7 +32,6 @@ export default ({ mode }: { mode: Mode }) => {
             i18n: ["i18next"],
             utility: ["clsx", "immer", "true-myth", "class-variance-authority"],
             state: ["zustand"],
-            validation: ["zod"],
             tracking: ["react-ga4"]
           }
         }
