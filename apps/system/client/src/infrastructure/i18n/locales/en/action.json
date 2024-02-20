@@ -14,6 +14,8 @@
     "enter": "Enter {{field}}",
     "invite": "Invite",
     "inviting": "Inviting",
-    "inviteTarget": "Invite {{target}}"
+    "inviteTarget": "Invite {{target}}",
+    "successInvite": "Invite Success",
+    "failedInvite": "Invite Failed"
   }
 }

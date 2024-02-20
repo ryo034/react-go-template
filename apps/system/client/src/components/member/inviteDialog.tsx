@@ -23,7 +23,7 @@ export type InviteMembersFormValues = {
   members: [{ email: string; name: string }]
 }
 
-const inviteMembersFormId = "inviteMembersForm"
+export const inviteMembersFormId = "inviteMembersForm"
 
 interface InviteMemberEmailInputProps {
   register: any
@@ -67,10 +67,9 @@ interface InviteMemberNameInputProps {
   fieldArrayName: string
   fieldName: string
   index: number
-  errors: any
 }
 
-const InviteMemberNameInput = ({ fieldArrayName, fieldName, index, errors, register }: InviteMemberNameInputProps) => {
+const InviteMemberNameInput = ({ fieldArrayName, fieldName, index, register }: InviteMemberNameInputProps) => {
   const message = useInviteMembersFormMessage()
   const fn = `${fieldArrayName}.${index}.${fieldName}`
   return (
@@ -127,24 +126,19 @@ export const InviteMembersDialog = () => {
   const onSubmit = async (data: InviteMembersFormValues) => {
     setInviting(true)
     const res = await controller.workspace.inviteMembers({ invitees: data.members })
-    if (res) {
-      toast({ title: "ユーザーの招待に失敗しました" })
-      close()
-      return
-    }
-    toast({ title: "ユーザーを招待しました" })
+    toast({ title: res ? message.action.failedInvite : message.action.successInvite })
     close()
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" data-testid="inviteMembersButton">
           <PlusCircledIcon className="mr-2 h-4 w-4" />
           {message.action.inviteMember}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[580px] max-h-[580px]">
+      <DialogContent className="sm:max-w-[580px] max-h-[580px]" data-testid="inviteMembersDialog">
         <DialogHeader>
           <DialogTitle className="text-center">{message.action.inviteMember}</DialogTitle>
         </DialogHeader>
@@ -156,7 +150,7 @@ export const InviteMembersDialog = () => {
             onSubmit={handleSubmit(onSubmit)}
           >
             {fields.map((item, index) => (
-              <div className="w-full flex space-x-4 p-1" key={item.id}>
+              <div className="w-full flex space-x-4 p-1" key={item.id} data-testid={`inviteMemberFiledRow-${index}`}>
                 <InviteMemberEmailInput
                   fieldArrayName={"members"}
                   fieldName="email"
@@ -164,13 +158,7 @@ export const InviteMembersDialog = () => {
                   register={register}
                   errors={errors}
                 />
-                <InviteMemberNameInput
-                  fieldArrayName={"members"}
-                  fieldName="name"
-                  index={index}
-                  register={register}
-                  errors={errors}
-                />
+                <InviteMemberNameInput fieldArrayName={"members"} fieldName="name" index={index} register={register} />
                 <Button variant="ghost" type="button" onClick={() => onClickDeleteButton(index)}>
                   <Trash color="red" className="h-4 w-4" />
                 </Button>
