@@ -109,6 +109,8 @@ test.describe("get invitations", () => {
     const res = await client.GET("/api/v1/invitations", {
       headers: authHeaders(authInfo.token)
     })
+    console.log("res.data", res.data)
+
     expect(res.response.status).toBe(200)
     expect(res.error).toBeUndefined()
     expect(res.data).toStrictEqual((await import("./success_get_invitations.json")).default)

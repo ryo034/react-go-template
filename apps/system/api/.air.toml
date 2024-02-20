@@ -3,7 +3,7 @@ tmp_dir = "tmp"
 
 [build]
 bin = "./tmp/main"
-cmd = "go build -trimpath -buildvcs=false -o ./tmp/main ."
+cmd = "go build -trimpath -buildvcs=false -gcflags=\"all=-N -l\" -v -o ./tmp/main ."
 full_bin = "APP_ENV=dev APP_USER=air /go/bin/dlv exec ./tmp/main --headless=true --listen=:2345 --api-version=2 --accept-multiclient"
 #full_bin = "APP_ENV=dev APP_USER=air ./tmp/main"
 exclude_dir = ["assets", "tmp", "vendor"]

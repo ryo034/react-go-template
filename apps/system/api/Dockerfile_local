@@ -11,9 +11,9 @@ RUN apk update && \
 COPY . .
 
 # For Hot Reload & Debug
-ARG CGO_ENABLED=0
-ARG GOOS=linux
-ARG GOARCH=amd64
+# ARG CGO_ENABLED=0
+# ARG GOOS=linux
+# ARG GOARCH=amd64
 RUN go mod tidy && \
 	go get github.com/cosmtrek/air@latest && \
 	go get github.com/go-delve/delve/cmd/dlv@latest && \

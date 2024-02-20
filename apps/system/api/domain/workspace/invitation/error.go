@@ -2,31 +2,32 @@ package invitation
 
 import (
 	"fmt"
+
 	"github.com/google/uuid"
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 )
 
 const (
-	ExpiredInviteTokenMessageKey        domainErr.MessageKey = "ExpiredInvitation"
-	InvalidInviteTokenMessageKey        domainErr.MessageKey = "InvalidInviteToken"
+	ExpiredInviteTokenMessageKey        domainErr.MessageKey = "ExpiredInvitationToken"
+	InvalidInviteTokenMessageKey        domainErr.MessageKey = "InvalidInvitationToken"
 	AlreadyExpiredInvitationMessageKey  domainErr.MessageKey = "AlreadyExpiredInvitation"
 	AlreadyRevokedInvitationMessageKey  domainErr.MessageKey = "AlreadyRevokedInvitation"
 	AlreadyVerifiedInvitationMessageKey domainErr.MessageKey = "AlreadyVerifiedInvitation"
 )
 
-type ExpiredInvitation struct {
+type ExpiredInvitationToken struct {
 	Token uuid.UUID
 }
 
-func NewExpiredInvitation(token uuid.UUID) *ExpiredInvitation {
-	return &ExpiredInvitation{token}
+func NewExpiredInvitation(token uuid.UUID) *ExpiredInvitationToken {
+	return &ExpiredInvitationToken{token}
 }
 
-func (e *ExpiredInvitation) Error() string {
+func (e *ExpiredInvitationToken) Error() string {
 	return fmt.Sprintf("token:%s is expired", e.Token.String())
 }
 
-func (e *ExpiredInvitation) MessageKey() domainErr.MessageKey {
+func (e *ExpiredInvitationToken) MessageKey() domainErr.MessageKey {
 	return ExpiredInviteTokenMessageKey
 }
 
@@ -81,31 +82,18 @@ func (e *AlreadyVerifiedInvitation) MessageKey() domainErr.MessageKey {
 	return AlreadyVerifiedInvitationMessageKey
 }
 
-type ExpiredInviteToken struct {
-	ID    ID
+type InvalidInvitationToken struct {
 	Token uuid.UUID
 }
 
-func NewExpiredInviteToken(id ID, token uuid.UUID) *ExpiredInviteToken {
-	return &ExpiredInviteToken{id, token}
+func NewInvalidInviteToken(token uuid.UUID) *InvalidInvitationToken {
+	return &InvalidInvitationToken{token}
 }
 
-func (e *ExpiredInviteToken) Error() string {
-	return fmt.Sprintf("id:%s token:%s is expired", e.ID.ToString(), e.Token.String())
-}
-
-type InvalidInviteToken struct {
-	Token uuid.UUID
-}
-
-func NewInvalidInviteToken(token uuid.UUID) *InvalidInviteToken {
-	return &InvalidInviteToken{token}
-}
-
-func (e *InvalidInviteToken) Error() string {
+func (e *InvalidInvitationToken) Error() string {
 	return fmt.Sprintf("token:%s is invalid", e.Token.String())
 }
 
-func (e *InvalidInviteToken) MessageKey() domainErr.MessageKey {
+func (e *InvalidInvitationToken) MessageKey() domainErr.MessageKey {
 	return InvalidInviteTokenMessageKey
 }
