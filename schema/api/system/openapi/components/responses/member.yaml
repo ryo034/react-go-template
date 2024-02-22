@@ -1,18 +1,3 @@
-InvitationInfoResponse:
-  description: Invitation verified
-  content:
-    application/json:
-      schema:
-        type: object
-        required:
-          - workspaceName
-          - verified
-        properties:
-          workspaceName:
-            type: string
-          verified:
-            type: boolean
-
 InvitationsBulkResponse:
   description: Successfully sent invitations
   content:
@@ -41,3 +26,31 @@ RevokeInvitationResponse:
     application/json:
       schema:
         $ref: "#/components/schemas/Invitations"
+
+MembersResponse:
+  description: Get workspace members
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - members
+        properties:
+          members:
+            type: array
+            items:
+              $ref: "#/components/schemas/Member"
+
+InvitationsResponse:
+  description: Get workspace invitations
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - invitations
+        properties:
+          invitations:
+            type: array
+            items:
+              $ref: "#/components/schemas/Invitation"

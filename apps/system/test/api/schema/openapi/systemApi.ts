@@ -67,6 +67,10 @@ export interface paths {
     /** Process an invitation by verifying token and email */
     post: operations["processInvitation"];
   };
+  "/api/v1/auth/invitations": {
+    /** Get Invitation by token */
+    get: operations["getInvitationByToken"];
+  };
   "/api/v1/auth/oauth": {
     /**
      * Auth by OAuth
@@ -92,12 +96,7 @@ export interface paths {
      */
     get: {
       responses: {
-        /** @description Admin User */
-        200: {
-          content: {
-            "application/json": components["schemas"]["Me"];
-          };
-        };
+        200: components["responses"]["MeResponse"];
         401: components["responses"]["UnauthorizedError"];
         500: components["responses"]["InternalServerError"];
       };
@@ -111,12 +110,7 @@ export interface paths {
     put: {
       requestBody: components["requestBodies"]["UpdateMeProfile"];
       responses: {
-        /** @description Profile updated */
-        200: {
-          content: {
-            "application/json": components["schemas"]["Me"];
-          };
-        };
+        200: components["responses"]["UpdateProfileResponse"];
         400: components["responses"]["BadRequestError"];
         401: components["responses"]["UnauthorizedError"];
         500: components["responses"]["InternalServerError"];
@@ -137,12 +131,7 @@ export interface paths {
      */
     get: {
       responses: {
-        /** @description Joined Workspaces */
-        200: {
-          content: {
-            "application/json": components["schemas"]["Workspaces"];
-          };
-        };
+        200: components["responses"]["WorkspacesResponse"];
         401: components["responses"]["UnauthorizedError"];
         500: components["responses"]["InternalServerError"];
       };
@@ -154,12 +143,7 @@ export interface paths {
     post: {
       requestBody: components["requestBodies"]["CreateWorkspace"];
       responses: {
-        /** @description Workspace created */
-        201: {
-          content: {
-            "application/json": components["schemas"]["Workspace"];
-          };
-        };
+        201: components["responses"]["CreateWorkspaceResponse"];
         400: components["responses"]["BadRequestError"];
         401: components["responses"]["UnauthorizedError"];
         409: components["responses"]["ConflictError"];
@@ -174,12 +158,7 @@ export interface paths {
      */
     get: {
       responses: {
-        /** @description Members */
-        200: {
-          content: {
-            "application/json": components["schemas"]["Members"];
-          };
-        };
+        200: components["responses"]["MembersResponse"];
         401: components["responses"]["UnauthorizedError"];
         500: components["responses"]["InternalServerError"];
       };
@@ -194,16 +173,11 @@ export interface paths {
       parameters: {
         query?: {
           /** @description Invitation status */
-          status?: "verified";
+          status?: "accepted";
         };
       };
       responses: {
-        /** @description Invitations */
-        200: {
-          content: {
-            "application/json": components["schemas"]["Invitations"];
-          };
-        };
+        200: components["responses"]["InvitationsResponse"];
         401: components["responses"]["UnauthorizedError"];
         500: components["responses"]["InternalServerError"];
       };
@@ -212,10 +186,6 @@ export interface paths {
   "/api/v1/members/invitations/bulk": {
     /** Invite multiple users to the workspace by email */
     post: operations["inviteMultipleUsersToWorkspace"];
-  };
-  "/api/v1/members/invitations/verify": {
-    /** Verify Invitation */
-    get: operations["verifyInvitation"];
   };
   "/api/v1/members/invitations/{invitationId}/accept": {
     /** Accept an invitation to join a workspace */
@@ -284,7 +254,7 @@ export interface components {
        * @description Invitation ID
        */
       id: string;
-      verified: boolean;
+      accepted: boolean;
       /** Format: date-time */
       expiredAt: string;
       /**
@@ -533,12 +503,11 @@ export interface components {
         };
       };
     };
-    /** @description Invitation verified */
-    InvitationInfoResponse: {
+    /** @description Get invitation by token */
+    GetInvitationByTokenResponse: {
       content: {
         "application/json": {
-          workspaceName: string;
-          verified: boolean;
+          receivedInvitation: components["schemas"]["ReceivedInvitation"];
         };
       };
     };
@@ -558,6 +527,68 @@ export interface components {
     RevokeInvitationResponse: {
       content: {
         "application/json": components["schemas"]["Invitations"];
+      };
+    };
+    /** @description Get joined workspaces */
+    WorkspacesResponse: {
+      content: {
+        "application/json": {
+          workspaces: components["schemas"]["Workspace"][];
+        };
+      };
+    };
+    /** @description Get workspace invitations */
+    InvitationsResponse: {
+      content: {
+        "application/json": {
+          invitations: components["schemas"]["Invitation"][];
+        };
+      };
+    };
+    /** @description Get workspace members */
+    MembersResponse: {
+      content: {
+        "application/json": {
+          members: components["schemas"]["Member"][];
+        };
+      };
+    };
+    /** @description Me */
+    MeResponse: {
+      content: {
+        "application/json": {
+          me: components["schemas"]["Me"];
+        };
+      };
+    };
+    /** @description Update profile */
+    UpdateProfileResponse: {
+      content: {
+        "application/json": {
+          me: components["schemas"]["Me"];
+        };
+      };
+    };
+    /** @description Invitation accepted and user added to the workspace */
+    InvitationsAcceptResponse: {
+      content: {
+        "application/json": {
+          me: components["schemas"]["Me"];
+        };
+      };
+    };
+    /** @description Workspace created */
+    CreateWorkspaceResponse: {
+      content: {
+        "application/json": {
+          workspace: components["schemas"]["Workspace"];
+        };
+      };
+    };
+    /** @description Login response */
+    LoginResponse: {
+      content: {
+        "application/json": components["schemas"]["Me"];
       };
     };
   };
@@ -600,7 +631,7 @@ export interface components {
       };
     };
     /** @description Process an invitation by verifying token and email, and register or add user to workspace. */
-    InvitationsProcess: {
+    InvitationProcess: {
       content: {
         "application/json": {
           /**
@@ -637,7 +668,7 @@ export interface operations {
 
   /** Process an invitation by verifying token and email */
   processInvitation: {
-    requestBody: components["requestBodies"]["InvitationsProcess"];
+    requestBody: components["requestBodies"]["InvitationProcess"];
     responses: {
       /** @description OTP has been sent successfully. */
       200: {
@@ -647,18 +678,29 @@ export interface operations {
       500: components["responses"]["InternalServerError"];
     };
   };
+  /** Get Invitation by token */
+  getInvitationByToken: {
+    parameters: {
+      query: {
+        /** @description Invitation token */
+        token: string;
+      };
+    };
+    responses: {
+      200: components["responses"]["GetInvitationByTokenResponse"];
+      400: components["responses"]["BadRequestError"];
+      409: components["responses"]["ConflictError"];
+      410: components["responses"]["GoneError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
   /**
    * Login
    * @description Login
    */
   login: {
     responses: {
-      /** @description Login response */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Me"];
-        };
-      };
+      200: components["responses"]["LoginResponse"];
       500: components["responses"]["InternalServerError"];
     };
   };
@@ -672,22 +714,6 @@ export interface operations {
       500: components["responses"]["InternalServerError"];
     };
   };
-  /** Verify Invitation */
-  verifyInvitation: {
-    parameters: {
-      query: {
-        /** @description Invitation token */
-        token: string;
-      };
-    };
-    responses: {
-      200: components["responses"]["InvitationInfoResponse"];
-      400: components["responses"]["BadRequestError"];
-      401: components["responses"]["UnauthorizedError"];
-      404: components["responses"]["NotFoundError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
   /** Accept an invitation to join a workspace */
   acceptInvitation: {
     parameters: {
@@ -697,12 +723,7 @@ export interface operations {
       };
     };
     responses: {
-      /** @description Invitation accepted and user added to the workspace */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Me"];
-        };
-      };
+      200: components["responses"]["InvitationsAcceptResponse"];
       401: components["responses"]["UnauthorizedError"];
       409: components["responses"]["ConflictError"];
       410: components["responses"]["GoneError"];

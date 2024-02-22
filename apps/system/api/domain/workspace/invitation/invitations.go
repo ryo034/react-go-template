@@ -9,7 +9,7 @@ type Invitations interface {
 	IsNotEmpty() bool
 	ExcludeRevoked() Invitations
 	ExcludeVerified() Invitations
-	OnlyVerified() Invitations
+	OnlyAccepted() Invitations
 	SortByExpiryAt() Invitations
 }
 
@@ -57,10 +57,10 @@ func (ws *workspaces) ExcludeVerified() Invitations {
 	return NewInvitations(filtered)
 }
 
-func (ws *workspaces) OnlyVerified() Invitations {
+func (ws *workspaces) OnlyAccepted() Invitations {
 	filtered := make([]*Invitation, 0)
 	for _, w := range ws.wrapped {
-		if w.IsVerified() {
+		if w.IsAccepted() {
 			filtered = append(filtered, w)
 		}
 	}

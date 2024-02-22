@@ -21,18 +21,18 @@ test.describe("Me Invitations", () => {
 
       const res = await client.GET("/api/v1/me", { headers: authHeaders(authInfo.token) })
       expect(res.response.status).toBe(200)
-      expect(res.data?.self.email).toBe(email)
-      expect(res.data?.self.userId).not.toBeNull()
-      expect(res.data?.member).toBeUndefined()
-      expect(res.data?.currentWorkspace).toBeUndefined()
-      expect(res.data?.receivedInvitations).toEqual([
+      expect(res.data?.me.self.email).toBe(email)
+      expect(res.data?.me.self.userId).not.toBeNull()
+      expect(res.data?.me.member).toBeUndefined()
+      expect(res.data?.me.currentWorkspace).toBeUndefined()
+      expect(res.data?.me.receivedInvitations).toEqual([
         {
           invitation: {
             displayName: "",
             expiredAt: "2200-01-10T21:00:00+09:00",
             id: "018d96b8-2211-7862-bcbe-e9f4d002a8fc",
             inviteeEmail: "invite_test_not_expired@example.com",
-            verified: true
+            accepted: false
           },
           inviter: {
             member: {
@@ -53,8 +53,8 @@ test.describe("Me Invitations", () => {
       }
       // set account name
       const data: components["schemas"]["User"] = {
-        userId: res.data?.self.userId,
-        email: res.data?.self.email,
+        userId: res.data.me?.self.userId,
+        email: res.data.me?.self.email,
         name: "Updated Name",
         phoneNumber: ""
       }
@@ -73,14 +73,14 @@ test.describe("Me Invitations", () => {
       if (acceptInvitationRes.data === undefined) {
         throw new Error("acceptInvitationRes.data is undefined")
       }
-      expect(acceptInvitationRes.data.joinedWorkspaces).toEqual([
+      expect(acceptInvitationRes.data.me.joinedWorkspaces).toEqual([
         {
           workspaceId: "c1bd2603-b9cd-4f84-8b83-3548f6ae150b",
           name: "Example",
           subdomain: "example"
         }
       ])
-      expect(acceptInvitationRes.data.currentWorkspace?.workspaceId).toBe("c1bd2603-b9cd-4f84-8b83-3548f6ae150b")
+      expect(acceptInvitationRes.data.me.currentWorkspace?.workspaceId).toBe("c1bd2603-b9cd-4f84-8b83-3548f6ae150b")
     }
   )
 
@@ -111,8 +111,7 @@ test.describe("Me Invitations", () => {
       if (acceptInvitationRes.data === undefined) {
         throw new Error("acceptInvitationRes.data is undefined")
       }
-
-      expect(acceptInvitationRes.data.joinedWorkspaces).toEqual([
+      expect(acceptInvitationRes.data.me.joinedWorkspaces).toStrictEqual([
         {
           name: "InviteTest 2",
           subdomain: "invite-test-2",
@@ -124,12 +123,13 @@ test.describe("Me Invitations", () => {
           subdomain: "example"
         }
       ])
-      expect(acceptInvitationRes.data.currentWorkspace?.workspaceId).toBe("c1bd2603-b9cd-4f84-8b83-3548f6ae150b")
+      expect(acceptInvitationRes.data.me.currentWorkspace?.workspaceId).toBe("c1bd2603-b9cd-4f84-8b83-3548f6ae150b")
+      expect(acceptInvitationRes.data.me.receivedInvitations).toBeUndefined()
     }
   )
 
   test("failed to accept already accepted invitation return GoneError", async () => {
-    const email = "invite_test_already_used@example.com"
+    const email = "invite_test_already_accepted@example.com"
     const inviteToken = await getInviteToken(email)
     const authInfo = await getAuthInfo(email)
     const res = await client.POST("/api/v1/members/invitations/{invitationId}/accept", {

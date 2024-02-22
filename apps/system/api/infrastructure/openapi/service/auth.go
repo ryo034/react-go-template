@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/ryo034/react-go-template/apps/system/api/interface/controller/auth"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 )
@@ -22,5 +23,11 @@ func (s *service) ProcessInvitation(ctx context.Context, req *openapi.ProcessInv
 	return s.ctrl.Auth.ProcessInvitation(ctx, auth.ProcessInvitationInput{
 		Token: req.Token,
 		Email: req.Email,
+	})
+}
+
+func (s *service) GetInvitationByToken(ctx context.Context, params openapi.GetInvitationByTokenParams) (openapi.GetInvitationByTokenRes, error) {
+	return s.ctrl.Auth.InvitationByToken(ctx, auth.InvitationByTokenInput{
+		Token: params.Token,
 	})
 }

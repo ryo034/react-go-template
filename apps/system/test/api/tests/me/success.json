@@ -1,31 +1,33 @@
 {
-  "currentWorkspace": {
-    "name": "Example",
-    "subdomain": "example",
-    "workspaceId": "c1bd2603-b9cd-4f84-8b83-3548f6ae150b"
-  },
-  "joinedWorkspaces": [
-    {
+  "me": {
+    "currentWorkspace": {
       "name": "Example",
       "subdomain": "example",
       "workspaceId": "c1bd2603-b9cd-4f84-8b83-3548f6ae150b"
-    }
-  ],
-  "member": {
-    "profile": {
-      "displayName": "John Doe",
-      "id": "g57lunkvmbhurkm5dhf5nkblbu",
-      "idNumber": "DEV-12345"
     },
-    "user": {
+    "joinedWorkspaces": [
+      {
+        "name": "Example",
+        "subdomain": "example",
+        "workspaceId": "c1bd2603-b9cd-4f84-8b83-3548f6ae150b"
+      }
+    ],
+    "member": {
+      "profile": {
+        "displayName": "John Doe",
+        "id": "g57lunkvmbhurkm5dhf5nkblbu",
+        "idNumber": "DEV-12345"
+      },
+      "user": {
+        "email": "system_account@example.com",
+        "name": "John Doe",
+        "userId": "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
+      }
+    },
+    "self": {
       "email": "system_account@example.com",
       "name": "John Doe",
       "userId": "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
     }
-  },
-  "self": {
-    "email": "system_account@example.com",
-    "name": "John Doe",
-    "userId": "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
   }
 }

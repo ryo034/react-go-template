@@ -8,11 +8,7 @@ workspaces:
       - bearer: []
     responses:
       "200":
-        description: Joined Workspaces
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Workspaces"
+        $ref: "#/components/responses/WorkspacesResponse"
       "401":
         $ref: "#/components/responses/UnauthorizedError"
       "500":
@@ -28,11 +24,7 @@ workspaces:
       $ref: "#/components/requestBodies/CreateWorkspace"
     responses:
       "201":
-        description: Workspace created
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Workspace"
+        $ref: "#/components/responses/CreateWorkspaceResponse"
       "400":
         $ref: "#/components/responses/BadRequestError"
       "401":

@@ -60,37 +60,59 @@ func (i *Invitation) DisplayName() *member.DisplayName {
 }
 
 func (i *Invitation) ValidateCanAccept() error {
-	if i.IsExpired() {
-		return NewAlreadyExpiredInvitation(i.ID(), i.Token().Value())
+	if i.IsAccepted() {
+		return NewAlreadyAcceptedInvitation(i.ID(), i.Token().Value())
 	}
 	if i.IsRevoked() {
 		return NewAlreadyRevokedInvitation(i.ID(), i.Token().Value())
+	}
+	if i.IsExpired() {
+		return NewAlreadyExpiredInvitation(i.ID(), i.Token().Value())
 	}
 	return nil
 }
 
 func (i *Invitation) ValidateCanRevoke() error {
+	if i.IsAccepted() {
+		return NewAlreadyAcceptedInvitation(i.ID(), i.Token().Value())
+	}
+	if i.IsRevoked() {
+		return NewAlreadyRevokedInvitation(i.ID(), i.Token().Value())
+	}
 	if i.IsVerified() {
 		return NewAlreadyVerifiedInvitation(i.ID(), i.Token().Value())
 	}
 	if i.IsExpired() {
 		return NewAlreadyExpiredInvitation(i.ID(), i.Token().Value())
-	}
-	if i.IsRevoked() {
-		return NewAlreadyRevokedInvitation(i.ID(), i.Token().Value())
 	}
 	return nil
 }
 
 func (i *Invitation) ValidateCanVerify() error {
-	if i.IsExpired() {
-		return NewAlreadyExpiredInvitation(i.ID(), i.Token().Value())
+	if i.IsAccepted() {
+		return NewAlreadyAcceptedInvitation(i.ID(), i.Token().Value())
 	}
 	if i.IsRevoked() {
 		return NewAlreadyRevokedInvitation(i.ID(), i.Token().Value())
 	}
 	if i.IsVerified() {
 		return NewAlreadyVerifiedInvitation(i.ID(), i.Token().Value())
+	}
+	if i.IsExpired() {
+		return NewAlreadyExpiredInvitation(i.ID(), i.Token().Value())
+	}
+	return nil
+}
+
+func (i *Invitation) ValidateCanGetByToken() error {
+	if i.IsAccepted() {
+		return NewAlreadyAcceptedInvitation(i.ID(), i.Token().Value())
+	}
+	if i.IsRevoked() {
+		return NewAlreadyRevokedInvitation(i.ID(), i.Token().Value())
+	}
+	if i.IsExpired() {
+		return NewAlreadyExpiredInvitation(i.ID(), i.Token().Value())
 	}
 	return nil
 }
@@ -115,4 +137,11 @@ func (i *Invitation) IsRevoked() bool {
 		i.Events().IsNotEmpty() &&
 		i.Events().Latest() != nil &&
 		i.Events().Latest().IsRevoked()
+}
+
+func (i *Invitation) IsAccepted() bool {
+	return i.Events() != nil &&
+		i.Events().IsNotEmpty() &&
+		i.Events().Latest() != nil &&
+		i.Events().Latest().IsAccepted()
 }

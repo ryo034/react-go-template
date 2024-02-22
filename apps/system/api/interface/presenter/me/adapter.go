@@ -2,23 +2,59 @@ package me
 
 import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
+	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/member"
+	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/user"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 )
 
 type Adapter interface {
+	Adapt(me *me.Me) (openapi.Me, error)
 	AdaptReceivedInvitation(ri me.ReceivedInvitation) (openapi.ReceivedInvitation, error)
 	AdaptAllReceivedInvitation(ris me.ReceivedInvitations) ([]openapi.ReceivedInvitation, error)
 }
 
 type adapter struct {
+	ua user.Adapter
+	ma member.Adapter
 	wa workspace.Adapter
 	ia invitation.Adapter
 }
 
-func NewAdapter(wa workspace.Adapter, ia invitation.Adapter) Adapter {
-	return &adapter{wa, ia}
+func NewAdapter(
+	ua user.Adapter,
+	ma member.Adapter,
+	wa workspace.Adapter,
+	ia invitation.Adapter,
+) Adapter {
+	return &adapter{ua, ma, wa, ia}
+}
+
+func (a *adapter) Adapt(m *me.Me) (openapi.Me, error) {
+	var mem = openapi.OptMember{Set: false}
+	if m.HasMember() {
+		mem.Set = true
+		mem.Value = a.ma.Adapt(m.Member())
+	}
+	var cw = openapi.OptWorkspace{Set: false}
+	if m.HasWorkspace() {
+		cw.Set = true
+		cw.Value = a.wa.Adapt(m.Workspace())
+	}
+
+	ris, err := a.AdaptAllReceivedInvitation(m.ReceivedInvitations())
+	if err != nil {
+		return openapi.Me{}, nil
+	}
+
+	return openapi.Me{
+		Self:                a.ua.Adapt(m.Self()),
+		Member:              mem,
+		CurrentWorkspace:    cw,
+		JoinedWorkspaces:    a.wa.AdaptAll(m.JoinedWorkspaces()),
+		ReceivedInvitations: ris,
+	}, nil
 }
 
 func (a *adapter) AdaptReceivedInvitation(ri me.ReceivedInvitation) (openapi.ReceivedInvitation, error) {

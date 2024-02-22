@@ -15,7 +15,7 @@ export class WorkspaceDriver {
           subdomain: i.subdomain.value
         }
       })
-      return res.data ? Result.ok(res.data) : Result.err(this.errorHandler.adapt(res))
+      return res.data ? Result.ok(res.data.workspace) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))
     }
@@ -24,7 +24,7 @@ export class WorkspaceDriver {
   async findAllMembers(): PromiseResult<components["schemas"]["Members"], Error> {
     try {
       const res = await this.client.GET("/api/v1/members")
-      return res.data ? Result.ok(res.data) : Result.err(this.errorHandler.adapt(res))
+      return res.data ? Result.ok(res.data.members) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))
     }
@@ -41,6 +41,15 @@ export class WorkspaceDriver {
         }
       })
       return res.data ? Result.ok(null) : Result.err(this.errorHandler.adapt(res))
+    } catch (e) {
+      return Result.err(this.errorHandler.adapt(e))
+    }
+  }
+
+  async findAllInvitations(): PromiseResult<components["schemas"]["Invitations"], Error> {
+    try {
+      const res = await this.client.GET("/api/v1/invitations", { params: { query: { status: "accepted" } } })
+      return res.data ? Result.ok(res.data.invitations) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))
     }

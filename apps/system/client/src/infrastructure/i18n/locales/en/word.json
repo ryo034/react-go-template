@@ -9,6 +9,7 @@
     "url": "URL",
     "displayName": "Display Name",
     "member": "Member",
-    "invitation": "Invitation"
+    "invitation": "Invitation",
+    "goBack": "Go back"
   }
 }

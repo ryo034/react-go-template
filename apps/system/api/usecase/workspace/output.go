@@ -8,10 +8,9 @@ import (
 )
 
 type OutputPort interface {
-	Create(w *workspace.Workspace) *openapi.Workspace
-	FindAllMembers(ms member.Members) *openapi.Members
+	Create(w *workspace.Workspace) (openapi.APIV1WorkspacesPostRes, error)
+	FindAllMembers(ms member.Members) (openapi.APIV1MembersGetRes, error)
 	InviteMembers(is invitation.Invitations, registered invitation.Invitations, success invitation.Invitations, failed invitation.Invitations) (*openapi.InvitationsBulkResponse, error)
-	VerifyInvitationToken(w *workspace.Workspace, i *invitation.Invitation) openapi.VerifyInvitationRes
 	RevokeInvitation(is invitation.Invitations) (openapi.RevokeInvitationRes, error)
 	FindAllInvitation(is invitation.Invitations) (openapi.APIV1InvitationsGetRes, error)
 }

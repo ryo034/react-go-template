@@ -1,61 +1,63 @@
 {
-  "self": {
-    "userId": "018da09e-c6ca-795e-878d-32bb8c1e5cac",
-    "email": "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com",
-    "name": "Invite TestThree"
-  },
-  "member": {
-    "profile": {
-      "id": "agg2bxg22j5mrfomtq5p3ug32u",
-      "displayName": "Invite TestThree",
-      "idNumber": "DEV-54321"
-    },
-    "user": {
+  "me": {
+    "self": {
       "userId": "018da09e-c6ca-795e-878d-32bb8c1e5cac",
       "email": "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com",
       "name": "Invite TestThree"
-    }
-  },
-  "currentWorkspace": {
-    "workspaceId": "018d9b4d-e340-74f7-914c-2476eff949bb",
-    "name": "InviteTest 2",
-    "subdomain": "invite-test-2"
-  },
-  "joinedWorkspaces": [
-    {
+    },
+    "member": {
+      "profile": {
+        "id": "agg2bxg22j5mrfomtq5p3ug32u",
+        "displayName": "Invite TestThree",
+        "idNumber": "DEV-54321"
+      },
+      "user": {
+        "userId": "018da09e-c6ca-795e-878d-32bb8c1e5cac",
+        "email": "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com",
+        "name": "Invite TestThree"
+      }
+    },
+    "currentWorkspace": {
       "workspaceId": "018d9b4d-e340-74f7-914c-2476eff949bb",
       "name": "InviteTest 2",
       "subdomain": "invite-test-2"
-    }
-  ],
-  "receivedInvitations": [
-    {
-      "invitation": {
-        "displayName": "Invite TestThreeChanged",
-        "expiredAt": "2200-01-10T21:00:00+09:00",
-        "id": "018da09b-ed0c-7688-a8e3-4573104e006f",
-        "inviteeEmail": "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com",
-        "verified": true
-      },
-      "inviter": {
-        "member": {
-          "profile": {
-            "displayName": "Invite TestOne",
-            "id": "aggznopwor77na7lkbxmuzcsxy",
-            "idNumber": "DEV-54321"
-          },
-          "user": {
-            "email": "invite_test_1@example.com",
-            "name": "Invite TestOne",
-            "userId": "018d96bf-8dce-7f68-a926-b5d7ed6ed883"
-          }
+    },
+    "joinedWorkspaces": [
+      {
+        "workspaceId": "018d9b4d-e340-74f7-914c-2476eff949bb",
+        "name": "InviteTest 2",
+        "subdomain": "invite-test-2"
+      }
+    ],
+    "receivedInvitations": [
+      {
+        "invitation": {
+          "displayName": "Invite TestThreeChanged",
+          "expiredAt": "2200-01-10T21:00:00+09:00",
+          "id": "018da09b-ed0c-7688-a8e3-4573104e006f",
+          "inviteeEmail": "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com",
+          "accepted": false
         },
-        "workspace": {
-          "name": "Example",
-          "subdomain": "example",
-          "workspaceId": "c1bd2603-b9cd-4f84-8b83-3548f6ae150b"
+        "inviter": {
+          "member": {
+            "profile": {
+              "displayName": "Invite TestOne",
+              "id": "aggznopwor77na7lkbxmuzcsxy",
+              "idNumber": "DEV-54321"
+            },
+            "user": {
+              "email": "invite_test_1@example.com",
+              "name": "Invite TestOne",
+              "userId": "018d96bf-8dce-7f68-a926-b5d7ed6ed883"
+            }
+          },
+          "workspace": {
+            "name": "Example",
+            "subdomain": "example",
+            "workspaceId": "c1bd2603-b9cd-4f84-8b83-3548f6ae150b"
+          }
         }
       }
-    }
-  ]
+    ]
+  }
 }

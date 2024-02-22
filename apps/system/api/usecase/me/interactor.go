@@ -32,10 +32,10 @@ func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo me.Repos
 }
 
 func (u *useCase) Find(ctx context.Context, aID account.ID) (openapi.APIV1MeGetRes, error) {
-	exec := u.dbp.GetExecutor(ctx, true)
+	exec := u.dbp.GetExecutor(ctx, false)
 	lastLoginRes, err := u.repo.FindLastLogin(ctx, exec, aID)
 	if lastLoginRes != nil {
-		return u.op.Find(lastLoginRes), nil
+		return u.op.Find(lastLoginRes)
 	}
 	// If there is no last login information,
 	// it is considered that the user has not joined the workspace.
@@ -43,7 +43,7 @@ func (u *useCase) Find(ctx context.Context, aID account.ID) (openapi.APIV1MeGetR
 	if err != nil {
 		return nil, err
 	}
-	return u.op.Find(m), nil
+	return u.op.Find(m)
 }
 
 func (u *useCase) UpdateProfile(ctx context.Context, i *UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error) {
@@ -86,7 +86,7 @@ func (u *useCase) UpdateProfile(ctx context.Context, i *UpdateProfileInput) (ope
 	if err = result.Error(); err != nil {
 		return nil, err
 	}
-	return u.op.Find(result.Value(0).(*me.Me)), nil
+	return u.op.UpdateProfile(result.Value(0).(*me.Me))
 }
 
 func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error) {
@@ -134,5 +134,5 @@ func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput)
 	if err = result.Error(); err != nil {
 		return nil, err
 	}
-	return u.op.Find(result.Value(0).(*me.Me)), nil
+	return u.op.AcceptInvitation(result.Value(0).(*me.Me))
 }

@@ -194,7 +194,7 @@ CREATE TABLE invitee_names (
   CONSTRAINT fk_invitee_names_invitations_invitation_id FOREIGN KEY (invitation_id) REFERENCES invitations(invitation_id)
 );
 
-CREATE TYPE invitation_event_types AS ENUM ('verified', 'revoked', 'reissued');
+CREATE TYPE invitation_event_types AS ENUM ('verified', 'accepted', 'revoked', 'reissued');
 
 CREATE TABLE invitation_events (
   invitation_event_id uuid NOT NULL,

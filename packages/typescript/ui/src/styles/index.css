@@ -58,3 +58,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .wide-dialog {
+    width: 1024px !important;
+    max-width: calc(-100px + 100vw);
+    height: calc(-100px + 100vh);
+    overflow: scroll;
+    transition-property: transform;
+    transition-duration: 270ms;
+    transition-timing-function: ease;
+  }
+}

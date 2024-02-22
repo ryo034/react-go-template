@@ -22,10 +22,11 @@ func newPresenterInjector() Presenter {
 	pa := newPresenterAdapter()
 	m := member.NewAdapter(pa.User)
 	inv := invitation.NewAdapter()
-	meAdapter := me.NewAdapter(pa.Workspace, inv)
+	meAdapter := me.NewAdapter(pa.User, pa.Member, pa.Workspace, inv)
+	mp := me.NewPresenter(meAdapter)
 	return Presenter{
-		auth.NewPresenter(),
-		me.NewPresenter(meAdapter, pa.User, pa.Member, pa.Workspace),
+		auth.NewPresenter(meAdapter),
+		mp,
 		workspace.NewPresenter(pa.Workspace, pa.Invitation, m),
 	}
 }

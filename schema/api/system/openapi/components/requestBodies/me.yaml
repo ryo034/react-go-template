@@ -11,7 +11,7 @@ UpdateMeProfile:
           user:
             $ref: "#/components/schemas/User"
 
-InvitationsProcess:
+InvitationProcess:
   description: Process an invitation by verifying token and email, and register or add user to workspace.
   required: true
   content:

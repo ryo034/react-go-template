@@ -90,6 +90,12 @@ type Invoker interface {
 	//
 	// POST /api/v1/members/invitations/{invitationId}/accept
 	AcceptInvitation(ctx context.Context, params AcceptInvitationParams) (AcceptInvitationRes, error)
+	// GetInvitationByToken invokes getInvitationByToken operation.
+	//
+	// Get Invitation by token.
+	//
+	// GET /api/v1/auth/invitations
+	GetInvitationByToken(ctx context.Context, params GetInvitationByTokenParams) (GetInvitationByTokenRes, error)
 	// InviteMultipleUsersToWorkspace invokes inviteMultipleUsersToWorkspace operation.
 	//
 	// Invite multiple users to the workspace by email.
@@ -114,12 +120,6 @@ type Invoker interface {
 	//
 	// POST /api/v1/members/invitations/{invitationId}/revoke
 	RevokeInvitation(ctx context.Context, params RevokeInvitationParams) (RevokeInvitationRes, error)
-	// VerifyInvitation invokes verifyInvitation operation.
-	//
-	// Verify Invitation.
-	//
-	// GET /api/v1/members/invitations/verify
-	VerifyInvitation(ctx context.Context, params VerifyInvitationParams) (VerifyInvitationRes, error)
 }
 
 // Client implements OAS client.
@@ -1270,6 +1270,96 @@ func (c *Client) sendAcceptInvitation(ctx context.Context, params AcceptInvitati
 	return result, nil
 }
 
+// GetInvitationByToken invokes getInvitationByToken operation.
+//
+// Get Invitation by token.
+//
+// GET /api/v1/auth/invitations
+func (c *Client) GetInvitationByToken(ctx context.Context, params GetInvitationByTokenParams) (GetInvitationByTokenRes, error) {
+	res, err := c.sendGetInvitationByToken(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendGetInvitationByToken(ctx context.Context, params GetInvitationByTokenParams) (res GetInvitationByTokenRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("getInvitationByToken"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/api/v1/auth/invitations"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "GetInvitationByToken",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/auth/invitations"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "token" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "token",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			return e.EncodeValue(conv.UUIDToString(params.Token))
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeGetInvitationByTokenResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // InviteMultipleUsersToWorkspace invokes inviteMultipleUsersToWorkspace operation.
 //
 // Invite multiple users to the workspace by email.
@@ -1642,96 +1732,6 @@ func (c *Client) sendRevokeInvitation(ctx context.Context, params RevokeInvitati
 
 	stage = "DecodeResponse"
 	result, err := decodeRevokeInvitationResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// VerifyInvitation invokes verifyInvitation operation.
-//
-// Verify Invitation.
-//
-// GET /api/v1/members/invitations/verify
-func (c *Client) VerifyInvitation(ctx context.Context, params VerifyInvitationParams) (VerifyInvitationRes, error) {
-	res, err := c.sendVerifyInvitation(ctx, params)
-	return res, err
-}
-
-func (c *Client) sendVerifyInvitation(ctx context.Context, params VerifyInvitationParams) (res VerifyInvitationRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("verifyInvitation"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/v1/members/invitations/verify"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "VerifyInvitation",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/members/invitations/verify"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeQueryParams"
-	q := uri.NewQueryEncoder()
-	{
-		// Encode "token" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "token",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			return e.EncodeValue(conv.UUIDToString(params.Token))
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	u.RawQuery = q.Values().Encode()
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeVerifyInvitationResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

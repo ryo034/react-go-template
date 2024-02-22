@@ -8,6 +8,7 @@ type EventType int
 
 const (
 	Verified EventType = iota // 承認済み
+	Accepted                  // 受け入れ済み
 	Reissued                  // 再発行
 	Revoked                   // 取り消し
 )
@@ -34,6 +35,11 @@ func NewAsRevoked(occurredAt datetime.Datetime) Event {
 	return NewEvent(Revoked, occurredAt)
 }
 
+func NewAsAccepted(occurredAt datetime.Datetime) Event {
+	return NewEvent(Accepted, occurredAt)
+
+}
+
 func (e *Event) EventType() EventType {
 	return e.eventType
 }
@@ -44,6 +50,10 @@ func (e *Event) OccurredAt() datetime.Datetime {
 
 func (e *Event) IsVerified() bool {
 	return e.eventType == Verified
+}
+
+func (e *Event) IsAccepted() bool {
+	return e.eventType == Accepted
 }
 
 func (e *Event) IsReissued() bool {

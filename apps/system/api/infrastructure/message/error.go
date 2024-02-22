@@ -36,6 +36,10 @@ var DomainErrorMessages = map[domainError.MessageKey]map[language.Tag]string{
 		language.Japanese: "招待が既に承認されています",
 		language.English:  "Invite is already verified",
 	},
+	invitation.AlreadyAcceptedInvitationMessageKey: {
+		language.Japanese: "受諾済みの招待です",
+		language.English:  "Invite is already accepted",
+	},
 	invitation.AlreadyExpiredInvitationMessageKey: {
 		language.Japanese: "招待が既に期限切れです",
 		language.English:  "Invite is already expired",

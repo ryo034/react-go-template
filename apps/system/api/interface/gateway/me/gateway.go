@@ -46,7 +46,7 @@ func (g *gateway) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*me.Me
 	if err != nil {
 		return nil, err
 	}
-	ris, err := g.invd.FindActiveAllByEmail(ctx, exec, em)
+	ris, err := g.invd.FindAllReceivedByEmail(ctx, exec, em)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ func (g *gateway) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID accou
 	if err != nil {
 		return nil, err
 	}
-	invs, err := g.invd.FindActiveAllByEmail(ctx, exec, m.Self().Email())
+	invs, err := g.invd.FindAllReceivedByEmail(ctx, exec, m.Self().Email())
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +128,7 @@ func (g *gateway) FindAllActiveReceivedInvitations(ctx context.Context, exec bun
 	if err != nil {
 		return nil, err
 	}
-	res, err := g.invd.FindActiveAllByEmail(ctx, exec, em)
+	res, err := g.invd.FindAllReceivedByEmail(ctx, exec, em)
 	if err != nil {
 		return nil, err
 	}

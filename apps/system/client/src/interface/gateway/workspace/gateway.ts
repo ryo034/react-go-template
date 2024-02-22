@@ -1,15 +1,17 @@
 import { Result } from "true-myth"
-import { Invitees, Members, Workspace, WorkspaceCreateInput, WorkspaceRepository } from "~/domain"
+import { Invitations, Invitees, Members, Workspace, WorkspaceCreateInput, WorkspaceRepository } from "~/domain"
 import { WorkspaceDriver } from "~/driver/workspace/driver"
 import { PromiseResult } from "~/infrastructure/shared/result"
 import { WorkspaceGatewayAdapter } from "./adapter"
+import { InvitationGatewayAdapter } from "./invitation"
 import { MemberGatewayAdapter } from "./member"
 
 export class WorkspaceGateway implements WorkspaceRepository {
   constructor(
     private readonly driver: WorkspaceDriver,
     private readonly adapter: WorkspaceGatewayAdapter,
-    private readonly memberAdapter: MemberGatewayAdapter
+    private readonly memberAdapter: MemberGatewayAdapter,
+    private readonly invitationAdapter: InvitationGatewayAdapter
   ) {}
 
   async create(i: WorkspaceCreateInput): PromiseResult<Workspace, Error> {
@@ -34,5 +36,13 @@ export class WorkspaceGateway implements WorkspaceRepository {
       return Result.err(res.error)
     }
     return Result.ok(null)
+  }
+
+  async findAllInvitations(): PromiseResult<Invitations, Error> {
+    const res = await this.driver.findAllInvitations()
+    if (res.isErr) {
+      return Result.err(res.error)
+    }
+    return this.invitationAdapter.adaptAll(res.value)
   }
 }

@@ -40,6 +40,8 @@ func (a *adapter) Adapt(i *models.Invitation) (*invitation.Invitation, error) {
 			evs = append(evs, invitation.NewAsVerified(datetime.NewDatetime(ev.CreatedAt)))
 		} else if ev.EventType == "revoked" {
 			evs = append(evs, invitation.NewAsRevoked(datetime.NewDatetime(ev.CreatedAt)))
+		} else if ev.EventType == "accepted" {
+			evs = append(evs, invitation.NewAsAccepted(datetime.NewDatetime(ev.CreatedAt)))
 		} else {
 			//TODO: Error handling
 			return nil, fmt.Errorf("unknown event type: %s", ev.EventType)

@@ -1,0 +1,10 @@
+import { Entities, Invitation } from "~/domain"
+
+export class Invitations extends Entities<Invitation> {
+  static create(vs: Array<Invitation>): Invitations {
+    return new Invitations(vs)
+  }
+  static empty(): Invitations {
+    return new Invitations([])
+  }
+}

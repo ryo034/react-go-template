@@ -73,24 +73,46 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
-				case 'i': // Prefix: "invitations/process"
+				case 'i': // Prefix: "invitations"
 					origElem := elem
-					if l := len("invitations/process"); len(elem) >= l && elem[0:l] == "invitations/process" {
+					if l := len("invitations"); len(elem) >= l && elem[0:l] == "invitations" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
 						switch r.Method {
-						case "POST":
-							s.handleProcessInvitationRequest([0]string{}, elemIsEscaped, w, r)
+						case "GET":
+							s.handleGetInvitationByTokenRequest([0]string{}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "POST")
+							s.notAllowed(w, r, "GET")
 						}
 
 						return
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/process"
+						origElem := elem
+						if l := len("/process"); len(elem) >= l && elem[0:l] == "/process" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleProcessInvitationRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
@@ -304,27 +326,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 									s.handleInviteMultipleUsersToWorkspaceRequest([0]string{}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "POST")
-								}
-
-								return
-							}
-
-							elem = origElem
-						case 'v': // Prefix: "verify"
-							origElem := elem
-							if l := len("verify"); len(elem) >= l && elem[0:l] == "verify" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "GET":
-									s.handleVerifyInvitationRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "GET")
 								}
 
 								return
@@ -566,9 +567,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
-				case 'i': // Prefix: "invitations/process"
+				case 'i': // Prefix: "invitations"
 					origElem := elem
-					if l := len("invitations/process"); len(elem) >= l && elem[0:l] == "invitations/process" {
+					if l := len("invitations"); len(elem) >= l && elem[0:l] == "invitations" {
 						elem = elem[l:]
 					} else {
 						break
@@ -576,18 +577,44 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 					if len(elem) == 0 {
 						switch method {
-						case "POST":
-							// Leaf: ProcessInvitation
-							r.name = "ProcessInvitation"
-							r.summary = "Process an invitation by verifying token and email"
-							r.operationID = "processInvitation"
-							r.pathPattern = "/api/v1/auth/invitations/process"
+						case "GET":
+							r.name = "GetInvitationByToken"
+							r.summary = "Get Invitation by token"
+							r.operationID = "getInvitationByToken"
+							r.pathPattern = "/api/v1/auth/invitations"
 							r.args = args
 							r.count = 0
 							return r, true
 						default:
 							return
 						}
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/process"
+						origElem := elem
+						if l := len("/process"); len(elem) >= l && elem[0:l] == "/process" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch method {
+							case "POST":
+								// Leaf: ProcessInvitation
+								r.name = "ProcessInvitation"
+								r.summary = "Process an invitation by verifying token and email"
+								r.operationID = "processInvitation"
+								r.pathPattern = "/api/v1/auth/invitations/process"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
@@ -834,31 +861,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.summary = "Invite multiple users to the workspace by email"
 									r.operationID = "inviteMultipleUsersToWorkspace"
 									r.pathPattern = "/api/v1/members/invitations/bulk"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
-						case 'v': // Prefix: "verify"
-							origElem := elem
-							if l := len("verify"); len(elem) >= l && elem[0:l] == "verify" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								switch method {
-								case "GET":
-									// Leaf: VerifyInvitation
-									r.name = "VerifyInvitation"
-									r.summary = "Verify Invitation"
-									r.operationID = "verifyInvitation"
-									r.pathPattern = "/api/v1/members/invitations/verify"
 									r.args = args
 									r.count = 0
 									return r, true

@@ -11,7 +11,9 @@ paths:
   /api/v1/auth/otp/verify:
     $ref: "./paths/auth.yaml#/verify"
   /api/v1/auth/invitations/process:
-    $ref: "./paths/auth.yaml#/invitationsProcess"
+    $ref: "./paths/auth.yaml#/invitationProcess"
+  /api/v1/auth/invitations:
+    $ref: "./paths/auth.yaml#/invitation"
   /api/v1/auth/oauth:
     $ref: "./paths/auth.yaml#/oauth"
   /api/v1/me:
@@ -19,7 +21,7 @@ paths:
   /api/v1/me/profile:
     $ref: "./paths/me.yaml#/profile"
   /api/v1/login:
-    $ref: "./paths/login.yaml#/login"
+    $ref: "./paths/auth.yaml#/login"
   /api/v1/workspaces:
     $ref: "./paths/workspace.yaml#/workspaces"
   /api/v1/members:
@@ -28,8 +30,6 @@ paths:
     $ref: "./paths/member.yaml#/invitations"
   /api/v1/members/invitations/bulk:
     $ref: "./paths/member.yaml#/invitationsBulk"
-  /api/v1/members/invitations/verify:
-    $ref: "./paths/member.yaml#/invitationsVerify"
   /api/v1/members/invitations/{invitationId}/accept:
     $ref: "./paths/me.yaml#/invitationsAccept"
   /api/v1/members/invitations/{invitationId}/revoke:
@@ -80,8 +80,8 @@ components:
       $ref: "./components/requestBodies/workspace.yaml#/CreateWorkspace"
     UpdateMeProfile:
       $ref: "./components/requestBodies/me.yaml#/UpdateMeProfile"
-    InvitationsProcess:
-      $ref: "./components/requestBodies/me.yaml#/InvitationsProcess"
+    InvitationProcess:
+      $ref: "./components/requestBodies/me.yaml#/InvitationProcess"
     InvitationsBulk:
       $ref: "./components/requestBodies/member.yaml#/InvitationsBulk"
   responses:
@@ -101,9 +101,25 @@ components:
       $ref: "./components/responses/error.yaml#/components/responses/TooManyRequestsError"
     InternalServerError:
       $ref: "./components/responses/error.yaml#/components/responses/InternalServerError"
-    InvitationInfoResponse:
-      $ref: "./components/responses/member.yaml#/InvitationInfoResponse"
+    GetInvitationByTokenResponse:
+      $ref: "./components/responses/auth.yaml#/GetInvitationByTokenResponse"
     InvitationsBulkResponse:
       $ref: "./components/responses/member.yaml#/InvitationsBulkResponse"
     RevokeInvitationResponse:
       $ref: "./components/responses/member.yaml#/RevokeInvitationResponse"
+    WorkspacesResponse:
+      $ref: "./components/responses/workspace.yaml#/WorkspacesResponse"
+    InvitationsResponse:
+      $ref: "./components/responses/member.yaml#/InvitationsResponse"
+    MembersResponse:
+      $ref: "./components/responses/member.yaml#/MembersResponse"
+    MeResponse:
+      $ref: "./components/responses/me.yaml#/MeResponse"
+    UpdateProfileResponse:
+      $ref: "./components/responses/me.yaml#/UpdateProfileResponse"
+    InvitationsAcceptResponse:
+      $ref: "./components/responses/me.yaml#/InvitationsAcceptResponse"
+    CreateWorkspaceResponse:
+      $ref: "./components/responses/workspace.yaml#/CreateWorkspaceResponse"
+    LoginResponse:
+      $ref: "./components/responses/auth.yaml#/LoginResponse"

@@ -1449,6 +1449,112 @@ func (s *Server) handleAcceptInvitationRequest(args [1]string, argsEscaped bool,
 	}
 }
 
+// handleGetInvitationByTokenRequest handles getInvitationByToken operation.
+//
+// Get Invitation by token.
+//
+// GET /api/v1/auth/invitations
+func (s *Server) handleGetInvitationByTokenRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("getInvitationByToken"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/api/v1/auth/invitations"),
+	}
+
+	// Start a span for this request.
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "GetInvitationByToken",
+		trace.WithAttributes(otelAttrs...),
+		serverSpanKind,
+	)
+	defer span.End()
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		s.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	s.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	var (
+		recordError = func(stage string, err error) {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			s.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: "GetInvitationByToken",
+			ID:   "getInvitationByToken",
+		}
+	)
+	params, err := decodeGetInvitationByTokenParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var response GetInvitationByTokenRes
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    "GetInvitationByToken",
+			OperationSummary: "Get Invitation by token",
+			OperationID:      "getInvitationByToken",
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "token",
+					In:   "query",
+				}: params.Token,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = GetInvitationByTokenParams
+			Response = GetInvitationByTokenRes
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackGetInvitationByTokenParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.GetInvitationByToken(ctx, params)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.GetInvitationByToken(ctx, params)
+	}
+	if err != nil {
+		recordError("Internal", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	if err := encodeGetInvitationByTokenResponse(response, w, span); err != nil {
+		recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
 // handleInviteMultipleUsersToWorkspaceRequest handles inviteMultipleUsersToWorkspace operation.
 //
 // Invite multiple users to the workspace by email.
@@ -1934,112 +2040,6 @@ func (s *Server) handleRevokeInvitationRequest(args [1]string, argsEscaped bool,
 	}
 
 	if err := encodeRevokeInvitationResponse(response, w, span); err != nil {
-		recordError("EncodeResponse", err)
-		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
-			s.cfg.ErrorHandler(ctx, w, r, err)
-		}
-		return
-	}
-}
-
-// handleVerifyInvitationRequest handles verifyInvitation operation.
-//
-// Verify Invitation.
-//
-// GET /api/v1/members/invitations/verify
-func (s *Server) handleVerifyInvitationRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
-	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("verifyInvitation"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/v1/members/invitations/verify"),
-	}
-
-	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "VerifyInvitation",
-		trace.WithAttributes(otelAttrs...),
-		serverSpanKind,
-	)
-	defer span.End()
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		elapsedDuration := time.Since(startTime)
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		s.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	s.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	var (
-		recordError = func(stage string, err error) {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			s.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		err          error
-		opErrContext = ogenerrors.OperationContext{
-			Name: "VerifyInvitation",
-			ID:   "verifyInvitation",
-		}
-	)
-	params, err := decodeVerifyInvitationParams(args, argsEscaped, r)
-	if err != nil {
-		err = &ogenerrors.DecodeParamsError{
-			OperationContext: opErrContext,
-			Err:              err,
-		}
-		recordError("DecodeParams", err)
-		s.cfg.ErrorHandler(ctx, w, r, err)
-		return
-	}
-
-	var response VerifyInvitationRes
-	if m := s.cfg.Middleware; m != nil {
-		mreq := middleware.Request{
-			Context:          ctx,
-			OperationName:    "VerifyInvitation",
-			OperationSummary: "Verify Invitation",
-			OperationID:      "verifyInvitation",
-			Body:             nil,
-			Params: middleware.Parameters{
-				{
-					Name: "token",
-					In:   "query",
-				}: params.Token,
-			},
-			Raw: r,
-		}
-
-		type (
-			Request  = struct{}
-			Params   = VerifyInvitationParams
-			Response = VerifyInvitationRes
-		)
-		response, err = middleware.HookMiddleware[
-			Request,
-			Params,
-			Response,
-		](
-			m,
-			mreq,
-			unpackVerifyInvitationParams,
-			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.VerifyInvitation(ctx, params)
-				return response, err
-			},
-		)
-	} else {
-		response, err = s.h.VerifyInvitation(ctx, params)
-	}
-	if err != nil {
-		recordError("Internal", err)
-		s.cfg.ErrorHandler(ctx, w, r, err)
-		return
-	}
-
-	if err := encodeVerifyInvitationResponse(response, w, span); err != nil {
 		recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

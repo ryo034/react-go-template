@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/ryo034/react-go-template/apps/system/api/interface/controller/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 )
@@ -26,12 +27,6 @@ func (s *service) InviteMultipleUsersToWorkspace(ctx context.Context, req *opena
 		ims = append(ims, workspace.Invitee{Email: m.Email, DisplayName: m.Name})
 	}
 	return s.ctrl.Workspace.InviteMembers(ctx, workspace.InviteesInput{InvitedMembers: ims})
-}
-
-func (s *service) VerifyInvitation(ctx context.Context, params openapi.VerifyInvitationParams) (openapi.VerifyInvitationRes, error) {
-	return s.ctrl.Workspace.VerifyInvitationToken(ctx, workspace.VerifyInvitationTokenInput{
-		Token: params.Token,
-	})
 }
 
 func (s *service) RevokeInvitation(ctx context.Context, params openapi.RevokeInvitationParams) (openapi.RevokeInvitationRes, error) {

@@ -9,6 +9,7 @@
     "url": "URL",
     "displayName": "表示名",
     "member": "メンバー",
-    "invitation": "招待"
+    "invitation": "招待",
+    "goBack": "戻る"
   }
 }

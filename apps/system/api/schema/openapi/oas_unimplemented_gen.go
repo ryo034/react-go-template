@@ -112,6 +112,15 @@ func (UnimplementedHandler) AcceptInvitation(ctx context.Context, params AcceptI
 	return r, ht.ErrNotImplemented
 }
 
+// GetInvitationByToken implements getInvitationByToken operation.
+//
+// Get Invitation by token.
+//
+// GET /api/v1/auth/invitations
+func (UnimplementedHandler) GetInvitationByToken(ctx context.Context, params GetInvitationByTokenParams) (r GetInvitationByTokenRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // InviteMultipleUsersToWorkspace implements inviteMultipleUsersToWorkspace operation.
 //
 // Invite multiple users to the workspace by email.
@@ -145,14 +154,5 @@ func (UnimplementedHandler) ProcessInvitation(ctx context.Context, req *ProcessI
 //
 // POST /api/v1/members/invitations/{invitationId}/revoke
 func (UnimplementedHandler) RevokeInvitation(ctx context.Context, params RevokeInvitationParams) (r RevokeInvitationRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// VerifyInvitation implements verifyInvitation operation.
-//
-// Verify Invitation.
-//
-// GET /api/v1/members/invitations/verify
-func (UnimplementedHandler) VerifyInvitation(ctx context.Context, params VerifyInvitationParams) (r VerifyInvitationRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

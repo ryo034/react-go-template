@@ -13,6 +13,7 @@ const (
 	AlreadyExpiredInvitationMessageKey  domainErr.MessageKey = "AlreadyExpiredInvitation"
 	AlreadyRevokedInvitationMessageKey  domainErr.MessageKey = "AlreadyRevokedInvitation"
 	AlreadyVerifiedInvitationMessageKey domainErr.MessageKey = "AlreadyVerifiedInvitation"
+	AlreadyAcceptedInvitationMessageKey domainErr.MessageKey = "AlreadyAcceptedInvitation"
 )
 
 type ExpiredInvitationToken struct {
@@ -96,4 +97,21 @@ func (e *InvalidInvitationToken) Error() string {
 
 func (e *InvalidInvitationToken) MessageKey() domainErr.MessageKey {
 	return InvalidInviteTokenMessageKey
+}
+
+type AlreadyAcceptedInvitation struct {
+	ID    ID
+	Token uuid.UUID
+}
+
+func NewAlreadyAcceptedInvitation(id ID, token uuid.UUID) *AlreadyAcceptedInvitation {
+	return &AlreadyAcceptedInvitation{id, token}
+}
+
+func (e *AlreadyAcceptedInvitation) Error() string {
+	return fmt.Sprintf("id:%s token:%s is already accepted", e.ID.ToString(), e.Token.String())
+}
+
+func (e *AlreadyAcceptedInvitation) MessageKey() domainErr.MessageKey {
+	return AlreadyAcceptedInvitationMessageKey
 }

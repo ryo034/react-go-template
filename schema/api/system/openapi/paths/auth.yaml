@@ -1,3 +1,14 @@
+login:
+  post:
+    summary: Login
+    description: Login
+    operationId: login
+    responses:
+      "200":
+        $ref: "#/components/responses/LoginResponse"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+
 authByOtp:
   post:
     summary: Send OTP
@@ -58,14 +69,38 @@ oauth:
       "500":
         $ref: "#/components/responses/InternalServerError"
 
-invitationsProcess:
+invitation:
+  get:
+    summary: Get Invitation by token
+    operationId: getInvitationByToken
+    parameters:
+      - name: token
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Invitation token
+    responses:
+      "200":
+        $ref: "#/components/responses/GetInvitationByTokenResponse"
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "409":
+        $ref: "#/components/responses/ConflictError"
+      "410":
+        $ref: "#/components/responses/GoneError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+
+invitationProcess:
   post:
     summary: Process an invitation by verifying token and email
     operationId: processInvitation
     tags:
       - Invitations
     requestBody:
-      $ref: "#/components/requestBodies/InvitationsProcess"
+      $ref: "#/components/requestBodies/InvitationProcess"
     responses:
       "200":
         description: OTP has been sent successfully.

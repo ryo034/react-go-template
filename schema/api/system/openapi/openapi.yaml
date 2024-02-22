@@ -68,12 +68,35 @@ paths:
       tags:
         - Invitations
       requestBody:
-        $ref: '#/components/requestBodies/InvitationsProcess'
+        $ref: '#/components/requestBodies/InvitationProcess'
       responses:
         '200':
           description: OTP has been sent successfully.
         '400':
           $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v1/auth/invitations:
+    get:
+      summary: Get Invitation by token
+      operationId: getInvitationByToken
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Invitation token
+      responses:
+        '200':
+          $ref: '#/components/responses/GetInvitationByTokenResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '410':
+          $ref: '#/components/responses/GoneError'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /api/v1/auth/oauth:
@@ -105,11 +128,7 @@ paths:
         - bearer: []
       responses:
         '200':
-          description: Admin User
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Me'
+          $ref: '#/components/responses/MeResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '500':
@@ -126,11 +145,7 @@ paths:
         $ref: '#/components/requestBodies/UpdateMeProfile'
       responses:
         '200':
-          description: Profile updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Me'
+          $ref: '#/components/responses/UpdateProfileResponse'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '401':
@@ -144,11 +159,7 @@ paths:
       operationId: login
       responses:
         '200':
-          description: Login response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Me'
+          $ref: '#/components/responses/LoginResponse'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /api/v1/workspaces:
@@ -161,11 +172,7 @@ paths:
         - bearer: []
       responses:
         '200':
-          description: Joined Workspaces
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Workspaces'
+          $ref: '#/components/responses/WorkspacesResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '500':
@@ -181,11 +188,7 @@ paths:
         $ref: '#/components/requestBodies/CreateWorkspace'
       responses:
         '201':
-          description: Workspace created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Workspace'
+          $ref: '#/components/responses/CreateWorkspaceResponse'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '401':
@@ -204,11 +207,7 @@ paths:
         - bearer: []
       responses:
         '200':
-          description: Members
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Members'
+          $ref: '#/components/responses/MembersResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '500':
@@ -227,15 +226,11 @@ paths:
           schema:
             type: string
             enum:
-              - verified
+              - accepted
           description: Invitation status
       responses:
         '200':
-          description: Invitations
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Invitations'
+          $ref: '#/components/responses/InvitationsResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '500':
@@ -259,31 +254,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /api/v1/members/invitations/verify:
-    get:
-      summary: Verify Invitation
-      operationId: verifyInvitation
-      tags:
-        - Members
-      parameters:
-        - name: token
-          in: query
-          required: true
-          schema:
-            type: string
-            format: uuid
-          description: Invitation token
-      responses:
-        '200':
-          $ref: '#/components/responses/InvitationInfoResponse'
-        '400':
-          $ref: '#/components/responses/BadRequestError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
   /api/v1/members/invitations/{invitationId}/accept:
     post:
       summary: Accept an invitation to join a workspace
@@ -302,11 +272,7 @@ paths:
           description: Invitation token
       responses:
         '200':
-          description: Invitation accepted and user added to the workspace
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Me'
+          $ref: '#/components/responses/InvitationsAcceptResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '409':
@@ -444,7 +410,7 @@ components:
       type: object
       required:
         - id
-        - verified
+        - accepted
         - expiredAt
         - inviteeEmail
         - displayName
@@ -453,7 +419,7 @@ components:
           type: string
           format: uuid
           description: Invitation ID
-        verified:
+        accepted:
           type: boolean
         expiredAt:
           type: string
@@ -583,7 +549,7 @@ components:
             properties:
               user:
                 $ref: '#/components/schemas/User'
-    InvitationsProcess:
+    InvitationProcess:
       description: >-
         Process an invitation by verifying token and email, and register or add
         user to workspace.
@@ -857,20 +823,17 @@ components:
                 type: string
                 example: 400-001
                 description: A custom code identifying the specific error.
-    InvitationInfoResponse:
-      description: Invitation verified
+    GetInvitationByTokenResponse:
+      description: Get invitation by token
       content:
         application/json:
           schema:
             type: object
             required:
-              - workspaceName
-              - verified
+              - receivedInvitation
             properties:
-              workspaceName:
-                type: string
-              verified:
-                type: boolean
+              receivedInvitation:
+                $ref: '#/components/schemas/ReceivedInvitation'
     InvitationsBulkResponse:
       description: Successfully sent invitations
       content:
@@ -898,3 +861,92 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Invitations'
+    WorkspacesResponse:
+      description: Get joined workspaces
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - workspaces
+            properties:
+              workspaces:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Workspace'
+    InvitationsResponse:
+      description: Get workspace invitations
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - invitations
+            properties:
+              invitations:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invitation'
+    MembersResponse:
+      description: Get workspace members
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - members
+            properties:
+              members:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Member'
+    MeResponse:
+      description: Me
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - me
+            properties:
+              me:
+                $ref: '#/components/schemas/Me'
+    UpdateProfileResponse:
+      description: Update profile
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - me
+            properties:
+              me:
+                $ref: '#/components/schemas/Me'
+    InvitationsAcceptResponse:
+      description: Invitation accepted and user added to the workspace
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - me
+            properties:
+              me:
+                $ref: '#/components/schemas/Me'
+    CreateWorkspaceResponse:
+      description: Workspace created
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - workspace
+            properties:
+              workspace:
+                $ref: '#/components/schemas/Workspace'
+    LoginResponse:
+      description: Login response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Me'

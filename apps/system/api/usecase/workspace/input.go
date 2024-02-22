@@ -55,5 +55,5 @@ type RevokeInvitationInput struct {
 
 type FindAllInvitationInput struct {
 	AccountID  account.ID
-	IsVerified bool
+	IsAccepted bool
 }

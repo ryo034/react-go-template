@@ -2,7 +2,7 @@ Invitation:
   type: object
   required:
     - id
-    - verified
+    - accepted
     - expiredAt
     - inviteeEmail
     - displayName
@@ -11,7 +11,7 @@ Invitation:
       type: string
       format: uuid
       description: Invitation ID
-    verified:
+    accepted:
       type: boolean
     expiredAt:
       type: string

@@ -23,3 +23,7 @@ type AcceptInvitationInput struct {
 	AccountID    account.ID
 	InvitationID invitation.ID
 }
+
+type InvitationByTokenInput struct {
+	Token invitation.Token
+}

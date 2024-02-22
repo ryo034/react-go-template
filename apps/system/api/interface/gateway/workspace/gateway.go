@@ -2,6 +2,7 @@ package workspace
 
 import (
 	"context"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
@@ -75,12 +76,12 @@ func (g *gateway) InviteMembers(ctx context.Context, exec bun.IDB, inviter works
 	return g.d.InviteMembers(ctx, exec, inviter, is)
 }
 
-func (g *gateway) FindInviterWorkspaceFromToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*workspace.Workspace, error) {
+func (g *gateway) FindInviterFromToken(ctx context.Context, exec bun.IDB, token invitation.Token) (workspace.Inviter, error) {
 	res, err := g.invd.FindActiveByToken(ctx, exec, token)
 	if err != nil {
-		return nil, err
+		return workspace.Inviter{}, err
 	}
-	return g.adp.Adapt(res.InvitationUnit.Workspace)
+	return g.adp.AdaptInviter(res.InvitationUnit.Workspace, res.InvitationUnit.Member)
 }
 
 func (g *gateway) FindActiveInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) (*invitation.Invitation, *workspace.Workspace, error) {

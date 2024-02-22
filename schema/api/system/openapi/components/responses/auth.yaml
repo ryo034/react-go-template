@@ -1,0 +1,18 @@
+LoginResponse:
+  description: Login response
+  content:
+    application/json:
+      schema:
+        $ref: "#/components/schemas/Me"
+
+GetInvitationByTokenResponse:
+  description: Get invitation by token
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - receivedInvitation
+        properties:
+          receivedInvitation:
+            $ref: "#/components/schemas/ReceivedInvitation"

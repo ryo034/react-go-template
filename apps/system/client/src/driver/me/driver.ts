@@ -11,7 +11,7 @@ export class MeDriver {
   async find(): PromiseResult<components["schemas"]["Me"], Error> {
     try {
       const res = await this.client.GET("/api/v1/me")
-      return res.data ? Result.ok(res.data) : Result.err(this.errorHandler.adapt(res))
+      return res.data ? Result.ok(res.data.me) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))
     }
@@ -29,7 +29,7 @@ export class MeDriver {
           }
         }
       })
-      return res.data ? Result.ok(res.data) : Result.err(this.errorHandler.adapt(res))
+      return res.data ? Result.ok(res.data.me) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))
     }

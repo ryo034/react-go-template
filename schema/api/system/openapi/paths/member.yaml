@@ -8,11 +8,7 @@ members:
       - bearer: []
     responses:
       "200":
-        description: Members
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Members"
+        $ref: "#/components/responses/MembersResponse"
       "401":
         $ref: "#/components/responses/UnauthorizedError"
       "500":
@@ -32,15 +28,11 @@ invitations:
         schema:
           type: string
           enum:
-            - verified
+            - accepted
         description: Invitation status
     responses:
       "200":
-        description: Invitations
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Invitations"
+        $ref: "#/components/responses/InvitationsResponse"
       "401":
         $ref: "#/components/responses/UnauthorizedError"
       "500":
@@ -63,32 +55,6 @@ invitationsBulk:
         $ref: "#/components/responses/BadRequestError"
       "401":
         $ref: "#/components/responses/UnauthorizedError"
-      "500":
-        $ref: "#/components/responses/InternalServerError"
-
-invitationsVerify:
-  get:
-    summary: Verify Invitation
-    operationId: verifyInvitation
-    tags:
-      - Members
-    parameters:
-      - name: token
-        in: query
-        required: true
-        schema:
-          type: string
-          format: uuid
-        description: Invitation token
-    responses:
-      "200":
-        $ref: "#/components/responses/InvitationInfoResponse"
-      "400":
-        $ref: "#/components/responses/BadRequestError"
-      "401":
-        $ref: "#/components/responses/UnauthorizedError"
-      "404":
-        $ref: "#/components/responses/NotFoundError"
       "500":
         $ref: "#/components/responses/InternalServerError"
 

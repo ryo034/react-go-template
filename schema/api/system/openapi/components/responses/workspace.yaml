@@ -1,0 +1,25 @@
+WorkspacesResponse:
+  description: Get joined workspaces
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - workspaces
+        properties:
+          workspaces:
+            type: array
+            items:
+              $ref: "#/components/schemas/Workspace"
+
+CreateWorkspaceResponse:
+  description: Workspace created
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - workspace
+        properties:
+          workspace:
+            $ref: "#/components/schemas/Workspace"

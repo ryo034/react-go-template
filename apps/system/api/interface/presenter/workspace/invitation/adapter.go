@@ -31,7 +31,7 @@ func (a *adapter) Adapt(i *invitation.Invitation) (openapi.Invitation, error) {
 	}
 	return openapi.Invitation{
 		ID:           i.ID().Value(),
-		Verified:     i.IsVerified(),
+		Accepted:     i.IsAccepted(),
 		ExpiredAt:    lt,
 		InviteeEmail: i.InviteeEmail().ToString(),
 		DisplayName:  dn,

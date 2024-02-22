@@ -66,13 +66,15 @@ export const i18nKeys = {
     accountName: `${i18nRootKeys.word}.accountName`,
     subdomain: `${i18nRootKeys.word}.subdomain`,
     displayName: `${i18nRootKeys.word}.displayName`,
-    member: `${i18nRootKeys.word}.member`
+    member: `${i18nRootKeys.word}.member`,
+    goBack: `${i18nRootKeys.word}.goBack`
   },
   action: {
     submit: `${i18nRootKeys.action}.submit`,
     back: `${i18nRootKeys.action}.back`,
     cancel: `${i18nRootKeys.action}.cancel`,
     login: `${i18nRootKeys.action}.login`,
+    start: `${i18nRootKeys.action}.start`,
     sendOneTimeCode: `${i18nRootKeys.action}.sendOneTimeCode`,
     startWithEmail: `${i18nRootKeys.action}.startWithEmail`,
     showItem: `${i18nRootKeys.action}.showItem`,
@@ -114,6 +116,20 @@ export const i18nKeys = {
       description: `${i18nRootKeys.page}.onboardingSettingWorkspace.description`,
       error: {
         alreadyExist: `${i18nRootKeys.page}.onboardingSettingWorkspace.error.alreadyExist`
+      }
+    },
+    startInvitation: {
+      title: `${i18nRootKeys.page}.startInvitation.title`,
+      description: `${i18nRootKeys.page}.startInvitation.description`,
+      error: {
+        invitationAlreadyAcceptedTitle: `${i18nRootKeys.page}.startInvitation.error.invitationAlreadyAcceptedTitle`,
+        invitationInvalidTokenTitle: `${i18nRootKeys.page}.startInvitation.error.invitationInvalidTokenTitle`,
+        invitationAlreadyRevokedTitle: `${i18nRootKeys.page}.startInvitation.error.invitationAlreadyRevokedTitle`,
+        unknownTitle: `${i18nRootKeys.page}.startInvitation.error.unknownTitle`,
+        invitationAlreadyAcceptedDescription: `${i18nRootKeys.page}.startInvitation.error.invitationAlreadyAcceptedDescription`,
+        invitationInvalidTokenDescription: `${i18nRootKeys.page}.startInvitation.error.invitationInvalidTokenDescription`,
+        invitationAlreadyRevokedDescription: `${i18nRootKeys.page}.startInvitation.error.invitationAlreadyRevokedDescription`,
+        unknownDescription: `${i18nRootKeys.page}.startInvitation.error.unknownDescription`
       }
     }
   },

@@ -4,6 +4,8 @@ import (
 	"context"
 	"database/sql"
 
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
+
 	"github.com/go-faster/errors"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/auth"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
@@ -20,6 +22,7 @@ type UseCase interface {
 	AuthByOTP(ctx context.Context, i ByOTPInput) (openapi.APIV1AuthOtpPostRes, error)
 	VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error)
 	ProcessInvitation(ctx context.Context, i ProcessInvitationInput) (openapi.ProcessInvitationRes, error)
+	InvitationByToken(ctx context.Context, i InvitationByTokenInput) (openapi.GetInvitationByTokenRes, error)
 }
 
 type useCase struct {
@@ -28,13 +31,14 @@ type useCase struct {
 	repo    auth.Repository
 	meRepo  me.Repository
 	invRepo invitation.Repository
+	wRepo   workspace.Repository
 	emailDr email.Driver
 	fbDr    firebase.Driver
 	op      OutputPort
 }
 
-func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo auth.Repository, meRepo me.Repository, invRepo invitation.Repository, emailDr email.Driver, fbDr firebase.Driver, op OutputPort) UseCase {
-	return &useCase{txp, dbp, acRepo, meRepo, invRepo, emailDr, fbDr, op}
+func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo auth.Repository, meRepo me.Repository, invRepo invitation.Repository, wRepo workspace.Repository, emailDr email.Driver, fbDr firebase.Driver, op OutputPort) UseCase {
+	return &useCase{txp, dbp, acRepo, meRepo, invRepo, wRepo, emailDr, fbDr, op}
 }
 
 func (u *useCase) AuthByOTP(ctx context.Context, i ByOTPInput) (openapi.APIV1AuthOtpPostRes, error) {
@@ -140,4 +144,28 @@ func (u *useCase) ProcessInvitation(ctx context.Context, i ProcessInvitationInpu
 		return u.emailDr.SendOTP(pr, i.Email, code)
 	}
 	return &openapi.ProcessInvitationOK{}, pr.Transactional(fn)().Error()
+}
+
+func (u *useCase) InvitationByToken(ctx context.Context, i InvitationByTokenInput) (openapi.GetInvitationByTokenRes, error) {
+	p := u.dbp.GetExecutor(ctx, true)
+	res, err := u.invRepo.FindByToken(ctx, p, i.Token)
+	if err != nil {
+		return nil, err
+	}
+	if err = res.ValidateCanGetByToken(); err != nil {
+		return nil, err
+	}
+	w, err := u.wRepo.FindInviterFromToken(ctx, p, i.Token)
+	if err != nil {
+		return nil, err
+	}
+	invRes, err := u.invRepo.FindByToken(ctx, p, i.Token)
+	if err != nil {
+		return nil, err
+	}
+	ri, err := me.NewReceivedInvitation(invRes, w)
+	if err != nil {
+		return nil, err
+	}
+	return u.op.InvitationByToken(ri)
 }

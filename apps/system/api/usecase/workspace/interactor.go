@@ -17,7 +17,6 @@ type UseCase interface {
 	Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error)
 	FindAllMembers(ctx context.Context, i FindAllMembersInput) (openapi.APIV1MembersGetRes, error)
 	InviteMembers(ctx context.Context, i InviteMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error)
-	VerifyInvitationToken(ctx context.Context, i VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error)
 	RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error)
 	FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error)
 }
@@ -78,7 +77,7 @@ func (u *useCase) Create(ctx context.Context, i CreateInput) (openapi.APIV1Works
 		return nil, err
 	}
 	res := result.Value(0).(*workspace.Workspace)
-	return u.op.Create(res), nil
+	return u.op.Create(res)
 }
 
 func (u *useCase) FindAllMembers(ctx context.Context, i FindAllMembersInput) (openapi.APIV1MembersGetRes, error) {
@@ -91,7 +90,7 @@ func (u *useCase) FindAllMembers(ctx context.Context, i FindAllMembersInput) (op
 	if err != nil {
 		return nil, err
 	}
-	return u.op.FindAllMembers(ms), nil
+	return u.op.FindAllMembers(ms)
 }
 
 func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error) {
@@ -137,23 +136,6 @@ func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (open
 	)
 }
 
-func (u *useCase) VerifyInvitationToken(ctx context.Context, i VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error) {
-	p := u.dbp.GetExecutor(ctx, true)
-
-	res, err := u.invRepo.FindByToken(ctx, p, i.Token)
-	if err != nil {
-		return nil, err
-	}
-	if res.IsExpired() {
-		return nil, invitation.NewExpiredInvitation(res.Token().Value())
-	}
-	w, err := u.repo.FindInviterWorkspaceFromToken(ctx, p, i.Token)
-	if err != nil {
-		return nil, err
-	}
-	return u.op.VerifyInvitationToken(w, res), nil
-}
-
 func (u *useCase) RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
 	pr, err := u.txp.Provide(ctx)
@@ -195,8 +177,8 @@ func (u *useCase) FindAllInvitation(ctx context.Context, i FindAllInvitationInpu
 	if err != nil {
 		return nil, err
 	}
-	if i.IsVerified {
-		return u.op.FindAllInvitation(res.OnlyVerified().SortByExpiryAt())
+	if i.IsAccepted {
+		return u.op.FindAllInvitation(res.OnlyAccepted().SortByExpiryAt())
 	}
 	return u.op.FindAllInvitation(res.ExcludeRevoked().ExcludeVerified().SortByExpiryAt())
 }

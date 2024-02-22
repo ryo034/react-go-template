@@ -2,6 +2,7 @@ package invitation
 
 import (
 	"context"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	invitationDr "github.com/ryo034/react-go-template/apps/system/api/driver/workspace/invitation"
@@ -54,7 +55,7 @@ func (g *gateway) FindActiveByEmail(ctx context.Context, exec bun.IDB, email acc
 }
 
 func (g *gateway) FindActiveAllByEmail(ctx context.Context, exec bun.IDB, email account.Email) (invitation.Invitations, error) {
-	res, err := g.d.FindActiveAllByEmail(ctx, exec, email)
+	res, err := g.d.FindAllReceivedByEmail(ctx, exec, email)
 	if err != nil {
 		return nil, err
 	}

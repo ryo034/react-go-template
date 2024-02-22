@@ -87,6 +87,7 @@ INSERT INTO invitations (invitation_id, invitation_unit_id)
 VALUES
 ('018d96b8-0bb6-7822-b3b5-78a5d0e8790e', '018db49e-b4dd-7828-8a9b-fa8f9d12b552'),
 ('018d96b8-2211-7862-bcbe-e9f4d002a8fc', '018db4a4-c350-747b-8c4f-bd827e08174b'),
+('018dcee8-97b2-7ffe-a6cb-94093483fa12', '018db4a4-c350-747b-8c4f-bd827e08174b'),
 ('018d96bb-2a6e-70ed-bd74-8565ac2960ac', '018db4a4-c350-747b-8c4f-bd827e08174b'),
 ('018dbe26-f91d-7b0b-9a18-ff5181136ffb', '018db4a4-c350-747b-8c4f-bd827e08174b'),
 ('018d9fb4-641f-72f9-bdeb-a493a974dba1', '018db49e-d5a5-7ed1-aea6-e018d2e4bd38'),
@@ -97,6 +98,7 @@ INSERT INTO invitation_tokens (invitation_id, token, expired_at, created_at)
 VALUES
 ('018d96b8-0bb6-7822-b3b5-78a5d0e8790e', '018d96b7-587c-7614-b234-e086b1944e74', '2023-01-10 12:00:00', '2023-01-09 12:00:00'),
 ('018d96b8-2211-7862-bcbe-e9f4d002a8fc', '018d96b7-df68-792f-97d0-d6a044c2b4a2', '2200-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018dcee8-97b2-7ffe-a6cb-94093483fa12', '018dcee9-4ec8-7f93-9a9c-f9ad7ae3d592', '2200-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018d96bb-2a6e-70ed-bd74-8565ac2960ac', '018d96bb-975d-769c-aa3d-dfe09fc9f207', '2024-01-17 12:00:00', '2024-01-10 12:00:00'),
 ('018dbe26-f91d-7b0b-9a18-ff5181136ffb', '018dbe28-a7c6-7b51-885a-7c4647e4aff4', '2200-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018d9fb4-641f-72f9-bdeb-a493a974dba1', '018d9fb5-6150-7a4b-a5c8-b5a61e51ee50', '2200-01-10 12:00:00', '2024-01-10 12:00:00'),
@@ -107,7 +109,8 @@ INSERT INTO invitees (invitation_id, email)
 VALUES
 ('018d96b8-0bb6-7822-b3b5-78a5d0e8790e', 'invite_test_expired@example.com'),
 ('018d96b8-2211-7862-bcbe-e9f4d002a8fc', 'invite_test_not_expired@example.com'),
-('018d96bb-2a6e-70ed-bd74-8565ac2960ac', 'invite_test_already_used@example.com'),
+('018dcee8-97b2-7ffe-a6cb-94093483fa12', 'invite_test_already_verified@example.com'),
+('018d96bb-2a6e-70ed-bd74-8565ac2960ac', 'invite_test_already_accepted@example.com'),
 ('018dbe26-f91d-7b0b-9a18-ff5181136ffb', 'invite_test_revoked@example.com'),
 ('018d9fb4-641f-72f9-bdeb-a493a974dba1', 'invite_test_not_expired_with_display_name@example.com'),
 ('018d9b6d-01cf-7d3e-8328-76736b6db971', 'invite_test_already_joined_any_workspace@example.com'),
@@ -120,5 +123,7 @@ VALUES
 
 INSERT INTO invitation_events (invitation_event_id, invitation_id, event_type, created_at)
 VALUES
+('018dcee9-0494-7f71-97ec-919c04becb62', '018dcee8-97b2-7ffe-a6cb-94093483fa12', 'verified', '2023-01-10 15:00:00'),
 ('018db3ff-2a1a-7445-b464-3a84071b9549', '018d96bb-2a6e-70ed-bd74-8565ac2960ac', 'verified', '2023-01-10 15:00:00'),
+('018dca3b-8713-71ff-b176-bfaedd0cf766', '018d96bb-2a6e-70ed-bd74-8565ac2960ac', 'accepted', '2023-01-11 15:00:00'),
 ('018dbe29-c687-7a1d-b93d-bb3502c32988', '018dbe26-f91d-7b0b-9a18-ff5181136ffb', 'revoked', '2024-01-10 15:00:00');

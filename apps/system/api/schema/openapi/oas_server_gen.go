@@ -74,6 +74,12 @@ type Handler interface {
 	//
 	// POST /api/v1/members/invitations/{invitationId}/accept
 	AcceptInvitation(ctx context.Context, params AcceptInvitationParams) (AcceptInvitationRes, error)
+	// GetInvitationByToken implements getInvitationByToken operation.
+	//
+	// Get Invitation by token.
+	//
+	// GET /api/v1/auth/invitations
+	GetInvitationByToken(ctx context.Context, params GetInvitationByTokenParams) (GetInvitationByTokenRes, error)
 	// InviteMultipleUsersToWorkspace implements inviteMultipleUsersToWorkspace operation.
 	//
 	// Invite multiple users to the workspace by email.
@@ -98,12 +104,6 @@ type Handler interface {
 	//
 	// POST /api/v1/members/invitations/{invitationId}/revoke
 	RevokeInvitation(ctx context.Context, params RevokeInvitationParams) (RevokeInvitationRes, error)
-	// VerifyInvitation implements verifyInvitation operation.
-	//
-	// Verify Invitation.
-	//
-	// GET /api/v1/members/invitations/verify
-	VerifyInvitation(ctx context.Context, params VerifyInvitationParams) (VerifyInvitationRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

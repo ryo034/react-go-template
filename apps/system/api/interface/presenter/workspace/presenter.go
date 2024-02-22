@@ -20,14 +20,9 @@ type presenter struct {
 	ma   memberPresenter.Adapter
 }
 
-func (p *presenter) Create(w *workspace.Workspace) *openapi.Workspace {
+func (p *presenter) Create(w *workspace.Workspace) (openapi.APIV1WorkspacesPostRes, error) {
 	res := p.wa.Adapt(w)
-	return &res
-}
-
-func (p *presenter) FindAllMembers(ms member.Members) *openapi.Members {
-	res := p.ma.AdaptAll(ms)
-	return &res
+	return &openapi.CreateWorkspaceResponse{Workspace: res}, nil
 }
 
 func (p *presenter) InviteMembers(ms invitation.Invitations, registeredList invitation.Invitations, successList invitation.Invitations, failedList invitation.Invitations) (*openapi.InvitationsBulkResponse, error) {
@@ -51,12 +46,9 @@ func (p *presenter) InviteMembers(ms invitation.Invitations, registeredList invi
 	}, nil
 }
 
-func (p *presenter) VerifyInvitationToken(w *workspace.Workspace, i *invitation.Invitation) openapi.VerifyInvitationRes {
-	d := w.Detail()
-	return &openapi.InvitationInfoResponse{
-		WorkspaceName: d.Name().ToString(),
-		Verified:      i.IsVerified(),
-	}
+func (p *presenter) FindAllMembers(ms member.Members) (openapi.APIV1MembersGetRes, error) {
+	res := p.ma.AdaptAll(ms)
+	return &openapi.MembersResponse{Members: res}, nil
 }
 
 func (p *presenter) RevokeInvitation(is invitation.Invitations) (openapi.RevokeInvitationRes, error) {
@@ -72,5 +64,5 @@ func (p *presenter) FindAllInvitation(is invitation.Invitations) (openapi.APIV1I
 	if err != nil {
 		return nil, err
 	}
-	return &rs, err
+	return &openapi.InvitationsResponse{Invitations: rs}, err
 }

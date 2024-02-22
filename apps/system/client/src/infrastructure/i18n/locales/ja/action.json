@@ -4,6 +4,7 @@
     "back": "戻る",
     "cancel": "キャンセル",
     "login": "ログイン",
+    "start": "始める",
     "sendOneTimeCode": "認証コードを送る",
     "startWithEmail": "メールアドレスで始める",
     "showItem": "{{field}}を表示",

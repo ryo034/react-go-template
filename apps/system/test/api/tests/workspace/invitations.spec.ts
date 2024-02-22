@@ -4,37 +4,6 @@ import { genAPIClient, getAuthInfo, getInviteToken, statefulTest } from "../../s
 
 const client = genAPIClient()
 
-test.describe("verify invitations", () => {
-  test("user is already member of any workspace and display name is not set when invited", async () => {
-    const email = "invite_test_already_joined_any_workspace@example.com"
-    const token = await getInviteToken(email)
-    const res = await client.GET("/api/v1/members/invitations/verify", {
-      headers: defaultPostHeaders,
-      params: { query: { token } }
-    })
-    expect(res.response.status).toBe(200)
-    expect(res.error).toBeUndefined()
-    expect(res.data).toStrictEqual((await import("./success_invitations_verify.json")).default)
-  })
-
-  test("failed to get invite token by invalid token return BadRequestError", async () => {
-    const res = await client.GET("/api/v1/members/invitations/verify", {
-      headers: defaultPostHeaders,
-      params: { query: { token: "invalid-token" } }
-    })
-    expect(res.response.status).toBe(400)
-  })
-
-  test("failed to get invite token by expired token return BadRequestError with custom code", async () => {
-    const res = await client.GET("/api/v1/members/invitations/verify", {
-      headers: defaultPostHeaders,
-      params: { query: { token: "018d96b7-587c-7614-b234-e086b1944e74" } }
-    })
-    expect(res.response.status).toBe(400)
-    expect(res.error?.code).toBe("400-001")
-  })
-})
-
 test.describe("invite members", () => {
   statefulTest("success to invite members @stateful", async ({ page }) => {
     const email = "system_account@example.com"
@@ -111,7 +80,7 @@ test.describe("get invitations", () => {
     })
     expect(res.response.status).toBe(200)
     expect(res.error).toBeUndefined()
-    expect(JSON.stringify(res.data)).toEqual(JSON.stringify((await import("./success_get_invitations.json")).default));
+    expect(JSON.stringify(res.data)).toEqual(JSON.stringify((await import("./success_get_invitations.json")).default))
   })
   statefulTest(
     "success to get verified invitations without revoked and already registered @stateful",
@@ -120,11 +89,11 @@ test.describe("get invitations", () => {
       const authInfo = await getAuthInfo(email)
       const res = await client.GET("/api/v1/invitations", {
         headers: authHeaders(authInfo.token),
-        params: { query: { status: "verified" } }
+        params: { query: { status: "accepted" } }
       })
       expect(res.response.status).toBe(200)
       expect(res.error).toBeUndefined()
-      expect(res.data).toStrictEqual((await import("./success_get_verified_invitations.json")).default)
+      expect(res.data).toStrictEqual((await import("./success_get_accepted_invitations.json")).default)
     }
   )
 })

@@ -8,11 +8,7 @@ me:
       - bearer: []
     responses:
       "200":
-        description: Admin User
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Me"
+        $ref: "#/components/responses/MeResponse"
       "401":
         $ref: "#/components/responses/UnauthorizedError"
       "500":
@@ -30,11 +26,7 @@ profile:
       $ref: "#/components/requestBodies/UpdateMeProfile"
     responses:
       "200":
-        description: Profile updated
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Me"
+        $ref: "#/components/responses/UpdateProfileResponse"
       "401":
         $ref: "#/components/responses/UnauthorizedError"
       "400":
@@ -60,11 +52,7 @@ invitationsAccept:
         description: Invitation token
     responses:
       "200":
-        description: Invitation accepted and user added to the workspace
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Me"
+        $ref: "#/components/responses/InvitationsAcceptResponse"
       "401":
         $ref: "#/components/responses/UnauthorizedError"
       "409":

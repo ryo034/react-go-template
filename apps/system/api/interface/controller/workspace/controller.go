@@ -16,7 +16,6 @@ type Controller interface {
 	Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error)
 	FindAllMembers(ctx context.Context) (openapi.APIV1MembersGetRes, error)
 	InviteMembers(ctx context.Context, i InviteesInput) (openapi.InviteMultipleUsersToWorkspaceRes, error)
-	VerifyInvitationToken(ctx context.Context, i VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error)
 	RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error)
 	FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error)
 }
@@ -42,10 +41,6 @@ type Invitee struct {
 
 type InviteesInput struct {
 	InvitedMembers []Invitee
-}
-
-type VerifyInvitationTokenInput struct {
-	Token uuid.UUID
 }
 
 type RevokeInvitationInput struct {
@@ -116,15 +111,6 @@ func (c *controller) InviteMembers(ctx context.Context, i InviteesInput) (openap
 	return res, nil
 }
 
-func (c *controller) VerifyInvitationToken(ctx context.Context, i VerifyInvitationTokenInput) (openapi.VerifyInvitationRes, error) {
-	in := workspaceUc.VerifyInvitationTokenInput{Token: invitation.NewToken(i.Token)}
-	res, err := c.wuc.VerifyInvitationToken(ctx, in)
-	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.VerifyInvitationRes), nil
-	}
-	return res, nil
-}
-
 func (c *controller) RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error) {
 	in := workspaceUc.RevokeInvitationInput{InvitationID: invitation.NewID(i.InvitationID)}
 	res, err := c.wuc.RevokeInvitation(ctx, in)
@@ -140,11 +126,11 @@ func (c *controller) FindAllInvitation(ctx context.Context, i FindAllInvitationI
 		return c.resl.Error(ctx, err).(openapi.APIV1InvitationsGetRes), nil
 	}
 
-	verified := false
-	if i.Status == "verified" {
-		verified = true
+	accepted := false
+	if i.Status == "accepted" {
+		accepted = true
 	}
-	in := workspaceUc.FindAllInvitationInput{AccountID: aID, IsVerified: verified}
+	in := workspaceUc.FindAllInvitationInput{AccountID: aID, IsAccepted: accepted}
 	res, err := c.wuc.FindAllInvitation(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1InvitationsGetRes), nil

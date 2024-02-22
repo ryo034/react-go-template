@@ -5,6 +5,7 @@ export interface WorkspaceUseCase {
   create(i: CreateWorkspaceInput): Promise<Error | null>
   findAllMembers(): Promise<Error | null>
   inviteMembers(i: InviteMembersInput): Promise<Error | null>
+  findAllInvitations(): Promise<Error | null>
 }
 
 export class WorkspaceInteractor implements WorkspaceUseCase {
@@ -43,6 +44,17 @@ export class WorkspaceInteractor implements WorkspaceUseCase {
     if (res.isErr) {
       return res.error
     }
+    return null
+  }
+
+  async findAllInvitations(): Promise<Error | null> {
+    this.presenter.setInvitationsIsLoading(true)
+    const res = await this.repository.findAllInvitations()
+    if (res.isErr) {
+      return res.error
+    }
+    this.presenter.setInvitations(res.value)
+    this.presenter.setInvitationsIsLoading(false)
     return null
   }
 }

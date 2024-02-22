@@ -45,6 +45,10 @@ type AcceptInvitationRes interface {
 	acceptInvitationRes()
 }
 
+type GetInvitationByTokenRes interface {
+	getInvitationByTokenRes()
+}
+
 type InviteMultipleUsersToWorkspaceRes interface {
 	inviteMultipleUsersToWorkspaceRes()
 }
@@ -59,8 +63,4 @@ type ProcessInvitationRes interface {
 
 type RevokeInvitationRes interface {
 	revokeInvitationRes()
-}
-
-type VerifyInvitationRes interface {
-	verifyInvitationRes()
 }

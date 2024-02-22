@@ -162,6 +162,64 @@ func decodeAcceptInvitationParams(args [1]string, argsEscaped bool, r *http.Requ
 	return params, nil
 }
 
+// GetInvitationByTokenParams is parameters of getInvitationByToken operation.
+type GetInvitationByTokenParams struct {
+	// Invitation token.
+	Token uuid.UUID
+}
+
+func unpackGetInvitationByTokenParams(packed middleware.Parameters) (params GetInvitationByTokenParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "token",
+			In:   "query",
+		}
+		params.Token = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeGetInvitationByTokenParams(args [0]string, argsEscaped bool, r *http.Request) (params GetInvitationByTokenParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: token.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "token",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.Token = c
+				return nil
+			}); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "token",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // RevokeInvitationParams is parameters of revokeInvitation operation.
 type RevokeInvitationParams struct {
 	// Invitation id.
@@ -222,64 +280,6 @@ func decodeRevokeInvitationParams(args [1]string, argsEscaped bool, r *http.Requ
 		return params, &ogenerrors.DecodeParamError{
 			Name: "invitationId",
 			In:   "path",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// VerifyInvitationParams is parameters of verifyInvitation operation.
-type VerifyInvitationParams struct {
-	// Invitation token.
-	Token uuid.UUID
-}
-
-func unpackVerifyInvitationParams(packed middleware.Parameters) (params VerifyInvitationParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "token",
-			In:   "query",
-		}
-		params.Token = packed[key].(uuid.UUID)
-	}
-	return params
-}
-
-func decodeVerifyInvitationParams(args [0]string, argsEscaped bool, r *http.Request) (params VerifyInvitationParams, _ error) {
-	q := uri.NewQueryDecoder(r.URL.Query())
-	// Decode query: token.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "token",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToUUID(val)
-				if err != nil {
-					return err
-				}
-
-				params.Token = c
-				return nil
-			}); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "token",
-			In:   "query",
 			Err:  err,
 		}
 	}

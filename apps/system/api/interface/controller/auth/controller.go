@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+
 	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
@@ -16,6 +17,7 @@ type Controller interface {
 	VerifyOTP(ctx context.Context, req *openapi.APIV1AuthOtpVerifyPostReq) (openapi.APIV1AuthOtpVerifyPostRes, error)
 	AuthByOAuth(ctx context.Context) (openapi.APIV1AuthOAuthPostRes, error)
 	ProcessInvitation(ctx context.Context, i ProcessInvitationInput) (openapi.ProcessInvitationRes, error)
+	InvitationByToken(ctx context.Context, i InvitationByTokenInput) (openapi.GetInvitationByTokenRes, error)
 }
 
 type controller struct {
@@ -27,6 +29,10 @@ type controller struct {
 type ProcessInvitationInput struct {
 	Token uuid.UUID
 	Email string
+}
+
+type InvitationByTokenInput struct {
+	Token uuid.UUID
 }
 
 func NewController(auc authUc.UseCase, resl shared.Resolver, co infraShared.ContextOperator) Controller {
@@ -79,6 +85,15 @@ func (c *controller) ProcessInvitation(ctx context.Context, i ProcessInvitationI
 	res, err := c.auc.ProcessInvitation(ctx, inp)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.ProcessInvitationRes), nil
+	}
+	return res, nil
+}
+
+func (c *controller) InvitationByToken(ctx context.Context, i InvitationByTokenInput) (openapi.GetInvitationByTokenRes, error) {
+	inp := authUc.InvitationByTokenInput{Token: invitation.NewToken(i.Token)}
+	res, err := c.auc.InvitationByToken(ctx, inp)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.GetInvitationByTokenRes), nil
 	}
 	return res, nil
 }

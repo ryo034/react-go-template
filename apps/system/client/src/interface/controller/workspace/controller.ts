@@ -42,4 +42,8 @@ export class WorkspaceController {
     }
     return await this.useCase.inviteMembers({ invitees })
   }
+
+  async findAllInvitations(): Promise<null | Error> {
+    return await this.useCase.findAllInvitations()
+  }
 }
