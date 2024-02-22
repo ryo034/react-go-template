@@ -65,7 +65,7 @@ export const StartInvitationPage = () => {
 
   return (
     <>
-      <InvitatitionPageHeader />
+      <InvitationPageHeader />
       <div className="flex justify-center items-center min-h-screen">
         <InvitationSection
           titleI18nKey={message.title}
@@ -81,7 +81,7 @@ export const StartInvitationPage = () => {
   )
 }
 
-const InvitatitionPageHeader = () => {
+const InvitationPageHeader = () => {
   const { store } = useContext(ContainerContext)
 
   const me = store.me((state) => state.me)
