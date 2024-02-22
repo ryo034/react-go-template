@@ -19,6 +19,10 @@ updates:
       dependencies:
         patterns:
           - "*"
+        update-types:
+          - patch
+          - minor
+          - major
 
   - package-ecosystem: "npm"
     directory: "/apps/system/client"
@@ -32,6 +36,10 @@ updates:
       dependencies:
         patterns:
           - "*"
+        update-types:
+          - patch
+          - minor
+          - major
 
   - package-ecosystem: "npm"
     directory: "/packages/typescript/ui"
@@ -45,3 +53,7 @@ updates:
       dependencies:
         patterns:
           - "*"
+        update-types:
+          - patch
+          - minor
+          - major
