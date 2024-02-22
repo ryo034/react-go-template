@@ -178,17 +178,17 @@ func (r *resolver) errCode(err error) string {
 	case errors.As(err, &conflictErr):
 		code = "409-000"
 	case errors.As(err, &expiredInvitationToken):
-		code = "400-001"
+		code = "400-000"
 	case errors.As(err, &invalidInviteToken):
 		code = "400-000"
-	case errors.As(err, &alreadyExpiredInvitation):
-		code = "410-000"
-	case errors.As(err, &alreadyRevokedInvitation):
-		code = "410-001"
 	case errors.As(err, &alreadyVerifiedInvitation):
 		code = "409-000"
-	case errors.As(err, &alreadyAcceptedInvitation):
+	case errors.As(err, &alreadyExpiredInvitation):
+		code = "410-001"
+	case errors.As(err, &alreadyRevokedInvitation):
 		code = "410-002"
+	case errors.As(err, &alreadyAcceptedInvitation):
+		code = "410-003"
 	}
 	return code
 }

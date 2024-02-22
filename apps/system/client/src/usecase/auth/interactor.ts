@@ -1,10 +1,18 @@
 import { AuthRepository } from "~/domain/auth"
-import { AuthUseCaseOutput, StartWithEmailInput, VerifyOtpInput } from "~/usecase/auth"
+import {
+  AuthUseCaseOutput,
+  FindInvitationByTokenInput,
+  ProceedToInvitationInput,
+  StartWithEmailInput,
+  VerifyOtpInput
+} from "~/usecase/auth"
 import { MeUseCase } from "~/usecase/me"
 
 export interface AuthUseCase {
   startWithEmail(i: StartWithEmailInput): Promise<Error | null>
   verifyOtp(i: VerifyOtpInput): Promise<Error | null>
+  findInvitationByToken(i: FindInvitationByTokenInput): Promise<Error | null>
+  proceedToInvitation(i: ProceedToInvitationInput): Promise<Error | null>
 }
 
 export class AuthInteractor implements AuthUseCase {
@@ -39,5 +47,26 @@ export class AuthInteractor implements AuthUseCase {
       return singInRes.error
     }
     return await this.meUseCase.find()
+  }
+
+  async findInvitationByToken(i: FindInvitationByTokenInput): Promise<Error | null> {
+    this.presenter.setReceivedInvitationIsLoading(true)
+    const res = await this.repository.findInvitationByToken(i.token)
+    this.presenter.setReceivedInvitationIsLoading(false)
+    if (res.isErr) {
+      return res.error
+    }
+    this.presenter.setReceivedInvitation(res.value)
+    return null
+  }
+
+  async proceedToInvitation(i: ProceedToInvitationInput): Promise<Error | null> {
+    this.presenter.setIsLoading(true)
+    const res = await this.repository.proceedToInvitation(i.token, i.email)
+    this.presenter.setIsLoading(false)
+    if (res.isErr) {
+      return res.error
+    }
+    return null
   }
 }

@@ -1,9 +1,12 @@
-import { Email } from "~/domain"
-import { AuthStoreType } from "~/store"
+import { Email, ReceivedInvitation } from "~/domain"
+import { AuthStoreType, ReceivedInvitationStoreType } from "~/store"
 import { AuthUseCaseOutput } from "~/usecase/auth"
 
 export class AuthPresenter implements AuthUseCaseOutput {
-  constructor(private readonly store: AuthStoreType) {}
+  constructor(
+    private readonly store: AuthStoreType,
+    private readonly receivedInvitationStore: ReceivedInvitationStoreType
+  ) {}
 
   setEmail(v: Email) {
     this.store.getState().setEmail(v)
@@ -15,5 +18,17 @@ export class AuthPresenter implements AuthUseCaseOutput {
 
   setIsLoading(v: boolean) {
     this.store.getState().setIsLoading(v)
+  }
+
+  setReceivedInvitation(v: ReceivedInvitation) {
+    this.receivedInvitationStore.getState().setReceivedInvitation(v)
+  }
+
+  setReceivedInvitationIsLoading(v: boolean) {
+    this.receivedInvitationStore.getState().setReceivedInvitationIsLoading(v)
+  }
+
+  setIsInvitationProcessing(v: boolean) {
+    this.receivedInvitationStore.getState().setIsInvitationProcessing(v)
   }
 }

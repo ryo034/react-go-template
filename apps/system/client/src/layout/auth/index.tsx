@@ -31,24 +31,30 @@ export const AuthLayout = () => {
           navigate(unprotectedInitialPagePath)
           return
         }
+        navigate({ pathname: window.location.pathname, search: window.location.search })
         return
       }
 
       if (meRef.current !== null) {
         if (meRef.current.self.hasNotName) {
-          navigate(routeMap.onboardingSettingName)
+          navigate({ pathname: routeMap.onboardingSettingName, search: window.location.search })
           return
         }
+        if (meRef.current.hasReceivedInvitations) {
+          console.log("招待を受けるページ")
+          // navigate({ pathname: routeMap.onboardingSettingWorkspace, search: window.location.search })
+          // return
+        }
         if (meRef.current.hasNotWorkspace) {
-          navigate(routeMap.onboardingSettingWorkspace)
+          navigate({ pathname: routeMap.onboardingSettingWorkspace, search: window.location.search })
           return
         }
         if (meRef.current.doneOnboarding) {
           if (isAuthenticatedRoute) {
-            navigate(window.location.pathname)
+            navigate({ pathname: routeMap.home, search: window.location.search })
             return
           }
-          navigate(routeMap.home)
+          navigate({ pathname: window.location.pathname, search: window.location.search })
         }
         return
       }

@@ -22,4 +22,12 @@ export class AuthController {
     const input: VerifyOtpInput = { email, otp: otpRes.value }
     return await this.useCase.verifyOtp(input)
   }
+
+  async findInvitationByToken(token: string): Promise<null | Error> {
+    return await this.useCase.findInvitationByToken({ token })
+  }
+
+  async proceedToInvitation(token: string, email: Email): Promise<null | Error> {
+    return await this.useCase.proceedToInvitation({ token, email })
+  }
 }

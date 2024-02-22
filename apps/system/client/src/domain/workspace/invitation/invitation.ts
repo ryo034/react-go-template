@@ -4,7 +4,7 @@ import { InvitationId } from "./id"
 
 interface Props {
   id: InvitationId
-  verified: boolean
+  accepted: boolean
   expiredAt: AppDateTime
   inviteeEmail: Email
   displayName: MemberDisplayName
@@ -19,8 +19,8 @@ export class Invitation extends Entity<Props> {
     return this.value.id
   }
 
-  get verified(): boolean {
-    return this.value.verified
+  get accepted(): boolean {
+    return this.value.accepted
   }
 
   get expiredAt(): AppDateTime {

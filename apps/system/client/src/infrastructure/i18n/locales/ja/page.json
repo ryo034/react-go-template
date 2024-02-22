@@ -21,12 +21,14 @@
       "title": "{{inviterName}}があなたのことを<br/>{{workspaceName}}に招待しました",
       "description": "招待を受けるには{{email}}でログインしてください",
       "error": {
-        "invitationAlreadyAcceptedTitle": "この招待は既に受諾されています",
+        "invitationAlreadyAcceptedTitle": "この招待はすでに受諾されています",
         "invitationInvalidTokenTitle": "この招待は無効です",
-        "invitationAlreadyRevokedTitle": "この招待は既に管理者によって取り消されました",
+        "invitationAlreadyExpiredTitle": "この招待はすでに期限切れです",
+        "invitationAlreadyRevokedTitle": "この招待はすでに管理者によって取り消されました",
         "unknownErrorTitle": "エラーが発生しました",
         "invitationAlreadyAcceptedDescription": "もしこれが間違いだと思われる場合、またはワークスペースにログインできない場合は、ワークスペースの管理者またはサポートにご連絡ください。",
         "invitationInvalidTokenDescription": "もしこれが間違いだと思われる場合、またはワークスペースにログインできない場合は、ワークスペースの管理者またはサポートにご連絡ください。",
+        "invitationAlreadyExpiredDescription": "もしこれが間違いだと思われる場合、またはワークスペースにログインできない場合は、ワークスペースの管理者またはサポートにご連絡ください。",
         "invitationAlreadyRevokedDescription": "もしこれが間違いだと思われる場合、またはワークスペースにログインできない場合は、ワークスペースの管理者またはサポートにご連絡ください。",
         "unknownErrorDescription": "もしこれが間違いだと思われる場合、またはワークスペースにログインできない場合は、ワークスペースの管理者またはサポートにご連絡ください。"
       }

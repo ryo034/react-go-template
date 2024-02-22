@@ -56,7 +56,7 @@ test.describe("auth invitations", () => {
       params: { query: { token: "018d96b7-587c-7614-b234-e086b1944e74" } }
     })
     expect(res.response.status).toBe(410)
-    expect(res.error?.code).toBe("410-000")
+    expect(res.error?.code).toBe("410-001")
   })
   test("failed to get invite token by already revoked token return GoneError with custom code", async () => {
     const res = await client.GET("/api/v1/auth/invitations", {
@@ -64,7 +64,7 @@ test.describe("auth invitations", () => {
       params: { query: { token: "018dbe28-a7c6-7b51-885a-7c4647e4aff4" } }
     })
     expect(res.response.status).toBe(410)
-    expect(res.error?.code).toBe("410-001")
+    expect(res.error?.code).toBe("410-002")
   })
   test("success to get invite token by already verified token", async () => {
     const res = await client.GET("/api/v1/auth/invitations", {
@@ -81,6 +81,6 @@ test.describe("auth invitations", () => {
       params: { query: { token: "018d96bb-975d-769c-aa3d-dfe09fc9f207" } }
     })
     expect(res.response.status).toBe(410)
-    expect(res.error?.code).toBe("410-002")
+    expect(res.error?.code).toBe("410-003")
   })
 })

@@ -9,3 +9,12 @@ export type VerifyOtpInput = {
   email: Email
   otp: Otp
 }
+
+export type FindInvitationByTokenInput = {
+  token: string
+}
+
+export type ProceedToInvitationInput = {
+  token: string
+  email: Email
+}

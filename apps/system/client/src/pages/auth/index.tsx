@@ -1,6 +1,6 @@
 import { useContext, useLayoutEffect, useRef, useState } from "react"
 import { SubmitHandler } from "react-hook-form"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, createSearchParams, useNavigate } from "react-router-dom"
 import { AuthPageForm, LoginFormValues } from "~/components/auth/form"
 import { i18nKeys } from "~/infrastructure/i18n"
 import { ContainerContext } from "~/infrastructure/injector/context"
@@ -29,7 +29,7 @@ export const AuthPage = () => {
       setErrorMessage(errorMessageProvider.resolve(res))
       return
     }
-    navigate(routeMap.verifyOtp)
+    navigate({ pathname: routeMap.verifyOtp, search: createSearchParams({ email: d.email }).toString() })
   }
 
   const onClickGoogleLoginButton = async () => {

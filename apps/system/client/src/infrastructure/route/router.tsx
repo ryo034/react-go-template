@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import { routeMap } from "~/infrastructure/route/path"
 import { AuthLayout } from "~/layout/auth"
 import { DashboardLayout } from "~/layout/dashboard"
+import { InvitationLayout } from "~/layout/invitation"
 import { LoadingLayout } from "~/layout/loading"
 import { ThemeLayout } from "~/layout/theme"
 import { TrackingLayout } from "~/layout/tracking"
@@ -13,6 +14,7 @@ import { MembersPage } from "~/pages/members"
 import { OnboardingSettingNamePage } from "~/pages/onboarding/name"
 import { OnboardingSettingWorkspacePage } from "~/pages/onboarding/workspace"
 import { VerifyOtpPage } from "~/pages/otp"
+import { ReceivedInvitationsPage } from "~/pages/receivedInvitation"
 import { SettingsPage } from "~/pages/settings"
 
 export const accountInitialPagePath = routeMap.home
@@ -28,7 +30,13 @@ const router = createBrowserRouter([
           {
             element: <LoadingLayout />,
             children: [
-              { path: routeMap.startInvitationPageRoute, element: <StartInvitationPage /> },
+              {
+                element: <InvitationLayout />,
+                children: [
+                  { path: routeMap.startInvitationPageRoute, element: <StartInvitationPage /> },
+                  { path: routeMap.receivedInvitationsPageRoute, element: <ReceivedInvitationsPage /> }
+                ]
+              },
               {
                 element: <AuthLayout />,
                 children: [

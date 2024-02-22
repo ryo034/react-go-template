@@ -22,10 +22,12 @@
       "description": "To accept the invitation please login as {{email}}.",
       "error": {
         "invitationAlreadyAcceptedTitle": "This invitation has already been accepted",
+        "invitationAlreadyExpiredTitle": "This invitation has expired",
         "invitationInvalidTokenTitle": "This invitation is invalid",
         "invitationAlreadyRevokedTitle": "This invitation has been revoked",
         "unknownErrorTitle": "An error occurred",
         "invitationAlreadyAcceptedDescription": "If you think this is a mistake or if you have trouble logging into the workspace, please contact the workspace admins or support.",
+        "invitationAlreadyExpiredDescription": "If you think this is a mistake or if you have trouble logging into the workspace, please contact the workspace admins or support.",
         "invitationInvalidTokenDescription": "If you think this is a mistake or if you have trouble logging into the workspace, please contact the workspace admins or support.",
         "invitationAlreadyRevokedDescription": "If you think this is a mistake or if you have trouble logging into the workspace, please contact the workspace admins or support.",
         "unknownErrorDescription": "If you think this is a mistake or if you have trouble logging into the workspace, please contact the workspace admins or support."

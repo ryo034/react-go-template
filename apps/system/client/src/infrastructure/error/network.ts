@@ -1,5 +1,10 @@
 import { FirebaseError } from "firebase/app"
 import { NetworkBaseError, NetworkErrorInterpreter, convertToErrorByStatusCode } from "shared-network"
+import {
+  AlreadyAcceptedInvitationError,
+  AlreadyExpiredInvitationError,
+  AlreadyRevokeInvitationError
+} from "~/domain/workspace/invitation/error"
 import { FirebaseErrorAdapter } from "./firebase"
 
 export class EmailAlreadyInUseError extends NetworkBaseError {}
@@ -14,7 +19,28 @@ export const openapiFetchErrorInterpreter = (res: unknown): Error | null => {
       error?: { code?: number; message?: string }
       response: Response
     }
+    console.log("openapiFetchErrorInterpreter", r)
+    const err = customApplicationError(r.error?.message || "", "")
+    if (err !== null) {
+      return err
+    }
+
     return convertToErrorByStatusCode(r.response.status, r.error?.message)
+  }
+  return null
+}
+
+const customApplicationError = (message: string, customCode: string): Error | null => {
+  if (customCode === "") {
+    return null
+  }
+  switch (customCode) {
+    case "410-001":
+      return new AlreadyExpiredInvitationError(message)
+    case "410-002":
+      return new AlreadyRevokeInvitationError(message)
+    case "410-003":
+      return new AlreadyAcceptedInvitationError(message)
   }
   return null
 }

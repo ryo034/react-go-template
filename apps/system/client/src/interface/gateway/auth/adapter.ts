@@ -1,5 +1,5 @@
 import { Result } from "true-myth"
-import { CustomToken } from "~/domain/auth"
+import { CustomToken } from "~/domain"
 import { components } from "~/generated/schema/openapi/systemApi"
 
 export class AuthGatewayAdapter {

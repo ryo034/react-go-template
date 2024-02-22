@@ -124,8 +124,10 @@ export const i18nKeys = {
       error: {
         invitationAlreadyAcceptedTitle: `${i18nRootKeys.page}.startInvitation.error.invitationAlreadyAcceptedTitle`,
         invitationInvalidTokenTitle: `${i18nRootKeys.page}.startInvitation.error.invitationInvalidTokenTitle`,
+        invitationAlreadyExpiredTitle: `${i18nRootKeys.page}.startInvitation.error.invitationAlreadyExpiredTitle`,
         invitationAlreadyRevokedTitle: `${i18nRootKeys.page}.startInvitation.error.invitationAlreadyRevokedTitle`,
         unknownTitle: `${i18nRootKeys.page}.startInvitation.error.unknownTitle`,
+        invitationAlreadyExpiredDescription: `${i18nRootKeys.page}.startInvitation.error.invitationAlreadyExpiredDescription`,
         invitationAlreadyAcceptedDescription: `${i18nRootKeys.page}.startInvitation.error.invitationAlreadyAcceptedDescription`,
         invitationInvalidTokenDescription: `${i18nRootKeys.page}.startInvitation.error.invitationInvalidTokenDescription`,
         invitationAlreadyRevokedDescription: `${i18nRootKeys.page}.startInvitation.error.invitationAlreadyRevokedDescription`,

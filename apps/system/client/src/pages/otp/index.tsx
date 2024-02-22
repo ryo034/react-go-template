@@ -1,37 +1,36 @@
-import { useContext, useLayoutEffect, useRef, useState } from "react"
+import { useContext, useMemo, useState } from "react"
 import { SubmitHandler } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { OtpFormValues, VerifyOTPPageForm } from "~/components/auth/otp/form"
+import { Email } from "~/domain"
 import { i18nKeys } from "~/infrastructure/i18n"
 import { ContainerContext } from "~/infrastructure/injector/context"
+import { routeMap } from "~/infrastructure/route/path"
 
 export const verifyOtpPageRoute = "/verify-otp"
 
 export const VerifyOtpPage = () => {
-  const { store, controller, i18n, errorMessageProvider } = useContext(ContainerContext)
-  const me = store.me((state) => state.me)
-  const meRef = useRef(me)
-  const email = store.auth((state) => state.email)
+  const { controller, i18n, errorMessageProvider } = useContext(ContainerContext)
+  const [searchParams] = useSearchParams()
   const [errorMessage, setErrorMessage] = useState("")
-
   const navigate = useNavigate()
+  const email = searchParams.get("email")
+  const ema = Email.create(email ?? "")
 
-  useLayoutEffect(() => {
-    if (email === null || email.value === "") {
-      navigate("/")
+  useMemo(() => {
+    if (ema.isErr) {
+      navigate(routeMap.home)
       return
     }
-    store.me.subscribe((state) => {
-      meRef.current = state.me
-    })
-  }, [])
+  }, [email])
 
   const onSubmit: SubmitHandler<OtpFormValues> = async (d) => {
-    if (!email) {
+    if (ema.isErr) {
+      setErrorMessage(errorMessageProvider.resolve(ema.error))
       return
     }
     const opt = `${d.otpInput1}${d.otpInput2}${d.otpInput3}${d.otpInput4}${d.otpInput5}${d.otpInput6}`
-    const res = await controller.auth.verifyOtp(email, opt)
+    const res = await controller.auth.verifyOtp(ema.value, opt)
     if (res) {
       setErrorMessage(errorMessageProvider.resolve(res))
       return
@@ -47,6 +46,7 @@ export const VerifyOtpPage = () => {
           </h2>
           <p className="text-center text-sm text-muted-foreground">
             {i18n.translate(i18nKeys.page.verifyOtp.enterOtpMessage)}
+            <span>{email}</span>
           </p>
           <VerifyOTPPageForm onSubmit={onSubmit} errorMessage={errorMessage} />
         </div>

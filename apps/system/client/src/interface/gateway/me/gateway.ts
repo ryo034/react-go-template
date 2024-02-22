@@ -1,5 +1,5 @@
 import { Result } from "true-myth"
-import { Me, MeRepository, User } from "~/domain"
+import { InvitationId, Me, MeRepository, User } from "~/domain"
 import { AuthProviderDriver, MeDriver } from "~/driver"
 import { AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
 import { PromiseResult } from "~/infrastructure/shared/result"
@@ -29,6 +29,14 @@ export class MeGateway implements MeRepository {
 
   async updateProfile(user: User): PromiseResult<Me, Error> {
     const res = await this.driver.updateProfile(user)
+    if (res.isErr) {
+      return Result.err(res.error)
+    }
+    return this.adapter.adapt(res.value)
+  }
+
+  async acceptInvitation(invitationId: InvitationId): PromiseResult<Me, Error> {
+    const res = await this.driver.acceptInvitation(invitationId)
     if (res.isErr) {
       return Result.err(res.error)
     }

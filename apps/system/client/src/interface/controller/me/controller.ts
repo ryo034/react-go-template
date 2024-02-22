@@ -1,4 +1,4 @@
-import { AccountFullName, Me, User } from "~/domain"
+import { AccountFullName, InvitationId, Me, User } from "~/domain"
 import { AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
 import { MeUseCase } from "~/usecase"
 
@@ -7,6 +7,10 @@ export interface UpdateProfileNameInput {
   user: {
     name: string
   }
+}
+
+interface AcceptInvitationInput {
+  invitationId: InvitationId
 }
 
 export class MeController {
@@ -31,5 +35,9 @@ export class MeController {
     return await this.useCase.updateProfile({
       user: User.create({ id: i.current?.self.id, name: name.value, email: i.current.self.email })
     })
+  }
+
+  async acceptInvitation(i: AcceptInvitationInput): Promise<null | Error> {
+    return await this.useCase.acceptInvitation({ invitationId: i.invitationId })
   }
 }

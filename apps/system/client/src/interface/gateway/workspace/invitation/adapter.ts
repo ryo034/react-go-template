@@ -35,7 +35,7 @@ export class InvitationGatewayAdapter {
         id: id.value,
         displayName: displayName.value,
         inviteeEmail: inviteeEmail.value,
-        verified: invitation.verified,
+        accepted: invitation.accepted,
         expiredAt: expiredAt.value
       })
     )

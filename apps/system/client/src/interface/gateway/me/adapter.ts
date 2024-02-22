@@ -1,5 +1,5 @@
 import { Result } from "true-myth"
-import { Me } from "~/domain/me"
+import { Me, ReceivedInvitation, ReceivedInvitations } from "~/domain/me"
 import { Workspace } from "~/domain/workspace"
 import { Member } from "~/domain/workspace/member"
 import { components } from "~/generated/schema/openapi/systemApi"
@@ -7,12 +7,14 @@ import { AdapterError, AuthProviderCurrentUserNotFoundError } from "~/infrastruc
 import { UserGatewayAdapter } from "~/interface/gateway/user"
 import { WorkspaceGatewayAdapter } from "~/interface/gateway/workspace"
 import { MemberGatewayAdapter } from "~/interface/gateway/workspace/member"
+import { InvitationGatewayAdapter } from "../workspace/invitation"
 
 export class MeGatewayAdapter {
   constructor(
     private readonly userAdapter: UserGatewayAdapter,
     private readonly memberAdapter: MemberGatewayAdapter,
-    private readonly workspaceAdapter: WorkspaceGatewayAdapter
+    private readonly workspaceAdapter: WorkspaceGatewayAdapter,
+    private readonly invitationAdapter: InvitationGatewayAdapter
   ) {}
 
   adapt(me: components["schemas"]["Me"]): Result<Me, Error> {
@@ -49,6 +51,44 @@ export class MeGatewayAdapter {
       return Result.err(user.error)
     }
 
-    return Result.ok(Me.create({ self: user.value, workspace, member, joinedWorkspaces: joinedWorkspaces.value }))
+    const rivs = []
+    if (me.receivedInvitations !== undefined) {
+      for (const ari of me.receivedInvitations) {
+        const ri = this.adaptReceivedInvitation(ari)
+        if (ri.isErr) {
+          return Result.err(ri.error)
+        }
+        rivs.push(ri.value)
+      }
+    }
+
+    return Result.ok(
+      Me.create({
+        self: user.value,
+        workspace,
+        member,
+        joinedWorkspaces: joinedWorkspaces.value,
+        receivedInvitations: ReceivedInvitations.create(rivs)
+      })
+    )
+  }
+
+  adaptReceivedInvitation(
+    receivedInvitation: components["schemas"]["ReceivedInvitation"]
+  ): Result<ReceivedInvitation, Error> {
+    const invitation = this.invitationAdapter.adapt(receivedInvitation.invitation)
+    if (invitation.isErr) {
+      return Result.err(invitation.error)
+    }
+    const inviter = this.workspaceAdapter.adaptInviter(receivedInvitation.inviter)
+    if (inviter.isErr) {
+      return Result.err(inviter.error)
+    }
+    return Result.ok(
+      ReceivedInvitation.create({
+        invitation: invitation.value,
+        inviter: inviter.value
+      })
+    )
   }
 }

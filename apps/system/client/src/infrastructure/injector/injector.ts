@@ -12,7 +12,7 @@ import { openapiFetchClient } from "~/infrastructure/openapi/client"
 import { MeController, ThemeController } from "~/interface/controller"
 import { AuthController } from "~/interface/controller/auth/controller"
 import { WorkspaceController } from "~/interface/controller/workspace/controller"
-import { MeGateway, MeGatewayAdapter } from "~/interface/gateway"
+import { InvitationGatewayAdapter, MeGateway, MeGatewayAdapter } from "~/interface/gateway"
 import { AuthGateway, AuthGatewayAdapter } from "~/interface/gateway/auth"
 import { UserGatewayAdapter } from "~/interface/gateway/user"
 import { WorkspaceGatewayAdapter } from "~/interface/gateway/workspace"
@@ -22,7 +22,7 @@ import { AuthPresenter } from "~/interface/presenter/auth/presenter"
 import { MePresenter } from "~/interface/presenter/me/presenter"
 import { ThemePresenter } from "~/interface/presenter/theme/presenter"
 import { WorkspacePresenter } from "~/interface/presenter/workspace/presenter"
-import { authStore, meStore, themeStore } from "~/store"
+import { authStore, invitationsStore, meStore, receivedInvitationStore, themeStore } from "~/store"
 import { workspaceStore } from "~/store/workspace/store"
 import { MeInteractor, ThemeInteractor } from "~/usecase"
 import { AuthInteractor } from "~/usecase/auth"
@@ -34,7 +34,9 @@ const setupStore = () => {
     theme: themeStore,
     me: meStore,
     auth: authStore,
-    workspace: workspaceStore
+    workspace: workspaceStore,
+    invitations: invitationsStore,
+    receivedInvitation: receivedInvitationStore
   }
 }
 
@@ -61,23 +63,31 @@ const driver = setupDriver()
 const setupGatewayAdapter = () => {
   const user = new UserGatewayAdapter()
   const member = new MemberGatewayAdapter(user)
-  const workspace = new WorkspaceGatewayAdapter()
+  const workspace = new WorkspaceGatewayAdapter(member)
+  const invitation = new InvitationGatewayAdapter()
   return {
     user,
     member,
     workspace,
-    me: new MeGatewayAdapter(user, member, workspace),
-    auth: new AuthGatewayAdapter()
+    me: new MeGatewayAdapter(user, member, workspace, invitation),
+    auth: new AuthGatewayAdapter(),
+    invitation
   }
 }
 
 const gatewayAdapter = setupGatewayAdapter()
 
 const setupGateway = () => {
+  const me = new MeGateway(driver.me, driver.firebase, gatewayAdapter.me)
   return {
-    me: new MeGateway(driver.me, driver.firebase, gatewayAdapter.me),
-    auth: new AuthGateway(driver.auth, driver.firebase, gatewayAdapter.auth),
-    workspace: new WorkspaceGateway(driver.workspace, gatewayAdapter.workspace, gatewayAdapter.member)
+    me,
+    auth: new AuthGateway(driver.auth, driver.firebase, gatewayAdapter.auth, gatewayAdapter.me),
+    workspace: new WorkspaceGateway(
+      driver.workspace,
+      gatewayAdapter.workspace,
+      gatewayAdapter.member,
+      gatewayAdapter.invitation
+    )
   }
 }
 
@@ -87,8 +97,8 @@ const setupPresenter = () => {
   return {
     theme: new ThemePresenter(store.theme),
     me: new MePresenter(store.me),
-    auth: new AuthPresenter(store.auth),
-    workspace: new WorkspacePresenter(store.workspace)
+    auth: new AuthPresenter(store.auth, store.receivedInvitation),
+    workspace: new WorkspacePresenter(store.workspace, store.invitations)
   }
 }
 

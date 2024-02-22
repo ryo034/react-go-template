@@ -12,7 +12,7 @@ type Actions = {
   setInvitationsIsLoading: (v: boolean) => void
 }
 
-export const invitationStore = create(
+export const invitationsStore = create(
   immer<State & Actions>((set) => ({
     invitations: Invitations.empty(),
     invitationsIsLoading: false,
@@ -21,4 +21,4 @@ export const invitationStore = create(
   }))
 )
 
-export type InvitationStoreType = typeof invitationStore
+export type InvitationsStoreType = typeof invitationsStore

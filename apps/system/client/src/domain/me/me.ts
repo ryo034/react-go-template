@@ -1,13 +1,11 @@
-import { Entity } from "~/domain/shared"
-import { User } from "~/domain/user"
-import { Workspace, Workspaces } from "~/domain/workspace"
-import { Member } from "~/domain/workspace/member"
+import { Entity, Member, ReceivedInvitations, User, Workspace, Workspaces } from "~/domain"
 
 interface Props {
   self: User
   workspace?: Workspace
   member?: Member
   joinedWorkspaces: Workspaces
+  receivedInvitations: ReceivedInvitations
 }
 
 export class Me extends Entity<Props> {
@@ -45,5 +43,17 @@ export class Me extends Entity<Props> {
 
   get joinedWorkspaces(): Workspaces {
     return this.value.joinedWorkspaces
+  }
+
+  get receivedInvitations(): ReceivedInvitations {
+    return this.value.receivedInvitations
+  }
+
+  get hasReceivedInvitations(): boolean {
+    return this.value.receivedInvitations.isNotEmpty
+  }
+
+  get hasNotReceivedInvitations(): boolean {
+    return !this.hasReceivedInvitations
   }
 }
