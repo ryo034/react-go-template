@@ -1,5 +1,5 @@
 import { Separator } from "shared-ui"
-import { AccountForm } from "./form"
+import { SettingsAccountForm } from "./form"
 
 export const settingsAccountPageRoute = "/settings/account"
 
@@ -13,7 +13,7 @@ export const SettingsAccountPage = () => {
         </p>
       </div>
       <Separator />
-      <AccountForm />
+      <SettingsAccountForm />
     </div>
   )
 }

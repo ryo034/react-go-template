@@ -1,5 +1,5 @@
 import { Separator } from "shared-ui"
-import { ProfileForm } from "./form"
+import { SettingsProfileForm } from "./form"
 
 export const settingsProfilePageRoute = "/settings/profile"
 
@@ -11,7 +11,7 @@ export const SettingsProfilePage = () => {
         <p className="text-sm text-muted-foreground">This is how others will see you on the site.</p>
       </div>
       <Separator />
-      <ProfileForm />
+      <SettingsProfileForm />
     </div>
   )
 }
