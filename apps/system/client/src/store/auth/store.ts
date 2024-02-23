@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import { immer } from "zustand/middleware/immer"
-import { Email } from "~/domain"
 import { Otp } from "~/domain/auth"
+import { Email } from "~/domain/shared"
 
 type State = {
   otp: Otp | null

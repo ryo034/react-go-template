@@ -1,7 +1,7 @@
 import { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
-import { Email } from "~/domain"
 import { Otp } from "~/domain/auth"
+import { Email } from "~/domain/shared"
 import { components } from "~/generated/schema/openapi/systemApi"
 import { SystemAPIClient } from "~/infrastructure/openapi/client"
 import { PromiseResult } from "~/infrastructure/shared"

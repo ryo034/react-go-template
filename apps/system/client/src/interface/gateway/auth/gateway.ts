@@ -1,5 +1,6 @@
 import { Result } from "true-myth"
-import { AuthRepository, CustomToken, Email, Otp, ReceivedInvitation } from "~/domain"
+import { AuthRepository, CustomToken, Otp, ReceivedInvitation } from "~/domain"
+import { Email } from "~/domain/shared"
 import { AuthDriver, AuthProviderDriver } from "~/driver"
 import { PromiseResult } from "~/infrastructure/shared/result"
 import { AuthGatewayAdapter, MeGatewayAdapter } from "~/interface/gateway"

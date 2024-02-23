@@ -1,4 +1,5 @@
-import { Email, ReceivedInvitation } from "~/domain"
+import { ReceivedInvitation } from "~/domain"
+import { Email } from "~/domain/shared"
 import { AuthStoreType, ReceivedInvitationStoreType } from "~/store"
 import { AuthUseCaseOutput } from "~/usecase/auth"
 

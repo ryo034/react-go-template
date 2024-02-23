@@ -15,7 +15,7 @@ import {
   ScrollArea,
   useToast
 } from "shared-ui"
-import { Email } from "~/domain"
+import { Email } from "~/domain/shared"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { useInviteMembersFormMessage } from "./message"
 

@@ -1,4 +1,5 @@
-import { Email, Invitee, Invitees, MemberDisplayName, WorkspaceSubdomain } from "~/domain"
+import { Invitee, Invitees, MemberDisplayName, WorkspaceSubdomain } from "~/domain"
+import { Email } from "~/domain/shared"
 import { WorkspaceUseCase } from "~/usecase/workspace"
 
 export interface CreateWorkspaceInput {

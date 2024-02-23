@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import { routeMap } from "~/infrastructure/route/path"
 import { AuthLayout, AuthenticatedLayout } from "~/layout/auth"
 import { DashboardLayout } from "~/layout/dashboard"
+import { SettingsLayout } from "~/layout/dashboard/setting"
 import { InvitationLayout } from "~/layout/invitation"
 import { LoadingLayout } from "~/layout/loading"
 import { OnboardingLayout } from "~/layout/onboarding"
@@ -60,7 +61,10 @@ const router = createBrowserRouter([
                     children: [
                       { path: routeMap.home, element: <HomePage /> },
                       { path: routeMap.members, element: <MembersPage /> },
-                      { path: routeMap.settings, element: <SettingsPage /> }
+                      {
+                        element: <SettingsLayout />,
+                        children: [{ path: routeMap.settings, element: <SettingsPage /> }]
+                      }
                     ]
                   }
                 ]

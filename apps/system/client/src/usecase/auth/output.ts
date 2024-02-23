@@ -1,4 +1,5 @@
-import { Email, ReceivedInvitation } from "~/domain"
+import { ReceivedInvitation } from "~/domain"
+import { Email } from "~/domain/shared"
 
 export interface AuthUseCaseOutput {
   setEmail: (v: Email) => void

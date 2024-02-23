@@ -1,5 +1,5 @@
-import { Email } from "~/domain"
 import { Otp } from "~/domain/auth"
+import { Email } from "~/domain/shared"
 import { AuthUseCase, StartWithEmailInput, VerifyOtpInput } from "~/usecase"
 
 export class AuthController {

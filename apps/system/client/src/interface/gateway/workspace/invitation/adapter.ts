@@ -1,5 +1,6 @@
 import { Result } from "true-myth"
-import { AppDateTime, Email, Invitation, InvitationId, Invitations, MemberDisplayName } from "~/domain"
+import { Invitation, InvitationId, Invitations, MemberDisplayName } from "~/domain"
+import { AppDateTime, Email } from "~/domain/shared"
 import { components } from "~/generated/schema/openapi/systemApi"
 import { AdapterError } from "~/infrastructure/error"
 

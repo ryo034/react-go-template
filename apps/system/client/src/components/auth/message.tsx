@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { Email } from "~/domain"
+import { Email } from "~/domain/shared"
 import { i18nKeys } from "~/infrastructure/i18n"
 import { ContainerContext } from "~/infrastructure/injector/context"
 
