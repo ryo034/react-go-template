@@ -29,7 +29,7 @@
     "firebase": "^10.8.0",
     "i18next": "^23.9.0",
     "immer": "^10.0.3",
-    "lucide-react": "^0.334.0",
+    "lucide-react": "^0.336.0",
     "openapi-fetch": "^0.9.2",
     "phone": "^3.1.42",
     "react": "^18.2.0",
