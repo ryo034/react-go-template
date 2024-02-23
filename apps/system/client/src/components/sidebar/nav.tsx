@@ -5,7 +5,7 @@ import { useContext } from "react"
 import { useLocation } from "react-router-dom"
 import { Tooltip, TooltipContent, TooltipTrigger } from "shared-ui"
 import { ContainerContext } from "~/infrastructure/injector/context"
-import { routeMap } from "~/infrastructure/route/path"
+import { isSettingsPage, routeMap } from "~/infrastructure/route/path"
 import { NavItem, SidebarListItem, SidebarListItemCollapsed } from "./listItem"
 
 interface NavProps {
@@ -31,8 +31,8 @@ export const Nav = ({ isCollapsed }: NavProps) => {
     {
       title: i18n.translate("router.setting"),
       icon: Settings,
-      variant: location.pathname === routeMap.settings ? "default" : "ghost",
-      to: routeMap.settings
+      variant: isSettingsPage(location.pathname) ? "default" : "ghost",
+      to: routeMap.settingsProfile
     }
   ]
 

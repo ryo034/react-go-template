@@ -17,7 +17,9 @@ import { OnboardingSettingNamePage } from "~/pages/onboarding/name"
 import { OnboardingSettingWorkspacePage } from "~/pages/onboarding/workspace"
 import { VerifyOtpPage } from "~/pages/otp"
 import { ReceivedInvitationsPage } from "~/pages/receivedInvitation"
-import { SettingsPage } from "~/pages/settings"
+import { SettingsAccountPage } from "~/pages/settings/account"
+import { SettingsAppearancePage } from "~/pages/settings/appearance"
+import { SettingsProfilePage } from "~/pages/settings/profile"
 
 export const accountInitialPagePath = routeMap.home
 
@@ -63,7 +65,11 @@ const router = createBrowserRouter([
                       { path: routeMap.members, element: <MembersPage /> },
                       {
                         element: <SettingsLayout />,
-                        children: [{ path: routeMap.settings, element: <SettingsPage /> }]
+                        children: [
+                          { path: routeMap.settingsAppearance, element: <SettingsAppearancePage /> },
+                          { path: routeMap.settingsAccount, element: <SettingsAccountPage /> },
+                          { path: routeMap.settingsProfile, element: <SettingsProfilePage /> }
+                        ]
                       }
                     ]
                   }

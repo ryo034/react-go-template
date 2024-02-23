@@ -6,7 +6,9 @@ import { onboardingSettingNamePageRoute } from "~/pages/onboarding/name"
 import { onboardingSettingWorkspacePageRoute } from "~/pages/onboarding/workspace"
 import { verifyOtpPageRoute } from "~/pages/otp"
 import { receivedInvitationsPageRoute } from "~/pages/receivedInvitation"
-import { settingPageRoute } from "~/pages/settings"
+import { settingsAccountPageRoute } from "~/pages/settings/account"
+import { settingsAppearancePageRoute } from "~/pages/settings/appearance"
+import { settingsProfilePageRoute } from "~/pages/settings/profile"
 
 export const routeMap = {
   auth: authPageRoute,
@@ -18,9 +20,19 @@ export const routeMap = {
   onboardingSettingWorkspace: onboardingSettingWorkspacePageRoute,
   // dashboard
   home: homePageRoute,
-  settings: settingPageRoute,
+  settingsAppearance: settingsAppearancePageRoute,
+  settingsAccount: settingsAccountPageRoute,
+  settingsProfile: settingsProfilePageRoute,
   members: membersPageRoute
 } as const
+
+export const isSettingsPage = (path: string) => {
+  return (
+    path.includes(routeMap.settingsAppearance) ||
+    path.includes(routeMap.settingsProfile) ||
+    path.includes(routeMap.settingsAccount)
+  )
+}
 
 export const unauthenticatedRoutes = [routeMap.auth.toString(), routeMap.verifyOtp.toString()]
 export const invitationRoutes = [
@@ -32,6 +44,11 @@ export const onboardingRoutes = [
   routeMap.onboardingSettingWorkspace.toString()
 ]
 
-export const authRoutes = [routeMap.home.toString(), routeMap.settings.toString(), routeMap.members.toString()]
+export const authRoutes = [
+  routeMap.home.toString(),
+  routeMap.members.toString(),
+  routeMap.settingsAppearance.toString(),
+  routeMap.settingsProfile.toString()
+]
 
 export const unprotectedInitialPagePath = routeMap.auth
