@@ -1,14 +1,14 @@
+import { ThemeType } from "~/store"
 import { ThemeInteractor, ToggleInput } from "~/usecase"
 
 export class ThemeController {
   constructor(private readonly useCase: ThemeInteractor) {}
 
-  toggle(isDark: boolean): null {
-    const input: ToggleInput = { isDark }
-    return this.useCase.toggle(input)
+  toggle(theme: ThemeType): void {
+    this.useCase.toggle(theme)
   }
 
   init(): void {
-    this.useCase.get()
+    this.useCase.init()
   }
 }

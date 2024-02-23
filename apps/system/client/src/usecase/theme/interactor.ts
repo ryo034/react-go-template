@@ -1,22 +1,24 @@
 import { ThemeDriver } from "~/driver"
+import { ThemeType } from "~/store"
 import { ThemeUseCaseOutput, ToggleInput } from "~/usecase"
 
 export interface ThemeUseCase {
-  toggle(i: ToggleInput): null
-  get(): void
+  toggle(theme: ThemeType): void
+  init(): void
 }
 
 export class ThemeInteractor implements ThemeUseCase {
   constructor(private readonly driver: ThemeDriver, private readonly presenter: ThemeUseCaseOutput) {}
 
-  toggle(i: ToggleInput): null {
-    this.driver.set(i.isDark)
-    this.presenter.set(i.isDark)
-    return null
+  toggle(theme: ThemeType): void {
+    this.driver.set(theme)
+    this.presenter.set(theme)
   }
 
-  get(): void {
-    const isDark = this.driver.get()
-    this.presenter.set(isDark)
+  init(): void {
+    const theme = this.driver.get()
+    if (theme != null) {
+      this.presenter.set(theme)
+    }
   }
 }

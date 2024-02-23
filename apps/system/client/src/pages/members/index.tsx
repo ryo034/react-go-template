@@ -1,4 +1,5 @@
 import { useContext, useLayoutEffect, useRef } from "react"
+import { Separator } from "shared-ui"
 import { MemberCard } from "~/components/member/card"
 import { MemberCardListLoading } from "~/components/member/cardListLoading"
 import { MembersSettingDialog } from "~/components/member/membersSettingDialog"
@@ -33,11 +34,14 @@ export const MembersPage = () => {
   }
 
   return (
-    <div className="px-8">
-      <header className="py-8 flex space-x-4 items-center">
-        <h1 className="text-2xl font-bold tracking-tight">Members</h1>
-        <MembersSettingDialog />
+    <>
+      <header>
+        <div className="flex space-x-4 items-center">
+          <h2 className="text-2xl font-bold tracking-tight">Members</h2>
+          <MembersSettingDialog />
+        </div>
         {/* <InviteMembersDialog /> */}
+        <Separator className="my-6" />
       </header>
       <div className="grid grid-cols-4 gap-8">
         {membersIsLoading && <MemberCardListLoading count={10} />}
@@ -46,6 +50,6 @@ export const MembersPage = () => {
             return <MemberCard key={m.profile.id.value.asString} member={m} />
           })}
       </div>
-    </div>
+    </>
   )
 }

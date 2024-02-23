@@ -1,9 +1,17 @@
+import { useContext } from "react"
 import { Separator } from "shared-ui"
-import { AppearanceForm } from "./form"
+import { ContainerContext } from "~/infrastructure/injector/context"
+import { AppearanceFormValues, SettingsAppearanceForm } from "./form"
 
 export const settingsAppearancePageRoute = "/settings/appearance"
 
 export const SettingsAppearancePage = () => {
+  const { controller } = useContext(ContainerContext)
+
+  const onSubmit = ({ theme }: AppearanceFormValues) => {
+    controller.theme.toggle(theme)
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -13,7 +21,7 @@ export const SettingsAppearancePage = () => {
         </p>
       </div>
       <Separator />
-      <AppearanceForm />
+      <SettingsAppearanceForm onSubmit={onSubmit} />
     </div>
   )
 }

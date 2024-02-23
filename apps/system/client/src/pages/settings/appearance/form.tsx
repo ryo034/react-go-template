@@ -1,6 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useContext, useMemo } from "react"
 import { useForm } from "react-hook-form"
 import {
   Button,
@@ -16,35 +17,30 @@ import {
   toast
 } from "shared-ui"
 import { z } from "zod"
+import { ContainerContext } from "~/infrastructure/injector/context"
 const appearanceFormSchema = z.object({
   theme: z.enum(["light", "dark"], {
     required_error: "Please select a theme."
   })
 })
 
-type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
+export type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
 
-// This can come from your database or API.
-const defaultValues: Partial<AppearanceFormValues> = {
-  theme: "light"
+export interface AppearanceFormProps {
+  onSubmit: (data: AppearanceFormValues) => void
 }
 
-export function AppearanceForm() {
+export const SettingsAppearanceForm = ({ onSubmit }: AppearanceFormProps) => {
+  const { store } = useContext(ContainerContext)
+  const theme = store.theme((state) => state.theme)
+
   const form = useForm<AppearanceFormValues>({
-    resolver: zodResolver(appearanceFormSchema),
-    defaultValues
+    resolver: zodResolver(appearanceFormSchema)
   })
 
-  function onSubmit(data: AppearanceFormValues) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      )
-    })
-  }
+  useMemo(() => {
+    form.setValue("theme", theme)
+  }, [theme])
 
   return (
     <Form {...form}>

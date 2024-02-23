@@ -1,3 +1,5 @@
+import { ThemeType } from "~/store"
+
 export interface ThemeUseCaseOutput {
-  set: (v: boolean) => void
+  set: (v: ThemeType) => void
 }

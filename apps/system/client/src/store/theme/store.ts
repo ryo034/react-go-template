@@ -1,18 +1,20 @@
 import { create } from "zustand"
 import { immer } from "zustand/middleware/immer"
 
+export type ThemeType = "light" | "dark"
+
 type State = {
-  isDark: boolean
+  theme: ThemeType
 }
 
 type Actions = {
-  set: (v: boolean) => void
+  set: (v: ThemeType) => void
 }
 
 export const themeStore = create(
   immer<State & Actions>((set) => ({
-    isDark: false,
-    set: (v: boolean) => set({ isDark: v })
+    theme: "light" as ThemeType,
+    set: (v: ThemeType) => set({ theme: v })
   }))
 )
 

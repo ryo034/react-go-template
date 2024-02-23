@@ -64,7 +64,9 @@ export const DashboardLayout = ({
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={defaultLayout[2]}>
           <ScrollArea className="h-screen">
-            <Outlet />
+            <div className="space-y-6 p-10 pb-16 block">
+              <Outlet />
+            </div>
           </ScrollArea>
         </ResizablePanel>
       </ResizablePanelGroup>

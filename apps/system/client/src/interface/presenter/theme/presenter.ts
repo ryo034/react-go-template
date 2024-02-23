@@ -1,10 +1,11 @@
-import { ThemeStoreType } from "~/store/theme/store"
+import { ThemeStoreType, ThemeType } from "~/store/theme/store"
 import { ThemeUseCaseOutput } from "~/usecase"
 
 export class ThemePresenter implements ThemeUseCaseOutput {
   constructor(private readonly themeStore: ThemeStoreType) {}
 
-  set(v: boolean) {
+  set(v: ThemeType) {
     this.themeStore.getState().set(v)
+    document.documentElement.classList.add(v)
   }
 }
