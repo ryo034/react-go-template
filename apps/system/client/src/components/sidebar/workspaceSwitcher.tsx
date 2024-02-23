@@ -41,12 +41,12 @@ export const WorkspaceSwitcher = ({ className, isCollapsed, workspaces, currentW
   if (!currentWorkspace || !workspaces || !me) {
     return null
   }
-  const [selectedTeam, setSelectedTeam] = useState<Workspace>(currentWorkspace)
+  const [selectedWorkspace, setSelectedWorkspace] = useState<Workspace>(currentWorkspace)
 
   return (
     <Dialog open={showNewWorkspaceDialog} onOpenChange={setShowNewWorkspaceDialog}>
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild className="w-full">
+        <PopoverTrigger asChild className="w-full" data-testid="workspaceSwitcher">
           <Button
             fullWidth
             variant="outline"
@@ -56,10 +56,14 @@ export const WorkspaceSwitcher = ({ className, isCollapsed, workspaces, currentW
             className={cn(`justify-between ${isCollapsed && "w-10"}`, className)}
           >
             <Avatar className="mr-2 h-5 w-5">
-              <AvatarImage src={""} alt={selectedTeam.name.value} className="grayscale" />
-              <AvatarFallback>{selectedTeam.subdomain.value.slice(0, 1).toUpperCase()}</AvatarFallback>
+              <AvatarImage src={""} alt={selectedWorkspace.name.value} className="grayscale" />
+              <AvatarFallback>{selectedWorkspace.subdomain.value.slice(0, 1).toUpperCase()}</AvatarFallback>
             </Avatar>
-            {!isCollapsed && <p className="truncate">{selectedTeam.name.value}</p>}
+            {!isCollapsed && (
+              <p className="truncate" date-testid="currentWorkspaceName">
+                {selectedWorkspace.name.value}
+              </p>
+            )}
             {!isCollapsed && <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />}
           </Button>
         </PopoverTrigger>
@@ -73,7 +77,7 @@ export const WorkspaceSwitcher = ({ className, isCollapsed, workspaces, currentW
                   <CommandItem
                     key={w.id.value.asString}
                     onSelect={() => {
-                      setSelectedTeam(w)
+                      setSelectedWorkspace(w)
                       setOpen(false)
                     }}
                     className="text-sm"
@@ -84,7 +88,7 @@ export const WorkspaceSwitcher = ({ className, isCollapsed, workspaces, currentW
                     </Avatar>
                     {w.name.value}
                     <CheckIcon
-                      className={cn("ml-auto h-4 w-4", selectedTeam.equals(w) ? "opacity-100" : "opacity-0")}
+                      className={cn("ml-auto h-4 w-4", selectedWorkspace.equals(w) ? "opacity-100" : "opacity-0")}
                     />
                   </CommandItem>
                 </CommandGroup>

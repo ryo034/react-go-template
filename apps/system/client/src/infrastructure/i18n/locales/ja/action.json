@@ -17,6 +17,7 @@
     "inviting": "招待中",
     "inviteTarget": "{{target}}を招待する",
     "successInvite": "ユーザーを招待しました",
-    "failedInvite": "ユーザーの招待に失敗しました"
+    "failedInvite": "ユーザーの招待に失敗しました",
+    "join": "参加"
   }
 }

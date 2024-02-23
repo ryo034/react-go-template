@@ -32,6 +32,9 @@
         "invitationAlreadyRevokedDescription": "If you think this is a mistake or if you have trouble logging into the workspace, please contact the workspace admins or support.",
         "unknownErrorDescription": "If you think this is a mistake or if you have trouble logging into the workspace, please contact the workspace admins or support."
       }
+    },
+    "receivedInvitations": {
+      "title": "You have access to these workspaces"
     }
   }
 }

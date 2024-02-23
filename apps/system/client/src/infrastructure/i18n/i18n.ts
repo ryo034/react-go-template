@@ -67,7 +67,8 @@ export const i18nKeys = {
     subdomain: `${i18nRootKeys.word}.subdomain`,
     displayName: `${i18nRootKeys.word}.displayName`,
     member: `${i18nRootKeys.word}.member`,
-    goBack: `${i18nRootKeys.word}.goBack`
+    goBack: `${i18nRootKeys.word}.goBack`,
+    inviter: `${i18nRootKeys.word}.inviter`
   },
   action: {
     submit: `${i18nRootKeys.action}.submit`,
@@ -87,7 +88,8 @@ export const i18nKeys = {
     inviting: `${i18nRootKeys.action}.inviting`,
     inviteTarget: `${i18nRootKeys.action}.inviteTarget`,
     successInvite: `${i18nRootKeys.action}.successInvite`,
-    failedInvite: `${i18nRootKeys.action}.failedInvite`
+    failedInvite: `${i18nRootKeys.action}.failedInvite`,
+    join: `${i18nRootKeys.action}.join`
   },
   form: {
     required: `${i18nRootKeys.form}.required`,
@@ -133,6 +135,9 @@ export const i18nKeys = {
         invitationAlreadyRevokedDescription: `${i18nRootKeys.page}.startInvitation.error.invitationAlreadyRevokedDescription`,
         unknownDescription: `${i18nRootKeys.page}.startInvitation.error.unknownDescription`
       }
+    },
+    receivedInvitations: {
+      title: `${i18nRootKeys.page}.receivedInvitations.title`
     }
   },
   network: {

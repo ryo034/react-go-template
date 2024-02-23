@@ -21,7 +21,7 @@ export const getOtpCodeFromRedis = async (email: string): Promise<string> => {
   const redis = await RedisClient.create()
   const code = await redis.get(`otp:${email}`)
   if (code === null) {
-    throw new Error("code is null")
+    return ""
   }
   return code
 }

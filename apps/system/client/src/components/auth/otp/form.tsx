@@ -91,7 +91,6 @@ export const VerifyOTPPageForm = ({ onSubmit, errorMessage }: Props) => {
   const otpInput6Field = register("otpInput6", {
     maxLength: 1,
     onChange(e) {
-      console.log("onChange")
       setValue("otpInput6", e.target.value.slice(-1))
     }
   })

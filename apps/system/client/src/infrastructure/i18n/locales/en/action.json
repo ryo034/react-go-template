@@ -17,6 +17,7 @@
     "inviting": "Inviting",
     "inviteTarget": "Invite {{target}}",
     "successInvite": "Invite Success",
-    "failedInvite": "Invite Failed"
+    "failedInvite": "Invite Failed",
+    "join": "Join"
   }
 }

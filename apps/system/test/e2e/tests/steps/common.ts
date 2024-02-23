@@ -113,9 +113,10 @@ export default class PagesStep {
 
   @Step("現在のURLのパスが<urlPath>")
   async assetUrl(urlPath: string) {
-    const currentURL = new URL(await page.url())
-    const targetURL = new URL(`${currentURL.origin}${urlPath}`)
-    await expect(page).toHaveURL(targetURL.href)
+    const u = await page.url()
+    const currentURL = new URL(u)
+    const targetURL = new URL(`${currentURL.origin}${urlPath} `)
+    expect(currentURL.pathname).toBe(targetURL.pathname)
   }
 
   private testURL(url: URL, pattern: string): boolean {

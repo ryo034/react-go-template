@@ -37,7 +37,9 @@ export const SidebarUserNav = () => {
                 <AvatarImage src="/avatars/01.png" alt="@shadcn" />
                 <AvatarFallback>{me.member?.profile.displayName?.firstTwoCharacters}</AvatarFallback>
               </Avatar>
-              <p className="text-sm text-gray-500 dark:text-gray-400">{me.member?.profile.displayName?.value}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400" data-testid="displayNameOnSidebar">
+                {me.member?.profile.displayName?.value}
+              </p>
             </div>
           </Card>
         </div>

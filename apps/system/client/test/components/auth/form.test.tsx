@@ -30,7 +30,7 @@ describe("LoginForm", () => {
           },
           action: {
             login: "ログイン",
-            sendOneTimeCode: "ワンタイムコードを送信する",
+            sendOneTimeCode: "ワンタイムパスワードを送信する",
             startWithEmail: "メールアドレスで始める"
           },
           form: {

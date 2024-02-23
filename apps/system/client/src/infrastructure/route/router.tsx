@@ -1,9 +1,10 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import { routeMap } from "~/infrastructure/route/path"
-import { AuthLayout } from "~/layout/auth"
+import { AuthLayout, AuthenticatedLayout } from "~/layout/auth"
 import { DashboardLayout } from "~/layout/dashboard"
 import { InvitationLayout } from "~/layout/invitation"
 import { LoadingLayout } from "~/layout/loading"
+import { OnboardingLayout } from "~/layout/onboarding"
 import { ThemeLayout } from "~/layout/theme"
 import { TrackingLayout } from "~/layout/tracking"
 import { AuthPage } from "~/pages/auth"
@@ -31,6 +32,13 @@ const router = createBrowserRouter([
             element: <LoadingLayout />,
             children: [
               {
+                element: <AuthenticatedLayout />,
+                children: [
+                  { path: routeMap.auth, element: <AuthPage /> },
+                  { path: routeMap.verifyOtp, element: <VerifyOtpPage /> }
+                ]
+              },
+              {
                 element: <InvitationLayout />,
                 children: [
                   { path: routeMap.startInvitationPageRoute, element: <StartInvitationPage /> },
@@ -38,14 +46,15 @@ const router = createBrowserRouter([
                 ]
               },
               {
+                element: <OnboardingLayout />,
+                children: [
+                  { path: routeMap.onboardingSettingName, element: <OnboardingSettingNamePage /> },
+                  { path: routeMap.onboardingSettingWorkspace, element: <OnboardingSettingWorkspacePage /> }
+                ]
+              },
+              {
                 element: <AuthLayout />,
                 children: [
-                  // invitation
-                  // auth
-                  { path: routeMap.auth, element: <AuthPage /> },
-                  { path: routeMap.verifyOtp, element: <VerifyOtpPage /> },
-                  { path: routeMap.onboardingSettingName, element: <OnboardingSettingNamePage /> },
-                  { path: routeMap.onboardingSettingWorkspace, element: <OnboardingSettingWorkspacePage /> },
                   {
                     element: <DashboardLayout />,
                     children: [

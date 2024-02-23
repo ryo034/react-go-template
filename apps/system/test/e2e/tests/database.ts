@@ -12,7 +12,7 @@ const logWithEllipsis = (text: string, maxLength = 50) => {
   }
 }
 
-const showLog = (text: string) => {
+export const showLog = (text: string) => {
   if (isSilent) return
   console.log(text)
 }

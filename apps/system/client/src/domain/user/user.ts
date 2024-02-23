@@ -21,7 +21,7 @@ export class User extends Entity<Props> {
   }
 
   get hasName(): boolean {
-    return !!this.value.name
+    return this.value.name !== undefined && this.value.name.value !== ""
   }
 
   get hasNotName(): boolean {

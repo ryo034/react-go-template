@@ -10,6 +10,7 @@
     "displayName": "表示名",
     "member": "メンバー",
     "invitation": "招待",
-    "goBack": "戻る"
+    "goBack": "戻る",
+    "inviter": "招待者"
   }
 }

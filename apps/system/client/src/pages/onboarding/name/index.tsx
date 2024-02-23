@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { OnboardingSettingNamePageForm, OnboardingSettingNamePageFormValues } from "~/components/onboarding/name/form"
 import { AuthProviderUserNotFoundError } from "~/infrastructure/error"
 import { ContainerContext } from "~/infrastructure/injector/context"
+import { receivedInvitationsPageRoute } from "~/pages/receivedInvitation"
 import { onboardingSettingWorkspacePageRoute } from "../workspace"
 import { useOnboardingSettingNamePageMessage } from "./message"
 
@@ -31,7 +32,13 @@ export const OnboardingSettingNamePage = () => {
       setErrorMessage(errorMessageProvider.resolve(res))
       return
     }
-    navigate(onboardingSettingWorkspacePageRoute)
+    if (me?.hasReceivedInvitations === true) {
+      navigate(receivedInvitationsPageRoute)
+      return
+    }
+    if (me?.hasNotWorkspace === true) {
+      navigate(onboardingSettingWorkspacePageRoute)
+    }
   }
 
   return (

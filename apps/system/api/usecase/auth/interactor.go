@@ -4,6 +4,8 @@ import (
 	"context"
 	"database/sql"
 
+	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 
 	"github.com/go-faster/errors"
@@ -95,13 +97,17 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 		if err = u.memberLastLogin(pr, p, usr.AccountID()); err != nil {
 			return "", err
 		}
+		if tk == "" {
+			return "", domainErr.NewUnauthenticated()
+		}
 		return tk, nil
 	}
 	result := pr.Transactional(fn)()
 	if err = result.Error(); err != nil {
 		return nil, err
 	}
-	return u.op.JwtToken(result.Value(0).(string)), nil
+	tk := result.Value(0).(string)
+	return u.op.JwtToken(tk), nil
 }
 
 func (u *useCase) verifyOTP(ctx context.Context, aID account.ID, email account.Email, code string) (string, error) {

@@ -10,6 +10,7 @@
     "displayName": "Display Name",
     "member": "Member",
     "invitation": "Invitation",
-    "goBack": "Go back"
+    "goBack": "Go back",
+    "inviter": "inviter"
   }
 }
