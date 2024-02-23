@@ -14,6 +14,7 @@
     "format": "biome format ./",
     "preview": "vite preview",
     "test": "vitest run --reporter verbose",
+    "test-m": "vitest run --reporter verbose ./test/components/onboarding/name/form.test.tsx",
     "test-coverage": "vitest run --reporter verbose --coverage",
     "test-components": "vitest run ./test/components/library/reference/create/form.test.tsx --reporter verbose",
     "test-watch-components": "vitest ./test/components --reporter verbose"

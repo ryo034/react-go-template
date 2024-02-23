@@ -1,4 +1,5 @@
-import { AccountId, Entity, WorkspaceId, WorkspaceName, WorkspaceSubdomain } from "~/domain"
+import { AccountId, WorkspaceId, WorkspaceName, WorkspaceSubdomain } from "~/domain"
+import { Entity } from "~/domain/shared"
 
 interface Props {
   id: WorkspaceId

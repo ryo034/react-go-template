@@ -1,5 +1,5 @@
 import { Result } from "true-myth"
-import { DomainError, ValueObject, domainKeys } from "."
+import { DomainError, ValueObject, domainKeys } from "~/domain/shared"
 
 export class Phone extends ValueObject<string> {
   static pattern = new RegExp(/^0[789]0\d{8}$/)

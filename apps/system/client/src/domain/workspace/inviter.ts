@@ -1,4 +1,5 @@
-import { Email, Entity, Member, MemberDisplayName, Workspace } from "~/domain"
+import { Member, Workspace } from "~/domain"
+import { Entity } from "~/domain/shared"
 
 interface Props {
   self: Member

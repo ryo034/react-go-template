@@ -1,4 +1,4 @@
-import { AbstractEntity } from "."
+import { AbstractEntity } from "~/domain/shared"
 
 interface EntityProps {
   [index: string]: any

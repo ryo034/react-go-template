@@ -1,4 +1,5 @@
-import { Entities, Invitation } from "~/domain"
+import { Invitation } from "~/domain"
+import { Entities } from "~/domain/shared"
 
 export class Invitations extends Entities<Invitation> {
   static create(vs: Array<Invitation>): Invitations {

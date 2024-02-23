@@ -1,5 +1,5 @@
 import { Result } from "true-myth"
-import { DomainError, ValueObject, domainKeys } from "."
+import { DomainError, ValueObject, domainKeys } from "~/domain/shared"
 
 export class Email extends ValueObject<string> {
   static max = 320

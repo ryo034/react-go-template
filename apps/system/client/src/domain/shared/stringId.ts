@@ -1,5 +1,5 @@
 import { Result } from "true-myth"
-import { DomainError, ValueObject, domainKeys } from "."
+import { DomainError, ValueObject, domainKeys } from "~/domain/shared"
 
 export class StringId extends ValueObject<string> {
   static create(v: string): Result<StringId, Error> {

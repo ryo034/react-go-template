@@ -1,7 +1,5 @@
 import { Result } from "true-myth"
-import { DomainError, ValueObject, domainKeys } from "."
-
-export const regexErrMsg = "Password must contain at least one uppercase letter, one lowercase letter, and one digit."
+import { DomainError, ValueObject, domainKeys } from "~/domain/shared"
 
 export class Password extends ValueObject<string> {
   static min = 6
@@ -46,7 +44,7 @@ export class Password extends ValueObject<string> {
         new DomainError({
           domainKey: domainKeys.Password,
           value: v,
-          message: regexErrMsg
+          message: "Password must contain at least one uppercase letter, one lowercase letter, and one digit."
         })
       )
     }

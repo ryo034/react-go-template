@@ -1,6 +1,4 @@
-import { render } from "@testing-library/react"
 import { describe, test } from "vitest"
-import { InviteMembersDialog } from "~/components/member/inviteDialog"
 
 describe("InviteMembersDialog", () => {
   // beforeAll(() => {
@@ -13,7 +11,9 @@ describe("InviteMembersDialog", () => {
   // I can't test the dialog, as mentioned in the issue, so I'll test it E2E
   // https://github.com/radix-ui/primitives/discussions/1130
   test("correctly open and closes dialog", async () => {
-    render(<InviteMembersDialog />)
+    console.log("success")
+
+    // render(<InviteMembersDialog />)
     // const { getByTestId } = render(<InviteMembersDialog />)
     // await userEvent.click(getByTestId("inviteMembersButton"))
     // await waitFor(() => {

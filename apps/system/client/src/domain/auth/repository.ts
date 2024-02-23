@@ -1,4 +1,5 @@
-import { CustomToken, Email, Otp, ReceivedInvitation } from "~/domain"
+import { CustomToken, Otp, ReceivedInvitation } from "~/domain"
+import { Email } from "~/domain/shared"
 import { PromiseResult } from "~/infrastructure/shared"
 
 export interface AuthRepository {

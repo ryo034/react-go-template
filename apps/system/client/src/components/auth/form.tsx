@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { Button, FormResultErrorMessage, LoadingButton, SeparatorWithTitle } from "shared-ui"
 import { useAuthPageFormMessage } from "~/components/auth/message"
 import { FormInputSection } from "~/components/common/form/inputSection"
-import { Email } from "~/domain"
+import { Email } from "~/domain/shared"
 
 export type LoginFormValues = {
   email: string
