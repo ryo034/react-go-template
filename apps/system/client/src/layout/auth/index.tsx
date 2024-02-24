@@ -22,33 +22,34 @@ export const AuthLayout = () => {
     })
 
     const unsubscribed = firebaseAuth.onAuthStateChanged(async (user) => {
-      if (loading) {
-        return
-      }
-      if (!user) {
-        await controller.me.signOut()
-        navigate(unprotectedInitialPagePath)
-        return
-      }
+      if (!loading) {
+        if (!user) {
+          await controller.me.signOut()
+          navigate(unprotectedInitialPagePath)
+          return
+        }
 
-      if (!meIsLoadingRef.current && meRef.current !== null) {
-        return
-      }
-      const res = await controller.me.find()
-      if (!res) return
-      if (res !== null) {
-        await controller.me.signOut()
-        navigate(unprotectedInitialPagePath)
+        if (!meIsLoadingRef.current && meRef.current !== null) {
+          return
+        }
+        const res = await controller.me.find()
+        if (!res) return
+        if (res !== null) {
+          await controller.me.signOut()
+          navigate(unprotectedInitialPagePath)
+        }
       }
     })
     return () => unsubscribed()
   }, [loading, navigate, me])
 
-  if (loading || meIsLoadingRef.current) {
-    return <Loading />
+  // loading can not early return
+  if (!loading) {
+    if (meRef.current !== null) {
+      return <Outlet />
+    }
   }
-
-  return <Outlet />
+  return <Loading />
 }
 
 export const AuthenticatedLayout = () => {
@@ -67,11 +68,10 @@ export const AuthenticatedLayout = () => {
     })
 
     const unsubscribed = firebaseAuth.onAuthStateChanged(async (user) => {
-      if (loading) {
-        return
-      }
-      if (!user) {
-        return
+      if (!loading) {
+        if (!user) {
+          return
+        }
       }
     })
     return () => unsubscribed()

@@ -20,15 +20,13 @@ export const OnboardingLayout = () => {
       meIsLoadingRef.current = state.isLoading
     })
     const unsubscribed = firebaseAuth.onAuthStateChanged(async (user) => {
-      if (loading) {
-        return
-      }
-      if (!user) {
+      if (!loading) {
+        if (user) {
+          await controller.me.find()
+        }
         await controller.me.signOut()
         navigate(routeMap.auth)
-        return
       }
-      await controller.me.find()
     })
     return () => unsubscribed()
   }, [loading, navigate])

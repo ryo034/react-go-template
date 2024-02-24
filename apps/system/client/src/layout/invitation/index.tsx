@@ -71,13 +71,12 @@ export const InvitationLayout = () => {
       meIsLoadingRef.current = state.isLoading
     })
     const unsubscribed = firebaseAuth.onAuthStateChanged(async (user) => {
-      if (loading) {
-        return
+      if (!loading) {
+        if (!user) {
+          return
+        }
+        await controller.me.find()
       }
-      if (!user) {
-        return
-      }
-      await controller.me.find()
     })
     return () => unsubscribed()
   }, [loading, navigate])
