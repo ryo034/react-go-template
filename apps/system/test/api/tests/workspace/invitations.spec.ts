@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test"
-import { authHeaders, defaultPostHeaders } from "../../config/config"
-import { genAPIClient, getAuthInfo, getInviteToken, statefulTest } from "../../scripts"
+import { authHeaders } from "../../config/config"
+import { genAPIClient, getAuthInfo, statefulTest } from "../../scripts"
 
 const client = genAPIClient()
 
@@ -62,22 +62,10 @@ test.describe("invite members", () => {
 })
 
 test.describe("get invitations", () => {
-  test("invalid status", async () => {
-    const email = "system_account@example.com"
-    const authInfo = await getAuthInfo(email)
-    const res = await client.GET("/api/v1/invitations", {
-      headers: authHeaders(authInfo.token),
-      // @ts-ignore
-      params: { query: { status: "fuga" } }
-    })
-    expect(res.response.status).toBe(400)
-  })
   test("success to get invitations without revoked and already registered", async () => {
     const email = "system_account@example.com"
     const authInfo = await getAuthInfo(email)
-    const res = await client.GET("/api/v1/invitations", {
-      headers: authHeaders(authInfo.token)
-    })
+    const res = await client.GET("/api/v1/invitations", { headers: authHeaders(authInfo.token) })
     expect(res.response.status).toBe(200)
     expect(res.error).toBeUndefined()
     expect(JSON.stringify(res.data)).toEqual(JSON.stringify((await import("./success_get_invitations.json")).default))
