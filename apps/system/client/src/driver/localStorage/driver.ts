@@ -1,4 +1,4 @@
-import { StringId } from "~/domain"
+import { StringId } from "~/domain/shared"
 
 const keys = {
   selectedStoreId: "selectedStoreId"

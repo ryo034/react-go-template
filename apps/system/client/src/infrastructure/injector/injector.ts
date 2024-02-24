@@ -2,7 +2,7 @@ import ga4 from "react-ga4"
 import { ApiErrorHandler, ErrorHandlingServiceMessageProvider } from "shared-network"
 import { AuthDriver, ThemeDriver } from "~/driver"
 import { FirebaseDriver } from "~/driver"
-import { GoogleAnalyticsDriver } from "~/driver/analytics/ga/driver"
+import { LoggerDriver } from "~/driver/logger/driver"
 import { MeDriver } from "~/driver/me/driver"
 import { WorkspaceDriver } from "~/driver/workspace/driver"
 import { MessageProvider } from "~/infrastructure/error/message"
@@ -50,7 +50,7 @@ const setupDriver = () => {
   const firebase = new FirebaseDriver(firebaseAuth, apiErrorHandler)
   return {
     firebase,
-    ga: new GoogleAnalyticsDriver(ga4, apiErrorHandler),
+    logger: new LoggerDriver(ga4, apiErrorHandler),
     theme: new ThemeDriver(ls),
     me: new MeDriver(openapiFetchClient, apiErrorHandler),
     auth: new AuthDriver(openapiFetchClient, apiErrorHandler),
