@@ -1,14 +1,15 @@
 package error
 
 type Unauthenticated struct {
+	msg string
 }
 
-func NewUnauthenticated() *Unauthenticated {
-	return &Unauthenticated{}
+func NewUnauthenticated(msg string) *Unauthenticated {
+	return &Unauthenticated{msg}
 }
 
 func (u *Unauthenticated) Error() string {
-	return "Unauthenticated"
+	return u.msg
 }
 
 func (u *Unauthenticated) MessageKey() MessageKey {

@@ -44,6 +44,8 @@ verify:
               $ref: "#/components/schemas/JwtToken"
       "400":
         $ref: "#/components/responses/BadRequestError"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
       "429":
         $ref: "#/components/responses/TooManyRequestsError"
       "500":

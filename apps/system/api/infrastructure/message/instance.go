@@ -64,6 +64,10 @@ var instanceMessages = map[domainError.MessageKey]map[language.Tag]string{
 		language.Japanese: "参照している情報が古くなっています。画面を更新して下さい。",
 		language.English:  "You are seeing old data. Please reload your current page",
 	},
+	domainError.ForbiddenMessageKey: {
+		language.Japanese: "アクセス権限がありません",
+		language.English:  "You don't have permission",
+	},
 	domainError.ConflictVersionMessageKey: {
 		language.Japanese: "参照している情報が古くなっています。画面を更新して下さい。",
 		language.English:  "You are seeing old data. Please reload your current page",

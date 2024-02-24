@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
+
 	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	infraShared "github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
@@ -50,8 +52,7 @@ func (c *controller) UpdateProfile(ctx context.Context, i openapi.User) (openapi
 		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePutRes), nil
 	}
 	if i.UserId != aID.Value() {
-		// TODO: Return BadRequest
-		return c.resl.Error(ctx, fmt.Errorf("Invalid Input")).(openapi.APIV1MeProfilePutRes), nil
+		return c.resl.Error(ctx, domainErr.NewForbidden(fmt.Sprintf("Invalid User ID: %s", i.UserId))).(openapi.APIV1MeProfilePutRes), nil
 	}
 	in, err := meUc.NewUpdateProfileInput(i)
 	if err != nil {

@@ -43,7 +43,6 @@ func (a *adapter) Adapt(i *models.Invitation) (*invitation.Invitation, error) {
 		} else if ev.EventType == "accepted" {
 			evs = append(evs, invitation.NewAsAccepted(datetime.NewDatetime(ev.CreatedAt)))
 		} else {
-			//TODO: Error handling
 			return nil, fmt.Errorf("unknown event type: %s", ev.EventType)
 		}
 	}

@@ -12,6 +12,12 @@ components:
         application/json:
           schema:
             $ref: "../schemas/error.yaml#/GeneralError"
+    ForbiddenError:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/error.yaml#/GeneralError"
     NotFoundError:
       description: Entity not found.
       content:

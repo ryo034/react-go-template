@@ -2,6 +2,7 @@ package workspace
 
 import (
 	"context"
+
 	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
@@ -164,7 +165,6 @@ func (p *driver) InviteMembers(ctx context.Context, exec bun.IDB, inviter worksp
 			})
 		}
 	}
-	//TODO: Parallel insert
 	if _, err = exec.NewInsert().Model(&invs).Exec(ctx); err != nil {
 		return err
 	}

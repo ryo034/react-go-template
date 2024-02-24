@@ -109,7 +109,7 @@ func (d *driver) MustGetCurrentWorkspaceFromCustomClaim(ctx context.Context, aID
 		return workspace.ID{}, err
 	}
 	if wID == nil {
-		return workspace.ID{}, domainErr.NewUnauthenticated()
+		return workspace.ID{}, domainErr.NewUnauthenticated(fmt.Sprintf("account %s has no current workspace", aID.ToString()))
 	}
 	return *wID, nil
 }

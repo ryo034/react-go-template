@@ -2,6 +2,7 @@ package shared
 
 import (
 	"context"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/spf13/cast"
@@ -42,7 +43,7 @@ func (co contextOperator) SetUID(ctx context.Context, uID string) context.Contex
 func (co contextOperator) GetUID(ctx context.Context) (account.ID, error) {
 	value := ctx.Value(ContextUIDKey)
 	if value == nil {
-		return account.ID{}, domainErr.NewUnauthenticated()
+		return account.ID{}, domainErr.NewUnauthenticated("uid is not found")
 	}
 	return account.NewID(value.(string))
 }

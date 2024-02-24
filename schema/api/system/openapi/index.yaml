@@ -89,6 +89,8 @@ components:
       $ref: "./components/responses/error.yaml#/components/responses/GeneralError"
     BadRequestError:
       $ref: "./components/responses/error.yaml#/components/responses/BadRequestError"
+    ForbiddenError:
+      $ref: "./components/responses/error.yaml#/components/responses/ForbiddenError"
     NotFoundError:
       $ref: "./components/responses/error.yaml#/components/responses/NotFoundError"
     UnauthorizedError:

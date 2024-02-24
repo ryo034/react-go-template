@@ -57,6 +57,8 @@ paths:
                 $ref: '#/components/schemas/JwtToken'
         '400':
           $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
         '429':
           $ref: '#/components/responses/TooManyRequestsError'
         '500':
@@ -150,6 +152,8 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /api/v1/login:
@@ -615,6 +619,36 @@ components:
                 description: A custom code identifying the specific error.
     BadRequestError:
       description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            description: RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807
+            properties:
+              status:
+                type: integer
+                example: 400
+                description: >-
+                  The HTTP status code generated for this occurrence of the
+                  problem.
+              type:
+                type: string
+                example: invalid_item_id
+                description: error type
+              title:
+                type: string
+                description: A short, human-readable summary of the problem type
+              detail:
+                type: string
+                description: >-
+                  A human-readable explanation specific to this occurrence of
+                  the problem.
+              code:
+                type: string
+                example: 400-001
+                description: A custom code identifying the specific error.
+    ForbiddenError:
+      description: Forbidden
       content:
         application/json:
           schema:

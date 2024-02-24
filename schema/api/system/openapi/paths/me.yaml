@@ -29,6 +29,8 @@ profile:
         $ref: "#/components/responses/UpdateProfileResponse"
       "401":
         $ref: "#/components/responses/UnauthorizedError"
+      "403":
+        $ref: "#/components/responses/ForbiddenError"
       "400":
         $ref: "#/components/responses/BadRequestError"
       "500":

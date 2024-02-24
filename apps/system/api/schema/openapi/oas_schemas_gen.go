@@ -304,6 +304,72 @@ func (s *CreateWorkspaceResponse) SetWorkspace(val Workspace) {
 
 func (*CreateWorkspaceResponse) aPIV1WorkspacesPostRes() {}
 
+// RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
+type ForbiddenError struct {
+	// The HTTP status code generated for this occurrence of the problem.
+	Status OptInt `json:"status"`
+	// Error type.
+	Type OptString `json:"type"`
+	// A short, human-readable summary of the problem type.
+	Title OptString `json:"title"`
+	// A human-readable explanation specific to this occurrence of the problem.
+	Detail OptString `json:"detail"`
+	// A custom code identifying the specific error.
+	Code OptString `json:"code"`
+}
+
+// GetStatus returns the value of Status.
+func (s *ForbiddenError) GetStatus() OptInt {
+	return s.Status
+}
+
+// GetType returns the value of Type.
+func (s *ForbiddenError) GetType() OptString {
+	return s.Type
+}
+
+// GetTitle returns the value of Title.
+func (s *ForbiddenError) GetTitle() OptString {
+	return s.Title
+}
+
+// GetDetail returns the value of Detail.
+func (s *ForbiddenError) GetDetail() OptString {
+	return s.Detail
+}
+
+// GetCode returns the value of Code.
+func (s *ForbiddenError) GetCode() OptString {
+	return s.Code
+}
+
+// SetStatus sets the value of Status.
+func (s *ForbiddenError) SetStatus(val OptInt) {
+	s.Status = val
+}
+
+// SetType sets the value of Type.
+func (s *ForbiddenError) SetType(val OptString) {
+	s.Type = val
+}
+
+// SetTitle sets the value of Title.
+func (s *ForbiddenError) SetTitle(val OptString) {
+	s.Title = val
+}
+
+// SetDetail sets the value of Detail.
+func (s *ForbiddenError) SetDetail(val OptString) {
+	s.Detail = val
+}
+
+// SetCode sets the value of Code.
+func (s *ForbiddenError) SetCode(val OptString) {
+	s.Code = val
+}
+
+func (*ForbiddenError) aPIV1MeProfilePutRes() {}
+
 type GetInvitationByTokenResponse struct {
 	ReceivedInvitation ReceivedInvitation `json:"receivedInvitation"`
 }
@@ -1278,6 +1344,7 @@ func (s *UnauthorizedError) SetCode(val OptString) {
 	s.Code = val
 }
 
+func (*UnauthorizedError) aPIV1AuthOtpVerifyPostRes()         {}
 func (*UnauthorizedError) aPIV1InvitationsGetRes()            {}
 func (*UnauthorizedError) aPIV1MeGetRes()                     {}
 func (*UnauthorizedError) aPIV1MeProfilePutRes()              {}

@@ -58,6 +58,7 @@ export interface paths {
           };
         };
         400: components["responses"]["BadRequestError"];
+        401: components["responses"]["UnauthorizedError"];
         429: components["responses"]["TooManyRequestsError"];
         500: components["responses"]["InternalServerError"];
       };
@@ -113,6 +114,7 @@ export interface paths {
         200: components["responses"]["UpdateProfileResponse"];
         400: components["responses"]["BadRequestError"];
         401: components["responses"]["UnauthorizedError"];
+        403: components["responses"]["ForbiddenError"];
         500: components["responses"]["InternalServerError"];
       };
     };
@@ -323,6 +325,32 @@ export interface components {
     };
     /** @description Bad request */
     BadRequestError: {
+      content: {
+        "application/json": {
+          /**
+           * @description The HTTP status code generated for this occurrence of the problem.
+           * @example 400
+           */
+          status?: number;
+          /**
+           * @description error type
+           * @example invalid_item_id
+           */
+          type?: string;
+          /** @description A short, human-readable summary of the problem type */
+          title?: string;
+          /** @description A human-readable explanation specific to this occurrence of the problem. */
+          detail?: string;
+          /**
+           * @description A custom code identifying the specific error.
+           * @example 400-001
+           */
+          code?: string;
+        };
+      };
+    };
+    /** @description Forbidden */
+    ForbiddenError: {
       content: {
         "application/json": {
           /**

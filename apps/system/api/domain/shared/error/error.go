@@ -9,6 +9,7 @@ const (
 	EmailNotVerifiedMessageKey        MessageKey = "EmailNotVerified"
 	InvalidAddressMessageKey          MessageKey = "InvalidAddress"
 	ConflictedMessageKey              MessageKey = "Conflicted"
+	ForbiddenMessageKey               MessageKey = "Forbidden"
 	ConflictVersionMessageKey         MessageKey = "ConflictVersion"
 	NoSuchDataMessageKey              MessageKey = "NoSuchData"
 	UnauthenticatedMessageKey         MessageKey = "Unauthenticated"

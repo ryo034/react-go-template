@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 
@@ -98,7 +99,7 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 			return "", err
 		}
 		if tk == "" {
-			return "", domainErr.NewUnauthenticated()
+			return "", domainErr.NewUnauthenticated(fmt.Sprintf("Invalid OTP: %s", i.Otp))
 		}
 		return tk, nil
 	}
@@ -115,9 +116,8 @@ func (u *useCase) verifyOTP(ctx context.Context, aID account.ID, email account.E
 	if err != nil {
 		return "", err
 	}
-	//TODO: custom error
 	if !ok {
-		return "", err
+		return "", domainErr.NewUnauthenticated(fmt.Sprintf("Invalid OTP: %s", code))
 	}
 	return u.fbDr.CustomToken(ctx, aID)
 }
