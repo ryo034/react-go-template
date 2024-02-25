@@ -34,6 +34,11 @@ export default class PagesStep {
     await page.goto(`${homeURL}/auth`)
   }
 
+  @Step("設定のプロフィール設定を開く")
+  async goToProfileSettings() {
+    await page.goto(`${homeURL}/settings/profile`)
+  }
+
   @Step("アカウント設定画面を開く")
   async goToAccountSettings() {
     await page.goto(`${homeURL}/account/settings`)
@@ -144,5 +149,12 @@ export default class PagesStep {
   async clickSidebarUserIcon() {
     const target = page.getByTestId("userNavigationOnSidebar")
     await target.click()
+  }
+
+  @Step("トーストメッセージ<message>が表示されている")
+  async isVisibleToastMessage(message: string) {
+    const target = page.getByTestId("toastTitle")
+    await target.waitFor()
+    expect(await target.textContent()).toBe(message)
   }
 }

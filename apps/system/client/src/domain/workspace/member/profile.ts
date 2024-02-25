@@ -3,7 +3,6 @@ import { MemberDisplayName, MemberId, MemberIdNumber } from "~/domain/workspace/
 import { MemberBio } from "./bio"
 
 interface Props {
-  id: MemberId
   displayName?: MemberDisplayName
   idNumber?: MemberIdNumber
   bio: MemberBio
@@ -12,10 +11,6 @@ interface Props {
 export class MemberProfile extends Entity<Props> {
   static create(v: Props): MemberProfile {
     return new MemberProfile(v)
-  }
-
-  get id(): MemberId {
-    return this.value.id
   }
 
   get displayName(): MemberDisplayName | undefined {

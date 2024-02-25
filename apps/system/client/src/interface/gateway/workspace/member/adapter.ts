@@ -18,7 +18,7 @@ export class MemberGatewayAdapter {
       return Result.err(user.error)
     }
 
-    const id = MemberId.fromString(member.profile.id)
+    const id = MemberId.fromString(member.id)
     if (id.isErr) {
       return Result.err(id.error)
     }

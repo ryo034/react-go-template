@@ -12,7 +12,8 @@ VALUES
 ('018d6189-9ad0-7b72-801b-1e0de0d3c214', '2024-01-10 12:00:00'),
 ('018d96bf-8dce-7f68-a926-b5d7ed6ed883', '2024-01-10 12:00:00'),
 ('018d9b4d-9438-79ac-b533-1323d4ec9b9f', '2024-01-10 12:00:00'),
-('018da09e-c6ca-795e-878d-32bb8c1e5cac', '2024-01-10 12:00:00');
+('018da09e-c6ca-795e-878d-32bb8c1e5cac', '2024-01-10 12:00:00'),
+('018ddee7-3a8e-7387-a03e-2b37173b5ada', '2024-01-10 12:00:00');
 
 INSERT INTO system_account_profiles (system_account_id, name, email, created_at, updated_at)
 VALUES
@@ -21,7 +22,8 @@ VALUES
 ('018d6189-9ad0-7b72-801b-1e0de0d3c214', 'Unfinished Onboarding', 'unfinished_onboarding@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018d96bf-8dce-7f68-a926-b5d7ed6ed883', 'Invite TestOne', 'invite_test_1@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018d9b4d-9438-79ac-b533-1323d4ec9b9f', 'Invite TestTwo', 'invite_test_already_joined_any_workspace@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018da09e-c6ca-795e-878d-32bb8c1e5cac', 'Invite TestThree', 'invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
+('018da09e-c6ca-795e-878d-32bb8c1e5cac', 'Invite TestThree', 'invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018ddee7-3a8e-7387-a03e-2b37173b5ada', 'UpdateMe MemberProfile', 'update_me_member_profile@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
 
 -- INSERT INTO system_account_phone_numbers (system_account_id, phone_number, created_at, updated_at)
 -- VALUES
@@ -33,14 +35,16 @@ VALUES
 ('c1bd2603-b9cd-4f84-8b83-3548f6ae150b', '2024-01-10 12:00:00'),
 ('018d91d5-2ed0-7211-b2e6-cf26182ac4f9', '2024-01-10 12:00:00'),
 ('018d96b9-c920-7434-b5c3-02e5e920ae9d', '2024-01-10 12:00:00'),
-('018d9b4d-e340-74f7-914c-2476eff949bb', '2024-01-10 12:00:00');
+('018d9b4d-e340-74f7-914c-2476eff949bb', '2024-01-10 12:00:00'),
+('018ddee6-6446-7f9d-b750-469a7c2dfac5', '2024-01-10 12:00:00');
 
 INSERT INTO workspace_details (workspace_id, name, subdomain, created_at, updated_at)
 VALUES
 ('c1bd2603-b9cd-4f84-8b83-3548f6ae150b', 'Example', 'example', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018d91d5-2ed0-7211-b2e6-cf26182ac4f9', 'LoginLogoutRetry', 'login-logout-retry', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018d96b9-c920-7434-b5c3-02e5e920ae9d', 'InviteTest 1', 'invite-test-1', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018d9b4d-e340-74f7-914c-2476eff949bb', 'InviteTest 2', 'invite-test-2', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
+('018d9b4d-e340-74f7-914c-2476eff949bb', 'InviteTest 2', 'invite-test-2', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018ddee6-6446-7f9d-b750-469a7c2dfac5', 'UpdateMemberMeProfile Workspace', 'update-me-member-profile', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
 
 INSERT INTO members (member_id, system_account_id, workspace_id, created_at)
 VALUES
@@ -48,7 +52,8 @@ VALUES
 ('018d91d5-c061-78ba-9263-d6ef9e7e6783', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', '018d91d5-2ed0-7211-b2e6-cf26182ac4f9', '2024-01-10 12:00:00'),
 ('018d96b9-f674-7ff6-83eb-506eca6452be', '018d96bf-8dce-7f68-a926-b5d7ed6ed883', '018d96b9-c920-7434-b5c3-02e5e920ae9d', '2024-01-10 12:00:00'),
 ('018d9b4e-d8fb-73be-95c5-46fbc7a37a7d', '018d9b4d-9438-79ac-b533-1323d4ec9b9f', '018d9b4d-e340-74f7-914c-2476eff949bb', '2024-01-10 12:00:00'),
-('018da0dc-dad2-7ac8-95cc-9c3afdd0dbd5', '018da09e-c6ca-795e-878d-32bb8c1e5cac', '018d9b4d-e340-74f7-914c-2476eff949bb', '2024-01-10 12:00:00');
+('018da0dc-dad2-7ac8-95cc-9c3afdd0dbd5', '018da09e-c6ca-795e-878d-32bb8c1e5cac', '018d9b4d-e340-74f7-914c-2476eff949bb', '2024-01-10 12:00:00'),
+('018ddee7-2419-7c62-a9be-a56a2c07916e', '018ddee7-3a8e-7387-a03e-2b37173b5ada', '018ddee6-6446-7f9d-b750-469a7c2dfac5', '2024-01-10 12:00:00');
 
 INSERT INTO member_login_histories (member_login_history_id, member_id, login_at)
 VALUES
@@ -56,7 +61,8 @@ VALUES
 ('018d91d6-34a8-7c2b-8d1b-37622cf2fa1d', '018d91d5-c061-78ba-9263-d6ef9e7e6783', '2024-01-10 12:00:00'),
 ('018d96ba-6ebd-77a6-9534-958f8fe487ce', '018d96b9-f674-7ff6-83eb-506eca6452be', '2024-01-10 12:00:00'),
 ('018d9b4e-0b6e-7f6e-8b7e-9f6e8d7e6f8e', '018d9b4e-d8fb-73be-95c5-46fbc7a37a7d', '2024-01-10 12:00:00'),
-('018da0dc-7577-7e53-8db0-ac3d68801240', '018da0dc-dad2-7ac8-95cc-9c3afdd0dbd5', '2024-01-10 12:00:00');
+('018da0dc-7577-7e53-8db0-ac3d68801240', '018da0dc-dad2-7ac8-95cc-9c3afdd0dbd5', '2024-01-10 12:00:00'),
+('018ddee7-3a8e-7387-a03e-2b37173b5ada', '018ddee7-2419-7c62-a9be-a56a2c07916e', '2024-01-10 12:00:00');
 
 INSERT INTO member_profiles (member_id, member_id_number, display_name, bio, created_at, updated_at)
 VALUES
@@ -64,7 +70,8 @@ VALUES
 ('018d91d5-c061-78ba-9263-d6ef9e7e6783', 'DEV-67890', 'Login LogoutRetry', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018d96b9-f674-7ff6-83eb-506eca6452be', 'DEV-54321', 'Invite TestOne', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018d9b4e-d8fb-73be-95c5-46fbc7a37a7d', 'DEV-09876', 'Invite TestTwo', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018da0dc-dad2-7ac8-95cc-9c3afdd0dbd5', 'DEV-54321', 'Invite TestThree', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
+('018da0dc-dad2-7ac8-95cc-9c3afdd0dbd5', 'DEV-54321', 'Invite TestThree', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018ddee7-2419-7c62-a9be-a56a2c07916e', 'DEV-54321', 'UpdateMe MemberProfile DisplayName', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
 
 INSERT INTO member_addresses (member_id, postal_code, building_component_id, street_address_component_id, city_component_id, state_component_id, country_component_id, created_at)
 VALUES
@@ -75,7 +82,9 @@ VALUES
 ('377eba35-5560-4f48-a99d-19cbd6a82b0d', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
 ('018d91d5-c061-78ba-9263-d6ef9e7e6783', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
 ('018d96b9-f674-7ff6-83eb-506eca6452be', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018d9b4e-d8fb-73be-95c5-46fbc7a37a7d', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00');
+('018d9b4e-d8fb-73be-95c5-46fbc7a37a7d', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
+('018da0dc-dad2-7ac8-95cc-9c3afdd0dbd5', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
+('018ddee7-2419-7c62-a9be-a56a2c07916e', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00');
 
 INSERT INTO invitation_units (invitation_unit_id, workspace_id, invited_by, created_at)
 VALUES

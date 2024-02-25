@@ -34,6 +34,7 @@ func (a *adapter) Adapt(m *member.Member) openapi.Member {
 		User: a.ua.Adapt(m.User()),
 		Profile: openapi.MemberProfile{
 			DisplayName: dn,
+			Bio:         openapi.OptString{Value: p.Bio().ToString(), Set: p.HasBio()},
 			IdNumber: openapi.OptString{
 				Value: p.IDNumber().ToString(),
 				Set:   p.HasIDNumber(),

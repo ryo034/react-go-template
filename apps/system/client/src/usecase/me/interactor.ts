@@ -1,4 +1,4 @@
-import { MeRepository } from "~/domain"
+import { MeRepository, MemberProfile } from "~/domain"
 import { AcceptInvitationInput, MeUseCaseOutput, UpdateMemberProfileInput, UpdateProfileInput } from "~/usecase"
 
 export interface MeUseCase {
@@ -52,7 +52,7 @@ export class MeInteractor implements MeUseCase {
   }
 
   async updateMemberProfile(i: UpdateMemberProfileInput): Promise<Error | null> {
-    const res = await this.repository.updateMemberProfile(i)
+    const res = await this.repository.updateMemberProfile(MemberProfile.create(i))
     if (res.isErr) {
       return res.error
     }

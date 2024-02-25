@@ -1,8 +1,8 @@
 import { Entity } from "@/domain/shared"
-import { User } from "~/domain/user"
-import { MemberProfile } from "~/domain/workspace/member"
+import { MemberId, MemberProfile, User } from "~/domain"
 
 interface Props {
+  id: MemberId
   user: User
   profile: MemberProfile
 }
@@ -10,6 +10,10 @@ interface Props {
 export class Member extends Entity<Props> {
   static create(v: Props): Member {
     return new Member(v)
+  }
+
+  get id(): MemberId {
+    return this.value.id
   }
 
   get user(): User {

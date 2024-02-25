@@ -75,7 +75,9 @@ const ToastClose = forwardRef<ElementRef<typeof Close>, ComponentPropsWithoutRef
 ToastClose.displayName = Close.displayName
 
 const ToastTitle = forwardRef<ElementRef<typeof Title>, ComponentPropsWithoutRef<typeof Title>>(
-  ({ className, ...props }, ref) => <Title ref={ref} className={cn("text-sm font-semibold", className)} {...props} />
+  ({ className, ...props }, ref) => (
+    <Title data-testid="toastTitle" ref={ref} className={cn("text-sm font-semibold", className)} {...props} />
+  )
 )
 ToastTitle.displayName = Title.displayName
 

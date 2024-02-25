@@ -1,6 +1,11 @@
-import { AccountFullName, InvitationId, Me, User } from "~/domain"
+import { AccountFullName, InvitationId, Me, MemberDisplayName, MemberIdNumber, User } from "~/domain"
+import { MemberBio } from "~/domain/workspace/member/bio"
 import { AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
 import { MeUseCase } from "~/usecase"
+
+interface AcceptInvitationInput {
+  invitationId: InvitationId
+}
 
 export interface UpdateProfileNameInput {
   current: Me | null
@@ -9,8 +14,10 @@ export interface UpdateProfileNameInput {
   }
 }
 
-interface AcceptInvitationInput {
-  invitationId: InvitationId
+export interface UpdateMemberProfileInput {
+  displayName: string
+  bio: string
+  idNumber: string
 }
 
 export class MeController {
@@ -22,6 +29,10 @@ export class MeController {
 
   async find(): Promise<null | Error> {
     return await this.useCase.find()
+  }
+
+  async acceptInvitation(i: AcceptInvitationInput): Promise<null | Error> {
+    return await this.useCase.acceptInvitation({ invitationId: i.invitationId })
   }
 
   async updateProfileName(i: UpdateProfileNameInput): Promise<null | Error> {
@@ -37,7 +48,34 @@ export class MeController {
     })
   }
 
-  async acceptInvitation(i: AcceptInvitationInput): Promise<null | Error> {
-    return await this.useCase.acceptInvitation({ invitationId: i.invitationId })
+  async updateMemberProfile(i: UpdateMemberProfileInput): Promise<null | Error> {
+    const bio = MemberBio.create(i.bio)
+    if (bio.isErr) {
+      return bio.error
+    }
+
+    let displayName: MemberDisplayName | undefined = undefined
+    if (i.displayName) {
+      const dn = MemberDisplayName.create(i.displayName)
+      if (dn.isErr) {
+        return dn.error
+      }
+      displayName = dn.value
+    }
+
+    let idNumber: MemberIdNumber | undefined = undefined
+    if (i.idNumber) {
+      const idn = MemberIdNumber.create(i.idNumber)
+      if (idn.isErr) {
+        return idn.error
+      }
+      idNumber = idn.value
+    }
+
+    return await this.useCase.updateMemberProfile({
+      bio: bio.value,
+      displayName,
+      idNumber
+    })
   }
 }

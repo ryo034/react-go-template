@@ -48,8 +48,14 @@ export class MeDriver {
 
   async updateMemberProfile(profile: MemberProfile): PromiseResult<components["schemas"]["Me"], Error> {
     try {
-      const res = await this.client.PUT("/api/v1/members/profile", {
-        body: { profile }
+      const res = await this.client.PUT("/api/v1/me/member/profile", {
+        body: {
+          memberProfile: {
+            displayName: profile.displayName?.value || "",
+            bio: profile.bio.value,
+            idNumber: profile.idNumber ? profile.idNumber.value : ""
+          }
+        }
       })
       return res.data ? Result.ok(res.data.me) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {

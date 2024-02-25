@@ -22,6 +22,10 @@ func (p *Profile) Bio() Bio {
 	return p.bio
 }
 
+func (p *Profile) HasBio() bool {
+	return p.bio.v != ""
+}
+
 func (p *Profile) HasDisplayName() bool {
 	return p.displayName != nil
 }

@@ -42,7 +42,6 @@ export const VerifyOtpPage = () => {
       setErrorMessage(errorMessageProvider.resolve(err))
       return
     }
-
     if (meRef.current === null) {
       return
     }

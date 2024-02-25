@@ -60,6 +60,16 @@
       "customAuth": true,
       "lastRefreshAt": "2024-02-01T22:12:50.547Z",
       "displayName": "Invite TestThree"
+    },
+    {
+      "localId": "018ddee7-3a8e-7387-a03e-2b37173b5ada",
+      "lastLoginAt": "1706825570547",
+      "emailVerified": true,
+      "email": "update_me_member_profile@example.com",
+      "createdAt": "1706825570522",
+      "customAuth": true,
+      "lastRefreshAt": "2024-02-01T22:12:50.547Z",
+      "displayName": "UpdateMe MemberProfile"
     }
   ]
 }

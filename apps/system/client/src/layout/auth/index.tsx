@@ -67,15 +67,15 @@ export const AuthenticatedLayout = () => {
       meIsLoadingRef.current = state.isLoading
     })
 
-    const unsubscribed = firebaseAuth.onAuthStateChanged(async (user) => {
-      if (!loading) {
-        if (!user) {
-          return
-        }
-      }
-    })
-    return () => unsubscribed()
-  }, [loading, navigate, me])
+    // const unsubscribed = firebaseAuth.onAuthStateChanged(async (user) => {
+    //   if (!loading) {
+    //     if (!user) {
+    //       return
+    //     }
+    //   }
+    // })
+    // return () => unsubscribed()
+  }, [loading, me])
 
   return <Outlet />
 }
