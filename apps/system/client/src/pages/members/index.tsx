@@ -37,7 +37,9 @@ export const MembersPage = () => {
     <>
       <header>
         <div className="flex space-x-4 items-center">
-          <h2 className="text-2xl font-bold tracking-tight">Members</h2>
+          <h2 className="text-2xl font-bold tracking-tight" data-testid="pageTitle">
+            Members
+          </h2>
           <MembersSettingDialog />
         </div>
         {/* <InviteMembersDialog /> */}
@@ -45,10 +47,7 @@ export const MembersPage = () => {
       </header>
       <div className="grid grid-cols-4 gap-8">
         {membersIsLoading && <MemberCardListLoading count={10} />}
-        {!membersIsLoading &&
-          members.values.map((m) => {
-            return <MemberCard key={m.profile.id.value.asString} member={m} />
-          })}
+        {!membersIsLoading && membersRef.current.values.map((m) => <MemberCard key={m.id.value.asString} member={m} />)}
       </div>
     </>
   )

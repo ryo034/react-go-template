@@ -9,39 +9,9 @@ export default class PagesStep {
     await page.waitForTimeout(seconds * 1000)
   }
 
-  @Step("ホームに遷移する")
-  async openOrdersPage() {
-    await page.goto(homeURL)
-  }
-
-  @Step("ダッシュボードに遷移")
-  async goToDashboardPage() {
-    await page.goto(`${homeURL}/dashboard/references`)
-  }
-
   @Step("<path>を開く")
   async openPage(path: string) {
     await page.goto(`${homeURL}${path}`)
-  }
-
-  @Step("ログイン画面を開く")
-  async goToLoginPage() {
-    await page.goto(`${homeURL}`)
-  }
-
-  @Step("認証作成画面を開く")
-  async goToAuthPage() {
-    await page.goto(`${homeURL}/auth`)
-  }
-
-  @Step("設定のプロフィール設定を開く")
-  async goToProfileSettings() {
-    await page.goto(`${homeURL}/settings/profile`)
-  }
-
-  @Step("アカウント設定画面を開く")
-  async goToAccountSettings() {
-    await page.goto(`${homeURL}/account/settings`)
   }
 
   @Step("画面を更新する")
@@ -51,7 +21,7 @@ export default class PagesStep {
 
   @Step("ダッシュボードに遷移し左側のメニューから<pageName>を選択")
   async moveAndSelectPage(pageName: string) {
-    await this.goToDashboardPage()
+    await page.goto(`${homeURL}/dashboard/references`)
     const target = page.getByTestId("sidebarMenuList").getByText(pageName)
     await target.waitFor()
     await target.click()
@@ -121,7 +91,7 @@ export default class PagesStep {
     const u = await page.url()
     const currentURL = new URL(u)
     const targetURL = new URL(`${currentURL.origin}${urlPath} `)
-    expect(currentURL.pathname).toBe(targetURL.pathname)
+    page.waitForURL(targetURL.pathname)
   }
 
   private testURL(url: URL, pattern: string): boolean {
@@ -156,5 +126,11 @@ export default class PagesStep {
     const target = page.getByTestId("toastTitle")
     await target.waitFor()
     expect(await target.textContent()).toBe(message)
+  }
+
+  @Step("ページタイトルが<title>である")
+  async assetPageTitle(title: string) {
+    const pageTitle = await page.getByTestId("pageTitle").textContent()
+    expect(pageTitle).toBe(title)
   }
 }

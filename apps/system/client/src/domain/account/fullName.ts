@@ -3,11 +3,11 @@ import { DomainError, ValueObject, domainKeys } from "~/domain/shared"
 
 export class AccountFullName extends ValueObject<string> {
   // 漢字/ひらがな/カタカナ/半角文字
-  static pattern = /^[ぁ-んァ-ン一-龥a-zA-Z ]+$/
+  static pattern = /^[ぁ-んァ-ン一-龥a-zA-Z\u3000 ]+$/
   static max = 50
   static create(v: string): Result<AccountFullName, Error> {
-    const trimmed = v.trim()
-    if (trimmed.length > AccountFullName.max) {
+    const formatted = AccountFullName.format(v)
+    if (formatted.length > AccountFullName.max) {
       return Result.err(
         new DomainError({
           domainKey: domainKeys.AccountFullName,
@@ -16,7 +16,7 @@ export class AccountFullName extends ValueObject<string> {
         })
       )
     }
-    if (!AccountFullName.pattern.test(trimmed)) {
+    if (!AccountFullName.pattern.test(formatted)) {
       return Result.err(
         new DomainError({
           domainKey: domainKeys.AccountFullName,
@@ -25,6 +25,10 @@ export class AccountFullName extends ValueObject<string> {
         })
       )
     }
-    return Result.ok(new AccountFullName(trimmed))
+    return Result.ok(new AccountFullName(formatted))
+  }
+
+  static format(v: string): string {
+    return v.trim().replace(/　/g, " ")
   }
 }

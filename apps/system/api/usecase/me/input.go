@@ -15,7 +15,8 @@ type UpdateInput struct {
 }
 
 type UpdateProfileInput struct {
-	user *user.User
+	AccountID account.ID
+	Name      account.Name
 }
 
 type UpdateMemberProfileInput struct {
@@ -98,24 +99,6 @@ func NewUpdateInput(i openapi.Me) (*UpdateInput, error) {
 
 	m := me.NewMe(u, w, mem, workspace.NewWorkspaces(jws), nil)
 	return &UpdateInput{me: m}, nil
-}
-
-func NewUpdateProfileInput(i openapi.User) (*UpdateProfileInput, error) {
-	aID := account.NewIDFromUUID(i.UserId)
-	email, err := account.NewEmail(i.Email)
-	if err != nil {
-		return nil, err
-	}
-	var na *account.Name
-	if i.Name.Set {
-		tmpNa, err := account.NewName(i.Name.Value)
-		if err != nil {
-			return nil, err
-		}
-		na = &tmpNa
-	}
-	u := user.NewUser(aID, email, na, nil)
-	return &UpdateProfileInput{user: u}, nil
 }
 
 type AcceptInvitationInput struct {

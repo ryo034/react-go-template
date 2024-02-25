@@ -1,8 +1,8 @@
-import { InvitationId, MemberDisplayName, MemberIdNumber, User } from "~/domain"
+import { AccountFullName, InvitationId, MemberDisplayName, MemberIdNumber } from "~/domain"
 import { MemberBio } from "~/domain/workspace/member/bio"
 
 export type UpdateProfileInput = {
-  user: User
+  name: AccountFullName
 }
 
 export type AcceptInvitationInput = {

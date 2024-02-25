@@ -21,7 +21,9 @@ const sidebarNavItems = [
 export const SettingsLayout = () => {
   return (
     <>
-      <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
+      <h2 className="text-2xl font-bold tracking-tight" data-testid="pageTitle">
+        Settings
+      </h2>
       <Separator className="my-6" />
       <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
         <aside className="-mx-4 lg:w-1/5 space-y-4">

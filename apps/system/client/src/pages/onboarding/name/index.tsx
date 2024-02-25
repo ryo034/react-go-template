@@ -20,7 +20,7 @@ export const OnboardingSettingNamePage = () => {
   const isLoading = store.me((state) => state.isLoading)
 
   const onSubmit: SubmitHandler<OnboardingSettingNamePageFormValues> = async (d) => {
-    const res = await controller.me.updateProfileName({
+    const res = await controller.me.updateProfile({
       current: me,
       user: { name: d.name }
     })

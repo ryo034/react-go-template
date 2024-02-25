@@ -7,11 +7,8 @@ interface AcceptInvitationInput {
   invitationId: InvitationId
 }
 
-export interface UpdateProfileNameInput {
-  current: Me | null
-  user: {
-    name: string
-  }
+export interface UpdateProfileInput {
+  name: string
 }
 
 export interface UpdateMemberProfileInput {
@@ -35,17 +32,12 @@ export class MeController {
     return await this.useCase.acceptInvitation({ invitationId: i.invitationId })
   }
 
-  async updateProfileName(i: UpdateProfileNameInput): Promise<null | Error> {
-    if (i.current === null) {
-      return new AuthProviderCurrentUserNotFoundError("current user not found")
-    }
-    const name = AccountFullName.create(i.user.name)
+  async updateProfile(i: UpdateProfileInput): Promise<null | Error> {
+    const name = AccountFullName.create(i.name)
     if (name.isErr) {
       return name.error
     }
-    return await this.useCase.updateProfile({
-      user: User.create({ id: i.current?.self.id, name: name.value, email: i.current.self.email })
-    })
+    return await this.useCase.updateProfile({ name: name.value })
   }
 
   async updateMemberProfile(i: UpdateMemberProfileInput): Promise<null | Error> {

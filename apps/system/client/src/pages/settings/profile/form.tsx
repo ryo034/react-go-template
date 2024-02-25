@@ -1,7 +1,6 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import {
   Button,
@@ -15,7 +14,6 @@ import {
   Input,
   LoadingButton,
   Textarea,
-  toast
 } from "shared-ui"
 import { z } from "zod"
 import { MemberDisplayName } from "~/domain"
@@ -83,7 +81,7 @@ export const SettingsProfileForm = ({ defaultValues, onSubmit, isUpdating = fals
             <FormItem>
               <FormLabel>Bio</FormLabel>
               <FormControl>
-                <Textarea placeholder="Tell us a little bit about yourself" className="resize-none" {...field} />
+                <Textarea placeholder="Tell us a little bit about yourself" className="resize-none h-32" {...field} />
               </FormControl>
               <FormDescription>
                 You can <span>@mention</span> other users and organizations to link to them.

@@ -1,9 +1,31 @@
-import { Separator } from "shared-ui"
-import { SettingsAccountForm } from "./form"
+import { useContext, useState } from "react"
+import { Separator, useToast } from "shared-ui"
+import { ContainerContext } from "~/infrastructure/injector/context"
+import { SettingsAccountForm, SettingsAccountFormValues } from "./form"
 
 export const settingsAccountPageRoute = "/settings/account"
 
 export const SettingsAccountPage = () => {
+  const { store, controller } = useContext(ContainerContext)
+  const { toast } = useToast()
+
+  const [isUpdating, setIsUpdating] = useState(false)
+
+  const me = store.me((state) => state.me)
+
+  if (!me) return <></>
+
+  const onSubmit = async (d: SettingsAccountFormValues) => {
+    setIsUpdating(true)
+    const err = await controller.me.updateProfile({ name: d.name })
+    setIsUpdating(false)
+    if (err) {
+      toast({ title: "Failed to update profile" })
+      return
+    }
+    toast({ title: "Profile updated" })
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -13,7 +35,11 @@ export const SettingsAccountPage = () => {
         </p>
       </div>
       <Separator />
-      <SettingsAccountForm />
+      <SettingsAccountForm
+        defaultValues={{ name: me.self.name?.value ?? "" }}
+        onSubmit={onSubmit}
+        isUpdating={isUpdating}
+      />
     </div>
   )
 }

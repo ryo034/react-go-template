@@ -2,13 +2,10 @@ package me
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
-
-	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 
 	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
@@ -21,7 +18,7 @@ import (
 type Controller interface {
 	Find(ctx context.Context) (openapi.APIV1MeGetRes, error)
 	AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error)
-	UpdateProfile(ctx context.Context, i openapi.User) (openapi.APIV1MeProfilePutRes, error)
+	UpdateProfile(ctx context.Context, i UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error)
 	UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1MeMemberProfilePutRes, error)
 }
 
@@ -33,6 +30,10 @@ type controller struct {
 
 type AcceptInvitationInput struct {
 	InvitationID uuid.UUID
+}
+
+type UpdateProfileInput struct {
+	Name string
 }
 
 type UpdateMemberProfileInput struct {
@@ -70,15 +71,20 @@ func (c *controller) AcceptInvitation(ctx context.Context, i AcceptInvitationInp
 	return res, nil
 }
 
-func (c *controller) UpdateProfile(ctx context.Context, i openapi.User) (openapi.APIV1MeProfilePutRes, error) {
+func NewUpdateProfileInput(i UpdateProfileInput, aID account.ID) (meUc.UpdateProfileInput, error) {
+	na, err := account.NewName(i.Name)
+	if err != nil {
+		return meUc.UpdateProfileInput{}, err
+	}
+	return meUc.UpdateProfileInput{Name: na, AccountID: aID}, nil
+}
+
+func (c *controller) UpdateProfile(ctx context.Context, i UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error) {
 	aID, err := c.co.GetUID(ctx)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePutRes), nil
 	}
-	if i.UserId != aID.Value() {
-		return c.resl.Error(ctx, domainErr.NewForbidden(fmt.Sprintf("Invalid User ID: %s", i.UserId))).(openapi.APIV1MeProfilePutRes), nil
-	}
-	in, err := meUc.NewUpdateProfileInput(i)
+	in, err := NewUpdateProfileInput(i, aID)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePutRes), nil
 	}

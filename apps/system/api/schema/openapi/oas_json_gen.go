@@ -326,13 +326,13 @@ func (s *APIV1MeProfilePutReq) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *APIV1MeProfilePutReq) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("user")
-		s.User.Encode(e)
+		e.FieldStart("profile")
+		s.Profile.Encode(e)
 	}
 }
 
 var jsonFieldsNameOfAPIV1MeProfilePutReq = [1]string{
-	0: "user",
+	0: "profile",
 }
 
 // Decode decodes APIV1MeProfilePutReq from json.
@@ -344,15 +344,15 @@ func (s *APIV1MeProfilePutReq) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "user":
+		case "profile":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				if err := s.User.Decode(d); err != nil {
+				if err := s.Profile.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"user\"")
+				return errors.Wrap(err, "decode field \"profile\"")
 			}
 		default:
 			return d.Skip()
@@ -406,6 +406,69 @@ func (s *APIV1MeProfilePutReq) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *APIV1MeProfilePutReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *APIV1MeProfilePutReqProfile) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *APIV1MeProfilePutReqProfile) encodeFields(e *jx.Encoder) {
+	{
+		if s.Name.Set {
+			e.FieldStart("name")
+			s.Name.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfAPIV1MeProfilePutReqProfile = [1]string{
+	0: "name",
+}
+
+// Decode decodes APIV1MeProfilePutReqProfile from json.
+func (s *APIV1MeProfilePutReqProfile) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode APIV1MeProfilePutReqProfile to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "name":
+			if err := func() error {
+				s.Name.Reset()
+				if err := s.Name.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode APIV1MeProfilePutReqProfile")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *APIV1MeProfilePutReqProfile) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *APIV1MeProfilePutReqProfile) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

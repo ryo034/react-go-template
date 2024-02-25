@@ -39,13 +39,12 @@ export class MemberGatewayAdapter {
     }
 
     const profile = MemberProfile.create({
-      id: id.value,
       displayName: displayName.value,
       idNumber: idNumber.value,
       bio: bio.value
     })
 
-    return Result.ok(Member.create({ user: user.value, profile }))
+    return Result.ok(Member.create({ id: id.value, user: user.value, profile }))
   }
 
   adaptAll(members: components["schemas"]["Members"]): Result<Members, Error> {

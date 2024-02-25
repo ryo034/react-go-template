@@ -571,10 +571,13 @@ components:
           schema:
             type: object
             required:
-              - user
+              - profile
             properties:
-              user:
-                $ref: '#/components/schemas/User'
+              profile:
+                type: object
+                properties:
+                  name:
+                    type: string
     InvitationProcess:
       description: >-
         Process an invitation by verifying token and email, and register or add

@@ -17,7 +17,7 @@ import (
 type UseCase interface {
 	Find(ctx context.Context, aID account.ID) (openapi.APIV1MeGetRes, error)
 	AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error)
-	UpdateProfile(ctx context.Context, i *UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error)
+	UpdateProfile(ctx context.Context, i UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error)
 	UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1MeMemberProfilePutRes, error)
 }
 
@@ -97,7 +97,7 @@ func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput)
 	return u.op.AcceptInvitation(result.Value(0).(*me.Me))
 }
 
-func (u *useCase) UpdateProfile(ctx context.Context, i *UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error) {
+func (u *useCase) UpdateProfile(ctx context.Context, i UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
@@ -105,18 +105,18 @@ func (u *useCase) UpdateProfile(ctx context.Context, i *UpdateProfileInput) (ope
 	}
 	fn := func() (*me.Me, error) {
 		var currentWorkspaceID *workspace.ID
-		currentWorkspaceID, err = u.fbDriver.GetCurrentWorkspaceFromCustomClaim(ctx, i.user.AccountID())
+		currentWorkspaceID, err = u.fbDriver.GetCurrentWorkspaceFromCustomClaim(ctx, i.AccountID)
 		if err != nil {
 			return nil, err
 		}
 		var current *me.Me
 		if currentWorkspaceID == nil {
-			current, err = u.repo.FindProfile(pr, p, i.user.AccountID())
+			current, err = u.repo.FindProfile(pr, p, i.AccountID)
 			if err != nil {
 				return nil, err
 			}
 		} else {
-			mem, err := u.wRepo.FindMember(pr, p, i.user.AccountID(), *currentWorkspaceID)
+			mem, err := u.wRepo.FindMember(pr, p, i.AccountID, *currentWorkspaceID)
 			if err != nil {
 				return nil, err
 			}
@@ -125,13 +125,16 @@ func (u *useCase) UpdateProfile(ctx context.Context, i *UpdateProfileInput) (ope
 				return nil, err
 			}
 		}
-		if err = u.repo.UpdateProfile(pr, p, i.user); err != nil {
+
+		usr := current.Self().UpdateName(i.Name)
+
+		if err = u.repo.UpdateProfile(pr, p, usr); err != nil {
 			return nil, err
 		}
 		if current.NotJoined() {
-			return u.repo.FindBeforeOnboard(pr, p, i.user.AccountID())
+			return u.repo.FindBeforeOnboard(pr, p, i.AccountID)
 		}
-		return u.repo.FindLastLogin(pr, p, i.user.AccountID())
+		return u.repo.FindLastLogin(pr, p, i.AccountID)
 	}
 	result := pr.Transactional(fn)()
 	if err = result.Error(); err != nil {

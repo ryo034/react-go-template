@@ -102,17 +102,31 @@ func (s *APIV1MeMemberProfilePutReq) SetMemberProfile(val MemberProfile) {
 }
 
 type APIV1MeProfilePutReq struct {
-	User User `json:"user"`
+	Profile APIV1MeProfilePutReqProfile `json:"profile"`
 }
 
-// GetUser returns the value of User.
-func (s *APIV1MeProfilePutReq) GetUser() User {
-	return s.User
+// GetProfile returns the value of Profile.
+func (s *APIV1MeProfilePutReq) GetProfile() APIV1MeProfilePutReqProfile {
+	return s.Profile
 }
 
-// SetUser sets the value of User.
-func (s *APIV1MeProfilePutReq) SetUser(val User) {
-	s.User = val
+// SetProfile sets the value of Profile.
+func (s *APIV1MeProfilePutReq) SetProfile(val APIV1MeProfilePutReqProfile) {
+	s.Profile = val
+}
+
+type APIV1MeProfilePutReqProfile struct {
+	Name OptString `json:"name"`
+}
+
+// GetName returns the value of Name.
+func (s *APIV1MeProfilePutReqProfile) GetName() OptString {
+	return s.Name
+}
+
+// SetName sets the value of Name.
+func (s *APIV1MeProfilePutReqProfile) SetName(val OptString) {
+	s.Name = val
 }
 
 type APIV1PingGetOK struct {

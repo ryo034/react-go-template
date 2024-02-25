@@ -26,10 +26,13 @@ UpdateMeProfile:
       schema:
         type: object
         required:
-          - user
+          - profile
         properties:
-          user:
-            $ref: "#/components/schemas/User"
+          profile:
+            type: object
+            properties:
+              name:
+                type: string
 
 UpdateMeMemberProfile:
   description: Update Me Member Profile

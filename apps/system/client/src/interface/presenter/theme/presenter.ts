@@ -6,6 +6,7 @@ export class ThemePresenter implements ThemeUseCaseOutput {
 
   set(v: ThemeType) {
     this.themeStore.getState().set(v)
+    document.documentElement.classList.remove("light", "dark")
     document.documentElement.classList.add(v)
   }
 }

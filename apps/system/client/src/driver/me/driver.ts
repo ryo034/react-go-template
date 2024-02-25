@@ -1,6 +1,6 @@
 import { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
-import { InvitationId, MemberProfile, User } from "~/domain"
+import { AccountFullName, InvitationId, MemberProfile, User } from "~/domain"
 import { components } from "~/generated/schema/openapi/systemApi"
 import { SystemAPIClient } from "~/infrastructure/openapi/client"
 import { PromiseResult } from "~/infrastructure/shared/result"
@@ -28,15 +28,12 @@ export class MeDriver {
     }
   }
 
-  async updateProfile(user: User): PromiseResult<components["schemas"]["Me"], Error> {
+  async updateProfile(name: AccountFullName): PromiseResult<components["schemas"]["Me"], Error> {
     try {
       const res = await this.client.PUT("/api/v1/me/profile", {
         body: {
-          user: {
-            userId: user.id.value.asString,
-            email: user.email.value,
-            name: user.name?.value || "",
-            phoneNumber: ""
+          profile: {
+            name: name.value
           }
         }
       })

@@ -43,7 +43,7 @@ export class MeInteractor implements MeUseCase {
   }
 
   async updateProfile(i: UpdateProfileInput): Promise<Error | null> {
-    const res = await this.repository.updateProfile(i.user)
+    const res = await this.repository.updateProfile(i.name)
     if (res.isErr) {
       return res.error
     }

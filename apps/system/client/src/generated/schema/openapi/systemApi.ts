@@ -679,7 +679,9 @@ export interface components {
     UpdateMeProfile: {
       content: {
         "application/json": {
-          user: components["schemas"]["User"];
+          profile: {
+            name?: string;
+          };
         };
       };
     };
