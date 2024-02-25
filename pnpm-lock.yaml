@@ -51,8 +51,8 @@ importers:
         specifier: ^10.0.3
         version: 10.0.3
       lucide-react:
-        specifier: ^0.336.0
-        version: 0.336.0(react@18.2.0)
+        specifier: ^0.340.0
+        version: 0.340.0(react@18.2.0)
       openapi-fetch:
         specifier: ^0.9.2
         version: 0.9.2
@@ -262,8 +262,8 @@ importers:
         specifier: ^3.3.1
         version: 3.3.1
       lucide-react:
-        specifier: ^0.336.0
-        version: 0.336.0(react@18.2.0)
+        specifier: ^0.340.0
+        version: 0.340.0(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -4920,8 +4920,8 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /lucide-react@0.336.0(react@18.2.0):
-    resolution: {integrity: sha512-e06J4Qrdrk3BP/hf3MnkW3LnymdthfyEtVbdEg0xPQ/olTEKfOfTv03DYmdRm1+XpaNQdCpiHT7Vi6regbxDCQ==}
+  /lucide-react@0.340.0(react@18.2.0):
+    resolution: {integrity: sha512-mWzYhbyy2d+qKuKHh+GWElPwa+kIquTnKbmSLGWOuZy+bjfZCkYD8DQWVFlqI4mQwc4HNxcqcOvtQ7ZS2PwURg==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
