@@ -111,8 +111,8 @@ func (g *gateway) UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.Use
 	return g.fd.UpdateProfile(ctx, usr)
 }
 
-func (g *gateway) UpdateMember(ctx context.Context, exec bun.IDB, m *me.Me) error {
-	return g.md.UpdateMember(ctx, exec, m)
+func (g *gateway) UpdateMemberProfile(ctx context.Context, exec bun.IDB, m *member.Member) (*member.Member, error) {
+	return g.md.UpdateMemberProfile(ctx, exec, m)
 }
 
 func (g *gateway) AcceptInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) error {

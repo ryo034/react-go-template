@@ -87,6 +87,20 @@ func (s *APIV1InvitationsGetStatus) UnmarshalText(data []byte) error {
 	}
 }
 
+type APIV1MeMemberProfilePutReq struct {
+	MemberProfile MemberProfile `json:"memberProfile"`
+}
+
+// GetMemberProfile returns the value of MemberProfile.
+func (s *APIV1MeMemberProfilePutReq) GetMemberProfile() MemberProfile {
+	return s.MemberProfile
+}
+
+// SetMemberProfile sets the value of MemberProfile.
+func (s *APIV1MeMemberProfilePutReq) SetMemberProfile(val MemberProfile) {
+	s.MemberProfile = val
+}
+
 type APIV1MeProfilePutReq struct {
 	User User `json:"user"`
 }
@@ -200,6 +214,7 @@ func (s *BadRequestError) SetCode(val OptString) {
 func (*BadRequestError) aPIV1AuthOAuthPostRes()             {}
 func (*BadRequestError) aPIV1AuthOtpPostRes()               {}
 func (*BadRequestError) aPIV1AuthOtpVerifyPostRes()         {}
+func (*BadRequestError) aPIV1MeMemberProfilePutRes()        {}
 func (*BadRequestError) aPIV1MeProfilePutRes()              {}
 func (*BadRequestError) aPIV1WorkspacesPostRes()            {}
 func (*BadRequestError) getInvitationByTokenRes()           {}
@@ -522,6 +537,7 @@ func (*InternalServerError) aPIV1AuthOtpPostRes()               {}
 func (*InternalServerError) aPIV1AuthOtpVerifyPostRes()         {}
 func (*InternalServerError) aPIV1InvitationsGetRes()            {}
 func (*InternalServerError) aPIV1MeGetRes()                     {}
+func (*InternalServerError) aPIV1MeMemberProfilePutRes()        {}
 func (*InternalServerError) aPIV1MeProfilePutRes()              {}
 func (*InternalServerError) aPIV1MembersGetRes()                {}
 func (*InternalServerError) aPIV1PingGetRes()                   {}
@@ -847,8 +863,15 @@ func (*MeResponse) aPIV1MeGetRes() {}
 
 // Ref: #/components/schemas/Member
 type Member struct {
+	// Base32 encoded UUID.
+	ID      string        `json:"id"`
 	Profile MemberProfile `json:"profile"`
 	User    User          `json:"user"`
+}
+
+// GetID returns the value of ID.
+func (s *Member) GetID() string {
+	return s.ID
 }
 
 // GetProfile returns the value of Profile.
@@ -859,6 +882,11 @@ func (s *Member) GetProfile() MemberProfile {
 // GetUser returns the value of User.
 func (s *Member) GetUser() User {
 	return s.User
+}
+
+// SetID sets the value of ID.
+func (s *Member) SetID(val string) {
+	s.ID = val
 }
 
 // SetProfile sets the value of Profile.
@@ -873,15 +901,10 @@ func (s *Member) SetUser(val User) {
 
 // Ref: #/components/schemas/MemberProfile
 type MemberProfile struct {
-	// Base32 encoded UUID.
-	ID          string    `json:"id"`
 	DisplayName string    `json:"displayName"`
 	IdNumber    OptString `json:"idNumber"`
-}
-
-// GetID returns the value of ID.
-func (s *MemberProfile) GetID() string {
-	return s.ID
+	// User's bio.
+	Bio OptString `json:"bio"`
 }
 
 // GetDisplayName returns the value of DisplayName.
@@ -894,9 +917,9 @@ func (s *MemberProfile) GetIdNumber() OptString {
 	return s.IdNumber
 }
 
-// SetID sets the value of ID.
-func (s *MemberProfile) SetID(val string) {
-	s.ID = val
+// GetBio returns the value of Bio.
+func (s *MemberProfile) GetBio() OptString {
+	return s.Bio
 }
 
 // SetDisplayName sets the value of DisplayName.
@@ -907,6 +930,11 @@ func (s *MemberProfile) SetDisplayName(val string) {
 // SetIdNumber sets the value of IdNumber.
 func (s *MemberProfile) SetIdNumber(val OptString) {
 	s.IdNumber = val
+}
+
+// SetBio sets the value of Bio.
+func (s *MemberProfile) SetBio(val OptString) {
+	s.Bio = val
 }
 
 type MembersResponse struct {
@@ -1347,6 +1375,7 @@ func (s *UnauthorizedError) SetCode(val OptString) {
 func (*UnauthorizedError) aPIV1AuthOtpVerifyPostRes()         {}
 func (*UnauthorizedError) aPIV1InvitationsGetRes()            {}
 func (*UnauthorizedError) aPIV1MeGetRes()                     {}
+func (*UnauthorizedError) aPIV1MeMemberProfilePutRes()        {}
 func (*UnauthorizedError) aPIV1MeProfilePutRes()              {}
 func (*UnauthorizedError) aPIV1MembersGetRes()                {}
 func (*UnauthorizedError) aPIV1WorkspacesGetRes()             {}
@@ -1354,6 +1383,22 @@ func (*UnauthorizedError) aPIV1WorkspacesPostRes()            {}
 func (*UnauthorizedError) acceptInvitationRes()               {}
 func (*UnauthorizedError) inviteMultipleUsersToWorkspaceRes() {}
 func (*UnauthorizedError) revokeInvitationRes()               {}
+
+type UpdateMeMemberProfileResponse struct {
+	Me Me `json:"me"`
+}
+
+// GetMe returns the value of Me.
+func (s *UpdateMeMemberProfileResponse) GetMe() Me {
+	return s.Me
+}
+
+// SetMe sets the value of Me.
+func (s *UpdateMeMemberProfileResponse) SetMe(val Me) {
+	s.Me = val
+}
+
+func (*UpdateMeMemberProfileResponse) aPIV1MeMemberProfilePutRes() {}
 
 type UpdateProfileResponse struct {
 	Me Me `json:"me"`

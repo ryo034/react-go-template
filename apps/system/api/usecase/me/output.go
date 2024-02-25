@@ -7,6 +7,7 @@ import (
 
 type OutputPort interface {
 	Find(m *me.Me) (openapi.APIV1MeGetRes, error)
-	UpdateProfile(m *me.Me) (openapi.APIV1MeProfilePutRes, error)
 	AcceptInvitation(m *me.Me) (openapi.AcceptInvitationRes, error)
+	UpdateProfile(m *me.Me) (openapi.APIV1MeProfilePutRes, error)
+	UpdateMemberProfile(m *me.Me) (openapi.APIV1MeMemberProfilePutRes, error)
 }

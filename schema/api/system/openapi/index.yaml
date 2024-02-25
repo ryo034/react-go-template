@@ -20,6 +20,8 @@ paths:
     $ref: "./paths/me.yaml#/me"
   /api/v1/me/profile:
     $ref: "./paths/me.yaml#/profile"
+  /api/v1/me/member/profile:
+    $ref: "./paths/me.yaml#/memberProfile"
   /api/v1/login:
     $ref: "./paths/auth.yaml#/login"
   /api/v1/workspaces:
@@ -84,6 +86,8 @@ components:
       $ref: "./components/requestBodies/me.yaml#/InvitationProcess"
     InvitationsBulk:
       $ref: "./components/requestBodies/member.yaml#/InvitationsBulk"
+    UpdateMeMemberProfile:
+      $ref: "./components/requestBodies/me.yaml#/UpdateMeMemberProfile"
   responses:
     GeneralError:
       $ref: "./components/responses/error.yaml#/components/responses/GeneralError"
@@ -119,6 +123,8 @@ components:
       $ref: "./components/responses/me.yaml#/MeResponse"
     UpdateProfileResponse:
       $ref: "./components/responses/me.yaml#/UpdateProfileResponse"
+    UpdateMeMemberProfileResponse:
+      $ref: "./components/responses/me.yaml#/UpdateMeMemberProfileResponse"
     InvitationsAcceptResponse:
       $ref: "./components/responses/me.yaml#/InvitationsAcceptResponse"
     CreateWorkspaceResponse:

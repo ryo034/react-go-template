@@ -6,8 +6,8 @@
       "name": "Invite TestThree"
     },
     "member": {
+      "id": "agg2bxg22j5mrfomtq5p3ug32u",
       "profile": {
-        "id": "agg2bxg22j5mrfomtq5p3ug32u",
         "displayName": "Invite TestThree",
         "idNumber": "DEV-54321"
       },
@@ -40,9 +40,9 @@
         },
         "inviter": {
           "member": {
+            "id": "aggznopwor77na7lkbxmuzcsxy",
             "profile": {
               "displayName": "Invite TestOne",
-              "id": "aggznopwor77na7lkbxmuzcsxy",
               "idNumber": "DEV-54321"
             },
             "user": {

@@ -9,9 +9,9 @@
     },
     "inviter": {
       "member": {
+        "id": "aggznopwor77na7lkbxmuzcsxy",
         "profile": {
           "displayName": "Invite TestOne",
-          "id": "aggznopwor77na7lkbxmuzcsxy",
           "idNumber": "DEV-54321"
         },
         "user": {

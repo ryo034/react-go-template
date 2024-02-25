@@ -2,7 +2,8 @@
   "name": "system-api-test",
   "description": "API test",
   "scripts": {
-    "test-mi": "PARALLEL=false SILENT=false playwright test -g 'failed to get invite token by already accepted token return GoneError with custom code'",
+    "test-mi": "PARALLEL=false SILENT=false playwright test --workers=1 --grep @stateful ./tests/me",
+    "test-mii": "PARALLEL=false SILENT=false playwright test -g 'success if request has empty fields @stateful'",
     "test:stateless": "PARALLEL=true SILENT=false playwright test --workers=3 --grep-invert @stateful",
     "test:stateful": "PARALLEL=false SILENT=false playwright test --workers=1 --grep @stateful"
   },

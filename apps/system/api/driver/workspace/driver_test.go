@@ -4,6 +4,9 @@ package workspace
 
 import (
 	"context"
+	"reflect"
+	"testing"
+
 	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
@@ -16,8 +19,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
-	"reflect"
-	"testing"
 )
 
 func Test_driver_FindAll_OK(t *testing.T) {
@@ -134,7 +135,8 @@ func Test_driver_AddMember_OK(t *testing.T) {
 	name, _ := account.NewName("John Doe")
 	u := user.NewUser(aID, email, &name, nil)
 	dn := member.NewDisplayName("John Doe")
-	m := member.NewMember(mID, u, dn, nil)
+	pr := member.NewProfile(dn, nil, member.NewAsEmptyBio())
+	m := member.NewMember(mID, u, pr)
 
 	want := &models.Member{
 		MemberID:        mID.Value(),

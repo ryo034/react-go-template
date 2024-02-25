@@ -1,10 +1,12 @@
 import { Entity } from "@/domain/shared"
 import { MemberDisplayName, MemberId, MemberIdNumber } from "~/domain/workspace/member"
+import { MemberBio } from "./bio"
 
 interface Props {
   id: MemberId
   displayName?: MemberDisplayName
   idNumber?: MemberIdNumber
+  bio: MemberBio
 }
 
 export class MemberProfile extends Entity<Props> {
@@ -22,6 +24,10 @@ export class MemberProfile extends Entity<Props> {
 
   get idNumber(): MemberIdNumber | undefined {
     return this.value.idNumber
+  }
+
+  get bio(): MemberBio {
+    return this.value.bio
   }
 
   get hasDisplayName(): boolean {

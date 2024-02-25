@@ -39,6 +39,20 @@ func encodeAPIV1AuthOtpVerifyPostRequest(
 	return nil
 }
 
+func encodeAPIV1MeMemberProfilePutRequest(
+	req *APIV1MeMemberProfilePutReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeAPIV1MeProfilePutRequest(
 	req *APIV1MeProfilePutReq,
 	r *http.Request,

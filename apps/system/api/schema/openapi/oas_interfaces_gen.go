@@ -21,6 +21,10 @@ type APIV1MeGetRes interface {
 	aPIV1MeGetRes()
 }
 
+type APIV1MeMemberProfilePutRes interface {
+	aPIV1MeMemberProfilePutRes()
+}
+
 type APIV1MeProfilePutRes interface {
 	aPIV1MeProfilePutRes()
 }

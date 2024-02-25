@@ -119,6 +119,21 @@ export interface paths {
       };
     };
   };
+  "/api/v1/me/member/profile": {
+    /**
+     * Update Me Member Profile
+     * @description Updates Me the member profile
+     */
+    put: {
+      requestBody: components["requestBodies"]["UpdateMeMemberProfile"];
+      responses: {
+        200: components["responses"]["UpdateMeMemberProfileResponse"];
+        400: components["responses"]["BadRequestError"];
+        401: components["responses"]["UnauthorizedError"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+  };
   "/api/v1/login": {
     /**
      * Login
@@ -237,17 +252,19 @@ export interface components {
       workspace: components["schemas"]["Workspace"];
     };
     Member: {
-      profile: components["schemas"]["MemberProfile"];
-      user: components["schemas"]["User"];
-    };
-    MemberProfile: {
       /**
        * @description base32 encoded UUID
        * @example 3VZ6ZJ2Z6VZ6ZJ2Z
        */
       id: string;
+      profile: components["schemas"]["MemberProfile"];
+      user: components["schemas"]["User"];
+    };
+    MemberProfile: {
       displayName: string;
       idNumber?: string;
+      /** @description User's bio */
+      bio?: string;
     };
     Members: components["schemas"]["Member"][];
     Invitation: {
@@ -597,6 +614,14 @@ export interface components {
         };
       };
     };
+    /** @description Update Me Member Profile */
+    UpdateMeMemberProfileResponse: {
+      content: {
+        "application/json": {
+          me: components["schemas"]["Me"];
+        };
+      };
+    };
     /** @description Invitation accepted and user added to the workspace */
     InvitationsAcceptResponse: {
       content: {
@@ -680,6 +705,14 @@ export interface components {
       content: {
         "application/json": {
           invitees?: components["schemas"]["Invitee"][];
+        };
+      };
+    };
+    /** @description Update Me Member Profile */
+    UpdateMeMemberProfile: {
+      content: {
+        "application/json": {
+          memberProfile: components["schemas"]["MemberProfile"];
         };
       };
     };

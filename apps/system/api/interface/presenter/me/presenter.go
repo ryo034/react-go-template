@@ -22,6 +22,14 @@ func (p *presenter) Find(m *me.Me) (openapi.APIV1MeGetRes, error) {
 	return &openapi.MeResponse{Me: am}, nil
 }
 
+func (p *presenter) AcceptInvitation(m *me.Me) (openapi.AcceptInvitationRes, error) {
+	am, err := p.a.Adapt(m)
+	if err != nil {
+		return nil, err
+	}
+	return &openapi.InvitationsAcceptResponse{Me: am}, nil
+}
+
 func (p *presenter) UpdateProfile(m *me.Me) (openapi.APIV1MeProfilePutRes, error) {
 	am, err := p.a.Adapt(m)
 	if err != nil {
@@ -30,10 +38,10 @@ func (p *presenter) UpdateProfile(m *me.Me) (openapi.APIV1MeProfilePutRes, error
 	return &openapi.UpdateProfileResponse{Me: am}, nil
 }
 
-func (p *presenter) AcceptInvitation(m *me.Me) (openapi.AcceptInvitationRes, error) {
+func (p *presenter) UpdateMemberProfile(m *me.Me) (openapi.APIV1MeMemberProfilePutRes, error) {
 	am, err := p.a.Adapt(m)
 	if err != nil {
 		return nil, err
 	}
-	return &openapi.InvitationsAcceptResponse{Me: am}, nil
+	return &openapi.UpdateMeMemberProfileResponse{Me: am}, nil
 }

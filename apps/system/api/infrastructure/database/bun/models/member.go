@@ -1,9 +1,10 @@
 package models
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"time"
 )
 
 const (
@@ -34,6 +35,7 @@ type MemberProfile struct {
 	MemberID       uuid.UUID `bun:"member_id,pk"`
 	MemberIDNumber string    `bun:"member_id_number"`
 	DisplayName    string    `bun:"display_name,notnull"`
+	Bio            string    `bun:"bio,notnull"`
 	CreatedAt      time.Time `bun:"created_at,notnull,default:current_timestamp"`
 	UpdatedAt      time.Time `bun:"updated_at,notnull,default:current_timestamp"`
 

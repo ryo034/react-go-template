@@ -58,6 +58,15 @@ func (UnimplementedHandler) APIV1MeGet(ctx context.Context) (r APIV1MeGetRes, _ 
 	return r, ht.ErrNotImplemented
 }
 
+// APIV1MeMemberProfilePut implements PUT /api/v1/me/member/profile operation.
+//
+// Updates Me the member profile.
+//
+// PUT /api/v1/me/member/profile
+func (UnimplementedHandler) APIV1MeMemberProfilePut(ctx context.Context, req *APIV1MeMemberProfilePutReq) (r APIV1MeMemberProfilePutRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIV1MeProfilePut implements PUT /api/v1/me/profile operation.
 //
 // Updates the user profile.

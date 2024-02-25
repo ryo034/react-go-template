@@ -34,7 +34,12 @@ func (a *adapter) Adapt(m *models.Member) (*member.Member, error) {
 		return nil, err
 	}
 	id := member.NewIDFromUUID(m.MemberID)
-	return member.NewMember(id, u, dn, &idNumber), nil
+	bio, err := member.NewBio(m.Profile.Bio)
+	if err != nil {
+		return nil, err
+	}
+	pro := member.NewProfile(dn, &idNumber, bio)
+	return member.NewMember(id, u, pro), nil
 }
 
 func (a *adapter) AdaptAll(ms models.Members) (member.Members, error) {

@@ -30,7 +30,7 @@ func NewDriver() Driver {
 	return &driver{}
 }
 
-func (p *driver) FindAll(ctx context.Context, exec bun.IDB, aID account.ID) (models.Workspaces, error) {
+func (d *driver) FindAll(ctx context.Context, exec bun.IDB, aID account.ID) (models.Workspaces, error) {
 	var ws models.Workspaces
 	err := exec.
 		NewSelect().
@@ -45,15 +45,15 @@ func (p *driver) FindAll(ctx context.Context, exec bun.IDB, aID account.ID) (mod
 	return ws, nil
 }
 
-func (p *driver) Create(ctx context.Context, exec bun.IDB, w *workspace.Workspace) (*models.Workspace, error) {
-	d := w.Detail()
+func (d *driver) Create(ctx context.Context, exec bun.IDB, w *workspace.Workspace) (*models.Workspace, error) {
+	wd := w.Detail()
 	m := &models.Workspace{
 		WorkspaceID: w.ID().Value(),
 	}
 	md := &models.WorkspaceDetail{
 		WorkspaceID: w.ID().Value(),
-		Subdomain:   d.Subdomain().ToString(),
-		Name:        d.Name().ToString(),
+		Subdomain:   wd.Subdomain().ToString(),
+		Name:        wd.Name().ToString(),
 	}
 	if _, err := exec.NewInsert().Model(m).Exec(ctx); err != nil {
 		return nil, err
@@ -68,7 +68,7 @@ func (p *driver) Create(ctx context.Context, exec bun.IDB, w *workspace.Workspac
 	return m, nil
 }
 
-func (p *driver) AddMember(ctx context.Context, exec bun.IDB, w *workspace.Workspace, m *member.Member) (*models.Member, error) {
+func (d *driver) AddMember(ctx context.Context, exec bun.IDB, w *workspace.Workspace, m *member.Member) (*models.Member, error) {
 	mm := &models.Member{
 		MemberID:        m.ID().Value(),
 		WorkspaceID:     w.ID().Value(),
@@ -78,9 +78,10 @@ func (p *driver) AddMember(ctx context.Context, exec bun.IDB, w *workspace.Works
 		return nil, err
 	}
 
+	p := m.Profile()
 	dn := ""
-	if m.HasDisplayName() {
-		dn = m.DisplayName().ToString()
+	if p.HasDisplayName() {
+		dn = p.DisplayName().ToString()
 	}
 	mp := &models.MemberProfile{
 		MemberID:       m.ID().Value(),
@@ -93,7 +94,7 @@ func (p *driver) AddMember(ctx context.Context, exec bun.IDB, w *workspace.Works
 	return mm, nil
 }
 
-func (p *driver) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error) {
+func (d *driver) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error) {
 	m := &models.Member{}
 	err := exec.
 		NewSelect().
@@ -112,7 +113,7 @@ func (p *driver) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, w
 	return m, nil
 }
 
-func (p *driver) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace.ID) (models.Members, error) {
+func (d *driver) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace.ID) (models.Members, error) {
 	var ms models.Members
 	err := exec.
 		NewSelect().
@@ -130,7 +131,7 @@ func (p *driver) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace
 	return ms, nil
 }
 
-func (p *driver) InviteMembers(ctx context.Context, exec bun.IDB, inviter workspace.Inviter, is invitation.Invitations) error {
+func (d *driver) InviteMembers(ctx context.Context, exec bun.IDB, inviter workspace.Inviter, is invitation.Invitations) error {
 	uid, err := uuid.NewV7()
 	if err != nil {
 		return err

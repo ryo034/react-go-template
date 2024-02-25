@@ -1,6 +1,6 @@
 import { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
-import { InvitationId, User } from "~/domain"
+import { InvitationId, MemberProfile, User } from "~/domain"
 import { components } from "~/generated/schema/openapi/systemApi"
 import { SystemAPIClient } from "~/infrastructure/openapi/client"
 import { PromiseResult } from "~/infrastructure/shared/result"
@@ -11,6 +11,17 @@ export class MeDriver {
   async find(): PromiseResult<components["schemas"]["Me"], Error> {
     try {
       const res = await this.client.GET("/api/v1/me")
+      return res.data ? Result.ok(res.data.me) : Result.err(this.errorHandler.adapt(res))
+    } catch (e) {
+      return Result.err(this.errorHandler.adapt(e))
+    }
+  }
+
+  async acceptInvitation(invitationId: InvitationId): PromiseResult<components["schemas"]["Me"], Error> {
+    try {
+      const res = await this.client.POST("/api/v1/members/invitations/{invitationId}/accept", {
+        params: { path: { invitationId: invitationId.value.asString } }
+      })
       return res.data ? Result.ok(res.data.me) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))
@@ -35,10 +46,10 @@ export class MeDriver {
     }
   }
 
-  async acceptInvitation(invitationId: InvitationId): PromiseResult<components["schemas"]["Me"], Error> {
+  async updateMemberProfile(profile: MemberProfile): PromiseResult<components["schemas"]["Me"], Error> {
     try {
-      const res = await this.client.POST("/api/v1/members/invitations/{invitationId}/accept", {
-        params: { path: { invitationId: invitationId.value.asString } }
+      const res = await this.client.PUT("/api/v1/members/profile", {
+        body: { profile }
       })
       return res.data ? Result.ok(res.data.me) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {

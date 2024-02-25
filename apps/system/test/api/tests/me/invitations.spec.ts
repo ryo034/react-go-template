@@ -36,7 +36,8 @@ test.describe("Me Invitations", () => {
           },
           inviter: {
             member: {
-              profile: { displayName: "John Doe", id: "g57lunkvmbhurkm5dhf5nkblbu", idNumber: "DEV-12345" },
+              id: "g57lunkvmbhurkm5dhf5nkblbu",
+              profile: { displayName: "John Doe", idNumber: "DEV-12345" },
               user: {
                 email: "system_account@example.com",
                 name: "John Doe",

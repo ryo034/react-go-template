@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"html/template"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
@@ -11,7 +13,6 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/mailer"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"golang.org/x/text/language"
-	"html/template"
 )
 
 type Driver interface {
@@ -95,15 +96,16 @@ func (d *driver) SendInvitation(ctx context.Context, inviter workspace.Inviter, 
 	wd := inviter.Workspace().Detail()
 	tmplPath := ""
 	subject := ""
+	p := inviter.Profile()
 	switch lang {
 	case language.English:
-		subject = fmt.Sprintf("%s has invited you to join the %s workspace", inviter.DisplayName().ToString(), wd.Name().ToString())
+		subject = fmt.Sprintf("%s has invited you to join the %s workspace", p.DisplayName().ToString(), wd.Name().ToString())
 		tmplPath = "driver/email/template/invite_member/en.html"
 		if err != nil {
 			return err
 		}
 	default:
-		subject = fmt.Sprintf("%sがあなたを%sワークスペースに招待しました", inviter.DisplayName().ToString(), wd.Name().ToString())
+		subject = fmt.Sprintf("%sがあなたを%sワークスペースに招待しました", p.DisplayName().ToString(), wd.Name().ToString())
 		tmplPath = "driver/email/template/invite_member/ja.html"
 		if err != nil {
 			return err
@@ -117,7 +119,7 @@ func (d *driver) SendInvitation(ctx context.Context, inviter workspace.Inviter, 
 		ServiceName:   d.serviceName,
 		URL:           template.URL("https://example.com"),
 		WorkspaceName: wd.Name().ToString(),
-		InviterName:   inviter.DisplayName().ToString(),
+		InviterName:   p.DisplayName().ToString(),
 	}
 	var body bytes.Buffer
 	if err = tmpl.Execute(&body, data); err != nil {

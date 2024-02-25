@@ -18,6 +18,7 @@ export const domainKeys = {
   BusinessEntity: "BusinessEntity",
   MemberDisplayName: "MemberDisplayName",
   MemberIdNumber: "MemberIdNumber",
+  MemberBio: "MemberBio",
   AccountName: "AccountName",
   AccountFullName: "AccountFullName",
   StringId: "StringId",

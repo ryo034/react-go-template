@@ -1,5 +1,6 @@
 import { Result } from "true-myth"
 import { Member, MemberDisplayName, MemberId, MemberIdNumber, MemberProfile, Members } from "~/domain/workspace/member"
+import { MemberBio } from "~/domain/workspace/member/bio"
 import { components } from "~/generated/schema/openapi/systemApi"
 import { AdapterError } from "~/infrastructure/error"
 import { UserGatewayAdapter } from "~/interface/gateway/user"
@@ -32,10 +33,16 @@ export class MemberGatewayAdapter {
       return Result.err(idNumber.error)
     }
 
+    const bio = MemberBio.create(member.profile.bio ?? "")
+    if (bio.isErr) {
+      return Result.err(bio.error)
+    }
+
     const profile = MemberProfile.create({
       id: id.value,
       displayName: displayName.value,
-      idNumber: idNumber.value
+      idNumber: idNumber.value,
+      bio: bio.value
     })
 
     return Result.ok(Member.create({ user: user.value, profile }))

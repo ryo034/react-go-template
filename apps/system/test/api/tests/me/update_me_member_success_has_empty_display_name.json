@@ -16,7 +16,7 @@
       "id": "g57lunkvmbhurkm5dhf5nkblbu",
       "profile": {
         "displayName": "John Doe",
-        "idNumber": "DEV-12345"
+        "idNumber": ""
       },
       "user": {
         "email": "system_account@example.com",

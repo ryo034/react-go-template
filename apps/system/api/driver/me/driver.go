@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/id"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
@@ -21,8 +20,8 @@ type Driver interface {
 	FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*models.SystemAccount, error)
 	FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) (*models.SystemAccount, error)
 	FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.SystemAccount, error)
-	UpdateMember(ctx context.Context, exec bun.IDB, m *me.Me) error
 	UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User) error
+	UpdateMemberProfile(ctx context.Context, exec bun.IDB, m *member.Member) (*member.Member, error)
 }
 
 type driver struct {
@@ -129,20 +128,6 @@ func (d *driver) FindByEmail(ctx context.Context, exec bun.IDB, email account.Em
 	return sysAcc, nil
 }
 
-func (d *driver) UpdateMember(ctx context.Context, exec bun.IDB, m *me.Me) error {
-	mem := &models.MemberProfile{
-		MemberID:       m.Member().ID().Value(),
-		MemberIDNumber: m.Member().IDNumber().ToString(),
-		DisplayName:    m.Member().DisplayName().ToString(),
-	}
-	_, err := exec.
-		NewUpdate().
-		Model(mem).
-		WherePK().
-		Exec(ctx)
-	return err
-}
-
 func (d *driver) UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User) error {
 	mem := &models.SystemAccountProfile{
 		SystemAccountID: usr.AccountID().Value(),
@@ -156,4 +141,24 @@ func (d *driver) UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User
 		Exec(ctx)
 	fmt.Println(res)
 	return err
+}
+
+func (d *driver) UpdateMemberProfile(ctx context.Context, exec bun.IDB, m *member.Member) (*member.Member, error) {
+	p := m.Profile()
+	idNum := ""
+	if p.IDNumber() != nil {
+		idNum = p.IDNumber().ToString()
+	}
+	mem := &models.MemberProfile{
+		MemberID:       m.ID().Value(),
+		MemberIDNumber: idNum,
+		DisplayName:    p.DisplayName().ToString(),
+		Bio:            p.Bio().ToString(),
+	}
+	_, err := exec.
+		NewUpdate().
+		Model(mem).
+		WherePK().
+		Exec(ctx)
+	return m, err
 }

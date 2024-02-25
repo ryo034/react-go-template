@@ -57,7 +57,8 @@ func (u *useCase) Create(ctx context.Context, i CreateInput) (openapi.APIV1Works
 			return nil, err
 		}
 		dn := member.NewDisplayName(meRes.Self().Name().ToString())
-		m := member.NewMember(meID, meRes.Self(), dn, nil)
+		pro := member.NewProfile(dn, nil, member.NewAsEmptyBio())
+		m := member.NewMember(meID, meRes.Self(), pro)
 		memRes, err := u.repo.AddMember(pr, p, wres, m)
 		if err != nil {
 			return nil, err

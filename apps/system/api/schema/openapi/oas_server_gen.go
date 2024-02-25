@@ -38,6 +38,12 @@ type Handler interface {
 	//
 	// GET /api/v1/me
 	APIV1MeGet(ctx context.Context) (APIV1MeGetRes, error)
+	// APIV1MeMemberProfilePut implements PUT /api/v1/me/member/profile operation.
+	//
+	// Updates Me the member profile.
+	//
+	// PUT /api/v1/me/member/profile
+	APIV1MeMemberProfilePut(ctx context.Context, req *APIV1MeMemberProfilePutReq) (APIV1MeMemberProfilePutRes, error)
 	// APIV1MeProfilePut implements PUT /api/v1/me/profile operation.
 	//
 	// Updates the user profile.

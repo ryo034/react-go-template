@@ -1,16 +1,3 @@
-UpdateMeProfile:
-  description: Update Me Profile
-  required: true
-  content:
-    application/json:
-      schema:
-        type: object
-        required:
-          - user
-        properties:
-          user:
-            $ref: "#/components/schemas/User"
-
 InvitationProcess:
   description: Process an invitation by verifying token and email, and register or add user to workspace.
   required: true
@@ -30,3 +17,29 @@ InvitationProcess:
         required:
           - token
           - email
+
+UpdateMeProfile:
+  description: Update Me Profile
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - user
+        properties:
+          user:
+            $ref: "#/components/schemas/User"
+
+UpdateMeMemberProfile:
+  description: Update Me Member Profile
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - memberProfile
+        properties:
+          memberProfile:
+            $ref: "#/components/schemas/MemberProfile"

@@ -4,6 +4,10 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
+
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 
 	"github.com/google/uuid"
@@ -16,8 +20,9 @@ import (
 
 type Controller interface {
 	Find(ctx context.Context) (openapi.APIV1MeGetRes, error)
-	UpdateProfile(ctx context.Context, i openapi.User) (openapi.APIV1MeProfilePutRes, error)
 	AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error)
+	UpdateProfile(ctx context.Context, i openapi.User) (openapi.APIV1MeProfilePutRes, error)
+	UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1MeMemberProfilePutRes, error)
 }
 
 type controller struct {
@@ -28,6 +33,12 @@ type controller struct {
 
 type AcceptInvitationInput struct {
 	InvitationID uuid.UUID
+}
+
+type UpdateMemberProfileInput struct {
+	DisplayName string
+	IdNumber    string
+	Bio         string
 }
 
 func NewController(uc meUc.UseCase, resl shared.Resolver, co infraShared.ContextOperator) Controller {
@@ -42,6 +53,19 @@ func (c *controller) Find(ctx context.Context) (openapi.APIV1MeGetRes, error) {
 	res, err := c.uc.Find(ctx, aID)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MeGetRes), nil
+	}
+	return res, nil
+}
+
+func (c *controller) AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error) {
+	aID, err := c.co.GetUID(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.AcceptInvitationRes), nil
+	}
+	in := meUc.AcceptInvitationInput{AccountID: aID, InvitationID: invitation.NewID(i.InvitationID)}
+	res, err := c.uc.AcceptInvitation(ctx, in)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.AcceptInvitationRes), nil
 	}
 	return res, nil
 }
@@ -65,15 +89,43 @@ func (c *controller) UpdateProfile(ctx context.Context, i openapi.User) (openapi
 	return res, nil
 }
 
-func (c *controller) AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error) {
+func NewUpdateMemberProfileInput(i UpdateMemberProfileInput, aID account.ID) (meUc.UpdateMemberProfileInput, error) {
+	var err error = nil
+	var dn *member.DisplayName
+	if i.DisplayName != "" {
+		dn = member.NewDisplayName(i.DisplayName)
+	}
+	var mid *member.IDNumber
+	if i.IdNumber != "" {
+		tmpMID, err := member.NewIDNumber(i.IdNumber)
+		if err != nil {
+			return meUc.UpdateMemberProfileInput{}, err
+		}
+		mid = &tmpMID
+	}
+	bio := member.NewAsEmptyBio()
+	if i.Bio != "" {
+		bio, err = member.NewBio(i.Bio)
+		if err != nil {
+			return meUc.UpdateMemberProfileInput{}, err
+		}
+	}
+	pr := member.NewProfile(dn, mid, bio)
+	return meUc.UpdateMemberProfileInput{AccountID: aID, Profile: pr}, nil
+}
+
+func (c *controller) UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1MeMemberProfilePutRes, error) {
 	aID, err := c.co.GetUID(ctx)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.AcceptInvitationRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1MeMemberProfilePutRes), nil
 	}
-	in := meUc.AcceptInvitationInput{AccountID: aID, InvitationID: invitation.NewID(i.InvitationID)}
-	res, err := c.uc.AcceptInvitation(ctx, in)
+	in, err := NewUpdateMemberProfileInput(i, aID)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.AcceptInvitationRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1MeMemberProfilePutRes), nil
+	}
+	res, err := c.uc.UpdateMemberProfile(ctx, in)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MeMemberProfilePutRes), nil
 	}
 	return res, nil
 }

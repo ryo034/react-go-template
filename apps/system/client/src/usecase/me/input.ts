@@ -7,3 +7,9 @@ export type UpdateProfileInput = {
 export type AcceptInvitationInput = {
   invitationId: InvitationId
 }
+
+export type UpdateMemberProfileInput = {
+  displayName: string
+  idNumber: string
+  bio: string
+}

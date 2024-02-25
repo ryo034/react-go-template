@@ -1,3 +1,15 @@
+InvitationsAcceptResponse:
+  description: Invitation accepted and user added to the workspace
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - me
+        properties:
+          me:
+            $ref: "#/components/schemas/Me"
+
 MeResponse:
   description: Me
   content:
@@ -22,8 +34,8 @@ UpdateProfileResponse:
           me:
             $ref: "#/components/schemas/Me"
 
-InvitationsAcceptResponse:
-  description: Invitation accepted and user added to the workspace
+UpdateMeMemberProfileResponse:
+  description: Update Me Member Profile
   content:
     application/json:
       schema:

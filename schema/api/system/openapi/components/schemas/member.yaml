@@ -1,9 +1,14 @@
 Member:
   type: object
   required:
+    - id
     - user
     - profile
   properties:
+    id:
+      type: string
+      description: base32 encoded UUID
+      example: 3VZ6ZJ2Z6VZ6ZJ2Z
     profile:
       $ref: "#/components/schemas/MemberProfile"
     user:
@@ -12,17 +17,15 @@ Member:
 MemberProfile:
   type: object
   required:
-    - id
     - displayName
   properties:
-    id:
-      type: string
-      description: base32 encoded UUID
-      example: 3VZ6ZJ2Z6VZ6ZJ2Z
     displayName:
       type: string
     idNumber:
       type: string
+    bio:
+      type: string
+      description: User's bio
 
 Members:
   type: array

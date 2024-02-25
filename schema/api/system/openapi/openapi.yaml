@@ -156,6 +156,25 @@ paths:
           $ref: '#/components/responses/ForbiddenError'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /api/v1/me/member/profile:
+    put:
+      summary: Update Me Member Profile
+      description: Updates Me the member profile
+      tags:
+        - Profile
+      security:
+        - bearer: []
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateMeMemberProfile'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateMeMemberProfileResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /api/v1/login:
     post:
       summary: Login
@@ -385,9 +404,14 @@ components:
     Member:
       type: object
       required:
+        - id
         - user
         - profile
       properties:
+        id:
+          type: string
+          description: base32 encoded UUID
+          example: 3VZ6ZJ2Z6VZ6ZJ2Z
         profile:
           $ref: '#/components/schemas/MemberProfile'
         user:
@@ -395,17 +419,15 @@ components:
     MemberProfile:
       type: object
       required:
-        - id
         - displayName
       properties:
-        id:
-          type: string
-          description: base32 encoded UUID
-          example: 3VZ6ZJ2Z6VZ6ZJ2Z
         displayName:
           type: string
         idNumber:
           type: string
+        bio:
+          type: string
+          description: User's bio
     Members:
       type: array
       items:
@@ -586,6 +608,18 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/Invitee'
+    UpdateMeMemberProfile:
+      description: Update Me Member Profile
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - memberProfile
+            properties:
+              memberProfile:
+                $ref: '#/components/schemas/MemberProfile'
   responses:
     GeneralError:
       description: General Error
@@ -947,6 +981,17 @@ components:
                 $ref: '#/components/schemas/Me'
     UpdateProfileResponse:
       description: Update profile
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - me
+            properties:
+              me:
+                $ref: '#/components/schemas/Me'
+    UpdateMeMemberProfileResponse:
+      description: Update Me Member Profile
       content:
         application/json:
           schema:

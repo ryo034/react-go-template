@@ -259,24 +259,60 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				switch elem[0] {
-				case '/': // Prefix: "/profile"
+				case '/': // Prefix: "/"
 					origElem := elem
-					if l := len("/profile"); len(elem) >= l && elem[0:l] == "/profile" {
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "PUT":
-							s.handleAPIV1MeProfilePutRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "PUT")
+						break
+					}
+					switch elem[0] {
+					case 'm': // Prefix: "member/profile"
+						origElem := elem
+						if l := len("member/profile"); len(elem) >= l && elem[0:l] == "member/profile" {
+							elem = elem[l:]
+						} else {
+							break
 						}
 
-						return
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "PUT":
+								s.handleAPIV1MeMemberProfilePutRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "PUT")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'p': // Prefix: "profile"
+						origElem := elem
+						if l := len("profile"); len(elem) >= l && elem[0:l] == "profile" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "PUT":
+								s.handleAPIV1MeProfilePutRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "PUT")
+							}
+
+							return
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
@@ -785,28 +821,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 				}
 				switch elem[0] {
-				case '/': // Prefix: "/profile"
+				case '/': // Prefix: "/"
 					origElem := elem
-					if l := len("/profile"); len(elem) >= l && elem[0:l] == "/profile" {
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						switch method {
-						case "PUT":
-							// Leaf: APIV1MeProfilePut
-							r.name = "APIV1MeProfilePut"
-							r.summary = "Update Profile"
-							r.operationID = ""
-							r.pathPattern = "/api/v1/me/profile"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
+						break
+					}
+					switch elem[0] {
+					case 'm': // Prefix: "member/profile"
+						origElem := elem
+						if l := len("member/profile"); len(elem) >= l && elem[0:l] == "member/profile" {
+							elem = elem[l:]
+						} else {
+							break
 						}
+
+						if len(elem) == 0 {
+							switch method {
+							case "PUT":
+								// Leaf: APIV1MeMemberProfilePut
+								r.name = "APIV1MeMemberProfilePut"
+								r.summary = "Update Me Member Profile"
+								r.operationID = ""
+								r.pathPattern = "/api/v1/me/member/profile"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'p': // Prefix: "profile"
+						origElem := elem
+						if l := len("profile"); len(elem) >= l && elem[0:l] == "profile" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch method {
+							case "PUT":
+								// Leaf: APIV1MeProfilePut
+								r.name = "APIV1MeProfilePut"
+								r.summary = "Update Profile"
+								r.operationID = ""
+								r.pathPattern = "/api/v1/me/profile"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem

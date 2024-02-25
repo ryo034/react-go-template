@@ -18,3 +18,51 @@ test.describe("Update me success", () => {
     expect(res.data).toStrictEqual((await import("./update_me.json")).default)
   })
 })
+
+test.describe("Update me member profile success", () => {
+  statefulTest("update me member profile @stateful", async ({ page }) => {
+    const authInfo = await getAuthInfo("system_account@example.com")
+    const meRes = await client.GET("/api/v1/me", { headers: authHeaders(authInfo.token) })
+    expect(meRes.data).toStrictEqual((await import("./update_me_member_get_me.json")).default)
+
+    const data: components["schemas"]["MemberProfile"] = {
+      displayName: "Updated Display Name",
+      bio: "Updated Bio",
+      idNumber: "1234567890"
+    }
+    const res = await client.PUT("/api/v1/me/member/profile", {
+      headers: authHeaders(authInfo.token),
+      body: { memberProfile: data }
+    })
+    expect(res.response.status).toBe(200)
+    expect(res.data).toStrictEqual((await import("./update_me_member_success.json")).default)
+  })
+
+  statefulTest("success if request has empty fields @stateful", async ({ page }) => {
+    const authInfo = await getAuthInfo("system_account@example.com")
+    const meRes = await client.GET("/api/v1/me", { headers: authHeaders(authInfo.token) })
+    expect(meRes.data).toStrictEqual((await import("./update_me_member_get_me.json")).default)
+    const data: components["schemas"]["MemberProfile"] = {
+      displayName: "Updated Display Name"
+    }
+    const res = await client.PUT("/api/v1/me/member/profile", {
+      headers: authHeaders(authInfo.token),
+      body: { memberProfile: data }
+    })
+    expect(res.response.status).toBe(200)
+    expect(res.data).toStrictEqual((await import("./update_me_member_success_has_empty_bio_idnumber.json")).default)
+
+    // empty display name
+    const data2: components["schemas"]["MemberProfile"] = {
+      displayName: ""
+    }
+    const emptyDisplayNameRes = await client.PUT("/api/v1/me/member/profile", {
+      headers: authHeaders(authInfo.token),
+      body: { memberProfile: data2 }
+    })
+    expect(emptyDisplayNameRes.response.status).toBe(200)
+    expect(emptyDisplayNameRes.data).toStrictEqual(
+      (await import("./update_me_member_success_has_empty_display_name.json")).default
+    )
+  })
+})

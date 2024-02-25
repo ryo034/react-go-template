@@ -18,6 +18,11 @@ type UpdateProfileInput struct {
 	user *user.User
 }
 
+type UpdateMemberProfileInput struct {
+	AccountID account.ID
+	Profile   member.Profile
+}
+
 func NewUpdateInput(i openapi.Me) (*UpdateInput, error) {
 	aID := account.NewIDFromUUID(i.Self.UserId)
 	email, err := account.NewEmail(i.Self.Email)
@@ -51,7 +56,7 @@ func NewUpdateInput(i openapi.Me) (*UpdateInput, error) {
 
 	var mem *member.Member
 	if i.Member.Set {
-		mID, err := member.NewID(i.Member.Value.Profile.ID)
+		mID, err := member.NewID(i.Member.Value.ID)
 		if err != nil {
 			return nil, err
 		}
@@ -64,7 +69,16 @@ func NewUpdateInput(i openapi.Me) (*UpdateInput, error) {
 			}
 			mid = &tmpMid
 		}
-		mem = member.NewMember(mID, u, mdn, mid)
+		bio := member.NewAsEmptyBio()
+		if i.Member.Value.Profile.Bio.Set {
+			bio, err = member.NewBio(i.Member.Value.Profile.Bio.Value)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		pr := member.NewProfile(mdn, mid, bio)
+		mem = member.NewMember(mID, u, pr)
 	}
 
 	jws := make([]*workspace.Workspace, 0, len(i.JoinedWorkspaces))

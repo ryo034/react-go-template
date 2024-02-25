@@ -14,28 +14,6 @@ me:
       "500":
         $ref: "#/components/responses/InternalServerError"
 
-profile:
-  put:
-    summary: Update Profile
-    description: Updates the user profile
-    tags:
-      - Profile
-    security:
-      - bearer: []
-    requestBody:
-      $ref: "#/components/requestBodies/UpdateMeProfile"
-    responses:
-      "200":
-        $ref: "#/components/responses/UpdateProfileResponse"
-      "401":
-        $ref: "#/components/responses/UnauthorizedError"
-      "403":
-        $ref: "#/components/responses/ForbiddenError"
-      "400":
-        $ref: "#/components/responses/BadRequestError"
-      "500":
-        $ref: "#/components/responses/InternalServerError"
-
 invitationsAccept:
   post:
     summary: Accept an invitation to join a workspace
@@ -61,5 +39,47 @@ invitationsAccept:
         $ref: "#/components/responses/ConflictError"
       "410":
         $ref: "#/components/responses/GoneError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+
+profile:
+  put:
+    summary: Update Profile
+    description: Updates the user profile
+    tags:
+      - Profile
+    security:
+      - bearer: []
+    requestBody:
+      $ref: "#/components/requestBodies/UpdateMeProfile"
+    responses:
+      "200":
+        $ref: "#/components/responses/UpdateProfileResponse"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
+      "403":
+        $ref: "#/components/responses/ForbiddenError"
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+
+memberProfile:
+  put:
+    summary: Update Me Member Profile
+    description: Updates Me the member profile
+    tags:
+      - Profile
+    security:
+      - bearer: []
+    requestBody:
+      $ref: "#/components/requestBodies/UpdateMeMemberProfile"
+    responses:
+      "200":
+        $ref: "#/components/responses/UpdateMeMemberProfileResponse"
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
       "500":
         $ref: "#/components/responses/InternalServerError"
