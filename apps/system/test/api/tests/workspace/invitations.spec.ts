@@ -70,18 +70,15 @@ test.describe("get invitations", () => {
     expect(res.error).toBeUndefined()
     expect(JSON.stringify(res.data)).toEqual(JSON.stringify((await import("./success_get_invitations.json")).default))
   })
-  statefulTest(
-    "success to get verified invitations without revoked and already registered @stateful",
-    async ({ page }) => {
-      const email = "system_account@example.com"
-      const authInfo = await getAuthInfo(email)
-      const res = await client.GET("/api/v1/invitations", {
-        headers: authHeaders(authInfo.token),
-        params: { query: { status: "accepted" } }
-      })
-      expect(res.response.status).toBe(200)
-      expect(res.error).toBeUndefined()
-      expect(res.data).toStrictEqual((await import("./success_get_accepted_invitations.json")).default)
-    }
-  )
+  statefulTest("success to get accepted invitations without revoked @stateful", async ({ page }) => {
+    const email = "system_account@example.com"
+    const authInfo = await getAuthInfo(email)
+    const res = await client.GET("/api/v1/invitations", {
+      headers: authHeaders(authInfo.token),
+      params: { query: { status: "accepted" } }
+    })
+    expect(res.response.status).toBe(200)
+    expect(res.error).toBeUndefined()
+    expect(res.data).toStrictEqual((await import("./success_get_accepted_invitations.json")).default)
+  })
 })

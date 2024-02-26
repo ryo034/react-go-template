@@ -8,6 +8,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
+
 	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
@@ -31,7 +33,12 @@ func Test_driver_Create_OK(t *testing.T) {
 		db := bun.NewDB(test.SetupTestDB(t, ctx).DB, pgdialect.New())
 		pr := core.NewDatabaseProvider(db, db)
 		aID := account.NewIDFromUUID(systemAccountIDUUID)
-		got, err := NewDriver().Create(ctx, pr.GetExecutor(ctx, false), aID, email)
+		ap := provider.NewProvider(
+			provider.NewIDFromUUID(uuid.MustParse("018de777-7bb8-7cb7-b705-58c876746288")),
+			"email",
+			"",
+		)
+		got, err := NewDriver().Create(ctx, pr.GetExecutor(ctx, false), aID, email, ap)
 		if (err != nil) != wantErr {
 			t.Errorf("Create() error = %v, wantErr %v", err, wantErr)
 			return
@@ -82,9 +89,8 @@ func Test_driver_Find_OK(t *testing.T) {
 		},
 		AuthProviders: []*models.AuthProvider{
 			{
-				AuthProviderID:  uuid.MustParse("018de2f6-968d-7458-9c67-69ae5698a143"),
+				AuthProviderID:  uuid.MustParse("018de777-7bb8-7cb7-b705-58c876746288"),
 				SystemAccountID: systemAccountIDUUID,
-				ProviderUID:     "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
 				Provider:        "email",
 				ProvidedBy:      "firebase",
 				CreatedAt:       defaultTime,

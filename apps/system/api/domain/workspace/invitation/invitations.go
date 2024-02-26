@@ -9,8 +9,10 @@ type Invitations interface {
 	IsNotEmpty() bool
 	ExcludeRevoked() Invitations
 	ExcludeVerified() Invitations
+	ExcludeAccepted() Invitations
 	OnlyAccepted() Invitations
 	SortByExpiryAt() Invitations
+	Sort() Invitations
 }
 
 type workspaces struct {
@@ -57,6 +59,17 @@ func (ws *workspaces) ExcludeVerified() Invitations {
 	return NewInvitations(filtered)
 }
 
+func (ws *workspaces) ExcludeAccepted() Invitations {
+	filtered := make([]*Invitation, 0)
+	for _, w := range ws.wrapped {
+		if !w.IsAccepted() {
+			filtered = append(filtered, w)
+		}
+	}
+	return NewInvitations(filtered)
+
+}
+
 func (ws *workspaces) OnlyAccepted() Invitations {
 	filtered := make([]*Invitation, 0)
 	for _, w := range ws.wrapped {
@@ -71,6 +84,14 @@ func (ws *workspaces) SortByExpiryAt() Invitations {
 	sorted := append(make([]*Invitation, 0, ws.Size()), ws.wrapped...)
 	sort.Slice(sorted, func(i, j int) bool {
 		return sorted[i].ExpiredAt().Value().ToTime().Before(sorted[j].ExpiredAt().Value().ToTime())
+	})
+	return NewInvitations(sorted)
+}
+
+func (ws *workspaces) Sort() Invitations {
+	sorted := append(make([]*Invitation, 0, ws.Size()), ws.wrapped...)
+	sort.Slice(sorted, func(i, j int) bool {
+		return sorted[i].ID().Value().Time() < sorted[j].ID().Value().Time()
 	})
 	return NewInvitations(sorted)
 }

@@ -3,14 +3,16 @@ package auth
 import (
 	"context"
 	"fmt"
+	"time"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/auth"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 	authDr "github.com/ryo034/react-go-template/apps/system/api/driver/auth"
 	kvDr "github.com/ryo034/react-go-template/apps/system/api/driver/keyvalue"
 	auth2 "github.com/ryo034/react-go-template/apps/system/api/infrastructure/auth"
 	"github.com/uptrace/bun"
-	"time"
 )
 
 type gateway struct {
@@ -45,8 +47,8 @@ func (g *gateway) VerifyOTP(ctx context.Context, email account.Email, code strin
 	return c == code, nil
 }
 
-func (g *gateway) Create(ctx context.Context, exec bun.IDB, aID account.ID, email account.Email) (*user.User, error) {
-	res, err := g.ad.Create(ctx, exec, aID, email)
+func (g *gateway) Create(ctx context.Context, exec bun.IDB, aID account.ID, email account.Email, ap *provider.Provider) (*user.User, error) {
+	res, err := g.ad.Create(ctx, exec, aID, email, ap)
 	if err != nil {
 		return nil, err
 	}

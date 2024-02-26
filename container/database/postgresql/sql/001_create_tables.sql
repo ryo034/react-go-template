@@ -48,7 +48,6 @@ CREATE TYPE auth_provider_provided_by AS ENUM ('firebase');
 CREATE TABLE auth_providers (
   auth_provider_id uuid NOT NULL,
   system_account_id uuid NOT NULL,
-  provider_uid VARCHAR(256) NOT NULL UNIQUE,
   provider auth_provider_provider NOT NULL,
   provided_by auth_provider_provided_by NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,

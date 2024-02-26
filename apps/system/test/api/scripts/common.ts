@@ -44,7 +44,7 @@ export const getOtpCodeFromRedis = async (email: string): Promise<string> => {
 }
 
 export const getAuthInfo = async (email: string): Promise<AuthInfo> => {
-  const { data, response, error } = await client.POST("/api/v1/auth/otp", {
+  const { response, error } = await client.POST("/api/v1/auth/otp", {
     headers: defaultPostHeaders,
     body: { email }
   })
@@ -57,7 +57,8 @@ export const getAuthInfo = async (email: string): Promise<AuthInfo> => {
     body: { email, otp: code }
   })
   if (verifyRes.error !== undefined || verifyRes.response.status !== 200) {
-    throw new Error("verifyRes.data is undefined")
+    console.debug(verifyRes)
+    throw new Error("verifyRes.data is undefined error")
   }
   const { token } = verifyRes.data
   const fb = new Firebase(firebaseConfig, { showConsole: false })

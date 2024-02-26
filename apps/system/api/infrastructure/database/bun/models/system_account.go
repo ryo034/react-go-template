@@ -24,7 +24,6 @@ type AuthProvider struct {
 
 	AuthProviderID  uuid.UUID `bun:"auth_provider_id,pk"`
 	SystemAccountID uuid.UUID `bun:"system_account_id,notnull"`
-	ProviderUID     string    `bun:"provider_uid,notnull,unique"`
 	Provider        string    `bun:"provider,notnull"`
 	ProvidedBy      string    `bun:"provided_by,notnull"`
 	CreatedAt       time.Time `bun:"created_at,notnull,default:current_timestamp"`

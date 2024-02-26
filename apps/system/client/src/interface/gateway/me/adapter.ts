@@ -64,8 +64,6 @@ export class MeGatewayAdapter {
       }
     }
 
-    console.log("adaptAllAuthProvider")
-
     const providers = this.authAdapter.adaptAllAuthProvider(me.providers)
     if (providers.isErr) {
       return Result.err(providers.error)

@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
+
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
@@ -84,7 +86,11 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 			if err != nil {
 				return "", err
 			}
-			usr, err = u.repo.Create(pr, p, aID, i.Email)
+			ap, err := provider.NewProviderAsEmailOnFirebase()
+			if err != nil {
+				return "", err
+			}
+			usr, err = u.repo.Create(pr, p, aID, i.Email, ap)
 			if err != nil {
 				return "", err
 			}

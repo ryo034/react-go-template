@@ -55,7 +55,6 @@ func Test_driver_FindByToken_OK(t *testing.T) {
 				{
 					AuthProviderID:  uuid.MustParse("018de2f6-968d-7458-9c67-69ae5698a143"),
 					SystemAccountID: inviteeSystemAccountID,
-					ProviderUID:     "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
 					Provider:        "email",
 					ProvidedBy:      "firebase",
 					CreatedAt:       defaultTime,

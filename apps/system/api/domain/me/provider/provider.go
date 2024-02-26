@@ -17,12 +17,20 @@ func NewProvider(id ID, kind Kind, providedBy ProvidedBy) *Provider {
 	return &Provider{id, kind, providedBy}
 }
 
-func NewProviderAsGoogleOnFirebase(id ID) *Provider {
-	return NewProvider(id, Google, ProvidedByFirebase)
+func NewProviderAsGoogleOnFirebase() (*Provider, error) {
+	id, err := GenerateID()
+	if err != nil {
+		return nil, err
+	}
+	return NewProvider(id, Google, ProvidedByFirebase), nil
 }
 
-func NewProviderAsEmailOnFirebase(id ID) *Provider {
-	return NewProvider(id, Email, ProvidedByFirebase)
+func NewProviderAsEmailOnFirebase() (*Provider, error) {
+	id, err := GenerateID()
+	if err != nil {
+		return nil, err
+	}
+	return NewProvider(id, Email, ProvidedByFirebase), nil
 
 }
 

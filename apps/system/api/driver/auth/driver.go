@@ -3,13 +3,15 @@ package auth
 import (
 	"context"
 
+	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	"github.com/uptrace/bun"
 )
 
 type Driver interface {
-	Create(ctx context.Context, exec bun.IDB, aID account.ID, email account.Email) (*models.SystemAccount, error)
+	Create(ctx context.Context, exec bun.IDB, aID account.ID, email account.Email, ap *provider.Provider) (*models.SystemAccount, error)
 	Find(ctx context.Context, exec bun.IDB, email account.Email) (*models.SystemAccount, error)
 }
 
@@ -20,7 +22,7 @@ func NewDriver() Driver {
 	return &driver{}
 }
 
-func (p *driver) Create(ctx context.Context, exec bun.IDB, aID account.ID, email account.Email) (*models.SystemAccount, error) {
+func (p *driver) Create(ctx context.Context, exec bun.IDB, aID account.ID, email account.Email, ap *provider.Provider) (*models.SystemAccount, error) {
 	sa := models.SystemAccount{
 		SystemAccountID: aID.Value(),
 	}
@@ -55,8 +57,36 @@ func (p *driver) Create(ctx context.Context, exec bun.IDB, aID account.ID, email
 		return nil, err
 	}
 
+	prb := "firebase"
+	switch ap.ProvidedBy() {
+	case provider.ProvidedByFirebase:
+		prb = "firebase"
+	}
+
+	prv := "email"
+	switch ap.Kind() {
+	case provider.Email:
+		prv = "email"
+	case provider.Google:
+		prb = "google"
+	}
+
+	apm := models.AuthProvider{
+		AuthProviderID:  ap.ID().Value(),
+		SystemAccountID: aID.Value(),
+		Provider:        prv,
+		ProvidedBy:      prb,
+	}
+	if _, err = exec.
+		NewInsert().
+		Model(&apm).
+		Exec(ctx); err != nil {
+		return nil, err
+	}
+
 	sa.Profile = &sap
 	sa.Emails = append(sa.Emails, &sape)
+	sa.AuthProviders = append(sa.AuthProviders, &apm)
 
 	return &sa, err
 }

@@ -181,5 +181,5 @@ func (u *useCase) FindAllInvitation(ctx context.Context, i FindAllInvitationInpu
 	if i.IsAccepted {
 		return u.op.FindAllInvitation(res.OnlyAccepted().SortByExpiryAt())
 	}
-	return u.op.FindAllInvitation(res.ExcludeRevoked().ExcludeVerified().SortByExpiryAt())
+	return u.op.FindAllInvitation(res.ExcludeRevoked().ExcludeVerified().ExcludeAccepted().Sort())
 }
