@@ -4,7 +4,7 @@ type Kind string
 
 const (
 	Google Kind = "google"
-	Email       = "email"
+	Email  Kind = "email"
 )
 
 type Provider struct {

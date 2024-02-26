@@ -1,9 +1,12 @@
 package user
 
 import (
+	"testing"
+
+	"github.com/ryo034/react-go-template/apps/system/api/util/test"
+
 	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
-	"testing"
 )
 
 func TestAdapter_Adapt(t *testing.T) {
@@ -11,22 +14,33 @@ func TestAdapter_Adapt(t *testing.T) {
 	validEmail := "test@example.com"
 	validName := "John Doe"
 	validPhoneNumber := "09000000000"
+	defaultTime := test.GetDefaultTime()
 
 	systemAccount := models.SystemAccount{
 		SystemAccountID: validUUID,
 		Profile: &models.SystemAccountProfile{
-			Email: validEmail,
-			Name:  validName,
+			Name: validName,
 		},
-		PhoneNumber: &models.SystemAccountPhoneNumber{
-			PhoneNumber: validPhoneNumber,
+		Emails: []*models.SystemAccountEmail{
+			{
+				SystemAccountID: validUUID,
+				Email:           validEmail,
+				CreatedAt:       defaultTime,
+			},
+		},
+		PhoneNumbers: []*models.SystemAccountPhoneNumber{
+			{
+				SystemAccountID: validUUID,
+				PhoneNumber:     validPhoneNumber,
+				CreatedAt:       defaultTime,
+			},
 		},
 	}
 
-	adapter := NewAdapter()
+	adap := NewAdapter()
 
 	t.Run("Valid conversion", func(t *testing.T) {
-		u, err := adapter.AdaptTmp(&systemAccount)
+		u, err := adap.AdaptTmp(&systemAccount)
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)
 		}
@@ -37,8 +51,8 @@ func TestAdapter_Adapt(t *testing.T) {
 
 	t.Run("PhoneNumber is nil", func(t *testing.T) {
 		invalidSystemAccount := systemAccount
-		invalidSystemAccount.PhoneNumber = nil
-		u, err := adapter.AdaptTmp(&invalidSystemAccount)
+		invalidSystemAccount.PhoneNumbers = nil
+		u, err := adap.AdaptTmp(&invalidSystemAccount)
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)
 		}
@@ -50,7 +64,7 @@ func TestAdapter_Adapt(t *testing.T) {
 	t.Run("Name is empty", func(t *testing.T) {
 		invalidSystemAccount := systemAccount
 		invalidSystemAccount.Profile.Name = ""
-		u, err := adapter.AdaptTmp(&invalidSystemAccount)
+		u, err := adap.AdaptTmp(&invalidSystemAccount)
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)
 		}
