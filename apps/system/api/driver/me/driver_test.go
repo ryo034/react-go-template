@@ -4,6 +4,10 @@ package me
 
 import (
 	"context"
+	"reflect"
+	"testing"
+	"time"
+
 	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
@@ -15,9 +19,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
-	"reflect"
-	"testing"
-	"time"
 )
 
 const systemAccountID = "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
@@ -42,19 +43,36 @@ func Test_driver_Find_OK(t *testing.T) {
 		SystemAccount: &models.SystemAccount{
 			SystemAccountID: systemAccountIDUUID,
 			CreatedAt:       defaultTime,
-			PhoneNumber:     nil,
 			Profile: &models.SystemAccountProfile{
 				SystemAccountID: systemAccountIDUUID,
 				Name:            "John Doe",
-				Email:           "system_account@example.com",
 				CreatedAt:       defaultTime,
 				UpdatedAt:       defaultTime,
 			},
+			Emails: []*models.SystemAccountEmail{
+				{
+					SystemAccountID: systemAccountIDUUID,
+					Email:           "system_account@example.com",
+					CreatedAt:       defaultTime,
+				},
+			},
+			AuthProviders: []*models.AuthProvider{
+				{
+					AuthProviderID:  uuid.MustParse("018de2f6-968d-7458-9c67-69ae5698a143"),
+					SystemAccountID: systemAccountIDUUID,
+					ProviderUID:     "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
+					Provider:        "email",
+					ProvidedBy:      "firebase",
+					CreatedAt:       defaultTime,
+				},
+			},
+			PhoneNumbers: nil,
 		},
 		Profile: &models.MemberProfile{
 			MemberID:       memberID,
 			MemberIDNumber: "DEV-12345",
 			DisplayName:    "John Doe",
+			Bio:            "John Doe is a passionate software engineer with 8 years of experience specializing in web development, particularly with React and Node.js. A graduate from MIT with a strong focus on clean architecture and Agile methodologies, John has successfully led multiple projects, from innovative startups to established tech giants. He's a firm believer in continuous learning, contributing regularly to open-source projects, and sharing insights through tech blogs and meetups. Outside of work, John enjoys hiking 🚶‍♂️, drone photography 📸, and playing the guitar 🎸. He's committed to using technology to drive positive social change.",
 			CreatedAt:      defaultTime,
 			UpdatedAt:      defaultTime,
 		},

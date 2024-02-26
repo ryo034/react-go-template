@@ -7,10 +7,12 @@ import { AdapterError, AuthProviderCurrentUserNotFoundError } from "~/infrastruc
 import { UserGatewayAdapter } from "~/interface/gateway/user"
 import { WorkspaceGatewayAdapter } from "~/interface/gateway/workspace"
 import { MemberGatewayAdapter } from "~/interface/gateway/workspace/member"
+import { AuthGatewayAdapter } from "../auth"
 import { InvitationGatewayAdapter } from "../workspace/invitation"
 
 export class MeGatewayAdapter {
   constructor(
+    private readonly authAdapter: AuthGatewayAdapter,
     private readonly userAdapter: UserGatewayAdapter,
     private readonly memberAdapter: MemberGatewayAdapter,
     private readonly workspaceAdapter: WorkspaceGatewayAdapter,
@@ -62,13 +64,21 @@ export class MeGatewayAdapter {
       }
     }
 
+    console.log("adaptAllAuthProvider")
+
+    const providers = this.authAdapter.adaptAllAuthProvider(me.providers)
+    if (providers.isErr) {
+      return Result.err(providers.error)
+    }
+
     return Result.ok(
       Me.create({
         self: user.value,
         workspace,
         member,
         joinedWorkspaces: joinedWorkspaces.value,
-        receivedInvitations: ReceivedInvitations.create(rivs)
+        receivedInvitations: ReceivedInvitations.create(rivs),
+        providers: providers.value
       })
     )
   }

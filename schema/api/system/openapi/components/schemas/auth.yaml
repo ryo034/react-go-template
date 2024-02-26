@@ -6,3 +6,10 @@ JwtToken:
     token:
       type: string
       description: JWT token
+
+AuthProvider:
+  type: string
+  description: Authentication provider
+  enum:
+    - email
+    - google

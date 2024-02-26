@@ -15,6 +15,7 @@
     "member": {
       "id": "g57lunkvmbhurkm5dhf5nkblbu",
       "profile": {
+        "bio": "Updated Bio",
         "displayName": "Updated Display Name",
         "idNumber": "1234567890"
       },
@@ -28,6 +29,7 @@
       "email": "system_account@example.com",
       "name": "John Doe",
       "userId": "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
-    }
+    },
+    "providers": ["email"]
   }
 }

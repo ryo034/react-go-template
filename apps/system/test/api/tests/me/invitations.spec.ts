@@ -16,9 +16,7 @@ test.describe("Me Invitations", () => {
         body: { token: inviteToken, email }
       })
       expect(processRes.response.status).toBe(200)
-
       const authInfo = await getAuthInfo(email)
-
       const res = await client.GET("/api/v1/me", { headers: authHeaders(authInfo.token) })
       expect(res.response.status).toBe(200)
       expect(res.data?.me.self.email).toBe(email)
@@ -37,7 +35,11 @@ test.describe("Me Invitations", () => {
           inviter: {
             member: {
               id: "g57lunkvmbhurkm5dhf5nkblbu",
-              profile: { displayName: "John Doe", idNumber: "DEV-12345" },
+              profile: {
+                displayName: "John Doe",
+                idNumber: "DEV-12345",
+                bio: "John Doe is a passionate software engineer with 8 years of experience specializing in web development, particularly with React and Node.js. A graduate from MIT with a strong focus on clean architecture and Agile methodologies, John has successfully led multiple projects, from innovative startups to established tech giants. He's a firm believer in continuous learning, contributing regularly to open-source projects, and sharing insights through tech blogs and meetups. Outside of work, John enjoys hiking 🚶‍♂️, drone photography 📸, and playing the guitar 🎸. He's committed to using technology to drive positive social change."
+              },
               user: {
                 email: "system_account@example.com",
                 name: "John Doe",
@@ -48,7 +50,6 @@ test.describe("Me Invitations", () => {
           }
         }
       ])
-
       if (res.data === undefined) {
         throw new Error("res.data is undefined")
       }
@@ -61,10 +62,9 @@ test.describe("Me Invitations", () => {
       }
       const updateProfileRes = await client.PUT("/api/v1/me/profile", {
         headers: authHeaders(authInfo.token),
-        body: { user: data }
+        body: { profile: data }
       })
       expect(updateProfileRes.response.status).toBe(200)
-
       // accept invitation
       const acceptInvitationRes = await client.POST("/api/v1/members/invitations/{invitationId}/accept", {
         headers: authHeaders(authInfo.token),
@@ -84,7 +84,6 @@ test.describe("Me Invitations", () => {
       expect(acceptInvitationRes.data.me.currentWorkspace?.workspaceId).toBe("c1bd2603-b9cd-4f84-8b83-3548f6ae150b")
     }
   )
-
   // already used user accept invitation
   statefulTest(
     "add invited workspace to joinedWorkspaces and currentWorkspace changed to invited workspace @stateful",
@@ -96,13 +95,10 @@ test.describe("Me Invitations", () => {
         body: { token: inviteToken, email }
       })
       expect(processRes.response.status).toBe(200)
-
       const authInfo = await getAuthInfo(email)
-
       const res = await client.GET("/api/v1/me", { headers: authHeaders(authInfo.token) })
       expect(res.response.status).toBe(200)
       expect(res.data).toStrictEqual((await import("./already_used_user_accept_invitation_me_res.json")).default)
-
       // accept invitation
       const acceptInvitationRes = await client.POST("/api/v1/members/invitations/{invitationId}/accept", {
         headers: authHeaders(authInfo.token),
@@ -128,7 +124,6 @@ test.describe("Me Invitations", () => {
       expect(acceptInvitationRes.data.me.receivedInvitations).toBeUndefined()
     }
   )
-
   test("failed to accept already accepted invitation return GoneError", async () => {
     const email = "invite_test_already_accepted@example.com"
     const inviteToken = await getInviteToken(email)
@@ -139,7 +134,6 @@ test.describe("Me Invitations", () => {
     })
     expect(res.response.status).toBe(410)
   })
-
   test("failed to accept already expired invitation return GoneError", async () => {
     const email = "invite_test_expired@example.com"
     const inviteToken = await getInviteToken(email)
@@ -150,7 +144,6 @@ test.describe("Me Invitations", () => {
     })
     expect(res.response.status).toBe(410)
   })
-
   test("failed to accept revoked invitation return GoneError", async () => {
     const email = "invite_test_revoked@example.com"
     const inviteToken = await getInviteToken(email)

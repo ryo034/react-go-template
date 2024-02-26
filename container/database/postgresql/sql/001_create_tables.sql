@@ -42,10 +42,41 @@ CREATE TABLE system_accounts (
   PRIMARY KEY (system_account_id)
 );
 
+CREATE TYPE auth_provider_provider AS ENUM ('google', 'email');
+CREATE TYPE auth_provider_provided_by AS ENUM ('firebase');
+
+CREATE TABLE auth_providers (
+  auth_provider_id uuid NOT NULL,
+  system_account_id uuid NOT NULL,
+  provider_uid VARCHAR(256) NOT NULL UNIQUE,
+  provider auth_provider_provider NOT NULL,
+  provided_by auth_provider_provided_by NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (auth_provider_id),
+  CONSTRAINT fk_auth_providers_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+);
+
+CREATE TABLE system_account_emails (
+  system_account_id uuid NOT NULL,
+  email VARCHAR(256) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (system_account_id),
+  CONSTRAINT fk_system_account_emails_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+);
+CREATE INDEX system_account_emails_created_at_index ON system_account_emails(created_at);
+
+CREATE TABLE system_account_phone_numbers (
+  system_account_id uuid NOT NULL,
+  phone_number VARCHAR(15) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (system_account_id),
+  CONSTRAINT fk_system_account_phone_numbers_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+);
+CREATE INDEX system_account_phone_numbers_created_at_index ON system_account_phone_numbers(created_at);
+
 CREATE TABLE system_account_profiles (
   system_account_id uuid NOT NULL,
   name VARCHAR(255),
-  email VARCHAR(256) NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (system_account_id),
@@ -55,19 +86,6 @@ CREATE TABLE system_account_profiles (
 CREATE TRIGGER refresh_system_account_profiles_updated_at_step1 BEFORE UPDATE ON system_account_profiles FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step1();
 CREATE TRIGGER refresh_system_account_profiles_updated_at_step2 BEFORE UPDATE OF updated_at ON system_account_profiles FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step2();
 CREATE TRIGGER refresh_system_account_profiles_updated_at_step3 BEFORE UPDATE ON system_account_profiles FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step3();
-
-CREATE TABLE system_account_phone_numbers (
-  system_account_id uuid NOT NULL,
-  phone_number VARCHAR(15) NOT NULL UNIQUE,
-  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (system_account_id),
-  CONSTRAINT fk_system_account_phone_numbers_sas_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
-);
-
-CREATE TRIGGER refresh_system_account_phone_numbers_updated_at_step1 BEFORE UPDATE ON system_account_phone_numbers FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step1();
-CREATE TRIGGER refresh_system_account_phone_numbers_updated_at_step2 BEFORE UPDATE OF updated_at ON system_account_phone_numbers FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step2();
-CREATE TRIGGER refresh_system_account_phone_numbers_updated_at_step3 BEFORE UPDATE ON system_account_phone_numbers FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step3();
 
 CREATE TABLE workspaces (
   workspace_id uuid NOT NULL,
@@ -180,6 +198,7 @@ CREATE TABLE invitation_tokens (
   PRIMARY KEY (invitation_id, token),
   CONSTRAINT fk_invitations_invitation_tokens_invitation_id FOREIGN KEY (invitation_id) REFERENCES invitations(invitation_id)
 );
+CREATE INDEX invitation_tokens_expired_at_index ON invitation_tokens(expired_at);
 
 CREATE TABLE invitees (
   invitation_id uuid NOT NULL,
@@ -205,3 +224,4 @@ CREATE TABLE invitation_events (
   PRIMARY KEY (invitation_event_id),
   CONSTRAINT fk_invitation_events_invitations_invitation_id FOREIGN KEY (invitation_id) REFERENCES invitations(invitation_id)
 );
+CREATE INDEX invitation_events_created_at_index ON invitation_events(created_at);

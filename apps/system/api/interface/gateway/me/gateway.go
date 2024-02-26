@@ -42,7 +42,7 @@ func (g *gateway) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*me.Me
 	if err != nil {
 		return nil, err
 	}
-	em, err := account.NewEmail(p.Profile.Email)
+	em, err := account.NewEmail(p.Emails[0].Email)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +124,7 @@ func (g *gateway) FindAllActiveReceivedInvitations(ctx context.Context, exec bun
 	if err != nil {
 		return nil, err
 	}
-	em, err := account.NewEmail(p.Profile.Email)
+	em, err := account.NewEmail(p.Emails[0].Email)
 	if err != nil {
 		return nil, err
 	}

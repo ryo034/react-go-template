@@ -1,4 +1,4 @@
-import { Member, ReceivedInvitations, User, Workspace, Workspaces } from "~/domain"
+import { AuthProviders, Member, ReceivedInvitations, User, Workspace, Workspaces } from "~/domain"
 import { Entity } from "~/domain/shared"
 
 interface Props {
@@ -7,6 +7,7 @@ interface Props {
   member?: Member
   joinedWorkspaces: Workspaces
   receivedInvitations: ReceivedInvitations
+  providers: AuthProviders
 }
 
 export class Me extends Entity<Props> {
@@ -56,5 +57,9 @@ export class Me extends Entity<Props> {
 
   get hasNotReceivedInvitations(): boolean {
     return !this.hasReceivedInvitations
+  }
+
+  get providers(): AuthProviders {
+    return this.value.providers
   }
 }

@@ -87,6 +87,7 @@ func (d *driver) AddMember(ctx context.Context, exec bun.IDB, w *workspace.Works
 		MemberID:       m.ID().Value(),
 		MemberIDNumber: "",
 		DisplayName:    dn,
+		Bio:            "",
 	}
 	if _, err := exec.NewInsert().Model(mp).Exec(ctx); err != nil {
 		return nil, err
@@ -102,7 +103,9 @@ func (d *driver) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, w
 		Relation("Profile").
 		Relation("SystemAccount").
 		Relation("SystemAccount.Profile").
-		Relation("SystemAccount.PhoneNumber").
+		Relation("SystemAccount.AuthProviders").
+		Relation("SystemAccount.PhoneNumbers").
+		Relation("SystemAccount.Emails").
 		Relation("Workspace").
 		Where("ms.system_account_id = ?", aID.ToString()).
 		Where("ms.workspace_id = ?", wID.Value()).
@@ -121,7 +124,9 @@ func (d *driver) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace
 		Relation("Profile").
 		Relation("SystemAccount").
 		Relation("SystemAccount.Profile").
-		Relation("SystemAccount.PhoneNumber").
+		Relation("SystemAccount.AuthProviders").
+		Relation("SystemAccount.PhoneNumbers").
+		Relation("SystemAccount.Emails").
 		Relation("Workspace").
 		Where("ms.workspace_id = ?", wID.Value()).
 		Scan(ctx)

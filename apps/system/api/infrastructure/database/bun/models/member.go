@@ -7,13 +7,6 @@ import (
 	"github.com/uptrace/bun"
 )
 
-const (
-	MemberTableName             = "members"
-	MemberProfileTableName      = "member_profiles"
-	MemberLoginHistoryTableName = "member_login_histories"
-	MemberAddressTableName      = "member_addresses"
-)
-
 type Member struct {
 	bun.BaseModel `bun:"table:members,alias:ms"`
 

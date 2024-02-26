@@ -43,6 +43,8 @@ components:
   schemas:
     JwtToken:
       $ref: "./components/schemas/auth.yaml#/JwtToken"
+    AuthProvider:
+      $ref: "./components/schemas/auth.yaml#/AuthProvider"
     User:
       $ref: "./components/schemas/user.yaml#/User"
     MultiFactor:

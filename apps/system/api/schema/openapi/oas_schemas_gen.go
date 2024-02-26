@@ -161,6 +161,49 @@ func (s *APIV1WorkspacesPostReq) SetSubdomain(val string) {
 	s.Subdomain = val
 }
 
+// Authentication provider.
+// Ref: #/components/schemas/AuthProvider
+type AuthProvider string
+
+const (
+	AuthProviderEmail  AuthProvider = "email"
+	AuthProviderGoogle AuthProvider = "google"
+)
+
+// AllValues returns all AuthProvider values.
+func (AuthProvider) AllValues() []AuthProvider {
+	return []AuthProvider{
+		AuthProviderEmail,
+		AuthProviderGoogle,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s AuthProvider) MarshalText() ([]byte, error) {
+	switch s {
+	case AuthProviderEmail:
+		return []byte(s), nil
+	case AuthProviderGoogle:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *AuthProvider) UnmarshalText(data []byte) error {
+	switch AuthProvider(data) {
+	case AuthProviderEmail:
+		*s = AuthProviderEmail
+		return nil
+	case AuthProviderGoogle:
+		*s = AuthProviderGoogle
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type BadRequestError struct {
 	// The HTTP status code generated for this occurrence of the problem.
@@ -805,6 +848,7 @@ type Me struct {
 	CurrentWorkspace    OptWorkspace         `json:"currentWorkspace"`
 	JoinedWorkspaces    []Workspace          `json:"joinedWorkspaces"`
 	ReceivedInvitations []ReceivedInvitation `json:"receivedInvitations"`
+	Providers           []AuthProvider       `json:"providers"`
 }
 
 // GetSelf returns the value of Self.
@@ -832,6 +876,11 @@ func (s *Me) GetReceivedInvitations() []ReceivedInvitation {
 	return s.ReceivedInvitations
 }
 
+// GetProviders returns the value of Providers.
+func (s *Me) GetProviders() []AuthProvider {
+	return s.Providers
+}
+
 // SetSelf sets the value of Self.
 func (s *Me) SetSelf(val User) {
 	s.Self = val
@@ -855,6 +904,11 @@ func (s *Me) SetJoinedWorkspaces(val []Workspace) {
 // SetReceivedInvitations sets the value of ReceivedInvitations.
 func (s *Me) SetReceivedInvitations(val []ReceivedInvitation) {
 	s.ReceivedInvitations = val
+}
+
+// SetProviders sets the value of Providers.
+func (s *Me) SetProviders(val []AuthProvider) {
+	s.Providers = val
 }
 
 func (*Me) loginRes() {}

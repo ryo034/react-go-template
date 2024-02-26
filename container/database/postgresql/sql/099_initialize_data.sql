@@ -15,20 +15,35 @@ VALUES
 ('018da09e-c6ca-795e-878d-32bb8c1e5cac', '2024-01-10 12:00:00'),
 ('018ddee7-3a8e-7387-a03e-2b37173b5ada', '2024-01-10 12:00:00');
 
-INSERT INTO system_account_profiles (system_account_id, name, email, created_at, updated_at)
+INSERT INTO auth_providers (auth_provider_id, system_account_id, provider_uid, provider, provided_by, created_at)
 VALUES
-('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'John Doe', 'system_account@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', 'Login LogoutRetry', 'login_logout_login@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018d6189-9ad0-7b72-801b-1e0de0d3c214', 'Unfinished Onboarding', 'unfinished_onboarding@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018d96bf-8dce-7f68-a926-b5d7ed6ed883', 'Invite TestOne', 'invite_test_1@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018d9b4d-9438-79ac-b533-1323d4ec9b9f', 'Invite TestTwo', 'invite_test_already_joined_any_workspace@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018da09e-c6ca-795e-878d-32bb8c1e5cac', 'Invite TestThree', 'invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018ddee7-3a8e-7387-a03e-2b37173b5ada', 'UpdateMe MemberProfile', 'update_me_member_profile@example.com', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
+('018de2f6-968d-7458-9c67-69ae5698a143', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'email', 'firebase', '2024-01-10 12:00:00'),
+('018de2f6-b536-7f9c-bd34-dcf319ee4127', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', 'email', 'firebase', '2024-01-10 12:00:00'),
+('018de2ff-7d69-7f8d-9d19-57bb4106f594', '018d6189-9ad0-7b72-801b-1e0de0d3c214', '018d6189-9ad0-7b72-801b-1e0de0d3c214', 'email', 'firebase', '2024-01-10 12:00:00'),
+('018de2f6-ca47-7fc9-832a-3d725120c55b', '018d96bf-8dce-7f68-a926-b5d7ed6ed883', '018d96bf-8dce-7f68-a926-b5d7ed6ed883', 'email', 'firebase', '2024-01-10 12:00:00'),
+('018de2f6-de72-7b8c-92ab-b72b90d41ccd', '018d9b4d-9438-79ac-b533-1323d4ec9b9f', '018d9b4d-9438-79ac-b533-1323d4ec9b9f', 'email', 'firebase', '2024-01-10 12:00:00'),
+('018de2f6-f23e-7a3c-ab51-3117f07c1930', '018da09e-c6ca-795e-878d-32bb8c1e5cac', '018da09e-c6ca-795e-878d-32bb8c1e5cac', 'email', 'firebase', '2024-01-10 12:00:00'),
+('018de2f7-0939-7cb7-a1f0-c7959bf6edd7', '018ddee7-3a8e-7387-a03e-2b37173b5ada', '018ddee7-3a8e-7387-a03e-2b37173b5ada', 'email', 'firebase', '2024-01-10 12:00:00');
 
--- INSERT INTO system_account_phone_numbers (system_account_id, phone_number, created_at, updated_at)
--- VALUES
--- ('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', '09012345678', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
--- ('018d6189-9ad0-7b72-801b-1e0de0d3c214', '09012345679', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
+INSERT INTO system_account_emails (system_account_id, email, created_at)
+VALUES
+('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'system_account@example.com', '2024-01-10 12:00:00'),
+('018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', 'login_logout_login@example.com', '2024-01-10 12:00:00'),
+('018d6189-9ad0-7b72-801b-1e0de0d3c214', 'unfinished_onboarding@example.com', '2024-01-10 12:00:00'),
+('018d96bf-8dce-7f68-a926-b5d7ed6ed883', 'invite_test_1@example.com', '2024-01-10 12:00:00'),
+('018d9b4d-9438-79ac-b533-1323d4ec9b9f', 'invite_test_already_joined_any_workspace@example.com', '2024-01-10 12:00:00'),
+('018da09e-c6ca-795e-878d-32bb8c1e5cac', 'invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com', '2024-01-10 12:00:00'),
+('018ddee7-3a8e-7387-a03e-2b37173b5ada', 'update_me_member_profile@example.com', '2024-01-10 12:00:00');
+
+INSERT INTO system_account_profiles (system_account_id, name, created_at, updated_at)
+VALUES
+('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'John Doe', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', 'Login LogoutRetry', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018d6189-9ad0-7b72-801b-1e0de0d3c214', 'Unfinished Onboarding', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018d96bf-8dce-7f68-a926-b5d7ed6ed883', 'Invite TestOne', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018d9b4d-9438-79ac-b533-1323d4ec9b9f', 'Invite TestTwo', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018da09e-c6ca-795e-878d-32bb8c1e5cac', 'Invite TestThree', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018ddee7-3a8e-7387-a03e-2b37173b5ada', 'UpdateMe MemberProfile', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
 
 INSERT INTO workspaces (workspace_id, created_at)
 VALUES

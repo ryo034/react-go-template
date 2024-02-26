@@ -3,6 +3,8 @@ package me
 import (
 	"slices"
 
+	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
@@ -15,10 +17,11 @@ type Me struct {
 	member              *member.Member
 	joinedWorkspaces    workspace.Workspaces
 	receivedInvitations ReceivedInvitations
+	providers           provider.Providers
 }
 
-func NewMe(self *user.User, workspace *workspace.Workspace, member *member.Member, joinedWorkspaces workspace.Workspaces, receivedInvitations ReceivedInvitations) *Me {
-	return &Me{self, workspace, member, joinedWorkspaces, receivedInvitations}
+func NewMe(self *user.User, workspace *workspace.Workspace, member *member.Member, joinedWorkspaces workspace.Workspaces, receivedInvitations ReceivedInvitations, providers provider.Providers) *Me {
+	return &Me{self, workspace, member, joinedWorkspaces, receivedInvitations, providers}
 }
 
 func (m *Me) Self() *user.User {
@@ -78,4 +81,8 @@ func (m *Me) UpdateSelf(u *user.User) *Me {
 func (m *Me) UpdateName(name account.Name) *Me {
 	m.UpdateSelf(m.self.UpdateName(name))
 	return m
+}
+
+func (m *Me) Providers() provider.Providers {
+	return m.providers
 }

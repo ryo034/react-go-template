@@ -1,13 +1,10 @@
 package models
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"time"
-)
-
-const (
-	MembershipPeriodTableName = "membership_periods"
 )
 
 type MembershipPeriod struct {

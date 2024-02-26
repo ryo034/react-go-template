@@ -27,6 +27,9 @@ interface Database {
 export const targetTables = [
   "address_components",
   "system_accounts",
+  "auth_providers",
+  "system_account_emails",
+  "system_account_phone_numbers",
   "system_account_profiles",
   "system_account_phone_numbers",
   "workspaces",
@@ -86,7 +89,9 @@ export class MainDb implements Database {
 
     if (csv.length > 0) {
       for (const row of csv) {
-        const query = format(`INSERT INTO ${tableName} (${columns}) VALUES %L`, [row]).replace(/''/gi, "NULL")
+        const query = format(`INSERT INTO ${tableName} (${columns}) VALUES %L`, [
+          row.map((value) => (value === "" ? null : value))
+        ])
         logWithEllipsis(query)
         await connection.query(query)
       }

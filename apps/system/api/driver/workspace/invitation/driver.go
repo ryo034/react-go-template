@@ -50,8 +50,9 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, id invitation.ID) (*mod
 		Relation("InvitationUnit.Member.Profile").
 		Relation("InvitationUnit.Member.SystemAccount").
 		Relation("InvitationUnit.Member.SystemAccount.Profile").
-		Relation("InvitationUnit.Member.SystemAccount.Profile").
-		Relation("InvitationUnit.Member.SystemAccount.PhoneNumber").
+		Relation("InvitationUnit.Member.SystemAccount.PhoneNumbers").
+		Relation("InvitationUnit.Member.SystemAccount.Emails").
+		Relation("InvitationUnit.Member.SystemAccount.AuthProviders").
 		Relation("Invitee").
 		Relation("Tokens").
 		Relation("Events").
@@ -110,8 +111,9 @@ func (d *driver) FindActiveByEmail(ctx context.Context, exec bun.IDB, email acco
 		Relation("InvitationUnit.Member.Profile").
 		Relation("InvitationUnit.Member.SystemAccount").
 		Relation("InvitationUnit.Member.SystemAccount.Profile").
-		Relation("InvitationUnit.Member.SystemAccount.Profile").
-		Relation("InvitationUnit.Member.SystemAccount.PhoneNumber").
+		Relation("InvitationUnit.Member.SystemAccount.PhoneNumbers").
+		Relation("InvitationUnit.Member.SystemAccount.Emails").
+		Relation("InvitationUnit.Member.SystemAccount.AuthProviders").
 		Relation("Invitee").
 		Where(fmt.Sprintf("%s.invitation_id = ?", models.InvitationTableAliasName), invt.InvitationID).
 		Limit(1).
@@ -236,8 +238,9 @@ func (d *driver) FindAllReceivedByEmail(ctx context.Context, exec bun.IDB, email
 		Relation("InvitationUnit.Member.Profile").
 		Relation("InvitationUnit.Member.SystemAccount").
 		Relation("InvitationUnit.Member.SystemAccount.Profile").
-		Relation("InvitationUnit.Member.SystemAccount.Profile").
-		Relation("InvitationUnit.Member.SystemAccount.PhoneNumber").
+		Relation("InvitationUnit.Member.SystemAccount.PhoneNumbers").
+		Relation("InvitationUnit.Member.SystemAccount.Emails").
+		Relation("InvitationUnit.Member.SystemAccount.AuthProviders").
 		Relation("Invitee").
 		Relation("Tokens", func(query *bun.SelectQuery) *bun.SelectQuery {
 			return query.Order("expired_at DESC").Limit(1)
@@ -306,8 +309,9 @@ func (d *driver) FindActiveByToken(ctx context.Context, exec bun.IDB, token invi
 		Relation("InvitationUnit.Member.Profile").
 		Relation("InvitationUnit.Member.SystemAccount").
 		Relation("InvitationUnit.Member.SystemAccount.Profile").
-		Relation("InvitationUnit.Member.SystemAccount.Profile").
-		Relation("InvitationUnit.Member.SystemAccount.PhoneNumber").
+		Relation("InvitationUnit.Member.SystemAccount.AuthProviders").
+		Relation("InvitationUnit.Member.SystemAccount.Emails").
+		Relation("InvitationUnit.Member.SystemAccount.PhoneNumbers").
 		Relation("Invitee").
 		Where(fmt.Sprintf("%s.invitation_id = ?", models.InvitationTableAliasName), invt.InvitationID).
 		Limit(1).
@@ -338,8 +342,9 @@ func (d *driver) FindAllByWorkspace(ctx context.Context, exec bun.IDB, wID works
 		Relation("InvitationUnit.Member.Profile").
 		Relation("InvitationUnit.Member.SystemAccount").
 		Relation("InvitationUnit.Member.SystemAccount.Profile").
-		Relation("InvitationUnit.Member.SystemAccount.Profile").
-		Relation("InvitationUnit.Member.SystemAccount.PhoneNumber").
+		Relation("InvitationUnit.Member.SystemAccount.PhoneNumbers").
+		Relation("InvitationUnit.Member.SystemAccount.Emails").
+		Relation("InvitationUnit.Member.SystemAccount.AuthProviders").
 		Relation("Invitee").
 		Relation("Tokens").
 		Relation("Events").

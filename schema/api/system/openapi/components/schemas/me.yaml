@@ -29,6 +29,10 @@ Me:
       type: array
       items:
         $ref: "#/components/schemas/ReceivedInvitation"
+    providers:
+      type: array
+      items:
+        $ref: "#/components/schemas/AuthProvider"
 
 ReceivedInvitation:
   type: object

@@ -13,7 +13,10 @@ test.describe("Update me success", () => {
       name: "Updated Name",
       phoneNumber: ""
     }
-    const res = await client.PUT("/api/v1/me/profile", { headers: authHeaders(authInfo.token), body: { user: data } })
+    const res = await client.PUT("/api/v1/me/profile", {
+      headers: authHeaders(authInfo.token),
+      body: { profile: data }
+    })
     expect(res.response.status).toBe(200)
     expect(res.data).toStrictEqual((await import("./update_me.json")).default)
   })

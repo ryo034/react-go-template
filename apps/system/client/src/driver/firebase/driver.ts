@@ -28,7 +28,6 @@ export class FirebaseDriver implements AuthProviderDriver {
   constructor(private readonly client: Auth, private readonly errorHandler: ApiErrorHandler) {}
 
   get currentUser(): AuthProviderUser | null {
-    this.client.onAuthStateChanged
     if (this.client.currentUser === null) {
       return null
     }

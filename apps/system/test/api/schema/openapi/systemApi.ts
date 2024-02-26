@@ -222,6 +222,11 @@ export interface components {
       /** @description JWT token */
       token: string;
     };
+    /**
+     * @description Authentication provider
+     * @enum {string}
+     */
+    AuthProvider: "email" | "google";
     User: {
       /** Format: uuid */
       userId: string;
@@ -307,6 +312,7 @@ export interface components {
       currentWorkspace?: components["schemas"]["Workspace"];
       joinedWorkspaces: components["schemas"]["Workspace"][];
       receivedInvitations?: components["schemas"]["ReceivedInvitation"][];
+      providers?: components["schemas"]["AuthProvider"][];
     };
     ReceivedInvitation: {
       invitation: components["schemas"]["Invitation"];

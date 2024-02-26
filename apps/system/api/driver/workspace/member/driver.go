@@ -2,6 +2,7 @@ package member
 
 import (
 	"context"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	"github.com/uptrace/bun"
@@ -26,7 +27,9 @@ func (p *driver) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*models
 		Relation("Profile").
 		Relation("SystemAccount").
 		Relation("SystemAccount.Profile").
-		Relation("SystemAccount.PhoneNumber").
+		Relation("SystemAccount.AuthProviders").
+		Relation("SystemAccount.PhoneNumbers").
+		Relation("SystemAccount.Emails").
 		Where("ms.member_id = ?", mID.Value()).
 		Scan(ctx)
 	if err != nil {

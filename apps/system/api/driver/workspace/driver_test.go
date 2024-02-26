@@ -36,6 +36,7 @@ func Test_driver_FindAll_OK(t *testing.T) {
 			Detail: &models.WorkspaceDetail{
 				WorkspaceID: wID,
 				Name:        "Example",
+				Subdomain:   "example",
 				CreatedAt:   defaultTime,
 				UpdatedAt:   defaultTime,
 			},

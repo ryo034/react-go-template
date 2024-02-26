@@ -23,7 +23,7 @@ func (a *adapter) AdaptTmp(u *models.SystemAccount) (*user.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	email, err := account.NewEmail(u.Profile.Email)
+	email, err := account.NewEmail(u.Emails[0].Email)
 	if err != nil {
 		return nil, err
 	}
@@ -37,8 +37,8 @@ func (a *adapter) AdaptTmp(u *models.SystemAccount) (*user.User, error) {
 	}
 
 	var pn *phone.Number = nil
-	if u.PhoneNumber != nil {
-		tmpPn, err := phone.NewPhoneNumber(u.PhoneNumber.PhoneNumber)
+	if u.PhoneNumbers != nil {
+		tmpPn, err := phone.NewPhoneNumber(u.PhoneNumbers[0].PhoneNumber)
 		if err != nil {
 			return nil, err
 		}

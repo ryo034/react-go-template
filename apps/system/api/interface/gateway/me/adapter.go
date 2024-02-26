@@ -1,7 +1,10 @@
 package me
 
 import (
+	"fmt"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
+	providerDomain "github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	memberGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/member"
 	userGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/user"
@@ -11,9 +14,11 @@ import (
 
 type Adapter interface {
 	Adapt(m *models.Member, ws models.Workspaces, ris []*models.Invitation) (*me.Me, error)
-	AdaptSystemAccount(m *models.SystemAccount) (*me.Me, error)
+	AdaptSystemAccount(sa *models.SystemAccount) (*me.Me, error)
 	AdaptReceivedInvitation(i *models.Invitation) (me.ReceivedInvitation, error)
 	AdaptAllReceivedInvitation(is []*models.Invitation) (me.ReceivedInvitations, error)
+	AdaptProvider(p *models.AuthProvider) (*providerDomain.Provider, error)
+	AdaptAllProviders(ps []*models.AuthProvider) (providerDomain.Providers, error)
 }
 
 type adapter struct {
@@ -45,15 +50,23 @@ func (a *adapter) Adapt(m *models.Member, ws models.Workspaces, ris []*models.In
 	if err != nil {
 		return nil, err
 	}
-	return me.NewMe(u, w, mem, aws, aris), nil
-}
-
-func (a *adapter) AdaptSystemAccount(m *models.SystemAccount) (*me.Me, error) {
-	u, err := a.uga.AdaptTmp(m)
+	prvs, err := a.AdaptAllProviders(m.SystemAccount.AuthProviders)
 	if err != nil {
 		return nil, err
 	}
-	return me.NewMe(u, nil, nil, nil, nil), nil
+	return me.NewMe(u, w, mem, aws, aris, prvs), nil
+}
+
+func (a *adapter) AdaptSystemAccount(sa *models.SystemAccount) (*me.Me, error) {
+	u, err := a.uga.AdaptTmp(sa)
+	if err != nil {
+		return nil, err
+	}
+	prvs, err := a.AdaptAllProviders(sa.AuthProviders)
+	if err != nil {
+		return nil, err
+	}
+	return me.NewMe(u, nil, nil, nil, nil, prvs), nil
 }
 
 func (a *adapter) AdaptReceivedInvitation(i *models.Invitation) (me.ReceivedInvitation, error) {
@@ -81,4 +94,30 @@ func (a *adapter) AdaptAllReceivedInvitation(is []*models.Invitation) (me.Receiv
 		mis = append(mis, ai)
 	}
 	return me.NewReceivedInvitations(mis), nil
+}
+
+func (a *adapter) AdaptProvider(p *models.AuthProvider) (*providerDomain.Provider, error) {
+	prb := providerDomain.ProvidedByFirebase
+	var kind = providerDomain.Google
+	switch p.Provider {
+	case "email":
+		kind = providerDomain.Email
+	case "google":
+		kind = providerDomain.Google
+	default:
+		return nil, fmt.Errorf("unknown provider: %s", p.Provider)
+	}
+	return providerDomain.NewProvider(providerDomain.NewIDFromUUID(p.AuthProviderID), kind, prb), nil
+}
+
+func (a *adapter) AdaptAllProviders(ps []*models.AuthProvider) (providerDomain.Providers, error) {
+	res := make([]*providerDomain.Provider, 0, len(ps))
+	for _, p := range ps {
+		pv, err := a.AdaptProvider(p)
+		if err != nil {
+			return nil, err
+		}
+		res = append(res, pv)
+	}
+	return providerDomain.NewProviders(res), nil
 }

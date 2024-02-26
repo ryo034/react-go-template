@@ -65,12 +65,13 @@ const setupGatewayAdapter = () => {
   const member = new MemberGatewayAdapter(user)
   const workspace = new WorkspaceGatewayAdapter(member)
   const invitation = new InvitationGatewayAdapter()
+  const auth = new AuthGatewayAdapter()
   return {
+    auth,
     user,
     member,
     workspace,
-    me: new MeGatewayAdapter(user, member, workspace, invitation),
-    auth: new AuthGatewayAdapter(),
+    me: new MeGatewayAdapter(auth, user, member, workspace, invitation),
     invitation
   }
 }

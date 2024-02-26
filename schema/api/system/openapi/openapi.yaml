@@ -343,6 +343,12 @@ components:
         token:
           type: string
           description: JWT token
+    AuthProvider:
+      type: string
+      description: Authentication provider
+      enum:
+        - email
+        - google
     User:
       type: object
       required:
@@ -510,6 +516,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ReceivedInvitation'
+        providers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthProvider'
     ReceivedInvitation:
       type: object
       required:

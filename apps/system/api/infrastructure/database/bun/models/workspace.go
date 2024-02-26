@@ -1,14 +1,10 @@
 package models
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"time"
-)
-
-const (
-	WorkspaceTableName       = "workspaces"
-	WorkspaceDetailTableName = "workspace_details"
 )
 
 type Workspace struct {

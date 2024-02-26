@@ -632,6 +632,46 @@ func (s *APIV1WorkspacesPostReq) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes AuthProvider as json.
+func (s AuthProvider) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes AuthProvider from json.
+func (s *AuthProvider) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AuthProvider to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch AuthProvider(v) {
+	case AuthProviderEmail:
+		*s = AuthProviderEmail
+	case AuthProviderGoogle:
+		*s = AuthProviderGoogle
+	default:
+		*s = AuthProvider(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s AuthProvider) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *AuthProvider) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode implements json.Marshaler.
 func (s *BadRequestError) Encode(e *jx.Encoder) {
 	e.ObjStart()
@@ -2465,14 +2505,25 @@ func (s *Me) encodeFields(e *jx.Encoder) {
 			e.ArrEnd()
 		}
 	}
+	{
+		if s.Providers != nil {
+			e.FieldStart("providers")
+			e.ArrStart()
+			for _, elem := range s.Providers {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
 }
 
-var jsonFieldsNameOfMe = [5]string{
+var jsonFieldsNameOfMe = [6]string{
 	0: "self",
 	1: "member",
 	2: "currentWorkspace",
 	3: "joinedWorkspaces",
 	4: "receivedInvitations",
+	5: "providers",
 }
 
 // Decode decodes Me from json.
@@ -2548,6 +2599,23 @@ func (s *Me) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"receivedInvitations\"")
+			}
+		case "providers":
+			if err := func() error {
+				s.Providers = make([]AuthProvider, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem AuthProvider
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Providers = append(s.Providers, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"providers\"")
 			}
 		default:
 			return d.Skip()

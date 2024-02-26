@@ -2,7 +2,6 @@ package me
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/id"
@@ -42,7 +41,9 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*models
 		Relation("Workspace.Detail").
 		Relation("SystemAccount").
 		Relation("SystemAccount.Profile").
-		Relation("SystemAccount.PhoneNumber").
+		Relation("SystemAccount.AuthProviders").
+		Relation("SystemAccount.Emails").
+		Relation("SystemAccount.PhoneNumbers").
 		Where("ms.member_id = ?", mID.Value()).
 		Scan(ctx)
 	if err != nil {
@@ -89,7 +90,9 @@ func (d *driver) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID accoun
 		NewSelect().
 		Model(sysAcc).
 		Relation("Profile").
-		Relation("PhoneNumber").
+		Relation("AuthProviders").
+		Relation("Emails").
+		Relation("PhoneNumbers").
 		Where("sa.system_account_id = ?", aID.ToString()).
 		Scan(ctx)
 	if err != nil {
@@ -104,7 +107,9 @@ func (d *driver) FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) 
 		NewSelect().
 		Model(sysAcc).
 		Relation("Profile").
-		Relation("PhoneNumber").
+		Relation("AuthProviders").
+		Relation("Emails").
+		Relation("PhoneNumbers").
 		Where("sa.system_account_id = ?", aID.ToString()).
 		Scan(ctx)
 	if err != nil {
@@ -114,32 +119,33 @@ func (d *driver) FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) 
 }
 
 func (d *driver) FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.SystemAccount, error) {
-	sysAcc := &models.SystemAccount{}
+	sysAcc := &models.SystemAccountEmail{}
 	err := exec.
 		NewSelect().
 		Model(sysAcc).
-		Relation("Profile").
-		Relation("PhoneNumber").
-		Where("email = ?", email.ToString()).
+		Relation("SystemAccount").
+		Relation("SystemAccount.Profile").
+		Relation("SystemAccount.AuthProviders").
+		Relation("SystemAccount.Emails").
+		Relation("SystemAccount.PhoneNumbers").
+		Where("saes.email = ?", email.ToString()).
 		Scan(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return sysAcc, nil
+	return sysAcc.SystemAccount, nil
 }
 
 func (d *driver) UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User) error {
 	mem := &models.SystemAccountProfile{
 		SystemAccountID: usr.AccountID().Value(),
 		Name:            usr.Name().ToString(),
-		Email:           usr.Email().ToString(),
 	}
-	res, err := exec.
+	_, err := exec.
 		NewUpdate().
 		Model(mem).
 		WherePK().
 		Exec(ctx)
-	fmt.Println(res)
 	return err
 }
 

@@ -4,6 +4,10 @@ package auth
 
 import (
 	"context"
+	"reflect"
+	"testing"
+	"time"
+
 	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
@@ -13,9 +17,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
-	"reflect"
-	"testing"
-	"time"
 )
 
 func Test_driver_Create_OK(t *testing.T) {
@@ -43,10 +44,10 @@ func Test_driver_Create_OK(t *testing.T) {
 		}
 
 		assert.Equal(t, systemAccountIDUUID, got.SystemAccountID)
-		assert.Equal(t, "system_account@example.com", got.Profile.Email)
+		assert.Equal(t, "system_account@example.com", got.Emails[0].Email)
 		assert.Equal(t, "", got.Profile.Name)
-		if got.PhoneNumber != nil {
-			t.Errorf("PhoneNumber should be nil, got: %v", got.PhoneNumber)
+		if got.PhoneNumbers != nil {
+			t.Errorf("PhoneNumber should be nil, got: %v", got.PhoneNumbers)
 		}
 	})
 }
@@ -59,18 +60,35 @@ func Test_driver_Find_OK(t *testing.T) {
 	want := &models.SystemAccount{
 		SystemAccountID: systemAccountIDUUID,
 		CreatedAt:       defaultTime,
-		PhoneNumber: &models.SystemAccountPhoneNumber{
-			SystemAccountID: systemAccountIDUUID,
-			PhoneNumber:     "09012345678",
-			CreatedAt:       defaultTime,
-			UpdatedAt:       defaultTime,
-		},
+		//PhoneNumbers: []*models.SystemAccountPhoneNumber{
+		//	{
+		//		SystemAccountID: systemAccountIDUUID,
+		//		PhoneNumber:     "09012345678",
+		//		CreatedAt:       defaultTime,
+		//	},
+		//},
 		Profile: &models.SystemAccountProfile{
 			SystemAccountID: systemAccountIDUUID,
 			Name:            "John Doe",
-			Email:           "system_account@example.com",
 			CreatedAt:       defaultTime,
 			UpdatedAt:       defaultTime,
+		},
+		Emails: []*models.SystemAccountEmail{
+			{
+				SystemAccountID: systemAccountIDUUID,
+				Email:           "system_account@example.com",
+				CreatedAt:       defaultTime,
+			},
+		},
+		AuthProviders: []*models.AuthProvider{
+			{
+				AuthProviderID:  uuid.MustParse("018de2f6-968d-7458-9c67-69ae5698a143"),
+				SystemAccountID: systemAccountIDUUID,
+				ProviderUID:     "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
+				Provider:        "email",
+				ProvidedBy:      "firebase",
+				CreatedAt:       defaultTime,
+			},
 		},
 	}
 	wantErr := false
