@@ -53,29 +53,29 @@ export const AuthLayout = () => {
 }
 
 export const AuthenticatedLayout = () => {
-  const { store } = useContext(ContainerContext)
-  const navigate = useNavigate()
-  const me = store.me((state) => state.me)
-  const meIsLoading = store.me((state) => state.isLoading)
-  const meRef = useRef(me)
-  const meIsLoadingRef = useRef(meIsLoading)
-  const [_, loading] = useAuthState(firebaseAuth)
+  // const { store } = useContext(ContainerContext)
+  // const navigate = useNavigate()
+  // const me = store.me((state) => state.me)
+  // const meIsLoading = store.me((state) => state.isLoading)
+  // const meRef = useRef(me)
+  // const meIsLoadingRef = useRef(meIsLoading)
+  // const [_, loading] = useAuthState(firebaseAuth)
 
-  useLayoutEffect(() => {
-    store.me.subscribe((state) => {
-      meRef.current = state.me
-      meIsLoadingRef.current = state.isLoading
-    })
+  // useLayoutEffect(() => {
+  //   store.me.subscribe((state) => {
+  //     meRef.current = state.me
+  //     meIsLoadingRef.current = state.isLoading
+  //   })
 
-    // const unsubscribed = firebaseAuth.onAuthStateChanged(async (user) => {
-    //   if (!loading) {
-    //     if (!user) {
-    //       return
-    //     }
-    //   }
-    // })
-    // return () => unsubscribed()
-  }, [loading, me])
+  //   // const unsubscribed = firebaseAuth.onAuthStateChanged(async (user) => {
+  //   //   if (!loading) {
+  //   //     if (!user) {
+  //   //       return
+  //   //     }
+  //   //   }
+  //   // })
+  //   // return () => unsubscribed()
+  // }, [loading, me])
 
   return <Outlet />
 }

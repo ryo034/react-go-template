@@ -11,21 +11,12 @@ type Member struct {
 }
 
 func NewMember(id ID, u *user.User, profile Profile) *Member {
-	return &Member{id, u, profile}
-}
-
-func NewMemberFromUser(u *user.User, displayName *DisplayName) (*Member, error) {
-	var err error
-	var dn *DisplayName
-	if displayName == nil {
+	dn := profile.DisplayName()
+	if profile.DisplayName() == nil {
 		dn = NewDisplayName(u.Name().ToString())
 	}
-	id, err := GenerateID()
-	if err != nil {
-		return nil, err
-	}
-	pr := NewProfile(dn, nil, NewAsEmptyBio())
-	return &Member{id, u, pr}, nil
+	profile.displayName = dn
+	return &Member{id, u, profile}
 }
 
 func (w *Member) ID() ID {

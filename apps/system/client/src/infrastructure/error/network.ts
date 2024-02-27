@@ -16,12 +16,12 @@ export const openapiFetchErrorInterpreter = (res: unknown): Error | null => {
   if (res !== null && typeof res === "object" && "response" in res && (res as any).response instanceof Response) {
     const r = res as {
       data?: undefined
-      error?: { code?: number; message?: string }
+      error?: { code?: string; message?: string }
       response: Response
     }
-    console.log("openapiFetchErrorInterpreter", r)
-    const err = customApplicationError(r.error?.message || "", "")
+    const err = customApplicationError(r.error?.message || "", r.error?.code || "")
     if (err !== null) {
+      console.error("Network error", err)
       return err
     }
 

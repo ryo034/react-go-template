@@ -31,71 +31,6 @@ type ErrorMessage = {
   description: string
 }
 
-export const StartInvitationPage = () => {
-  const { store, controller } = useContext(ContainerContext)
-  const [searchParams] = useSearchParams()
-  const [errorMessageType, setErrorMessageType] = useState<ErrorMessageType | null>(null)
-
-  const message = useStartInvitationPageMessage()
-  const meIsLoading = store.me((state) => state.isLoading)
-  const receivedInvitation = store.receivedInvitation((s) => s.invitation)
-  const me = store.me((s) => s.me)
-  const meRef = useRef(me)
-  const meIsLoadingRef = useRef(meIsLoading)
-
-  useLayoutEffect(() => {
-    store.me.subscribe((state) => {
-      meRef.current = state.me
-      meIsLoadingRef.current = state.isLoading
-    })
-
-    const unsubscribed = firebaseAuth.onAuthStateChanged(async () => {
-      await controller.me.find()
-    })
-    return () => unsubscribed()
-  }, [])
-
-  useLayoutEffect(() => {
-    const fetchInvitationByToken = async () => {
-      const token = searchParams.get("token") || ""
-      const err = await controller.auth.findInvitationByToken(token)
-      if (err === null) {
-        return
-      }
-
-      if (isBadRequestError(err)) {
-        setErrorMessageType("invalidToken")
-        return
-      }
-      if (isAlreadyExpiredInvitationError(err)) {
-        setErrorMessageType("alreadyExpired")
-        return
-      }
-      if (isAlreadyRevokeInvitationError(err)) {
-        setErrorMessageType("alreadyRevoked")
-        return
-      }
-      if (isAlreadyAcceptedInvitationError(err)) {
-        setErrorMessageType("alreadyAccepted")
-        return
-      }
-    }
-    fetchInvitationByToken()
-  }, [])
-
-  return (
-    <div className="flex justify-center items-center min-h-screen">
-      <InvitationSection
-        titleI18nKey={message.title}
-        receivedInvitation={receivedInvitation}
-        description={message.description("uni.nashi.034+1@gmail.com")}
-        startButtonLabel={message.action.start}
-        errorMessageType={errorMessageType}
-      />
-    </div>
-  )
-}
-
 const InvitationSection = ({
   titleI18nKey,
   description,
@@ -115,11 +50,9 @@ const InvitationSection = ({
   const { toast } = useToast()
 
   const isInvitationProcessing = store.receivedInvitation((s) => s.isInvitationProcessing)
-
   if (errorMessageType !== null) {
     return <ErrorMessageSection errorMessageType={errorMessageType} />
   }
-
   if (receivedInvitation === null) {
     return <div>Loading...</div>
   }
@@ -216,6 +149,65 @@ const ErrorMessageSection = ({ errorMessageType }: { errorMessageType: ErrorMess
       <Button className="w-64" onClick={onClickGoBackButton}>
         {message.word.goBack}
       </Button>
+    </div>
+  )
+}
+
+export const StartInvitationPage = () => {
+  const { store, controller } = useContext(ContainerContext)
+  const [searchParams] = useSearchParams()
+  const [errorMessageType, setErrorMessageType] = useState<ErrorMessageType | null>(null)
+
+  const message = useStartInvitationPageMessage()
+  const receivedInvitation = store.receivedInvitation((s) => s.invitation)
+  const receivedInvitationLoading = store.receivedInvitation((s) => s.invitationIsLoading)
+  const receivedInvitationRef = useRef(receivedInvitation)
+  const receivedInvitationLoadingRef = useRef(receivedInvitationLoading)
+
+  useLayoutEffect(() => {
+    store.receivedInvitation.subscribe((state) => {
+      receivedInvitationRef.current = state.invitation
+      receivedInvitationLoadingRef.current = state.invitationIsLoading
+    })
+
+    const fetchInvitationByToken = async () => {
+      const token = searchParams.get("token") || ""
+      const err = await controller.auth.findInvitationByToken(token)
+      if (err === null) {
+        return
+      }
+
+      if (isBadRequestError(err)) {
+        setErrorMessageType("invalidToken")
+        return
+      }
+      if (isAlreadyExpiredInvitationError(err)) {
+        setErrorMessageType("alreadyExpired")
+        return
+      }
+      if (isAlreadyRevokeInvitationError(err)) {
+        setErrorMessageType("alreadyRevoked")
+        return
+      }
+      if (isAlreadyAcceptedInvitationError(err)) {
+        setErrorMessageType("alreadyAccepted")
+        return
+      }
+
+      setErrorMessageType("unknown")
+    }
+    fetchInvitationByToken()
+  }, [searchParams])
+
+  return (
+    <div className="flex justify-center items-center min-h-screen">
+      <InvitationSection
+        titleI18nKey={message.title}
+        receivedInvitation={receivedInvitationRef.current}
+        description={message.description(receivedInvitationRef.current?.invitation.inviteeEmail.value || "")}
+        startButtonLabel={message.action.start}
+        errorMessageType={errorMessageType}
+      />
     </div>
   )
 }

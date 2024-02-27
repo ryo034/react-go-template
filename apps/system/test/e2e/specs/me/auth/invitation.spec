@@ -60,7 +60,7 @@ tags: stateful
 * "始める"ボタンをクリック
 * メールアドレス"invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com"に送信されたワンタイムパスワードを取得
 * ワンタイムパスワード確認画面にワンタイムパスワードを入力する
-* 招待受諾画面でワークスペース""招待者""の参加ボタンをクリック
+* 招待受諾画面でワークスペース"Example"招待者"Invite TestOne"の参加ボタンをクリック
 * 選択中のワークスペース名が"Example"である
 
 ## ユーザーは招待中にログアウトすることができる

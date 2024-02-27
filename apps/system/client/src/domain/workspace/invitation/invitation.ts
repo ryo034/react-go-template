@@ -6,7 +6,7 @@ interface Props {
   accepted: boolean
   expiredAt: AppDateTime
   inviteeEmail: Email
-  displayName: MemberDisplayName
+  displayName: MemberDisplayName | null
 }
 
 export class Invitation extends Entity<Props> {
@@ -30,7 +30,7 @@ export class Invitation extends Entity<Props> {
     return this.value.inviteeEmail
   }
 
-  get displayName(): MemberDisplayName {
+  get displayName(): MemberDisplayName | null {
     return this.value.displayName
   }
 }

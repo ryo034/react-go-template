@@ -23,6 +23,7 @@ export const OnboardingLayout = () => {
       if (!loading) {
         if (user) {
           await controller.me.find()
+          return
         }
         await controller.me.signOut()
         navigate(routeMap.auth)

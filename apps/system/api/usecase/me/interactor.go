@@ -70,7 +70,11 @@ func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput)
 		if err != nil {
 			return nil, err
 		}
-		mem, err := member.NewMemberFromUser(m.Self(), invRes.DisplayName())
+		id, err := member.GenerateID()
+		if err != nil {
+			return nil, err
+		}
+		mem := member.NewMember(id, m.Self(), member.NewEmptyProfile())
 		if err != nil {
 			return nil, err
 		}

@@ -179,7 +179,7 @@ func (u *useCase) FindAllInvitation(ctx context.Context, i FindAllInvitationInpu
 		return nil, err
 	}
 	if i.IsAccepted {
-		return u.op.FindAllInvitation(res.OnlyAccepted().SortByExpiryAt())
+		return u.op.FindAllInvitation(res.OnlyAccepted().Sort())
 	}
 	return u.op.FindAllInvitation(res.ExcludeRevoked().ExcludeVerified().ExcludeAccepted().Sort())
 }

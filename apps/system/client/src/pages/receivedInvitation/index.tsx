@@ -39,7 +39,7 @@ export const ReceivedInvitationsPage = () => {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen" data-testid="receivedInvitationsPage">
       <div className="mx-auto flex flex-wrap justify-center">
         <div className="space-y-2 text-center mb-12 px-8 w-full">
           <p className="text-4xl font-bold">{message.title}</p>

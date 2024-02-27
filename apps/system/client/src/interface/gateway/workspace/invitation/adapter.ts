@@ -16,9 +16,13 @@ export class InvitationGatewayAdapter {
       return Result.err(id.error)
     }
 
-    const displayName = MemberDisplayName.create(invitation.displayName)
-    if (displayName.isErr) {
-      return Result.err(displayName.error)
+    let displayName: MemberDisplayName | null = null
+    if (invitation.displayName !== null && invitation.displayName.length > 0) {
+      const displayNameRes = MemberDisplayName.create(invitation.displayName)
+      if (displayNameRes.isErr) {
+        return Result.err(displayNameRes.error)
+      }
+      displayName = displayNameRes.value
     }
 
     const inviteeEmail = Email.create(invitation.inviteeEmail)
@@ -34,7 +38,7 @@ export class InvitationGatewayAdapter {
     return Result.ok(
       Invitation.create({
         id: id.value,
-        displayName: displayName.value,
+        displayName,
         inviteeEmail: inviteeEmail.value,
         accepted: invitation.accepted,
         expiredAt: expiredAt.value

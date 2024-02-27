@@ -30,6 +30,7 @@ const InvitationPageHeader = () => {
     toast({ title: "ログアウトしました" })
     navigate(routeMap.auth)
   }
+
   if (me === null) return <></>
 
   return (

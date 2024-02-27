@@ -10,6 +10,10 @@ func NewProfile(displayName *DisplayName, idNumber *IDNumber, bio Bio) Profile {
 	return Profile{displayName, idNumber, bio}
 }
 
+func NewEmptyProfile() Profile {
+	return Profile{nil, nil, NewAsEmptyBio()}
+}
+
 func (p *Profile) DisplayName() *DisplayName {
 	return p.displayName
 }

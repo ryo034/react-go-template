@@ -86,14 +86,6 @@ export default class PagesStep {
     expect(await target.isVisible()).toBeTruthy()
   }
 
-  @Step("現在のURLのパスが<urlPath>")
-  async assetUrl(urlPath: string) {
-    const u = await page.url()
-    const currentURL = new URL(u)
-    const targetURL = new URL(`${currentURL.origin}${urlPath} `)
-    page.waitForURL(targetURL.pathname)
-  }
-
   private testURL(url: URL, pattern: string): boolean {
     const regexPattern = pattern.replace(/:[a-zA-Z0-9_]+/, "\\w+")
     const regex = new RegExp(regexPattern)
@@ -132,5 +124,47 @@ export default class PagesStep {
   async assetPageTitle(title: string) {
     const pageTitle = await page.getByTestId("pageTitle").textContent()
     expect(pageTitle).toBe(title)
+  }
+
+  @Step("ワンタイムパスワード入力画面が表示されている")
+  async isVisibleOtpPage() {
+    const target = page.getByTestId("otpInput1")
+    await target.waitFor()
+    expect(target).toBeVisible()
+  }
+
+  @Step("オンボーディングの名前入力画面が表示されている")
+  async isVisibleOnboardingNamePage() {
+    const target = page.getByTestId("name")
+    await target.waitFor()
+    expect(target).toBeVisible()
+  }
+
+  @Step("オンボーディングのワークスペース作成画面が表示されている")
+  async isVisibleOnboardingWorkspacePage() {
+    const target = page.getByTestId("subdomain")
+    await target.waitFor()
+    expect(target).toBeVisible()
+  }
+
+  @Step("招待受諾画面が表示されている")
+  async isVisibleReceivedInvitationsPage() {
+    const target = page.getByTestId("receivedInvitationsPage")
+    await target.waitFor()
+    expect(target).toBeVisible()
+  }
+
+  @Step("ログイン画面が表示されている")
+  async isVisibleLoginPage() {
+    const target = page.getByTestId("authPage")
+    await target.waitFor()
+    expect(target).toBeVisible()
+  }
+
+  @Step("ホーム画面が表示されている")
+  async isVisibleHomePage() {
+    const target = page.getByTestId("homePage")
+    await target.waitFor()
+    expect(target).toBeVisible()
   }
 }
