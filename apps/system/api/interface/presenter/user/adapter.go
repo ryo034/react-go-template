@@ -25,7 +25,7 @@ func (a *adapter) Adapt(u *user.User) openapi.User {
 	var ph = openapi.OptString{Set: false}
 	if u.HasPhoneNumber() {
 		ph.Set = true
-		ph.Value = u.PhoneNumber().ToString()
+		ph.Value = u.PhoneNumber().ToNational()
 	}
 	return openapi.User{
 		UserId:      u.AccountID().Value(),

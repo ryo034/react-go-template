@@ -44,4 +44,13 @@ export class AuthDriver {
       return Result.err(this.errorHandler.adapt(e))
     }
   }
+
+  async authByOAuth(): PromiseResult<components["schemas"]["Me"], Error> {
+    try {
+      const res = await this.client.POST("/api/v1/auth/oauth")
+      return res.data ? Result.ok(res.data) : Result.err(this.errorHandler.adapt(res))
+    } catch (e) {
+      return Result.err(this.errorHandler.adapt(e))
+    }
+  }
 }

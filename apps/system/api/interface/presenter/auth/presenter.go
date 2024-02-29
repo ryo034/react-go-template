@@ -26,3 +26,11 @@ func (p *presenter) InvitationByToken(ri meDomain.ReceivedInvitation) (openapi.G
 	}
 	return &openapi.GetInvitationByTokenResponse{ReceivedInvitation: res}, nil
 }
+
+func (p *presenter) AuthByAuth(m *meDomain.Me) (openapi.APIV1AuthOAuthPostRes, error) {
+	res, err := p.meAdapter.Adapt(m)
+	if err != nil {
+		return nil, err
+	}
+	return &res, nil
+}

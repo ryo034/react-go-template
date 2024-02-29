@@ -3,6 +3,10 @@ package auth
 import (
 	"context"
 
+	"github.com/google/uuid"
+
+	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
@@ -11,8 +15,9 @@ import (
 )
 
 type Driver interface {
-	Create(ctx context.Context, exec bun.IDB, aID account.ID, email account.Email, ap *provider.Provider) (*models.SystemAccount, error)
+	Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *provider.Provider) (*models.SystemAccount, error)
 	Find(ctx context.Context, exec bun.IDB, email account.Email) (*models.SystemAccount, error)
+	FindAccountIDByAuthProviderUID(ctx context.Context, exec bun.IDB, apUID provider.UID) (uuid.UUID, error)
 }
 
 type driver struct {
@@ -22,9 +27,9 @@ func NewDriver() Driver {
 	return &driver{}
 }
 
-func (p *driver) Create(ctx context.Context, exec bun.IDB, aID account.ID, email account.Email, ap *provider.Provider) (*models.SystemAccount, error) {
+func (p *driver) Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *provider.Provider) (*models.SystemAccount, error) {
 	sa := models.SystemAccount{
-		SystemAccountID: aID.Value(),
+		SystemAccountID: usr.AccountID().Value(),
 	}
 	_, err := exec.
 		NewInsert().
@@ -34,9 +39,14 @@ func (p *driver) Create(ctx context.Context, exec bun.IDB, aID account.ID, email
 		return nil, err
 	}
 
+	na := ""
+	if usr.HasName() {
+		na = usr.Name().ToString()
+	}
+
 	sap := models.SystemAccountProfile{
-		SystemAccountID: aID.Value(),
-		Name:            "",
+		SystemAccountID: usr.AccountID().Value(),
+		Name:            na,
 	}
 	_, err = exec.
 		NewInsert().
@@ -47,8 +57,8 @@ func (p *driver) Create(ctx context.Context, exec bun.IDB, aID account.ID, email
 	}
 
 	sape := models.SystemAccountEmail{
-		SystemAccountID: aID.Value(),
-		Email:           email.ToString(),
+		SystemAccountID: usr.AccountID().Value(),
+		Email:           usr.Email().ToString(),
 	}
 	if _, err = exec.
 		NewInsert().
@@ -68,14 +78,15 @@ func (p *driver) Create(ctx context.Context, exec bun.IDB, aID account.ID, email
 	case provider.Email:
 		prv = "email"
 	case provider.Google:
-		prb = "google"
+		prv = "google"
 	}
 
 	apm := models.AuthProvider{
 		AuthProviderID:  ap.ID().Value(),
-		SystemAccountID: aID.Value(),
+		SystemAccountID: usr.AccountID().Value(),
 		Provider:        prv,
 		ProvidedBy:      prb,
+		ProviderUID:     ap.UID().ToString(),
 	}
 	if _, err = exec.
 		NewInsert().
@@ -116,4 +127,17 @@ func (p *driver) Find(ctx context.Context, exec bun.IDB, email account.Email) (*
 		return nil, err
 	}
 	return sa, nil
+}
+
+func (p *driver) FindAccountIDByAuthProviderUID(ctx context.Context, exec bun.IDB, apUID provider.UID) (uuid.UUID, error) {
+	apm := &models.AuthProvider{}
+	err := exec.
+		NewSelect().
+		Model(apm).
+		Where("provider_uid = ?", apUID.ToString()).
+		Scan(ctx)
+	if err != nil {
+		return uuid.UUID{}, err
+	}
+	return apm.SystemAccountID, nil
 }

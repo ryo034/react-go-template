@@ -67,12 +67,12 @@ func (c *controller) Create(ctx context.Context, i CreateInput) (openapi.APIV1Wo
 	return res, nil
 }
 
+func NewFindAllMembersInput() workspaceUc.FindAllMembersInput {
+	return workspaceUc.FindAllMembersInput{}
+}
+
 func (c *controller) FindAllMembers(ctx context.Context) (openapi.APIV1MembersGetRes, error) {
-	aID, err := c.co.GetUID(ctx)
-	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1MembersGetRes), nil
-	}
-	in := workspaceUc.NewFindAllMembersInput(aID)
+	in := NewFindAllMembersInput()
 	res, err := c.wuc.FindAllMembers(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MembersGetRes), nil
@@ -121,16 +121,11 @@ func (c *controller) RevokeInvitation(ctx context.Context, i RevokeInvitationInp
 }
 
 func (c *controller) FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error) {
-	aID, err := c.co.GetUID(ctx)
-	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1InvitationsGetRes), nil
-	}
-
 	accepted := false
 	if i.Status == "accepted" {
 		accepted = true
 	}
-	in := workspaceUc.FindAllInvitationInput{AccountID: aID, IsAccepted: accepted}
+	in := workspaceUc.FindAllInvitationInput{IsAccepted: accepted}
 	res, err := c.wuc.FindAllInvitation(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1InvitationsGetRes), nil

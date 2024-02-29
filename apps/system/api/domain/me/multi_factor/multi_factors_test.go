@@ -1,16 +1,17 @@
 package multi_factor
 
 import (
-	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/datetime"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
 	"reflect"
 	"testing"
+
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/datetime"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
 )
 
 func Test_multiFactors_Latest_OK(t *testing.T) {
-	ph1, _ := phone.NewPhoneNumber("09000000000")
+	ph1, _ := phone.NewInternationalPhoneNumber("09000000000", "")
 	dt1, _ := datetime.NewDatetimeFromString("2020-01-01 00:00:00")
-	ph2, _ := phone.NewPhoneNumber("09000000001")
+	ph2, _ := phone.NewInternationalPhoneNumber("09000000001", "")
 	dt2, _ := datetime.NewDatetimeFromString("2020-01-02 00:00:00")
 	expected := NewMultiFactor(ph2, dt2)
 	type fields struct {

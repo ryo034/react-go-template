@@ -2,6 +2,10 @@ package openapi
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+	"time"
+
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/config"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/redis"
@@ -14,9 +18,6 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/openapi/service"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
-	"log"
-	"net/http"
-	"time"
 )
 
 func Start(conf config.Reader) {
@@ -49,7 +50,7 @@ func Start(conf config.Reader) {
 
 	h, err := openapi.NewServer(
 		service.NewService(inj),
-		openapiMiddleware.NewSecMiddleware(fb, co),
+		openapiMiddleware.NewSecMiddleware(fb, co, p, inj.Driver().Auth, inj.Driver().Firebase),
 	)
 
 	if err != nil {

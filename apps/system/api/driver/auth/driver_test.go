@@ -8,6 +8,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
 
 	"github.com/google/uuid"
@@ -25,7 +27,7 @@ func Test_driver_Create_OK(t *testing.T) {
 	var systemAccountIDUUID = uuid.MustParse("1710ba5a-f82e-41f7-a599-71693b99848d")
 	st := time.Now()
 
-	email, _ := account.NewEmail("system_account@example.com")
+	email, _ := account.NewEmail("Test_driver_Create_OK@example.com")
 
 	wantErr := false
 	ctx := context.Background()
@@ -33,12 +35,15 @@ func Test_driver_Create_OK(t *testing.T) {
 		db := bun.NewDB(test.SetupTestDB(t, ctx).DB, pgdialect.New())
 		pr := core.NewDatabaseProvider(db, db)
 		aID := account.NewIDFromUUID(systemAccountIDUUID)
+		apUID, _ := provider.NewUID(aID.ToString())
 		ap := provider.NewProvider(
 			provider.NewIDFromUUID(uuid.MustParse("018de777-7bb8-7cb7-b705-58c876746288")),
 			"email",
-			"",
+			"firebase",
+			apUID,
 		)
-		got, err := NewDriver().Create(ctx, pr.GetExecutor(ctx, false), aID, email, ap)
+		usr := user.NewUser(aID, email, nil, nil)
+		got, err := NewDriver().Create(ctx, pr.GetExecutor(ctx, false), usr, ap)
 		if (err != nil) != wantErr {
 			t.Errorf("Create() error = %v, wantErr %v", err, wantErr)
 			return
@@ -49,13 +54,18 @@ func Test_driver_Create_OK(t *testing.T) {
 			assert.True(t, got.Profile.CreatedAt.After(st) && got.Profile.CreatedAt.Before(et), "Profile.CreatedAt should be within test time range")
 			assert.True(t, got.Profile.UpdatedAt.After(st) && got.Profile.UpdatedAt.Before(et), "Profile.UpdatedAt should be within test time range")
 		}
-
 		assert.Equal(t, systemAccountIDUUID, got.SystemAccountID)
-		assert.Equal(t, "system_account@example.com", got.Emails[0].Email)
+		assert.Equal(t, "Test_driver_Create_OK@example.com", got.Emails[0].Email)
 		assert.Equal(t, "", got.Profile.Name)
 		if got.PhoneNumbers != nil {
 			t.Errorf("PhoneNumber should be nil, got: %v", got.PhoneNumbers)
 		}
+		if got.AuthProviders == nil {
+			t.Errorf("AuthProvider should not be nil")
+		}
+		assert.Equal(t, "email", got.AuthProviders[0].Provider)
+		assert.Equal(t, "1710ba5a-f82e-41f7-a599-71693b99848d", got.AuthProviders[0].ProviderUID)
+		assert.Equal(t, "firebase", got.AuthProviders[0].ProvidedBy)
 	})
 }
 
@@ -89,7 +99,8 @@ func Test_driver_Find_OK(t *testing.T) {
 		},
 		AuthProviders: []*models.AuthProvider{
 			{
-				AuthProviderID:  uuid.MustParse("018de777-7bb8-7cb7-b705-58c876746288"),
+				AuthProviderID:  uuid.MustParse("018de2f6-968d-7458-9c67-69ae5698a143"),
+				ProviderUID:     "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
 				SystemAccountID: systemAccountIDUUID,
 				Provider:        "email",
 				ProvidedBy:      "firebase",

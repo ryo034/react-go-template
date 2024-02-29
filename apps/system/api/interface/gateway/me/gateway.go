@@ -65,7 +65,7 @@ func (g *gateway) LastLogin(ctx context.Context, exec bun.IDB, m *me.Me) error {
 	if err := g.md.LastLogin(ctx, exec, m.Member().ID()); err != nil {
 		return err
 	}
-	return g.fd.SetCurrentWorkspaceToCustomClaim(ctx, m.Self().AccountID(), m.Workspace().ID())
+	return g.fd.SetCurrentWorkspaceToCustomClaim(ctx, m.Workspace().ID())
 }
 
 func (g *gateway) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*me.Me, error) {

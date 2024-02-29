@@ -14,6 +14,10 @@ export class AuthController {
     return await this.useCase.startWithEmail(input)
   }
 
+  async createByOAuth(): Promise<null | Error> {
+    return await this.useCase.createByOAuth()
+  }
+
   async verifyOtp(email: Email, otp: string): Promise<null | Error> {
     const otpRes = Otp.create(otp)
     if (otpRes.isErr) {

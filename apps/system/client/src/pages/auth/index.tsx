@@ -1,4 +1,5 @@
-import { useContext, useLayoutEffect, useRef, useState } from "react"
+import { GoogleAuthProvider, getRedirectResult, signInWithCredential, signInWithRedirect } from "firebase/auth"
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { SubmitHandler } from "react-hook-form"
 import { Link, createSearchParams, useNavigate } from "react-router-dom"
 import { AuthPageForm, LoginFormValues } from "~/components/auth/form"
@@ -9,7 +10,7 @@ import { routeMap } from "~/infrastructure/route/path"
 export const authPageRoute = "/"
 
 export const AuthPage = () => {
-  const { store, controller, i18n, errorMessageProvider } = useContext(ContainerContext)
+  const { store, controller, i18n, errorMessageProvider, driver } = useContext(ContainerContext)
   const me = store.me((state) => state.me)
   const meRef = useRef(me)
   const authIsLoading = store.auth((state) => state.isLoading)
@@ -21,7 +22,43 @@ export const AuthPage = () => {
     store.me.subscribe((state) => {
       meRef.current = state.me
     })
+
+    const handleRedirectResult = async () => {
+      const result = await getRedirectResult(driver.firebase.getClient)
+      if (result === null) {
+        return
+      }
+      const err = await controller.auth.createByOAuth()
+      if (err) {
+        setErrorMessage(errorMessageProvider.resolve(err))
+        return
+      }
+
+      if (meRef.current === null) {
+        return
+      }
+
+      if (meRef.current.self.hasNotName) {
+        navigate(routeMap.onboardingSettingName)
+        return
+      }
+      if (meRef.current.hasReceivedInvitations) {
+        navigate(routeMap.receivedInvitationsPageRoute)
+        return
+      }
+      if (meRef.current.hasNotWorkspace) {
+        navigate(routeMap.onboardingSettingWorkspace)
+        return
+      }
+      navigate(routeMap.home)
+    }
+    handleRedirectResult()
   }, [])
+
+  // if logged in, call useEffect getRedirectResult and navigate to home
+  const onClickGoogleLoginButton = async () => {
+    await driver.firebase.startWithGoogle()
+  }
 
   const onSubmit: SubmitHandler<LoginFormValues> = async (d) => {
     const res = await controller.auth.startWithEmail(d.email)
@@ -30,10 +67,6 @@ export const AuthPage = () => {
       return
     }
     navigate({ pathname: routeMap.verifyOtp, search: createSearchParams({ email: d.email }).toString() })
-  }
-
-  const onClickGoogleLoginButton = async () => {
-    console.log("onClickGoogleLoginButton")
   }
 
   return (

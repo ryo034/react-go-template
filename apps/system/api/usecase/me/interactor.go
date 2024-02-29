@@ -109,7 +109,7 @@ func (u *useCase) UpdateProfile(ctx context.Context, i UpdateProfileInput) (open
 	}
 	fn := func() (*me.Me, error) {
 		var currentWorkspaceID *workspace.ID
-		currentWorkspaceID, err = u.fbDriver.GetCurrentWorkspaceFromCustomClaim(ctx, i.AccountID)
+		currentWorkspaceID, err = u.fbDriver.GetCurrentWorkspaceFromCustomClaim(ctx)
 		if err != nil {
 			return nil, err
 		}
@@ -155,7 +155,7 @@ func (u *useCase) UpdateMemberProfile(ctx context.Context, i UpdateMemberProfile
 	}
 	fn := func() (*me.Me, error) {
 		var currentWorkspaceID *workspace.ID
-		currentWorkspaceID, err = u.fbDriver.GetCurrentWorkspaceFromCustomClaim(ctx, i.AccountID)
+		currentWorkspaceID, err = u.fbDriver.GetCurrentWorkspaceFromCustomClaim(ctx)
 		if err != nil {
 			return nil, err
 		}

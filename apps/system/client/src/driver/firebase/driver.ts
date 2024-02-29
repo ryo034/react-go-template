@@ -1,4 +1,12 @@
-import { Auth, reload, signInWithCustomToken, signOut } from "firebase/auth"
+import {
+  Auth,
+  GoogleAuthProvider,
+  getRedirectResult,
+  reload,
+  signInWithCustomToken,
+  signInWithRedirect,
+  signOut
+} from "firebase/auth"
 import { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
 import { CustomToken } from "~/domain/auth"
@@ -22,6 +30,7 @@ export interface AuthProviderDriver {
   reload(): PromiseResult<null, Error>
   signOut(): PromiseResult<null, Error>
   signInWithCustomToken(customToken: CustomToken): PromiseResult<UserCredential, Error>
+  startWithGoogle(): PromiseResult<null, Error>
 }
 
 export class FirebaseDriver implements AuthProviderDriver {
@@ -32,6 +41,10 @@ export class FirebaseDriver implements AuthProviderDriver {
       return null
     }
     return this.adaptAuthProviderUser(this.client.currentUser)
+  }
+
+  get getClient(): Auth {
+    return this.client
   }
 
   private adaptAuthProviderUser(user: AuthProviderUser): AuthProviderUser {
@@ -72,6 +85,28 @@ export class FirebaseDriver implements AuthProviderDriver {
         providerId: res.providerId
       }
       return Result.ok(credential)
+    } catch (e) {
+      return Result.err(this.errorHandler.adapt(e))
+    }
+  }
+
+  async getRedirectResult(): PromiseResult<UserCredential, Error> {
+    try {
+      const res = await getRedirectResult(this.client)
+      if (res === null) {
+        return Result.err(new AuthProviderCurrentUserNotFoundError("currentUser is null"))
+      }
+      return Result.ok(res)
+    } catch (e) {
+      return Result.err(this.errorHandler.adapt(e))
+    }
+  }
+
+  async startWithGoogle(): PromiseResult<null, Error> {
+    try {
+      const provider = new GoogleAuthProvider()
+      await signInWithRedirect(this.client, provider)
+      return Result.ok(null)
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))
     }

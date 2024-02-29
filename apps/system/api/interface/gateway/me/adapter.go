@@ -107,7 +107,12 @@ func (a *adapter) AdaptProvider(p *models.AuthProvider) (*providerDomain.Provide
 	default:
 		return nil, fmt.Errorf("unknown provider: %s", p.Provider)
 	}
-	return providerDomain.NewProvider(providerDomain.NewIDFromUUID(p.AuthProviderID), kind, prb), nil
+
+	apUID, err := providerDomain.NewUID(p.ProviderUID)
+	if err != nil {
+		return nil, err
+	}
+	return providerDomain.NewProvider(providerDomain.NewIDFromUUID(p.AuthProviderID), kind, prb, apUID), nil
 }
 
 func (a *adapter) AdaptAllProviders(ps []*models.AuthProvider) (providerDomain.Providers, error) {

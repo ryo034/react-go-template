@@ -25,6 +25,7 @@ type AuthProvider struct {
 	AuthProviderID  uuid.UUID `bun:"auth_provider_id,pk"`
 	SystemAccountID uuid.UUID `bun:"system_account_id,notnull"`
 	Provider        string    `bun:"provider,notnull"`
+	ProviderUID     string    `bun:"provider_uid,notnull"`
 	ProvidedBy      string    `bun:"provided_by,notnull"`
 	CreatedAt       time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
@@ -46,6 +47,7 @@ type SystemAccountPhoneNumber struct {
 
 	SystemAccountID uuid.UUID `bun:"system_account_id,pk"`
 	PhoneNumber     string    `bun:"phone_number,notnull"`
+	CountryCode     string    `bun:"country_code,notnull"`
 	CreatedAt       time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
 	SystemAccount *SystemAccount `bun:"sa,rel:belongs-to"`

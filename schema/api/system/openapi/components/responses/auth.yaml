@@ -16,3 +16,17 @@ GetInvitationByTokenResponse:
         properties:
           receivedInvitation:
             $ref: "#/components/schemas/ReceivedInvitation"
+
+AuthVerifyOTPResponse:
+  description: Successfully verified OTP. The user is now authenticated.
+  content:
+    application/json:
+      schema:
+        $ref: "#/components/schemas/JwtToken"
+
+AuthByOAuthResponse:
+  description: Auth by OAuth response
+  content:
+    application/json:
+      schema:
+        $ref: "#/components/schemas/Me"

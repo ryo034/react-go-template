@@ -32,11 +32,6 @@ func NewCreateInput(subdomain string, aID account.ID) (CreateInput, error) {
 }
 
 type FindAllMembersInput struct {
-	accountID account.ID
-}
-
-func NewFindAllMembersInput(aID account.ID) FindAllMembersInput {
-	return FindAllMembersInput{aID}
 }
 
 type InviteMembersInput struct {
@@ -49,11 +44,9 @@ type VerifyInvitationTokenInput struct {
 }
 
 type RevokeInvitationInput struct {
-	AccountID    account.ID
 	InvitationID invitation.ID
 }
 
 type FindAllInvitationInput struct {
-	AccountID  account.ID
 	IsAccepted bool
 }

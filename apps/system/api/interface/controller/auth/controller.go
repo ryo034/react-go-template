@@ -62,18 +62,20 @@ func (c *controller) VerifyOTP(ctx context.Context, req *openapi.APIV1AuthOtpVer
 }
 
 func (c *controller) AuthByOAuth(ctx context.Context) (openapi.APIV1AuthOAuthPostRes, error) {
-	//ctxからtokenを取得
-	//em, err := account.NewEmail(req.Email)
-	//if err != nil {
-	//	return c.resl.Error(ctx, err).(openapi.APIV1AuthOAuthPostRes), nil
-	//}
-	//
-	//inp := authUc.VerifyOTPInput{Email: em, Otp: req.Otp}
-	//res, err := c.auc.VerifyOTP(ctx, inp)
-	//if err != nil {
-	//	return c.resl.Error(ctx, err).(openapi.APIV1AuthOAuthPostRes), nil
-	//}
-	return nil, nil
+	aID, err := c.co.GetUID(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1AuthOAuthPostRes), nil
+	}
+	apUID, err := c.co.GetAuthProviderUID(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1AuthOAuthPostRes), nil
+	}
+	inp := authUc.ByOAuthInput{AccountID: aID, AuthProviderUID: apUID}
+	res, err := c.auc.AuthByOAuth(ctx, inp)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1AuthOAuthPostRes), nil
+	}
+	return res, nil
 }
 
 func (c *controller) ProcessInvitation(ctx context.Context, i ProcessInvitationInput) (openapi.ProcessInvitationRes, error) {

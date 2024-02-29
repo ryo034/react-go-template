@@ -110,7 +110,7 @@ const setupUseCase = () => {
   return {
     theme: new ThemeInteractor(driver.theme, presenter.theme),
     me,
-    auth: new AuthInteractor(gateway.auth, me, presenter.auth),
+    auth: new AuthInteractor(gateway.auth, me, presenter.auth, presenter.me),
     workspace: new WorkspaceInteractor(gateway.workspace, me, presenter.workspace)
   }
 }

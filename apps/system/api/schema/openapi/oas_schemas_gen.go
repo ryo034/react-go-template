@@ -268,7 +268,6 @@ func (s *BadRequestError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*BadRequestError) aPIV1AuthOAuthPostRes()             {}
 func (*BadRequestError) aPIV1AuthOtpPostRes()               {}
 func (*BadRequestError) aPIV1AuthOtpVerifyPostRes()         {}
 func (*BadRequestError) aPIV1MeMemberProfilePutRes()        {}
@@ -911,7 +910,8 @@ func (s *Me) SetProviders(val []AuthProvider) {
 	s.Providers = val
 }
 
-func (*Me) loginRes() {}
+func (*Me) aPIV1AuthOAuthPostRes() {}
+func (*Me) loginRes()              {}
 
 type MeResponse struct {
 	Me Me `json:"me"`
@@ -1440,6 +1440,7 @@ func (s *UnauthorizedError) SetCode(val OptString) {
 	s.Code = val
 }
 
+func (*UnauthorizedError) aPIV1AuthOAuthPostRes()             {}
 func (*UnauthorizedError) aPIV1AuthOtpVerifyPostRes()         {}
 func (*UnauthorizedError) aPIV1InvitationsGetRes()            {}
 func (*UnauthorizedError) aPIV1MeGetRes()                     {}
@@ -1531,8 +1532,6 @@ func (s *User) SetName(val OptString) {
 func (s *User) SetPhoneNumber(val OptString) {
 	s.PhoneNumber = val
 }
-
-func (*User) aPIV1AuthOAuthPostRes() {}
 
 // Ref: #/components/schemas/Workspace
 type Workspace struct {

@@ -51,12 +51,7 @@ export interface paths {
     post: {
       requestBody: components["requestBodies"]["AuthVerifyPost"];
       responses: {
-        /** @description Successfully verified OTP. The user is now authenticated. */
-        200: {
-          content: {
-            "application/json": components["schemas"]["JwtToken"];
-          };
-        };
+        200: components["responses"]["AuthVerifyOTPResponse"];
         400: components["responses"]["BadRequestError"];
         401: components["responses"]["UnauthorizedError"];
         429: components["responses"]["TooManyRequestsError"];
@@ -79,13 +74,8 @@ export interface paths {
      */
     post: {
       responses: {
-        /** @description SignIn response */
-        200: {
-          content: {
-            "application/json": components["schemas"]["User"];
-          };
-        };
-        400: components["responses"]["BadRequestError"];
+        200: components["responses"]["AuthByOAuthResponse"];
+        401: components["responses"]["UnauthorizedError"];
         500: components["responses"]["InternalServerError"];
       };
     };
@@ -646,6 +636,18 @@ export interface components {
     };
     /** @description Login response */
     LoginResponse: {
+      content: {
+        "application/json": components["schemas"]["Me"];
+      };
+    };
+    /** @description Successfully verified OTP. The user is now authenticated. */
+    AuthVerifyOTPResponse: {
+      content: {
+        "application/json": components["schemas"]["JwtToken"];
+      };
+    };
+    /** @description Auth by OAuth response */
+    AuthByOAuthResponse: {
       content: {
         "application/json": components["schemas"]["Me"];
       };

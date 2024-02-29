@@ -1,5 +1,5 @@
 import { Result } from "true-myth"
-import { AuthRepository, CustomToken, Otp, ReceivedInvitation } from "~/domain"
+import { AuthRepository, CustomToken, Me, Otp, ReceivedInvitation } from "~/domain"
 import { Email } from "~/domain/shared"
 import { AuthDriver, AuthProviderDriver } from "~/driver"
 import { PromiseResult } from "~/infrastructure/shared/result"
@@ -15,6 +15,14 @@ export class AuthGateway implements AuthRepository {
 
   async startWithEmail(email: Email): PromiseResult<null, Error> {
     const res = await this.driver.startWithEmail(email)
+    if (res.isErr) {
+      return Result.err(res.error)
+    }
+    return Result.ok(null)
+  }
+
+  async startWithGoogle(): PromiseResult<null, Error> {
+    const res = await this.apDriver.startWithGoogle()
     if (res.isErr) {
       return Result.err(res.error)
     }
@@ -51,5 +59,13 @@ export class AuthGateway implements AuthRepository {
       return Result.err(res.error)
     }
     return Result.ok(null)
+  }
+
+  async authByOAuth(): PromiseResult<Me, Error> {
+    const res = await this.driver.authByOAuth()
+    if (res.isErr) {
+      return Result.err(res.error)
+    }
+    return this.meAdapter.adapt(res.value)
   }
 }

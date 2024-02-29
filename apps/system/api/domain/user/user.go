@@ -60,6 +60,10 @@ func (u *User) HasPhoneNumber() bool {
 	return u.phoneNumber != nil
 }
 
+func (u *User) HasNotPhoneNumber() bool {
+	return u.phoneNumber == nil
+}
+
 func (u *User) UpdateName(name account.Name) *User {
 	u.name = &name
 	return u

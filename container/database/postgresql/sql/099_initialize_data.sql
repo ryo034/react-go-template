@@ -13,17 +13,17 @@ VALUES
 ('018d96bf-8dce-7f68-a926-b5d7ed6ed883', '2024-01-10 12:00:00'),
 ('018d9b4d-9438-79ac-b533-1323d4ec9b9f', '2024-01-10 12:00:00'),
 ('018da09e-c6ca-795e-878d-32bb8c1e5cac', '2024-01-10 12:00:00'),
-('018ddee7-3a8e-7387-a03e-2b37173b5ada', '2024-01-10 12:00:00');
+('018ddee7-3a8e-7387-a03e-2b37173b5ada', '2024-01-1v0 12:00:00');
 
-INSERT INTO auth_providers (auth_provider_id, system_account_id, provider, provided_by, created_at)
+INSERT INTO auth_providers (auth_provider_id, system_account_id, provider, provider_uid, provided_by, created_at)
 VALUES
-('018de2f6-968d-7458-9c67-69ae5698a143', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'email', 'firebase', '2024-01-10 12:00:00'),
-('018de2f6-b536-7f9c-bd34-dcf319ee4127', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', 'email', 'firebase', '2024-01-10 12:00:00'),
-('018de2ff-7d69-7f8d-9d19-57bb4106f594', '018d6189-9ad0-7b72-801b-1e0de0d3c214', 'email', 'firebase', '2024-01-10 12:00:00'),
-('018de2f6-ca47-7fc9-832a-3d725120c55b', '018d96bf-8dce-7f68-a926-b5d7ed6ed883', 'email', 'firebase', '2024-01-10 12:00:00'),
-('018de2f6-de72-7b8c-92ab-b72b90d41ccd', '018d9b4d-9438-79ac-b533-1323d4ec9b9f', 'email', 'firebase', '2024-01-10 12:00:00'),
-('018de2f6-f23e-7a3c-ab51-3117f07c1930', '018da09e-c6ca-795e-878d-32bb8c1e5cac', 'email', 'firebase', '2024-01-10 12:00:00'),
-('018de2f7-0939-7cb7-a1f0-c7959bf6edd7', '018ddee7-3a8e-7387-a03e-2b37173b5ada', 'email', 'firebase', '2024-01-10 12:00:00');
+('018de2f6-968d-7458-9c67-69ae5698a143', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'email', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'firebase', '2024-01-10 12:00:00'),
+('018de2f6-b536-7f9c-bd34-dcf319ee4127', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', 'email', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', 'firebase', '2024-01-10 12:00:00'),
+('018de2ff-7d69-7f8d-9d19-57bb4106f594', '018d6189-9ad0-7b72-801b-1e0de0d3c214', 'email', '018d6189-9ad0-7b72-801b-1e0de0d3c214', 'firebase', '2024-01-10 12:00:00'),
+('018de2f6-ca47-7fc9-832a-3d725120c55b', '018d96bf-8dce-7f68-a926-b5d7ed6ed883', 'email', '018d96bf-8dce-7f68-a926-b5d7ed6ed883', 'firebase', '2024-01-10 12:00:00'),
+('018de2f6-de72-7b8c-92ab-b72b90d41ccd', '018d9b4d-9438-79ac-b533-1323d4ec9b9f', 'email', '018d9b4d-9438-79ac-b533-1323d4ec9b9f', 'firebase', '2024-01-10 12:00:00'),
+('018de2f6-f23e-7a3c-ab51-3117f07c1930', '018da09e-c6ca-795e-878d-32bb8c1e5cac', 'email', '018da09e-c6ca-795e-878d-32bb8c1e5cac', 'firebase', '2024-01-10 12:00:00'),
+('018de2f7-0939-7cb7-a1f0-c7959bf6edd7', '018ddee7-3a8e-7387-a03e-2b37173b5ada', 'email', '018ddee7-3a8e-7387-a03e-2b37173b5ada', 'firebase', '2024-01-10 12:00:00');
 
 INSERT INTO system_account_emails (system_account_id, email, created_at)
 VALUES

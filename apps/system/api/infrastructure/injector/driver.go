@@ -42,7 +42,7 @@ func newDriverInjector(
 	meDr := me.NewDriver(invDr)
 	return Driver{
 		keyvalue.NewRedisDriver(rc),
-		firebaseDriver.NewDriver(f),
+		firebaseDriver.NewDriver(f, co),
 		email.NewDriver(conf.ServiceName(), co, mc, noreplyEmail, logger),
 		meDr,
 		auth.NewDriver(),

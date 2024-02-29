@@ -11,26 +11,27 @@ type Provider struct {
 	id         ID
 	kind       Kind
 	providedBy ProvidedBy
+	uid        UID
 }
 
-func NewProvider(id ID, kind Kind, providedBy ProvidedBy) *Provider {
-	return &Provider{id, kind, providedBy}
+func NewProvider(id ID, kind Kind, providedBy ProvidedBy, uid UID) *Provider {
+	return &Provider{id, kind, providedBy, uid}
 }
 
-func NewProviderAsGoogleOnFirebase() (*Provider, error) {
+func NewProviderAsGoogleOnFirebase(uid UID) (*Provider, error) {
 	id, err := GenerateID()
 	if err != nil {
 		return nil, err
 	}
-	return NewProvider(id, Google, ProvidedByFirebase), nil
+	return NewProvider(id, Google, ProvidedByFirebase, uid), nil
 }
 
-func NewProviderAsEmailOnFirebase() (*Provider, error) {
+func NewProviderAsEmailOnFirebase(uid UID) (*Provider, error) {
 	id, err := GenerateID()
 	if err != nil {
 		return nil, err
 	}
-	return NewProvider(id, Email, ProvidedByFirebase), nil
+	return NewProvider(id, Email, ProvidedByFirebase, uid), nil
 
 }
 
@@ -44,4 +45,8 @@ func (p *Provider) Kind() Kind {
 
 func (p *Provider) ProvidedBy() ProvidedBy {
 	return p.providedBy
+}
+
+func (p *Provider) UID() UID {
+	return p.uid
 }

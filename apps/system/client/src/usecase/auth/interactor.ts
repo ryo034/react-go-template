@@ -6,10 +6,11 @@ import {
   StartWithEmailInput,
   VerifyOtpInput
 } from "~/usecase/auth"
-import { MeUseCase } from "~/usecase/me"
+import { MeUseCase, MeUseCaseOutput } from "~/usecase/me"
 
 export interface AuthUseCase {
   startWithEmail(i: StartWithEmailInput): Promise<Error | null>
+  createByOAuth(): Promise<Error | null>
   verifyOtp(i: VerifyOtpInput): Promise<Error | null>
   findInvitationByToken(i: FindInvitationByTokenInput): Promise<Error | null>
   proceedToInvitation(i: ProceedToInvitationInput): Promise<Error | null>
@@ -19,7 +20,8 @@ export class AuthInteractor implements AuthUseCase {
   constructor(
     private readonly repository: AuthRepository,
     private readonly meUseCase: MeUseCase,
-    private readonly presenter: AuthUseCaseOutput
+    private readonly presenter: AuthUseCaseOutput,
+    private readonly mePresenter: MeUseCaseOutput
   ) {}
 
   async startWithEmail(i: StartWithEmailInput): Promise<Error | null> {
@@ -31,6 +33,27 @@ export class AuthInteractor implements AuthUseCase {
       return res.error
     }
     this.presenter.setIsLoading(false)
+    return null
+  }
+
+  async startWithGoogle(): Promise<Error | null> {
+    this.presenter.setIsLoading(true)
+    const res = await this.repository.startWithGoogle()
+    if (res.isErr) {
+      this.presenter.setIsLoading(false)
+      return res.error
+    }
+    return null
+  }
+
+  async createByOAuth(): Promise<Error | null> {
+    this.presenter.setIsLoading(true)
+    const res = await this.repository.authByOAuth()
+    this.presenter.setIsLoading(false)
+    if (res.isErr) {
+      return res.error
+    }
+    this.mePresenter.set(res.value)
     return null
   }
 

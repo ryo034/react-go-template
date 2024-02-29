@@ -37,11 +37,7 @@ verify:
       $ref: "#/components/requestBodies/AuthVerifyPost"
     responses:
       "200":
-        description: Successfully verified OTP. The user is now authenticated.
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/JwtToken"
+        $ref: "#/components/responses/AuthVerifyOTPResponse"
       "400":
         $ref: "#/components/responses/BadRequestError"
       "401":
@@ -61,13 +57,9 @@ oauth:
       - bearer: []
     responses:
       "200":
-        description: SignIn response
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/User"
-      "400":
-        $ref: "#/components/responses/BadRequestError"
+        $ref: "#/components/responses/AuthByOAuthResponse"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
       "500":
         $ref: "#/components/responses/InternalServerError"
 

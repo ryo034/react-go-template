@@ -38,7 +38,7 @@ func (a *adapter) AdaptTmp(u *models.SystemAccount) (*user.User, error) {
 
 	var pn *phone.Number = nil
 	if u.PhoneNumbers != nil {
-		tmpPn, err := phone.NewPhoneNumber(u.PhoneNumbers[0].PhoneNumber)
+		tmpPn, err := phone.NewInternationalPhoneNumber(u.PhoneNumbers[0].PhoneNumber, u.PhoneNumbers[0].CountryCode)
 		if err != nil {
 			return nil, err
 		}

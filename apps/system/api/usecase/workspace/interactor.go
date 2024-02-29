@@ -83,7 +83,7 @@ func (u *useCase) Create(ctx context.Context, i CreateInput) (openapi.APIV1Works
 
 func (u *useCase) FindAllMembers(ctx context.Context, i FindAllMembersInput) (openapi.APIV1MembersGetRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
-	currentWorkspaceID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx, i.accountID)
+	currentWorkspaceID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +96,7 @@ func (u *useCase) FindAllMembers(ctx context.Context, i FindAllMembersInput) (op
 
 func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error) {
 	// Exclude already registered members
-	currentWorkspaceID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx, i.AccountID)
+	currentWorkspaceID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -143,7 +143,7 @@ func (u *useCase) RevokeInvitation(ctx context.Context, i RevokeInvitationInput)
 	if err != nil {
 		return nil, err
 	}
-	wID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx, i.AccountID)
+	wID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -170,7 +170,7 @@ func (u *useCase) RevokeInvitation(ctx context.Context, i RevokeInvitationInput)
 
 func (u *useCase) FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error) {
 	p := u.dbp.GetExecutor(ctx, true)
-	wID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx, i.AccountID)
+	wID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx)
 	if err != nil {
 		return nil, err
 	}

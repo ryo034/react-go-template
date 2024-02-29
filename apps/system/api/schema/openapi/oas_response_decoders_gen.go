@@ -30,7 +30,7 @@ func decodeAPIV1AuthOAuthPostResponse(resp *http.Response) (res APIV1AuthOAuthPo
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response User
+			var response Me
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
@@ -60,8 +60,8 @@ func decodeAPIV1AuthOAuthPostResponse(resp *http.Response) (res APIV1AuthOAuthPo
 		default:
 			return res, validate.InvalidContentType(ct)
 		}
-	case 400:
-		// Code 400.
+	case 401:
+		// Code 401.
 		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
 		if err != nil {
 			return res, errors.Wrap(err, "parse media type")
@@ -74,7 +74,7 @@ func decodeAPIV1AuthOAuthPostResponse(resp *http.Response) (res APIV1AuthOAuthPo
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response BadRequestError
+			var response UnauthorizedError
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err

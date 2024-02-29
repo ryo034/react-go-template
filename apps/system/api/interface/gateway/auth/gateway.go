@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"time"
 
+	fbDr "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/auth"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
@@ -18,11 +20,12 @@ import (
 type gateway struct {
 	kvd kvDr.Store
 	ad  authDr.Driver
+	fd  fbDr.Driver
 	adp Adapter
 }
 
-func NewGateway(kvd kvDr.Store, ad authDr.Driver, adp Adapter) auth.Repository {
-	return &gateway{kvd, ad, adp}
+func NewGateway(kvd kvDr.Store, ad authDr.Driver, fd fbDr.Driver, adp Adapter) auth.Repository {
+	return &gateway{kvd, ad, fd, adp}
 }
 
 const totpKeyPrefix = "otp:"
@@ -47,9 +50,12 @@ func (g *gateway) VerifyOTP(ctx context.Context, email account.Email, code strin
 	return c == code, nil
 }
 
-func (g *gateway) Create(ctx context.Context, exec bun.IDB, aID account.ID, email account.Email, ap *provider.Provider) (*user.User, error) {
-	res, err := g.ad.Create(ctx, exec, aID, email, ap)
+func (g *gateway) Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *provider.Provider) (*user.User, error) {
+	res, err := g.ad.Create(ctx, exec, usr, ap)
 	if err != nil {
+		return nil, err
+	}
+	if err = g.fd.UpdateProfile(ctx, usr); err != nil {
 		return nil, err
 	}
 	return g.adp.AdaptTmp(res)

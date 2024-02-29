@@ -49,6 +49,7 @@ CREATE TABLE auth_providers (
   auth_provider_id uuid NOT NULL,
   system_account_id uuid NOT NULL,
   provider auth_provider_provider NOT NULL,
+  provider_uid VARCHAR(255) NOT NULL,
   provided_by auth_provider_provided_by NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (auth_provider_id),
@@ -57,16 +58,19 @@ CREATE TABLE auth_providers (
 
 CREATE TABLE system_account_emails (
   system_account_id uuid NOT NULL,
-  email VARCHAR(256) NOT NULL,
+  email VARCHAR(256) NOT NULL UNIQUE,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (system_account_id),
   CONSTRAINT fk_system_account_emails_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
 );
 CREATE INDEX system_account_emails_created_at_index ON system_account_emails(created_at);
 
+CREATE TYPE system_account_phone_number_country_codes AS ENUM ('JP', 'US');
+
 CREATE TABLE system_account_phone_numbers (
   system_account_id uuid NOT NULL,
-  phone_number VARCHAR(15) NOT NULL,
+  phone_number VARCHAR(15) NOT NULL UNIQUE,
+  country_code system_account_phone_number_country_codes NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (system_account_id),
   CONSTRAINT fk_system_account_phone_numbers_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)

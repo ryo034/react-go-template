@@ -133,3 +133,7 @@ components:
       $ref: "./components/responses/workspace.yaml#/CreateWorkspaceResponse"
     LoginResponse:
       $ref: "./components/responses/auth.yaml#/LoginResponse"
+    AuthVerifyOTPResponse:
+      $ref: "./components/responses/auth.yaml#/AuthVerifyOTPResponse"
+    AuthByOAuthResponse:
+      $ref: "./components/responses/auth.yaml#/AuthByOAuthResponse"
