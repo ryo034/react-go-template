@@ -13,7 +13,9 @@ VALUES
 ('018d96bf-8dce-7f68-a926-b5d7ed6ed883', '2024-01-10 12:00:00'),
 ('018d9b4d-9438-79ac-b533-1323d4ec9b9f', '2024-01-10 12:00:00'),
 ('018da09e-c6ca-795e-878d-32bb8c1e5cac', '2024-01-10 12:00:00'),
-('018ddee7-3a8e-7387-a03e-2b37173b5ada', '2024-01-1v0 12:00:00');
+('018ddee7-3a8e-7387-a03e-2b37173b5ada', '2024-01-10 12:00:00'),
+('018df2ef-43d0-7ba3-9159-13b2b6634042', '2024-01-10 12:00:00'),
+('018df2ef-d77a-784a-92d3-3f52deb284bd', '2024-01-10 12:00:00');
 
 INSERT INTO auth_providers (auth_provider_id, system_account_id, provider, provider_uid, provided_by, created_at)
 VALUES
@@ -23,7 +25,9 @@ VALUES
 ('018de2f6-ca47-7fc9-832a-3d725120c55b', '018d96bf-8dce-7f68-a926-b5d7ed6ed883', 'email', '018d96bf-8dce-7f68-a926-b5d7ed6ed883', 'firebase', '2024-01-10 12:00:00'),
 ('018de2f6-de72-7b8c-92ab-b72b90d41ccd', '018d9b4d-9438-79ac-b533-1323d4ec9b9f', 'email', '018d9b4d-9438-79ac-b533-1323d4ec9b9f', 'firebase', '2024-01-10 12:00:00'),
 ('018de2f6-f23e-7a3c-ab51-3117f07c1930', '018da09e-c6ca-795e-878d-32bb8c1e5cac', 'email', '018da09e-c6ca-795e-878d-32bb8c1e5cac', 'firebase', '2024-01-10 12:00:00'),
-('018de2f7-0939-7cb7-a1f0-c7959bf6edd7', '018ddee7-3a8e-7387-a03e-2b37173b5ada', 'email', '018ddee7-3a8e-7387-a03e-2b37173b5ada', 'firebase', '2024-01-10 12:00:00');
+('018de2f7-0939-7cb7-a1f0-c7959bf6edd7', '018ddee7-3a8e-7387-a03e-2b37173b5ada', 'email', '018ddee7-3a8e-7387-a03e-2b37173b5ada', 'firebase', '2024-01-10 12:00:00'),
+('018df2f3-5922-789d-b529-9b98ab707514', '018df2ef-43d0-7ba3-9159-13b2b6634042', 'google', 'MuJcEqPqy9r3wJ85GWsV3SszVJ6X', 'firebase', '2024-01-10 12:00:00'),
+('018df2f4-d77c-7b11-9e98-a6d03d70a27a', '018df2ef-d77a-784a-92d3-3f52deb284bd', 'google', 'Xk1n15UQOFbml4RoF0QdCza5n0dU', 'firebase', '2024-01-10 12:00:00');
 
 INSERT INTO system_account_emails (system_account_id, email, created_at)
 VALUES
@@ -33,7 +37,9 @@ VALUES
 ('018d96bf-8dce-7f68-a926-b5d7ed6ed883', 'invite_test_1@example.com', '2024-01-10 12:00:00'),
 ('018d9b4d-9438-79ac-b533-1323d4ec9b9f', 'invite_test_already_joined_any_workspace@example.com', '2024-01-10 12:00:00'),
 ('018da09e-c6ca-795e-878d-32bb8c1e5cac', 'invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com', '2024-01-10 12:00:00'),
-('018ddee7-3a8e-7387-a03e-2b37173b5ada', 'update_me_member_profile@example.com', '2024-01-10 12:00:00');
+('018ddee7-3a8e-7387-a03e-2b37173b5ada', 'update_me_member_profile@example.com', '2024-01-10 12:00:00'),
+('018df2ef-43d0-7ba3-9159-13b2b6634042', 'google_auth_test_no_name@example.com', '2024-01-10 12:00:00'),
+('018df2ef-d77a-784a-92d3-3f52deb284bd', 'google_auth_test_has_name@example.com', '2024-01-10 12:00:00');
 
 INSERT INTO system_account_profiles (system_account_id, name, created_at, updated_at)
 VALUES
@@ -43,7 +49,9 @@ VALUES
 ('018d96bf-8dce-7f68-a926-b5d7ed6ed883', 'Invite TestOne', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018d9b4d-9438-79ac-b533-1323d4ec9b9f', 'Invite TestTwo', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018da09e-c6ca-795e-878d-32bb8c1e5cac', 'Invite TestThree', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018ddee7-3a8e-7387-a03e-2b37173b5ada', 'UpdateMe MemberProfile', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
+('018ddee7-3a8e-7387-a03e-2b37173b5ada', 'UpdateMe MemberProfile', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018df2ef-43d0-7ba3-9159-13b2b6634042', '', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018df2ef-d77a-784a-92d3-3f52deb284bd', 'GoogleAuthTest HasNameTest', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
 
 INSERT INTO workspaces (workspace_id, created_at)
 VALUES
@@ -116,7 +124,11 @@ VALUES
 ('018dbe26-f91d-7b0b-9a18-ff5181136ffb', '018db4a4-c350-747b-8c4f-bd827e08174b'),
 ('018d9fb4-641f-72f9-bdeb-a493a974dba1', '018db49e-d5a5-7ed1-aea6-e018d2e4bd38'),
 ('018d9b6d-01cf-7d3e-8328-76736b6db971', '018db49e-d5a5-7ed1-aea6-e018d2e4bd38'),
-('018da09b-ed0c-7688-a8e3-4573104e006f', '018db49e-d5a5-7ed1-aea6-e018d2e4bd38');
+('018da09b-ed0c-7688-a8e3-4573104e006f', '018db49e-d5a5-7ed1-aea6-e018d2e4bd38'),
+('018df2f6-152e-7c71-84c3-a2b77306724f', '018db49e-d5a5-7ed1-aea6-e018d2e4bd38'),
+('018df2f9-c876-700d-8bb4-8a3613bfbc71', '018db49e-d5a5-7ed1-aea6-e018d2e4bd38'),
+('018df2f7-31cf-7079-899e-9e6dab375c38', '018db49e-d5a5-7ed1-aea6-e018d2e4bd38'),
+('018df2f9-8eb2-78a2-accd-e44bb55dabef', '018db49e-d5a5-7ed1-aea6-e018d2e4bd38');
 
 INSERT INTO invitation_tokens (invitation_id, token, expired_at, created_at)
 VALUES
@@ -127,7 +139,11 @@ VALUES
 ('018dbe26-f91d-7b0b-9a18-ff5181136ffb', '018dbe28-a7c6-7b51-885a-7c4647e4aff4', '2200-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018d9fb4-641f-72f9-bdeb-a493a974dba1', '018d9fb5-6150-7a4b-a5c8-b5a61e51ee50', '2200-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018d9b6d-01cf-7d3e-8328-76736b6db971', '018d9fb5-7e56-75ed-952f-ae8aa4fed8c6', '2200-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018da09b-ed0c-7688-a8e3-4573104e006f', '018da09e-2fa7-7d3a-ad23-2c9f5cb76b92', '2200-01-10 12:00:00', '2024-01-10 12:00:00');
+('018da09b-ed0c-7688-a8e3-4573104e006f', '018da09e-2fa7-7d3a-ad23-2c9f5cb76b92', '2200-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018df2f6-152e-7c71-84c3-a2b77306724f', '018df2f6-50a9-7c19-94a2-575f32dd1e41', '2200-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018df2f9-c876-700d-8bb4-8a3613bfbc71', '018df2fa-2dc2-79ea-8913-e45e39379c9c', '2200-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018df2f7-31cf-7079-899e-9e6dab375c38', '018df2fa-4598-7e13-af4d-7727a9bca288', '2200-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018df2f9-8eb2-78a2-accd-e44bb55dabef', '018df2fa-5b26-78d4-ad65-7ca831064e50', '2200-01-10 12:00:00', '2024-01-10 12:00:00');
 
 INSERT INTO invitees (invitation_id, email)
 VALUES
@@ -138,12 +154,18 @@ VALUES
 ('018dbe26-f91d-7b0b-9a18-ff5181136ffb', 'invite_test_revoked@example.com'),
 ('018d9fb4-641f-72f9-bdeb-a493a974dba1', 'invite_test_not_expired_with_display_name@example.com'),
 ('018d9b6d-01cf-7d3e-8328-76736b6db971', 'invite_test_already_joined_any_workspace@example.com'),
-('018da09b-ed0c-7688-a8e3-4573104e006f', 'invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com');
+('018da09b-ed0c-7688-a8e3-4573104e006f', 'invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com'),
+('018df2f6-152e-7c71-84c3-a2b77306724f', 'invite_test_has_name_google_auth_with_display_name_when_invite@example.com'),
+('018df2f9-c876-700d-8bb4-8a3613bfbc71', 'invite_test_has_name_google_auth_no_name_when_invite@example.com'),
+('018df2f7-31cf-7079-899e-9e6dab375c38', 'invite_test_no_name_google_auth_with_display_name_when_invite@example.com'),
+('018df2f9-8eb2-78a2-accd-e44bb55dabef', 'invite_test_no_name_google_auth_no_name_when_invite@example.com');
 
 INSERT INTO invitee_names (invitation_id, display_name)
 VALUES
 ('018d9fb4-641f-72f9-bdeb-a493a974dba1', 'Invite Test'),
-('018da09b-ed0c-7688-a8e3-4573104e006f', 'Invite TestThreeChanged');
+('018da09b-ed0c-7688-a8e3-4573104e006f', 'Invite TestThreeChanged'),
+('018df2f6-152e-7c71-84c3-a2b77306724f', 'InviteGoogleAuthTest HasNameTest'),
+('018df2f9-c876-700d-8bb4-8a3613bfbc71', 'InviteGoogleAuthTest NoNameTest');
 
 INSERT INTO invitation_events (invitation_event_id, invitation_id, event_type, created_at)
 VALUES

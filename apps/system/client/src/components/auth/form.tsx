@@ -48,7 +48,7 @@ export const AuthPageForm = ({ onSubmit, onClickGoogleLoginButton, errorMessage,
     <form className="space-y-6" id={authFormId} onSubmit={handleSubmit(onSubmit)}>
       <div>
         <Button fullWidth type="button" onClick={onClickGoogleLoginButton} data-testid="googleLoginButton">
-          Googleでログイン
+          Googleで始める
         </Button>
       </div>
 

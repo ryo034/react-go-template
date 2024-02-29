@@ -113,21 +113,18 @@ func (u *useCase) AuthByOAuth(ctx context.Context, i ByOAuthInput) (openapi.APIV
 		return nil, err
 	}
 
-	if m != nil {
-		// if user exists and joined return me with member info
-		m, err = u.meRepo.FindLastLogin(ctx, p, m.Self().AccountID())
-		if err != nil {
-			return nil, err
+	// if user exists and joined return me with member info
+	flm, err := u.meRepo.FindLastLogin(ctx, p, m.Self().AccountID())
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return u.op.AuthByAuth(m)
 		}
-
-		if m.HasMember() {
-			// create last login info and
-			if err = u.meRepo.LastLogin(ctx, p, m); err != nil {
-				return nil, err
-			}
-		}
+		return nil, err
 	}
-	return u.op.AuthByAuth(m)
+	if err = u.meRepo.LastLogin(ctx, p, flm); err != nil {
+		return nil, err
+	}
+	return u.op.AuthByAuth(flm)
 }
 
 // memberLastLogin If there is information about the last logged-in workspace,put that workspace information in the jwt.

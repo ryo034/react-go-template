@@ -1,3 +1,5 @@
 invitation_id,display_name
 018d9fb4-641f-72f9-bdeb-a493a974dba1,Invite Test
 018da09b-ed0c-7688-a8e3-4573104e006f,Invite TestThreeChanged
+018df2f6-152e-7c71-84c3-a2b77306724f,InviteGoogleAuthTest HasNameTest
+018df2f9-c876-700d-8bb4-8a3613bfbc71,InviteGoogleAuthTest NoNameTest

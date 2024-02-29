@@ -128,21 +128,21 @@ export default class PagesStep {
 
   @Step("ワンタイムパスワード入力画面が表示されている")
   async isVisibleOtpPage() {
-    const target = page.getByTestId("otpInput1")
+    const target = page.getByTestId("verifyOtpPage")
     await target.waitFor()
     expect(target).toBeVisible()
   }
 
   @Step("オンボーディングの名前入力画面が表示されている")
   async isVisibleOnboardingNamePage() {
-    const target = page.getByTestId("name")
+    const target = page.getByTestId("onboardingSettingNamePage")
     await target.waitFor()
     expect(target).toBeVisible()
   }
 
   @Step("オンボーディングのワークスペース作成画面が表示されている")
   async isVisibleOnboardingWorkspacePage() {
-    const target = page.getByTestId("subdomain")
+    const target = page.getByTestId("onboardingCreateWorkspacePage")
     await target.waitFor()
     expect(target).toBeVisible()
   }

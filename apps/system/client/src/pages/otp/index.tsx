@@ -61,7 +61,7 @@ export const VerifyOtpPage = () => {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen" data-testid="verifyOtpPage">
       <section className="w-full max-w-md mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="space-y-6">
           <h2 className="text-center text-3xl font-extrabold text-gray-900">

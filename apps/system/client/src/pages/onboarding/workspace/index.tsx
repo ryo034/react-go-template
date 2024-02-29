@@ -37,7 +37,7 @@ export const OnboardingSettingWorkspacePage = () => {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen" data-testid="onboardingCreateWorkspacePage">
       <div className="mx-auto space-y-6">
         <div className="space-y-2 text-center mb-12 px-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-6">{message.title}</h1>

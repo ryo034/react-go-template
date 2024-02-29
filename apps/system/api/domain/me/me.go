@@ -48,6 +48,11 @@ func (m *Me) HasMember() bool {
 	return m.member != nil
 }
 
+func (m *Me) NotMember() bool {
+	return m.member == nil
+
+}
+
 func (m *Me) JoinedWorkspaces() workspace.Workspaces {
 	return m.joinedWorkspaces
 }

@@ -1,6 +1,6 @@
 import { readFileSync } from "fs"
 import { getApp, getApps, initializeApp } from "firebase-admin/app"
-import { MultiFactorCreateSettings, UserProvider, getAuth } from "firebase-admin/auth"
+import { MultiFactorCreateSettings, UserProvider, UserProviderRequest, getAuth } from "firebase-admin/auth"
 import * as fba from "firebase/app"
 import * as fb from "firebase/auth"
 import { firebaseClientConfig } from "./config"
@@ -11,7 +11,7 @@ export interface FirebaseUser {
   emailVerified: boolean
   mfaInfo: { phoneInfo: string }[]
   phoneNumber: string
-  passwordHash: string
+  passwordHash: Buffer
   displayName: string
   photoURL: string
   disabled: boolean
@@ -99,19 +99,38 @@ export class Firebase {
           })
         }
       }
-      // const password = users[idx].passwordHash.split(":")[2].split("=")[1]
+
+      const providerData: UserProviderRequest[] = []
+
+      if (users[idx].providerUserInfo && users[idx].providerUserInfo.length > 0) {
+        for (const provider of users[idx].providerUserInfo) {
+          if (provider.providerId === "google.com") {
+            providerData.push({
+              uid: users[idx].localId,
+              displayName: provider.displayName,
+              email: provider.email,
+              phoneNumber: users[idx].phoneNumber,
+              photoURL: users[idx].photoURL,
+              providerId: provider.providerId
+            })
+          }
+        }
+      }
       try {
-        await this.firebaseAdminAuth.createUser({
-          uid: users[idx].localId,
-          email: users[idx].email,
-          emailVerified: users[idx].emailVerified,
-          phoneNumber: users[idx].phoneNumber,
-          // password,
-          displayName: users[idx].displayName,
-          photoURL: users[idx].photoURL,
-          disabled: users[idx].disabled,
-          multiFactor: mfa
-        })
+        await this.firebaseAdminAuth.importUsers([
+          {
+            uid: users[idx].localId,
+            email: users[idx].email,
+            emailVerified: users[idx].emailVerified,
+            phoneNumber: users[idx].phoneNumber,
+            passwordHash: users[idx].passwordHash,
+            displayName: users[idx].displayName,
+            photoURL: users[idx].photoURL,
+            disabled: users[idx].disabled,
+            providerData,
+            multiFactor: mfa
+          }
+        ])
       } catch (e) {
         console.error("failed to create user", users[idx], e)
       }

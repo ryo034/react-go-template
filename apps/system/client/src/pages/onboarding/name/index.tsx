@@ -39,7 +39,7 @@ export const OnboardingSettingNamePage = () => {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen" data-testid="onboardingSettingNamePage">
       <div className="mx-auto space-y-6">
         <div className="space-y-2 text-center mb-12 px-8">
           <h1 className="text-4xl font-bold">{message.title}</h1>

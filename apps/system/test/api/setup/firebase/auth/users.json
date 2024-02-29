@@ -2,74 +2,180 @@
   "kind": "identitytoolkit#DownloadAccountResponse",
   "users": [
     {
-      "localId": "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
-      "lastLoginAt": "1706825570547",
-      "emailVerified": true,
-      "email": "system_account@example.com",
+      "localId": "018d6189-9ad0-7b72-801b-1e0de0d3c214",
       "createdAt": "1706825570522",
-      "customAuth": true,
-      "lastRefreshAt": "2024-02-01T22:12:50.547Z",
-      "displayName": "John Doe"
+      "lastLoginAt": "1706825570547",
+      "displayName": "Unfinished Onboarding",
+      "validSince": "1709178626",
+      "email": "unfinished_onboarding@example.com",
+      "emailVerified": true,
+      "disabled": false
     },
     {
       "localId": "018d91d4-5a5e-799c-9cfa-de8d0c02d7f2",
+      "createdAt": "1706825570522",
       "lastLoginAt": "1706825570547",
-      "emailVerified": true,
+      "displayName": "Login LogoutRetry",
+      "validSince": "1709178626",
       "email": "login_logout_login@example.com",
-      "createdAt": "1706825570522",
-      "customAuth": true,
-      "lastRefreshAt": "2024-02-01T22:12:50.547Z",
-      "displayName": "Login LogoutRetry"
-    },
-    {
-      "localId": "018d6189-9ad0-7b72-801b-1e0de0d3c214",
-      "lastLoginAt": "1706825570547",
       "emailVerified": true,
-      "email": "unfinished_onboarding@example.com",
-      "createdAt": "1706825570522",
-      "customAuth": true,
-      "lastRefreshAt": "2024-02-01T22:12:50.547Z",
-      "displayName": "Unfinished Onboarding"
+      "disabled": false
     },
     {
       "localId": "018d96bf-8dce-7f68-a926-b5d7ed6ed883",
-      "lastLoginAt": "1706825570547",
-      "emailVerified": true,
-      "email": "invite_test_1@example.com",
       "createdAt": "1706825570522",
-      "customAuth": true,
-      "lastRefreshAt": "2024-02-01T22:12:50.547Z",
-      "displayName": "Invite TestOne"
+      "lastLoginAt": "1706825570547",
+      "displayName": "Invite TestOne",
+      "validSince": "1709178626",
+      "email": "invite_test_1@example.com",
+      "emailVerified": true,
+      "disabled": false
     },
     {
       "localId": "018d9b4d-9438-79ac-b533-1323d4ec9b9f",
-      "lastLoginAt": "1706825570547",
-      "emailVerified": true,
-      "email": "invite_test_already_joined_any_workspace@example.com",
       "createdAt": "1706825570522",
-      "customAuth": true,
-      "lastRefreshAt": "2024-02-01T22:12:50.547Z",
-      "displayName": "Invite TestTwo"
+      "lastLoginAt": "1706825570547",
+      "displayName": "Invite TestTwo",
+      "validSince": "1709178626",
+      "email": "invite_test_already_joined_any_workspace@example.com",
+      "emailVerified": true,
+      "disabled": false
     },
     {
       "localId": "018da09e-c6ca-795e-878d-32bb8c1e5cac",
-      "lastLoginAt": "1706825570547",
-      "emailVerified": true,
-      "email": "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com",
       "createdAt": "1706825570522",
-      "customAuth": true,
-      "lastRefreshAt": "2024-02-01T22:12:50.547Z",
-      "displayName": "Invite TestThree"
+      "lastLoginAt": "1706825570547",
+      "displayName": "Invite TestThree",
+      "validSince": "1709178626",
+      "email": "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com",
+      "emailVerified": true,
+      "disabled": false
     },
     {
       "localId": "018ddee7-3a8e-7387-a03e-2b37173b5ada",
-      "lastLoginAt": "1706825570547",
-      "emailVerified": true,
-      "email": "update_me_member_profile@example.com",
       "createdAt": "1706825570522",
-      "customAuth": true,
-      "lastRefreshAt": "2024-02-01T22:12:50.547Z",
-      "displayName": "UpdateMe MemberProfile"
+      "lastLoginAt": "1706825570547",
+      "displayName": "UpdateMe MemberProfile",
+      "validSince": "1709178626",
+      "email": "update_me_member_profile@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "John Doe",
+      "validSince": "1709178626",
+      "email": "system_account@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "HTlwtXYJpAk3DJyCbtlITJuL4Uel",
+      "displayName": "InviteGoogleAuthTest HasNameTest",
+      "email": "invite_test_has_name_google_auth_with_display_name_when_invite@example.com",
+      "emailVerified": true,
+      "createdAt": "1709178724762",
+      "lastLoginAt": "1709178724763",
+      "providerUserInfo": [
+        {
+          "providerId": "google.com",
+          "rawId": "8117585759289069293776385835256346327126",
+          "federatedId": "8117585759289069293776385835256346327126",
+          "displayName": "InviteGoogleAuthTest HasNameTest",
+          "email": "invite_test_has_name_google_auth_with_display_name_when_invite@example.com"
+        }
+      ],
+      "lastRefreshAt": "2024-02-29T03:52:04.764Z"
+    },
+    {
+      "localId": "MuJcEqPqy9r3wJ85GWsV3SszVJ6X",
+      "createdAt": "1709177783179",
+      "lastLoginAt": "1709177783180",
+      "customAttributes": "{\"account_id\":\"018df2ef-43d0-7ba3-9159-13b2b6634042\"}",
+      "providerUserInfo": [
+        {
+          "providerId": "google.com",
+          "rawId": "3378429687136062096139862870373819500449",
+          "federatedId": "3378429687136062096139862870373819500449",
+          "email": "google_auth_test_no_name@example.com"
+        }
+      ],
+      "validSince": "1709178626",
+      "email": "google_auth_test_no_name@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "TOwqzAcIX3Wh78PNSx2pMM6s5lCw",
+      "email": "invite_test_no_name_google_auth_no_name_when_invite@example.com",
+      "emailVerified": true,
+      "createdAt": "1709178788554",
+      "lastLoginAt": "1709178788554",
+      "providerUserInfo": [
+        {
+          "providerId": "google.com",
+          "rawId": "9151601052982606792971923117066043020123",
+          "federatedId": "9151601052982606792971923117066043020123",
+          "email": "invite_test_no_name_google_auth_no_name_when_invite@example.com"
+        }
+      ],
+      "lastRefreshAt": "2024-02-29T03:53:08.554Z"
+    },
+    {
+      "localId": "Xk1n15UQOFbml4RoF0QdCza5n0dU",
+      "createdAt": "1709177821002",
+      "lastLoginAt": "1709177821002",
+      "displayName": "GoogleAuthTest HasName",
+      "customAttributes": "{\"account_id\":\"018df2ef-d77a-784a-92d3-3f52deb284bd\"}",
+      "providerUserInfo": [
+        {
+          "providerId": "google.com",
+          "rawId": "8223475793527022324734904896374578500291",
+          "federatedId": "8223475793527022324734904896374578500291",
+          "displayName": "GoogleAuthTest HasName",
+          "email": "google_auth_test_has_name@example.com"
+        }
+      ],
+      "validSince": "1709178626",
+      "email": "google_auth_test_has_name@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "fJI5JPAAb4U83hFw7jtiKgiqpLjT",
+      "email": "invite_test_no_name_google_auth_with_display_name_when_invite@example.com",
+      "emailVerified": true,
+      "createdAt": "1709178777153",
+      "lastLoginAt": "1709178777153",
+      "providerUserInfo": [
+        {
+          "providerId": "google.com",
+          "rawId": "4347094366136333555579364592462169216868",
+          "federatedId": "4347094366136333555579364592462169216868",
+          "email": "invite_test_no_name_google_auth_with_display_name_when_invite@example.com"
+        }
+      ],
+      "lastRefreshAt": "2024-02-29T03:52:57.153Z"
+    },
+    {
+      "localId": "tCTmDnfj4vl26rPCGbNb62uUAFYs",
+      "displayName": "InviteGoogleAuthTest NoNameTest",
+      "email": "invite_test_has_name_google_auth_no_name_when_invite@example.com",
+      "emailVerified": true,
+      "createdAt": "1709178758535",
+      "lastLoginAt": "1709178758535",
+      "providerUserInfo": [
+        {
+          "providerId": "google.com",
+          "rawId": "3345006124937477051737615376433511937702",
+          "federatedId": "3345006124937477051737615376433511937702",
+          "displayName": "InviteGoogleAuthTest NoNameTest",
+          "email": "invite_test_has_name_google_auth_no_name_when_invite@example.com"
+        }
+      ],
+      "lastRefreshAt": "2024-02-29T03:52:38.535Z"
     }
   ]
 }
