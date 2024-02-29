@@ -13,7 +13,7 @@ func TestAdapter_Adapt(t *testing.T) {
 	validUUID := uuid.New()
 	validEmail := "test@example.com"
 	validName := "John Doe"
-	validPhoneNumber := "09000000000"
+	validPhoneNumber := "+819012341234"
 	defaultTime := test.GetDefaultTime()
 
 	systemAccount := models.SystemAccount{
