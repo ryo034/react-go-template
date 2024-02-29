@@ -16,7 +16,8 @@ type Controller interface {
 	AuthByOTP(ctx context.Context, req *openapi.APIV1AuthOtpPostReq) (openapi.APIV1AuthOtpPostRes, error)
 	VerifyOTP(ctx context.Context, req *openapi.APIV1AuthOtpVerifyPostReq) (openapi.APIV1AuthOtpVerifyPostRes, error)
 	AuthByOAuth(ctx context.Context) (openapi.APIV1AuthOAuthPostRes, error)
-	ProcessInvitation(ctx context.Context, i ProcessInvitationInput) (openapi.ProcessInvitationRes, error)
+	ProcessInvitationEmail(ctx context.Context, i ProcessInvitationInput) (openapi.ProcessInvitationEmailRes, error)
+	ProcessInvitationOAuth(ctx context.Context, i ProcessInvitationOAuth) (openapi.ProcessInvitationOAuthRes, error)
 	InvitationByToken(ctx context.Context, i InvitationByTokenInput) (openapi.GetInvitationByTokenRes, error)
 }
 
@@ -29,6 +30,10 @@ type controller struct {
 type ProcessInvitationInput struct {
 	Token uuid.UUID
 	Email string
+}
+
+type ProcessInvitationOAuth struct {
+	Token uuid.UUID
 }
 
 type InvitationByTokenInput struct {
@@ -78,17 +83,27 @@ func (c *controller) AuthByOAuth(ctx context.Context) (openapi.APIV1AuthOAuthPos
 	return res, nil
 }
 
-func (c *controller) ProcessInvitation(ctx context.Context, i ProcessInvitationInput) (openapi.ProcessInvitationRes, error) {
+func (c *controller) ProcessInvitationEmail(ctx context.Context, i ProcessInvitationInput) (openapi.ProcessInvitationEmailRes, error) {
 	em, err := account.NewEmail(i.Email)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.ProcessInvitationRes), nil
+		return c.resl.Error(ctx, err).(openapi.ProcessInvitationEmailRes), nil
 	}
-	inp := authUc.ProcessInvitationInput{Token: invitation.NewToken(i.Token), Email: em}
-	res, err := c.auc.ProcessInvitation(ctx, inp)
+	inp := authUc.ProcessInvitationEmailInput{Token: invitation.NewToken(i.Token), Email: em}
+	res, err := c.auc.ProcessInvitationEmail(ctx, inp)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.ProcessInvitationRes), nil
+		return c.resl.Error(ctx, err).(openapi.ProcessInvitationEmailRes), nil
 	}
 	return res, nil
+}
+
+func (c *controller) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitationOAuth) (openapi.ProcessInvitationOAuthRes, error) {
+	inp := authUc.ProcessInvitationOAuthInput{Token: invitation.NewToken(i.Token)}
+	res, err := c.auc.ProcessInvitationOAuth(ctx, inp)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.ProcessInvitationOAuthRes), nil
+	}
+	return res, nil
+
 }
 
 func (c *controller) InvitationByToken(ctx context.Context, i InvitationByTokenInput) (openapi.GetInvitationByTokenRes, error) {

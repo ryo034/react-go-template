@@ -28,3 +28,38 @@ AuthVerifyPost:
         required:
           - email
           - otp
+
+InvitationProcessEmail:
+  description: Process an invitation by verifying token and email, and register or add user to workspace.
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          token:
+            type: string
+            format: uuid
+            description: The invitation token.
+          email:
+            type: string
+            format: email
+            description: The user's email address.
+        required:
+          - token
+          - email
+
+InvitationProcessOAuth:
+  description: Process an invitation by verifying token and OAuth, and register or add user to workspace.
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          token:
+            type: string
+            format: uuid
+            description: The invitation token.
+        required:
+          - token

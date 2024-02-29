@@ -19,10 +19,16 @@ func (s *service) APIV1AuthOAuthPost(ctx context.Context) (openapi.APIV1AuthOAut
 	return s.ctrl.Auth.AuthByOAuth(ctx)
 }
 
-func (s *service) ProcessInvitation(ctx context.Context, req *openapi.ProcessInvitationReq) (openapi.ProcessInvitationRes, error) {
-	return s.ctrl.Auth.ProcessInvitation(ctx, auth.ProcessInvitationInput{
+func (s *service) ProcessInvitationEmail(ctx context.Context, req *openapi.ProcessInvitationEmailReq) (openapi.ProcessInvitationEmailRes, error) {
+	return s.ctrl.Auth.ProcessInvitationEmail(ctx, auth.ProcessInvitationInput{
 		Token: req.Token,
 		Email: req.Email,
+	})
+}
+
+func (s *service) ProcessInvitationOAuth(ctx context.Context, req *openapi.ProcessInvitationOAuthReq) (openapi.ProcessInvitationOAuthRes, error) {
+	return s.ctrl.Auth.ProcessInvitationOAuth(ctx, auth.ProcessInvitationOAuth{
+		Token: req.Token,
 	})
 }
 

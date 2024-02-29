@@ -2,7 +2,8 @@ import { AuthRepository } from "~/domain/auth"
 import {
   AuthUseCaseOutput,
   FindInvitationByTokenInput,
-  ProceedToInvitationInput,
+  ProceedInvitationByEmailInput,
+  ProceedInvitationByOAuthInput,
   StartWithEmailInput,
   VerifyOtpInput
 } from "~/usecase/auth"
@@ -13,7 +14,8 @@ export interface AuthUseCase {
   createByOAuth(): Promise<Error | null>
   verifyOtp(i: VerifyOtpInput): Promise<Error | null>
   findInvitationByToken(i: FindInvitationByTokenInput): Promise<Error | null>
-  proceedToInvitation(i: ProceedToInvitationInput): Promise<Error | null>
+  proceedInvitationByEmail(i: ProceedInvitationByEmailInput): Promise<Error | null>
+  proceedInvitationByOAuth(i: ProceedInvitationByOAuthInput): Promise<Error | null>
 }
 
 export class AuthInteractor implements AuthUseCase {
@@ -83,13 +85,24 @@ export class AuthInteractor implements AuthUseCase {
     return null
   }
 
-  async proceedToInvitation(i: ProceedToInvitationInput): Promise<Error | null> {
+  async proceedInvitationByEmail(i: ProceedInvitationByEmailInput): Promise<Error | null> {
     this.presenter.setIsLoading(true)
-    const res = await this.repository.proceedToInvitation(i.token, i.email)
+    const res = await this.repository.proceedInvitationByEmail(i.token, i.email)
     this.presenter.setIsLoading(false)
     if (res.isErr) {
       return res.error
     }
+    return null
+  }
+
+  async proceedInvitationByOAuth(i: ProceedInvitationByOAuthInput): Promise<Error | null> {
+    this.presenter.setIsLoading(true)
+    const res = await this.repository.proceedInvitationByOAuth(i.token)
+    this.presenter.setIsLoading(false)
+    if (res.isErr) {
+      return res.error
+    }
+    this.mePresenter.set(res.value)
     return null
   }
 }

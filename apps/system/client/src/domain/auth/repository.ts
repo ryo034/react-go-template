@@ -9,5 +9,6 @@ export interface AuthRepository {
   verifyOtp(email: Email, otp: Otp): PromiseResult<CustomToken, Error>
   signInWithCustomToken(customToken: CustomToken): PromiseResult<null, Error>
   findInvitationByToken(token: string): PromiseResult<ReceivedInvitation, Error>
-  proceedToInvitation(token: string, email: Email): PromiseResult<null, Error>
+  proceedInvitationByEmail(token: string, email: Email): PromiseResult<null, Error>
+  proceedInvitationByOAuth(token: string): PromiseResult<Me, Error>
 }

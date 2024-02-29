@@ -45,7 +45,7 @@ export const useOnboardingSettingNamePageFormMessage: () => OnboardingSettingNam
             field: i18n.translate(`${i18nKeys.word.accountName}`)
           }),
           max: i18n.translate(`${i18nKeys.form.max}`, {
-            field: i18n.translate(`${i18nKeys.word.email}`),
+            field: i18n.translate(`${i18nKeys.word.accountName}`),
             max: AccountFullName.max
           }),
           regex: i18n.translate(`${i18nKeys.form.regex}`, { field: i18n.translate(`${i18nKeys.word.accountName}`) })

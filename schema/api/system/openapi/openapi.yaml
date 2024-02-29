@@ -59,17 +59,36 @@ paths:
           $ref: '#/components/responses/TooManyRequestsError'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /api/v1/auth/invitations/process:
+  /api/v1/auth/invitations/process/email:
     post:
       summary: Process an invitation by verifying token and email
-      operationId: processInvitation
+      operationId: processInvitationEmail
       tags:
         - Invitations
       requestBody:
-        $ref: '#/components/requestBodies/InvitationProcess'
+        $ref: '#/components/requestBodies/InvitationProcessEmail'
       responses:
         '200':
           description: OTP has been sent successfully.
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v1/auth/invitations/process/oauth:
+    post:
+      summary: >-
+        Process an invitation by verifying token and OAuth, and register or add
+        user to workspace.
+      operationId: processInvitationOAuth
+      tags:
+        - Invitations
+      security:
+        - bearer: []
+      requestBody:
+        $ref: '#/components/requestBodies/InvitationProcessOAuth'
+      responses:
+        '200':
+          $ref: '#/components/responses/InvitationProcessOAuthResponse'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '500':
@@ -580,7 +599,7 @@ components:
                 properties:
                   name:
                     type: string
-    InvitationProcess:
+    InvitationProcessEmail:
       description: >-
         Process an invitation by verifying token and email, and register or add
         user to workspace.
@@ -601,6 +620,22 @@ components:
             required:
               - token
               - email
+    InvitationProcessOAuth:
+      description: >-
+        Process an invitation by verifying token and OAuth, and register or add
+        user to workspace.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                format: uuid
+                description: The invitation token.
+            required:
+              - token
     InvitationsBulk:
       required: true
       description: Bulk invite users to workspace
@@ -1042,6 +1077,12 @@ components:
             $ref: '#/components/schemas/JwtToken'
     AuthByOAuthResponse:
       description: Auth by OAuth response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Me'
+    InvitationProcessOAuthResponse:
+      description: Invitation processed by OAuth
       content:
         application/json:
           schema:

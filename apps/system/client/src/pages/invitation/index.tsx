@@ -1,3 +1,4 @@
+import { getRedirectResult } from "firebase/auth"
 import { useContext, useLayoutEffect, useRef, useState } from "react"
 import { Trans } from "react-i18next"
 import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom"
@@ -9,7 +10,6 @@ import {
   isAlreadyExpiredInvitationError,
   isAlreadyRevokeInvitationError
 } from "~/domain/workspace/invitation/error"
-import { firebaseAuth } from "~/infrastructure/firebase"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { routeMap } from "~/infrastructure/route/path"
 import { useStartInvitationPageMessage } from "./message"
@@ -35,31 +35,31 @@ const InvitationSection = ({
   titleI18nKey,
   description,
   receivedInvitation,
-  startButtonLabel,
+  startWithEmailButtonLabel,
+  startWithGoogleButtonLabel,
   errorMessageType
 }: {
   titleI18nKey: string
   receivedInvitation: ReceivedInvitation | null
   description: string
-  startButtonLabel: string
+  startWithEmailButtonLabel: string
+  startWithGoogleButtonLabel: string
   errorMessageType: ErrorMessageType | null
 }) => {
   const [searchParams] = useSearchParams()
-  const { controller, store } = useContext(ContainerContext)
+  const { controller, store, driver, errorMessageProvider } = useContext(ContainerContext)
   const navigate = useNavigate()
   const { toast } = useToast()
+  const [errorMessage, setErrorMessage] = useState("")
+  const me = store.me((state) => state.me)
+  const meRef = useRef(me)
 
-  const isInvitationProcessing = store.receivedInvitation((s) => s.isInvitationProcessing)
-  if (errorMessageType !== null) {
-    return <ErrorMessageSection errorMessageType={errorMessageType} />
-  }
-  if (receivedInvitation === null) {
-    return <div>Loading...</div>
-  }
-
-  const onClickStartButton = async () => {
+  const onClickStartWithEmailButton = async () => {
+    if (receivedInvitation === null) {
+      return
+    }
     const token = searchParams.get("token") || ""
-    const err = await controller.auth.proceedToInvitation(token, receivedInvitation.invitation.inviteeEmail)
+    const err = await controller.auth.proceedInvitationByEmail(token, receivedInvitation.invitation.inviteeEmail)
     if (err !== null) {
       toast({
         title: "招待の受諾に失敗しました。お手数ですが、しばらくしてから再度お試しください",
@@ -71,6 +71,49 @@ const InvitationSection = ({
       pathname: routeMap.verifyOtp,
       search: createSearchParams({ email: receivedInvitation.invitation.inviteeEmail.value }).toString()
     })
+  }
+
+  const onClickStartWithGoogleButton = async () => {
+    await driver.firebase.startWithGoogle()
+  }
+
+  useLayoutEffect(() => {
+    store.me.subscribe((state) => {
+      meRef.current = state.me
+    })
+
+    const handleRedirectResult = async () => {
+      const result = await getRedirectResult(driver.firebase.getClient)
+      if (result === null) {
+        return
+      }
+      const token = searchParams.get("token") || ""
+      const err = await controller.auth.proceedInvitationByOAuth(token)
+      if (err !== null) {
+        toast({
+          title: "招待の受諾に失敗しました。お手数ですが、しばらくしてから再度お試しください",
+          variant: "destructive"
+        })
+        return
+      }
+      if (meRef.current === null) {
+        return
+      }
+      if (meRef.current.self.hasNotName) {
+        navigate(routeMap.onboardingSettingName)
+        return
+      }
+      navigate({ pathname: routeMap.receivedInvitations })
+    }
+    handleRedirectResult()
+  }, [])
+
+  const isInvitationProcessing = store.receivedInvitation((s) => s.isInvitationProcessing)
+  if (errorMessageType !== null) {
+    return <ErrorMessageSection errorMessageType={errorMessageType} />
+  }
+  if (receivedInvitation === null) {
+    return <div>Loading...</div>
   }
 
   return (
@@ -87,13 +130,32 @@ const InvitationSection = ({
         </h1>
         <p className="text-muted-foreground">{description}</p>
       </div>
-      {isInvitationProcessing ? (
-        <LoadingButton className="w-[256px]" />
-      ) : (
-        <Button className="w-[256px]" onClick={onClickStartButton} data-testid="startButtonFromInvitation">
-          {startButtonLabel}
-        </Button>
-      )}
+      <div className="flex flex-col gap-6">
+        {isInvitationProcessing ? (
+          <LoadingButton className="w-[256px]" data-testid="googleLoadingButton" />
+        ) : (
+          <Button
+            className="w-[256px]"
+            onClick={onClickStartWithGoogleButton}
+            data-testid="startWithGoogleButtonFromInvitation"
+          >
+            {startWithGoogleButtonLabel}
+          </Button>
+        )}
+
+        {isInvitationProcessing ? (
+          <LoadingButton className="w-[256px]" variant="outline" data-testid="emailLoadingButton" />
+        ) : (
+          <Button
+            className="w-[256px]"
+            onClick={onClickStartWithEmailButton}
+            variant="outline"
+            data-testid="startWithEmailButtonFromInvitation"
+          >
+            {startWithEmailButtonLabel}
+          </Button>
+        )}
+      </div>
     </div>
   )
 }
@@ -205,7 +267,8 @@ export const StartInvitationPage = () => {
         titleI18nKey={message.title}
         receivedInvitation={receivedInvitationRef.current}
         description={message.description(receivedInvitationRef.current?.invitation.inviteeEmail.value || "")}
-        startButtonLabel={message.action.start}
+        startWithEmailButtonLabel={message.action.startWithEmail}
+        startWithGoogleButtonLabel={message.action.startWithGoogle}
         errorMessageType={errorMessageType}
       />
     </div>

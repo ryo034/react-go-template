@@ -50,7 +50,7 @@ export const VerifyOtpPage = () => {
       return
     }
     if (meRef.current.hasReceivedInvitations) {
-      navigate(routeMap.receivedInvitationsPageRoute)
+      navigate(routeMap.receivedInvitations)
       return
     }
     if (meRef.current.hasNotWorkspace) {

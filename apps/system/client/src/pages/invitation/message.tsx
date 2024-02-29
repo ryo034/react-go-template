@@ -8,7 +8,12 @@ export const useStartInvitationPageMessage = () => {
     title: `${i18nKeys.page.startInvitation.title}`,
     description: (email: string) => i18n.translate(`${i18nKeys.page.startInvitation.description}`, { email }),
     action: {
-      start: i18n.translate(`${i18nKeys.action.start}`)
+      startWithGoogle: i18n.translate(`${i18nKeys.action.startWith}`, {
+        field: i18n.translate(`${i18nKeys.word.google}`)
+      }),
+      startWithEmail: i18n.translate(`${i18nKeys.action.startWith}`, {
+        field: i18n.translate(`${i18nKeys.word.email}`)
+      })
     },
     word: {
       goBack: i18n.translate(`${i18nKeys.word.goBack}`)

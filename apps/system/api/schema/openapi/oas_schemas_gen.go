@@ -275,7 +275,8 @@ func (*BadRequestError) aPIV1MeProfilePutRes()              {}
 func (*BadRequestError) aPIV1WorkspacesPostRes()            {}
 func (*BadRequestError) getInvitationByTokenRes()           {}
 func (*BadRequestError) inviteMultipleUsersToWorkspaceRes() {}
-func (*BadRequestError) processInvitationRes()              {}
+func (*BadRequestError) processInvitationEmailRes()         {}
+func (*BadRequestError) processInvitationOAuthRes()         {}
 
 type Bearer struct {
 	Token string
@@ -603,7 +604,8 @@ func (*InternalServerError) acceptInvitationRes()               {}
 func (*InternalServerError) getInvitationByTokenRes()           {}
 func (*InternalServerError) inviteMultipleUsersToWorkspaceRes() {}
 func (*InternalServerError) loginRes()                          {}
-func (*InternalServerError) processInvitationRes()              {}
+func (*InternalServerError) processInvitationEmailRes()         {}
+func (*InternalServerError) processInvitationOAuthRes()         {}
 func (*InternalServerError) revokeInvitationRes()               {}
 
 // Ref: #/components/schemas/Invitation
@@ -910,8 +912,9 @@ func (s *Me) SetProviders(val []AuthProvider) {
 	s.Providers = val
 }
 
-func (*Me) aPIV1AuthOAuthPostRes() {}
-func (*Me) loginRes()              {}
+func (*Me) aPIV1AuthOAuthPostRes()     {}
+func (*Me) loginRes()                  {}
+func (*Me) processInvitationOAuthRes() {}
 
 type MeResponse struct {
 	Me Me `json:"me"`
@@ -1251,12 +1254,12 @@ func (o OptWorkspace) Or(d Workspace) Workspace {
 	return d
 }
 
-// ProcessInvitationOK is response for ProcessInvitation operation.
-type ProcessInvitationOK struct{}
+// ProcessInvitationEmailOK is response for ProcessInvitationEmail operation.
+type ProcessInvitationEmailOK struct{}
 
-func (*ProcessInvitationOK) processInvitationRes() {}
+func (*ProcessInvitationEmailOK) processInvitationEmailRes() {}
 
-type ProcessInvitationReq struct {
+type ProcessInvitationEmailReq struct {
 	// The invitation token.
 	Token uuid.UUID `json:"token"`
 	// The user's email address.
@@ -1264,23 +1267,38 @@ type ProcessInvitationReq struct {
 }
 
 // GetToken returns the value of Token.
-func (s *ProcessInvitationReq) GetToken() uuid.UUID {
+func (s *ProcessInvitationEmailReq) GetToken() uuid.UUID {
 	return s.Token
 }
 
 // GetEmail returns the value of Email.
-func (s *ProcessInvitationReq) GetEmail() string {
+func (s *ProcessInvitationEmailReq) GetEmail() string {
 	return s.Email
 }
 
 // SetToken sets the value of Token.
-func (s *ProcessInvitationReq) SetToken(val uuid.UUID) {
+func (s *ProcessInvitationEmailReq) SetToken(val uuid.UUID) {
 	s.Token = val
 }
 
 // SetEmail sets the value of Email.
-func (s *ProcessInvitationReq) SetEmail(val string) {
+func (s *ProcessInvitationEmailReq) SetEmail(val string) {
 	s.Email = val
+}
+
+type ProcessInvitationOAuthReq struct {
+	// The invitation token.
+	Token uuid.UUID `json:"token"`
+}
+
+// GetToken returns the value of Token.
+func (s *ProcessInvitationOAuthReq) GetToken() uuid.UUID {
+	return s.Token
+}
+
+// SetToken sets the value of Token.
+func (s *ProcessInvitationOAuthReq) SetToken(val uuid.UUID) {
+	s.Token = val
 }
 
 // Ref: #/components/schemas/ReceivedInvitation

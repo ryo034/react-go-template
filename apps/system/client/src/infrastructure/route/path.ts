@@ -14,8 +14,8 @@ export const routeMap = {
   auth: authPageRoute,
   // onboarding
   verifyOtp: verifyOtpPageRoute,
-  startInvitationPageRoute: startInvitationPageRoute,
-  receivedInvitationsPageRoute: receivedInvitationsPageRoute,
+  startInvitation: startInvitationPageRoute,
+  receivedInvitations: receivedInvitationsPageRoute,
   onboardingSettingName: onboardingSettingNamePageRoute,
   onboardingSettingWorkspace: onboardingSettingWorkspacePageRoute,
   // dashboard
@@ -35,10 +35,7 @@ export const isSettingsPage = (path: string) => {
 }
 
 export const unauthenticatedRoutes = [routeMap.auth.toString(), routeMap.verifyOtp.toString()]
-export const invitationRoutes = [
-  routeMap.startInvitationPageRoute.toString(),
-  routeMap.receivedInvitationsPageRoute.toString()
-]
+export const invitationRoutes = [routeMap.startInvitation.toString(), routeMap.receivedInvitations.toString()]
 export const onboardingRoutes = [
   routeMap.onboardingSettingName.toString(),
   routeMap.onboardingSettingWorkspace.toString()

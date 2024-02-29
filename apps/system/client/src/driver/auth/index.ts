@@ -36,10 +36,21 @@ export class AuthDriver {
     }
   }
 
-  async proceedToInvitation(token: string, email: Email): PromiseResult<null, Error> {
+  async proceedInvitationByEmail(token: string, email: Email): PromiseResult<null, Error> {
     try {
-      const res = await this.client.POST("/api/v1/auth/invitations/process", { body: { token, email: email.value } })
+      const res = await this.client.POST("/api/v1/auth/invitations/process/email", {
+        body: { token, email: email.value }
+      })
       return res.data ? Result.ok(null) : Result.err(this.errorHandler.adapt(res))
+    } catch (e) {
+      return Result.err(this.errorHandler.adapt(e))
+    }
+  }
+
+  async proceedInvitationByOAuth(token: string): PromiseResult<components["schemas"]["Me"], Error> {
+    try {
+      const res = await this.client.POST("/api/v1/auth/invitations/process/oauth", { body: { token } })
+      return res.data ? Result.ok(res.data) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))
     }

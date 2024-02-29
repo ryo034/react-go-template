@@ -31,7 +31,11 @@ export class AuthController {
     return await this.useCase.findInvitationByToken({ token })
   }
 
-  async proceedToInvitation(token: string, email: Email): Promise<null | Error> {
-    return await this.useCase.proceedToInvitation({ token, email })
+  async proceedInvitationByEmail(token: string, email: Email): Promise<null | Error> {
+    return await this.useCase.proceedInvitationByEmail({ token, email })
+  }
+
+  async proceedInvitationByOAuth(token: string): Promise<null | Error> {
+    return await this.useCase.proceedInvitationByOAuth({ token })
   }
 }

@@ -30,3 +30,10 @@ AuthByOAuthResponse:
     application/json:
       schema:
         $ref: "#/components/schemas/Me"
+
+InvitationProcessOAuthResponse:
+  description: Invitation processed by OAuth
+  content:
+    application/json:
+      schema:
+        $ref: "#/components/schemas/Me"

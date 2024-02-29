@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/google/uuid"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 
@@ -30,7 +32,8 @@ type UseCase interface {
 	AuthByOTP(ctx context.Context, i ByOTPInput) (openapi.APIV1AuthOtpPostRes, error)
 	AuthByOAuth(ctx context.Context, i ByOAuthInput) (openapi.APIV1AuthOAuthPostRes, error)
 	VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error)
-	ProcessInvitation(ctx context.Context, i ProcessInvitationInput) (openapi.ProcessInvitationRes, error)
+	ProcessInvitationEmail(ctx context.Context, i ProcessInvitationEmailInput) (openapi.ProcessInvitationEmailRes, error)
+	ProcessInvitationOAuth(ctx context.Context, i ProcessInvitationOAuthInput) (openapi.ProcessInvitationOAuthRes, error)
 	InvitationByToken(ctx context.Context, i InvitationByTokenInput) (openapi.GetInvitationByTokenRes, error)
 }
 
@@ -61,7 +64,7 @@ func (u *useCase) AuthByOTP(ctx context.Context, i ByOTPInput) (openapi.APIV1Aut
 	return &openapi.APIV1AuthOtpPostOK{}, nil
 }
 
-func (u *useCase) createUser(ctx context.Context, p bun.IDB, i ByOAuthInput) (openapi.APIV1AuthOAuthPostRes, error) {
+func (u *useCase) createUser(ctx context.Context, p bun.IDB, aID account.ID) (*me.Me, error) {
 	prov, err := u.fbDr.FindProviderData(ctx)
 	if err != nil {
 		return nil, err
@@ -90,7 +93,7 @@ func (u *useCase) createUser(ctx context.Context, p bun.IDB, i ByOAuthInput) (op
 	} else {
 		pn = &tmpPn
 	}
-	usr, err := u.repo.Create(ctx, p, user.NewUser(i.AccountID, ema, na, pn), prov)
+	usr, err := u.repo.Create(ctx, p, user.NewUser(aID, ema, na, pn), prov)
 	if err != nil {
 		return nil, err
 	}
@@ -98,33 +101,44 @@ func (u *useCase) createUser(ctx context.Context, p bun.IDB, i ByOAuthInput) (op
 	if err != nil {
 		return nil, err
 	}
-	return u.op.AuthByAuth(res)
+	return res, nil
+}
+
+func (u *useCase) createAndFindAccountIfNotExist(ctx context.Context, exec bun.IDB, aID account.ID) (*me.Me, error) {
+	//　Account Exists
+	m, err := u.meRepo.FindBeforeOnboard(ctx, exec, aID)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return u.createUser(ctx, exec, aID)
+		}
+		return nil, err
+	}
+	// if user exists and joined return me with member info
+	flm, err := u.meRepo.FindLastLogin(ctx, exec, m.Self().AccountID())
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return m, nil
+		}
+		return nil, err
+	}
+	return flm, nil
 }
 
 func (u *useCase) AuthByOAuth(ctx context.Context, i ByOAuthInput) (openapi.APIV1AuthOAuthPostRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
 
 	//　Account Exists
-	m, err := u.meRepo.FindBeforeOnboard(ctx, p, i.AccountID)
+	m, err := u.createAndFindAccountIfNotExist(ctx, p, i.AccountID)
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return u.createUser(ctx, p, i)
-		}
 		return nil, err
 	}
-
-	// if user exists and joined return me with member info
-	flm, err := u.meRepo.FindLastLogin(ctx, p, m.Self().AccountID())
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return u.op.AuthByAuth(m)
-		}
+	if m.NotMember() {
+		return u.op.AuthByAuth(m)
+	}
+	if err = u.meRepo.LastLogin(ctx, p, m); err != nil {
 		return nil, err
 	}
-	if err = u.meRepo.LastLogin(ctx, p, flm); err != nil {
-		return nil, err
-	}
-	return u.op.AuthByAuth(flm)
+	return u.op.AuthByAuth(m)
 }
 
 // memberLastLogin If there is information about the last logged-in workspace,put that workspace information in the jwt.
@@ -202,7 +216,7 @@ func (u *useCase) verifyOTP(ctx context.Context, email account.Email, code strin
 	return u.fbDr.CustomToken(ctx)
 }
 
-func (u *useCase) ProcessInvitation(ctx context.Context, i ProcessInvitationInput) (openapi.ProcessInvitationRes, error) {
+func (u *useCase) ProcessInvitationEmail(ctx context.Context, i ProcessInvitationEmailInput) (openapi.ProcessInvitationEmailRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
 	invRes, err := u.invRepo.FindActiveByEmail(ctx, p, i.Email)
 	if err != nil {
@@ -229,7 +243,63 @@ func (u *useCase) ProcessInvitation(ctx context.Context, i ProcessInvitationInpu
 		}
 		return u.emailDr.SendOTP(pr, i.Email, code)
 	}
-	return &openapi.ProcessInvitationOK{}, pr.Transactional(fn)().Error()
+	return &openapi.ProcessInvitationEmailOK{}, pr.Transactional(fn)().Error()
+}
+
+func (u *useCase) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitationOAuthInput) (openapi.ProcessInvitationOAuthRes, error) {
+	fbUsr, err := u.fbDr.GetUser(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	p := u.dbp.GetExecutor(ctx, false)
+	em, _ := account.NewEmail(fbUsr.Email)
+	invRes, err := u.invRepo.FindActiveByEmail(ctx, p, em)
+	if err != nil {
+		return nil, err
+	}
+	if invRes.Token().NotEquals(i.Token) {
+		return nil, invitation.NewInvalidInviteToken(i.Token.Value())
+	}
+	if err = invRes.ValidateCanVerify(); err != nil {
+		return nil, err
+	}
+	pr, err := u.txp.Provide(ctx)
+	if err != nil {
+		return nil, err
+	}
+	fn := func() (*me.Me, error) {
+		if err = u.invRepo.VerifyByToken(pr, p, i.Token); err != nil {
+			return nil, err
+		}
+
+		//　check Account Exists
+		ema, _ := account.NewEmail(fbUsr.Email)
+		usr, err := u.repo.FindByEmail(pr, p, ema)
+		if err != nil {
+			if errors.Is(err, sql.ErrNoRows) {
+				// create new account
+				return u.createUser(pr, p, account.NewIDFromUUID(uuid.MustParse(fbUsr.CustomClaims["account_id"].(string))))
+			}
+			return nil, err
+		}
+		m, err := u.createAndFindAccountIfNotExist(pr, p, usr.AccountID())
+		if err != nil {
+			return nil, err
+		}
+		if m.NotMember() {
+			return m, nil
+		}
+		if err = u.meRepo.LastLogin(pr, p, m); err != nil {
+			return nil, err
+		}
+		return m, nil
+	}
+	result := pr.Transactional(fn)()
+	if err = result.Error(); err != nil {
+		return nil, err
+	}
+	return u.op.ProcessInvitationOAuth(result.Value(0).(*me.Me))
 }
 
 func (u *useCase) InvitationByToken(ctx context.Context, i InvitationByTokenInput) (openapi.GetInvitationByTokenRes, error) {

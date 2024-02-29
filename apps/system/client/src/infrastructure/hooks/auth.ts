@@ -19,7 +19,7 @@ export const useAuthenticator = () => {
       return { pathname: routeMap.onboardingSettingName, search: "" }
     }
     if (meRef.current.hasReceivedInvitations) {
-      return { pathname: routeMap.receivedInvitationsPageRoute, search: "" }
+      return { pathname: routeMap.receivedInvitations, search: "" }
     }
     if (meRef.current.hasNotWorkspace) {
       return { pathname: routeMap.onboardingSettingWorkspace, search: "" }

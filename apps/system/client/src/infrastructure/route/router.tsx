@@ -44,8 +44,8 @@ const router = createBrowserRouter([
               {
                 element: <InvitationLayout />,
                 children: [
-                  { path: routeMap.startInvitationPageRoute, element: <StartInvitationPage /> },
-                  { path: routeMap.receivedInvitationsPageRoute, element: <ReceivedInvitationsPage /> }
+                  { path: routeMap.startInvitation, element: <StartInvitationPage /> },
+                  { path: routeMap.receivedInvitations, element: <ReceivedInvitationsPage /> }
                 ]
               },
               {

@@ -11,3 +11,5 @@ invitation_id,email
 018df2f9-c876-700d-8bb4-8a3613bfbc71,invite_test_has_name_google_auth_no_name_when_invite@example.com
 018df2f7-31cf-7079-899e-9e6dab375c38,invite_test_no_name_google_auth_with_display_name_when_invite@example.com
 018df2f9-8eb2-78a2-accd-e44bb55dabef,invite_test_no_name_google_auth_no_name_when_invite@example.com
+018df53b-4310-701e-b62d-bea4b4c7d667,invite_test_already_joined_any_workspace_by_email@example.com
+018df54f-9c56-7209-9082-380f1096c46e,invite_test_already_joined_any_workspace_by_google@example.com

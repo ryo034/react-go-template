@@ -12,7 +12,12 @@ export const useAuthPageFormMessage = () => {
     action: {
       login: i18n.translate(`${i18nKeys.action.login}`),
       sendOneTimeCode: i18n.translate(`${i18nKeys.action.sendOneTimeCode}`),
-      startWithEmail: i18n.translate(`${i18nKeys.action.startWithEmail}`)
+      startWithEmail: i18n.translate(`${i18nKeys.action.startWith}`, {
+        field: i18n.translate(`${i18nKeys.word.email}`)
+      }),
+      startWithGoogle: i18n.translate(`${i18nKeys.action.startWith}`, {
+        field: i18n.translate(`${i18nKeys.word.google}`)
+      })
     },
     form: {
       validation: {

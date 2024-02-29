@@ -1941,20 +1941,20 @@ func (s *Server) handleLoginRequest(args [0]string, argsEscaped bool, w http.Res
 	}
 }
 
-// handleProcessInvitationRequest handles processInvitation operation.
+// handleProcessInvitationEmailRequest handles processInvitationEmail operation.
 //
 // Process an invitation by verifying token and email.
 //
-// POST /api/v1/auth/invitations/process
-func (s *Server) handleProcessInvitationRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// POST /api/v1/auth/invitations/process/email
+func (s *Server) handleProcessInvitationEmailRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("processInvitation"),
+		otelogen.OperationID("processInvitationEmail"),
 		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/v1/auth/invitations/process"),
+		semconv.HTTPRouteKey.String("/api/v1/auth/invitations/process/email"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "ProcessInvitation",
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "ProcessInvitationEmail",
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -1979,11 +1979,11 @@ func (s *Server) handleProcessInvitationRequest(args [0]string, argsEscaped bool
 		}
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: "ProcessInvitation",
-			ID:   "processInvitation",
+			Name: "ProcessInvitationEmail",
+			ID:   "processInvitationEmail",
 		}
 	)
-	request, close, err := s.decodeProcessInvitationRequest(r)
+	request, close, err := s.decodeProcessInvitationEmailRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -1999,22 +1999,22 @@ func (s *Server) handleProcessInvitationRequest(args [0]string, argsEscaped bool
 		}
 	}()
 
-	var response ProcessInvitationRes
+	var response ProcessInvitationEmailRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    "ProcessInvitation",
+			OperationName:    "ProcessInvitationEmail",
 			OperationSummary: "Process an invitation by verifying token and email",
-			OperationID:      "processInvitation",
+			OperationID:      "processInvitationEmail",
 			Body:             request,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
 
 		type (
-			Request  = *ProcessInvitationReq
+			Request  = *ProcessInvitationEmailReq
 			Params   = struct{}
-			Response = ProcessInvitationRes
+			Response = ProcessInvitationEmailRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -2025,12 +2025,12 @@ func (s *Server) handleProcessInvitationRequest(args [0]string, argsEscaped bool
 			mreq,
 			nil,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.ProcessInvitation(ctx, request)
+				response, err = s.h.ProcessInvitationEmail(ctx, request)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.ProcessInvitation(ctx, request)
+		response, err = s.h.ProcessInvitationEmail(ctx, request)
 	}
 	if err != nil {
 		recordError("Internal", err)
@@ -2038,7 +2038,157 @@ func (s *Server) handleProcessInvitationRequest(args [0]string, argsEscaped bool
 		return
 	}
 
-	if err := encodeProcessInvitationResponse(response, w, span); err != nil {
+	if err := encodeProcessInvitationEmailResponse(response, w, span); err != nil {
+		recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handleProcessInvitationOAuthRequest handles processInvitationOAuth operation.
+//
+// Process an invitation by verifying token and OAuth, and register or add user to workspace.
+//
+// POST /api/v1/auth/invitations/process/oauth
+func (s *Server) handleProcessInvitationOAuthRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("processInvitationOAuth"),
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/v1/auth/invitations/process/oauth"),
+	}
+
+	// Start a span for this request.
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "ProcessInvitationOAuth",
+		trace.WithAttributes(otelAttrs...),
+		serverSpanKind,
+	)
+	defer span.End()
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		s.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	s.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	var (
+		recordError = func(stage string, err error) {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			s.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: "ProcessInvitationOAuth",
+			ID:   "processInvitationOAuth",
+		}
+	)
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			sctx, ok, err := s.securityBearer(ctx, "ProcessInvitationOAuth", r)
+			if err != nil {
+				err = &ogenerrors.SecurityError{
+					OperationContext: opErrContext,
+					Security:         "Bearer",
+					Err:              err,
+				}
+				recordError("Security:Bearer", err)
+				s.cfg.ErrorHandler(ctx, w, r, err)
+				return
+			}
+			if ok {
+				satisfied[0] |= 1 << 0
+				ctx = sctx
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			err = &ogenerrors.SecurityError{
+				OperationContext: opErrContext,
+				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+			}
+			recordError("Security", err)
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+	}
+	request, close, err := s.decodeProcessInvitationOAuthRequest(r)
+	if err != nil {
+		err = &ogenerrors.DecodeRequestError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		recordError("DecodeRequest", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+	defer func() {
+		if err := close(); err != nil {
+			recordError("CloseRequest", err)
+		}
+	}()
+
+	var response ProcessInvitationOAuthRes
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    "ProcessInvitationOAuth",
+			OperationSummary: "Process an invitation by verifying token and OAuth, and register or add user to workspace.",
+			OperationID:      "processInvitationOAuth",
+			Body:             request,
+			Params:           middleware.Parameters{},
+			Raw:              r,
+		}
+
+		type (
+			Request  = *ProcessInvitationOAuthReq
+			Params   = struct{}
+			Response = ProcessInvitationOAuthRes
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			nil,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.ProcessInvitationOAuth(ctx, request)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.ProcessInvitationOAuth(ctx, request)
+	}
+	if err != nil {
+		recordError("Internal", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	if err := encodeProcessInvitationOAuthResponse(response, w, span); err != nil {
 		recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

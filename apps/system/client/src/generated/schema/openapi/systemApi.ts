@@ -59,9 +59,13 @@ export interface paths {
       };
     };
   };
-  "/api/v1/auth/invitations/process": {
+  "/api/v1/auth/invitations/process/email": {
     /** Process an invitation by verifying token and email */
-    post: operations["processInvitation"];
+    post: operations["processInvitationEmail"];
+  };
+  "/api/v1/auth/invitations/process/oauth": {
+    /** Process an invitation by verifying token and OAuth, and register or add user to workspace. */
+    post: operations["processInvitationOAuth"];
   };
   "/api/v1/auth/invitations": {
     /** Get Invitation by token */
@@ -652,6 +656,12 @@ export interface components {
         "application/json": components["schemas"]["Me"];
       };
     };
+    /** @description Invitation processed by OAuth */
+    InvitationProcessOAuthResponse: {
+      content: {
+        "application/json": components["schemas"]["Me"];
+      };
+    };
   };
   parameters: never;
   requestBodies: {
@@ -694,7 +704,7 @@ export interface components {
       };
     };
     /** @description Process an invitation by verifying token and email, and register or add user to workspace. */
-    InvitationProcess: {
+    InvitationProcessEmail: {
       content: {
         "application/json": {
           /**
@@ -707,6 +717,18 @@ export interface components {
            * @description The user's email address.
            */
           email: string;
+        };
+      };
+    };
+    /** @description Process an invitation by verifying token and OAuth, and register or add user to workspace. */
+    InvitationProcessOAuth: {
+      content: {
+        "application/json": {
+          /**
+           * Format: uuid
+           * @description The invitation token.
+           */
+          token: string;
         };
       };
     };
@@ -738,13 +760,22 @@ export type external = Record<string, never>;
 export interface operations {
 
   /** Process an invitation by verifying token and email */
-  processInvitation: {
-    requestBody: components["requestBodies"]["InvitationProcess"];
+  processInvitationEmail: {
+    requestBody: components["requestBodies"]["InvitationProcessEmail"];
     responses: {
       /** @description OTP has been sent successfully. */
       200: {
         content: never;
       };
+      400: components["responses"]["BadRequestError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /** Process an invitation by verifying token and OAuth, and register or add user to workspace. */
+  processInvitationOAuth: {
+    requestBody: components["requestBodies"]["InvitationProcessOAuth"];
+    responses: {
+      200: components["responses"]["InvitationProcessOAuthResponse"];
       400: components["responses"]["BadRequestError"];
       500: components["responses"]["InternalServerError"];
     };

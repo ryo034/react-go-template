@@ -31,7 +31,8 @@ describe("LoginForm", () => {
           action: {
             login: "ログイン",
             sendOneTimeCode: "ワンタイムパスワードを送信する",
-            startWithEmail: "メールアドレスで始める"
+            startWithEmail: "メールアドレスで始める",
+            startWithGoogle: "Googleで始める"
           },
           form: {
             validation: {

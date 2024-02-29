@@ -14,7 +14,11 @@ export type FindInvitationByTokenInput = {
   token: string
 }
 
-export type ProceedToInvitationInput = {
+export type ProceedInvitationByEmailInput = {
   token: string
   email: Email
+}
+
+export type ProceedInvitationByOAuthInput = {
+  token: string
 }

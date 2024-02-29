@@ -48,7 +48,7 @@ export const AuthPageForm = ({ onSubmit, onClickGoogleLoginButton, errorMessage,
     <form className="space-y-6" id={authFormId} onSubmit={handleSubmit(onSubmit)}>
       <div>
         <Button fullWidth type="button" onClick={onClickGoogleLoginButton} data-testid="googleLoginButton">
-          Googleで始める
+          {message.action.startWithGoogle}
         </Button>
       </div>
 
@@ -66,9 +66,9 @@ export const AuthPageForm = ({ onSubmit, onClickGoogleLoginButton, errorMessage,
       />
       <FormResultErrorMessage message={errorMessage} />
       {isLoading ? (
-        <LoadingButton fullWidth />
+        <LoadingButton fullWidth variant="outline" />
       ) : (
-        <Button fullWidth type="submit" form={authFormId} data-testid="startButton">
+        <Button fullWidth type="submit" form={authFormId} variant="outline" data-testid="startButton">
           {message.action.startWithEmail}
         </Button>
       )}

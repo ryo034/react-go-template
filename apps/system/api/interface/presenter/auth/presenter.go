@@ -34,3 +34,11 @@ func (p *presenter) AuthByAuth(m *meDomain.Me) (openapi.APIV1AuthOAuthPostRes, e
 	}
 	return &res, nil
 }
+
+func (p *presenter) ProcessInvitationOAuth(m *meDomain.Me) (openapi.ProcessInvitationOAuthRes, error) {
+	res, err := p.meAdapter.Adapt(m)
+	if err != nil {
+		return nil, err
+	}
+	return &res, nil
+}

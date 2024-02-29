@@ -8,3 +8,5 @@ system_account_id,email,created_at
 018ddee7-3a8e-7387-a03e-2b37173b5ada,update_me_member_profile@example.com,2024-01-10 12:00:00.000000 +00:00
 018df2ef-43d0-7ba3-9159-13b2b6634042,google_auth_test_no_name@example.com,2024-01-10 12:00:00.000000 +00:00
 018df2ef-d77a-784a-92d3-3f52deb284bd,google_auth_test_has_name@example.com,2024-01-10 12:00:00.000000 +00:00
+018df53c-c5a6-71a2-bf90-2f751f342d4c,invite_test_already_joined_any_workspace_by_email@example.com,2024-01-10 12:00:00.000000 +00:00
+018df551-4339-730c-8031-618eb8ef66b5,invite_test_already_joined_any_workspace_by_google@example.com,2024-01-10 12:00:00.000000 +00:00

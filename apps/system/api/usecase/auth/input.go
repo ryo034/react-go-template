@@ -20,9 +20,13 @@ type VerifyOTPInput struct {
 	Otp   string
 }
 
-type ProcessInvitationInput struct {
+type ProcessInvitationEmailInput struct {
 	Token invitation.Token
 	Email account.Email
+}
+
+type ProcessInvitationOAuthInput struct {
+	Token invitation.Token
 }
 
 type AcceptInvitationInput struct {

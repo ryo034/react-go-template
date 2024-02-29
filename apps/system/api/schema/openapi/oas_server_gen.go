@@ -98,12 +98,18 @@ type Handler interface {
 	//
 	// POST /api/v1/login
 	Login(ctx context.Context) (LoginRes, error)
-	// ProcessInvitation implements processInvitation operation.
+	// ProcessInvitationEmail implements processInvitationEmail operation.
 	//
 	// Process an invitation by verifying token and email.
 	//
-	// POST /api/v1/auth/invitations/process
-	ProcessInvitation(ctx context.Context, req *ProcessInvitationReq) (ProcessInvitationRes, error)
+	// POST /api/v1/auth/invitations/process/email
+	ProcessInvitationEmail(ctx context.Context, req *ProcessInvitationEmailReq) (ProcessInvitationEmailRes, error)
+	// ProcessInvitationOAuth implements processInvitationOAuth operation.
+	//
+	// Process an invitation by verifying token and OAuth, and register or add user to workspace.
+	//
+	// POST /api/v1/auth/invitations/process/oauth
+	ProcessInvitationOAuth(ctx context.Context, req *ProcessInvitationOAuthReq) (ProcessInvitationOAuthRes, error)
 	// RevokeInvitation implements revokeInvitation operation.
 	//
 	// Revoke an invitation to join a workspace.

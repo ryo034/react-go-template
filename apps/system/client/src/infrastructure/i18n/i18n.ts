@@ -68,7 +68,8 @@ export const i18nKeys = {
     displayName: `${i18nRootKeys.word}.displayName`,
     member: `${i18nRootKeys.word}.member`,
     goBack: `${i18nRootKeys.word}.goBack`,
-    inviter: `${i18nRootKeys.word}.inviter`
+    inviter: `${i18nRootKeys.word}.inviter`,
+    google: `${i18nRootKeys.word}.google`
   },
   action: {
     submit: `${i18nRootKeys.action}.submit`,
@@ -76,8 +77,8 @@ export const i18nKeys = {
     cancel: `${i18nRootKeys.action}.cancel`,
     login: `${i18nRootKeys.action}.login`,
     start: `${i18nRootKeys.action}.start`,
+    startWith: `${i18nRootKeys.action}.startWith`,
     sendOneTimeCode: `${i18nRootKeys.action}.sendOneTimeCode`,
-    startWithEmail: `${i18nRootKeys.action}.startWithEmail`,
     showItem: `${i18nRootKeys.action}.showItem`,
     logout: `${i18nRootKeys.action}.logout`,
     inputField: `${i18nRootKeys.action}.inputField`,

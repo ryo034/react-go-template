@@ -114,12 +114,18 @@ type Invoker interface {
 	//
 	// POST /api/v1/login
 	Login(ctx context.Context) (LoginRes, error)
-	// ProcessInvitation invokes processInvitation operation.
+	// ProcessInvitationEmail invokes processInvitationEmail operation.
 	//
 	// Process an invitation by verifying token and email.
 	//
-	// POST /api/v1/auth/invitations/process
-	ProcessInvitation(ctx context.Context, request *ProcessInvitationReq) (ProcessInvitationRes, error)
+	// POST /api/v1/auth/invitations/process/email
+	ProcessInvitationEmail(ctx context.Context, request *ProcessInvitationEmailReq) (ProcessInvitationEmailRes, error)
+	// ProcessInvitationOAuth invokes processInvitationOAuth operation.
+	//
+	// Process an invitation by verifying token and OAuth, and register or add user to workspace.
+	//
+	// POST /api/v1/auth/invitations/process/oauth
+	ProcessInvitationOAuth(ctx context.Context, request *ProcessInvitationOAuthReq) (ProcessInvitationOAuthRes, error)
 	// RevokeInvitation invokes revokeInvitation operation.
 	//
 	// Revoke an invitation to join a workspace.
@@ -1653,21 +1659,21 @@ func (c *Client) sendLogin(ctx context.Context) (res LoginRes, err error) {
 	return result, nil
 }
 
-// ProcessInvitation invokes processInvitation operation.
+// ProcessInvitationEmail invokes processInvitationEmail operation.
 //
 // Process an invitation by verifying token and email.
 //
-// POST /api/v1/auth/invitations/process
-func (c *Client) ProcessInvitation(ctx context.Context, request *ProcessInvitationReq) (ProcessInvitationRes, error) {
-	res, err := c.sendProcessInvitation(ctx, request)
+// POST /api/v1/auth/invitations/process/email
+func (c *Client) ProcessInvitationEmail(ctx context.Context, request *ProcessInvitationEmailReq) (ProcessInvitationEmailRes, error) {
+	res, err := c.sendProcessInvitationEmail(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendProcessInvitation(ctx context.Context, request *ProcessInvitationReq) (res ProcessInvitationRes, err error) {
+func (c *Client) sendProcessInvitationEmail(ctx context.Context, request *ProcessInvitationEmailReq) (res ProcessInvitationEmailRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("processInvitation"),
+		otelogen.OperationID("processInvitationEmail"),
 		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/v1/auth/invitations/process"),
+		semconv.HTTPRouteKey.String("/api/v1/auth/invitations/process/email"),
 	}
 
 	// Run stopwatch.
@@ -1682,7 +1688,7 @@ func (c *Client) sendProcessInvitation(ctx context.Context, request *ProcessInvi
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ProcessInvitation",
+	ctx, span := c.cfg.Tracer.Start(ctx, "ProcessInvitationEmail",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -1700,7 +1706,7 @@ func (c *Client) sendProcessInvitation(ctx context.Context, request *ProcessInvi
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
-	pathParts[0] = "/api/v1/auth/invitations/process"
+	pathParts[0] = "/api/v1/auth/invitations/process/email"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
@@ -1708,7 +1714,7 @@ func (c *Client) sendProcessInvitation(ctx context.Context, request *ProcessInvi
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
-	if err := encodeProcessInvitationRequest(request, r); err != nil {
+	if err := encodeProcessInvitationEmailRequest(request, r); err != nil {
 		return res, errors.Wrap(err, "encode request")
 	}
 
@@ -1720,7 +1726,115 @@ func (c *Client) sendProcessInvitation(ctx context.Context, request *ProcessInvi
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeProcessInvitationResponse(resp)
+	result, err := decodeProcessInvitationEmailResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// ProcessInvitationOAuth invokes processInvitationOAuth operation.
+//
+// Process an invitation by verifying token and OAuth, and register or add user to workspace.
+//
+// POST /api/v1/auth/invitations/process/oauth
+func (c *Client) ProcessInvitationOAuth(ctx context.Context, request *ProcessInvitationOAuthReq) (ProcessInvitationOAuthRes, error) {
+	res, err := c.sendProcessInvitationOAuth(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendProcessInvitationOAuth(ctx context.Context, request *ProcessInvitationOAuthReq) (res ProcessInvitationOAuthRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("processInvitationOAuth"),
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/v1/auth/invitations/process/oauth"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "ProcessInvitationOAuth",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/auth/invitations/process/oauth"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeProcessInvitationOAuthRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "ProcessInvitationOAuth", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeProcessInvitationOAuthResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

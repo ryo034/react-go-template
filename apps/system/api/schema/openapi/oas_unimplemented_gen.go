@@ -148,12 +148,21 @@ func (UnimplementedHandler) Login(ctx context.Context) (r LoginRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// ProcessInvitation implements processInvitation operation.
+// ProcessInvitationEmail implements processInvitationEmail operation.
 //
 // Process an invitation by verifying token and email.
 //
-// POST /api/v1/auth/invitations/process
-func (UnimplementedHandler) ProcessInvitation(ctx context.Context, req *ProcessInvitationReq) (r ProcessInvitationRes, _ error) {
+// POST /api/v1/auth/invitations/process/email
+func (UnimplementedHandler) ProcessInvitationEmail(ctx context.Context, req *ProcessInvitationEmailReq) (r ProcessInvitationEmailRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ProcessInvitationOAuth implements processInvitationOAuth operation.
+//
+// Process an invitation by verifying token and OAuth, and register or add user to workspace.
+//
+// POST /api/v1/auth/invitations/process/oauth
+func (UnimplementedHandler) ProcessInvitationOAuth(ctx context.Context, req *ProcessInvitationOAuthReq) (r ProcessInvitationOAuthRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

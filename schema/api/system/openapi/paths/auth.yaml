@@ -87,17 +87,35 @@ invitation:
       "500":
         $ref: "#/components/responses/InternalServerError"
 
-invitationProcess:
+invitationProcessEmail:
   post:
     summary: Process an invitation by verifying token and email
-    operationId: processInvitation
+    operationId: processInvitationEmail
     tags:
       - Invitations
     requestBody:
-      $ref: "#/components/requestBodies/InvitationProcess"
+      $ref: "#/components/requestBodies/InvitationProcessEmail"
     responses:
       "200":
         description: OTP has been sent successfully.
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+
+invitationProcessOAuth:
+  post:
+    summary: Process an invitation by verifying token and OAuth, and register or add user to workspace.
+    operationId: processInvitationOAuth
+    tags:
+      - Invitations
+    security:
+      - bearer: []
+    requestBody:
+      $ref: "#/components/requestBodies/InvitationProcessOAuth"
+    responses:
+      "200":
+        $ref: "#/components/responses/InvitationProcessOAuthResponse"
       "400":
         $ref: "#/components/responses/BadRequestError"
       "500":

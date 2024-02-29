@@ -1,5 +1,5 @@
-import { GoogleAuthProvider, getRedirectResult, signInWithCredential, signInWithRedirect } from "firebase/auth"
-import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react"
+import { getRedirectResult } from "firebase/auth"
+import { useContext, useLayoutEffect, useRef, useState } from "react"
 import { SubmitHandler } from "react-hook-form"
 import { Link, createSearchParams, useNavigate } from "react-router-dom"
 import { AuthPageForm, LoginFormValues } from "~/components/auth/form"
@@ -37,13 +37,12 @@ export const AuthPage = () => {
       if (meRef.current === null) {
         return
       }
-
       if (meRef.current.self.hasNotName) {
         navigate(routeMap.onboardingSettingName)
         return
       }
       if (meRef.current.hasReceivedInvitations) {
-        navigate(routeMap.receivedInvitationsPageRoute)
+        navigate(routeMap.receivedInvitations)
         return
       }
       if (meRef.current.hasNotWorkspace) {

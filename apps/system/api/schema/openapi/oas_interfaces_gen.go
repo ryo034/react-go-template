@@ -61,8 +61,12 @@ type LoginRes interface {
 	loginRes()
 }
 
-type ProcessInvitationRes interface {
-	processInvitationRes()
+type ProcessInvitationEmailRes interface {
+	processInvitationEmailRes()
+}
+
+type ProcessInvitationOAuthRes interface {
+	processInvitationOAuthRes()
 }
 
 type RevokeInvitationRes interface {

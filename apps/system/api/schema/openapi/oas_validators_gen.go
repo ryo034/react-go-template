@@ -558,7 +558,7 @@ func (s *MembersResponse) Validate() error {
 	return nil
 }
 
-func (s *ProcessInvitationReq) Validate() error {
+func (s *ProcessInvitationEmailReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}

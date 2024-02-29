@@ -92,24 +92,60 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/process"
+					case '/': // Prefix: "/process/"
 						origElem := elem
-						if l := len("/process"); len(elem) >= l && elem[0:l] == "/process" {
+						if l := len("/process/"); len(elem) >= l && elem[0:l] == "/process/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleProcessInvitationRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
+							break
+						}
+						switch elem[0] {
+						case 'e': // Prefix: "email"
+							origElem := elem
+							if l := len("email"); len(elem) >= l && elem[0:l] == "email" {
+								elem = elem[l:]
+							} else {
+								break
 							}
 
-							return
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleProcessInvitationEmailRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 'o': // Prefix: "oauth"
+							origElem := elem
+							if l := len("oauth"); len(elem) >= l && elem[0:l] == "oauth" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleProcessInvitationOAuthRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
@@ -626,28 +662,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/process"
+					case '/': // Prefix: "/process/"
 						origElem := elem
-						if l := len("/process"); len(elem) >= l && elem[0:l] == "/process" {
+						if l := len("/process/"); len(elem) >= l && elem[0:l] == "/process/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							switch method {
-							case "POST":
-								// Leaf: ProcessInvitation
-								r.name = "ProcessInvitation"
-								r.summary = "Process an invitation by verifying token and email"
-								r.operationID = "processInvitation"
-								r.pathPattern = "/api/v1/auth/invitations/process"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
+							break
+						}
+						switch elem[0] {
+						case 'e': // Prefix: "email"
+							origElem := elem
+							if l := len("email"); len(elem) >= l && elem[0:l] == "email" {
+								elem = elem[l:]
+							} else {
+								break
 							}
+
+							if len(elem) == 0 {
+								switch method {
+								case "POST":
+									// Leaf: ProcessInvitationEmail
+									r.name = "ProcessInvitationEmail"
+									r.summary = "Process an invitation by verifying token and email"
+									r.operationID = "processInvitationEmail"
+									r.pathPattern = "/api/v1/auth/invitations/process/email"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'o': // Prefix: "oauth"
+							origElem := elem
+							if l := len("oauth"); len(elem) >= l && elem[0:l] == "oauth" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch method {
+								case "POST":
+									// Leaf: ProcessInvitationOAuth
+									r.name = "ProcessInvitationOAuth"
+									r.summary = "Process an invitation by verifying token and OAuth, and register or add user to workspace."
+									r.operationID = "processInvitationOAuth"
+									r.pathPattern = "/api/v1/auth/invitations/process/oauth"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem

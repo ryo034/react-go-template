@@ -53,12 +53,20 @@ export class AuthGateway implements AuthRepository {
     return this.meAdapter.adaptReceivedInvitation(res.value)
   }
 
-  async proceedToInvitation(token: string, email: Email): PromiseResult<null, Error> {
-    const res = await this.driver.proceedToInvitation(token, email)
+  async proceedInvitationByEmail(token: string, email: Email): PromiseResult<null, Error> {
+    const res = await this.driver.proceedInvitationByEmail(token, email)
     if (res.isErr) {
       return Result.err(res.error)
     }
     return Result.ok(null)
+  }
+
+  async proceedInvitationByOAuth(token: string): PromiseResult<Me, Error> {
+    const res = await this.driver.proceedInvitationByOAuth(token)
+    if (res.isErr) {
+      return Result.err(res.error)
+    }
+    return this.meAdapter.adapt(res.value)
   }
 
   async authByOAuth(): PromiseResult<Me, Error> {

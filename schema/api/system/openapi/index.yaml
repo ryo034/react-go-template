@@ -10,8 +10,10 @@ paths:
     $ref: "./paths/auth.yaml#/authByOtp"
   /api/v1/auth/otp/verify:
     $ref: "./paths/auth.yaml#/verify"
-  /api/v1/auth/invitations/process:
-    $ref: "./paths/auth.yaml#/invitationProcess"
+  /api/v1/auth/invitations/process/email:
+    $ref: "./paths/auth.yaml#/invitationProcessEmail"
+  /api/v1/auth/invitations/process/oauth:
+    $ref: "./paths/auth.yaml#/invitationProcessOAuth"
   /api/v1/auth/invitations:
     $ref: "./paths/auth.yaml#/invitation"
   /api/v1/auth/oauth:
@@ -84,8 +86,10 @@ components:
       $ref: "./components/requestBodies/workspace.yaml#/CreateWorkspace"
     UpdateMeProfile:
       $ref: "./components/requestBodies/me.yaml#/UpdateMeProfile"
-    InvitationProcess:
-      $ref: "./components/requestBodies/me.yaml#/InvitationProcess"
+    InvitationProcessEmail:
+      $ref: "./components/requestBodies/auth.yaml#/InvitationProcessEmail"
+    InvitationProcessOAuth:
+      $ref: "./components/requestBodies/auth.yaml#/InvitationProcessOAuth"
     InvitationsBulk:
       $ref: "./components/requestBodies/member.yaml#/InvitationsBulk"
     UpdateMeMemberProfile:
@@ -137,3 +141,5 @@ components:
       $ref: "./components/responses/auth.yaml#/AuthVerifyOTPResponse"
     AuthByOAuthResponse:
       $ref: "./components/responses/auth.yaml#/AuthByOAuthResponse"
+    InvitationProcessOAuthResponse:
+      $ref: "./components/responses/auth.yaml#/InvitationProcessOAuthResponse"

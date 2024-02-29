@@ -64,13 +64,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 Button.displayName = "Button"
 
 const LoadingButton = forwardRef<HTMLButtonElement, LoadingButtonProps>(
-  ({ className, fullWidth, text = "Loading...", dataTestId = "loadingButton", ...props }, ref) => {
+  ({ className, fullWidth, text = "Loading...", dataTestId = "loadingButton", variant, size, ...props }, ref) => {
     return (
       <Button
         disabled
         ref={ref}
         {...props}
-        className={cn(buttonVariants({ className, fullWidth }))}
+        className={cn(buttonVariants({ variant, size, className, fullWidth }))}
         data-testid={dataTestId}
       >
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -79,5 +79,6 @@ const LoadingButton = forwardRef<HTMLButtonElement, LoadingButtonProps>(
     )
   }
 )
+LoadingButton.displayName = "LoadingButton"
 
 export { Button, LoadingButton, buttonVariants }
