@@ -15,7 +15,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 	authDr "github.com/ryo034/react-go-template/apps/system/api/driver/auth"
 	kvDr "github.com/ryo034/react-go-template/apps/system/api/driver/keyvalue"
-	auth2 "github.com/ryo034/react-go-template/apps/system/api/infrastructure/auth"
+	auth2 "github.com/ryo034/react-go-template/apps/system/api/infrastructure/authentication"
 	"github.com/uptrace/bun"
 )
 

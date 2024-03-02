@@ -1,4 +1,4 @@
-package auth
+package authentication
 
 type UserInfo struct {
 	DisplayName string `json:"displayName,omitempty"`

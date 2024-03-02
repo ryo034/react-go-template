@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/go-redis/redis_rate/v10"
-	"github.com/redis/go-redis/v9"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/go-redis/redis_rate/v10"
+	"github.com/redis/go-redis/v9"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 )
 
 type otpRateLimiter struct {

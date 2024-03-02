@@ -61,7 +61,7 @@ const (
 	GteItems            domainError.MessageKey = "gte-items"
 	Time                domainError.MessageKey = "time"
 	Date                domainError.MessageKey = "date"
-	FacilityAuth        domainError.MessageKey = "facility-auth"
+	FacilityAuth        domainError.MessageKey = "facility-authentication"
 )
 
 var commonErrorMessages = map[string]map[language.Tag]string{

@@ -5,12 +5,13 @@ package middleware
 import (
 	"context"
 	"fmt"
-	"github.com/go-redis/redis_rate/v10"
-	"github.com/ryo034/react-go-template/apps/system/api/util/test"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/go-redis/redis_rate/v10"
+	"github.com/ryo034/react-go-template/apps/system/api/util/test"
 )
 
 func Test_OrpRateLimiterMiddleware_Burst(t *testing.T) {
