@@ -5,7 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/notification"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
@@ -19,8 +20,6 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
-	"github.com/ryo034/react-go-template/apps/system/api/driver/email"
-	"github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 	"github.com/uptrace/bun"
@@ -36,62 +35,33 @@ type UseCase interface {
 }
 
 type useCase struct {
-	txp     core.TransactionProvider
-	dbp     core.Provider
-	repo    auth.Repository
-	meRepo  me.Repository
-	invRepo invitation.Repository
-	wRepo   workspace.Repository
-	emailDr email.Driver
-	fbDr    firebase.Driver
-	op      OutputPort
+	txp              core.TransactionProvider
+	dbp              core.Provider
+	repo             auth.Repository
+	meRepo           me.Repository
+	invRepo          invitation.Repository
+	wRepo            workspace.Repository
+	notificationRepo notification.Repository
+	op               OutputPort
 }
 
-func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo auth.Repository, meRepo me.Repository, invRepo invitation.Repository, wRepo workspace.Repository, emailDr email.Driver, fbDr firebase.Driver, op OutputPort) UseCase {
-	return &useCase{txp, dbp, acRepo, meRepo, invRepo, wRepo, emailDr, fbDr, op}
+func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo auth.Repository, meRepo me.Repository, invRepo invitation.Repository, wRepo workspace.Repository, notificationRepo notification.Repository, op OutputPort) UseCase {
+	return &useCase{txp, dbp, acRepo, meRepo, invRepo, wRepo, notificationRepo, op}
 }
 
 func (u *useCase) AuthByOTP(ctx context.Context, i ByOTPInput) (openapi.APIV1AuthOtpPostRes, error) {
-	code, err := u.repo.GenTOTP(ctx, i.Email)
+	code, err := u.repo.GenOTP(ctx, i.Email)
 	if err != nil {
 		return nil, err
 	}
-	if err = u.emailDr.SendOTP(ctx, i.Email, code); err != nil {
+	if err = u.notificationRepo.NotifyOtpByEmail(ctx, i.Email, code); err != nil {
 		return nil, err
 	}
 	return &openapi.APIV1AuthOtpPostOK{}, nil
 }
 
-func (u *useCase) createUser(ctx context.Context, p bun.IDB, aID account.ID) (*me.Me, error) {
-	prov, err := u.fbDr.FindProviderData(ctx)
-	if err != nil {
-		return nil, err
-	}
-	fbur, err := u.fbDr.GetUser(ctx)
-	if err != nil {
-		return nil, err
-	}
-	ema, err := account.NewEmail(fbur.Email)
-	if err != nil {
-		return nil, err
-	}
-	var na *account.Name = nil
-	name, err := account.NewName(fbur.DisplayName)
-	if err != nil {
-		// if not match name format, just ignore
-		fmt.Printf("failed to create name: %s", err)
-	} else {
-		na = &name
-	}
-	var pn *phone.Number = nil
-	tmpPn, err := phone.NewInternationalPhoneNumber(fbur.PhoneNumber, "")
-	if err != nil {
-		// if not match phone number format, just ignore
-		fmt.Printf("failed to create phone number: %s", err)
-	} else {
-		pn = &tmpPn
-	}
-	usr, err := u.repo.Create(ctx, p, user.NewUser(aID, ema, na, pn), prov)
+func (u *useCase) createUser(ctx context.Context, p bun.IDB, ci CreateInfo) (*me.Me, error) {
+	usr, err := u.repo.Create(ctx, p, ci.User, ci.Provider)
 	if err != nil {
 		return nil, err
 	}
@@ -113,7 +83,7 @@ func (u *useCase) AuthByOAuth(ctx context.Context, i ByOAuthInput) (openapi.APIV
 		return nil, err
 	}
 	if m == nil {
-		if m, err = u.createUser(ctx, p, i.AccountID); err != nil {
+		if m, err = u.createUser(ctx, p, i.CreateInfo); err != nil {
 			return nil, err
 		}
 	}
@@ -210,11 +180,11 @@ func (u *useCase) ProcessInvitationEmail(ctx context.Context, i ProcessInvitatio
 		if err = u.invRepo.VerifyByToken(pr, p, i.Token); err != nil {
 			return err
 		}
-		code, err := u.repo.GenTOTP(pr, i.Email)
+		code, err := u.repo.GenOTP(pr, i.Email)
 		if err != nil {
 			return err
 		}
-		return u.emailDr.SendOTP(pr, i.Email, code)
+		return u.notificationRepo.NotifyOtpByEmail(pr, i.Email, code)
 	}
 	return &openapi.ProcessInvitationEmailOK{}, pr.Transactional(fn)().Error()
 }
@@ -253,10 +223,10 @@ func (u *useCase) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitatio
 			}
 		}
 		if meRes == nil {
-			if i.AccountID == nil {
-				return nil, domainErr.NewUnauthenticated("AccountID is required")
+			if i.CreateInfo == nil {
+				return nil, domainErr.NewUnauthenticated("User not found")
 			}
-			if meRes, err = u.createUser(pr, p, *i.AccountID); err != nil {
+			if meRes, err = u.createUser(pr, p, *i.CreateInfo); err != nil {
 				return nil, err
 			}
 		}

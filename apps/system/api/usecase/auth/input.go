@@ -3,6 +3,7 @@ package auth
 import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 )
 
@@ -10,9 +11,14 @@ type ByOTPInput struct {
 	Email account.Email
 }
 
+type CreateInfo struct {
+	User     *user.User
+	Provider *provider.Provider
+}
+
 type ByOAuthInput struct {
-	AccountID       account.ID
-	AuthProviderUID provider.UID
+	AccountID  account.ID
+	CreateInfo CreateInfo
 }
 
 type VerifyOTPInput struct {
@@ -26,9 +32,9 @@ type ProcessInvitationEmailInput struct {
 }
 
 type ProcessInvitationOAuthInput struct {
-	Token     invitation.Token
-	Email     account.Email
-	AccountID *account.ID
+	Token      invitation.Token
+	Email      account.Email
+	CreateInfo *CreateInfo
 }
 
 type AcceptInvitationInput struct {

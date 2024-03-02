@@ -2,6 +2,10 @@ package auth
 
 import (
 	"context"
+	"fmt"
+
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 
 	"github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 
@@ -74,11 +78,11 @@ func (c *controller) AuthByOAuth(ctx context.Context) (openapi.APIV1AuthOAuthPos
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1AuthOAuthPostRes), nil
 	}
-	apUID, err := c.co.GetAuthProviderUID(ctx)
+	ci, err := c.createUser(ctx, aID)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1AuthOAuthPostRes), nil
 	}
-	inp := authUc.ByOAuthInput{AccountID: aID, AuthProviderUID: apUID}
+	inp := authUc.ByOAuthInput{AccountID: aID, CreateInfo: ci}
 	res, err := c.auc.AuthByOAuth(ctx, inp)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1AuthOAuthPostRes), nil
@@ -99,21 +103,56 @@ func (c *controller) ProcessInvitationEmail(ctx context.Context, i ProcessInvita
 	return res, nil
 }
 
+func (c *controller) createUser(ctx context.Context, aID account.ID) (authUc.CreateInfo, error) {
+	prov, err := c.fbDr.FindProviderData(ctx)
+	if err != nil {
+		return authUc.CreateInfo{}, err
+	}
+	fbUsr, err := c.fbDr.GetUser(ctx)
+	if err != nil {
+		return authUc.CreateInfo{}, err
+	}
+	ema, err := account.NewEmail(fbUsr.Email)
+	if err != nil {
+		return authUc.CreateInfo{}, err
+	}
+	var na *account.Name = nil
+	name, err := account.NewName(fbUsr.DisplayName)
+	if err != nil {
+		// if not match name format, just ignore
+		fmt.Printf("failed to create name: %s", err)
+	} else {
+		na = &name
+	}
+	var pn *phone.Number = nil
+	tmpPn, err := phone.NewInternationalPhoneNumber(fbUsr.PhoneNumber, "")
+	if err != nil {
+		// if not match phone number format, just ignore
+		fmt.Printf("failed to create phone number: %s", err)
+	} else {
+		pn = &tmpPn
+	}
+	return authUc.CreateInfo{User: user.NewUser(aID, ema, na, pn), Provider: prov}, nil
+}
+
 func (c *controller) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitationOAuth) (openapi.ProcessInvitationOAuthRes, error) {
 	fbUsr, err := c.fbDr.GetUser(ctx)
 	if err != nil {
 		return nil, err
 	}
-	var aID *account.ID = nil
+	var ci *authUc.CreateInfo = nil
 	if fbUsr.CustomClaims["account_id"] != nil {
-		tmpAID := account.NewIDFromUUID(uuid.MustParse(fbUsr.CustomClaims["account_id"].(string)))
-		aID = &tmpAID
+		tmpCI, err := c.createUser(ctx, account.NewIDFromUUID(uuid.MustParse(fbUsr.CustomClaims["account_id"].(string))))
+		if err != nil {
+			return nil, err
+		}
+		ci = &tmpCI
 	}
 	em, _ := account.NewEmail(fbUsr.Email)
 	inp := authUc.ProcessInvitationOAuthInput{
-		Token:     invitation.NewToken(i.Token),
-		Email:     em,
-		AccountID: aID,
+		Token:      invitation.NewToken(i.Token),
+		Email:      em,
+		CreateInfo: ci,
 	}
 	res, err := c.auc.ProcessInvitationOAuth(ctx, inp)
 	if err != nil {

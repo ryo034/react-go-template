@@ -3,11 +3,12 @@ package workspace
 import (
 	"context"
 
+	"github.com/ryo034/react-go-template/apps/system/api/domain/notification"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
-	"github.com/ryo034/react-go-template/apps/system/api/driver/email"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 )
@@ -21,17 +22,17 @@ type UseCase interface {
 }
 
 type useCase struct {
-	txp         core.TransactionProvider
-	dbp         core.Provider
-	repo        workspace.Repository
-	meRepo      me.Repository
-	invRepo     invitation.Repository
-	emailDriver email.Driver
-	op          OutputPort
+	txp              core.TransactionProvider
+	dbp              core.Provider
+	repo             workspace.Repository
+	meRepo           me.Repository
+	invRepo          invitation.Repository
+	notificationRepo notification.Repository
+	op               OutputPort
 }
 
-func NewUseCase(txp core.TransactionProvider, dbp core.Provider, repo workspace.Repository, meRepo me.Repository, invRepo invitation.Repository, emailDriver email.Driver, op OutputPort) UseCase {
-	return &useCase{txp, dbp, repo, meRepo, invRepo, emailDriver, op}
+func NewUseCase(txp core.TransactionProvider, dbp core.Provider, repo workspace.Repository, meRepo me.Repository, invRepo invitation.Repository, notificationRepo notification.Repository, op OutputPort) UseCase {
+	return &useCase{txp, dbp, repo, meRepo, invRepo, notificationRepo, op}
 }
 
 func (u *useCase) Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error) {
@@ -110,7 +111,7 @@ func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (open
 	inviter := workspace.NewInviter(meRes.Member(), meRes.Workspace())
 
 	is := invitation.NewInvitations(targets)
-	successSendMailList, failedSendMailList := u.emailDriver.SendInvitations(ctx, inviter, is)
+	successSendMailList, failedSendMailList := u.notificationRepo.NotifyMembersInvited(ctx, inviter, is)
 	if err = u.repo.InviteMembers(ctx, exec, inviter, successSendMailList); err != nil {
 		return nil, err
 	}

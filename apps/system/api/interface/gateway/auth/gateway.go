@@ -33,7 +33,7 @@ func NewGateway(kvd kvDr.Store, ad authDr.Driver, fd fbDr.Driver, adp Adapter) a
 const otpKeyPrefix = "otp:"
 const otpKeyExpire = 60 * 2
 
-func (g *gateway) GenTOTP(ctx context.Context, email account.Email) (string, error) {
+func (g *gateway) GenOTP(ctx context.Context, email account.Email) (string, error) {
 	code, err := auth2.GenerateOTPCode()
 	if err != nil {
 		return "", err
