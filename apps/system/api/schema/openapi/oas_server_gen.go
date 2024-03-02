@@ -92,12 +92,6 @@ type Handler interface {
 	//
 	// POST /api/v1/members/invitations/bulk
 	InviteMultipleUsersToWorkspace(ctx context.Context, req *InviteMultipleUsersToWorkspaceReq) (InviteMultipleUsersToWorkspaceRes, error)
-	// Login implements login operation.
-	//
-	// Login.
-	//
-	// POST /api/v1/login
-	Login(ctx context.Context) (LoginRes, error)
 	// ProcessInvitationEmail implements processInvitationEmail operation.
 	//
 	// Process an invitation by verifying token and email.

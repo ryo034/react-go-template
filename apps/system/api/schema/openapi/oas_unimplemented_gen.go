@@ -139,15 +139,6 @@ func (UnimplementedHandler) InviteMultipleUsersToWorkspace(ctx context.Context, 
 	return r, ht.ErrNotImplemented
 }
 
-// Login implements login operation.
-//
-// Login.
-//
-// POST /api/v1/login
-func (UnimplementedHandler) Login(ctx context.Context) (r LoginRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
 // ProcessInvitationEmail implements processInvitationEmail operation.
 //
 // Process an invitation by verifying token and email.

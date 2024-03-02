@@ -128,13 +128,6 @@ export interface paths {
       };
     };
   };
-  "/api/v1/login": {
-    /**
-     * Login
-     * @description Login
-     */
-    post: operations["login"];
-  };
   "/api/v1/workspaces": {
     /**
      * Get Joined Workspaces
@@ -799,16 +792,6 @@ export interface operations {
       400: components["responses"]["BadRequestError"];
       409: components["responses"]["ConflictError"];
       410: components["responses"]["GoneError"];
-      500: components["responses"]["InternalServerError"];
-    };
-  };
-  /**
-   * Login
-   * @description Login
-   */
-  login: {
-    responses: {
-      200: components["responses"]["LoginResponse"];
       500: components["responses"]["InternalServerError"];
     };
   };

@@ -57,10 +57,6 @@ type InviteMultipleUsersToWorkspaceRes interface {
 	inviteMultipleUsersToWorkspaceRes()
 }
 
-type LoginRes interface {
-	loginRes()
-}
-
 type ProcessInvitationEmailRes interface {
 	processInvitationEmailRes()
 }

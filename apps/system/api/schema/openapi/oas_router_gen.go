@@ -255,27 +255,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
-			case 'l': // Prefix: "login"
-				origElem := elem
-				if l := len("login"); len(elem) >= l && elem[0:l] == "login" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "POST":
-						s.handleLoginRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "POST")
-					}
-
-					return
-				}
-
-				elem = origElem
 			case 'm': // Prefix: "me"
 				origElem := elem
 				if l := len("me"); len(elem) >= l && elem[0:l] == "me" {
@@ -840,31 +819,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.summary = "Get pending invitations"
 						r.operationID = ""
 						r.pathPattern = "/api/v1/invitations"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
-					}
-				}
-
-				elem = origElem
-			case 'l': // Prefix: "login"
-				origElem := elem
-				if l := len("login"); len(elem) >= l && elem[0:l] == "login" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					switch method {
-					case "POST":
-						// Leaf: Login
-						r.name = "Login"
-						r.summary = "Login"
-						r.operationID = "login"
-						r.pathPattern = "/api/v1/login"
 						r.args = args
 						r.count = 0
 						return r, true

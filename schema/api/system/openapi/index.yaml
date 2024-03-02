@@ -24,8 +24,6 @@ paths:
     $ref: "./paths/me.yaml#/profile"
   /api/v1/me/member/profile:
     $ref: "./paths/me.yaml#/memberProfile"
-  /api/v1/login:
-    $ref: "./paths/auth.yaml#/login"
   /api/v1/workspaces:
     $ref: "./paths/workspace.yaml#/workspaces"
   /api/v1/members:

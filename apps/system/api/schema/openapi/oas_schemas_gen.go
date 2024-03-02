@@ -603,7 +603,6 @@ func (*InternalServerError) aPIV1WorkspacesPostRes()            {}
 func (*InternalServerError) acceptInvitationRes()               {}
 func (*InternalServerError) getInvitationByTokenRes()           {}
 func (*InternalServerError) inviteMultipleUsersToWorkspaceRes() {}
-func (*InternalServerError) loginRes()                          {}
 func (*InternalServerError) processInvitationEmailRes()         {}
 func (*InternalServerError) processInvitationOAuthRes()         {}
 func (*InternalServerError) revokeInvitationRes()               {}
@@ -913,7 +912,6 @@ func (s *Me) SetProviders(val []AuthProvider) {
 }
 
 func (*Me) aPIV1AuthOAuthPostRes()     {}
-func (*Me) loginRes()                  {}
 func (*Me) processInvitationOAuthRes() {}
 
 type MeResponse struct {

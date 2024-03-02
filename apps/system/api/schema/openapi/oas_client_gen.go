@@ -108,12 +108,6 @@ type Invoker interface {
 	//
 	// POST /api/v1/members/invitations/bulk
 	InviteMultipleUsersToWorkspace(ctx context.Context, request *InviteMultipleUsersToWorkspaceReq) (InviteMultipleUsersToWorkspaceRes, error)
-	// Login invokes login operation.
-	//
-	// Login.
-	//
-	// POST /api/v1/login
-	Login(ctx context.Context) (LoginRes, error)
 	// ProcessInvitationEmail invokes processInvitationEmail operation.
 	//
 	// Process an invitation by verifying token and email.
@@ -1580,78 +1574,6 @@ func (c *Client) sendInviteMultipleUsersToWorkspace(ctx context.Context, request
 
 	stage = "DecodeResponse"
 	result, err := decodeInviteMultipleUsersToWorkspaceResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// Login invokes login operation.
-//
-// Login.
-//
-// POST /api/v1/login
-func (c *Client) Login(ctx context.Context) (LoginRes, error) {
-	res, err := c.sendLogin(ctx)
-	return res, err
-}
-
-func (c *Client) sendLogin(ctx context.Context) (res LoginRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("login"),
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/v1/login"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "Login",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/login"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeLoginResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
