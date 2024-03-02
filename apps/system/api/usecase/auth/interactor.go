@@ -107,22 +107,18 @@ func (u *useCase) createUser(ctx context.Context, p bun.IDB, aID account.ID) (*m
 	return res, nil
 }
 
-func (u *useCase) createAndFindAccountIfNotExist(ctx context.Context, exec bun.IDB, aID account.ID) (*me.Me, error) {
-	m, err := u.meRepo.FindLastLogin(ctx, exec, aID)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return u.createUser(ctx, exec, aID)
-		}
-		return nil, err
-	}
-	return m, nil
-}
-
 func (u *useCase) AuthByOAuth(ctx context.Context, i ByOAuthInput) (openapi.APIV1AuthOAuthPostRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
 
-	//　Account Exists
-	m, err := u.createAndFindAccountIfNotExist(ctx, p, i.AccountID)
+	m, err := u.meRepo.FindLastLogin(ctx, p, i.AccountID)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return nil, err
+	}
+	if m == nil {
+		if m, err = u.createUser(ctx, p, i.AccountID); err != nil {
+			return nil, err
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -259,20 +255,24 @@ func (u *useCase) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitatio
 		if err = u.invRepo.VerifyByToken(pr, p, i.Token); err != nil {
 			return nil, err
 		}
+		var meRes *me.Me = nil
 		if usr != nil {
-			return u.createUser(pr, p, account.NewIDFromUUID(uuid.MustParse(fbUsr.CustomClaims["account_id"].(string))))
+			if meRes, err = u.meRepo.FindLastLogin(pr, p, usr.AccountID()); err != nil && !errors.Is(err, sql.ErrNoRows) {
+				return nil, err
+			}
 		}
-		m, err := u.createAndFindAccountIfNotExist(pr, p, usr.AccountID())
-		if err != nil {
+		if meRes == nil {
+			if meRes, err = u.createUser(pr, p, account.NewIDFromUUID(uuid.MustParse(fbUsr.CustomClaims["account_id"].(string)))); err != nil {
+				return nil, err
+			}
+		}
+		if meRes.NotJoined() {
+			return meRes, nil
+		}
+		if err = u.meRepo.RecordLogin(pr, p, meRes); err != nil {
 			return nil, err
 		}
-		if m.NotJoined() {
-			return m, nil
-		}
-		if err = u.meRepo.RecordLogin(pr, p, m); err != nil {
-			return nil, err
-		}
-		return m, nil
+		return meRes, nil
 	}
 	result := pr.Transactional(fn)()
 	if err = result.Error(); err != nil {

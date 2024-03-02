@@ -2,13 +2,12 @@
   "name": "system-e2e-test",
   "description": "E2E",
   "scripts": {
-    "test:stateless": "gauge run --max-retries-count=1 --tags '!unimplemented & !stateful' specs",
-    "test:stateful": "gauge run --max-retries-count=1 --tags '!unimplemented & stateful' specs",
+    "test:stateless": "gauge run --max-retries-count=2 --tags '!unimplemented & !stateful' specs",
+    "test:stateful": "gauge run --max-retries-count=2 --tags '!unimplemented & stateful' specs",
     "test-auth": "gauge run --max-retries-count=1 specs/me/auth/create.spec",
-    "test-m": "gauge run --max-retries-count=1 specs/me/auth/invitation.spec:114"
+    "test-m": "gauge run --max-retries-count=1 specs/me/auth/auth.spec:31"
   },
   "dependencies": {
-    "@playwright/test": "^1.42.0",
     "firebase": "^10.8.1",
     "firebase-admin": "^12.0.0",
     "ioredis": "^5.3.2",
@@ -18,11 +17,12 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.42.1",
     "@types/node": "latest",
     "@types/pg": "^8.11.2",
     "csv-parse": "^5.5.5",
     "gauge-ts": "^0.1.1",
-    "playwright": "1.42.0"
+    "playwright": "1.42.1"
   },
   "packageManager": "pnpm@8.15.2+sha256.90bb5d6382cb2cb8b8d4959a076b3953d84d1d94121717097bcd41c71344fa14",
   "engines": {

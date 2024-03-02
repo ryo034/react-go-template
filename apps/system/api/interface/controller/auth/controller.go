@@ -103,7 +103,6 @@ func (c *controller) ProcessInvitationOAuth(ctx context.Context, i ProcessInvita
 		return c.resl.Error(ctx, err).(openapi.ProcessInvitationOAuthRes), nil
 	}
 	return res, nil
-
 }
 
 func (c *controller) InvitationByToken(ctx context.Context, i InvitationByTokenInput) (openapi.GetInvitationByTokenRes, error) {
