@@ -40,9 +40,18 @@ func NewSecMiddleware(firebase *fb.Firebase, co shared.ContextOperator, dbp core
 // HandleBearer run only when the authentication method is Bearer
 func (m *Middleware) HandleBearer(ctx context.Context, operationName string, t openapi.Bearer) (context.Context, error) {
 	return m.checkAndSetToken(ctx, t.GetToken())
+	//newCtx, err := m.checkAndSetToken(ctx, t.GetToken())
+	//if err != nil {
+	//	return nil, err
+	//}
+	//return m.authorize(newCtx, operationName)
 }
 
 // checkAndSetToken return JWT information in the key token in the argument context
+func (m *Middleware) authorize(ctx context.Context, operationName string) (context.Context, error) {
+	return ctx, nil
+}
+
 func (m *Middleware) checkAndSetToken(ctx context.Context, t string) (context.Context, error) {
 	token, err := m.firebase.Auth.VerifyIDToken(ctx, t)
 	if err != nil || token == nil {

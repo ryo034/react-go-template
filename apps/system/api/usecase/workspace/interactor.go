@@ -43,32 +43,28 @@ func (u *useCase) Create(ctx context.Context, i CreateInput) (openapi.APIV1Works
 		return nil, err
 	}
 	fn := func() (*workspace.Workspace, error) {
-		w := i.Workspace
 		meRes, err := u.meRepo.FindBeforeOnboard(pr, p, i.AccountID)
 		if err != nil {
 			return nil, err
 		}
+		w := i.Workspace
 		wres, err := u.repo.Create(pr, p, w)
 		if err != nil {
 			return nil, err
 		}
-		meID, err := member.GenerateID()
+		m, err := member.GenerateAsWorkspaceOwner(meRes.Self(), member.NewDisplayName(meRes.Self().Name().ToString()))
 		if err != nil {
 			return nil, err
 		}
-		dn := member.NewDisplayName(meRes.Self().Name().ToString())
-		pro := member.NewProfile(dn, nil, member.NewAsEmptyBio())
-		m := member.NewMember(meID, meRes.Self(), pro)
 		memRes, err := u.repo.AddMember(pr, p, wres, m)
 		if err != nil {
 			return nil, err
 		}
-
 		meRes, err = u.meRepo.Find(pr, p, memRes.ID())
 		if err != nil {
 			return nil, err
 		}
-		if err = u.meRepo.LastLogin(pr, p, meRes); err != nil {
+		if err = u.meRepo.RecordLogin(pr, p, meRes); err != nil {
 			return nil, err
 		}
 		return wres, nil

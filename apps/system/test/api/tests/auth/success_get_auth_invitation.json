@@ -15,6 +15,7 @@
           "displayName": "Invite TestOne",
           "idNumber": "DEV-54321"
         },
+        "role": "OWNER",
         "user": {
           "email": "invite_test_1@example.com",
           "name": "Invite TestOne",

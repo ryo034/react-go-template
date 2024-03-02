@@ -32,25 +32,21 @@ func (m *Me) Workspace() *workspace.Workspace {
 	return m.workspace
 }
 
-func (m *Me) HasWorkspace() bool {
-	return m.workspace != nil
+func (m *Me) NotJoined() bool {
+	return m.joinedWorkspaces == nil && m.member == nil && m.workspace == nil
 }
 
-func (m *Me) NotJoined() bool {
-	return m.joinedWorkspaces == nil
+func (m *Me) IsJoined() bool {
+	return m.joinedWorkspaces != nil && m.member != nil && m.workspace != nil
 }
 
 func (m *Me) Member() *member.Member {
 	return m.member
 }
 
-func (m *Me) HasMember() bool {
-	return m.member != nil
-}
-
-func (m *Me) NotMember() bool {
-	return m.member == nil
-
+func (m *Me) UpdateMember(member *member.Member) *Me {
+	m.member = member
+	return m
 }
 
 func (m *Me) JoinedWorkspaces() workspace.Workspaces {
@@ -84,8 +80,12 @@ func (m *Me) UpdateSelf(u *user.User) *Me {
 }
 
 func (m *Me) UpdateName(name account.Name) *Me {
-	m.UpdateSelf(m.self.UpdateName(name))
-	return m
+	tmpSelf := m.self.UpdateName(name)
+	updated := m.UpdateSelf(tmpSelf)
+	if m.member == nil {
+		return updated
+	}
+	return m.UpdateMember(m.member.UpdateUser(tmpSelf))
 }
 
 func (m *Me) Providers() provider.Providers {

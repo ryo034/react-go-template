@@ -1,17 +1,18 @@
-import { expect, test } from "@playwright/test"
+import { expect } from "@playwright/test"
 import { components } from "schema/openapi/systemApi"
 import { authHeaders, defaultPostHeaders } from "../../config/config"
-import { genAPIClient, getAuthInfo, getInvitationIdByToken, getInviteToken, statefulTest } from "../../scripts"
+import { genAPIClient, getAuthInfo, getInvitationIdByToken, getInviteToken, systemTest } from "../../scripts"
 const client = genAPIClient()
 
-test.describe("Me Invitations", () => {
+systemTest.describe("Me Invitations", () => {
   // not used user accept invitation
-  statefulTest(
-    "create account and add invited workspace to joinedWorkspaces and currentWorkspace set to invited workspace @stateful",
-    async ({ page }) => {
+  systemTest(
+    "create account and add invited workspace to joinedWorkspaces and currentWorkspace set to invited workspace",
+    { tag: ["@stateful"] },
+    async ({ stateful }) => {
       const email = "invite_test_not_expired@example.com"
       const inviteToken = await getInviteToken(email)
-      const processRes = await client.POST("/api/v1/auth/invitations/process", {
+      const processRes = await client.POST("/api/v1/auth/invitations/process/email", {
         headers: defaultPostHeaders,
         body: { token: inviteToken, email }
       })
@@ -40,6 +41,7 @@ test.describe("Me Invitations", () => {
                 idNumber: "DEV-12345",
                 bio: "John Doe is a passionate software engineer with 8 years of experience specializing in web development, particularly with React and Node.js. A graduate from MIT with a strong focus on clean architecture and Agile methodologies, John has successfully led multiple projects, from innovative startups to established tech giants. He's a firm believer in continuous learning, contributing regularly to open-source projects, and sharing insights through tech blogs and meetups. Outside of work, John enjoys hiking 🚶‍♂️, drone photography 📸, and playing the guitar 🎸. He's committed to using technology to drive positive social change."
               },
+              role: "OWNER",
               user: {
                 email: "system_account@example.com",
                 name: "John Doe",
@@ -85,12 +87,13 @@ test.describe("Me Invitations", () => {
     }
   )
   // already used user accept invitation
-  statefulTest(
-    "add invited workspace to joinedWorkspaces and currentWorkspace changed to invited workspace @stateful",
-    async ({ page }) => {
+  systemTest(
+    "add invited workspace to joinedWorkspaces and currentWorkspace changed to invited workspace",
+    { tag: ["@stateful"] },
+    async ({ stateful }) => {
       const email = "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com"
       const inviteToken = await getInviteToken(email)
-      const processRes = await client.POST("/api/v1/auth/invitations/process", {
+      const processRes = await client.POST("/api/v1/auth/invitations/process/email", {
         headers: defaultPostHeaders,
         body: { token: inviteToken, email }
       })
@@ -130,7 +133,7 @@ test.describe("Me Invitations", () => {
       expect(acceptInvitationRes.data.me.receivedInvitations).toBeUndefined()
     }
   )
-  test("failed to accept already accepted invitation return GoneError", async () => {
+  systemTest("failed to accept already accepted invitation return GoneError", async () => {
     const email = "invite_test_already_accepted@example.com"
     const inviteToken = await getInviteToken(email)
     const authInfo = await getAuthInfo(email)
@@ -140,7 +143,7 @@ test.describe("Me Invitations", () => {
     })
     expect(res.response.status).toBe(410)
   })
-  test("failed to accept already expired invitation return GoneError", async () => {
+  systemTest("failed to accept already expired invitation return GoneError", async () => {
     const email = "invite_test_expired@example.com"
     const inviteToken = await getInviteToken(email)
     const authInfo = await getAuthInfo(email)
@@ -150,7 +153,7 @@ test.describe("Me Invitations", () => {
     })
     expect(res.response.status).toBe(410)
   })
-  test("failed to accept revoked invitation return GoneError", async () => {
+  systemTest("failed to accept revoked invitation return GoneError", async () => {
     const email = "invite_test_revoked@example.com"
     const inviteToken = await getInviteToken(email)
     const authInfo = await getAuthInfo(email)

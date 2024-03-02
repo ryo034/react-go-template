@@ -68,6 +68,19 @@ func (d *driver) Create(ctx context.Context, exec bun.IDB, w *workspace.Workspac
 	return m, nil
 }
 
+func adaptMemberRole(mr member.Role) string {
+	switch mr {
+	case member.RoleOwner:
+		return "owner"
+	case member.RoleAdmin:
+		return "admin"
+	case member.RoleMember:
+		return "member"
+	default:
+		return "guest"
+	}
+}
+
 func (d *driver) AddMember(ctx context.Context, exec bun.IDB, w *workspace.Workspace, m *member.Member) (*models.Member, error) {
 	mm := &models.Member{
 		MemberID:        m.ID().Value(),
@@ -92,6 +105,21 @@ func (d *driver) AddMember(ctx context.Context, exec bun.IDB, w *workspace.Works
 	if _, err := exec.NewInsert().Model(mp).Exec(ctx); err != nil {
 		return nil, err
 	}
+
+	mrID, err := uuid.NewV7()
+
+	if err != nil {
+		return nil, err
+	}
+	mr := &models.MemberRole{
+		MemberRoleID: mrID,
+		MemberID:     m.ID().Value(),
+		Role:         adaptMemberRole(m.Role()),
+	}
+	if _, err := exec.NewInsert().Model(mr).Exec(ctx); err != nil {
+		return nil, err
+	}
+	mm.Role = mr
 	return mm, nil
 }
 
@@ -101,6 +129,7 @@ func (d *driver) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, w
 		NewSelect().
 		Model(m).
 		Relation("Profile").
+		Relation("Role").
 		Relation("SystemAccount").
 		Relation("SystemAccount.Profile").
 		Relation("SystemAccount.AuthProviders").
@@ -122,6 +151,7 @@ func (d *driver) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace
 		NewSelect().
 		Model(&ms).
 		Relation("Profile").
+		Relation("Role").
 		Relation("SystemAccount").
 		Relation("SystemAccount.Profile").
 		Relation("SystemAccount.AuthProviders").

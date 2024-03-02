@@ -24,7 +24,7 @@ func newUseCaseInjector(
 	txp core.TransactionProvider,
 ) UseCase {
 	return UseCase{
-		me.NewUseCase(txp, p, ri.Me, ri.Workspace, di.Firebase, pi.Me),
+		me.NewUseCase(txp, p, ri.Me, ri.Workspace, pi.Me),
 		auth.NewUseCase(txp, p, ri.Auth, ri.Me, ri.Invitation, ri.Workspace, di.Email, di.Firebase, pi.Auth),
 		workspace.NewUseCase(txp, p, ri.Workspace, ri.Me, ri.Invitation, di.Firebase, di.Email, pi.Workspace),
 	}

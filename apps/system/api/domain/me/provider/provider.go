@@ -1,5 +1,7 @@
 package provider
 
+import "github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+
 type Kind string
 
 const (
@@ -26,13 +28,16 @@ func NewProviderAsGoogleOnFirebase(uid UID) (*Provider, error) {
 	return NewProvider(id, Google, ProvidedByFirebase, uid), nil
 }
 
-func NewProviderAsEmailOnFirebase(uid UID) (*Provider, error) {
+func NewProviderAsEmailOnFirebase(aID account.ID) (*Provider, error) {
+	apUID, err := NewUID(aID.Value().String())
+	if err != nil {
+		return nil, err
+	}
 	id, err := GenerateID()
 	if err != nil {
 		return nil, err
 	}
-	return NewProvider(id, Email, ProvidedByFirebase, uid), nil
-
+	return NewProvider(id, Email, ProvidedByFirebase, apUID), nil
 }
 
 func (p *Provider) ID() ID {

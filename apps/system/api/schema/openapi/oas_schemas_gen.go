@@ -938,6 +938,7 @@ type Member struct {
 	ID      string        `json:"id"`
 	Profile MemberProfile `json:"profile"`
 	User    User          `json:"user"`
+	Role    MemberRole    `json:"role"`
 }
 
 // GetID returns the value of ID.
@@ -955,6 +956,11 @@ func (s *Member) GetUser() User {
 	return s.User
 }
 
+// GetRole returns the value of Role.
+func (s *Member) GetRole() MemberRole {
+	return s.Role
+}
+
 // SetID sets the value of ID.
 func (s *Member) SetID(val string) {
 	s.ID = val
@@ -968,6 +974,11 @@ func (s *Member) SetProfile(val MemberProfile) {
 // SetUser sets the value of User.
 func (s *Member) SetUser(val User) {
 	s.User = val
+}
+
+// SetRole sets the value of Role.
+func (s *Member) SetRole(val MemberRole) {
+	s.Role = val
 }
 
 // Ref: #/components/schemas/MemberProfile
@@ -1006,6 +1017,63 @@ func (s *MemberProfile) SetIdNumber(val OptString) {
 // SetBio sets the value of Bio.
 func (s *MemberProfile) SetBio(val OptString) {
 	s.Bio = val
+}
+
+// Role of the member.
+// Ref: #/components/schemas/MemberRole
+type MemberRole string
+
+const (
+	MemberRoleOWNER  MemberRole = "OWNER"
+	MemberRoleADMIN  MemberRole = "ADMIN"
+	MemberRoleMEMBER MemberRole = "MEMBER"
+	MemberRoleGUEST  MemberRole = "GUEST"
+)
+
+// AllValues returns all MemberRole values.
+func (MemberRole) AllValues() []MemberRole {
+	return []MemberRole{
+		MemberRoleOWNER,
+		MemberRoleADMIN,
+		MemberRoleMEMBER,
+		MemberRoleGUEST,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s MemberRole) MarshalText() ([]byte, error) {
+	switch s {
+	case MemberRoleOWNER:
+		return []byte(s), nil
+	case MemberRoleADMIN:
+		return []byte(s), nil
+	case MemberRoleMEMBER:
+		return []byte(s), nil
+	case MemberRoleGUEST:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *MemberRole) UnmarshalText(data []byte) error {
+	switch MemberRole(data) {
+	case MemberRoleOWNER:
+		*s = MemberRoleOWNER
+		return nil
+	case MemberRoleADMIN:
+		*s = MemberRoleADMIN
+		return nil
+	case MemberRoleMEMBER:
+		*s = MemberRoleMEMBER
+		return nil
+	case MemberRoleGUEST:
+		*s = MemberRoleGUEST
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 type MembersResponse struct {

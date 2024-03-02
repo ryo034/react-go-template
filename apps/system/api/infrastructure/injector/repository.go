@@ -5,6 +5,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	authGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/auth"
 	meGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/me"
 	workspaceGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/workspace"
@@ -18,9 +19,9 @@ type RepositoryInjector struct {
 	Invitation invitation.Repository
 }
 
-func newRepositoryInjector(di Driver, gw GatewayAdapter) RepositoryInjector {
+func newRepositoryInjector(co shared.ContextOperator, di Driver, gw GatewayAdapter) RepositoryInjector {
 	return RepositoryInjector{
-		meGw.NewGateway(di.Me, di.Firebase, di.Workspace, di.Invitation, gw.Me),
+		meGw.NewGateway(di.Me, di.Firebase, di.Workspace, di.Invitation, gw.Me, co),
 		authGw.NewGateway(di.KeyValue, di.Auth, di.Firebase, gw.Auth),
 		workspaceGw.NewGateway(di.Workspace, di.Member, di.Invitation, gw.Workspace, gw.Member, gw.Invitation),
 		invitationGw.NewGateway(di.Invitation, gw.Invitation),

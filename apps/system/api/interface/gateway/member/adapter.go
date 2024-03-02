@@ -1,6 +1,8 @@
 package member
 
 import (
+	"fmt"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
 	userGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/user"
@@ -17,6 +19,20 @@ type adapter struct {
 
 func NewAdapter(uga userGw.Adapter) Adapter {
 	return &adapter{uga}
+}
+
+func (a *adapter) adaptRole(r *models.MemberRole) (member.Role, error) {
+	switch r.Role {
+	case "owner":
+		return member.RoleOwner, nil
+	case "admin":
+		return member.RoleAdmin, nil
+	case "member":
+		return member.RoleMember, nil
+	case "guest":
+		return member.RoleGuest, nil
+	}
+	return "", fmt.Errorf("invalid role: %s", r.Role)
 }
 
 func (a *adapter) Adapt(m *models.Member) (*member.Member, error) {
@@ -39,7 +55,11 @@ func (a *adapter) Adapt(m *models.Member) (*member.Member, error) {
 		return nil, err
 	}
 	pro := member.NewProfile(dn, &idNumber, bio)
-	return member.NewMember(id, u, pro), nil
+	ar, err := a.adaptRole(m.Role)
+	if err != nil {
+		return nil, err
+	}
+	return member.NewMember(id, u, pro, ar), nil
 }
 
 func (a *adapter) AdaptAll(ms models.Members) (member.Members, error) {

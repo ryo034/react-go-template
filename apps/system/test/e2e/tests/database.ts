@@ -35,6 +35,7 @@ export const targetTables = [
   "workspaces",
   "workspace_details",
   "members",
+  "member_roles",
   "member_login_histories",
   "member_profiles",
   "member_addresses",

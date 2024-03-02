@@ -236,6 +236,7 @@ func (d *driver) FindAllReceivedByEmail(ctx context.Context, exec bun.IDB, email
 		Relation("InvitationUnit.Workspace.Detail").
 		Relation("InvitationUnit.Member").
 		Relation("InvitationUnit.Member.Profile").
+		Relation("InvitationUnit.Member.Role").
 		Relation("InvitationUnit.Member.SystemAccount").
 		Relation("InvitationUnit.Member.SystemAccount.Profile").
 		Relation("InvitationUnit.Member.SystemAccount.PhoneNumbers").
@@ -306,6 +307,7 @@ func (d *driver) FindActiveByToken(ctx context.Context, exec bun.IDB, token invi
 		Relation("InvitationUnit.Workspace").
 		Relation("InvitationUnit.Workspace.Detail").
 		Relation("InvitationUnit.Member").
+		Relation("InvitationUnit.Member.Role").
 		Relation("InvitationUnit.Member.Profile").
 		Relation("InvitationUnit.Member.SystemAccount").
 		Relation("InvitationUnit.Member.SystemAccount.Profile").
@@ -340,6 +342,7 @@ func (d *driver) FindAllByWorkspace(ctx context.Context, exec bun.IDB, wID works
 		Relation("InvitationUnit.Workspace.Detail").
 		Relation("InvitationUnit.Member").
 		Relation("InvitationUnit.Member.Profile").
+		Relation("InvitationUnit.Member.Role").
 		Relation("InvitationUnit.Member.SystemAccount").
 		Relation("InvitationUnit.Member.SystemAccount.Profile").
 		Relation("InvitationUnit.Member.SystemAccount.PhoneNumbers").

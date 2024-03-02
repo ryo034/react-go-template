@@ -19,6 +19,7 @@
         "displayName": "John Doe",
         "idNumber": "DEV-12345"
       },
+      "role": "OWNER",
       "user": {
         "email": "system_account@example.com",
         "name": "John Doe",

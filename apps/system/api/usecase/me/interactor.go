@@ -2,6 +2,9 @@ package me
 
 import (
 	"context"
+	"database/sql"
+
+	"github.com/go-faster/errors"
 
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 
@@ -9,7 +12,6 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
-	fbDr "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 )
@@ -22,31 +24,24 @@ type UseCase interface {
 }
 
 type useCase struct {
-	txp      core.TransactionProvider
-	dbp      core.Provider
-	repo     me.Repository
-	wRepo    workspace.Repository
-	fbDriver fbDr.Driver
-	op       OutputPort
+	txp   core.TransactionProvider
+	dbp   core.Provider
+	repo  me.Repository
+	wRepo workspace.Repository
+	op    OutputPort
 }
 
-func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo me.Repository, wRepo workspace.Repository, fbDriver fbDr.Driver, op OutputPort) UseCase {
-	return &useCase{txp, dbp, acRepo, wRepo, fbDriver, op}
+func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo me.Repository, wRepo workspace.Repository, op OutputPort) UseCase {
+	return &useCase{txp, dbp, acRepo, wRepo, op}
 }
 
 func (u *useCase) Find(ctx context.Context, aID account.ID) (openapi.APIV1MeGetRes, error) {
 	exec := u.dbp.GetExecutor(ctx, false)
 	lastLoginRes, err := u.repo.FindLastLogin(ctx, exec, aID)
-	if lastLoginRes != nil {
-		return u.op.Find(lastLoginRes)
-	}
-	// If there is no last login information,
-	// it is considered that the user has not joined the workspace.
-	m, err := u.repo.FindBeforeOnboard(ctx, exec, aID)
-	if err != nil {
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		return nil, err
 	}
-	return u.op.Find(m)
+	return u.op.Find(lastLoginRes)
 }
 
 func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error) {
@@ -70,11 +65,7 @@ func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput)
 		if err != nil {
 			return nil, err
 		}
-		id, err := member.GenerateID()
-		if err != nil {
-			return nil, err
-		}
-		mem := member.NewMember(id, m.Self(), member.NewEmptyProfile())
+		mem, err := member.GenerateMember(m.Self())
 		if err != nil {
 			return nil, err
 		}
@@ -89,7 +80,7 @@ func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput)
 		if err != nil {
 			return nil, err
 		}
-		if err = u.repo.LastLogin(pr, p, m); err != nil {
+		if err = u.repo.RecordLogin(pr, p, m); err != nil {
 			return nil, err
 		}
 		return m, nil
@@ -108,37 +99,12 @@ func (u *useCase) UpdateProfile(ctx context.Context, i UpdateProfileInput) (open
 		return nil, err
 	}
 	fn := func() (*me.Me, error) {
-		var currentWorkspaceID *workspace.ID
-		currentWorkspaceID, err = u.fbDriver.GetCurrentWorkspaceFromCustomClaim(ctx)
+		current, err := u.repo.FindLastLogin(pr, p, i.AccountID)
 		if err != nil {
 			return nil, err
 		}
-		var current *me.Me
-		if currentWorkspaceID == nil {
-			current, err = u.repo.FindProfile(pr, p, i.AccountID)
-			if err != nil {
-				return nil, err
-			}
-		} else {
-			mem, err := u.wRepo.FindMember(pr, p, i.AccountID, *currentWorkspaceID)
-			if err != nil {
-				return nil, err
-			}
-			current, err = u.repo.Find(pr, p, mem.ID())
-			if err != nil {
-				return nil, err
-			}
-		}
-
-		usr := current.Self().UpdateName(i.Name)
-
-		if err = u.repo.UpdateProfile(pr, p, usr); err != nil {
-			return nil, err
-		}
-		if current.NotJoined() {
-			return u.repo.FindBeforeOnboard(pr, p, i.AccountID)
-		}
-		return u.repo.FindLastLogin(pr, p, i.AccountID)
+		current = current.UpdateName(i.Name)
+		return current, u.repo.UpdateProfile(pr, p, current.Self())
 	}
 	result := pr.Transactional(fn)()
 	if err = result.Error(); err != nil {
@@ -154,26 +120,23 @@ func (u *useCase) UpdateMemberProfile(ctx context.Context, i UpdateMemberProfile
 		return nil, err
 	}
 	fn := func() (*me.Me, error) {
-		var currentWorkspaceID *workspace.ID
-		currentWorkspaceID, err = u.fbDriver.GetCurrentWorkspaceFromCustomClaim(ctx)
+		m, err := u.repo.FindLastLogin(pr, p, i.AccountID)
 		if err != nil {
 			return nil, err
 		}
-		if currentWorkspaceID == nil {
-			return nil, domainErr.NewUnauthenticated("No current workspace")
+		if m.NotJoined() {
+			return nil, domainErr.NewUnauthenticated("Not joined")
 		}
-		mem, err := u.wRepo.FindMember(pr, p, i.AccountID, *currentWorkspaceID)
-		if err != nil {
+		m = m.UpdateMember(m.Member().UpdateProfile(i.Profile))
+		if _, err = u.repo.UpdateMemberProfile(pr, p, m.Member()); err != nil {
 			return nil, err
 		}
-		if mem, err = u.repo.UpdateMemberProfile(pr, p, mem.UpdateProfile(i.Profile)); err != nil {
-			return nil, err
-		}
-		return u.repo.FindLastLogin(pr, p, i.AccountID)
+		return m, nil
 	}
 	result := pr.Transactional(fn)()
 	if err = result.Error(); err != nil {
 		return nil, err
 	}
+
 	return u.op.UpdateMemberProfile(result.Value(0).(*me.Me))
 }

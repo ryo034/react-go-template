@@ -1,9 +1,19 @@
+MemberRole:
+  type: string
+  description: Role of the member
+  enum:
+    - OWNER
+    - ADMIN
+    - MEMBER
+    - GUEST
+
 Member:
   type: object
   required:
     - id
     - user
     - profile
+    - role
   properties:
     id:
       type: string
@@ -13,6 +23,8 @@ Member:
       $ref: "#/components/schemas/MemberProfile"
     user:
       $ref: "#/components/schemas/User"
+    role:
+      $ref: "#/components/schemas/MemberRole"
 
 MemberProfile:
   type: object

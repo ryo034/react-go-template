@@ -137,7 +137,7 @@ func Test_driver_AddMember_OK(t *testing.T) {
 	u := user.NewUser(aID, email, &name, nil)
 	dn := member.NewDisplayName("John Doe")
 	pr := member.NewProfile(dn, nil, member.NewAsEmptyBio())
-	m := member.NewMember(mID, u, pr)
+	m := member.NewMember(mID, u, pr, member.RoleAdmin)
 
 	want := &models.Member{
 		MemberID:        mID.Value(),

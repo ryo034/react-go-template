@@ -19,6 +19,7 @@
         "displayName": "Updated Display Name",
         "idNumber": "1234567890"
       },
+      "role": "OWNER",
       "user": {
         "email": "system_account@example.com",
         "name": "John Doe",

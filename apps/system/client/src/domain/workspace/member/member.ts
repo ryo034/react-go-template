@@ -1,10 +1,11 @@
 import { Entity } from "@/domain/shared"
-import { MemberId, MemberProfile, User } from "~/domain"
+import { MemberId, MemberProfile, MemberRole, User } from "~/domain"
 
 interface Props {
   id: MemberId
   user: User
   profile: MemberProfile
+  role: MemberRole
 }
 
 export class Member extends Entity<Props> {
@@ -22,5 +23,9 @@ export class Member extends Entity<Props> {
 
   get profile(): MemberProfile {
     return this.value.profile
+  }
+
+  get role(): MemberRole {
+    return this.value.role
   }
 }

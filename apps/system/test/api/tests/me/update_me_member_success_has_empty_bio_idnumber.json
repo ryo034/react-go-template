@@ -15,9 +15,9 @@
     "member": {
       "id": "g57lunkvmbhurkm5dhf5nkblbu",
       "profile": {
-        "displayName": "Updated Display Name",
-        "idNumber": ""
+        "displayName": "Updated Display Name"
       },
+      "role": "OWNER",
       "user": {
         "email": "system_account@example.com",
         "name": "John Doe",

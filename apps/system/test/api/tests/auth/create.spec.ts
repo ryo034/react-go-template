@@ -1,11 +1,11 @@
 import { expect, test } from "@playwright/test"
 import { defaultPostHeaders } from "../../config/config"
-import { genAPIClient, getOtpCodeFromRedis, statefulTest } from "../../scripts"
+import { genAPIClient, getOtpCodeFromRedis, systemTest } from "../../scripts"
 
 const client = genAPIClient()
 
-test.describe("Otp API", () => {
-  statefulTest("Create Account And Verify By OTP @stateful", async ({ page }) => {
+systemTest.describe("Create Account", () => {
+  systemTest("Create Account And Verify By OTP", { tag: ["@stateful"] }, async ({ stateful }) => {
     const email = "test+999@example.com"
     const { response, error } = await client.POST("/api/v1/auth/otp", {
       headers: defaultPostHeaders,

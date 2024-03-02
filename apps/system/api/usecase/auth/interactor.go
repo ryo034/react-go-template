@@ -97,6 +97,9 @@ func (u *useCase) createUser(ctx context.Context, p bun.IDB, aID account.ID) (*m
 	if err != nil {
 		return nil, err
 	}
+	if err = u.meRepo.UpdateProfile(ctx, p, usr); err != nil {
+		return nil, err
+	}
 	res, err := u.meRepo.FindBeforeOnboard(ctx, p, usr.AccountID())
 	if err != nil {
 		return nil, err
@@ -105,23 +108,14 @@ func (u *useCase) createUser(ctx context.Context, p bun.IDB, aID account.ID) (*m
 }
 
 func (u *useCase) createAndFindAccountIfNotExist(ctx context.Context, exec bun.IDB, aID account.ID) (*me.Me, error) {
-	//　Account Exists
-	m, err := u.meRepo.FindBeforeOnboard(ctx, exec, aID)
+	m, err := u.meRepo.FindLastLogin(ctx, exec, aID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return u.createUser(ctx, exec, aID)
 		}
 		return nil, err
 	}
-	// if user exists and joined return me with member info
-	flm, err := u.meRepo.FindLastLogin(ctx, exec, m.Self().AccountID())
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return m, nil
-		}
-		return nil, err
-	}
-	return flm, nil
+	return m, nil
 }
 
 func (u *useCase) AuthByOAuth(ctx context.Context, i ByOAuthInput) (openapi.APIV1AuthOAuthPostRes, error) {
@@ -132,88 +126,73 @@ func (u *useCase) AuthByOAuth(ctx context.Context, i ByOAuthInput) (openapi.APIV
 	if err != nil {
 		return nil, err
 	}
-	if m.NotMember() {
+	if m.NotJoined() {
 		return u.op.AuthByAuth(m)
 	}
-	if err = u.meRepo.LastLogin(ctx, p, m); err != nil {
+	if err = u.meRepo.RecordLogin(ctx, p, m); err != nil {
 		return nil, err
 	}
 	return u.op.AuthByAuth(m)
 }
 
-// memberLastLogin If there is information about the last logged-in workspace,put that workspace information in the jwt.
-func (u *useCase) memberLastLogin(ctx context.Context, exec bun.IDB, aID account.ID) error {
-	meRes, err := u.meRepo.FindLastLogin(ctx, exec, aID)
-	if err != nil && !errors.Is(err, sql.ErrNoRows) {
-		return err
-	}
-	if errors.Is(err, sql.ErrNoRows) || meRes.NotJoined() {
-		return nil
-	}
-	return u.meRepo.LastLogin(ctx, exec, meRes)
-}
-
+// VerifyOTP User information cannot be retrieved/edited in Firebase on the backend side until VerifyOTP returns a token to the frontend and is authenticated
 func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
+	usr, err := u.repo.FindByEmail(ctx, p, i.Email)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return nil, err
+	}
+
+	newAccountID, err := account.GenerateID()
+	if err != nil {
+		return nil, err
+	}
+
+	var meRes *me.Me = nil
+	var ap *provider.Provider = nil
+
+	if usr == nil {
+		if ap, err = provider.NewProviderAsEmailOnFirebase(newAccountID); err != nil {
+			return nil, err
+		}
+	} else {
+		if meRes, err = u.meRepo.FindLastLogin(ctx, p, usr.AccountID()); err != nil {
+			if errors.Is(err, sql.ErrNoRows) {
+				return nil, domainErr.NewUnauthenticated(fmt.Sprintf("User not found: %s", i.Email))
+			}
+			return nil, err
+		}
+		ap = meRes.Providers().FindByKind(provider.Email)
+	}
+
+	ctx = u.meRepo.SetCurrentProvider(ctx, ap)
+
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
 		return nil, err
 	}
+
 	fn := func() (string, error) {
-		usr, err := u.repo.FindByEmail(pr, p, i.Email)
-		if err != nil && !errors.Is(err, sql.ErrNoRows) {
-			return "", err
+		if meRes != nil {
+			if err = u.meRepo.RecordLogin(pr, p, meRes); err != nil {
+				return "", err
+			}
 		}
 		if usr == nil {
-			// if user does not exist, create user, verify TOTP and return custom token
-			aID, err := account.GenerateID()
-			if err != nil {
-				return "", err
-			}
-			apUID, err := provider.NewUID(aID.Value().String())
-			if err != nil {
-				return "", err
-			}
-			ap, err := provider.NewProviderAsEmailOnFirebase(apUID)
-			if err != nil {
-				return "", err
-			}
-			usr, err = u.repo.Create(pr, p, user.NewUser(aID, i.Email, nil, nil), ap)
-			if err != nil {
+			if usr, err = u.repo.Create(pr, p, user.NewUser(newAccountID, i.Email, nil, nil), ap); err != nil {
 				return "", err
 			}
 		}
-
 		// if user exists, verify TOTP and return custom token
-		tk, err := u.verifyOTP(pr, i.Email, i.Otp)
-		if err != nil {
-			return "", err
-		}
-		if err = u.memberLastLogin(pr, p, usr.AccountID()); err != nil {
-			return "", err
-		}
-		if tk == "" {
-			return "", domainErr.NewUnauthenticated(fmt.Sprintf("Invalid OTP: %s", i.Otp))
-		}
-		return tk, nil
+		return u.repo.VerifyOTP(ctx, i.Email, i.Otp)
 	}
+
 	result := pr.Transactional(fn)()
 	if err = result.Error(); err != nil {
 		return nil, err
 	}
 	tk := result.Value(0).(string)
 	return u.op.JwtToken(tk), nil
-}
-
-func (u *useCase) verifyOTP(ctx context.Context, email account.Email, code string) (string, error) {
-	ok, err := u.repo.VerifyOTP(ctx, email, code)
-	if err != nil {
-		return "", err
-	}
-	if !ok {
-		return "", domainErr.NewUnauthenticated(fmt.Sprintf("Invalid OTP: %s", code))
-	}
-	return u.fbDr.CustomToken(ctx)
 }
 
 func (u *useCase) ProcessInvitationEmail(ctx context.Context, i ProcessInvitationEmailInput) (openapi.ProcessInvitationEmailRes, error) {
@@ -264,6 +243,14 @@ func (u *useCase) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitatio
 	if err = invRes.ValidateCanVerify(); err != nil {
 		return nil, err
 	}
+
+	//　check Account Exists
+	ema, _ := account.NewEmail(fbUsr.Email)
+	usr, err := u.repo.FindByEmail(ctx, p, ema)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return nil, err
+	}
+
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
 		return nil, err
@@ -272,25 +259,17 @@ func (u *useCase) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitatio
 		if err = u.invRepo.VerifyByToken(pr, p, i.Token); err != nil {
 			return nil, err
 		}
-
-		//　check Account Exists
-		ema, _ := account.NewEmail(fbUsr.Email)
-		usr, err := u.repo.FindByEmail(pr, p, ema)
-		if err != nil {
-			if errors.Is(err, sql.ErrNoRows) {
-				// create new account
-				return u.createUser(pr, p, account.NewIDFromUUID(uuid.MustParse(fbUsr.CustomClaims["account_id"].(string))))
-			}
-			return nil, err
+		if usr != nil {
+			return u.createUser(pr, p, account.NewIDFromUUID(uuid.MustParse(fbUsr.CustomClaims["account_id"].(string))))
 		}
 		m, err := u.createAndFindAccountIfNotExist(pr, p, usr.AccountID())
 		if err != nil {
 			return nil, err
 		}
-		if m.NotMember() {
+		if m.NotJoined() {
 			return m, nil
 		}
-		if err = u.meRepo.LastLogin(pr, p, m); err != nil {
+		if err = u.meRepo.RecordLogin(pr, p, m); err != nil {
 			return nil, err
 		}
 		return m, nil

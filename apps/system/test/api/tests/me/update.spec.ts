@@ -1,11 +1,11 @@
-import { expect, test } from "@playwright/test"
+import { expect } from "@playwright/test"
 import { components } from "schema/openapi/systemApi"
 import { authHeaders } from "../../config/config"
-import { genAPIClient, getAuthInfo, statefulTest } from "../../scripts"
+import { genAPIClient, getAuthInfo, systemTest } from "../../scripts"
 const client = genAPIClient()
 
-test.describe("Update me success", () => {
-  statefulTest("update me @stateful", async ({ page }) => {
+systemTest.describe("Update me success", () => {
+  systemTest("update me", { tag: ["@stateful"] }, async ({ stateful }) => {
     const authInfo = await getAuthInfo("system_account@example.com")
     const data: components["schemas"]["User"] = {
       userId: "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
@@ -22,8 +22,8 @@ test.describe("Update me success", () => {
   })
 })
 
-test.describe("Update me member profile success", () => {
-  statefulTest("update me member profile @stateful", async ({ page }) => {
+systemTest.describe("Update me member profile success", () => {
+  systemTest("update me member profile", { tag: ["@stateful"] }, async ({ stateful }) => {
     const authInfo = await getAuthInfo("system_account@example.com")
     const meRes = await client.GET("/api/v1/me", { headers: authHeaders(authInfo.token) })
     expect(meRes.data).toStrictEqual((await import("./update_me_member_get_me.json")).default)
@@ -41,7 +41,7 @@ test.describe("Update me member profile success", () => {
     expect(res.data).toStrictEqual((await import("./update_me_member_success.json")).default)
   })
 
-  statefulTest("success if request has empty fields @stateful", async ({ page }) => {
+  systemTest("success if request has empty fields", { tag: ["@stateful"] }, async ({ stateful }) => {
     const authInfo = await getAuthInfo("system_account@example.com")
     const meRes = await client.GET("/api/v1/me", { headers: authHeaders(authInfo.token) })
     expect(meRes.data).toStrictEqual((await import("./update_me_member_get_me.json")).default)

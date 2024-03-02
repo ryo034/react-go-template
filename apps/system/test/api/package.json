@@ -2,14 +2,14 @@
   "name": "system-api-test",
   "description": "API test",
   "scripts": {
-    "test-mi": "PARALLEL=false SILENT=false playwright test --workers=1 test/api/tests/workspace/members.spec.ts",
-    "test-mii": "PARALLEL=false SILENT=false playwright test -g 'success to get invitations without revoked and already registered'",
+    "test-mi": "PARALLEL=false SILENT=false playwright test --workers=1 test/api/tests/me/me.spec.ts",
+    "test-mii": "PARALLEL=false SILENT=false playwright test -g 'create account and add invited workspace to joinedWorkspaces and currentWorkspace set to invited workspace'",
     "test:stateless": "PARALLEL=true SILENT=false playwright test --retries=3 --workers=3 --grep-invert @stateful",
     "test:stateful": "PARALLEL=false SILENT=false playwright test --retries=1 --workers=1 --grep @stateful"
   },
   "dependencies": {
-    "dotenv": "^16.4.4",
-    "firebase": "^10.8.0",
+    "dotenv": "^16.4.5",
+    "firebase": "^10.8.1",
     "firebase-admin": "^12.0.0",
     "ioredis": "^5.3.2",
     "node-pg-format": "^1.3.5",
@@ -20,10 +20,10 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.42.0",
-    "@types/node": "^20.11.19",
-    "@types/pg": "^8.11.0",
-    "csv-parse": "^5.5.3",
-    "playwright": "1.41.2"
+    "@types/node": "^20.11.24",
+    "@types/pg": "^8.11.2",
+    "csv-parse": "^5.5.5",
+    "playwright": "1.42.0"
   },
   "packageManager": "pnpm@8.15.2+sha256.90bb5d6382cb2cb8b8d4959a076b3953d84d1d94121717097bcd41c71344fa14",
   "engines": {

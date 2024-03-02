@@ -5,6 +5,7 @@ type Providers interface {
 	AsSlice() []*Provider
 	IsEmpty() bool
 	IsNotEmpty() bool
+	FindByKind(k Kind) *Provider
 }
 
 type workspaces struct {
@@ -29,4 +30,13 @@ func (ws *workspaces) Size() int {
 
 func (ws *workspaces) AsSlice() []*Provider {
 	return append(make([]*Provider, 0, ws.Size()), ws.wrapped...)
+}
+
+func (ws *workspaces) FindByKind(k Kind) *Provider {
+	for _, w := range ws.wrapped {
+		if w.Kind() == k {
+			return w
+		}
+	}
+	return nil
 }

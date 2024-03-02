@@ -40,15 +40,18 @@ restart-db:
 # ====================
 #  Update packages
 # ====================
+.PHONY: package-update-latest
+package-update-latest:
+	@ncu -u && rm -rf node_modules && corepack pnpm install
 
 .PHONY: update-all-typescript-package
 update-all-typescript-package:
-	@cd ./packages/typescript/ui && ncu -u
-	@cd ./packages/typescript/network && ncu -u
-	@cd ./apps/system/client && ncu -u
-	@cd ./apps/system/test/api && ncu -u
-	@cd ./apps/system/test/e2e && ncu -u
-	@corepack pnpm install -r
+	@cd ./packages/typescript/ui && make package-update-latest
+	@cd ./packages/typescript/network && make package-update-latest
+	@cd ./apps/system/client && make package-update-latest
+	@cd ./apps/system/test/api && make package-update-latest
+	@cd ./apps/system/test/e2e && make package-update-latest
+	@make package-update-latest
 
 .PHONY: update-pnpm-version
 update-pnpm-version:

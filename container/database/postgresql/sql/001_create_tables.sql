@@ -120,6 +120,18 @@ CREATE TABLE members (
   CONSTRAINT fk_members_workspaces_workspace_id FOREIGN KEY (workspace_id) REFERENCES workspaces(workspace_id)
 );
 
+CREATE TYPE member_role_type AS ENUM ('owner', 'admin', 'member', 'guest');
+
+CREATE TABLE member_roles (
+  member_role_id uuid NOT NULL,
+  member_id uuid NOT NULL,
+  role member_role_type NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (member_role_id),
+  CONSTRAINT fk_member_roles_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id)
+);
+CREATE INDEX member_roles_created_at_index ON member_roles(created_at);
+
 CREATE TABLE member_login_histories (
   member_login_history_id uuid NOT NULL,
   member_id uuid NOT NULL,

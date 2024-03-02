@@ -5,6 +5,10 @@ import (
 	"database/sql"
 	"errors"
 
+	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
+
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
@@ -23,10 +27,11 @@ type gateway struct {
 	wd   workspaceDr.Driver
 	invd invitationDr.Driver
 	a    Adapter
+	co   shared.ContextOperator
 }
 
-func NewGateway(md meDr.Driver, fd fbDr.Driver, wd workspaceDr.Driver, invd invitationDr.Driver, a Adapter) me.Repository {
-	return &gateway{md, fd, wd, invd, a}
+func NewGateway(md meDr.Driver, fd fbDr.Driver, wd workspaceDr.Driver, invd invitationDr.Driver, a Adapter, co shared.ContextOperator) me.Repository {
+	return &gateway{md, fd, wd, invd, a, co}
 }
 
 func (g *gateway) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*me.Me, error) {
@@ -55,17 +60,27 @@ func (g *gateway) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*me.Me
 
 func (g *gateway) FindLastLogin(ctx context.Context, exec bun.IDB, aID account.ID) (*me.Me, error) {
 	res, err := g.md.FindLastLogin(ctx, exec, aID)
-	if err != nil {
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		return nil, err
+	}
+	if res == nil {
+		return g.FindBeforeOnboard(ctx, exec, aID)
 	}
 	return g.Find(ctx, exec, member.NewIDFromUUID(res.Member.MemberID))
 }
 
-func (g *gateway) LastLogin(ctx context.Context, exec bun.IDB, m *me.Me) error {
+func (g *gateway) RecordLogin(ctx context.Context, exec bun.IDB, m *me.Me) error {
+	if m.NotJoined() {
+		return nil
+	}
 	if err := g.md.LastLogin(ctx, exec, m.Member().ID()); err != nil {
 		return err
 	}
 	return g.fd.SetCurrentWorkspaceToCustomClaim(ctx, m.Workspace().ID())
+}
+
+func (g *gateway) SetCurrentProvider(ctx context.Context, p *provider.Provider) context.Context {
+	return g.co.SetAuthProviderUID(ctx, p.UID())
 }
 
 func (g *gateway) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*me.Me, error) {
@@ -86,14 +101,6 @@ func (g *gateway) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID accou
 		return nil, err
 	}
 	return m.UpdateReceivedInvitations(ainvs), nil
-}
-
-func (g *gateway) FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) (*me.Me, error) {
-	res, err := g.md.FindProfile(ctx, exec, aID)
-	if err != nil {
-		return nil, err
-	}
-	return g.a.AdaptSystemAccount(res)
 }
 
 func (g *gateway) FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*me.Me, error) {

@@ -59,6 +59,8 @@ components:
       $ref: "./components/schemas/workspace.yaml#/Inviter"
     Member:
       $ref: "./components/schemas/member.yaml#/Member"
+    MemberRole:
+      $ref: "./components/schemas/member.yaml#/MemberRole"
     MemberProfile:
       $ref: "./components/schemas/member.yaml#/MemberProfile"
     Members:

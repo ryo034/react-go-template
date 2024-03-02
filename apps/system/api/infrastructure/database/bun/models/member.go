@@ -18,6 +18,7 @@ type Member struct {
 	SystemAccount *SystemAccount `bun:"sa,rel:belongs-to"`
 	Profile       *MemberProfile `bun:"mp,rel:has-one"`
 	Workspace     *Workspace     `bun:"ws,rel:belongs-to"`
+	Role          *MemberRole    `bun:"rel:has-one"`
 }
 
 type Members []*Member
@@ -33,6 +34,17 @@ type MemberProfile struct {
 	UpdatedAt      time.Time `bun:"updated_at,notnull,default:current_timestamp"`
 
 	Member *Member `bun:"rel:has-one"`
+}
+
+type MemberRole struct {
+	bun.BaseModel `bun:"table:member_roles,alias:mr"`
+
+	MemberRoleID uuid.UUID `bun:"member_role_id,pk"`
+	MemberID     uuid.UUID `bun:"member_id,notnull"`
+	Role         string    `bun:"role,notnull"`
+	CreatedAt    time.Time `bun:"created_at,notnull,default:current_timestamp"`
+
+	Member *Member `bun:"rel:belongs-to"`
 }
 
 type MemberLoginHistory struct {

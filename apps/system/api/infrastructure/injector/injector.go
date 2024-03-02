@@ -33,7 +33,7 @@ func NewInjector(
 ) (*Injector, error) {
 	defaultLang := conf.DefaultLanguage()
 	di := newDriverInjector(conf, logger, rc, f, co, mc, conf.NoReplyEmail())
-	ri := newRepositoryInjector(di, newGatewayAdapterInjector())
+	ri := newRepositoryInjector(co, di, newGatewayAdapterInjector())
 	pi := newPresenterInjector()
 	la := sharedPresenter.NewLanguageAdapter(defaultLang)
 	messageResource := message.NewResource(defaultLang)

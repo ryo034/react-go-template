@@ -11,7 +11,7 @@ import (
 
 type Repository interface {
 	GenTOTP(ctx context.Context, email account.Email) (string, error)
-	VerifyOTP(ctx context.Context, email account.Email, code string) (bool, error)
+	VerifyOTP(ctx context.Context, email account.Email, code string) (string, error)
 	FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*user.User, error)
 	Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *provider.Provider) (*user.User, error)
 }

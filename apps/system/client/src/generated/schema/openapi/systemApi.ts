@@ -258,7 +258,13 @@ export interface components {
       id: string;
       profile: components["schemas"]["MemberProfile"];
       user: components["schemas"]["User"];
+      role: components["schemas"]["MemberRole"];
     };
+    /**
+     * @description Role of the member
+     * @enum {string}
+     */
+    MemberRole: "OWNER" | "ADMIN" | "MEMBER" | "GUEST";
     MemberProfile: {
       displayName: string;
       idNumber?: string;

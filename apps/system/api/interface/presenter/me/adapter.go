@@ -38,12 +38,13 @@ func NewAdapter(
 
 func (a *adapter) Adapt(m *me.Me) (openapi.Me, error) {
 	var mem = openapi.OptMember{Set: false}
-	if m.HasMember() {
+	if m.IsJoined() {
 		mem.Set = true
 		mem.Value = a.ma.Adapt(m.Member())
 	}
+
 	var cw = openapi.OptWorkspace{Set: false}
-	if m.HasWorkspace() {
+	if m.IsJoined() {
 		cw.Set = true
 		cw.Value = a.wa.Adapt(m.Workspace())
 	}

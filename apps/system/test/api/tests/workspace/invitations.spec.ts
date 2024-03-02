@@ -1,11 +1,11 @@
-import { expect, test } from "@playwright/test"
+import { expect } from "@playwright/test"
 import { authHeaders } from "../../config/config"
-import { genAPIClient, getAuthInfo, statefulTest } from "../../scripts"
+import { genAPIClient, getAuthInfo, systemTest } from "../../scripts"
 
 const client = genAPIClient()
 
-test.describe("invite members", () => {
-  statefulTest("success to invite members @stateful", async ({ page }) => {
+systemTest.describe("invite members", () => {
+  systemTest("success to invite members", { tag: ["@stateful"] }, async ({ stateful }) => {
     const email = "system_account@example.com"
     const authInfo = await getAuthInfo(email)
     const res = await client.POST("/api/v1/members/invitations/bulk", {
@@ -26,7 +26,7 @@ test.describe("invite members", () => {
       ).length
     ).toBe(1)
   })
-  statefulTest("Already joined any workspace @stateful", async ({ page }) => {
+  systemTest("Already joined any workspace", { tag: ["@stateful"] }, async ({ stateful }) => {
     const email = "invite_test_already_joined_any_workspace@example.com"
     const authInfo = await getAuthInfo(email)
     const res = await client.POST("/api/v1/members/invitations/bulk", {
@@ -48,7 +48,7 @@ test.describe("invite members", () => {
       ).length
     ).toBe(1)
   })
-  test("Contains invalid email", async () => {
+  systemTest("Contains invalid email", async () => {
     const email = "invite_test_already_joined_any_workspace@example.com"
     const authInfo = await getAuthInfo(email)
     const res = await client.POST("/api/v1/members/invitations/bulk", {
@@ -61,8 +61,8 @@ test.describe("invite members", () => {
   })
 })
 
-test.describe("get invitations", () => {
-  test("success to get invitations without revoked and already registered", async () => {
+systemTest.describe("get invitations", () => {
+  systemTest("success to get invitations without revoked and already registered", async () => {
     const email = "system_account@example.com"
     const authInfo = await getAuthInfo(email)
     const res = await client.GET("/api/v1/invitations", { headers: authHeaders(authInfo.token) })
@@ -70,7 +70,8 @@ test.describe("get invitations", () => {
     expect(res.error).toBeUndefined()
     expect(JSON.stringify(res.data)).toEqual(JSON.stringify((await import("./success_get_invitations.json")).default))
   })
-  statefulTest("success to get accepted invitations without revoked @stateful", async ({ page }) => {
+
+  systemTest("success to get accepted invitations without revoked", { tag: ["@stateful"] }, async ({ stateful }) => {
     const email = "system_account@example.com"
     const authInfo = await getAuthInfo(email)
     const res = await client.GET("/api/v1/invitations", {

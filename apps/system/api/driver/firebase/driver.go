@@ -90,7 +90,7 @@ func (d *driver) GetUser(ctx context.Context) (*auth.UserRecord, error) {
 	}
 	ur, err := d.f.Auth.GetUser(ctx, apUID.ToString())
 	if err != nil {
-		log.Fatalf("Error get auth provider UID: %v\n error :%v", apUID, err)
+		log.Printf("Error GetUser from auth provider UID: %v\n error :%v", apUID, err)
 		return nil, err
 	}
 	return ur, err

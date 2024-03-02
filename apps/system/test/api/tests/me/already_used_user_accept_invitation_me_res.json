@@ -12,6 +12,7 @@
         "displayName": "Invite TestThree",
         "idNumber": "DEV-54321"
       },
+      "role": "ADMIN",
       "user": {
         "userId": "018da09e-c6ca-795e-878d-32bb8c1e5cac",
         "email": "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com",
@@ -47,6 +48,7 @@
               "displayName": "Invite TestOne",
               "idNumber": "DEV-54321"
             },
+            "role": "OWNER",
             "user": {
               "email": "invite_test_1@example.com",
               "name": "Invite TestOne",

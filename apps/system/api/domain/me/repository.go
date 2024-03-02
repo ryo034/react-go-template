@@ -3,6 +3,8 @@ package me
 import (
 	"context"
 
+	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
@@ -13,9 +15,9 @@ import (
 type Repository interface {
 	Find(ctx context.Context, exec bun.IDB, mID member.ID) (*Me, error)
 	FindLastLogin(ctx context.Context, exec bun.IDB, aID account.ID) (*Me, error)
-	LastLogin(ctx context.Context, exec bun.IDB, m *Me) error
+	RecordLogin(ctx context.Context, exec bun.IDB, m *Me) error
+	SetCurrentProvider(ctx context.Context, p *provider.Provider) context.Context
 	FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*Me, error)
-	FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) (*Me, error)
 	FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*Me, error)
 	UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User) error
 	UpdateMemberProfile(ctx context.Context, exec bun.IDB, m *member.Member) (*member.Member, error)

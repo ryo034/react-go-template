@@ -7,6 +7,7 @@
         "displayName": "John Doe",
         "idNumber": "DEV-12345"
       },
+      "role": "OWNER",
       "user": {
         "userId": "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
         "email": "system_account@example.com",

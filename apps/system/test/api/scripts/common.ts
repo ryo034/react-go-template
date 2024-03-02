@@ -69,8 +69,8 @@ export const getAuthInfo = async (email: string): Promise<AuthInfo> => {
   }
 }
 
-export const statefulTest = test.extend({
-  page: async ({ baseURL, page }, use) => {
+export const systemTest = test.extend({
+  stateful: async ({ baseURL, page }, use) => {
     await statefulBeforeEach()
     await use(page)
   }

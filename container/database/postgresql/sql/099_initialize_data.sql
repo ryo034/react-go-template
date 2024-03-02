@@ -88,6 +88,17 @@ VALUES
 ('018da0dc-dad2-7ac8-95cc-9c3afdd0dbd5', '018da09e-c6ca-795e-878d-32bb8c1e5cac', '018d9b4d-e340-74f7-914c-2476eff949bb', '2024-01-10 12:00:00'),
 ('018ddee7-2419-7c62-a9be-a56a2c07916e', '018ddee7-3a8e-7387-a03e-2b37173b5ada', '018ddee6-6446-7f9d-b750-469a7c2dfac5', '2024-01-10 12:00:00');
 
+INSERT INTO member_roles (member_role_id, member_id, role, created_at)
+VALUES
+('018df76b-260d-759f-9b47-fb5f611f5da6', '377eba35-5560-4f48-a99d-19cbd6a82b0d', 'owner', '2024-01-10 12:00:00'),
+('018df76b-3cbe-7e58-81cf-431eeef1bffe', '018d91d5-c061-78ba-9263-d6ef9e7e6783', 'owner', '2024-01-10 12:00:00'),
+('018df76b-56e0-7371-a69b-1dea397a75d8', '018d96b9-f674-7ff6-83eb-506eca6452be', 'owner', '2024-01-10 12:00:00'),
+('018df76b-6bf7-788f-bc7b-e1102924573d', '018df53e-4c77-79de-b725-c43ebcb79450', 'admin', '2024-01-10 12:00:00'),
+('018df76b-81da-7cb2-a5fe-b849b52a939e', '018df552-5086-7b84-8601-d04c319d2e44', 'admin', '2024-01-10 12:00:00'),
+('018df76b-9717-788a-9b02-548a9666ac44', '018d9b4e-d8fb-73be-95c5-46fbc7a37a7d', 'owner', '2024-01-10 12:00:00'),
+('018df76b-ace2-7420-87d5-666e55aa18b7', '018da0dc-dad2-7ac8-95cc-9c3afdd0dbd5', 'admin', '2024-01-10 12:00:00'),
+('018df76b-bf83-723d-b345-0f9d6d94f0a4', '018ddee7-2419-7c62-a9be-a56a2c07916e', 'owner', '2024-01-10 12:00:00');
+
 INSERT INTO member_login_histories (member_login_history_id, member_id, login_at)
 VALUES
 ('018d6bc0-3884-7420-a802-f857192c7e24', '377eba35-5560-4f48-a99d-19cbd6a82b0d', '2024-01-10 12:00:00'),

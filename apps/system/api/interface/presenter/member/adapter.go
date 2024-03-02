@@ -19,6 +19,19 @@ func NewAdapter(ua user.Adapter) Adapter {
 	return &adapter{ua}
 }
 
+func (a *adapter) adaptRole(r member.Role) openapi.MemberRole {
+	switch r {
+	case member.RoleOwner:
+		return openapi.MemberRoleOWNER
+	case member.RoleAdmin:
+		return openapi.MemberRoleADMIN
+	case member.RoleMember:
+		return openapi.MemberRoleMEMBER
+	default:
+		return openapi.MemberRoleGUEST
+	}
+}
+
 func (a *adapter) Adapt(m *member.Member) openapi.Member {
 	if m == nil {
 		return openapi.Member{}
@@ -29,16 +42,27 @@ func (a *adapter) Adapt(m *member.Member) openapi.Member {
 	if p.HasDisplayName() {
 		dn = p.DisplayName().ToString()
 	}
+
+	var memIDNum = openapi.OptString{Set: false}
+	if p.HasIDNumber() {
+		memIDNum.Set = true
+		memIDNum.Value = p.IDNumber().ToString()
+	}
+
+	var memBio = openapi.OptString{Set: false}
+	if p.HasBio() {
+		memBio.Set = true
+		memBio.Value = p.Bio().ToString()
+	}
+
 	return openapi.Member{
 		ID:   m.ID().ToFriendlyString(),
 		User: a.ua.Adapt(m.User()),
+		Role: a.adaptRole(m.Role()),
 		Profile: openapi.MemberProfile{
 			DisplayName: dn,
-			Bio:         openapi.OptString{Value: p.Bio().ToString(), Set: p.HasBio()},
-			IdNumber: openapi.OptString{
-				Value: p.IDNumber().ToString(),
-				Set:   p.HasIDNumber(),
-			},
+			Bio:         memBio,
+			IdNumber:    memIDNum,
 		},
 	}
 }

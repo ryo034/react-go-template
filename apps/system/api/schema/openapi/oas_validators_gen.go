@@ -512,10 +512,36 @@ func (s *Member) Validate() error {
 			Error: err,
 		})
 	}
+	if err := func() error {
+		if err := s.Role.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "role",
+			Error: err,
+		})
+	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
+}
+
+func (s MemberRole) Validate() error {
+	switch s {
+	case "OWNER":
+		return nil
+	case "ADMIN":
+		return nil
+	case "MEMBER":
+		return nil
+	case "GUEST":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
 }
 
 func (s *MembersResponse) Validate() error {
