@@ -5,8 +5,6 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/google/uuid"
-
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 
@@ -222,14 +220,8 @@ func (u *useCase) ProcessInvitationEmail(ctx context.Context, i ProcessInvitatio
 }
 
 func (u *useCase) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitationOAuthInput) (openapi.ProcessInvitationOAuthRes, error) {
-	fbUsr, err := u.fbDr.GetUser(ctx)
-	if err != nil {
-		return nil, err
-	}
-
 	p := u.dbp.GetExecutor(ctx, false)
-	em, _ := account.NewEmail(fbUsr.Email)
-	invRes, err := u.invRepo.FindActiveByEmail(ctx, p, em)
+	invRes, err := u.invRepo.FindActiveByEmail(ctx, p, i.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -241,8 +233,7 @@ func (u *useCase) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitatio
 	}
 
 	//　check Account Exists
-	ema, _ := account.NewEmail(fbUsr.Email)
-	usr, err := u.repo.FindByEmail(ctx, p, ema)
+	usr, err := u.repo.FindByEmail(ctx, p, i.Email)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		return nil, err
 	}
@@ -262,7 +253,10 @@ func (u *useCase) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitatio
 			}
 		}
 		if meRes == nil {
-			if meRes, err = u.createUser(pr, p, account.NewIDFromUUID(uuid.MustParse(fbUsr.CustomClaims["account_id"].(string)))); err != nil {
+			if i.AccountID == nil {
+				return nil, domainErr.NewUnauthenticated("AccountID is required")
+			}
+			if meRes, err = u.createUser(pr, p, *i.AccountID); err != nil {
 				return nil, err
 			}
 		}

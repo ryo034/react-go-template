@@ -3,6 +3,8 @@ package auth
 import (
 	"context"
 
+	"github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
+
 	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
@@ -25,6 +27,7 @@ type controller struct {
 	auc  authUc.UseCase
 	resl shared.Resolver
 	co   infraShared.ContextOperator
+	fbDr firebase.Driver
 }
 
 type ProcessInvitationInput struct {
@@ -40,8 +43,8 @@ type InvitationByTokenInput struct {
 	Token uuid.UUID
 }
 
-func NewController(auc authUc.UseCase, resl shared.Resolver, co infraShared.ContextOperator) Controller {
-	return &controller{auc, resl, co}
+func NewController(auc authUc.UseCase, resl shared.Resolver, co infraShared.ContextOperator, fbDr firebase.Driver) Controller {
+	return &controller{auc, resl, co, fbDr}
 }
 
 func (c *controller) AuthByOTP(ctx context.Context, req *openapi.APIV1AuthOtpPostReq) (openapi.APIV1AuthOtpPostRes, error) {
@@ -97,7 +100,21 @@ func (c *controller) ProcessInvitationEmail(ctx context.Context, i ProcessInvita
 }
 
 func (c *controller) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitationOAuth) (openapi.ProcessInvitationOAuthRes, error) {
-	inp := authUc.ProcessInvitationOAuthInput{Token: invitation.NewToken(i.Token)}
+	fbUsr, err := c.fbDr.GetUser(ctx)
+	if err != nil {
+		return nil, err
+	}
+	var aID *account.ID = nil
+	if fbUsr.CustomClaims["account_id"] != nil {
+		tmpAID := account.NewIDFromUUID(uuid.MustParse(fbUsr.CustomClaims["account_id"].(string)))
+		aID = &tmpAID
+	}
+	em, _ := account.NewEmail(fbUsr.Email)
+	inp := authUc.ProcessInvitationOAuthInput{
+		Token:     invitation.NewToken(i.Token),
+		Email:     em,
+		AccountID: aID,
+	}
 	res, err := c.auc.ProcessInvitationOAuth(ctx, inp)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.ProcessInvitationOAuthRes), nil

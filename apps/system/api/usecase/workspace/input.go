@@ -32,11 +32,13 @@ func NewCreateInput(subdomain string, aID account.ID) (CreateInput, error) {
 }
 
 type FindAllMembersInput struct {
+	CurrentWorkspaceID workspace.ID
 }
 
 type InviteMembersInput struct {
-	AccountID   account.ID
-	Invitations invitation.Invitations
+	CurrentWorkspaceID workspace.ID
+	AccountID          account.ID
+	Invitations        invitation.Invitations
 }
 
 type VerifyInvitationTokenInput struct {
@@ -44,9 +46,11 @@ type VerifyInvitationTokenInput struct {
 }
 
 type RevokeInvitationInput struct {
-	InvitationID invitation.ID
+	CurrentWorkspaceID workspace.ID
+	InvitationID       invitation.ID
 }
 
 type FindAllInvitationInput struct {
-	IsAccepted bool
+	CurrentWorkspaceID workspace.ID
+	IsAccepted         bool
 }

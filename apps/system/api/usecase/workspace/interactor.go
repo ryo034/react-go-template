@@ -8,7 +8,6 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/email"
-	fbDr "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 )
@@ -27,13 +26,12 @@ type useCase struct {
 	repo        workspace.Repository
 	meRepo      me.Repository
 	invRepo     invitation.Repository
-	fbDriver    fbDr.Driver
 	emailDriver email.Driver
 	op          OutputPort
 }
 
-func NewUseCase(txp core.TransactionProvider, dbp core.Provider, repo workspace.Repository, meRepo me.Repository, invRepo invitation.Repository, fbDriver fbDr.Driver, emailDriver email.Driver, op OutputPort) UseCase {
-	return &useCase{txp, dbp, repo, meRepo, invRepo, fbDriver, emailDriver, op}
+func NewUseCase(txp core.TransactionProvider, dbp core.Provider, repo workspace.Repository, meRepo me.Repository, invRepo invitation.Repository, emailDriver email.Driver, op OutputPort) UseCase {
+	return &useCase{txp, dbp, repo, meRepo, invRepo, emailDriver, op}
 }
 
 func (u *useCase) Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error) {
@@ -79,11 +77,7 @@ func (u *useCase) Create(ctx context.Context, i CreateInput) (openapi.APIV1Works
 
 func (u *useCase) FindAllMembers(ctx context.Context, i FindAllMembersInput) (openapi.APIV1MembersGetRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
-	currentWorkspaceID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx)
-	if err != nil {
-		return nil, err
-	}
-	ms, err := u.repo.FindAllMembers(ctx, exec, currentWorkspaceID)
+	ms, err := u.repo.FindAllMembers(ctx, exec, i.CurrentWorkspaceID)
 	if err != nil {
 		return nil, err
 	}
@@ -92,12 +86,8 @@ func (u *useCase) FindAllMembers(ctx context.Context, i FindAllMembersInput) (op
 
 func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error) {
 	// Exclude already registered members
-	currentWorkspaceID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx)
-	if err != nil {
-		return nil, err
-	}
 	exec := u.dbp.GetExecutor(ctx, false)
-	members, err := u.repo.FindAllMembers(ctx, exec, currentWorkspaceID)
+	members, err := u.repo.FindAllMembers(ctx, exec, i.CurrentWorkspaceID)
 	if err != nil {
 		return nil, err
 	}
@@ -139,10 +129,6 @@ func (u *useCase) RevokeInvitation(ctx context.Context, i RevokeInvitationInput)
 	if err != nil {
 		return nil, err
 	}
-	wID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx)
-	if err != nil {
-		return nil, err
-	}
 	inv, err := u.invRepo.Find(ctx, p, i.InvitationID)
 	if err != nil {
 		return nil, err
@@ -154,7 +140,7 @@ func (u *useCase) RevokeInvitation(ctx context.Context, i RevokeInvitationInput)
 		if err = u.invRepo.Revoke(pr, p, i.InvitationID); err != nil {
 			return nil, err
 		}
-		return u.repo.FindAllInvitations(pr, p, wID)
+		return u.repo.FindAllInvitations(pr, p, i.CurrentWorkspaceID)
 	}
 	result := pr.Transactional(fn)()
 	if err = result.Error(); err != nil {
@@ -166,11 +152,7 @@ func (u *useCase) RevokeInvitation(ctx context.Context, i RevokeInvitationInput)
 
 func (u *useCase) FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error) {
 	p := u.dbp.GetExecutor(ctx, true)
-	wID, err := u.fbDriver.MustGetCurrentWorkspaceFromCustomClaim(ctx)
-	if err != nil {
-		return nil, err
-	}
-	res, err := u.repo.FindAllInvitations(ctx, p, wID)
+	res, err := u.repo.FindAllInvitations(ctx, p, i.CurrentWorkspaceID)
 	if err != nil {
 		return nil, err
 	}

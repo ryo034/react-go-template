@@ -3,6 +3,10 @@ package workspace
 import (
 	"context"
 
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
+
+	fbDr "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
+
 	"github.com/google/uuid"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
@@ -22,12 +26,13 @@ type Controller interface {
 
 type controller struct {
 	wuc  workspaceUc.UseCase
+	fbDr fbDr.Driver
 	resl shared.Resolver
 	co   infraShared.ContextOperator
 }
 
-func NewController(wuc workspaceUc.UseCase, resl shared.Resolver, co infraShared.ContextOperator) Controller {
-	return &controller{wuc, resl, co}
+func NewController(wuc workspaceUc.UseCase, fbDr fbDr.Driver, resl shared.Resolver, co infraShared.ContextOperator) Controller {
+	return &controller{wuc, fbDr, resl, co}
 }
 
 type CreateInput struct {
@@ -67,12 +72,14 @@ func (c *controller) Create(ctx context.Context, i CreateInput) (openapi.APIV1Wo
 	return res, nil
 }
 
-func NewFindAllMembersInput() workspaceUc.FindAllMembersInput {
-	return workspaceUc.FindAllMembersInput{}
-}
-
 func (c *controller) FindAllMembers(ctx context.Context) (openapi.APIV1MembersGetRes, error) {
-	in := NewFindAllMembersInput()
+	cwID, err := c.fbDr.MustGetCurrentWorkspaceFromCustomClaim(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MembersGetRes), nil
+	}
+	in := workspaceUc.FindAllMembersInput{
+		CurrentWorkspaceID: cwID,
+	}
 	res, err := c.wuc.FindAllMembers(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MembersGetRes), nil
@@ -80,7 +87,7 @@ func (c *controller) FindAllMembers(ctx context.Context) (openapi.APIV1MembersGe
 	return res, nil
 }
 
-func NewInviteMembersInput(aID account.ID, ims []Invitee) (workspaceUc.InviteMembersInput, error) {
+func NewInviteMembersInput(cwID workspace.ID, aID account.ID, ims []Invitee) (workspaceUc.InviteMembersInput, error) {
 	ivs := make([]*invitation.Invitation, 0, len(ims))
 	for _, im := range ims {
 		i, err := invitation.GenInvitation(im.Email, im.DisplayName)
@@ -90,8 +97,9 @@ func NewInviteMembersInput(aID account.ID, ims []Invitee) (workspaceUc.InviteMem
 		ivs = append(ivs, i)
 	}
 	return workspaceUc.InviteMembersInput{
-		AccountID:   aID,
-		Invitations: invitation.NewInvitations(ivs),
+		CurrentWorkspaceID: cwID,
+		AccountID:          aID,
+		Invitations:        invitation.NewInvitations(ivs),
 	}, nil
 }
 
@@ -100,7 +108,11 @@ func (c *controller) InviteMembers(ctx context.Context, i InviteesInput) (openap
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.InviteMultipleUsersToWorkspaceRes), nil
 	}
-	in, err := NewInviteMembersInput(aID, i.InvitedMembers)
+	cwID, err := c.fbDr.MustGetCurrentWorkspaceFromCustomClaim(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.InviteMultipleUsersToWorkspaceRes), nil
+	}
+	in, err := NewInviteMembersInput(cwID, aID, i.InvitedMembers)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.InviteMultipleUsersToWorkspaceRes), nil
 	}
@@ -112,7 +124,14 @@ func (c *controller) InviteMembers(ctx context.Context, i InviteesInput) (openap
 }
 
 func (c *controller) RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error) {
-	in := workspaceUc.RevokeInvitationInput{InvitationID: invitation.NewID(i.InvitationID)}
+	cwID, err := c.fbDr.MustGetCurrentWorkspaceFromCustomClaim(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.RevokeInvitationRes), nil
+	}
+	in := workspaceUc.RevokeInvitationInput{
+		CurrentWorkspaceID: cwID,
+		InvitationID:       invitation.NewID(i.InvitationID),
+	}
 	res, err := c.wuc.RevokeInvitation(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.RevokeInvitationRes), nil
@@ -125,7 +144,14 @@ func (c *controller) FindAllInvitation(ctx context.Context, i FindAllInvitationI
 	if i.Status == "accepted" {
 		accepted = true
 	}
-	in := workspaceUc.FindAllInvitationInput{IsAccepted: accepted}
+	cwID, err := c.fbDr.MustGetCurrentWorkspaceFromCustomClaim(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1InvitationsGetRes), nil
+	}
+	in := workspaceUc.FindAllInvitationInput{
+		CurrentWorkspaceID: cwID,
+		IsAccepted:         accepted,
+	}
 	res, err := c.wuc.FindAllInvitation(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1InvitationsGetRes), nil

@@ -26,7 +26,9 @@ type ProcessInvitationEmailInput struct {
 }
 
 type ProcessInvitationOAuthInput struct {
-	Token invitation.Token
+	Token     invitation.Token
+	Email     account.Email
+	AccountID *account.ID
 }
 
 type AcceptInvitationInput struct {

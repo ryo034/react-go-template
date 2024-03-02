@@ -20,11 +20,12 @@ func newControllerInjector(
 	mr message.Resource,
 	la sharedPresenter.LanguageAdapter,
 	co shared.ContextOperator,
+	di Driver,
 ) Controller {
 	sr := sharedPresenter.NewResolver(mr, la)
 	return Controller{
 		me.NewController(ui.Me, sr, co),
-		auth.NewController(ui.Auth, sr, co),
-		workspace.NewController(ui.Workspace, sr, co),
+		auth.NewController(ui.Auth, sr, co, di.Firebase),
+		workspace.NewController(ui.Workspace, di.Firebase, sr, co),
 	}
 }
