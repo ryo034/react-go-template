@@ -126,15 +126,16 @@ func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (open
 
 func (u *useCase) RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
-	pr, err := u.txp.Provide(ctx)
-	if err != nil {
-		return nil, err
-	}
 	inv, err := u.invRepo.Find(ctx, p, i.InvitationID)
 	if err != nil {
 		return nil, err
 	}
 	if err = inv.ValidateCanRevoke(); err != nil {
+		return nil, err
+	}
+
+	pr, err := u.txp.Provide(ctx)
+	if err != nil {
 		return nil, err
 	}
 	fn := func() (invitation.Invitations, error) {

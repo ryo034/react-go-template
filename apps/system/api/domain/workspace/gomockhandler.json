@@ -1,0 +1,14 @@
+{
+	"mocks": {
+		"mock_repository.go": {
+			"checksum": "GfLXnJdYDbB/AuQD09ZeSw==",
+			"source_checksum": "1hjdN+0QKqAu85x4x4ZD9g==",
+			"mode": "SOURCE_MODE",
+			"source_mode_runner": {
+				"source": "repository.go",
+				"destination": "mock_repository.go",
+				"package": "workspace"
+			}
+		}
+	}
+}

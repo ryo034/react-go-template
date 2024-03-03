@@ -1,0 +1,14 @@
+{
+	"mocks": {
+		"mock_repository.go": {
+			"checksum": "W+DhJHRYK0a9jdCXIsGudw==",
+			"source_checksum": "f4ZVXLVI0fc2ybeYL7Y3UQ==",
+			"mode": "SOURCE_MODE",
+			"source_mode_runner": {
+				"source": "repository.go",
+				"destination": "mock_repository.go",
+				"package": "auth"
+			}
+		}
+	}
+}

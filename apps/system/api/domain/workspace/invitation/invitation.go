@@ -88,7 +88,10 @@ func (i *Invitation) ValidateCanRevoke() error {
 	return nil
 }
 
-func (i *Invitation) ValidateCanVerify() error {
+func (i *Invitation) ValidateCanVerify(token Token) error {
+	if i.Token().NotEquals(token) {
+		return NewInvalidInviteToken(token.Value())
+	}
 	if i.IsAccepted() {
 		return NewAlreadyAcceptedInvitation(i.ID(), i.Token().Value())
 	}

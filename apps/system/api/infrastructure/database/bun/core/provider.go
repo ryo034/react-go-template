@@ -1,7 +1,10 @@
+//go:generate gomockhandler -source=$GOFILE -destination=mock_$GOFILE -package=$GOPACKAGE
+
 package core
 
 import (
 	"context"
+
 	"github.com/uptrace/bun"
 )
 

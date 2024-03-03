@@ -1,0 +1,24 @@
+{
+	"mocks": {
+		"mock_provider.go": {
+			"checksum": "F+G/ZJxI+QBeNViMOOQlRw==",
+			"source_checksum": "4qUs6jpzFS1cYO2ZYXai3g==",
+			"mode": "SOURCE_MODE",
+			"source_mode_runner": {
+				"source": "provider.go",
+				"destination": "mock_provider.go",
+				"package": "core"
+			}
+		},
+		"mock_transaction.go": {
+			"checksum": "EMo8pt7QIDeVg6Gkv5HmNQ==",
+			"source_checksum": "9REJUKg6KI9234Z+qlJp8w==",
+			"mode": "SOURCE_MODE",
+			"source_mode_runner": {
+				"source": "transaction.go",
+				"destination": "mock_transaction.go",
+				"package": "core"
+			}
+		}
+	}
+}

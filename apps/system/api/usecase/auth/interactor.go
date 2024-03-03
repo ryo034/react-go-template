@@ -102,6 +102,31 @@ func (u *useCase) AuthByOAuth(ctx context.Context, i ByOAuthInput) (openapi.APIV
 	return u.op.AuthByAuth(m)
 }
 
+func (u *useCase) setupUserByOAuth(ctx context.Context, aID account.ID) (context.Context, *provider.Provider, error) {
+	ap, err := provider.NewProviderAsEmailOnFirebase(aID)
+	if err != nil {
+		return ctx, nil, err
+	}
+	ctx = u.meRepo.SetCurrentProvider(ctx, ap)
+	return ctx, ap, nil
+}
+
+func (u *useCase) setupOAuthUserByOAuth(ctx context.Context, p bun.IDB, usr *user.User) (context.Context, *me.Me, error) {
+	meRes, err := u.meRepo.FindLastLogin(ctx, p, usr.AccountID())
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return ctx, nil, domainErr.NewUnauthenticated(fmt.Sprintf("User not found: %s", usr.Email().ToString()))
+		}
+		return ctx, nil, err
+	}
+	ap := meRes.Providers().FindByKind(provider.Email)
+	ctx = u.meRepo.SetCurrentProvider(ctx, ap)
+	if err = u.meRepo.SetMe(ctx, meRes); err != nil {
+		return ctx, nil, err
+	}
+	return ctx, meRes, nil
+}
+
 // VerifyOTP User information cannot be retrieved/edited in Firebase on the backend side until VerifyOTP returns a token to the frontend and is authenticated
 func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
@@ -114,27 +139,14 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 	if err != nil {
 		return nil, err
 	}
-
 	var meRes *me.Me = nil
 	var ap *provider.Provider = nil
 
+	//set user info to context before transaction
 	if usr == nil {
-		if ap, err = provider.NewProviderAsEmailOnFirebase(newAccountID); err != nil {
-			return nil, err
-		}
-		ctx = u.meRepo.SetCurrentProvider(ctx, ap)
+		ctx, ap, err = u.setupUserByOAuth(ctx, newAccountID)
 	} else {
-		if meRes, err = u.meRepo.FindLastLogin(ctx, p, usr.AccountID()); err != nil {
-			if errors.Is(err, sql.ErrNoRows) {
-				return nil, domainErr.NewUnauthenticated(fmt.Sprintf("User not found: %s", i.Email))
-			}
-			return nil, err
-		}
-		ap = meRes.Providers().FindByKind(provider.Email)
-		ctx = u.meRepo.SetCurrentProvider(ctx, ap)
-		if err = u.meRepo.SetMe(ctx, meRes); err != nil {
-			return nil, err
-		}
+		ctx, meRes, err = u.setupOAuthUserByOAuth(ctx, p, usr)
 	}
 
 	pr, err := u.txp.Provide(ctx)
@@ -143,18 +155,18 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 	}
 
 	fn := func() (string, error) {
-		if meRes != nil {
-			if err = u.meRepo.RecordLogin(pr, p, meRes); err != nil {
+		if usr == nil {
+			_, err = u.repo.Create(ctx, p, user.NewUser(newAccountID, i.Email, nil, nil), ap)
+			if err != nil {
 				return "", err
 			}
-		}
-		if usr == nil {
-			if usr, err = u.repo.Create(pr, p, user.NewUser(newAccountID, i.Email, nil, nil), ap); err != nil {
+		} else {
+			if err = u.meRepo.RecordLogin(ctx, p, meRes); err != nil {
 				return "", err
 			}
 		}
 		// if user exists, verify TOTP and return custom token
-		return u.repo.VerifyOTP(ctx, i.Email, i.Otp)
+		return u.repo.VerifyOTP(pr, i.Email, i.Otp)
 	}
 
 	result := pr.Transactional(fn)()
@@ -171,11 +183,8 @@ func (u *useCase) ProcessInvitationEmail(ctx context.Context, i ProcessInvitatio
 	if err != nil {
 		return nil, err
 	}
-	if invRes.Token().NotEquals(i.Token) {
-		return nil, invitation.NewInvalidInviteToken(i.Token.Value())
-	}
-	if err = invRes.ValidateCanVerify(); err != nil {
-		return nil, invitation.NewAlreadyExpiredInvitation(invRes.ID(), invRes.Token().Value())
+	if err = invRes.ValidateCanVerify(i.Token); err != nil {
+		return nil, err
 	}
 
 	pr, err := u.txp.Provide(ctx)
@@ -201,14 +210,11 @@ func (u *useCase) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitatio
 	if err != nil {
 		return nil, err
 	}
-	if invRes.Token().NotEquals(i.Token) {
-		return nil, invitation.NewInvalidInviteToken(i.Token.Value())
-	}
-	if err = invRes.ValidateCanVerify(); err != nil {
+	if err = invRes.ValidateCanVerify(i.Token); err != nil {
 		return nil, err
 	}
 
-	//　check Account Exists
+	// check Account Exists
 	usr, err := u.repo.FindByEmail(ctx, p, i.Email)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		return nil, err

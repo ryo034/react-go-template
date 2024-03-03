@@ -1,8 +1,11 @@
+//go:generate gomockhandler -source=$GOFILE -destination=mock_$GOFILE -package=$GOPACKAGE
+
 package core
 
 import (
 	"context"
 	"database/sql"
+
 	"github.com/ryo034/react-go-template/apps/system/api/util/reflect/function"
 	"github.com/uptrace/bun"
 )

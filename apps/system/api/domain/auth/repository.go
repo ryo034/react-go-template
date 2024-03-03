@@ -1,3 +1,5 @@
+//go:generate gomockhandler -source=$GOFILE -destination=mock_$GOFILE -package=$GOPACKAGE
+
 package auth
 
 import (

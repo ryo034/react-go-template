@@ -1,0 +1,14 @@
+{
+	"mocks": {
+		"mock_repository.go": {
+			"checksum": "Kp2eh6qhr4lhXWA65hmo8Q==",
+			"source_checksum": "zSQu2CsUka25bTx5A0CSGg==",
+			"mode": "SOURCE_MODE",
+			"source_mode_runner": {
+				"source": "repository.go",
+				"destination": "mock_repository.go",
+				"package": "invitation"
+			}
+		}
+	}
+}
