@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 
 	"github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
@@ -104,54 +103,58 @@ func (c *controller) ProcessInvitationEmail(ctx context.Context, i ProcessInvita
 }
 
 func (c *controller) createUser(ctx context.Context, aID account.ID) (authUc.CreateInfo, error) {
-	prov, err := c.fbDr.FindProviderData(ctx)
+	prov, err := c.fbDr.GenProviderData(ctx)
 	if err != nil {
 		return authUc.CreateInfo{}, err
 	}
-	fbUsr, err := c.fbDr.GetUser(ctx)
+	pi, err := c.fbDr.GetProviderInfo(ctx, firebase.GetProviderInfoRequiredOption{CurrentWorkspaceID: false})
 	if err != nil {
 		return authUc.CreateInfo{}, err
 	}
-	ema, err := account.NewEmail(fbUsr.Email)
-	if err != nil {
-		return authUc.CreateInfo{}, err
-	}
+
 	var na *account.Name = nil
-	name, err := account.NewName(fbUsr.DisplayName)
-	if err != nil {
+	if pi.UserInfo.DisplayName == nil {
 		// if not match name format, just ignore
 		fmt.Printf("failed to create name: %s", err)
 	} else {
-		na = &name
+		tmpNa, err := account.NewName(pi.UserInfo.DisplayName.ToString())
+		if err != nil {
+			// if not match name format, just ignore
+			fmt.Printf("failed to create name: %s", err)
+		}
+		na = &tmpNa
 	}
-	var pn *phone.Number = nil
-	tmpPn, err := phone.NewInternationalPhoneNumber(fbUsr.PhoneNumber, "")
+
+	if pi.UserInfo.Email == nil {
+		return authUc.CreateInfo{}, fmt.Errorf("email is required")
+	}
+	em, err := account.NewEmail(pi.UserInfo.Email.ToString())
 	if err != nil {
-		// if not match phone number format, just ignore
-		fmt.Printf("failed to create phone number: %s", err)
-	} else {
-		pn = &tmpPn
+		return authUc.CreateInfo{}, err
 	}
-	return authUc.CreateInfo{User: user.NewUser(aID, ema, na, pn), Provider: prov}, nil
+	return authUc.CreateInfo{User: user.NewUser(aID, em, na, pi.UserInfo.PhoneNumber), Provider: prov}, nil
 }
 
 func (c *controller) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitationOAuth) (openapi.ProcessInvitationOAuthRes, error) {
-	fbUsr, err := c.fbDr.GetUser(ctx)
+	pi, err := c.fbDr.GetProviderInfo(ctx, firebase.GetProviderInfoRequiredOption{CurrentWorkspaceID: false})
 	if err != nil {
 		return nil, err
 	}
 	var ci *authUc.CreateInfo = nil
-	if fbUsr.CustomClaims["account_id"] != nil {
-		tmpCI, err := c.createUser(ctx, account.NewIDFromUUID(uuid.MustParse(fbUsr.CustomClaims["account_id"].(string))))
+	if pi.CustomClaim.AccountID != nil {
+		tmpCI, err := c.createUser(ctx, *pi.CustomClaim.AccountID)
 		if err != nil {
 			return nil, err
 		}
 		ci = &tmpCI
 	}
-	em, _ := account.NewEmail(fbUsr.Email)
+
+	if pi.UserInfo.Email == nil {
+		return c.resl.Error(ctx, fmt.Errorf("email is required")).(openapi.ProcessInvitationOAuthRes), nil
+	}
 	inp := authUc.ProcessInvitationOAuthInput{
 		Token:      invitation.NewToken(i.Token),
-		Email:      em,
+		Email:      *pi.UserInfo.Email,
 		CreateInfo: ci,
 	}
 	res, err := c.auc.ProcessInvitationOAuth(ctx, inp)

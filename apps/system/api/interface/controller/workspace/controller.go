@@ -73,13 +73,11 @@ func (c *controller) Create(ctx context.Context, i CreateInput) (openapi.APIV1Wo
 }
 
 func (c *controller) FindAllMembers(ctx context.Context) (openapi.APIV1MembersGetRes, error) {
-	cwID, err := c.fbDr.MustGetCurrentWorkspaceFromCustomClaim(ctx)
+	clm, err := c.fbDr.GetProviderInfo(ctx, fbDr.GetProviderInfoRequiredOption{CurrentWorkspaceID: true})
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MembersGetRes), nil
 	}
-	in := workspaceUc.FindAllMembersInput{
-		CurrentWorkspaceID: cwID,
-	}
+	in := workspaceUc.FindAllMembersInput{CurrentWorkspaceID: *clm.CustomClaim.CurrentWorkspaceID}
 	res, err := c.wuc.FindAllMembers(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MembersGetRes), nil
@@ -108,11 +106,11 @@ func (c *controller) InviteMembers(ctx context.Context, i InviteesInput) (openap
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.InviteMultipleUsersToWorkspaceRes), nil
 	}
-	cwID, err := c.fbDr.MustGetCurrentWorkspaceFromCustomClaim(ctx)
+	clm, err := c.fbDr.GetProviderInfo(ctx, fbDr.GetProviderInfoRequiredOption{CurrentWorkspaceID: true})
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.InviteMultipleUsersToWorkspaceRes), nil
 	}
-	in, err := NewInviteMembersInput(cwID, aID, i.InvitedMembers)
+	in, err := NewInviteMembersInput(*clm.CustomClaim.CurrentWorkspaceID, aID, i.InvitedMembers)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.InviteMultipleUsersToWorkspaceRes), nil
 	}
@@ -124,12 +122,12 @@ func (c *controller) InviteMembers(ctx context.Context, i InviteesInput) (openap
 }
 
 func (c *controller) RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error) {
-	cwID, err := c.fbDr.MustGetCurrentWorkspaceFromCustomClaim(ctx)
+	clm, err := c.fbDr.GetProviderInfo(ctx, fbDr.GetProviderInfoRequiredOption{CurrentWorkspaceID: true})
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.RevokeInvitationRes), nil
 	}
 	in := workspaceUc.RevokeInvitationInput{
-		CurrentWorkspaceID: cwID,
+		CurrentWorkspaceID: *clm.CustomClaim.CurrentWorkspaceID,
 		InvitationID:       invitation.NewID(i.InvitationID),
 	}
 	res, err := c.wuc.RevokeInvitation(ctx, in)
@@ -144,12 +142,12 @@ func (c *controller) FindAllInvitation(ctx context.Context, i FindAllInvitationI
 	if i.Status == "accepted" {
 		accepted = true
 	}
-	cwID, err := c.fbDr.MustGetCurrentWorkspaceFromCustomClaim(ctx)
+	clm, err := c.fbDr.GetProviderInfo(ctx, fbDr.GetProviderInfoRequiredOption{CurrentWorkspaceID: true})
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1InvitationsGetRes), nil
 	}
 	in := workspaceUc.FindAllInvitationInput{
-		CurrentWorkspaceID: cwID,
+		CurrentWorkspaceID: *clm.CustomClaim.CurrentWorkspaceID,
 		IsAccepted:         accepted,
 	}
 	res, err := c.wuc.FindAllInvitation(ctx, in)

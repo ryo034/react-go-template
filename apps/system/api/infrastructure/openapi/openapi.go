@@ -50,7 +50,7 @@ func Start(conf config.Reader) {
 
 	h, err := openapi.NewServer(
 		service.NewService(inj),
-		openapiMiddleware.NewSecMiddleware(fb, co, p, inj.Driver().Auth, inj.Driver().Firebase),
+		openapiMiddleware.NewSecMiddleware(),
 	)
 
 	if err != nil {
@@ -59,7 +59,7 @@ func Start(conf config.Reader) {
 
 	server := &http.Server{
 		Addr:         endpoint,
-		Handler:      middleware.NewMiddlewares(co).Global(h, conf, zl, rc),
+		Handler:      middleware.NewMiddlewares(co).Global(h, conf, zl, rc, p, inj.Driver()),
 		ReadTimeout:  15 * time.Second,
 		WriteTimeout: 15 * time.Second,
 		IdleTimeout:  15 * time.Second,

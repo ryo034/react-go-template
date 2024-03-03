@@ -1,0 +1,20 @@
+[
+  { "PType": "p", "V0": "owner", "V1": "*", "V2": "*", "V3": "allow" },
+
+  { "PType": "p", "V0": "*", "V1": "/api/v1/me", "V2": "GET", "V3": "allow" },
+  { "PType": "p", "V0": "*", "V1": "/api/v1/me/profile", "V2": "PUT", "V3": "allow" },
+  { "PType": "p", "V0": "*", "V1": "/api/v1/me/member/profile", "V2": "PUT", "V3": "allow" },
+  { "PType": "p", "V0": "*", "V1": "/api/v1/workspaces", "V2": "*", "V3": "allow" },
+  { "PType": "p", "V0": "*", "V1": "/api/v1/members", "V2": "GET", "V3": "allow" },
+  { "PType": "p", "V0": "*", "V1": "/api/v1/invitations", "V2": "GET", "V3": "allow" },
+  { "PType": "p", "V0": "*", "V1": "/api/v1/members/invitations/{invitationId}/accept", "V2": "*", "V3": "allow" },
+
+  { "PType": "p", "V0": "admin", "V1": "/api/v1/members/invitations/bulk", "V2": "POST", "V3": "allow" },
+  {
+    "PType": "p",
+    "V0": "admin",
+    "V1": "/api/v1/members/invitations/{invitationId}/revoke",
+    "V2": "POST",
+    "V3": "allow"
+  }
+]

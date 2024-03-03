@@ -1,7 +1,11 @@
+//go:generate gomockhandler -source=$GOFILE -destination=mock_$GOFILE -package=$GOPACKAGE
+
 package shared
 
 import (
 	"context"
+
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
 
@@ -17,6 +21,8 @@ type ContextOperator interface {
 	GetUID(ctx context.Context) (account.ID, error)
 	SetAuthProviderUID(ctx context.Context, apUID provider.UID) context.Context
 	GetAuthProviderUID(ctx context.Context) (provider.UID, error)
+	SetRole(ctx context.Context, role member.Role) context.Context
+	GetRole(ctx context.Context) (member.Role, error)
 	GetUIDWithNil(ctx context.Context) (*account.ID, error)
 	GetLang(ctx context.Context) (language.Tag, error)
 	SetLang(ctx context.Context, lang language.Tag) context.Context
@@ -34,6 +40,7 @@ const (
 	ContextTokenKey           Key = "token"
 	ContextUIDKey             Key = "uid"
 	ContextAuthProviderUIDKey Key = "auth-provider-uid"
+	ContextRoleKey            Key = "role"
 	ContextLanguageKey        Key = "lang"
 	ContextRequestIDKey       Key = "request-id"
 )
@@ -77,6 +84,19 @@ func (co contextOperator) GetAuthProviderUID(ctx context.Context) (provider.UID,
 		return provider.UID{}, domainErr.NewUnauthenticated("auth provider uid is not found")
 	}
 	return provider.NewUID(v)
+}
+
+func (co contextOperator) SetRole(ctx context.Context, role member.Role) context.Context {
+	return context.WithValue(ctx, ContextRoleKey, role.ToString())
+}
+
+func (co contextOperator) GetRole(ctx context.Context) (member.Role, error) {
+	value := ctx.Value(ContextRoleKey)
+	v := cast.ToString(value)
+	if value == nil || v == "" {
+		return "", domainErr.NewNoSuchData("role")
+	}
+	return member.NewRole(v)
 }
 
 func (co contextOperator) GetLang(ctx context.Context) (language.Tag, error) {

@@ -6,6 +6,10 @@ import (
 	"log"
 	"reflect"
 
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
+
+	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
+
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
@@ -22,15 +26,17 @@ import (
 )
 
 type Driver interface {
+	VerifyIDToken(ctx context.Context, token string) (*auth.Token, error)
 	CustomToken(ctx context.Context) (string, error)
-	FindProviderData(ctx context.Context) (*provider.Provider, error)
+	GenProviderData(ctx context.Context) (*provider.Provider, error)
 	RevokeRefreshTokens(ctx context.Context) error
-	GetUser(ctx context.Context) (*auth.UserRecord, error)
+
 	CreateUser(ctx context.Context, email account.Email) error
-	SetCurrentWorkspaceToCustomClaim(ctx context.Context, wID workspace.ID) error
-	GetCurrentWorkspaceFromCustomClaim(ctx context.Context) (*workspace.ID, error)
+	GetProviderInfo(ctx context.Context, option GetProviderInfoRequiredOption) (ProviderInfo, error)
+
+	SetMeToCustomClaim(ctx context.Context, me *me.Me) error
 	SetAccountIDToCustomClaim(ctx context.Context, aID account.ID) error
-	MustGetCurrentWorkspaceFromCustomClaim(ctx context.Context) (workspace.ID, error)
+
 	UpdateProfile(ctx context.Context, usr *user.User) error
 	UpdateEmail(ctx context.Context, em account.Email) error
 	UpdateName(ctx context.Context, n account.Name) error
@@ -40,7 +46,25 @@ type Driver interface {
 const (
 	CustomClaimCurrentWorkspaceIDKey string = "current_workspace_id"
 	CustomClaimAccountIDKey          string = "account_id"
+	CustomClaimRoleKey               string = "role"
 )
+
+type CustomClaim struct {
+	CurrentWorkspaceID *workspace.ID
+	AccountID          *account.ID
+	Role               *member.Role
+}
+
+type UserInfo struct {
+	Email       *account.Email
+	DisplayName *member.DisplayName
+	PhoneNumber *phone.Number
+}
+
+type ProviderInfo struct {
+	CustomClaim CustomClaim
+	UserInfo    UserInfo
+}
 
 type driver struct {
 	f  *firebase.Firebase
@@ -49,6 +73,10 @@ type driver struct {
 
 func NewDriver(f *firebase.Firebase, co shared.ContextOperator) Driver {
 	return &driver{f, co}
+}
+
+func (d *driver) VerifyIDToken(ctx context.Context, token string) (*auth.Token, error) {
+	return d.f.Auth.VerifyIDToken(ctx, token)
 }
 
 func (d *driver) CustomToken(ctx context.Context) (string, error) {
@@ -63,7 +91,7 @@ func (d *driver) DeleteUser(ctx context.Context, apUID provider.UID) error {
 	return d.f.Auth.DeleteUser(ctx, apUID.ToString())
 }
 
-func (d *driver) FindProviderData(ctx context.Context) (*provider.Provider, error) {
+func (d *driver) GenProviderData(ctx context.Context) (*provider.Provider, error) {
 	apUID, err := d.co.GetAuthProviderUID(ctx)
 	if err != nil {
 		return nil, err
@@ -96,6 +124,85 @@ func (d *driver) GetUser(ctx context.Context) (*auth.UserRecord, error) {
 	return ur, err
 }
 
+type GetProviderInfoRequiredOption struct {
+	CurrentWorkspaceID bool
+}
+
+func (d *driver) GetProviderInfo(ctx context.Context, option GetProviderInfoRequiredOption) (ProviderInfo, error) {
+	apUID, err := d.co.GetAuthProviderUID(ctx)
+	if err != nil {
+		return ProviderInfo{}, err
+	}
+	u, err := d.f.Auth.GetUser(ctx, apUID.ToString())
+	if err != nil {
+		return ProviderInfo{}, err
+	}
+	claims := u.CustomClaims
+	if claims == nil {
+		claims = map[string]interface{}{}
+	}
+	var clmAID *account.ID = nil
+	var clmWID *workspace.ID = nil
+	var clmRole *member.Role = nil
+
+	aIDInClaims, _ := claims[CustomClaimAccountIDKey].(string)
+	if aIDInClaims != "" {
+		aID := account.NewIDFromUUID(uuid.MustParse(aIDInClaims))
+		if err != nil {
+			return ProviderInfo{}, err
+		}
+		clmAID = &aID
+	}
+
+	wIDInClaims, _ := claims[CustomClaimCurrentWorkspaceIDKey].(string)
+	if wIDInClaims == "" && option.CurrentWorkspaceID {
+		return ProviderInfo{}, domainErr.NewUnauthenticated(fmt.Sprintf("account does not have current workspace"))
+	}
+	if wIDInClaims != "" {
+		wID := workspace.NewIDFromUUID(uuid.MustParse(wIDInClaims))
+		clmWID = &wID
+	}
+
+	roleInClaims, _ := claims[CustomClaimRoleKey].(string)
+	if roleInClaims != "" {
+		role, err := member.NewRole(roleInClaims)
+		if err != nil {
+			return ProviderInfo{}, err
+		}
+		clmRole = &role
+	}
+
+	var em *account.Email = nil
+	var dn *member.DisplayName = nil
+	var ph *phone.Number = nil
+
+	if u.UserInfo.Email != "" {
+		tmpEm, err := account.NewEmail(u.Email)
+		if err != nil {
+			return ProviderInfo{}, err
+		}
+		em = &tmpEm
+	}
+
+	if u.UserInfo.DisplayName != "" {
+		dn = member.NewDisplayName(u.DisplayName)
+	}
+
+	if u.UserInfo.PhoneNumber != "" {
+		tmpPh, err := phone.NewInternationalPhoneNumber(u.PhoneNumber, "JP")
+		if err != nil {
+			return ProviderInfo{}, err
+		}
+		ph = &tmpPh
+	}
+
+	return ProviderInfo{
+		CustomClaim: CustomClaim{clmWID, clmAID, clmRole},
+		UserInfo:    UserInfo{em, dn, ph},
+	}, nil
+
+}
+
 func (d *driver) UpdateProfile(ctx context.Context, usr *user.User) error {
 	apUID, err := d.co.GetAuthProviderUID(ctx)
 	if err != nil {
@@ -126,7 +233,19 @@ func (d *driver) UpdateProfile(ctx context.Context, usr *user.User) error {
 	return err
 }
 
-func (d *driver) SetCurrentWorkspaceToCustomClaim(ctx context.Context, wID workspace.ID) error {
+func (d *driver) GetEmail(ctx context.Context) (account.Email, error) {
+	apUID, err := d.co.GetAuthProviderUID(ctx)
+	if err != nil {
+		return account.Email{}, err
+	}
+	u, err := d.f.Auth.GetUser(ctx, apUID.ToString())
+	if err != nil {
+		return account.Email{}, err
+	}
+	return account.NewEmail(u.Email)
+}
+
+func (d *driver) SetMeToCustomClaim(ctx context.Context, me *me.Me) error {
 	apUID, err := d.co.GetAuthProviderUID(ctx)
 	if err != nil {
 		return err
@@ -139,7 +258,12 @@ func (d *driver) SetCurrentWorkspaceToCustomClaim(ctx context.Context, wID works
 	if cms == nil {
 		cms = map[string]interface{}{}
 	}
-	cms[CustomClaimCurrentWorkspaceIDKey] = wID.Value()
+	cms[CustomClaimAccountIDKey] = me.Self().AccountID().Value().String()
+
+	if me.IsJoined() {
+		cms[CustomClaimCurrentWorkspaceIDKey] = me.Workspace().ID().Value().String()
+		cms[CustomClaimRoleKey] = me.Member().Role().ToString()
+	}
 	return d.f.Auth.SetCustomUserClaims(ctx, apUID.ToString(), cms)
 }
 
@@ -179,17 +303,6 @@ func (d *driver) GetCurrentWorkspaceFromCustomClaim(ctx context.Context) (*works
 	}
 	wID := workspace.NewIDFromUUID(uuid.MustParse(ccWID))
 	return &wID, err
-}
-
-func (d *driver) MustGetCurrentWorkspaceFromCustomClaim(ctx context.Context) (workspace.ID, error) {
-	wID, err := d.GetCurrentWorkspaceFromCustomClaim(ctx)
-	if err != nil {
-		return workspace.ID{}, err
-	}
-	if wID == nil {
-		return workspace.ID{}, domainErr.NewUnauthenticated(fmt.Sprintf("account does not have current workspace"))
-	}
-	return *wID, nil
 }
 
 func (d *driver) CreateUser(ctx context.Context, email account.Email) error {

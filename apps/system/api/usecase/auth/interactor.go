@@ -93,6 +93,9 @@ func (u *useCase) AuthByOAuth(ctx context.Context, i ByOAuthInput) (openapi.APIV
 	if m.NotJoined() {
 		return u.op.AuthByAuth(m)
 	}
+	if err = u.meRepo.SetMe(ctx, m); err != nil {
+		return nil, err
+	}
 	if err = u.meRepo.RecordLogin(ctx, p, m); err != nil {
 		return nil, err
 	}
@@ -119,6 +122,7 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 		if ap, err = provider.NewProviderAsEmailOnFirebase(newAccountID); err != nil {
 			return nil, err
 		}
+		ctx = u.meRepo.SetCurrentProvider(ctx, ap)
 	} else {
 		if meRes, err = u.meRepo.FindLastLogin(ctx, p, usr.AccountID()); err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
@@ -127,9 +131,11 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 			return nil, err
 		}
 		ap = meRes.Providers().FindByKind(provider.Email)
+		ctx = u.meRepo.SetCurrentProvider(ctx, ap)
+		if err = u.meRepo.SetMe(ctx, meRes); err != nil {
+			return nil, err
+		}
 	}
-
-	ctx = u.meRepo.SetCurrentProvider(ctx, ap)
 
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {

@@ -76,11 +76,15 @@ func (g *gateway) RecordLogin(ctx context.Context, exec bun.IDB, m *me.Me) error
 	if err := g.md.LastLogin(ctx, exec, m.Member().ID()); err != nil {
 		return err
 	}
-	return g.fd.SetCurrentWorkspaceToCustomClaim(ctx, m.Workspace().ID())
+	return g.fd.SetMeToCustomClaim(ctx, m)
 }
 
 func (g *gateway) SetCurrentProvider(ctx context.Context, p *provider.Provider) context.Context {
 	return g.co.SetAuthProviderUID(ctx, p.UID())
+}
+
+func (g *gateway) SetMe(ctx context.Context, m *me.Me) error {
+	return g.fd.SetMeToCustomClaim(ctx, m)
 }
 
 func (g *gateway) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*me.Me, error) {

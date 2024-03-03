@@ -1,0 +1,14 @@
+{
+	"mocks": {
+		"mock_context.go": {
+			"checksum": "pHcz+otzPrOUIbcuBlTvzg==",
+			"source_checksum": "Vj7P9ArOWkiNT8F5fYTqfg==",
+			"mode": "SOURCE_MODE",
+			"source_mode_runner": {
+				"source": "context.go",
+				"destination": "mock_context.go",
+				"package": "shared"
+			}
+		}
+	}
+}

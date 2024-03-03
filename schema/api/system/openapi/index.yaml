@@ -4,6 +4,7 @@ info:
   description: System API
   version: 1.0.0
 paths:
+  # Unauthenticated
   /api/v1/ping:
     $ref: "./paths/ping.yaml#/ping"
   /api/v1/auth/otp:
@@ -18,12 +19,14 @@ paths:
     $ref: "./paths/auth.yaml#/invitation"
   /api/v1/auth/oauth:
     $ref: "./paths/auth.yaml#/oauth"
+  # Me
   /api/v1/me:
     $ref: "./paths/me.yaml#/me"
   /api/v1/me/profile:
     $ref: "./paths/me.yaml#/profile"
   /api/v1/me/member/profile:
     $ref: "./paths/me.yaml#/memberProfile"
+  # Workspaces
   /api/v1/workspaces:
     $ref: "./paths/workspace.yaml#/workspaces"
   /api/v1/members:
