@@ -57,6 +57,11 @@ jobs:
           name: gosec-results
           path: results.html
 
+      - name: Install gomockhandler
+        run: |
+          go install go.uber.org/mock/mockgen@latest
+          go install github.com/sanposhiho/gomockhandler@latest
+
       - name: Go Generate
         run: go generate ./... && git diff --exit-code
 
