@@ -6,7 +6,7 @@ const client = genAPIClient()
 
 systemTest.describe("invite members", () => {
   systemTest("success to invite members", { tag: ["@stateful"] }, async ({ stateful }) => {
-    const email = "system_account@example.com"
+    const email = "account@example.com"
     const authInfo = await getAuthInfo(email)
     const res = await client.POST("/api/v1/members/invitations/bulk", {
       headers: authHeaders(authInfo.token),
@@ -63,7 +63,7 @@ systemTest.describe("invite members", () => {
 
 systemTest.describe("get invitations", () => {
   systemTest("success to get invitations without revoked and already registered", async () => {
-    const email = "system_account@example.com"
+    const email = "account@example.com"
     const authInfo = await getAuthInfo(email)
     const res = await client.GET("/api/v1/invitations", { headers: authHeaders(authInfo.token) })
     expect(res.response.status).toBe(200)
@@ -72,7 +72,7 @@ systemTest.describe("get invitations", () => {
   })
 
   systemTest("success to get accepted invitations without revoked", { tag: ["@stateful"] }, async ({ stateful }) => {
-    const email = "system_account@example.com"
+    const email = "account@example.com"
     const authInfo = await getAuthInfo(email)
     const res = await client.GET("/api/v1/invitations", {
       headers: authHeaders(authInfo.token),

@@ -43,7 +43,7 @@ systemTest.describe("Me Invitations", () => {
               },
               role: "OWNER",
               user: {
-                email: "system_account@example.com",
+                email: "account@example.com",
                 name: "John Doe",
                 userId: "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
               }

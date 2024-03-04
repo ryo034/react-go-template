@@ -48,17 +48,18 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, id invitation.ID) (*mod
 		Relation("InvitationUnit.Workspace.Detail").
 		Relation("InvitationUnit.Member").
 		Relation("InvitationUnit.Member.Profile").
-		Relation("InvitationUnit.Member.SystemAccount").
-		Relation("InvitationUnit.Member.SystemAccount.AuthProviders").
-		Relation("InvitationUnit.Member.SystemAccount.Name").
-		Relation("InvitationUnit.Member.SystemAccount.Name.SystemAccountName").
-		Relation("InvitationUnit.Member.SystemAccount.Email").
-		Relation("InvitationUnit.Member.SystemAccount.Email.SystemAccountEmail").
-		Relation("InvitationUnit.Member.SystemAccount.PhoneNumber").
-		Relation("InvitationUnit.Member.SystemAccount.PhoneNumber.SystemAccountPhoneNumber").
-		Relation("InvitationUnit.Member.SystemAccount.PhotoEvent").
-		Relation("InvitationUnit.Member.SystemAccount.PhotoEvent.SystemAccountPhotoEvent").
-		Relation("InvitationUnit.Member.SystemAccount.PhotoEvent.SystemAccountPhotoEvent.Photo").
+		Relation("InvitationUnit.Member.Role").
+		Relation("InvitationUnit.Member.Account").
+		Relation("InvitationUnit.Member.Account.AuthProviders").
+		Relation("InvitationUnit.Member.Account.Name").
+		Relation("InvitationUnit.Member.Account.Name.AccountName").
+		Relation("InvitationUnit.Member.Account.Email").
+		Relation("InvitationUnit.Member.Account.Email.AccountEmail").
+		Relation("InvitationUnit.Member.Account.PhoneNumber").
+		Relation("InvitationUnit.Member.Account.PhoneNumber.AccountPhoneNumber").
+		Relation("InvitationUnit.Member.Account.PhotoEvent").
+		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent").
+		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent.Photo").
 		Relation("Invitee").
 		Relation("Tokens").
 		Relation("Events").
@@ -115,17 +116,18 @@ func (d *driver) FindActiveByEmail(ctx context.Context, exec bun.IDB, email acco
 		Relation("InvitationUnit.Workspace.Detail").
 		Relation("InvitationUnit.Member").
 		Relation("InvitationUnit.Member.Profile").
-		Relation("InvitationUnit.Member.SystemAccount").
-		Relation("InvitationUnit.Member.SystemAccount.AuthProviders").
-		Relation("InvitationUnit.Member.SystemAccount.Name").
-		Relation("InvitationUnit.Member.SystemAccount.Name.SystemAccountName").
-		Relation("InvitationUnit.Member.SystemAccount.Email").
-		Relation("InvitationUnit.Member.SystemAccount.Email.SystemAccountEmail").
-		Relation("InvitationUnit.Member.SystemAccount.PhoneNumber").
-		Relation("InvitationUnit.Member.SystemAccount.PhoneNumber.SystemAccountPhoneNumber").
-		Relation("InvitationUnit.Member.SystemAccount.PhotoEvent").
-		Relation("InvitationUnit.Member.SystemAccount.PhotoEvent.SystemAccountPhotoEvent").
-		Relation("InvitationUnit.Member.SystemAccount.PhotoEvent.SystemAccountPhotoEvent.Photo").
+		Relation("InvitationUnit.Member.Role").
+		Relation("InvitationUnit.Member.Account").
+		Relation("InvitationUnit.Member.Account.AuthProviders").
+		Relation("InvitationUnit.Member.Account.Name").
+		Relation("InvitationUnit.Member.Account.Name.AccountName").
+		Relation("InvitationUnit.Member.Account.Email").
+		Relation("InvitationUnit.Member.Account.Email.AccountEmail").
+		Relation("InvitationUnit.Member.Account.PhoneNumber").
+		Relation("InvitationUnit.Member.Account.PhoneNumber.AccountPhoneNumber").
+		Relation("InvitationUnit.Member.Account.PhotoEvent").
+		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent").
+		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent.Photo").
 		Relation("Invitee").
 		Where(fmt.Sprintf("%s.invitation_id = ?", models.InvitationTableAliasName), invt.InvitationID).
 		Limit(1).
@@ -249,17 +251,17 @@ func (d *driver) FindAllReceivedByEmail(ctx context.Context, exec bun.IDB, email
 		Relation("InvitationUnit.Member").
 		Relation("InvitationUnit.Member.Profile").
 		Relation("InvitationUnit.Member.Role").
-		Relation("InvitationUnit.Member.SystemAccount").
-		Relation("InvitationUnit.Member.SystemAccount.AuthProviders").
-		Relation("InvitationUnit.Member.SystemAccount.Name").
-		Relation("InvitationUnit.Member.SystemAccount.Name.SystemAccountName").
-		Relation("InvitationUnit.Member.SystemAccount.Email").
-		Relation("InvitationUnit.Member.SystemAccount.Email.SystemAccountEmail").
-		Relation("InvitationUnit.Member.SystemAccount.PhoneNumber").
-		Relation("InvitationUnit.Member.SystemAccount.PhoneNumber.SystemAccountPhoneNumber").
-		Relation("InvitationUnit.Member.SystemAccount.PhotoEvent").
-		Relation("InvitationUnit.Member.SystemAccount.PhotoEvent.SystemAccountPhotoEvent").
-		Relation("InvitationUnit.Member.SystemAccount.PhotoEvent.SystemAccountPhotoEvent.Photo").
+		Relation("InvitationUnit.Member.Account").
+		Relation("InvitationUnit.Member.Account.AuthProviders").
+		Relation("InvitationUnit.Member.Account.Name").
+		Relation("InvitationUnit.Member.Account.Name.AccountName").
+		Relation("InvitationUnit.Member.Account.Email").
+		Relation("InvitationUnit.Member.Account.Email.AccountEmail").
+		Relation("InvitationUnit.Member.Account.PhoneNumber").
+		Relation("InvitationUnit.Member.Account.PhoneNumber.AccountPhoneNumber").
+		Relation("InvitationUnit.Member.Account.PhotoEvent").
+		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent").
+		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent.Photo").
 		Relation("Invitee").
 		Relation("Tokens", func(query *bun.SelectQuery) *bun.SelectQuery {
 			return query.Order("expired_at DESC").Limit(1)
@@ -325,19 +327,19 @@ func (d *driver) FindActiveByToken(ctx context.Context, exec bun.IDB, token invi
 		Relation("InvitationUnit.Workspace").
 		Relation("InvitationUnit.Workspace.Detail").
 		Relation("InvitationUnit.Member").
-		Relation("InvitationUnit.Member.Role").
 		Relation("InvitationUnit.Member.Profile").
-		Relation("InvitationUnit.Member.SystemAccount").
-		Relation("InvitationUnit.Member.SystemAccount.AuthProviders").
-		Relation("InvitationUnit.Member.SystemAccount.Name").
-		Relation("InvitationUnit.Member.SystemAccount.Name.SystemAccountName").
-		Relation("InvitationUnit.Member.SystemAccount.Email").
-		Relation("InvitationUnit.Member.SystemAccount.Email.SystemAccountEmail").
-		Relation("InvitationUnit.Member.SystemAccount.PhoneNumber").
-		Relation("InvitationUnit.Member.SystemAccount.PhoneNumber.SystemAccountPhoneNumber").
-		Relation("InvitationUnit.Member.SystemAccount.PhotoEvent").
-		Relation("InvitationUnit.Member.SystemAccount.PhotoEvent.SystemAccountPhotoEvent").
-		Relation("InvitationUnit.Member.SystemAccount.PhotoEvent.SystemAccountPhotoEvent.Photo").
+		Relation("InvitationUnit.Member.Role").
+		Relation("InvitationUnit.Member.Account").
+		Relation("InvitationUnit.Member.Account.AuthProviders").
+		Relation("InvitationUnit.Member.Account.Name").
+		Relation("InvitationUnit.Member.Account.Name.AccountName").
+		Relation("InvitationUnit.Member.Account.Email").
+		Relation("InvitationUnit.Member.Account.Email.AccountEmail").
+		Relation("InvitationUnit.Member.Account.PhoneNumber").
+		Relation("InvitationUnit.Member.Account.PhoneNumber.AccountPhoneNumber").
+		Relation("InvitationUnit.Member.Account.PhotoEvent").
+		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent").
+		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent.Photo").
 		Relation("Invitee").
 		Where(fmt.Sprintf("%s.invitation_id = ?", models.InvitationTableAliasName), invt.InvitationID).
 		Limit(1).
@@ -367,17 +369,17 @@ func (d *driver) FindAllByWorkspace(ctx context.Context, exec bun.IDB, wID works
 		Relation("InvitationUnit.Member").
 		Relation("InvitationUnit.Member.Profile").
 		Relation("InvitationUnit.Member.Role").
-		Relation("InvitationUnit.Member.SystemAccount").
-		Relation("InvitationUnit.Member.SystemAccount.AuthProviders").
-		Relation("InvitationUnit.Member.SystemAccount.Name").
-		Relation("InvitationUnit.Member.SystemAccount.Name.SystemAccountName").
-		Relation("InvitationUnit.Member.SystemAccount.Email").
-		Relation("InvitationUnit.Member.SystemAccount.Email.SystemAccountEmail").
-		Relation("InvitationUnit.Member.SystemAccount.PhoneNumber").
-		Relation("InvitationUnit.Member.SystemAccount.PhoneNumber.SystemAccountPhoneNumber").
-		Relation("InvitationUnit.Member.SystemAccount.PhotoEvent").
-		Relation("InvitationUnit.Member.SystemAccount.PhotoEvent.SystemAccountPhotoEvent").
-		Relation("InvitationUnit.Member.SystemAccount.PhotoEvent.SystemAccountPhotoEvent.Photo").
+		Relation("InvitationUnit.Member.Account").
+		Relation("InvitationUnit.Member.Account.AuthProviders").
+		Relation("InvitationUnit.Member.Account.Name").
+		Relation("InvitationUnit.Member.Account.Name.AccountName").
+		Relation("InvitationUnit.Member.Account.Email").
+		Relation("InvitationUnit.Member.Account.Email.AccountEmail").
+		Relation("InvitationUnit.Member.Account.PhoneNumber").
+		Relation("InvitationUnit.Member.Account.PhoneNumber.AccountPhoneNumber").
+		Relation("InvitationUnit.Member.Account.PhotoEvent").
+		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent").
+		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent.Photo").
 		Relation("Invitee").
 		Relation("Tokens").
 		Relation("Events").

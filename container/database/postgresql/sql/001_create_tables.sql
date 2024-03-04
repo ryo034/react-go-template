@@ -36,10 +36,10 @@ CREATE TABLE address_components (
   PRIMARY KEY (component_id)
 );
 
-CREATE TABLE system_accounts (
-  system_account_id uuid NOT NULL,
+CREATE TABLE accounts (
+  account_id uuid NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (system_account_id)
+  PRIMARY KEY (account_id)
 );
 
 CREATE TYPE auth_provider_provider AS ENUM ('google', 'email');
@@ -47,91 +47,91 @@ CREATE TYPE auth_provider_provided_by AS ENUM ('firebase');
 
 CREATE TABLE auth_providers (
   auth_provider_id uuid NOT NULL,
-  system_account_id uuid NOT NULL,
+  account_id uuid NOT NULL,
   provider auth_provider_provider NOT NULL,
   provider_uid VARCHAR(255) NOT NULL,
   provided_by auth_provider_provided_by NOT NULL,
   registered_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (auth_provider_id),
-  CONSTRAINT fk_auth_providers_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+  CONSTRAINT fk_auth_providers_accounts_account_id FOREIGN KEY (account_id) REFERENCES accounts(account_id)
 );
 
-CREATE TABLE system_account_emails (
-  system_account_email_id uuid NOT NULL,
-  system_account_id uuid NOT NULL,
+CREATE TABLE account_emails (
+  account_email_id uuid NOT NULL,
+  account_id uuid NOT NULL,
   email VARCHAR(256) NOT NULL UNIQUE,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (system_account_email_id),
-  CONSTRAINT fk_system_account_emails_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+  PRIMARY KEY (account_email_id),
+  CONSTRAINT fk_account_emails_accounts_account_id FOREIGN KEY (account_id) REFERENCES accounts(account_id)
 );
 
-CREATE TABLE system_account_latest_emails (
-  system_account_email_id uuid NOT NULL,
-  system_account_id uuid NOT NULL UNIQUE,
-  PRIMARY KEY (system_account_email_id),
-  CONSTRAINT fk_salems_system_account_emails_system_account_email_id FOREIGN KEY (system_account_email_id) REFERENCES system_account_emails(system_account_email_id),
-  CONSTRAINT fk_salems_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+CREATE TABLE account_latest_emails (
+  account_email_id uuid NOT NULL,
+  account_id uuid NOT NULL UNIQUE,
+  PRIMARY KEY (account_email_id),
+  CONSTRAINT fk_salems_account_emails_account_email_id FOREIGN KEY (account_email_id) REFERENCES account_emails(account_email_id),
+  CONSTRAINT fk_salems_accounts_account_id FOREIGN KEY (account_id) REFERENCES accounts(account_id)
 );
 
-CREATE TABLE system_account_names (
-  system_account_name_id uuid NOT NULL,
-  system_account_id uuid NOT NULL,
+CREATE TABLE account_names (
+  account_name_id uuid NOT NULL,
+  account_id uuid NOT NULL,
   name VARCHAR(255) NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (system_account_name_id),
-  CONSTRAINT fk_system_account_names_sas_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+  PRIMARY KEY (account_name_id),
+  CONSTRAINT fk_account_names_sas_account_id FOREIGN KEY (account_id) REFERENCES accounts(account_id)
 );
 
-CREATE TABLE system_account_latest_names (
-  system_account_name_id uuid NOT NULL,
-  system_account_id uuid NOT NULL UNIQUE,
-  PRIMARY KEY (system_account_name_id),
-  CONSTRAINT fk_salns_system_account_names_system_account_name_id FOREIGN KEY (system_account_name_id) REFERENCES system_account_names(system_account_name_id),
-  CONSTRAINT fk_salns_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+CREATE TABLE account_latest_names (
+  account_name_id uuid NOT NULL,
+  account_id uuid NOT NULL UNIQUE,
+  PRIMARY KEY (account_name_id),
+  CONSTRAINT fk_salns_account_names_account_name_id FOREIGN KEY (account_name_id) REFERENCES account_names(account_name_id),
+  CONSTRAINT fk_salns_accounts_account_id FOREIGN KEY (account_id) REFERENCES accounts(account_id)
 );
 
-CREATE TYPE system_account_phone_number_country_codes AS ENUM ('JP', 'US');
-CREATE TABLE system_account_phone_numbers (
-  system_account_phone_number_id uuid NOT NULL,
-  system_account_id uuid NOT NULL,
+CREATE TYPE account_phone_number_country_codes AS ENUM ('JP', 'US');
+CREATE TABLE account_phone_numbers (
+  account_phone_number_id uuid NOT NULL,
+  account_id uuid NOT NULL,
   phone_number VARCHAR(15) NOT NULL UNIQUE,
-  country_code system_account_phone_number_country_codes NOT NULL,
+  country_code account_phone_number_country_codes NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (system_account_phone_number_id),
-  CONSTRAINT fk_system_account_phone_numbers_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+  PRIMARY KEY (account_phone_number_id),
+  CONSTRAINT fk_account_phone_numbers_accounts_account_id FOREIGN KEY (account_id) REFERENCES accounts(account_id)
 );
 
-CREATE TABLE system_account_latest_phone_numbers (
-  system_account_phone_number_id uuid NOT NULL,
-  system_account_id uuid NOT NULL UNIQUE,
-  PRIMARY KEY (system_account_phone_number_id),
-  CONSTRAINT fk_salpns_system_account_phone_numbers_system_account_phone_number_id FOREIGN KEY (system_account_phone_number_id) REFERENCES system_account_phone_numbers(system_account_phone_number_id),
-  CONSTRAINT fk_salpns_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+CREATE TABLE account_latest_phone_numbers (
+  account_phone_number_id uuid NOT NULL,
+  account_id uuid NOT NULL UNIQUE,
+  PRIMARY KEY (account_phone_number_id),
+  CONSTRAINT fk_salpns_account_phone_numbers_account_phone_number_id FOREIGN KEY (account_phone_number_id) REFERENCES account_phone_numbers(account_phone_number_id),
+  CONSTRAINT fk_salpns_accounts_account_id FOREIGN KEY (account_id) REFERENCES accounts(account_id)
 );
 
-CREATE TYPE system_account_photo_event_types AS ENUM ('upload', 'delete');
-CREATE TABLE system_account_photo_events (
-  system_account_photo_event_id uuid NOT NULL,
-  system_account_id uuid NOT NULL,
-  event_type system_account_photo_event_types NOT NULL,
+CREATE TYPE account_photo_event_types AS ENUM ('upload', 'delete');
+CREATE TABLE account_photo_events (
+  account_photo_event_id uuid NOT NULL,
+  account_id uuid NOT NULL,
+  event_type account_photo_event_types NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (system_account_photo_event_id),
-  CONSTRAINT fk_system_account_photo_events_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+  PRIMARY KEY (account_photo_event_id),
+  CONSTRAINT fk_account_photo_events_accounts_account_id FOREIGN KEY (account_id) REFERENCES accounts(account_id)
 );
 
-CREATE TABLE system_account_photos (
-  system_account_photo_event_id uuid NOT NULL,
+CREATE TABLE account_photos (
+  account_photo_event_id uuid NOT NULL,
   photo_path TEXT NOT NULL,
-  PRIMARY KEY (system_account_photo_event_id),
-  CONSTRAINT fk_system_account_photos_sape_system_account_photo_event_id FOREIGN KEY (system_account_photo_event_id) REFERENCES system_account_photo_events(system_account_photo_event_id)
+  PRIMARY KEY (account_photo_event_id),
+  CONSTRAINT fk_account_photos_sape_account_photo_event_id FOREIGN KEY (account_photo_event_id) REFERENCES account_photo_events(account_photo_event_id)
 );
 
-CREATE TABLE system_account_latest_photo_events (
-  system_account_photo_event_id uuid NOT NULL,
-  system_account_id uuid NOT NULL UNIQUE,
-  PRIMARY KEY (system_account_photo_event_id),
-  CONSTRAINT fk_salpes_system_account_photo_events_system_account_photo_event_id FOREIGN KEY (system_account_photo_event_id) REFERENCES system_account_photo_events(system_account_photo_event_id),
-  CONSTRAINT fk_salpes_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+CREATE TABLE account_latest_photo_events (
+  account_photo_event_id uuid NOT NULL,
+  account_id uuid NOT NULL UNIQUE,
+  PRIMARY KEY (account_photo_event_id),
+  CONSTRAINT fk_salpes_account_photo_events_account_photo_event_id FOREIGN KEY (account_photo_event_id) REFERENCES account_photo_events(account_photo_event_id),
+  CONSTRAINT fk_salpes_accounts_account_id FOREIGN KEY (account_id) REFERENCES accounts(account_id)
 );
 
 CREATE TABLE workspaces (
@@ -156,11 +156,11 @@ CREATE TRIGGER refresh_workspace_details_updated_at_step3 BEFORE UPDATE ON works
 
 CREATE TABLE members (
   member_id uuid NOT NULL,
-  system_account_id uuid NOT NULL,
+  account_id uuid NOT NULL,
   workspace_id uuid NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (member_id),
-  CONSTRAINT fk_members_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id),
+  CONSTRAINT fk_members_accounts_account_id FOREIGN KEY (account_id) REFERENCES accounts(account_id),
   CONSTRAINT fk_members_workspaces_workspace_id FOREIGN KEY (workspace_id) REFERENCES workspaces(workspace_id)
 );
 

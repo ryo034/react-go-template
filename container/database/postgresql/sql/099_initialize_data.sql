@@ -5,7 +5,7 @@ VALUES
 ('90c3287b-2ff8-46b4-bfb5-332a979a199a', 'State', 'Kanto'),
 ('44002c51-cc57-489f-bcf7-4f2abc6ddeb8', 'Street', 'Shibuya');
 
-INSERT INTO system_accounts (system_account_id, created_at)
+INSERT INTO accounts (account_id, created_at)
 VALUES
 ('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', '2024-01-10 12:00:00'),
 ('018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', '2024-01-10 12:00:00'),
@@ -19,7 +19,7 @@ VALUES
 ('018df53c-c5a6-71a2-bf90-2f751f342d4c', '2024-01-10 12:00:00'),
 ('018df551-4339-730c-8031-618eb8ef66b5', '2024-01-10 12:00:00');
 
-INSERT INTO auth_providers (auth_provider_id, system_account_id, provider, provider_uid, provided_by, registered_at)
+INSERT INTO auth_providers (auth_provider_id, account_id, provider, provider_uid, provided_by, registered_at)
 VALUES
 ('018de2f6-968d-7458-9c67-69ae5698a143', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'email', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'firebase', '2024-01-10 12:00:00'),
 ('018de2f6-b536-7f9c-bd34-dcf319ee4127', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', 'email', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', 'firebase', '2024-01-10 12:00:00'),
@@ -33,9 +33,9 @@ VALUES
 ('018df53c-f868-7f2a-bafd-9cda1fe15e8a', '018df53c-c5a6-71a2-bf90-2f751f342d4c', 'email', '018df53c-c5a6-71a2-bf90-2f751f342d4c', 'firebase', '2024-01-10 12:00:00'),
 ('018df551-d07a-7761-8c69-7de98d195e26', '018df551-4339-730c-8031-618eb8ef66b5', 'google', 'ZHjoHCDE0C1EHxLIQvNgiygTXu9A', 'firebase', '2024-01-10 12:00:00');
 
-INSERT INTO system_account_emails (system_account_email_id, system_account_id, email, created_at)
+INSERT INTO account_emails (account_email_id, account_id, email, created_at)
 VALUES
-('018e09c2-9924-7048-9f08-afa2f3ea5b53', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'system_account@example.com', '2024-01-10 12:00:00'),
+('018e09c2-9924-7048-9f08-afa2f3ea5b53', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'account@example.com', '2024-01-10 12:00:00'),
 ('018e09c2-a8d4-7eb8-966d-40069a2ad41a', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', 'login_logout_login@example.com', '2024-01-10 12:00:00'),
 ('018e09c2-d3f3-75d3-9b72-91a4c2b2d8aa', '018d6189-9ad0-7b72-801b-1e0de0d3c214', 'unfinished_onboarding@example.com', '2024-01-10 12:00:00'),
 ('018e09c2-d3f3-71bd-bbca-5cec4e063d46', '018d96bf-8dce-7f68-a926-b5d7ed6ed883', 'invite_test_1@example.com', '2024-01-10 12:00:00'),
@@ -47,7 +47,7 @@ VALUES
 ('018e09c2-d3f3-7de8-8531-51a58e1e3a96', '018df53c-c5a6-71a2-bf90-2f751f342d4c', 'invite_test_already_joined_any_workspace_by_email@example.com', '2024-01-10 12:00:00'),
 ('018e09c2-d3f3-787a-94e6-adfc83e2c457', '018df551-4339-730c-8031-618eb8ef66b5', 'invite_test_already_joined_any_workspace_by_google@example.com', '2024-01-10 12:00:00');
 
-INSERT INTO system_account_latest_emails (system_account_email_id, system_account_id)
+INSERT INTO account_latest_emails (account_email_id, account_id)
 VALUES
 ('018e09c2-9924-7048-9f08-afa2f3ea5b53', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70'),
 ('018e09c2-a8d4-7eb8-966d-40069a2ad41a', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2'),
@@ -61,7 +61,7 @@ VALUES
 ('018e09c2-d3f3-7de8-8531-51a58e1e3a96', '018df53c-c5a6-71a2-bf90-2f751f342d4c'),
 ('018e09c2-d3f3-787a-94e6-adfc83e2c457', '018df551-4339-730c-8031-618eb8ef66b5');
 
-INSERT INTO system_account_names (system_account_name_id, system_account_id, name, created_at)
+INSERT INTO account_names (account_name_id, account_id, name, created_at)
 VALUES
 ('018e088e-fd36-722d-a927-8cfd34a642bd', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'John Doe', '2024-01-10 12:00:00'),
 ('018e088f-9eab-78bf-9b3f-c4aacb50e666', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', 'Login LogoutRetry', '2024-01-10 12:00:00'),
@@ -74,7 +74,7 @@ VALUES
 ('018e0890-34c0-7ed8-80d6-6626f4d37531', '018df53c-c5a6-71a2-bf90-2f751f342d4c', 'InviteGoogleAuthTest AlreadyJoined', '2024-01-10 12:00:00'),
 ('018e0890-4745-7655-af59-805da2375591', '018df551-4339-730c-8031-618eb8ef66b5', 'InviteGoogleAuthTest AlreadyJoinedGoogle', '2024-01-10 12:00:00');
 
-INSERT INTO system_account_latest_names (system_account_name_id, system_account_id)
+INSERT INTO account_latest_names (account_name_id, account_id)
 VALUES
 ('018e088e-fd36-722d-a927-8cfd34a642bd', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70'),
 ('018e088f-9eab-78bf-9b3f-c4aacb50e666', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2'),
@@ -103,7 +103,7 @@ VALUES
 ('018d9b4d-e340-74f7-914c-2476eff949bb', 'InviteTest 2', 'invite-test-2', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018ddee6-6446-7f9d-b750-469a7c2dfac5', 'UpdateMemberMeProfile Workspace', 'update-me-member-profile', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
 
-INSERT INTO members (member_id, system_account_id, workspace_id, created_at)
+INSERT INTO members (member_id, account_id, workspace_id, created_at)
 VALUES
 ('377eba35-5560-4f48-a99d-19cbd6a82b0d', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'c1bd2603-b9cd-4f84-8b83-3548f6ae150b', '2024-01-10 12:00:00'),
 ('018d91d5-c061-78ba-9263-d6ef9e7e6783', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', '018d91d5-2ed0-7211-b2e6-cf26182ac4f9', '2024-01-10 12:00:00'),

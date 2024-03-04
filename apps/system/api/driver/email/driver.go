@@ -15,6 +15,8 @@ import (
 	"golang.org/x/text/language"
 )
 
+//TODO:embedでテンプレートを埋め込む
+
 type Driver interface {
 	SendOTP(ctx context.Context, mailTo account.Email, code string) error
 	SendInvitation(ctx context.Context, inviter workspace.Inviter, i *invitation.Invitation) error

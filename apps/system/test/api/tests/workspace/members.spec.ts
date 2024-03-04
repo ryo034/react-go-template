@@ -6,7 +6,7 @@ const client = genAPIClient()
 
 test.describe("Workspace members", () => {
   test("get workspace members", async () => {
-    const authInfo = await getAuthInfo("system_account@example.com")
+    const authInfo = await getAuthInfo("account@example.com")
     const hs = authHeaders(authInfo.token)
     const res = await client.GET("/api/v1/members", { headers: hs })
     expect(res.response.status).toBe(200)

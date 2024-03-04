@@ -7,132 +7,132 @@ import (
 	"github.com/uptrace/bun"
 )
 
-type SystemAccount struct {
-	bun.BaseModel `bun:"table:system_accounts,alias:sa"`
+type Account struct {
+	bun.BaseModel `bun:"table:accounts,alias:sa"`
 
-	SystemAccountID uuid.UUID `bun:"system_account_id,pk"`
-	CreatedAt       time.Time `bun:"created_at,notnull,default:current_timestamp"`
+	AccountID uuid.UUID `bun:"account_id,pk"`
+	CreatedAt time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	AuthProviders []*AuthProvider                 `bun:"aps,rel:has-many"`
-	Name          *SystemAccountLatestName        `bun:"salns,rel:has-one"`
-	PhotoEvent    *SystemAccountLatestPhotoEvent  `bun:"salaphoes,rel:has-one"`
-	PhoneNumber   *SystemAccountLatestPhoneNumber `bun:"salpns,rel:has-one"`
-	Email         *SystemAccountLatestEmail       `bun:"salems,rel:has-one"`
+	AuthProviders []*AuthProvider           `bun:"ap,rel:has-many"`
+	Name          *AccountLatestName        `bun:"aln,rel:has-one"`
+	PhotoEvent    *AccountLatestPhotoEvent  `bun:"alaphoe,rel:has-one"`
+	PhoneNumber   *AccountLatestPhoneNumber `bun:"alpn,rel:has-one"`
+	Email         *AccountLatestEmail       `bun:"alem,rel:has-one"`
 
 	// Relation exists but is not used in the application
-	//Names        []*SystemAccountName        `bun:"sans,rel:has-many"`
-	//PhotoEvents  []*SystemAccountPhotoEvent  `bun:"saphoes,rel:has-many"`
-	//PhoneNumbers []*SystemAccountPhoneNumber `bun:"sapns,rel:has-many"`
-	//Emails       []*SystemAccountEmail       `bun:"saes,rel:has-many"`
+	//Names        []*AccountName        `bun:"an,rel:has-many"`
+	//PhotoEvents  []*AccountPhotoEvent  `bun:"aphoe,rel:has-many"`
+	//PhoneNumbers []*AccountPhoneNumber `bun:"apn,rel:has-many"`
+	//Emails       []*AccountEmail       `bun:"ae,rel:has-many"`
 }
 
 type AuthProvider struct {
-	bun.BaseModel `bun:"table:auth_providers,alias:aps"`
+	bun.BaseModel `bun:"table:auth_providers,alias:ap"`
 
-	AuthProviderID  uuid.UUID `bun:"auth_provider_id,pk"`
-	SystemAccountID uuid.UUID `bun:"system_account_id,notnull"`
-	Provider        string    `bun:"provider,notnull"`
-	ProviderUID     string    `bun:"provider_uid,notnull"`
-	ProvidedBy      string    `bun:"provided_by,notnull"`
-	RegisteredAt    time.Time `bun:"registered_at,notnull,default:current_timestamp"`
+	AuthProviderID uuid.UUID `bun:"auth_provider_id,pk"`
+	AccountID      uuid.UUID `bun:"account_id,notnull"`
+	Provider       string    `bun:"provider,notnull"`
+	ProviderUID    string    `bun:"provider_uid,notnull"`
+	ProvidedBy     string    `bun:"provided_by,notnull"`
+	RegisteredAt   time.Time `bun:"registered_at,notnull,default:current_timestamp"`
 
-	SystemAccount *SystemAccount `bun:"sa,rel:belongs-to"`
+	Account *Account `bun:"sa,rel:belongs-to"`
 }
 
-type SystemAccountEmail struct {
-	bun.BaseModel `bun:"table:system_account_emails,alias:saes"`
+type AccountEmail struct {
+	bun.BaseModel `bun:"table:account_emails,alias:ae"`
 
-	SystemAccountEmailID uuid.UUID `bun:"system_account_email_id,pk"`
-	SystemAccountID      uuid.UUID `bun:"system_account_id,notnull"`
-	Email                string    `bun:"email,notnull"`
+	AccountEmailID uuid.UUID `bun:"account_email_id,pk"`
+	AccountID      uuid.UUID `bun:"account_id,notnull"`
+	Email          string    `bun:"email,notnull"`
+	CreatedAt      time.Time `bun:"created_at,notnull,default:current_timestamp"`
+
+	Account            *Account            `bun:"sa,rel:belongs-to"`
+	AccountLatestEmail *AccountLatestEmail `bun:"alem,rel:has-one"`
+}
+
+type AccountLatestEmail struct {
+	bun.BaseModel `bun:"table:account_latest_emails,alias:alem"`
+
+	AccountEmailID uuid.UUID `bun:"account_email_id,pk"`
+	AccountID      uuid.UUID `bun:"account_id,notnull,unique"`
+
+	Account      *Account      `bun:"sa,rel:belongs-to"`
+	AccountEmail *AccountEmail `bun:"ae,rel:has-one"`
+}
+
+type AccountPhoneNumber struct {
+	bun.BaseModel `bun:"table:account_phone_numbers,alias:apn"`
+
+	AccountPhoneNumberID uuid.UUID `bun:"account_phone_number_id,pk"`
+	AccountID            uuid.UUID `bun:"account_id,notnull"`
+	PhoneNumber          string    `bun:"phone_number,notnull"`
+	CountryCode          string    `bun:"country_code,notnull"`
 	CreatedAt            time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	SystemAccount            *SystemAccount            `bun:"sa,rel:belongs-to"`
-	SystemAccountLatestEmail *SystemAccountLatestEmail `bun:"salems,rel:has-one"`
+	Account                  *Account                  `bun:"sa,rel:belongs-to"`
+	AccountLatestPhoneNumber *AccountLatestPhoneNumber `bun:"alpn,rel:has-one"`
 }
 
-type SystemAccountLatestEmail struct {
-	bun.BaseModel `bun:"table:system_account_latest_emails,alias:salems"`
+type AccountLatestPhoneNumber struct {
+	bun.BaseModel `bun:"table:account_latest_phone_numbers,alias:alpn"`
 
-	SystemAccountLatestEmailID uuid.UUID `bun:"system_account_latest_email_id,pk"`
-	SystemAccountID            uuid.UUID `bun:"system_account_id,notnull,unique"`
+	AccountPhoneNumberID uuid.UUID `bun:"account_phone_number_id,pk"`
+	AccountID            uuid.UUID `bun:"account_id,notnull,unique"`
 
-	SystemAccount      *SystemAccount      `bun:"sa,rel:belongs-to"`
-	SystemAccountEmail *SystemAccountEmail `bun:"saes,rel:belongs-to"`
+	Account            *Account            `bun:"sa,rel:belongs-to"`
+	AccountPhoneNumber *AccountPhoneNumber `bun:"apn,rel:belongs-to"`
 }
 
-type SystemAccountPhoneNumber struct {
-	bun.BaseModel `bun:"table:system_account_phone_numbers,alias:sapns"`
+type AccountName struct {
+	bun.BaseModel `bun:"table:account_names,alias:an"`
 
-	SystemAccountPhoneNumberID uuid.UUID `bun:"system_account_phone_number_id,pk"`
-	SystemAccountID            uuid.UUID `bun:"system_account_id,notnull"`
-	PhoneNumber                string    `bun:"phone_number,notnull"`
-	CountryCode                string    `bun:"country_code,notnull"`
-	CreatedAt                  time.Time `bun:"created_at,notnull,default:current_timestamp"`
+	AccountNameID uuid.UUID `bun:"account_name_id,pk"`
+	AccountID     uuid.UUID `bun:"account_id,notnull"`
+	Name          string    `bun:"name,notnull"`
+	CreatedAt     time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	SystemAccount                  *SystemAccount                  `bun:"sa,rel:belongs-to"`
-	SystemAccountLatestPhoneNumber *SystemAccountLatestPhoneNumber `bun:"salpns,rel:has-one"`
+	Account           *Account           `bun:"sa,rel:belongs-to"`
+	AccountLatestName *AccountLatestName `bun:"aln,rel:has-one"`
 }
 
-type SystemAccountLatestPhoneNumber struct {
-	bun.BaseModel `bun:"table:system_account_latest_phone_numbers,alias:salpns"`
+type AccountLatestName struct {
+	bun.BaseModel `bun:"table:account_latest_names,alias:aln"`
 
-	SystemAccountPhoneNumberID uuid.UUID `bun:"system_account_phone_number_id,pk"`
-	SystemAccountID            uuid.UUID `bun:"system_account_id,notnull,unique"`
+	AccountNameID uuid.UUID `bun:"account_name_id,pk"`
+	AccountID     uuid.UUID `bun:"account_id,notnull,unique"`
 
-	SystemAccount            *SystemAccount            `bun:"sa,rel:belongs-to"`
-	SystemAccountPhoneNumber *SystemAccountPhoneNumber `bun:"sapns,rel:belongs-to"`
+	Account     *Account     `bun:"sa,rel:belongs-to"`
+	AccountName *AccountName `bun:"an,rel:belongs-to"`
 }
 
-type SystemAccountName struct {
-	bun.BaseModel `bun:"table:system_account_names,alias:sans"`
+type AccountPhotoEvent struct {
+	bun.BaseModel `bun:"table:account_photo_events,alias:aphoe"`
 
-	SystemAccountNameID uuid.UUID `bun:"system_account_name_id,pk"`
-	SystemAccountID     uuid.UUID `bun:"system_account_id,notnull"`
-	Name                string    `bun:"name,notnull"`
+	AccountPhotoEventID uuid.UUID `bun:"account_photo_event_id,pk"`
+	AccountID           uuid.UUID `bun:"account_id,notnull"`
+	EventType           string    `bun:"event_type,notnull"`
 	CreatedAt           time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	SystemAccount           *SystemAccount           `bun:"sa,rel:belongs-to"`
-	SystemAccountLatestName *SystemAccountLatestName `bun:"salns,rel:has-one"`
+	Account *Account      `bun:"sa,rel:belongs-to"`
+	Photo   *AccountPhoto `bun:"apho,rel:has-one"`
 }
 
-type SystemAccountLatestName struct {
-	bun.BaseModel `bun:"table:system_account_latest_names,alias:salns"`
+type AccountPhoto struct {
+	bun.BaseModel `bun:"table:account_photos,alias:apho"`
 
-	SystemAccountNameID uuid.UUID `bun:"system_account_name_id,pk"`
-	SystemAccountID     uuid.UUID `bun:"system_account_id,notnull,unique"`
+	AccountPhotoEventID uuid.UUID `bun:"account_photo_event_id,pk"`
+	PhotoPath           string    `bun:"photo_path,notnull"`
 
-	SystemAccount     *SystemAccount     `bun:"sa,rel:belongs-to"`
-	SystemAccountName *SystemAccountName `bun:"sans,rel:belongs-to"`
+	AccountPhotoEvent *AccountPhotoEvent `bun:"sape,rel:belongs-to"`
 }
 
-type SystemAccountPhotoEvent struct {
-	bun.BaseModel `bun:"table:system_account_photo_events,alias:saphoes"`
+type AccountLatestPhotoEvent struct {
+	bun.BaseModel `bun:"table:account_latest_photo_events,alias:alaphoe"`
 
-	SystemAccountPhotoEventID uuid.UUID `bun:"system_account_photo_event_id,pk"`
-	SystemAccountID           uuid.UUID `bun:"system_account_id,notnull"`
-	EventType                 string    `bun:"event_type,notnull"`
-	CreatedAt                 time.Time `bun:"created_at,notnull,default:current_timestamp"`
+	AccountPhotoEventID uuid.UUID `bun:"account_photo_event_id,pk"`
+	AccountID           uuid.UUID `bun:"account_id,notnull,unique"`
 
-	SystemAccount *SystemAccount      `bun:"sa,rel:belongs-to"`
-	Photo         *SystemAccountPhoto `bun:"saphos,rel:has-one"`
-}
-
-type SystemAccountPhoto struct {
-	bun.BaseModel `bun:"table:system_account_photos,alias:saphos"`
-
-	SystemAccountPhotoEventID uuid.UUID `bun:"system_account_photo_event_id,pk"`
-	PhotoPath                 string    `bun:"photo_path,notnull"`
-
-	SystemAccountPhotoEvent *SystemAccountPhotoEvent `bun:"sape,rel:belongs-to"`
-}
-
-type SystemAccountLatestPhotoEvent struct {
-	bun.BaseModel `bun:"table:system_account_latest_photo_events,alias:salaphoes"`
-
-	SystemAccountPhotoEventID uuid.UUID `bun:"system_account_photo_event_id,pk"`
-	SystemAccountID           uuid.UUID `bun:"system_account_id,notnull,unique"`
-
-	SystemAccountPhotoEvent *SystemAccountPhotoEvent `bun:"saphoes,rel:belongs-to"`
-	SystemAccount           *SystemAccount           `bun:"sa,rel:belongs-to"`
+	AccountPhotoEvent *AccountPhotoEvent `bun:"aphoe,rel:belongs-to"`
+	Account           *Account           `bun:"sa,rel:belongs-to"`
 }

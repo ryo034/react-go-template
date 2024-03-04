@@ -132,7 +132,7 @@ func Test_driver_AddMember_OK(t *testing.T) {
 	wd := workspace.NewDetail(wn, wsub)
 	w := workspace.NewWorkspace(wID, wd)
 
-	email, _ := account.NewEmail("system_account@example.com")
+	email, _ := account.NewEmail("account@example.com")
 	name, _ := account.NewName("John Doe")
 	u := user.NewUser(aID, email, &name, nil, nil)
 	dn := member.NewDisplayName("John Doe")
@@ -140,10 +140,10 @@ func Test_driver_AddMember_OK(t *testing.T) {
 	m := member.NewMember(mID, u, pr, member.RoleAdmin)
 
 	want := &models.Member{
-		MemberID:        mID.Value(),
-		WorkspaceID:     ws.WorkspaceID,
-		SystemAccountID: systemAccountIDUUID,
-		CreatedAt:       defaultTime,
+		MemberID:    mID.Value(),
+		WorkspaceID: ws.WorkspaceID,
+		AccountID:   systemAccountIDUUID,
+		CreatedAt:   defaultTime,
 	}
 
 	ctx := context.Background()
@@ -162,7 +162,7 @@ func Test_driver_AddMember_OK(t *testing.T) {
 		if got.WorkspaceID != want.WorkspaceID {
 			assert.EqualValuesf(t, want, got, "%v failed", "AddMember")
 		}
-		if got.SystemAccountID != want.SystemAccountID {
+		if got.AccountID != want.AccountID {
 			assert.EqualValuesf(t, want, got, "%v failed", "AddMember")
 		}
 	})

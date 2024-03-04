@@ -14,7 +14,7 @@ import (
 
 type Adapter interface {
 	Adapt(m *models.Member, ws models.Workspaces, ris []*models.Invitation) (*me.Me, error)
-	AdaptSystemAccount(sa *models.SystemAccount) (*me.Me, error)
+	AdaptAccount(sa *models.Account) (*me.Me, error)
 	AdaptReceivedInvitation(i *models.Invitation) (me.ReceivedInvitation, error)
 	AdaptAllReceivedInvitation(is []*models.Invitation) (me.ReceivedInvitations, error)
 	AdaptProvider(p *models.AuthProvider) (*providerDomain.Provider, error)
@@ -33,7 +33,7 @@ func NewAdapter(uga userGw.Adapter, wga workspaceGw.Adapter, mga memberGw.Adapte
 }
 
 func (a *adapter) Adapt(m *models.Member, ws models.Workspaces, ris []*models.Invitation) (*me.Me, error) {
-	u, err := a.uga.AdaptTmp(m.SystemAccount)
+	u, err := a.uga.AdaptTmp(m.Account)
 	mem, err := a.mga.Adapt(m)
 	if err != nil {
 		return nil, err
@@ -50,14 +50,14 @@ func (a *adapter) Adapt(m *models.Member, ws models.Workspaces, ris []*models.In
 	if err != nil {
 		return nil, err
 	}
-	prvs, err := a.AdaptAllProviders(m.SystemAccount.AuthProviders)
+	prvs, err := a.AdaptAllProviders(m.Account.AuthProviders)
 	if err != nil {
 		return nil, err
 	}
 	return me.NewMe(u, w, mem, aws, aris, prvs), nil
 }
 
-func (a *adapter) AdaptSystemAccount(sa *models.SystemAccount) (*me.Me, error) {
+func (a *adapter) AdaptAccount(sa *models.Account) (*me.Me, error) {
 	u, err := a.uga.AdaptTmp(sa)
 	if err != nil {
 		return nil, err

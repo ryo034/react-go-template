@@ -51,13 +51,15 @@ func Test_driver_Create_OK(t *testing.T) {
 		et := time.Now()
 		assert.True(t, got.CreatedAt.After(st) && got.CreatedAt.Before(et), "CreatedAt should be within test time range")
 		if got.Name != nil {
-			assert.True(t, got.Name.CreatedAt.After(st) && got.Name.CreatedAt.Before(et), "Name.CreatedAt should be within test time range")
+			assert.True(t, got.Name.AccountName.CreatedAt.After(st) && got.Name.AccountName.CreatedAt.Before(et), "Name.CreatedAt should be within test time range")
 		}
-		assert.Equal(t, systemAccountIDUUID, got.SystemAccountID)
-		assert.Equal(t, "Test_driver_Create_OK@example.com", got.Emails[0].Email)
-		assert.Equal(t, "", got.Name.Name)
-		if got.PhoneNumbers != nil {
-			t.Errorf("PhoneNumber should be nil, got: %v", got.PhoneNumbers)
+		assert.Equal(t, systemAccountIDUUID, got.AccountID)
+		assert.Equal(t, "Test_driver_Create_OK@example.com", got.Email.AccountEmail.Email)
+		if got.Name != nil {
+			t.Errorf("Name should be nil, got: %v", got.Name)
+		}
+		if got.PhoneNumber != nil {
+			t.Errorf("PhoneNumber should be nil, got: %v", got.PhoneNumber)
 		}
 		if got.AuthProviders == nil {
 			t.Errorf("AuthProvider should not be nil")
@@ -69,41 +71,50 @@ func Test_driver_Create_OK(t *testing.T) {
 }
 
 func Test_driver_Find_OK(t *testing.T) {
-	var systemAccountIDUUID = uuid.MustParse("394e67b6-2850-4ddf-a4c9-c2a619d5bf70")
+	systemAccountIDUUID := uuid.MustParse("394e67b6-2850-4ddf-a4c9-c2a619d5bf70")
 	defaultTime := test.GetDefaultTime()
-	email, _ := account.NewEmail("system_account@example.com")
+	email, _ := account.NewEmail("account@example.com")
+	anID := uuid.MustParse("018e088e-fd36-722d-a927-8cfd34a642bd")
+	aeID := uuid.MustParse("018e09c2-9924-7048-9f08-afa2f3ea5b53")
 
-	want := &models.SystemAccount{
-		SystemAccountID: systemAccountIDUUID,
-		CreatedAt:       defaultTime,
-		//PhoneNumbers: []*models.SystemAccountPhoneNumber{
+	want := &models.Account{
+		AccountID: systemAccountIDUUID,
+		CreatedAt: defaultTime,
+		//PhoneNumbers: []*models.AccountPhoneNumber{
 		//	{
-		//		SystemAccountID: systemAccountIDUUID,
+		//		AccountID: systemAccountIDUUID,
 		//		PhoneNumber:     "09012345678",
 		//		CreatedAt:       defaultTime,
 		//	},
 		//},
-		Name: &models.SystemAccountName{
-			SystemAccountNameID: uuid.MustParse("018e088e-fd36-722d-a927-8cfd34a642bd"),
-			SystemAccountID:     systemAccountIDUUID,
-			Name:                "John Doe",
-			CreatedAt:           defaultTime,
+		Name: &models.AccountLatestName{
+			AccountNameID: anID,
+			AccountID:     systemAccountIDUUID,
+			AccountName: &models.AccountName{
+				AccountNameID: anID,
+				AccountID:     systemAccountIDUUID,
+				Name:          "John Doe",
+				CreatedAt:     defaultTime,
+			},
 		},
-		Emails: []*models.SystemAccountEmail{
-			{
-				SystemAccountID: systemAccountIDUUID,
-				Email:           "system_account@example.com",
-				CreatedAt:       defaultTime,
+		Email: &models.AccountLatestEmail{
+			AccountEmailID: aeID,
+			AccountID:      systemAccountIDUUID,
+			AccountEmail: &models.AccountEmail{
+				AccountEmailID: aeID,
+				AccountID:      systemAccountIDUUID,
+				Email:          "account@example.com",
+				CreatedAt:      defaultTime,
 			},
 		},
 		AuthProviders: []*models.AuthProvider{
 			{
-				AuthProviderID:  uuid.MustParse("018de2f6-968d-7458-9c67-69ae5698a143"),
-				ProviderUID:     "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
-				SystemAccountID: systemAccountIDUUID,
-				Provider:        "email",
-				ProvidedBy:      "firebase",
-				CreatedAt:       defaultTime,
+				AuthProviderID: uuid.MustParse("018de2f6-968d-7458-9c67-69ae5698a143"),
+				ProviderUID:    "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
+				AccountID:      systemAccountIDUUID,
+				Provider:       "email",
+				ProvidedBy:     "firebase",
+				RegisteredAt:   defaultTime,
 			},
 		},
 	}

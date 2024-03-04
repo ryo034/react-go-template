@@ -23,7 +23,7 @@ import (
 
 const systemAccountID = "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
 
-var systemAccountIDUUID = uuid.MustParse(systemAccountID)
+var accountIDUUID = uuid.MustParse(systemAccountID)
 
 func Test_driver_Find_OK(t *testing.T) {
 	defaultTime, err := time.Parse("2006-01-02 15:04:05", "2024-01-10 12:00:00")
@@ -34,45 +34,54 @@ func Test_driver_Find_OK(t *testing.T) {
 
 	workspaceID := uuid.MustParse("c1bd2603-b9cd-4f84-8b83-3548f6ae150b")
 	wID := workspace.NewIDFromUUID(workspaceID)
+	anID := uuid.MustParse("018e088e-fd36-722d-a927-8cfd34a642bd")
+	aeID := uuid.MustParse("018e09c2-9924-7048-9f08-afa2f3ea5b53")
 
 	want := &models.Member{
-		MemberID:        memberID,
-		WorkspaceID:     wID.Value(),
-		SystemAccountID: systemAccountIDUUID,
-		CreatedAt:       defaultTime,
+		MemberID:    memberID,
+		WorkspaceID: wID.Value(),
+		AccountID:   accountIDUUID,
+		CreatedAt:   defaultTime,
 		Role: &models.MemberRole{
 			MemberRoleID: uuid.MustParse("018df76b-260d-759f-9b47-fb5f611f5da6"),
 			MemberID:     memberID,
 			Role:         "owner",
 			CreatedAt:    defaultTime,
 		},
-		SystemAccount: &models.SystemAccount{
-			SystemAccountID: systemAccountIDUUID,
-			CreatedAt:       defaultTime,
-			Name: &models.SystemAccountName{
-				SystemAccountNameID: uuid.MustParse("018e088e-fd36-722d-a927-8cfd34a642bd"),
-				SystemAccountID:     systemAccountIDUUID,
-				Name:                "John Doe",
-				CreatedAt:           defaultTime,
+		Account: &models.Account{
+			AccountID: accountIDUUID,
+			CreatedAt: defaultTime,
+			Name: &models.AccountLatestName{
+				AccountNameID: anID,
+				AccountID:     accountIDUUID,
+				AccountName: &models.AccountName{
+					AccountNameID: anID,
+					AccountID:     accountIDUUID,
+					Name:          "John Doe",
+					CreatedAt:     defaultTime,
+				},
 			},
-			Emails: []*models.SystemAccountEmail{
-				{
-					SystemAccountID: systemAccountIDUUID,
-					Email:           "system_account@example.com",
-					CreatedAt:       defaultTime,
+			Email: &models.AccountLatestEmail{
+				AccountEmailID: aeID,
+				AccountID:      accountIDUUID,
+				AccountEmail: &models.AccountEmail{
+					AccountEmailID: aeID,
+					AccountID:      accountIDUUID,
+					Email:          "account@example.com",
+					CreatedAt:      defaultTime,
 				},
 			},
 			AuthProviders: []*models.AuthProvider{
 				{
-					AuthProviderID:  uuid.MustParse("018de2f6-968d-7458-9c67-69ae5698a143"),
-					ProviderUID:     "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
-					SystemAccountID: systemAccountIDUUID,
-					Provider:        "email",
-					ProvidedBy:      "firebase",
-					CreatedAt:       defaultTime,
+					AuthProviderID: uuid.MustParse("018de2f6-968d-7458-9c67-69ae5698a143"),
+					ProviderUID:    "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
+					AccountID:      accountIDUUID,
+					Provider:       "email",
+					ProvidedBy:     "firebase",
+					RegisteredAt:   defaultTime,
 				},
 			},
-			PhoneNumbers: nil,
+			PhoneNumber: nil,
 		},
 		Profile: &models.MemberProfile{
 			MemberID:       memberID,

@@ -36,7 +36,7 @@ func (a *adapter) adaptRole(r *models.MemberRole) (member.Role, error) {
 }
 
 func (a *adapter) Adapt(m *models.Member) (*member.Member, error) {
-	u, err := a.uga.AdaptTmp(m.SystemAccount)
+	u, err := a.uga.AdaptTmp(m.Account)
 	if err != nil {
 		return nil, err
 	}

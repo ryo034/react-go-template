@@ -5,7 +5,7 @@ const client = genAPIClient()
 
 test.describe("Me success", () => {
   test("if onboarding is completed, response include workspace info", async () => {
-    const authInfo = await getAuthInfo("system_account@example.com")
+    const authInfo = await getAuthInfo("account@example.com")
     const res = await client.GET("/api/v1/me", { headers: authHeaders(authInfo.token) })
     expect(res.response.status).toBe(200)
     expect(res.data).toStrictEqual((await import("./success.json")).default)

@@ -15,8 +15,8 @@ import (
 )
 
 type Driver interface {
-	Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *provider.Provider) (*models.SystemAccount, error)
-	Find(ctx context.Context, exec bun.IDB, email account.Email) (*models.SystemAccount, error)
+	Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *provider.Provider) (*models.Account, error)
+	Find(ctx context.Context, exec bun.IDB, email account.Email) (*models.Account, error)
 	FindAccountIDByAuthProviderUID(ctx context.Context, exec bun.IDB, apUID provider.UID) (uuid.UUID, error)
 }
 
@@ -27,9 +27,9 @@ func NewDriver() Driver {
 	return &driver{}
 }
 
-func (p *driver) Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *provider.Provider) (*models.SystemAccount, error) {
-	sa := models.SystemAccount{
-		SystemAccountID: usr.AccountID().Value(),
+func (p *driver) Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *provider.Provider) (*models.Account, error) {
+	sa := models.Account{
+		AccountID: usr.AccountID().Value(),
 	}
 	_, err := exec.NewInsert().Model(&sa).Exec(ctx)
 	if err != nil {
@@ -38,8 +38,8 @@ func (p *driver) Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *p
 
 	if usr.HasName() {
 		if _, err = exec.NewDelete().
-			Model(&models.SystemAccountLatestName{}).
-			Where("system_account_id = ?", usr.AccountID().Value()).
+			Model(&models.AccountLatestName{}).
+			Where("account_id = ?", usr.AccountID().Value()).
 			Exec(ctx); err != nil {
 			return nil, err
 		}
@@ -49,18 +49,18 @@ func (p *driver) Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *p
 		if err != nil {
 			return nil, err
 		}
-		sap := &models.SystemAccountName{
-			SystemAccountNameID: sanID,
-			SystemAccountID:     usr.AccountID().Value(),
-			Name:                na,
+		sap := &models.AccountName{
+			AccountNameID: sanID,
+			AccountID:     usr.AccountID().Value(),
+			Name:          na,
 		}
 		if _, err = exec.NewInsert().Model(sap).Exec(ctx); err != nil {
 			return nil, err
 		}
 
-		saln := &models.SystemAccountLatestName{
-			SystemAccountNameID: sanID,
-			SystemAccountID:     usr.AccountID().Value(),
+		saln := &models.AccountLatestName{
+			AccountNameID: sanID,
+			AccountID:     usr.AccountID().Value(),
 		}
 		if _, err = exec.NewInsert().Model(saln).Exec(ctx); err != nil {
 			return nil, err
@@ -71,8 +71,8 @@ func (p *driver) Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *p
 
 	// Update Email
 	if _, err = exec.NewDelete().
-		Model(&models.SystemAccountLatestEmail{}).
-		Where("system_account_id = ?", usr.AccountID().Value()).
+		Model(&models.AccountLatestEmail{}).
+		Where("account_id = ?", usr.AccountID().Value()).
 		Exec(ctx); err != nil {
 		return nil, err
 	}
@@ -82,23 +82,24 @@ func (p *driver) Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *p
 		return nil, err
 	}
 
-	saem := &models.SystemAccountEmail{
-		SystemAccountEmailID: saemID,
-		SystemAccountID:      usr.AccountID().Value(),
-		Email:                usr.Email().ToString(),
+	saem := &models.AccountEmail{
+		AccountEmailID: saemID,
+		AccountID:      usr.AccountID().Value(),
+		Email:          usr.Email().ToString(),
 	}
 	if _, err = exec.NewInsert().Model(saem).Exec(ctx); err != nil {
 		return nil, err
 	}
 
-	salem := &models.SystemAccountLatestEmail{
-		SystemAccountLatestEmailID: saemID,
-		SystemAccountID:            usr.AccountID().Value(),
+	salem := &models.AccountLatestEmail{
+		AccountEmailID: saemID,
+		AccountID:      usr.AccountID().Value(),
 	}
 	if _, err = exec.NewInsert().Model(salem).Exec(ctx); err != nil {
 		return nil, err
 	}
 
+	salem.AccountEmail = saem
 	sa.Email = salem
 
 	prb := "firebase"
@@ -116,11 +117,11 @@ func (p *driver) Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *p
 	}
 
 	apm := models.AuthProvider{
-		AuthProviderID:  ap.ID().Value(),
-		SystemAccountID: usr.AccountID().Value(),
-		Provider:        prv,
-		ProvidedBy:      prb,
-		ProviderUID:     ap.UID().ToString(),
+		AuthProviderID: ap.ID().Value(),
+		AccountID:      usr.AccountID().Value(),
+		Provider:       prv,
+		ProvidedBy:     prb,
+		ProviderUID:    ap.UID().ToString(),
 	}
 	if _, err = exec.
 		NewInsert().
@@ -134,8 +135,8 @@ func (p *driver) Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *p
 	return &sa, err
 }
 
-func (p *driver) Find(ctx context.Context, exec bun.IDB, email account.Email) (*models.SystemAccount, error) {
-	sap := &models.SystemAccountEmail{}
+func (p *driver) Find(ctx context.Context, exec bun.IDB, email account.Email) (*models.Account, error) {
+	sap := &models.AccountEmail{}
 	err := exec.
 		NewSelect().
 		Model(sap).
@@ -145,21 +146,21 @@ func (p *driver) Find(ctx context.Context, exec bun.IDB, email account.Email) (*
 		return nil, err
 	}
 
-	sa := &models.SystemAccount{}
+	sa := &models.Account{}
 	err = exec.
 		NewSelect().
 		Model(sa).
 		Relation("AuthProviders").
 		Relation("Name").
-		Relation("Name.SystemAccountName").
+		Relation("Name.AccountName").
 		Relation("Email").
-		Relation("Email.SystemAccountEmail").
+		Relation("Email.AccountEmail").
 		Relation("PhoneNumber").
-		Relation("PhoneNumber.SystemAccountPhoneNumber").
+		Relation("PhoneNumber.AccountPhoneNumber").
 		Relation("PhotoEvent").
-		Relation("PhotoEvent.SystemAccountPhotoEvent").
-		Relation("PhotoEvent.SystemAccountPhotoEvent.Photo").
-		Where("sa.system_account_id = ?", sap.SystemAccountID).
+		Relation("PhotoEvent.AccountPhotoEvent").
+		Relation("PhotoEvent.AccountPhotoEvent.Photo").
+		Where("sa.account_id = ?", sap.AccountID).
 		Scan(ctx)
 	if err != nil {
 		return nil, err
@@ -177,5 +178,5 @@ func (p *driver) FindAccountIDByAuthProviderUID(ctx context.Context, exec bun.ID
 	if err != nil {
 		return uuid.UUID{}, err
 	}
-	return apm.SystemAccountID, nil
+	return apm.AccountID, nil
 }

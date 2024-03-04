@@ -18,9 +18,9 @@ type Driver interface {
 	Find(ctx context.Context, exec bun.IDB, mID member.ID) (*models.Member, error)
 	LastLogin(ctx context.Context, exec bun.IDB, mID member.ID) error
 	FindLastLogin(ctx context.Context, exec bun.IDB, aID account.ID) (*models.MemberLoginHistory, error)
-	FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*models.SystemAccount, error)
-	FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) (*models.SystemAccount, error)
-	FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.SystemAccount, error)
+	FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*models.Account, error)
+	FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) (*models.Account, error)
+	FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.Account, error)
 	UpdateName(ctx context.Context, exec bun.IDB, usr *user.User) error
 	UpdateMemberProfile(ctx context.Context, exec bun.IDB, m *member.Member) (*member.Member, error)
 }
@@ -42,17 +42,17 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*models
 		Relation("Role").
 		Relation("Workspace").
 		Relation("Workspace.Detail").
-		Relation("SystemAccount").
-		Relation("SystemAccount.AuthProviders").
-		Relation("SystemAccount.Name").
-		Relation("SystemAccount.Name.SystemAccountName").
-		Relation("SystemAccount.Email").
-		Relation("SystemAccount.Email.SystemAccountEmail").
-		Relation("SystemAccount.PhoneNumber").
-		Relation("SystemAccount.PhoneNumber.SystemAccountPhoneNumber").
-		Relation("SystemAccount.PhotoEvent").
-		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent").
-		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent.Photo").
+		Relation("Account").
+		Relation("Account.AuthProviders").
+		Relation("Account.Name").
+		Relation("Account.Name.AccountName").
+		Relation("Account.Email").
+		Relation("Account.Email.AccountEmail").
+		Relation("Account.PhoneNumber").
+		Relation("Account.PhoneNumber.AccountPhoneNumber").
+		Relation("Account.PhotoEvent").
+		Relation("Account.PhotoEvent.AccountPhotoEvent").
+		Relation("Account.PhotoEvent.AccountPhotoEvent.Photo").
 		Where("ms.member_id = ?", mID.Value()).
 		Scan(ctx)
 	if err != nil {
@@ -66,11 +66,16 @@ func (d *driver) LastLogin(ctx context.Context, exec bun.IDB, mID member.ID) err
 	if err != nil {
 		return err
 	}
-	m := &models.MemberLoginHistory{
+	_, err = exec.NewDelete().Model(&models.MemberLatestLoginHistory{}).Where("member_id = ?", mID.Value()).Exec(ctx)
+	_, err = exec.NewInsert().Model(&models.MemberLoginHistory{
 		MemberLoginHistoryID: pkID.Value(),
 		MemberID:             mID.Value(),
-	}
-	_, err = exec.NewInsert().Model(m).Exec(ctx)
+	}).Exec(ctx)
+	_, err = exec.NewInsert().Model(&models.MemberLatestLoginHistory{
+		MemberLoginHistoryID: pkID.Value(),
+		MemberID:             mID.Value(),
+	}).Exec(ctx)
+
 	return err
 }
 
@@ -80,7 +85,7 @@ func (d *driver) FindLastLogin(ctx context.Context, exec bun.IDB, aID account.ID
 		NewSelect().
 		Model(m).
 		Relation("Member").
-		Where("member.system_account_id = ?", aID.ToString()).
+		Where("member.account_id = ?", aID.ToString()).
 		Order("login_at DESC").
 		Limit(1).
 		Scan(ctx)
@@ -90,22 +95,22 @@ func (d *driver) FindLastLogin(ctx context.Context, exec bun.IDB, aID account.ID
 	return m, nil
 }
 
-func (d *driver) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*models.SystemAccount, error) {
-	sysAcc := &models.SystemAccount{}
+func (d *driver) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*models.Account, error) {
+	sysAcc := &models.Account{}
 	err := exec.
 		NewSelect().
 		Model(sysAcc).
 		Relation("AuthProviders").
 		Relation("Name").
-		Relation("Name.SystemAccountName").
+		Relation("Name.AccountName").
 		Relation("Email").
-		Relation("Email.SystemAccountEmail").
+		Relation("Email.AccountEmail").
 		Relation("PhoneNumber").
-		Relation("PhoneNumber.SystemAccountPhoneNumber").
+		Relation("PhoneNumber.AccountPhoneNumber").
 		Relation("PhotoEvent").
-		Relation("PhotoEvent.SystemAccountPhotoEvent").
-		Relation("PhotoEvent.SystemAccountPhotoEvent.Photo").
-		Where("sa.system_account_id = ?", aID.ToString()).
+		Relation("PhotoEvent.AccountPhotoEvent").
+		Relation("PhotoEvent.AccountPhotoEvent.Photo").
+		Where("sa.account_id = ?", aID.ToString()).
 		Scan(ctx)
 	if err != nil {
 		return nil, err
@@ -113,22 +118,22 @@ func (d *driver) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID accoun
 	return sysAcc, nil
 }
 
-func (d *driver) FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) (*models.SystemAccount, error) {
-	sysAcc := &models.SystemAccount{}
+func (d *driver) FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) (*models.Account, error) {
+	sysAcc := &models.Account{}
 	err := exec.
 		NewSelect().
 		Model(sysAcc).
 		Relation("AuthProviders").
 		Relation("Name").
-		Relation("Name.SystemAccountName").
+		Relation("Name.AccountName").
 		Relation("Email").
-		Relation("Email.SystemAccountEmail").
+		Relation("Email.AccountEmail").
 		Relation("PhoneNumber").
-		Relation("PhoneNumber.SystemAccountPhoneNumber").
+		Relation("PhoneNumber.AccountPhoneNumber").
 		Relation("PhotoEvent").
-		Relation("PhotoEvent.SystemAccountPhotoEvent").
-		Relation("PhotoEvent.SystemAccountPhotoEvent.Photo").
-		Where("sa.system_account_id = ?", aID.ToString()).
+		Relation("PhotoEvent.AccountPhotoEvent").
+		Relation("PhotoEvent.AccountPhotoEvent.Photo").
+		Where("sa.account_id = ?", aID.ToString()).
 		Scan(ctx)
 	if err != nil {
 		return nil, err
@@ -136,28 +141,28 @@ func (d *driver) FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) 
 	return sysAcc, nil
 }
 
-func (d *driver) FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.SystemAccount, error) {
-	sysAcc := &models.SystemAccountEmail{}
+func (d *driver) FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.Account, error) {
+	sysAcc := &models.AccountEmail{}
 	err := exec.
 		NewSelect().
 		Model(sysAcc).
-		Relation("SystemAccount").
-		Relation("SystemAccount.AuthProviders").
-		Relation("SystemAccount.Name").
-		Relation("SystemAccount.Name.SystemAccountName").
-		Relation("SystemAccount.Email").
-		Relation("SystemAccount.Email.SystemAccountEmail").
-		Relation("SystemAccount.PhoneNumber").
-		Relation("SystemAccount.PhoneNumber.SystemAccountPhoneNumber").
-		Relation("SystemAccount.PhotoEvent").
-		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent").
-		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent.Photo").
-		Where("saes.email = ?", email.ToString()).
+		Relation("Account").
+		Relation("Account.AuthProviders").
+		Relation("Account.Name").
+		Relation("Account.Name.AccountName").
+		Relation("Account.Email").
+		Relation("Account.Email.AccountEmail").
+		Relation("Account.PhoneNumber").
+		Relation("Account.PhoneNumber.AccountPhoneNumber").
+		Relation("Account.PhotoEvent").
+		Relation("Account.PhotoEvent.AccountPhotoEvent").
+		Relation("Account.PhotoEvent.AccountPhotoEvent.Photo").
+		Where("ae.email = ?", email.ToString()).
 		Scan(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return sysAcc.SystemAccount, nil
+	return sysAcc.Account, nil
 }
 
 func (d *driver) UpdateName(ctx context.Context, exec bun.IDB, usr *user.User) error {
@@ -165,12 +170,16 @@ func (d *driver) UpdateName(ctx context.Context, exec bun.IDB, usr *user.User) e
 	if err != nil {
 		return err
 	}
-	mem := &models.SystemAccountName{
-		SystemAccountNameID: sanID,
-		SystemAccountID:     usr.AccountID().Value(),
-		Name:                usr.Name().ToString(),
-	}
-	_, err = exec.NewInsert().Model(mem).Exec(ctx)
+	_, err = exec.NewDelete().Model(&models.AccountLatestName{}).Where("account_id = ?", usr.AccountID().Value()).Exec(ctx)
+	_, err = exec.NewInsert().Model(&models.AccountName{
+		AccountNameID: sanID,
+		AccountID:     usr.AccountID().Value(),
+		Name:          usr.Name().ToString(),
+	}).Exec(ctx)
+	_, err = exec.NewInsert().Model(&models.AccountLatestName{
+		AccountNameID: sanID,
+		AccountID:     usr.AccountID().Value(),
+	}).Exec(ctx)
 	return err
 }
 

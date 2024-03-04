@@ -10,15 +10,15 @@ import (
 type Member struct {
 	bun.BaseModel `bun:"table:members,alias:ms"`
 
-	MemberID        uuid.UUID `bun:"member_id,pk"`
-	WorkspaceID     uuid.UUID `bun:"workspace_id,notnull"`
-	SystemAccountID uuid.UUID `bun:"system_account_id,notnull"`
-	CreatedAt       time.Time `bun:"created_at,notnull,default:current_timestamp"`
+	MemberID    uuid.UUID `bun:"member_id,pk"`
+	WorkspaceID uuid.UUID `bun:"workspace_id,notnull"`
+	AccountID   uuid.UUID `bun:"account_id,notnull"`
+	CreatedAt   time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	SystemAccount *SystemAccount `bun:"sa,rel:belongs-to"`
-	Profile       *MemberProfile `bun:"mp,rel:has-one"`
-	Workspace     *Workspace     `bun:"ws,rel:belongs-to"`
-	Role          *MemberRole    `bun:"rel:has-one"`
+	Account   *Account       `bun:"sa,rel:belongs-to"`
+	Profile   *MemberProfile `bun:"mp,rel:has-one"`
+	Workspace *Workspace     `bun:"ws,rel:belongs-to"`
+	Role      *MemberRole    `bun:"rel:has-one"`
 }
 
 type Members []*Member

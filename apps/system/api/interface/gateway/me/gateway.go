@@ -39,15 +39,15 @@ func (g *gateway) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*me.Me
 	if err != nil {
 		return nil, err
 	}
-	ws, err := g.wd.FindAll(ctx, exec, account.NewIDFromUUID(res.SystemAccountID))
+	ws, err := g.wd.FindAll(ctx, exec, account.NewIDFromUUID(res.AccountID))
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		return nil, err
 	}
-	p, err := g.md.FindProfile(ctx, exec, account.NewIDFromUUID(res.SystemAccountID))
+	p, err := g.md.FindProfile(ctx, exec, account.NewIDFromUUID(res.AccountID))
 	if err != nil {
 		return nil, err
 	}
-	em, err := account.NewEmail(p.Email.SystemAccountEmail.Email)
+	em, err := account.NewEmail(p.Email.AccountEmail.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +92,7 @@ func (g *gateway) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID accou
 	if err != nil {
 		return nil, err
 	}
-	m, err := g.a.AdaptSystemAccount(res)
+	m, err := g.a.AdaptAccount(res)
 	if err != nil {
 		return nil, err
 	}
@@ -112,7 +112,7 @@ func (g *gateway) FindByEmail(ctx context.Context, exec bun.IDB, email account.E
 	if err != nil {
 		return nil, err
 	}
-	return g.a.AdaptSystemAccount(res)
+	return g.a.AdaptAccount(res)
 }
 
 func (g *gateway) UpdateName(ctx context.Context, exec bun.IDB, usr *user.User) error {
@@ -135,7 +135,7 @@ func (g *gateway) FindAllActiveReceivedInvitations(ctx context.Context, exec bun
 	if err != nil {
 		return nil, err
 	}
-	em, err := account.NewEmail(p.Email.SystemAccountEmail.Email)
+	em, err := account.NewEmail(p.Email.AccountEmail.Email)
 	if err != nil {
 		return nil, err
 	}

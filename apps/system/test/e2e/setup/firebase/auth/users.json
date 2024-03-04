@@ -86,7 +86,7 @@
       "lastLoginAt": "1706825570547",
       "displayName": "John Doe",
       "validSince": "1709219111",
-      "email": "system_account@example.com",
+      "email": "account@example.com",
       "emailVerified": true,
       "disabled": false
     },

@@ -8,7 +8,7 @@ import (
 )
 
 type Adapter interface {
-	AdaptTmp(sa *models.SystemAccount) (*user.User, error)
+	AdaptTmp(sa *models.Account) (*user.User, error)
 }
 
 type adapter struct {
@@ -18,16 +18,16 @@ func NewAdapter() Adapter {
 	return &adapter{}
 }
 
-func (a *adapter) AdaptTmp(sa *models.SystemAccount) (*user.User, error) {
-	em, err := account.NewEmail(sa.Email.SystemAccountEmail.Email)
+func (a *adapter) AdaptTmp(sa *models.Account) (*user.User, error) {
+	em, err := account.NewEmail(sa.Email.AccountEmail.Email)
 	if err != nil {
 		return nil, err
 	}
-	aID := account.NewIDFromUUID(sa.SystemAccountID)
+	aID := account.NewIDFromUUID(sa.AccountID)
 
 	var an *account.Name = nil
-	if sa.Name != nil && sa.Name.SystemAccountName.Name != "" {
-		tmpAn, err := account.NewName(sa.Name.SystemAccountName.Name)
+	if sa.Name != nil && sa.Name.AccountName.Name != "" {
+		tmpAn, err := account.NewName(sa.Name.AccountName.Name)
 		if err != nil {
 			return nil, err
 		}
@@ -36,7 +36,7 @@ func (a *adapter) AdaptTmp(sa *models.SystemAccount) (*user.User, error) {
 
 	var pn *phone.Number = nil
 	if sa.PhoneNumber != nil {
-		tmpPn, err := phone.NewInternationalPhoneNumber(sa.PhoneNumber.SystemAccountPhoneNumber.PhoneNumber, sa.PhoneNumber.SystemAccountPhoneNumber.CountryCode)
+		tmpPn, err := phone.NewInternationalPhoneNumber(sa.PhoneNumber.AccountPhoneNumber.PhoneNumber, sa.PhoneNumber.AccountPhoneNumber.CountryCode)
 		if err != nil {
 			return nil, err
 		}
@@ -44,8 +44,8 @@ func (a *adapter) AdaptTmp(sa *models.SystemAccount) (*user.User, error) {
 	}
 
 	var pho *user.Photo = nil
-	if sa.PhotoEvent != nil && sa.PhotoEvent.SystemAccountPhotoEvent.EventType == "upload" {
-		tmpPho, err := user.NewPhotoFromString(sa.PhotoEvent.SystemAccountPhotoEvent.Photo.PhotoPath)
+	if sa.PhotoEvent != nil && sa.PhotoEvent.AccountPhotoEvent.EventType == "upload" {
+		tmpPho, err := user.NewPhotoFromString(sa.PhotoEvent.AccountPhotoEvent.Photo.PhotoPath)
 		if err != nil {
 			return nil, err
 		}

@@ -37,7 +37,7 @@ func (d *driver) FindAll(ctx context.Context, exec bun.IDB, aID account.ID) (mod
 		Model(&ws).
 		Relation("Detail").
 		Join("JOIN members ms ON ms.workspace_id = ws.workspace_id").
-		Where("ms.system_account_id = ?", aID.ToString()).
+		Where("ms.account_id = ?", aID.ToString()).
 		Scan(ctx)
 	if err != nil {
 		return nil, err
@@ -83,9 +83,9 @@ func adaptMemberRole(mr member.Role) string {
 
 func (d *driver) AddMember(ctx context.Context, exec bun.IDB, w *workspace.Workspace, m *member.Member) (*models.Member, error) {
 	mm := &models.Member{
-		MemberID:        m.ID().Value(),
-		WorkspaceID:     w.ID().Value(),
-		SystemAccountID: m.User().AccountID().Value(),
+		MemberID:    m.ID().Value(),
+		WorkspaceID: w.ID().Value(),
+		AccountID:   m.User().AccountID().Value(),
 	}
 	if _, err := exec.NewInsert().Model(mm).Exec(ctx); err != nil {
 		return nil, err
@@ -130,19 +130,19 @@ func (d *driver) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, w
 		Model(m).
 		Relation("Profile").
 		Relation("Role").
-		Relation("SystemAccount").
-		Relation("SystemAccount.AuthProviders").
-		Relation("SystemAccount.Name").
-		Relation("SystemAccount.Name.SystemAccountName").
-		Relation("SystemAccount.Email").
-		Relation("SystemAccount.Email.SystemAccountEmail").
-		Relation("SystemAccount.PhoneNumber").
-		Relation("SystemAccount.PhoneNumber.SystemAccountPhoneNumber").
-		Relation("SystemAccount.PhotoEvent").
-		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent").
-		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent.Photo").
+		Relation("Account").
+		Relation("Account.AuthProviders").
+		Relation("Account.Name").
+		Relation("Account.Name.AccountName").
+		Relation("Account.Email").
+		Relation("Account.Email.AccountEmail").
+		Relation("Account.PhoneNumber").
+		Relation("Account.PhoneNumber.AccountPhoneNumber").
+		Relation("Account.PhotoEvent").
+		Relation("Account.PhotoEvent.AccountPhotoEvent").
+		Relation("Account.PhotoEvent.AccountPhotoEvent.Photo").
 		Relation("Workspace").
-		Where("ms.system_account_id = ?", aID.ToString()).
+		Where("ms.account_id = ?", aID.ToString()).
 		Where("ms.workspace_id = ?", wID.Value()).
 		Scan(ctx)
 	if err != nil {
@@ -158,17 +158,17 @@ func (d *driver) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace
 		Model(&ms).
 		Relation("Profile").
 		Relation("Role").
-		Relation("SystemAccount").
-		Relation("SystemAccount.AuthProviders").
-		Relation("SystemAccount.Name").
-		Relation("SystemAccount.Name.SystemAccountName").
-		Relation("SystemAccount.Email").
-		Relation("SystemAccount.Email.SystemAccountEmail").
-		Relation("SystemAccount.PhoneNumber").
-		Relation("SystemAccount.PhoneNumber.SystemAccountPhoneNumber").
-		Relation("SystemAccount.PhotoEvent").
-		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent").
-		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent.Photo").
+		Relation("Account").
+		Relation("Account.AuthProviders").
+		Relation("Account.Name").
+		Relation("Account.Name.AccountName").
+		Relation("Account.Email").
+		Relation("Account.Email.AccountEmail").
+		Relation("Account.PhoneNumber").
+		Relation("Account.PhoneNumber.AccountPhoneNumber").
+		Relation("Account.PhotoEvent").
+		Relation("Account.PhotoEvent.AccountPhotoEvent").
+		Relation("Account.PhotoEvent.AccountPhotoEvent.Photo").
 		Relation("Workspace").
 		Where("ms.workspace_id = ?", wID.Value()).
 		Scan(ctx)

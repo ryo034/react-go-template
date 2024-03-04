@@ -6,10 +6,10 @@ const client = genAPIClient()
 
 systemTest.describe("Update me success", () => {
   systemTest("update me", { tag: ["@stateful"] }, async ({ stateful }) => {
-    const authInfo = await getAuthInfo("system_account@example.com")
+    const authInfo = await getAuthInfo("account@example.com")
     const data: components["schemas"]["User"] = {
       userId: "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
-      email: "system_account@example.com",
+      email: "account@example.com",
       name: "Updated Name",
       phoneNumber: ""
     }
@@ -24,7 +24,7 @@ systemTest.describe("Update me success", () => {
 
 systemTest.describe("Update me member profile success", () => {
   systemTest("update me member profile", { tag: ["@stateful"] }, async ({ stateful }) => {
-    const authInfo = await getAuthInfo("system_account@example.com")
+    const authInfo = await getAuthInfo("account@example.com")
     const meRes = await client.GET("/api/v1/me", { headers: authHeaders(authInfo.token) })
     expect(meRes.data).toStrictEqual((await import("./update_me_member_get_me.json")).default)
 
@@ -42,7 +42,7 @@ systemTest.describe("Update me member profile success", () => {
   })
 
   systemTest("success if request has empty fields", { tag: ["@stateful"] }, async ({ stateful }) => {
-    const authInfo = await getAuthInfo("system_account@example.com")
+    const authInfo = await getAuthInfo("account@example.com")
     const meRes = await client.GET("/api/v1/me", { headers: authHeaders(authInfo.token) })
     expect(meRes.data).toStrictEqual((await import("./update_me_member_get_me.json")).default)
     const data: components["schemas"]["MemberProfile"] = {

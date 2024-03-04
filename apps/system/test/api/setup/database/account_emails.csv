@@ -1,5 +1,5 @@
-system_account_email_id,system_account_id,email,created_at
-018e09c2-9924-7048-9f08-afa2f3ea5b53,394e67b6-2850-4ddf-a4c9-c2a619d5bf70,system_account@example.com,2024-01-10 12:00:00.000000 +00:00
+account_email_id,account_id,email,created_at
+018e09c2-9924-7048-9f08-afa2f3ea5b53,394e67b6-2850-4ddf-a4c9-c2a619d5bf70,account@example.com,2024-01-10 12:00:00.000000 +00:00
 018e09c2-a8d4-7eb8-966d-40069a2ad41a,018d91d4-5a5e-799c-9cfa-de8d0c02d7f2,login_logout_login@example.com,2024-01-10 12:00:00.000000 +00:00
 018e09c2-d3f3-75d3-9b72-91a4c2b2d8aa,018d6189-9ad0-7b72-801b-1e0de0d3c214,unfinished_onboarding@example.com,2024-01-10 12:00:00.000000 +00:00
 018e09c2-d3f3-71bd-bbca-5cec4e063d46,018d96bf-8dce-7f68-a926-b5d7ed6ed883,invite_test_1@example.com,2024-01-10 12:00:00.000000 +00:00

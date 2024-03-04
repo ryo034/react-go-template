@@ -12,27 +12,43 @@ import (
 func TestAdapter_Adapt(t *testing.T) {
 	validUUID := uuid.New()
 	validEmail := "test@example.com"
-	validName := "John Doe"
 	validPhoneNumber := "+819012341234"
 	defaultTime := test.GetDefaultTime()
 
-	systemAccount := models.SystemAccount{
-		SystemAccountID: validUUID,
-		Name: &models.SystemAccountName{
-			Name: validName,
-		},
-		Emails: []*models.SystemAccountEmail{
-			{
-				SystemAccountID: validUUID,
-				Email:           validEmail,
-				CreatedAt:       defaultTime,
+	anID, _ := uuid.NewV7()
+	aeID, _ := uuid.NewV7()
+	apnID, _ := uuid.NewV7()
+
+	systemAccount := models.Account{
+		AccountID: validUUID,
+		Name: &models.AccountLatestName{
+			AccountNameID: anID,
+			AccountID:     validUUID,
+			AccountName: &models.AccountName{
+				AccountNameID: anID,
+				AccountID:     validUUID,
+				Name:          "John Doe",
+				CreatedAt:     defaultTime,
 			},
 		},
-		PhoneNumbers: []*models.SystemAccountPhoneNumber{
-			{
-				SystemAccountID: validUUID,
-				PhoneNumber:     validPhoneNumber,
-				CreatedAt:       defaultTime,
+		Email: &models.AccountLatestEmail{
+			AccountEmailID: aeID,
+			AccountID:      validUUID,
+			AccountEmail: &models.AccountEmail{
+				AccountEmailID: aeID,
+				AccountID:      validUUID,
+				Email:          validEmail,
+				CreatedAt:      defaultTime,
+			},
+		},
+		PhoneNumber: &models.AccountLatestPhoneNumber{
+			AccountPhoneNumberID: apnID,
+			AccountID:            validUUID,
+			AccountPhoneNumber: &models.AccountPhoneNumber{
+				AccountPhoneNumberID: apnID,
+				AccountID:            validUUID,
+				PhoneNumber:          validPhoneNumber,
+				CreatedAt:            defaultTime,
 			},
 		},
 	}
@@ -50,9 +66,9 @@ func TestAdapter_Adapt(t *testing.T) {
 	})
 
 	t.Run("PhoneNumber is nil", func(t *testing.T) {
-		invalidSystemAccount := systemAccount
-		invalidSystemAccount.PhoneNumbers = nil
-		u, err := adap.AdaptTmp(&invalidSystemAccount)
+		invalidAccount := systemAccount
+		invalidAccount.PhoneNumber = nil
+		u, err := adap.AdaptTmp(&invalidAccount)
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)
 		}
@@ -62,9 +78,9 @@ func TestAdapter_Adapt(t *testing.T) {
 	})
 
 	t.Run("Name is empty", func(t *testing.T) {
-		invalidSystemAccount := systemAccount
-		invalidSystemAccount.Name = nil
-		u, err := adap.AdaptTmp(&invalidSystemAccount)
+		invalidAccount := systemAccount
+		invalidAccount.Name = nil
+		u, err := adap.AdaptTmp(&invalidAccount)
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)
 		}
