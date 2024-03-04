@@ -316,7 +316,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
 							switch r.Method {
 							case "PUT":
 								s.handleAPIV1MeProfilePutRequest([0]string{}, elemIsEscaped, w, r)
@@ -325,6 +324,31 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							return
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/photo"
+							origElem := elem
+							if l := len("/photo"); len(elem) >= l && elem[0:l] == "/photo" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "DELETE":
+									s.handleAPIV1MeProfilePhotoDeleteRequest([0]string{}, elemIsEscaped, w, r)
+								case "PUT":
+									s.handleAPIV1MeProfilePhotoPutRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "DELETE,PUT")
+								}
+
+								return
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
@@ -899,7 +923,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						if len(elem) == 0 {
 							switch method {
 							case "PUT":
-								// Leaf: APIV1MeProfilePut
 								r.name = "APIV1MeProfilePut"
 								r.summary = "Update Profile"
 								r.operationID = ""
@@ -910,6 +933,42 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							default:
 								return
 							}
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/photo"
+							origElem := elem
+							if l := len("/photo"); len(elem) >= l && elem[0:l] == "/photo" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch method {
+								case "DELETE":
+									// Leaf: APIV1MeProfilePhotoDelete
+									r.name = "APIV1MeProfilePhotoDelete"
+									r.summary = "Delete Profile Photo"
+									r.operationID = ""
+									r.pathPattern = "/api/v1/me/profile/photo"
+									r.args = args
+									r.count = 0
+									return r, true
+								case "PUT":
+									// Leaf: APIV1MeProfilePhotoPut
+									r.name = "APIV1MeProfilePhotoPut"
+									r.summary = "Update Profile Photo"
+									r.operationID = ""
+									r.pathPattern = "/api/v1/me/profile/photo"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem

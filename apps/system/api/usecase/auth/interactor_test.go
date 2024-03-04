@@ -44,7 +44,7 @@ func Test_useCase_AuthByOAuth_OK(t *testing.T) {
 	email, _ := account.NewEmail("test@example.com")
 	name, _ := account.NewName("test")
 	iph, _ := phone.NewInternationalPhoneNumber("+819012345678", "JP")
-	usr := user.NewUser(aID, email, &name, &iph)
+	usr := user.NewUser(aID, email, &name, &iph, nil)
 
 	prID := provider.NewIDFromUUID(uuid.MustParse("018e060f-faec-73f0-a25f-ed83f41347ea"))
 	prUID, _ := provider.NewUID("test")

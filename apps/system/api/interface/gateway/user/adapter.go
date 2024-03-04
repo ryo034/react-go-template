@@ -23,13 +23,14 @@ func (a *adapter) AdaptTmp(u *models.SystemAccount) (*user.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	email, err := account.NewEmail(u.Emails[0].Email)
+	email, err := account.NewEmail(u.Email.SystemAccountEmail.Email)
 	if err != nil {
 		return nil, err
 	}
+
 	var nm *account.Name = nil
-	if u.Profile.Name != "" {
-		name, err := account.NewName(u.Profile.Name)
+	if u.Name != nil {
+		name, err := account.NewName(u.Name.SystemAccountName.Name)
 		if err != nil {
 			return nil, err
 		}
@@ -37,12 +38,22 @@ func (a *adapter) AdaptTmp(u *models.SystemAccount) (*user.User, error) {
 	}
 
 	var pn *phone.Number = nil
-	if u.PhoneNumbers != nil {
-		tmpPn, err := phone.NewInternationalPhoneNumber(u.PhoneNumbers[0].PhoneNumber, u.PhoneNumbers[0].CountryCode)
+	if u.PhoneNumber != nil {
+		tmpPn, err := phone.NewInternationalPhoneNumber(u.PhoneNumber.SystemAccountPhoneNumber.PhoneNumber, u.PhoneNumber.SystemAccountPhoneNumber.CountryCode)
 		if err != nil {
 			return nil, err
 		}
 		pn = &tmpPn
 	}
-	return user.NewUser(aID, email, nm, pn), nil
+
+	var pho *user.Photo = nil
+	if u.PhotoEvent != nil && u.PhotoEvent.SystemAccountPhotoEvent.EventType == "upload" {
+		tmpPho, err := user.NewPhotoFromString(u.PhotoEvent.SystemAccountPhotoEvent.Photo.PhotoPath)
+		if err != nil {
+			return nil, err
+		}
+		pho = &tmpPho
+	}
+
+	return user.NewUser(aID, email, nm, pn, pho), nil
 }

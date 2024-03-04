@@ -64,6 +64,41 @@ profile:
       "500":
         $ref: "#/components/responses/InternalServerError"
 
+profilePhoto:
+  put:
+    summary: Update Profile Photo
+    description: Updates the user profile photo
+    tags:
+      - Profile
+    security:
+      - bearer: []
+    requestBody:
+      $ref: "#/components/requestBodies/UpdateMeProfilePhoto"
+    responses:
+      "200":
+        $ref: "#/components/responses/UpdateProfilePhotoResponse"
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+
+  delete:
+    summary: Delete Profile Photo
+    description: Deletes the user profile photo
+    tags:
+      - Profile
+    security:
+      - bearer: []
+    responses:
+      "200":
+        $ref: "#/components/responses/RemoveProfilePhotoResponse"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+
 memberProfile:
   put:
     summary: Update Me Member Profile

@@ -11,7 +11,7 @@ type UpdateInput struct {
 	Me *me.Me
 }
 
-type UpdateProfileInput struct {
+type UpdateNameInput struct {
 	AccountID account.ID
 	Name      account.Name
 }

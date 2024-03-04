@@ -40,14 +40,20 @@ func Test_driver_Find_OK(t *testing.T) {
 		WorkspaceID:     wID.Value(),
 		SystemAccountID: systemAccountIDUUID,
 		CreatedAt:       defaultTime,
+		Role: &models.MemberRole{
+			MemberRoleID: uuid.MustParse("018df76b-260d-759f-9b47-fb5f611f5da6"),
+			MemberID:     memberID,
+			Role:         "owner",
+			CreatedAt:    defaultTime,
+		},
 		SystemAccount: &models.SystemAccount{
 			SystemAccountID: systemAccountIDUUID,
 			CreatedAt:       defaultTime,
-			Profile: &models.SystemAccountProfile{
-				SystemAccountID: systemAccountIDUUID,
-				Name:            "John Doe",
-				CreatedAt:       defaultTime,
-				UpdatedAt:       defaultTime,
+			Name: &models.SystemAccountName{
+				SystemAccountNameID: uuid.MustParse("018e088e-fd36-722d-a927-8cfd34a642bd"),
+				SystemAccountID:     systemAccountIDUUID,
+				Name:                "John Doe",
+				CreatedAt:           defaultTime,
 			},
 			Emails: []*models.SystemAccountEmail{
 				{

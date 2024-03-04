@@ -25,6 +25,14 @@ type APIV1MeMemberProfilePutRes interface {
 	aPIV1MeMemberProfilePutRes()
 }
 
+type APIV1MeProfilePhotoDeleteRes interface {
+	aPIV1MeProfilePhotoDeleteRes()
+}
+
+type APIV1MeProfilePhotoPutRes interface {
+	aPIV1MeProfilePhotoPutRes()
+}
+
 type APIV1MeProfilePutRes interface {
 	aPIV1MeProfilePutRes()
 }

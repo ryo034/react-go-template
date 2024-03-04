@@ -27,10 +27,16 @@ func (p *driver) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*models
 		Relation("Profile").
 		Relation("Role").
 		Relation("SystemAccount").
-		Relation("SystemAccount.Profile").
 		Relation("SystemAccount.AuthProviders").
-		Relation("SystemAccount.PhoneNumbers").
-		Relation("SystemAccount.Emails").
+		Relation("SystemAccount.Name").
+		Relation("SystemAccount.Name.SystemAccountName").
+		Relation("SystemAccount.Email").
+		Relation("SystemAccount.Email.SystemAccountEmail").
+		Relation("SystemAccount.PhoneNumber").
+		Relation("SystemAccount.PhoneNumber.SystemAccountPhoneNumber").
+		Relation("SystemAccount.PhotoEvent").
+		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent").
+		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent.Photo").
 		Where("ms.member_id = ?", mID.Value()).
 		Scan(ctx)
 	if err != nil {

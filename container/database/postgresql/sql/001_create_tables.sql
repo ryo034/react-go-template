@@ -51,44 +51,88 @@ CREATE TABLE auth_providers (
   provider auth_provider_provider NOT NULL,
   provider_uid VARCHAR(255) NOT NULL,
   provided_by auth_provider_provided_by NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  registered_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (auth_provider_id),
   CONSTRAINT fk_auth_providers_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
 );
 
 CREATE TABLE system_account_emails (
+  system_account_email_id uuid NOT NULL,
   system_account_id uuid NOT NULL,
   email VARCHAR(256) NOT NULL UNIQUE,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (system_account_id),
+  PRIMARY KEY (system_account_email_id),
   CONSTRAINT fk_system_account_emails_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
 );
-CREATE INDEX system_account_emails_created_at_index ON system_account_emails(created_at);
+
+CREATE TABLE system_account_latest_emails (
+  system_account_email_id uuid NOT NULL,
+  system_account_id uuid NOT NULL UNIQUE,
+  PRIMARY KEY (system_account_email_id),
+  CONSTRAINT fk_salems_system_account_emails_system_account_email_id FOREIGN KEY (system_account_email_id) REFERENCES system_account_emails(system_account_email_id),
+  CONSTRAINT fk_salems_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+);
+
+CREATE TABLE system_account_names (
+  system_account_name_id uuid NOT NULL,
+  system_account_id uuid NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (system_account_name_id),
+  CONSTRAINT fk_system_account_names_sas_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+);
+
+CREATE TABLE system_account_latest_names (
+  system_account_name_id uuid NOT NULL,
+  system_account_id uuid NOT NULL UNIQUE,
+  PRIMARY KEY (system_account_name_id),
+  CONSTRAINT fk_salns_system_account_names_system_account_name_id FOREIGN KEY (system_account_name_id) REFERENCES system_account_names(system_account_name_id),
+  CONSTRAINT fk_salns_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+);
 
 CREATE TYPE system_account_phone_number_country_codes AS ENUM ('JP', 'US');
-
 CREATE TABLE system_account_phone_numbers (
+  system_account_phone_number_id uuid NOT NULL,
   system_account_id uuid NOT NULL,
   phone_number VARCHAR(15) NOT NULL UNIQUE,
   country_code system_account_phone_number_country_codes NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (system_account_id),
+  PRIMARY KEY (system_account_phone_number_id),
   CONSTRAINT fk_system_account_phone_numbers_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
 );
-CREATE INDEX system_account_phone_numbers_created_at_index ON system_account_phone_numbers(created_at);
 
-CREATE TABLE system_account_profiles (
-  system_account_id uuid NOT NULL,
-  name VARCHAR(255),
-  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (system_account_id),
-  CONSTRAINT fk_system_account_profiles_sas_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+CREATE TABLE system_account_latest_phone_numbers (
+  system_account_phone_number_id uuid NOT NULL,
+  system_account_id uuid NOT NULL UNIQUE,
+  PRIMARY KEY (system_account_phone_number_id),
+  CONSTRAINT fk_salpns_system_account_phone_numbers_system_account_phone_number_id FOREIGN KEY (system_account_phone_number_id) REFERENCES system_account_phone_numbers(system_account_phone_number_id),
+  CONSTRAINT fk_salpns_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
 );
 
-CREATE TRIGGER refresh_system_account_profiles_updated_at_step1 BEFORE UPDATE ON system_account_profiles FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step1();
-CREATE TRIGGER refresh_system_account_profiles_updated_at_step2 BEFORE UPDATE OF updated_at ON system_account_profiles FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step2();
-CREATE TRIGGER refresh_system_account_profiles_updated_at_step3 BEFORE UPDATE ON system_account_profiles FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step3();
+CREATE TYPE system_account_photo_event_types AS ENUM ('upload', 'delete');
+CREATE TABLE system_account_photo_events (
+  system_account_photo_event_id uuid NOT NULL,
+  system_account_id uuid NOT NULL,
+  event_type system_account_photo_event_types NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (system_account_photo_event_id),
+  CONSTRAINT fk_system_account_photo_events_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+);
+
+CREATE TABLE system_account_photos (
+  system_account_photo_event_id uuid NOT NULL,
+  photo_path TEXT NOT NULL,
+  PRIMARY KEY (system_account_photo_event_id),
+  CONSTRAINT fk_system_account_photos_sape_system_account_photo_event_id FOREIGN KEY (system_account_photo_event_id) REFERENCES system_account_photo_events(system_account_photo_event_id)
+);
+
+CREATE TABLE system_account_latest_photo_events (
+  system_account_photo_event_id uuid NOT NULL,
+  system_account_id uuid NOT NULL UNIQUE,
+  PRIMARY KEY (system_account_photo_event_id),
+  CONSTRAINT fk_salpes_system_account_photo_events_system_account_photo_event_id FOREIGN KEY (system_account_photo_event_id) REFERENCES system_account_photo_events(system_account_photo_event_id),
+  CONSTRAINT fk_salpes_system_accounts_system_account_id FOREIGN KEY (system_account_id) REFERENCES system_accounts(system_account_id)
+);
 
 CREATE TABLE workspaces (
   workspace_id uuid NOT NULL,
@@ -138,6 +182,14 @@ CREATE TABLE member_login_histories (
   login_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (member_login_history_id),
   CONSTRAINT fk_member_login_histories_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id)
+);
+
+CREATE TABLE member_latest_login_histories (
+  member_login_history_id uuid NOT NULL,
+  member_id uuid NOT NULL UNIQUE,
+  PRIMARY KEY (member_login_history_id),
+  CONSTRAINT fk_mllhs_member_login_histories_member_login_history_id FOREIGN KEY (member_login_history_id) REFERENCES member_login_histories(member_login_history_id),
+  CONSTRAINT fk_mllhs_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id)
 );
 
 CREATE TABLE member_profiles (

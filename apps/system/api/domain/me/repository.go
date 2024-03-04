@@ -21,7 +21,7 @@ type Repository interface {
 	SetMe(ctx context.Context, m *Me) error
 	FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*Me, error)
 	FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*Me, error)
-	UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User) error
+	UpdateName(ctx context.Context, exec bun.IDB, usr *user.User) error
 	UpdateMemberProfile(ctx context.Context, exec bun.IDB, m *member.Member) (*member.Member, error)
 	AcceptInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) error
 	FindAllActiveReceivedInvitations(ctx context.Context, exec bun.IDB, aID account.ID) (ReceivedInvitations, error)

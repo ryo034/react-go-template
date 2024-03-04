@@ -34,6 +34,30 @@ UpdateProfileResponse:
           me:
             $ref: "#/components/schemas/Me"
 
+UpdateProfilePhotoResponse:
+  description: Update profile photo
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - me
+        properties:
+          me:
+            $ref: "#/components/schemas/Me"
+
+RemoveProfilePhotoResponse:
+  description: Remove profile photo
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - me
+        properties:
+          me:
+            $ref: "#/components/schemas/Me"
+
 UpdateMeMemberProfileResponse:
   description: Update Me Member Profile
   content:

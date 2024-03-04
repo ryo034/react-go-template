@@ -192,9 +192,9 @@ func (mr *MockRepositoryMockRecorder) UpdateMemberProfile(ctx, exec, m any) *gom
 }
 
 // UpdateProfile mocks base method.
-func (m *MockRepository) UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User) error {
+func (m *MockRepository) UpdateName(ctx context.Context, exec bun.IDB, usr *user.User) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateProfile", ctx, exec, usr)
+	ret := m.ctrl.Call(m, "UpdateName", ctx, exec, usr)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
@@ -202,5 +202,5 @@ func (m *MockRepository) UpdateProfile(ctx context.Context, exec bun.IDB, usr *u
 // UpdateProfile indicates an expected call of UpdateProfile.
 func (mr *MockRepositoryMockRecorder) UpdateProfile(ctx, exec, usr any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateProfile", reflect.TypeOf((*MockRepository)(nil).UpdateProfile), ctx, exec, usr)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateName", reflect.TypeOf((*MockRepository)(nil).UpdateName), ctx, exec, usr)
 }

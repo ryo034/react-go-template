@@ -48,13 +48,24 @@ type MemberRole struct {
 }
 
 type MemberLoginHistory struct {
-	bun.BaseModel `bun:"table:member_login_histories,alias:llw"`
+	bun.BaseModel `bun:"table:member_login_histories,alias:mllhs"`
 
 	MemberLoginHistoryID uuid.UUID `bun:"member_login_history_id,pk"`
 	MemberID             uuid.UUID `bun:"member_id,notnull"`
 	LoginAt              time.Time `bun:"login_at,notnull,default:current_timestamp"`
 
-	Member *Member `bun:"rel:belongs-to"`
+	Member          *Member                   `bun:"rel:belongs-to"`
+	MemberLastLogin *MemberLatestLoginHistory `bun:"rel:has-one"`
+}
+
+type MemberLatestLoginHistory struct {
+	bun.BaseModel `bun:"table:member_latest_login_histories,alias:mllhs"`
+
+	MemberLoginHistoryID uuid.UUID `bun:"member_login_history_id,pk"`
+	MemberID             uuid.UUID `bun:"member_id,notnull"`
+
+	Member             *Member             `bun:"rel:belongs-to"`
+	MemberLoginHistory *MemberLoginHistory `bun:"rel:belongs-to"`
 }
 
 type MemberAddress struct {

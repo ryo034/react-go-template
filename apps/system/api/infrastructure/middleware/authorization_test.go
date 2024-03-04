@@ -30,15 +30,15 @@ func TestAuthorizationMiddleware_UnauthorizedRoutes(t *testing.T) {
 		{"Me Member", member.RoleMember, "/api/v1/me", http.MethodGet, http.StatusOK},
 		{"Me Guest", member.RoleGuest, "/api/v1/me", http.MethodGet, http.StatusOK},
 
-		{"Me Profile Owner", member.RoleOwner, "/api/v1/me/profile", http.MethodPut, http.StatusOK},
-		{"Me Profile Admin", member.RoleAdmin, "/api/v1/me/profile", http.MethodPut, http.StatusOK},
-		{"Me Profile Member", member.RoleMember, "/api/v1/me/profile", http.MethodPut, http.StatusOK},
-		{"Me Profile Guest", member.RoleGuest, "/api/v1/me/profile", http.MethodPut, http.StatusOK},
+		{"Me Name Owner", member.RoleOwner, "/api/v1/me/profile", http.MethodPut, http.StatusOK},
+		{"Me Name Admin", member.RoleAdmin, "/api/v1/me/profile", http.MethodPut, http.StatusOK},
+		{"Me Name Member", member.RoleMember, "/api/v1/me/profile", http.MethodPut, http.StatusOK},
+		{"Me Name Guest", member.RoleGuest, "/api/v1/me/profile", http.MethodPut, http.StatusOK},
 
-		{"Me Member Profile Owner", member.RoleOwner, "/api/v1/me/member/profile", http.MethodPut, http.StatusOK},
-		{"Me Member Profile Admin", member.RoleAdmin, "/api/v1/me/member/profile", http.MethodPut, http.StatusOK},
-		{"Me Member Profile Member", member.RoleMember, "/api/v1/me/member/profile", http.MethodPut, http.StatusOK},
-		{"Me Member Profile Guest", member.RoleGuest, "/api/v1/me/member/profile", http.MethodPut, http.StatusOK},
+		{"Me Member Name Owner", member.RoleOwner, "/api/v1/me/member/profile", http.MethodPut, http.StatusOK},
+		{"Me Member Name Admin", member.RoleAdmin, "/api/v1/me/member/profile", http.MethodPut, http.StatusOK},
+		{"Me Member Name Member", member.RoleMember, "/api/v1/me/member/profile", http.MethodPut, http.StatusOK},
+		{"Me Member Name Guest", member.RoleGuest, "/api/v1/me/member/profile", http.MethodPut, http.StatusOK},
 
 		{"Accept invitation Owner", member.RoleOwner, "/api/v1/members/invitations/{invitationId}/accept", http.MethodPost, http.StatusOK},
 		{"Accept invitation Admin", member.RoleAdmin, "/api/v1/members/invitations/{invitationId}/accept", http.MethodPost, http.StatusOK},

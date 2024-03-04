@@ -31,41 +31,75 @@ func (p *driver) Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *p
 	sa := models.SystemAccount{
 		SystemAccountID: usr.AccountID().Value(),
 	}
-	_, err := exec.
-		NewInsert().
-		Model(&sa).
-		Exec(ctx)
+	_, err := exec.NewInsert().Model(&sa).Exec(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	na := ""
 	if usr.HasName() {
-		na = usr.Name().ToString()
+		if _, err = exec.NewDelete().
+			Model(&models.SystemAccountLatestName{}).
+			Where("system_account_id = ?", usr.AccountID().Value()).
+			Exec(ctx); err != nil {
+			return nil, err
+		}
+
+		na := usr.Name().ToString()
+		sanID, err := uuid.NewV7()
+		if err != nil {
+			return nil, err
+		}
+		sap := &models.SystemAccountName{
+			SystemAccountNameID: sanID,
+			SystemAccountID:     usr.AccountID().Value(),
+			Name:                na,
+		}
+		if _, err = exec.NewInsert().Model(sap).Exec(ctx); err != nil {
+			return nil, err
+		}
+
+		saln := &models.SystemAccountLatestName{
+			SystemAccountNameID: sanID,
+			SystemAccountID:     usr.AccountID().Value(),
+		}
+		if _, err = exec.NewInsert().Model(saln).Exec(ctx); err != nil {
+			return nil, err
+		}
+
+		sa.Name = saln
 	}
 
-	sap := models.SystemAccountProfile{
-		SystemAccountID: usr.AccountID().Value(),
-		Name:            na,
-	}
-	_, err = exec.
-		NewInsert().
-		Model(&sap).
-		Exec(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	sape := models.SystemAccountEmail{
-		SystemAccountID: usr.AccountID().Value(),
-		Email:           usr.Email().ToString(),
-	}
-	if _, err = exec.
-		NewInsert().
-		Model(&sape).
+	// Update Email
+	if _, err = exec.NewDelete().
+		Model(&models.SystemAccountLatestEmail{}).
+		Where("system_account_id = ?", usr.AccountID().Value()).
 		Exec(ctx); err != nil {
 		return nil, err
 	}
+
+	saemID, err := uuid.NewV7()
+	if err != nil {
+		return nil, err
+	}
+
+	saem := &models.SystemAccountEmail{
+		SystemAccountEmailID: saemID,
+		SystemAccountID:      usr.AccountID().Value(),
+		Email:                usr.Email().ToString(),
+	}
+	if _, err = exec.NewInsert().Model(saem).Exec(ctx); err != nil {
+		return nil, err
+	}
+
+	salem := &models.SystemAccountLatestEmail{
+		SystemAccountLatestEmailID: saemID,
+		SystemAccountID:            usr.AccountID().Value(),
+	}
+	if _, err = exec.NewInsert().Model(salem).Exec(ctx); err != nil {
+		return nil, err
+	}
+
+	sa.Email = salem
 
 	prb := "firebase"
 	switch ap.ProvidedBy() {
@@ -95,8 +129,6 @@ func (p *driver) Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *p
 		return nil, err
 	}
 
-	sa.Profile = &sap
-	sa.Emails = append(sa.Emails, &sape)
 	sa.AuthProviders = append(sa.AuthProviders, &apm)
 
 	return &sa, err
@@ -117,10 +149,16 @@ func (p *driver) Find(ctx context.Context, exec bun.IDB, email account.Email) (*
 	err = exec.
 		NewSelect().
 		Model(sa).
-		Relation("Profile").
 		Relation("AuthProviders").
-		Relation("Emails").
-		Relation("PhoneNumbers").
+		Relation("Name").
+		Relation("Name.SystemAccountName").
+		Relation("Email").
+		Relation("Email.SystemAccountEmail").
+		Relation("PhoneNumber").
+		Relation("PhoneNumber.SystemAccountPhoneNumber").
+		Relation("PhotoEvent").
+		Relation("PhotoEvent.SystemAccountPhotoEvent").
+		Relation("PhotoEvent.SystemAccountPhotoEvent.Photo").
 		Where("sa.system_account_id = ?", sap.SystemAccountID).
 		Scan(ctx)
 	if err != nil {

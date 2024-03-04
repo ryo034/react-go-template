@@ -60,6 +60,18 @@ type Invoker interface {
 	//
 	// PUT /api/v1/me/member/profile
 	APIV1MeMemberProfilePut(ctx context.Context, request *APIV1MeMemberProfilePutReq) (APIV1MeMemberProfilePutRes, error)
+	// APIV1MeProfilePhotoDelete invokes DELETE /api/v1/me/profile/photo operation.
+	//
+	// Deletes the user profile photo.
+	//
+	// DELETE /api/v1/me/profile/photo
+	APIV1MeProfilePhotoDelete(ctx context.Context) (APIV1MeProfilePhotoDeleteRes, error)
+	// APIV1MeProfilePhotoPut invokes PUT /api/v1/me/profile/photo operation.
+	//
+	// Updates the user profile photo.
+	//
+	// PUT /api/v1/me/profile/photo
+	APIV1MeProfilePhotoPut(ctx context.Context, request *APIV1MeProfilePhotoPutReq) (APIV1MeProfilePhotoPutRes, error)
 	// APIV1MeProfilePut invokes PUT /api/v1/me/profile operation.
 	//
 	// Updates the user profile.
@@ -759,6 +771,217 @@ func (c *Client) sendAPIV1MeMemberProfilePut(ctx context.Context, request *APIV1
 
 	stage = "DecodeResponse"
 	result, err := decodeAPIV1MeMemberProfilePutResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1MeProfilePhotoDelete invokes DELETE /api/v1/me/profile/photo operation.
+//
+// Deletes the user profile photo.
+//
+// DELETE /api/v1/me/profile/photo
+func (c *Client) APIV1MeProfilePhotoDelete(ctx context.Context) (APIV1MeProfilePhotoDeleteRes, error) {
+	res, err := c.sendAPIV1MeProfilePhotoDelete(ctx)
+	return res, err
+}
+
+func (c *Client) sendAPIV1MeProfilePhotoDelete(ctx context.Context) (res APIV1MeProfilePhotoDeleteRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/api/v1/me/profile/photo"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1MeProfilePhotoDelete",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/me/profile/photo"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "DELETE", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1MeProfilePhotoDelete", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1MeProfilePhotoDeleteResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1MeProfilePhotoPut invokes PUT /api/v1/me/profile/photo operation.
+//
+// Updates the user profile photo.
+//
+// PUT /api/v1/me/profile/photo
+func (c *Client) APIV1MeProfilePhotoPut(ctx context.Context, request *APIV1MeProfilePhotoPutReq) (APIV1MeProfilePhotoPutRes, error) {
+	res, err := c.sendAPIV1MeProfilePhotoPut(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIV1MeProfilePhotoPut(ctx context.Context, request *APIV1MeProfilePhotoPutReq) (res APIV1MeProfilePhotoPutRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPMethodKey.String("PUT"),
+		semconv.HTTPRouteKey.String("/api/v1/me/profile/photo"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1MeProfilePhotoPut",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/me/profile/photo"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "PUT", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIV1MeProfilePhotoPutRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1MeProfilePhotoPut", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1MeProfilePhotoPutResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

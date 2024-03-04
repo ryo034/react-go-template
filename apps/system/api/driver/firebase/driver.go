@@ -59,6 +59,7 @@ type UserInfo struct {
 	Email       *account.Email
 	DisplayName *member.DisplayName
 	PhoneNumber *phone.Number
+	Photo       *user.Photo
 }
 
 type ProviderInfo struct {
@@ -175,6 +176,7 @@ func (d *driver) GetProviderInfo(ctx context.Context, option GetProviderInfoRequ
 	var em *account.Email = nil
 	var dn *member.DisplayName = nil
 	var ph *phone.Number = nil
+	var pho *user.Photo = nil
 
 	if u.UserInfo.Email != "" {
 		tmpEm, err := account.NewEmail(u.Email)
@@ -196,9 +198,17 @@ func (d *driver) GetProviderInfo(ctx context.Context, option GetProviderInfoRequ
 		ph = &tmpPh
 	}
 
+	if u.UserInfo.PhotoURL != "" {
+		tmpPho, err := user.NewPhotoFromString(u.PhotoURL)
+		if err != nil {
+			return ProviderInfo{}, err
+		}
+		pho = &tmpPho
+	}
+
 	return ProviderInfo{
 		CustomClaim: CustomClaim{clmWID, clmAID, clmRole},
-		UserInfo:    UserInfo{em, dn, ph},
+		UserInfo:    UserInfo{em, dn, ph, pho},
 	}, nil
 
 }
@@ -221,6 +231,11 @@ func (d *driver) UpdateProfile(ctx context.Context, usr *user.User) error {
 	if usr.HasPhoneNumber() {
 		if u.PhoneNumber != usr.PhoneNumber().ToE164() {
 			params = params.PhoneNumber(usr.PhoneNumber().ToE164())
+		}
+	}
+	if usr.HasPhoto() {
+		if u.PhotoURL != usr.Photo().FilePath().String() {
+			params = params.PhotoURL(usr.Photo().FilePath().String())
 		}
 	}
 

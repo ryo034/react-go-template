@@ -113,6 +113,32 @@ export interface paths {
       };
     };
   };
+  "/api/v1/me/profile/photo": {
+    /**
+     * Update Profile Photo
+     * @description Updates the user profile photo
+     */
+    put: {
+      requestBody: components["requestBodies"]["UpdateMeProfilePhoto"];
+      responses: {
+        200: components["responses"]["UpdateProfilePhotoResponse"];
+        400: components["responses"]["BadRequestError"];
+        401: components["responses"]["UnauthorizedError"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+    /**
+     * Delete Profile Photo
+     * @description Deletes the user profile photo
+     */
+    delete: {
+      responses: {
+        200: components["responses"]["RemoveProfilePhotoResponse"];
+        401: components["responses"]["UnauthorizedError"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+  };
   "/api/v1/me/member/profile": {
     /**
      * Update Me Member Profile
@@ -221,6 +247,8 @@ export interface components {
       email: string;
       name?: string;
       phoneNumber?: string;
+      /** Format: uri */
+      photo?: string;
     };
     MultiFactor: {
       factorId: string;
@@ -613,6 +641,22 @@ export interface components {
         };
       };
     };
+    /** @description Update profile photo */
+    UpdateProfilePhotoResponse: {
+      content: {
+        "application/json": {
+          me: components["schemas"]["Me"];
+        };
+      };
+    };
+    /** @description Remove profile photo */
+    RemoveProfilePhotoResponse: {
+      content: {
+        "application/json": {
+          me: components["schemas"]["Me"];
+        };
+      };
+    };
     /** @description Update Me Member Profile */
     UpdateMeMemberProfileResponse: {
       content: {
@@ -699,6 +743,15 @@ export interface components {
           profile: {
             name?: string;
           };
+        };
+      };
+    };
+    /** @description Update Me Profile Photo */
+    UpdateMeProfilePhoto: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          photo: string;
         };
       };
     };

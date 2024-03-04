@@ -132,7 +132,17 @@ func (c *controller) createUser(ctx context.Context, aID account.ID) (authUc.Cre
 	if err != nil {
 		return authUc.CreateInfo{}, err
 	}
-	return authUc.CreateInfo{User: user.NewUser(aID, em, na, pi.UserInfo.PhoneNumber), Provider: prov}, nil
+
+	var pho *user.Photo = nil
+	if pi.UserInfo.Photo != nil {
+		tmpPho, err := user.NewPhotoFromString(pi.UserInfo.Photo.FilePath().String())
+		if err != nil {
+			return authUc.CreateInfo{}, err
+		}
+		pho = &tmpPho
+	}
+
+	return authUc.CreateInfo{User: user.NewUser(aID, em, na, pi.UserInfo.PhoneNumber, pho), Provider: prov}, nil
 }
 
 func (c *controller) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitationOAuth) (openapi.ProcessInvitationOAuthRes, error) {

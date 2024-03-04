@@ -3,10 +3,13 @@
 package openapi
 
 import (
+	"net/url"
 	"time"
 
 	"github.com/go-faster/errors"
 	"github.com/google/uuid"
+
+	ht "github.com/ogen-go/ogen/http"
 )
 
 // APIV1AuthOtpPostOK is response for APIV1AuthOtpPost operation.
@@ -99,6 +102,20 @@ func (s *APIV1MeMemberProfilePutReq) GetMemberProfile() MemberProfile {
 // SetMemberProfile sets the value of MemberProfile.
 func (s *APIV1MeMemberProfilePutReq) SetMemberProfile(val MemberProfile) {
 	s.MemberProfile = val
+}
+
+type APIV1MeProfilePhotoPutReq struct {
+	Photo ht.MultipartFile `json:"photo"`
+}
+
+// GetPhoto returns the value of Photo.
+func (s *APIV1MeProfilePhotoPutReq) GetPhoto() ht.MultipartFile {
+	return s.Photo
+}
+
+// SetPhoto sets the value of Photo.
+func (s *APIV1MeProfilePhotoPutReq) SetPhoto(val ht.MultipartFile) {
+	s.Photo = val
 }
 
 type APIV1MeProfilePutReq struct {
@@ -271,6 +288,7 @@ func (s *BadRequestError) SetCode(val OptString) {
 func (*BadRequestError) aPIV1AuthOtpPostRes()               {}
 func (*BadRequestError) aPIV1AuthOtpVerifyPostRes()         {}
 func (*BadRequestError) aPIV1MeMemberProfilePutRes()        {}
+func (*BadRequestError) aPIV1MeProfilePhotoPutRes()         {}
 func (*BadRequestError) aPIV1MeProfilePutRes()              {}
 func (*BadRequestError) aPIV1WorkspacesPostRes()            {}
 func (*BadRequestError) getInvitationByTokenRes()           {}
@@ -595,6 +613,8 @@ func (*InternalServerError) aPIV1AuthOtpVerifyPostRes()         {}
 func (*InternalServerError) aPIV1InvitationsGetRes()            {}
 func (*InternalServerError) aPIV1MeGetRes()                     {}
 func (*InternalServerError) aPIV1MeMemberProfilePutRes()        {}
+func (*InternalServerError) aPIV1MeProfilePhotoDeleteRes()      {}
+func (*InternalServerError) aPIV1MeProfilePhotoPutRes()         {}
 func (*InternalServerError) aPIV1MeProfilePutRes()              {}
 func (*InternalServerError) aPIV1MembersGetRes()                {}
 func (*InternalServerError) aPIV1PingGetRes()                   {}
@@ -1274,6 +1294,52 @@ func (o OptString) Or(d string) string {
 	return d
 }
 
+// NewOptURI returns new OptURI with value set to v.
+func NewOptURI(v url.URL) OptURI {
+	return OptURI{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptURI is optional url.URL.
+type OptURI struct {
+	Value url.URL
+	Set   bool
+}
+
+// IsSet returns true if OptURI was set.
+func (o OptURI) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptURI) Reset() {
+	var v url.URL
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptURI) SetTo(v url.URL) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptURI) Get() (v url.URL, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptURI) Or(d url.URL) url.URL {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptWorkspace returns new OptWorkspace with value set to v.
 func NewOptWorkspace(v Workspace) OptWorkspace {
 	return OptWorkspace{
@@ -1392,6 +1458,22 @@ func (s *ReceivedInvitation) SetInvitation(val Invitation) {
 func (s *ReceivedInvitation) SetInviter(val Inviter) {
 	s.Inviter = val
 }
+
+type RemoveProfilePhotoResponse struct {
+	Me Me `json:"me"`
+}
+
+// GetMe returns the value of Me.
+func (s *RemoveProfilePhotoResponse) GetMe() Me {
+	return s.Me
+}
+
+// SetMe sets the value of Me.
+func (s *RemoveProfilePhotoResponse) SetMe(val Me) {
+	s.Me = val
+}
+
+func (*RemoveProfilePhotoResponse) aPIV1MeProfilePhotoDeleteRes() {}
 
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type TooManyRequestsError struct {
@@ -1529,6 +1611,8 @@ func (*UnauthorizedError) aPIV1AuthOtpVerifyPostRes()         {}
 func (*UnauthorizedError) aPIV1InvitationsGetRes()            {}
 func (*UnauthorizedError) aPIV1MeGetRes()                     {}
 func (*UnauthorizedError) aPIV1MeMemberProfilePutRes()        {}
+func (*UnauthorizedError) aPIV1MeProfilePhotoDeleteRes()      {}
+func (*UnauthorizedError) aPIV1MeProfilePhotoPutRes()         {}
 func (*UnauthorizedError) aPIV1MeProfilePutRes()              {}
 func (*UnauthorizedError) aPIV1MembersGetRes()                {}
 func (*UnauthorizedError) aPIV1WorkspacesGetRes()             {}
@@ -1553,6 +1637,22 @@ func (s *UpdateMeMemberProfileResponse) SetMe(val Me) {
 
 func (*UpdateMeMemberProfileResponse) aPIV1MeMemberProfilePutRes() {}
 
+type UpdateProfilePhotoResponse struct {
+	Me Me `json:"me"`
+}
+
+// GetMe returns the value of Me.
+func (s *UpdateProfilePhotoResponse) GetMe() Me {
+	return s.Me
+}
+
+// SetMe sets the value of Me.
+func (s *UpdateProfilePhotoResponse) SetMe(val Me) {
+	s.Me = val
+}
+
+func (*UpdateProfilePhotoResponse) aPIV1MeProfilePhotoPutRes() {}
+
 type UpdateProfileResponse struct {
 	Me Me `json:"me"`
 }
@@ -1575,6 +1675,7 @@ type User struct {
 	Email       string    `json:"email"`
 	Name        OptString `json:"name"`
 	PhoneNumber OptString `json:"phoneNumber"`
+	Photo       OptURI    `json:"photo"`
 }
 
 // GetUserId returns the value of UserId.
@@ -1597,6 +1698,11 @@ func (s *User) GetPhoneNumber() OptString {
 	return s.PhoneNumber
 }
 
+// GetPhoto returns the value of Photo.
+func (s *User) GetPhoto() OptURI {
+	return s.Photo
+}
+
 // SetUserId sets the value of UserId.
 func (s *User) SetUserId(val uuid.UUID) {
 	s.UserId = val
@@ -1615,6 +1721,11 @@ func (s *User) SetName(val OptString) {
 // SetPhoneNumber sets the value of PhoneNumber.
 func (s *User) SetPhoneNumber(val OptString) {
 	s.PhoneNumber = val
+}
+
+// SetPhoto sets the value of Photo.
+func (s *User) SetPhoto(val OptURI) {
+	s.Photo = val
 }
 
 // Ref: #/components/schemas/Workspace

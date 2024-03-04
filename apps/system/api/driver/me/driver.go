@@ -3,6 +3,8 @@ package me
 import (
 	"context"
 
+	"github.com/google/uuid"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/id"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
@@ -19,7 +21,7 @@ type Driver interface {
 	FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*models.SystemAccount, error)
 	FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) (*models.SystemAccount, error)
 	FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.SystemAccount, error)
-	UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User) error
+	UpdateName(ctx context.Context, exec bun.IDB, usr *user.User) error
 	UpdateMemberProfile(ctx context.Context, exec bun.IDB, m *member.Member) (*member.Member, error)
 }
 
@@ -41,10 +43,16 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*models
 		Relation("Workspace").
 		Relation("Workspace.Detail").
 		Relation("SystemAccount").
-		Relation("SystemAccount.Profile").
 		Relation("SystemAccount.AuthProviders").
-		Relation("SystemAccount.Emails").
-		Relation("SystemAccount.PhoneNumbers").
+		Relation("SystemAccount.Name").
+		Relation("SystemAccount.Name.SystemAccountName").
+		Relation("SystemAccount.Email").
+		Relation("SystemAccount.Email.SystemAccountEmail").
+		Relation("SystemAccount.PhoneNumber").
+		Relation("SystemAccount.PhoneNumber.SystemAccountPhoneNumber").
+		Relation("SystemAccount.PhotoEvent").
+		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent").
+		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent.Photo").
 		Where("ms.member_id = ?", mID.Value()).
 		Scan(ctx)
 	if err != nil {
@@ -62,10 +70,7 @@ func (d *driver) LastLogin(ctx context.Context, exec bun.IDB, mID member.ID) err
 		MemberLoginHistoryID: pkID.Value(),
 		MemberID:             mID.Value(),
 	}
-	_, err = exec.
-		NewInsert().
-		Model(m).
-		Exec(ctx)
+	_, err = exec.NewInsert().Model(m).Exec(ctx)
 	return err
 }
 
@@ -90,10 +95,16 @@ func (d *driver) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID accoun
 	err := exec.
 		NewSelect().
 		Model(sysAcc).
-		Relation("Profile").
 		Relation("AuthProviders").
-		Relation("Emails").
-		Relation("PhoneNumbers").
+		Relation("Name").
+		Relation("Name.SystemAccountName").
+		Relation("Email").
+		Relation("Email.SystemAccountEmail").
+		Relation("PhoneNumber").
+		Relation("PhoneNumber.SystemAccountPhoneNumber").
+		Relation("PhotoEvent").
+		Relation("PhotoEvent.SystemAccountPhotoEvent").
+		Relation("PhotoEvent.SystemAccountPhotoEvent.Photo").
 		Where("sa.system_account_id = ?", aID.ToString()).
 		Scan(ctx)
 	if err != nil {
@@ -107,10 +118,16 @@ func (d *driver) FindProfile(ctx context.Context, exec bun.IDB, aID account.ID) 
 	err := exec.
 		NewSelect().
 		Model(sysAcc).
-		Relation("Profile").
 		Relation("AuthProviders").
-		Relation("Emails").
-		Relation("PhoneNumbers").
+		Relation("Name").
+		Relation("Name.SystemAccountName").
+		Relation("Email").
+		Relation("Email.SystemAccountEmail").
+		Relation("PhoneNumber").
+		Relation("PhoneNumber.SystemAccountPhoneNumber").
+		Relation("PhotoEvent").
+		Relation("PhotoEvent.SystemAccountPhotoEvent").
+		Relation("PhotoEvent.SystemAccountPhotoEvent.Photo").
 		Where("sa.system_account_id = ?", aID.ToString()).
 		Scan(ctx)
 	if err != nil {
@@ -125,10 +142,16 @@ func (d *driver) FindByEmail(ctx context.Context, exec bun.IDB, email account.Em
 		NewSelect().
 		Model(sysAcc).
 		Relation("SystemAccount").
-		Relation("SystemAccount.Profile").
 		Relation("SystemAccount.AuthProviders").
-		Relation("SystemAccount.Emails").
-		Relation("SystemAccount.PhoneNumbers").
+		Relation("SystemAccount.Name").
+		Relation("SystemAccount.Name.SystemAccountName").
+		Relation("SystemAccount.Email").
+		Relation("SystemAccount.Email.SystemAccountEmail").
+		Relation("SystemAccount.PhoneNumber").
+		Relation("SystemAccount.PhoneNumber.SystemAccountPhoneNumber").
+		Relation("SystemAccount.PhotoEvent").
+		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent").
+		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent.Photo").
 		Where("saes.email = ?", email.ToString()).
 		Scan(ctx)
 	if err != nil {
@@ -137,16 +160,17 @@ func (d *driver) FindByEmail(ctx context.Context, exec bun.IDB, email account.Em
 	return sysAcc.SystemAccount, nil
 }
 
-func (d *driver) UpdateProfile(ctx context.Context, exec bun.IDB, usr *user.User) error {
-	mem := &models.SystemAccountProfile{
-		SystemAccountID: usr.AccountID().Value(),
-		Name:            usr.Name().ToString(),
+func (d *driver) UpdateName(ctx context.Context, exec bun.IDB, usr *user.User) error {
+	sanID, err := uuid.NewV7()
+	if err != nil {
+		return err
 	}
-	_, err := exec.
-		NewUpdate().
-		Model(mem).
-		WherePK().
-		Exec(ctx)
+	mem := &models.SystemAccountName{
+		SystemAccountNameID: sanID,
+		SystemAccountID:     usr.AccountID().Value(),
+		Name:                usr.Name().ToString(),
+	}
+	_, err = exec.NewInsert().Model(mem).Exec(ctx)
 	return err
 }
 
@@ -162,10 +186,6 @@ func (d *driver) UpdateMemberProfile(ctx context.Context, exec bun.IDB, m *membe
 		DisplayName:    p.DisplayName().ToString(),
 		Bio:            p.Bio().ToString(),
 	}
-	_, err := exec.
-		NewUpdate().
-		Model(mem).
-		WherePK().
-		Exec(ctx)
+	_, err := exec.NewUpdate().Model(mem).WherePK().Exec(ctx)
 	return m, err
 }

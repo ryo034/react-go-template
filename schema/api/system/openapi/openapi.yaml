@@ -167,6 +167,39 @@ paths:
           $ref: '#/components/responses/ForbiddenError'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /api/v1/me/profile/photo:
+    put:
+      summary: Update Profile Photo
+      description: Updates the user profile photo
+      tags:
+        - Profile
+      security:
+        - bearer: []
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateMeProfilePhoto'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateProfilePhotoResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Delete Profile Photo
+      description: Deletes the user profile photo
+      tags:
+        - Profile
+      security:
+        - bearer: []
+      responses:
+        '200':
+          $ref: '#/components/responses/RemoveProfilePhotoResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /api/v1/me/member/profile:
     put:
       summary: Update Me Member Profile
@@ -366,6 +399,9 @@ components:
           type: string
         phoneNumber:
           type: string
+        photo:
+          type: string
+          format: uri
     MultiFactor:
       type: object
       required:
@@ -600,6 +636,19 @@ components:
                 properties:
                   name:
                     type: string
+    UpdateMeProfilePhoto:
+      description: Update Me Profile Photo
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            required:
+              - photo
+            properties:
+              photo:
+                type: string
+                format: binary
     InvitationProcessEmail:
       description: >-
         Process an invitation by verifying token and email, and register or add
@@ -1022,6 +1071,28 @@ components:
                 $ref: '#/components/schemas/Me'
     UpdateProfileResponse:
       description: Update profile
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - me
+            properties:
+              me:
+                $ref: '#/components/schemas/Me'
+    UpdateProfilePhotoResponse:
+      description: Update profile photo
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - me
+            properties:
+              me:
+                $ref: '#/components/schemas/Me'
+    RemoveProfilePhotoResponse:
+      description: Remove profile photo
       content:
         application/json:
           schema:

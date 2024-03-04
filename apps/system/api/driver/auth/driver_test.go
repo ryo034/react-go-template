@@ -31,7 +31,7 @@ func Test_driver_Create_OK(t *testing.T) {
 
 	wantErr := false
 	ctx := context.Background()
-	t.Run("Find", func(t *testing.T) {
+	t.Run("Create", func(t *testing.T) {
 		db := bun.NewDB(test.SetupTestDB(t, ctx).DB, pgdialect.New())
 		pr := core.NewDatabaseProvider(db, db)
 		aID := account.NewIDFromUUID(systemAccountIDUUID)
@@ -42,7 +42,7 @@ func Test_driver_Create_OK(t *testing.T) {
 			"firebase",
 			apUID,
 		)
-		usr := user.NewUser(aID, email, nil, nil)
+		usr := user.NewUser(aID, email, nil, nil, nil)
 		got, err := NewDriver().Create(ctx, pr.GetExecutor(ctx, false), usr, ap)
 		if (err != nil) != wantErr {
 			t.Errorf("Create() error = %v, wantErr %v", err, wantErr)
@@ -50,13 +50,12 @@ func Test_driver_Create_OK(t *testing.T) {
 		}
 		et := time.Now()
 		assert.True(t, got.CreatedAt.After(st) && got.CreatedAt.Before(et), "CreatedAt should be within test time range")
-		if got.Profile != nil {
-			assert.True(t, got.Profile.CreatedAt.After(st) && got.Profile.CreatedAt.Before(et), "Profile.CreatedAt should be within test time range")
-			assert.True(t, got.Profile.UpdatedAt.After(st) && got.Profile.UpdatedAt.Before(et), "Profile.UpdatedAt should be within test time range")
+		if got.Name != nil {
+			assert.True(t, got.Name.CreatedAt.After(st) && got.Name.CreatedAt.Before(et), "Name.CreatedAt should be within test time range")
 		}
 		assert.Equal(t, systemAccountIDUUID, got.SystemAccountID)
 		assert.Equal(t, "Test_driver_Create_OK@example.com", got.Emails[0].Email)
-		assert.Equal(t, "", got.Profile.Name)
+		assert.Equal(t, "", got.Name.Name)
 		if got.PhoneNumbers != nil {
 			t.Errorf("PhoneNumber should be nil, got: %v", got.PhoneNumbers)
 		}
@@ -84,11 +83,11 @@ func Test_driver_Find_OK(t *testing.T) {
 		//		CreatedAt:       defaultTime,
 		//	},
 		//},
-		Profile: &models.SystemAccountProfile{
-			SystemAccountID: systemAccountIDUUID,
-			Name:            "John Doe",
-			CreatedAt:       defaultTime,
-			UpdatedAt:       defaultTime,
+		Name: &models.SystemAccountName{
+			SystemAccountNameID: uuid.MustParse("018e088e-fd36-722d-a927-8cfd34a642bd"),
+			SystemAccountID:     systemAccountIDUUID,
+			Name:                "John Doe",
+			CreatedAt:           defaultTime,
 		},
 		Emails: []*models.SystemAccountEmail{
 			{

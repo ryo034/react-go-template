@@ -65,7 +65,7 @@ func (u *useCase) createUser(ctx context.Context, p bun.IDB, ci CreateInfo) (*me
 	if err != nil {
 		return nil, err
 	}
-	if err = u.meRepo.UpdateProfile(ctx, p, usr); err != nil {
+	if err = u.meRepo.UpdateName(ctx, p, usr); err != nil {
 		return nil, err
 	}
 	res, err := u.meRepo.FindBeforeOnboard(ctx, p, usr.AccountID())
@@ -156,7 +156,7 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 
 	fn := func() (string, error) {
 		if usr == nil {
-			_, err = u.repo.Create(ctx, p, user.NewUser(newAccountID, i.Email, nil, nil), ap)
+			_, err = u.repo.Create(ctx, p, user.NewUser(newAccountID, i.Email, nil, nil, nil), ap)
 			if err != nil {
 				return "", err
 			}

@@ -18,7 +18,7 @@ import (
 type Controller interface {
 	Find(ctx context.Context) (openapi.APIV1MeGetRes, error)
 	AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error)
-	UpdateProfile(ctx context.Context, i UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error)
+	UpdateName(ctx context.Context, i UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error)
 	UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1MeMemberProfilePutRes, error)
 }
 
@@ -71,24 +71,24 @@ func (c *controller) AcceptInvitation(ctx context.Context, i AcceptInvitationInp
 	return res, nil
 }
 
-func NewUpdateProfileInput(i UpdateProfileInput, aID account.ID) (meUc.UpdateProfileInput, error) {
+func NewUpdateNameInput(i UpdateProfileInput, aID account.ID) (meUc.UpdateNameInput, error) {
 	na, err := account.NewName(i.Name)
 	if err != nil {
-		return meUc.UpdateProfileInput{}, err
+		return meUc.UpdateNameInput{}, err
 	}
-	return meUc.UpdateProfileInput{Name: na, AccountID: aID}, nil
+	return meUc.UpdateNameInput{Name: na, AccountID: aID}, nil
 }
 
-func (c *controller) UpdateProfile(ctx context.Context, i UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error) {
+func (c *controller) UpdateName(ctx context.Context, i UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error) {
 	aID, err := c.co.GetUID(ctx)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePutRes), nil
 	}
-	in, err := NewUpdateProfileInput(i, aID)
+	in, err := NewUpdateNameInput(i, aID)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePutRes), nil
 	}
-	res, err := c.uc.UpdateProfile(ctx, in)
+	res, err := c.uc.UpdateName(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePutRes), nil
 	}

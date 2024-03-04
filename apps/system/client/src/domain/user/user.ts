@@ -1,10 +1,11 @@
-import { AccountFullName, AccountId } from "@/domain/account"
-import { Email, Entity } from "@/domain/shared"
+import { AccountFullName, AccountId } from "~/domain/account"
+import { Email, Entity, Photo } from "~/domain/shared"
 
 interface Props {
   id: AccountId
-  name?: AccountFullName
   email: Email
+  name?: AccountFullName
+  photo?: Photo
 }
 
 export class User extends Entity<Props> {
@@ -30,5 +31,9 @@ export class User extends Entity<Props> {
 
   get email(): Email {
     return this.value.email
+  }
+
+  get photo(): Photo | undefined {
+    return this.value.photo
   }
 }

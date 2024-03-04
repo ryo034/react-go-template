@@ -24,6 +24,8 @@ paths:
     $ref: "./paths/me.yaml#/me"
   /api/v1/me/profile:
     $ref: "./paths/me.yaml#/profile"
+  /api/v1/me/profile/photo:
+    $ref: "./paths/me.yaml#/profilePhoto"
   /api/v1/me/member/profile:
     $ref: "./paths/me.yaml#/memberProfile"
   # Workspaces
@@ -89,6 +91,8 @@ components:
       $ref: "./components/requestBodies/workspace.yaml#/CreateWorkspace"
     UpdateMeProfile:
       $ref: "./components/requestBodies/me.yaml#/UpdateMeProfile"
+    UpdateMeProfilePhoto:
+      $ref: "./components/requestBodies/me.yaml#/UpdateMeProfilePhoto"
     InvitationProcessEmail:
       $ref: "./components/requestBodies/auth.yaml#/InvitationProcessEmail"
     InvitationProcessOAuth:
@@ -132,6 +136,10 @@ components:
       $ref: "./components/responses/me.yaml#/MeResponse"
     UpdateProfileResponse:
       $ref: "./components/responses/me.yaml#/UpdateProfileResponse"
+    UpdateProfilePhotoResponse:
+      $ref: "./components/responses/me.yaml#/UpdateProfilePhotoResponse"
+    RemoveProfilePhotoResponse:
+      $ref: "./components/responses/me.yaml#/RemoveProfilePhotoResponse"
     UpdateMeMemberProfileResponse:
       $ref: "./components/responses/me.yaml#/UpdateMeMemberProfileResponse"
     InvitationsAcceptResponse:

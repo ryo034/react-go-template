@@ -14,3 +14,6 @@ User:
       type: string
     phoneNumber:
       type: string
+    photo:
+      type: string
+      format: uri

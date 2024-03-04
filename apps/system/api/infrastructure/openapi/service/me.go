@@ -12,7 +12,7 @@ func (s *service) APIV1MeGet(ctx context.Context) (openapi.APIV1MeGetRes, error)
 }
 
 func (s *service) APIV1MeProfilePut(ctx context.Context, req *openapi.APIV1MeProfilePutReq) (openapi.APIV1MeProfilePutRes, error) {
-	return s.ctrl.Me.UpdateProfile(ctx, me.UpdateProfileInput{Name: req.Profile.Name.Value})
+	return s.ctrl.Me.UpdateName(ctx, me.UpdateProfileInput{Name: req.Profile.Name.Value})
 }
 
 func (s *service) AcceptInvitation(ctx context.Context, params openapi.AcceptInvitationParams) (openapi.AcceptInvitationRes, error) {

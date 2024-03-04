@@ -67,6 +67,24 @@ func (UnimplementedHandler) APIV1MeMemberProfilePut(ctx context.Context, req *AP
 	return r, ht.ErrNotImplemented
 }
 
+// APIV1MeProfilePhotoDelete implements DELETE /api/v1/me/profile/photo operation.
+//
+// Deletes the user profile photo.
+//
+// DELETE /api/v1/me/profile/photo
+func (UnimplementedHandler) APIV1MeProfilePhotoDelete(ctx context.Context) (r APIV1MeProfilePhotoDeleteRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1MeProfilePhotoPut implements PUT /api/v1/me/profile/photo operation.
+//
+// Updates the user profile photo.
+//
+// PUT /api/v1/me/profile/photo
+func (UnimplementedHandler) APIV1MeProfilePhotoPut(ctx context.Context, req *APIV1MeProfilePhotoPutReq) (r APIV1MeProfilePhotoPutRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIV1MeProfilePut implements PUT /api/v1/me/profile operation.
 //
 // Updates the user profile.

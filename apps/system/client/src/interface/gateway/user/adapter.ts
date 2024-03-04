@@ -1,6 +1,7 @@
 import { Result } from "true-myth"
 import { AccountFullName, AccountId } from "~/domain/account"
 import { Email } from "~/domain/shared"
+import { Photo } from "~/domain/shared/photo"
 import { User } from "~/domain/user"
 import { components } from "~/generated/schema/openapi/systemApi"
 import { AdapterError } from "~/infrastructure/error"
@@ -31,6 +32,15 @@ export class UserGatewayAdapter {
       name = tmpName.value
     }
 
-    return Result.ok(User.create({ id: id.value, email: email.value, name }))
+    let photo: Photo | undefined = undefined
+    if (user.photo) {
+      const tmpPhoto = Photo.fromString(user.photo)
+      if (tmpPhoto.isErr) {
+        return Result.err(tmpPhoto.error)
+      }
+      photo = tmpPhoto.value
+    }
+
+    return Result.ok(User.create({ id: id.value, email: email.value, name, photo }))
   }
 }

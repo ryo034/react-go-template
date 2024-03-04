@@ -134,7 +134,7 @@ func Test_driver_AddMember_OK(t *testing.T) {
 
 	email, _ := account.NewEmail("system_account@example.com")
 	name, _ := account.NewName("John Doe")
-	u := user.NewUser(aID, email, &name, nil)
+	u := user.NewUser(aID, email, &name, nil, nil)
 	dn := member.NewDisplayName("John Doe")
 	pr := member.NewProfile(dn, nil, member.NewAsEmptyBio())
 	m := member.NewMember(mID, u, pr, member.RoleAdmin)

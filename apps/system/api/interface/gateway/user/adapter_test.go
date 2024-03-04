@@ -18,7 +18,7 @@ func TestAdapter_Adapt(t *testing.T) {
 
 	systemAccount := models.SystemAccount{
 		SystemAccountID: validUUID,
-		Profile: &models.SystemAccountProfile{
+		Name: &models.SystemAccountName{
 			Name: validName,
 		},
 		Emails: []*models.SystemAccountEmail{
@@ -63,7 +63,7 @@ func TestAdapter_Adapt(t *testing.T) {
 
 	t.Run("Name is empty", func(t *testing.T) {
 		invalidSystemAccount := systemAccount
-		invalidSystemAccount.Profile.Name = ""
+		invalidSystemAccount.Name = nil
 		u, err := adap.AdaptTmp(&invalidSystemAccount)
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)

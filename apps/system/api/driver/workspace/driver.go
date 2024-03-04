@@ -131,10 +131,16 @@ func (d *driver) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, w
 		Relation("Profile").
 		Relation("Role").
 		Relation("SystemAccount").
-		Relation("SystemAccount.Profile").
 		Relation("SystemAccount.AuthProviders").
-		Relation("SystemAccount.PhoneNumbers").
-		Relation("SystemAccount.Emails").
+		Relation("SystemAccount.Name").
+		Relation("SystemAccount.Name.SystemAccountName").
+		Relation("SystemAccount.Email").
+		Relation("SystemAccount.Email.SystemAccountEmail").
+		Relation("SystemAccount.PhoneNumber").
+		Relation("SystemAccount.PhoneNumber.SystemAccountPhoneNumber").
+		Relation("SystemAccount.PhotoEvent").
+		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent").
+		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent.Photo").
 		Relation("Workspace").
 		Where("ms.system_account_id = ?", aID.ToString()).
 		Where("ms.workspace_id = ?", wID.Value()).
@@ -153,10 +159,16 @@ func (d *driver) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace
 		Relation("Profile").
 		Relation("Role").
 		Relation("SystemAccount").
-		Relation("SystemAccount.Profile").
 		Relation("SystemAccount.AuthProviders").
-		Relation("SystemAccount.PhoneNumbers").
-		Relation("SystemAccount.Emails").
+		Relation("SystemAccount.Name").
+		Relation("SystemAccount.Name.SystemAccountName").
+		Relation("SystemAccount.Email").
+		Relation("SystemAccount.Email.SystemAccountEmail").
+		Relation("SystemAccount.PhoneNumber").
+		Relation("SystemAccount.PhoneNumber.SystemAccountPhoneNumber").
+		Relation("SystemAccount.PhotoEvent").
+		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent").
+		Relation("SystemAccount.PhotoEvent.SystemAccountPhotoEvent.Photo").
 		Relation("Workspace").
 		Where("ms.workspace_id = ?", wID.Value()).
 		Scan(ctx)

@@ -10,6 +10,7 @@ type User struct {
 	email       account.Email
 	name        *account.Name
 	phoneNumber *phone.Number
+	photo       *Photo
 }
 
 func NewUser(
@@ -17,19 +18,18 @@ func NewUser(
 	email account.Email,
 	name *account.Name,
 	phoneNumber *phone.Number,
+	photo *Photo,
 ) *User {
 	return &User{
 		accountId,
 		email,
 		name,
 		phoneNumber,
+		photo,
 	}
 }
-func NewTmpUser(
-	accountId account.ID,
-	email account.Email,
-) *User {
-	return &User{accountId, email, nil, nil}
+func NewTmpUser(accountId account.ID, email account.Email) *User {
+	return &User{accountId, email, nil, nil, nil}
 }
 
 func (u *User) AccountID() account.ID {
@@ -67,4 +67,12 @@ func (u *User) HasNotPhoneNumber() bool {
 func (u *User) UpdateName(name account.Name) *User {
 	u.name = &name
 	return u
+}
+
+func (u *User) Photo() *Photo {
+	return u.photo
+}
+
+func (u *User) HasPhoto() bool {
+	return u.photo != nil
 }

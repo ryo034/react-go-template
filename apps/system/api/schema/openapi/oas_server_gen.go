@@ -44,6 +44,18 @@ type Handler interface {
 	//
 	// PUT /api/v1/me/member/profile
 	APIV1MeMemberProfilePut(ctx context.Context, req *APIV1MeMemberProfilePutReq) (APIV1MeMemberProfilePutRes, error)
+	// APIV1MeProfilePhotoDelete implements DELETE /api/v1/me/profile/photo operation.
+	//
+	// Deletes the user profile photo.
+	//
+	// DELETE /api/v1/me/profile/photo
+	APIV1MeProfilePhotoDelete(ctx context.Context) (APIV1MeProfilePhotoDeleteRes, error)
+	// APIV1MeProfilePhotoPut implements PUT /api/v1/me/profile/photo operation.
+	//
+	// Updates the user profile photo.
+	//
+	// PUT /api/v1/me/profile/photo
+	APIV1MeProfilePhotoPut(ctx context.Context, req *APIV1MeProfilePhotoPutReq) (APIV1MeProfilePhotoPutRes, error)
 	// APIV1MeProfilePut implements PUT /api/v1/me/profile operation.
 	//
 	// Updates the user profile.
