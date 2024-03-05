@@ -36,4 +36,8 @@ export class User extends Entity<Props> {
   get photo(): Photo | undefined {
     return this.value.photo
   }
+
+  get hasPhoto(): boolean {
+    return this.value.photo !== undefined
+  }
 }

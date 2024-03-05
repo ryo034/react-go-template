@@ -31,6 +31,14 @@ func (p *Photo) HostingTo() media.HostingTo {
 	return p.hostingTo
 }
 
+func (p *Photo) IsFirebase() bool {
+	return p.hostingTo == media.HostingToFirebase
+}
+
+func (p *Photo) IsR2() bool {
+	return p.hostingTo == media.HostingToR2
+}
+
 func (p *Photo) URL() *url.URL {
 	return p.url
 }

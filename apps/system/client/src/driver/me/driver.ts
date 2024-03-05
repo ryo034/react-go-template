@@ -2,7 +2,7 @@ import { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
 import { AccountFullName, InvitationId, MemberProfile, User } from "~/domain"
 import { components } from "~/generated/schema/openapi/systemApi"
-import { SystemAPIClient } from "~/infrastructure/openapi/client"
+import { SystemAPIClient, openapiFetchClient } from "~/infrastructure/openapi/client"
 import { PromiseResult } from "~/infrastructure/shared/result"
 
 export class MeDriver {
@@ -36,6 +36,35 @@ export class MeDriver {
             name: name.value
           }
         }
+      })
+      return res.data ? Result.ok(res.data.me) : Result.err(this.errorHandler.adapt(res))
+    } catch (e) {
+      return Result.err(this.errorHandler.adapt(e))
+    }
+  }
+
+  async updatePhoto(file: File): PromiseResult<components["schemas"]["Me"], Error> {
+    // const types = openapiFetchClient(mySchema, {
+    //   transform(schemaObject, metadata): string {
+    //     if ("format" in schemaObject && schemaObject.format === "binary") {
+    //       return schemaObject.nullable ? "Blob | null" : "Blob";
+    //     }
+    //   },
+    // });
+    // const formData = new FormData()
+    // formData.append("photo", file)
+
+    try {
+      const res = await this.client.PUT("/api/v1/me/profile/photo", {
+        body: { photo: "" },
+        bodySerializer(body) {
+          const fd = new FormData()
+          fd.append("photo", file)
+          return fd
+        }
+        // headers: {
+        //   "Content-Type": "multipart/form-data"
+        // }
       })
       return res.data ? Result.ok(res.data.me) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {

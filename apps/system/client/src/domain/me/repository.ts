@@ -6,5 +6,6 @@ export interface MeRepository {
   find(): PromiseResult<Me, Error>
   acceptInvitation(invitationId: InvitationId): PromiseResult<Me, Error>
   updateProfile(name: AccountFullName): PromiseResult<Me, Error>
+  updatePhoto(file: File): PromiseResult<Me, Error>
   updateMemberProfile(profile: MemberProfile): PromiseResult<Me, Error>
 }

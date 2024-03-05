@@ -41,13 +41,14 @@ func newDriverInjector(
 	co shared.ContextOperator,
 	mc mailer.Client,
 	minioClient *minio.Client,
+	sh storage.Handler,
 	noreplyEmail account.Email,
 ) Driver {
 	invDr := invitation.NewDriver()
 	meDr := me.NewDriver(invDr)
 	return Driver{
 		keyvalue.NewRedisDriver(rc),
-		firebaseDriver.NewDriver(f, co, storage.NewHandler(conf)),
+		firebaseDriver.NewDriver(f, co, sh),
 		email.NewDriver(conf.ServiceName(), co, mc, noreplyEmail, logger),
 		meDr,
 		auth.NewDriver(),

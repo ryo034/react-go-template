@@ -1,29 +1,40 @@
-import createClient from "openapi-fetch"
+import createClient, { Middleware } from "openapi-fetch"
 import { paths } from "~/generated/schema/openapi/systemApi"
 import { firebaseAuth } from "~/infrastructure/firebase"
 
-const fetchRequestInterceptor = async (config: RequestInit | undefined) => {
-  const newConfig = config === undefined ? {} : { ...config }
+const fetchRequestInterceptor: Middleware = {
+  async onRequest(req, options) {
+    if (firebaseAuth.currentUser === null) {
+      return req
+    }
+    const token = await firebaseAuth.currentUser.getIdToken()
+    if (!token) {
+      return req
+    }
+    req.headers.set("Authorization", `Bearer ${token}`)
+    return req
+  }
+}
 
-  if (firebaseAuth.currentUser === null) {
-    return newConfig
-  }
-  const token = await firebaseAuth.currentUser.getIdToken()
-  if (!token) {
-    return newConfig
-  }
-  return {
-    ...newConfig,
-    headers: { ...new Headers(newConfig.headers), Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
+const debugMiddleware: Middleware = {
+  async onRequest(req, options) {
+    console.log("onRequest", req, options)
+    return req
+  },
+  async onResponse(res, options) {
+    console.log("onResponse", res, options)
+    return res
   }
 }
 
 export const openapiFetchClient = createClient<paths>({
-  baseUrl: import.meta.env.VITE_API_BASE_URL,
-  fetch: async (input, init) => {
-    const options = await fetchRequestInterceptor(init)
-    return fetch(input, { ...options })
-  }
+  baseUrl: import.meta.env.VITE_API_BASE_URL
 })
+
+openapiFetchClient.use(fetchRequestInterceptor)
+
+if (import.meta.env.MODE === "development") {
+  openapiFetchClient.use(debugMiddleware)
+}
 
 export type SystemAPIClient = typeof openapiFetchClient

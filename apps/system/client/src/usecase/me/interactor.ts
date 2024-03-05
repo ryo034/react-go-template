@@ -1,11 +1,18 @@
 import { MeRepository, MemberProfile } from "~/domain"
-import { AcceptInvitationInput, MeUseCaseOutput, UpdateMemberProfileInput, UpdateProfileInput } from "~/usecase"
+import {
+  AcceptInvitationInput,
+  MeUseCaseOutput,
+  UpdateMemberProfileInput,
+  UpdatePhotoInput,
+  UpdateProfileInput
+} from "~/usecase"
 
 export interface MeUseCase {
   signOut(): Promise<Error | null>
   find(): Promise<Error | null>
   acceptInvitation(i: AcceptInvitationInput): Promise<Error | null>
   updateProfile(i: UpdateProfileInput): Promise<Error | null>
+  updatePhoto(i: UpdatePhotoInput): Promise<Error | null>
   updateMemberProfile(i: UpdateMemberProfileInput): Promise<Error | null>
 }
 
@@ -44,6 +51,15 @@ export class MeInteractor implements MeUseCase {
 
   async updateProfile(i: UpdateProfileInput): Promise<Error | null> {
     const res = await this.repository.updateProfile(i.name)
+    if (res.isErr) {
+      return res.error
+    }
+    this.presenter.set(res.value)
+    return null
+  }
+
+  async updatePhoto(i: UpdatePhotoInput): Promise<Error | null> {
+    const res = await this.repository.updatePhoto(i.file)
     if (res.isErr) {
       return res.error
     }

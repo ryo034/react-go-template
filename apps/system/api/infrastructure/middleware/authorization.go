@@ -26,6 +26,7 @@ var UnauthorizedRoutes = []string{
 	"/api/v1/auth/oauth",
 	"/api/v1/me",
 	"/api/v1/me/profile",
+	"/api/v1/me/profile/photo",
 	"/api/v1/me/member/profile",
 	"/api/v1/members/invitations/{invitationID}/accept",
 }

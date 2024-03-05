@@ -6,7 +6,6 @@ interface Props {
   displayName?: MemberDisplayName
   idNumber?: MemberIdNumber
   bio: MemberBio
-  photo?: Photo
 }
 
 export class MemberProfile extends Entity<Props> {
@@ -32,13 +31,5 @@ export class MemberProfile extends Entity<Props> {
 
   get hasIdNumber(): boolean {
     return this.idNumber !== undefined
-  }
-
-  get hasPhoto(): boolean {
-    return this.value.photo !== undefined
-  }
-
-  get photo(): Photo | undefined {
-    return this.value.photo
   }
 }

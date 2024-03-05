@@ -25,4 +25,8 @@ export class Photo extends ValueObject<URL> {
       )
     }
   }
+
+  get photoURL(): string {
+    return this.value.toString()
+  }
 }

@@ -25,7 +25,7 @@ func (h *handler) createLocalAvatarPath(aID account.ID, id media.ID) url.URL {
 	return url.URL{
 		Scheme: "http",
 		Host:   h.conf.MinioConfig().Host,
-		Path:   fmt.Sprintf("/%s/avatar/%s", aID.ToString(), id.String()),
+		Path:   fmt.Sprintf("/accounts/%s/avatar/%s", aID.ToString(), id.String()),
 	}
 }
 
@@ -33,7 +33,7 @@ func (h *handler) createMinioAvatarPath(aID account.ID, id media.ID) url.URL {
 	return url.URL{
 		Scheme: "https",
 		Host:   h.conf.MinioConfig().Host,
-		Path:   fmt.Sprintf("/%s/avatar/%s", aID.ToString(), id.String()),
+		Path:   fmt.Sprintf("/accounts/%s/avatar/%s", aID.ToString(), id.String()),
 	}
 }
 

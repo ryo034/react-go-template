@@ -113,6 +113,13 @@ export default class PagesStep {
     await target.click()
   }
 
+  @Step("サイドバーの<target>をクリック")
+  async clickSidebarTarget(target: string) {
+    const targetsOnSidebar = page.getByTestId("pagesOnSidebar")
+    const targetElement = targetsOnSidebar.getByText(target)
+    await targetElement.click()
+  }
+
   @Step("トーストメッセージ<message>が表示されている")
   async isVisibleToastMessage(message: string) {
     const target = page.getByTestId("toastTitle")

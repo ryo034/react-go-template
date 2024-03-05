@@ -119,3 +119,35 @@ tags: stateful
 * 招待受諾画面でワークスペース"Example"招待者"Invite TestOne"の参加ボタンをクリック
 * 選択中のワークスペース名が"Example"である
 * 所属中の表示名が"InviteGoogleAuthTest AlreadyJoinedGoogle"である
+
+## 招待を受けたユーザー（プロフィール写真の設定されているgoogleアカウントでアカウント作成済）はメールアドレスで招待を受諾した場合、元のプロフィール画像が保持される
+* トークン"018e0eae-aea6-74e5-8bd6-288b480b335a"の招待画面を開く
+* "Googleで始める"ボタンをクリック
+* Googleアカウント選択画面でメールアドレス"invite_test_has_photo_by_google_accept_with_email@example.com"を選択する
+* 招待受諾画面でワークスペース"InviteTest 2"招待者"Invite TestTwo"の参加ボタンをクリック
+* 選択中のワークスペース名が"InviteTest 2"である
+* 所属中の表示名が"InviteTest HasPhotoAcceptWithEmail"である
+* サイドバーのアカウント情報にプロフィール画像"https://github.com/ryo034/image/assets/55078625/af9fae15-baf3-451e-820a-99f7e246af31"が設定されている
+
+## 招待を受けたユーザー（新たにプロフィール写真を設定しているgoogleアカウントでアカウント作成済）はメールアドレスで招待を受諾した場合、元のプロフィール画像が保持される
+* "googleで始める"ボタンをクリック
+* Googleアカウント選択画面でメールアドレス"invite_test_has_photo_by_google_accept_with_has_photo_google@example.com"を選択する
+* サイドバーの"設定"をクリック
+* "画像を変更"ボタンをクリック
+
+* トークン"018e0ec0-e54e-7476-b65c-220bfafbf631"の招待画面を開く
+* "Googleで始める"ボタンをクリック
+* Googleアカウント選択画面でメールアドレス"invite_test_has_photo_by_google_accept_with_has_photo_google@example.com"を選択する
+* 招待受諾画面でワークスペース"InviteTest 2"招待者"Invite TestTwi"の参加ボタンをクリック
+* 選択中のワークスペース名が"InviteTest 2"である
+* 所属中の表示名が"InviteTest HasPhotoAcceptWithGoogle"である
+* サイドバーのアカウント情報にプロフィール画像"https://github.com/ryo034/image/assets/55078625/ddeb3605-2291-4c19-81ec-6d890c7d0219"が設定されている
+
+## 招待を受けた未登録ユーザーはプロフィール写真が設定されているgoogleアカウントで招待を受諾した場合、googleアカウントのプロフィール画像が設定される
+* トークン"018e0ec2-0d64-7b7d-92af-e42be382216c"の招待画面を開く
+* "Googleで始める"ボタンをクリック
+* Googleアカウント選択画面でメールアドレス"invite_test_no_account_accept_with_has_photo_google@example.com"を選択する
+* 招待受諾画面でワークスペース"InviteTest 2"招待者"Invite TestTwo"の参加ボタンをクリック
+* 選択中のワークスペース名が"InviteTest 2"である
+* 所属中の表示名が"InviteTest HasNotPhotoAcceptWithGoogle"である
+* サイドバーのアカウント情報にプロフィール画像"https://github.com/ryo034/image/assets/55078625/8db77a30-17d4-4c78-8a3a-a88ba016dcfb"が設定されている

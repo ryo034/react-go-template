@@ -64,7 +64,7 @@ export const SettingsProfileForm = ({ defaultValues, onSubmit, isUpdating = fals
             <FormItem>
               <FormLabel>DisplayName</FormLabel>
               <FormControl>
-                <Input placeholder="display name" {...field} />
+                <Input placeholder="display name" disabled={isUpdating} {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name. It can be your real name or a pseudonym. You can only change this once
@@ -81,7 +81,12 @@ export const SettingsProfileForm = ({ defaultValues, onSubmit, isUpdating = fals
             <FormItem>
               <FormLabel>Bio</FormLabel>
               <FormControl>
-                <Textarea placeholder="Tell us a little bit about yourself" className="resize-none h-32" {...field} />
+                <Textarea
+                  placeholder="Tell us a little bit about yourself"
+                  className="resize-none h-32"
+                  disabled={isUpdating}
+                  {...field}
+                />
               </FormControl>
               <FormDescription>
                 You can <span>@mention</span> other users and organizations to link to them.

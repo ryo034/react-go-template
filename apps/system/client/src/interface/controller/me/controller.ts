@@ -1,6 +1,5 @@
-import { AccountFullName, InvitationId, Me, MemberDisplayName, MemberIdNumber, User } from "~/domain"
+import { AccountFullName, InvitationId, MemberDisplayName, MemberIdNumber } from "~/domain"
 import { MemberBio } from "~/domain/workspace/member/bio"
-import { AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
 import { MeUseCase } from "~/usecase"
 
 interface AcceptInvitationInput {
@@ -38,6 +37,10 @@ export class MeController {
       return name.error
     }
     return await this.useCase.updateProfile({ name: name.value })
+  }
+
+  async updatePhoto(i: File): Promise<null | Error> {
+    return await this.useCase.updatePhoto({ file: i })
   }
 
   async updateMemberProfile(i: UpdateMemberProfileInput): Promise<null | Error> {

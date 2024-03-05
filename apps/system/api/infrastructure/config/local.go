@@ -28,8 +28,8 @@ var localValues = map[Key]string{
 	// resend api key
 	resendAPIKey: "",
 	//	storage
-	storageHost:       "localhost:9090",
-	storageEndpoint:   "host.docker.internal:9090",
+	storageHost:       "127.0.0.1:9090",
+	storageEndpoint:   "minio:9000",
 	storageAccessKey:  "minio",
 	storageSecretKey:  "minio123",
 	storageBucketName: "system",

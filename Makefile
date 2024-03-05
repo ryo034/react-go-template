@@ -26,8 +26,16 @@ start:
 .PHONY: restart
 restart:
 	@docker-compose down
+	@make restart-minio
 	@make restart-db
 	@docker-compose up -d api
+
+.PHONY: restart-minio
+restart-minio:
+	@docker-compose rm -fsv minio
+	@docker-compose rm -fsv minio-createbuckets
+	@rm -rf container/minio/.data
+	@docker-compose up -d minio-createbuckets
 
 .PHONY: restart-db
 restart-db:

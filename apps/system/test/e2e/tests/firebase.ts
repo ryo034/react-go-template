@@ -13,7 +13,7 @@ export interface FirebaseUser {
   phoneNumber: string
   passwordHash: Buffer
   displayName: string
-  photoURL: string
+  photoUrl: string
   disabled: boolean
   providerUserInfo: UserProvider[]
   multiFactor: MultiFactorCreateSettings | null
@@ -110,12 +110,13 @@ export class Firebase {
               displayName: provider.displayName,
               email: provider.email,
               phoneNumber: users[idx].phoneNumber,
-              photoURL: users[idx].photoURL,
+              photoURL: users[idx].photoUrl,
               providerId: provider.providerId
             })
           }
         }
       }
+
       try {
         await this.firebaseAdminAuth.importUsers([
           {
@@ -125,7 +126,7 @@ export class Firebase {
             phoneNumber: users[idx].phoneNumber,
             passwordHash: users[idx].passwordHash,
             displayName: users[idx].displayName,
-            photoURL: users[idx].photoURL,
+            photoURL: users[idx].photoUrl,
             disabled: users[idx].disabled,
             providerData,
             multiFactor: mfa

@@ -10,6 +10,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/mailer"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/message"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/storage"
 	sharedPresenter "github.com/ryo034/react-go-template/apps/system/api/interface/presenter/shared"
 )
 
@@ -33,10 +34,11 @@ func NewInjector(
 	logger logger.Logger,
 	minioClient *minio.Client,
 ) (*Injector, error) {
+	sh := storage.NewHandler(conf)
 	defaultLang := conf.DefaultLanguage()
-	di := newDriverInjector(conf, logger, rc, f, co, mc, minioClient, conf.NoReplyEmail())
+	di := newDriverInjector(conf, logger, rc, f, co, mc, minioClient, sh, conf.NoReplyEmail())
 	ri := newRepositoryInjector(co, di, newGatewayAdapterInjector())
-	pi := newPresenterInjector()
+	pi := newPresenterInjector(sh)
 	la := sharedPresenter.NewLanguageAdapter(defaultLang)
 	messageResource := message.NewResource(defaultLang)
 	ui := newUseCaseInjector(conf.IsLocal(), co, ri, pi, d, txp)

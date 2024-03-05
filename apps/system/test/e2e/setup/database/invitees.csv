@@ -13,3 +13,6 @@ invitation_id,email
 018df2f9-8eb2-78a2-accd-e44bb55dabef,invite_test_no_name_google_auth_no_name_when_invite@example.com
 018df53b-4310-701e-b62d-bea4b4c7d667,invite_test_already_joined_any_workspace_by_email@example.com
 018df54f-9c56-7209-9082-380f1096c46e,invite_test_already_joined_any_workspace_by_google@example.com
+018e0eae-44a6-732d-ab12-54e5a1f3f27d,invite_test_has_photo_by_google_accept_with_email@example.com
+018e0ec0-bc20-7a22-9ffd-db6e0dccec25,invite_test_has_photo_by_google_accept_with_has_photo_google@example.com
+018e0ec1-cb17-777b-8e4a-3149194401b4,invite_test_no_account_accept_with_has_photo_google@example.com

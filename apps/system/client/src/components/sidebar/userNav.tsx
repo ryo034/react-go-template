@@ -34,10 +34,10 @@ export const SidebarUserNav = () => {
           <Card className="p-2 cursor-pointer" data-testid="userNavigationOnSidebar">
             <div className="flex items-center space-x-2">
               <Avatar className="h-8 w-8">
-                <AvatarImage src="/avatars/01.png" alt="@shadcn" />
+                <AvatarImage src={me.self?.photo?.photoURL} alt="avatar" data-testid="avatarOnSidebar" />
                 <AvatarFallback>{me.member?.profile.displayName?.firstTwoCharacters}</AvatarFallback>
               </Avatar>
-              <p className="text-sm text-gray-500 dark:text-gray-400" data-testid="displayNameOnSidebar">
+              <p className="text-sm text-gray-500 truncate dark:text-gray-400" data-testid="displayNameOnSidebar">
                 {me.member?.profile.displayName?.value}
               </p>
             </div>

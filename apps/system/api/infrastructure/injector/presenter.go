@@ -1,6 +1,7 @@
 package injector
 
 import (
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/storage"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/auth"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/me"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/member"
@@ -18,8 +19,8 @@ type Presenter struct {
 	Workspace workspaceUc.OutputPort
 }
 
-func newPresenterInjector() Presenter {
-	pa := newPresenterAdapter()
+func newPresenterInjector(sh storage.Handler) Presenter {
+	pa := newPresenterAdapter(sh)
 	m := member.NewAdapter(pa.User)
 	inv := invitation.NewAdapter()
 	meAdapter := me.NewAdapter(pa.User, pa.Member, pa.Workspace, inv)
@@ -38,8 +39,8 @@ type PresenterAdapter struct {
 	Invitation invitation.Adapter
 }
 
-func newPresenterAdapter() PresenterAdapter {
-	ua := user.NewAdapter()
+func newPresenterAdapter(sh storage.Handler) PresenterAdapter {
+	ua := user.NewAdapter(sh)
 	ma := member.NewAdapter(ua)
 	return PresenterAdapter{
 		ua,

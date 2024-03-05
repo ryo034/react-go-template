@@ -53,3 +53,12 @@ tags: stateful
 * 入力欄"ドメイン"に"test-workspace"と入力する
 * "送信"ボタンをクリック
 * ホーム画面が表示されている
+
+## 未登録ユーザーはGoogleのプロフィール画像の設定されているアカウントで新規作成した場合、プロフィール画像が設定される
+* ログイン画面を開く
+* "googleで始める"ボタンをクリック
+* Googleアカウント選択画面でメールアドレス"google_auth_test_has_photo@example.com"を選択する
+* 入力欄"ドメイン"に"google-auth-test-has-photo"と入力する
+* "送信"ボタンをクリック
+* ホーム画面が表示されている
+* サイドバーのアカウント情報にプロフィール画像"https://github.com/ryo034/image/assets/55078625/83983184-b3e9-4425-8dbc-2ca7a60fb5b0"が設定されている

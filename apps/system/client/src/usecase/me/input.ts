@@ -5,6 +5,10 @@ export type UpdateProfileInput = {
   name: AccountFullName
 }
 
+export type UpdatePhotoInput = {
+  file: File
+}
+
 export type AcceptInvitationInput = {
   invitationId: InvitationId
 }
