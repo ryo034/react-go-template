@@ -15,7 +15,7 @@ type Account struct {
 
 	AuthProviders []*AuthProvider           `bun:"ap,rel:has-many"`
 	Name          *AccountLatestName        `bun:"aln,rel:has-one"`
-	PhotoEvent    *AccountLatestPhotoEvent  `bun:"alaphoe,rel:has-one"`
+	PhotoEvent    *AccountLatestPhotoEvent  `bun:"alphoe,rel:has-one"`
 	PhoneNumber   *AccountLatestPhoneNumber `bun:"alpn,rel:has-one"`
 	Email         *AccountLatestEmail       `bun:"alem,rel:has-one"`
 
@@ -32,6 +32,7 @@ type AuthProvider struct {
 	AuthProviderID uuid.UUID `bun:"auth_provider_id,pk"`
 	AccountID      uuid.UUID `bun:"account_id,notnull"`
 	Provider       string    `bun:"provider,notnull"`
+	PhotoURL       string    `bun:"photo_url,notnull"`
 	ProviderUID    string    `bun:"provider_uid,notnull"`
 	ProvidedBy     string    `bun:"provided_by,notnull"`
 	RegisteredAt   time.Time `bun:"registered_at,notnull,default:current_timestamp"`
@@ -122,13 +123,14 @@ type AccountPhoto struct {
 	bun.BaseModel `bun:"table:account_photos,alias:apho"`
 
 	AccountPhotoEventID uuid.UUID `bun:"account_photo_event_id,pk"`
-	PhotoPath           string    `bun:"photo_path,notnull"`
+	PhotoID             uuid.UUID `bun:"photo_id,notnull"`
+	HostingTo           string    `bun:"hosting_to,notnull"`
 
 	AccountPhotoEvent *AccountPhotoEvent `bun:"sape,rel:belongs-to"`
 }
 
 type AccountLatestPhotoEvent struct {
-	bun.BaseModel `bun:"table:account_latest_photo_events,alias:alaphoe"`
+	bun.BaseModel `bun:"table:account_latest_photo_events,alias:alphoe"`
 
 	AccountPhotoEventID uuid.UUID `bun:"account_photo_event_id,pk"`
 	AccountID           uuid.UUID `bun:"account_id,notnull,unique"`

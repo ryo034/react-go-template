@@ -27,4 +27,10 @@ var localValues = map[Key]string{
 	noReplyEmail: "no-reply@example.com",
 	// resend api key
 	resendAPIKey: "",
+	//	storage
+	storageHost:       "localhost:9090",
+	storageEndpoint:   "host.docker.internal:9090",
+	storageAccessKey:  "minio",
+	storageSecretKey:  "minio123",
+	storageBucketName: "system",
 }

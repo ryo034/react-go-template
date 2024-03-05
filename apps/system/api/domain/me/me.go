@@ -91,3 +91,11 @@ func (m *Me) UpdateName(name account.Name) *Me {
 func (m *Me) Providers() provider.Providers {
 	return m.providers
 }
+
+func (m *Me) UpdateProfilePhoto(photo *user.Photo) *Me {
+	return m.UpdateSelf(m.self.UpdateProfilePhoto(photo))
+}
+
+func (m *Me) RemoveProfilePhoto() *Me {
+	return m.UpdateSelf(m.self.RemoveProfilePhoto())
+}

@@ -25,8 +25,8 @@ type RepositoryInjector struct {
 func newRepositoryInjector(co shared.ContextOperator, di Driver, gw GatewayAdapter) RepositoryInjector {
 	return RepositoryInjector{
 		notificationGw.NewGateway(di.Email),
-		meGw.NewGateway(di.Me, di.Firebase, di.Workspace, di.Invitation, gw.Me, co),
-		authGw.NewGateway(di.KeyValue, di.Auth, di.Firebase, gw.Auth),
+		meGw.NewGateway(di.Me, di.Firebase, di.Workspace, di.Invitation, di.Media, gw.Me, co),
+		authGw.NewGateway(di.KeyValue, di.Auth, di.Firebase, gw.User),
 		workspaceGw.NewGateway(di.Workspace, di.Member, di.Invitation, gw.Workspace, gw.Member, gw.Invitation),
 		invitationGw.NewGateway(di.Invitation, gw.Invitation),
 	}

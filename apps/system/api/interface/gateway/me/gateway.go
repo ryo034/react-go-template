@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"errors"
 
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/media"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
 
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
@@ -16,22 +18,24 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 	fbDr "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	meDr "github.com/ryo034/react-go-template/apps/system/api/driver/me"
+	mediaDr "github.com/ryo034/react-go-template/apps/system/api/driver/media"
 	workspaceDr "github.com/ryo034/react-go-template/apps/system/api/driver/workspace"
 	invitationDr "github.com/ryo034/react-go-template/apps/system/api/driver/workspace/invitation"
 	"github.com/uptrace/bun"
 )
 
 type gateway struct {
-	md   meDr.Driver
-	fd   fbDr.Driver
-	wd   workspaceDr.Driver
-	invd invitationDr.Driver
-	a    Adapter
-	co   shared.ContextOperator
+	md      meDr.Driver
+	fd      fbDr.Driver
+	wd      workspaceDr.Driver
+	invd    invitationDr.Driver
+	mediaDr mediaDr.Driver
+	a       Adapter
+	co      shared.ContextOperator
 }
 
-func NewGateway(md meDr.Driver, fd fbDr.Driver, wd workspaceDr.Driver, invd invitationDr.Driver, a Adapter, co shared.ContextOperator) me.Repository {
-	return &gateway{md, fd, wd, invd, a, co}
+func NewGateway(md meDr.Driver, fd fbDr.Driver, wd workspaceDr.Driver, invd invitationDr.Driver, mediaDr mediaDr.Driver, a Adapter, co shared.ContextOperator) me.Repository {
+	return &gateway{md, fd, wd, invd, mediaDr, a, co}
 }
 
 func (g *gateway) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*me.Me, error) {
@@ -144,4 +148,15 @@ func (g *gateway) FindAllActiveReceivedInvitations(ctx context.Context, exec bun
 		return nil, err
 	}
 	return g.a.AdaptAllReceivedInvitation(res)
+}
+
+func (g *gateway) UpdateProfilePhoto(ctx context.Context, exec bun.IDB, m *me.Me, photo *media.UploadPhoto) error {
+	if err := g.md.UpdateProfilePhoto(ctx, exec, m.Self().AccountID(), photo); err != nil {
+		return err
+	}
+	return g.mediaDr.UploadAvatar(ctx, photo.ID(), photo.Content())
+}
+
+func (g *gateway) RemoveProfilePhoto(ctx context.Context, exec bun.IDB, m *me.Me) error {
+	return g.md.RemoveProfilePhoto(ctx, exec, m.Self().AccountID())
 }

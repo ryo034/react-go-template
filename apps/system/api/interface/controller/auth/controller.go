@@ -135,11 +135,7 @@ func (c *controller) createUser(ctx context.Context, aID account.ID) (authUc.Cre
 
 	var pho *user.Photo = nil
 	if pi.UserInfo.Photo != nil {
-		tmpPho, err := user.NewPhotoFromString(pi.UserInfo.Photo.FilePath().String())
-		if err != nil {
-			return authUc.CreateInfo{}, err
-		}
-		pho = &tmpPho
+		pho = user.NewPhotoFromFirebase(pi.UserInfo.Photo.URL())
 	}
 
 	return authUc.CreateInfo{User: user.NewUser(aID, em, na, pi.UserInfo.PhoneNumber, pho), Provider: prov}, nil

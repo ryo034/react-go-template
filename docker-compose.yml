@@ -113,6 +113,19 @@ services:
       main_db_primary:
         condition: service_healthy
 
+  minio:
+    container_name: minio
+    image: minio/minio:latest
+    volumes:
+        - ./container/minio/.data:/export
+    ports:
+        - 9000:9000
+        - 8088:8080
+    environment:
+        MINIO_ROOT_USER: root
+        MINIO_ROOT_PASSWORD: password
+    command: server /export --console-address ":8080"
+
   api:
     depends_on:
       - firebase
@@ -120,6 +133,7 @@ services:
       - main_db_replica
       - redis
       - mail
+      - minio
     container_name: api-server
     env_file: .env
     build:

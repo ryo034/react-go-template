@@ -1,15 +1,21 @@
 package media
 
-import "github.com/ryo034/react-go-template/apps/system/api/domain/shared/id"
+import (
+	"github.com/google/uuid"
+)
 
 type ID struct {
-	id.UUID
+	v uuid.UUID
 }
 
-func NewID(v string) (ID, error) {
-	i, err := id.NewUUIDFromString(v)
-	if err != nil {
-		return ID{}, err
-	}
-	return ID{i}, nil
+func NewIDFromUUID(v uuid.UUID) ID {
+	return ID{v}
+}
+
+func (i ID) Value() uuid.UUID {
+	return i.v
+}
+
+func (i ID) String() string {
+	return i.v.String()
 }

@@ -2,6 +2,7 @@ package me
 
 import (
 	"context"
+	"io"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 
@@ -20,6 +21,7 @@ type Controller interface {
 	AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error)
 	UpdateName(ctx context.Context, i UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error)
 	UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1MeMemberProfilePutRes, error)
+	UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoInput) (openapi.APIV1MeProfilePhotoPutRes, error)
 }
 
 type controller struct {
@@ -40,6 +42,10 @@ type UpdateMemberProfileInput struct {
 	DisplayName string
 	IdNumber    string
 	Bio         string
+}
+
+type UpdateProfilePhotoInput struct {
+	Photo io.Reader
 }
 
 func NewController(uc meUc.UseCase, resl shared.Resolver, co infraShared.ContextOperator) Controller {
@@ -132,6 +138,19 @@ func (c *controller) UpdateMemberProfile(ctx context.Context, i UpdateMemberProf
 	res, err := c.uc.UpdateMemberProfile(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MeMemberProfilePutRes), nil
+	}
+	return res, nil
+}
+
+func (c *controller) UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoInput) (openapi.APIV1MeProfilePhotoPutRes, error) {
+	aID, err := c.co.GetUID(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePhotoPutRes), nil
+	}
+	in := meUc.UpdateProfilePhotoInput{AccountID: aID, Photo: i.Photo}
+	res, err := c.uc.UpdateProfilePhoto(ctx, in)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePhotoPutRes), nil
 	}
 	return res, nil
 }

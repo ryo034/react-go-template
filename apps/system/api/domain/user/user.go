@@ -76,3 +76,13 @@ func (u *User) Photo() *Photo {
 func (u *User) HasPhoto() bool {
 	return u.photo != nil
 }
+
+func (u *User) UpdateProfilePhoto(photo *Photo) *User {
+	u.photo = photo
+	return u
+}
+
+func (u *User) RemoveProfilePhoto() *User {
+	u.photo = nil
+	return u
+}

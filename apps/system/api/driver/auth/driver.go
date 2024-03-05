@@ -123,6 +123,9 @@ func (p *driver) Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *p
 		ProvidedBy:     prb,
 		ProviderUID:    ap.UID().ToString(),
 	}
+	if usr.HasPhoto() && usr.Photo().URL() != nil {
+		apm.PhotoURL = usr.Photo().URL().String()
+	}
 	if _, err = exec.
 		NewInsert().
 		Model(&apm).

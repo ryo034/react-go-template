@@ -15,6 +15,7 @@ import (
 
 	provider "github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
 	account "github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	media "github.com/ryo034/react-go-template/apps/system/api/domain/shared/media"
 	user "github.com/ryo034/react-go-template/apps/system/api/domain/user"
 	invitation "github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	member "github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
@@ -148,6 +149,20 @@ func (mr *MockRepositoryMockRecorder) RecordLogin(ctx, exec, m any) *gomock.Call
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RecordLogin", reflect.TypeOf((*MockRepository)(nil).RecordLogin), ctx, exec, m)
 }
 
+// RemoveProfilePhoto mocks base method.
+func (m_2 *MockRepository) RemoveProfilePhoto(ctx context.Context, exec bun.IDB, m *Me) error {
+	m_2.ctrl.T.Helper()
+	ret := m_2.ctrl.Call(m_2, "RemoveProfilePhoto", ctx, exec, m)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// RemoveProfilePhoto indicates an expected call of RemoveProfilePhoto.
+func (mr *MockRepositoryMockRecorder) RemoveProfilePhoto(ctx, exec, m any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveProfilePhoto", reflect.TypeOf((*MockRepository)(nil).RemoveProfilePhoto), ctx, exec, m)
+}
+
 // SetCurrentProvider mocks base method.
 func (m *MockRepository) SetCurrentProvider(ctx context.Context, p *provider.Provider) context.Context {
 	m.ctrl.T.Helper()
@@ -191,7 +206,7 @@ func (mr *MockRepositoryMockRecorder) UpdateMemberProfile(ctx, exec, m any) *gom
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateMemberProfile", reflect.TypeOf((*MockRepository)(nil).UpdateMemberProfile), ctx, exec, m)
 }
 
-// UpdateProfile mocks base method.
+// UpdateName mocks base method.
 func (m *MockRepository) UpdateName(ctx context.Context, exec bun.IDB, usr *user.User) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateName", ctx, exec, usr)
@@ -199,8 +214,22 @@ func (m *MockRepository) UpdateName(ctx context.Context, exec bun.IDB, usr *user
 	return ret0
 }
 
-// UpdateProfile indicates an expected call of UpdateProfile.
-func (mr *MockRepositoryMockRecorder) UpdateProfile(ctx, exec, usr any) *gomock.Call {
+// UpdateName indicates an expected call of UpdateName.
+func (mr *MockRepositoryMockRecorder) UpdateName(ctx, exec, usr any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateName", reflect.TypeOf((*MockRepository)(nil).UpdateName), ctx, exec, usr)
+}
+
+// UpdateProfilePhoto mocks base method.
+func (m_2 *MockRepository) UpdateProfilePhoto(ctx context.Context, exec bun.IDB, m *Me, photo *media.UploadPhoto) error {
+	m_2.ctrl.T.Helper()
+	ret := m_2.ctrl.Call(m_2, "UpdateProfilePhoto", ctx, exec, m, photo)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateProfilePhoto indicates an expected call of UpdateProfilePhoto.
+func (mr *MockRepositoryMockRecorder) UpdateProfilePhoto(ctx, exec, m, photo any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateProfilePhoto", reflect.TypeOf((*MockRepository)(nil).UpdateProfilePhoto), ctx, exec, m, photo)
 }

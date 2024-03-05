@@ -1,6 +1,7 @@
 package injector
 
 import (
+	"github.com/minio/minio-go/v7"
 	"github.com/redis/go-redis/v9"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/auth"
@@ -8,6 +9,7 @@ import (
 	firebaseDriver "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/keyvalue"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/me"
+	"github.com/ryo034/react-go-template/apps/system/api/driver/media"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/workspace/invitation"
 	"github.com/ryo034/react-go-template/apps/system/api/driver/workspace/member"
@@ -16,6 +18,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/logger"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/mailer"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/storage"
 )
 
 type Driver struct {
@@ -27,6 +30,7 @@ type Driver struct {
 	Workspace  workspace.Driver
 	Member     member.Driver
 	Invitation invitation.Driver
+	Media      media.Driver
 }
 
 func newDriverInjector(
@@ -36,18 +40,20 @@ func newDriverInjector(
 	f *firebase.Firebase,
 	co shared.ContextOperator,
 	mc mailer.Client,
+	minioClient *minio.Client,
 	noreplyEmail account.Email,
 ) Driver {
 	invDr := invitation.NewDriver()
 	meDr := me.NewDriver(invDr)
 	return Driver{
 		keyvalue.NewRedisDriver(rc),
-		firebaseDriver.NewDriver(f, co),
+		firebaseDriver.NewDriver(f, co, storage.NewHandler(conf)),
 		email.NewDriver(conf.ServiceName(), co, mc, noreplyEmail, logger),
 		meDr,
 		auth.NewDriver(),
 		workspace.NewDriver(),
 		member.NewDriver(),
 		invDr,
+		media.NewDriver(minioClient, conf.MinioConfig()),
 	}
 }

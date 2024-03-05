@@ -10,4 +10,6 @@ type OutputPort interface {
 	AcceptInvitation(m *me.Me) (openapi.AcceptInvitationRes, error)
 	UpdateProfile(m *me.Me) (openapi.APIV1MeProfilePutRes, error)
 	UpdateMemberProfile(m *me.Me) (openapi.APIV1MeMemberProfilePutRes, error)
+	UpdateProfilePhoto(m *me.Me) (openapi.APIV1MeProfilePhotoPutRes, error)
+	RemoveProfilePhoto(m *me.Me) (openapi.APIV1MeProfilePhotoDeleteRes, error)
 }

@@ -1,6 +1,8 @@
 package me
 
 import (
+	"io"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
@@ -24,4 +26,13 @@ type UpdateMemberProfileInput struct {
 type AcceptInvitationInput struct {
 	AccountID    account.ID
 	InvitationID invitation.ID
+}
+
+type UpdateProfilePhotoInput struct {
+	AccountID account.ID
+	Photo     io.Reader
+}
+
+type RemoveProfilePhotoInput struct {
+	AccountID account.ID
 }

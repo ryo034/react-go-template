@@ -45,3 +45,19 @@ func (p *presenter) UpdateMemberProfile(m *me.Me) (openapi.APIV1MeMemberProfileP
 	}
 	return &openapi.UpdateMeMemberProfileResponse{Me: am}, nil
 }
+
+func (p *presenter) UpdateProfilePhoto(m *me.Me) (openapi.APIV1MeProfilePhotoPutRes, error) {
+	am, err := p.a.Adapt(m)
+	if err != nil {
+		return nil, err
+	}
+	return &openapi.UpdateProfilePhotoResponse{Me: am}, nil
+}
+
+func (p *presenter) RemoveProfilePhoto(m *me.Me) (openapi.APIV1MeProfilePhotoDeleteRes, error) {
+	am, err := p.a.Adapt(m)
+	if err != nil {
+		return nil, err
+	}
+	return &openapi.RemoveProfilePhotoResponse{Me: am}, nil
+}

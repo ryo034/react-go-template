@@ -67,7 +67,7 @@ func Test_useCase_AuthByOAuth_OK(t *testing.T) {
 				mockDbProvider.EXPECT().GetExecutor(gomock.Any(), gomock.Any()).Return(nil)
 				mockMeRepo.EXPECT().FindLastLogin(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil, nil)
 				mockAuthRepo.EXPECT().Create(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(usr, nil)
-				mockMeRepo.EXPECT().UpdateProfile(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+				mockMeRepo.EXPECT().UpdateName(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 				mockMeRepo.EXPECT().FindBeforeOnboard(gomock.Any(), gomock.Any(), gomock.Any()).Return(mockMe, nil)
 				mockOutputPort.EXPECT().AuthByAuth(gomock.Any())
 			},

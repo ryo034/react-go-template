@@ -49,6 +49,7 @@ CREATE TABLE auth_providers (
   auth_provider_id uuid NOT NULL,
   account_id uuid NOT NULL,
   provider auth_provider_provider NOT NULL,
+  photo_url TEXT NOT NULL,
   provider_uid VARCHAR(255) NOT NULL,
   provided_by auth_provider_provided_by NOT NULL,
   registered_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -109,7 +110,7 @@ CREATE TABLE account_latest_phone_numbers (
   CONSTRAINT fk_salpns_accounts_account_id FOREIGN KEY (account_id) REFERENCES accounts(account_id)
 );
 
-CREATE TYPE account_photo_event_types AS ENUM ('upload', 'delete');
+CREATE TYPE account_photo_event_types AS ENUM ('upload', 'remove');
 CREATE TABLE account_photo_events (
   account_photo_event_id uuid NOT NULL,
   account_id uuid NOT NULL,
@@ -119,9 +120,11 @@ CREATE TABLE account_photo_events (
   CONSTRAINT fk_account_photo_events_accounts_account_id FOREIGN KEY (account_id) REFERENCES accounts(account_id)
 );
 
+CREATE TYPE account_photo_hosting_to AS ENUM ('r2');
 CREATE TABLE account_photos (
   account_photo_event_id uuid NOT NULL,
-  photo_path TEXT NOT NULL,
+  photo_id uuid NOT NULL,
+  hosting_to account_photo_hosting_to NOT NULL,
   PRIMARY KEY (account_photo_event_id),
   CONSTRAINT fk_account_photos_sape_account_photo_event_id FOREIGN KEY (account_photo_event_id) REFERENCES account_photo_events(account_photo_event_id)
 );

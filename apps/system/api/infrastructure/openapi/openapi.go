@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/storage/minio"
+
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/config"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/redis"
@@ -34,6 +36,12 @@ func Start(conf config.Reader) {
 
 	rc := redis.NewRedisClient(conf.RedisConfig())
 
+	minioClient, err := minio.NewMinioClient(conf.MinioConfig())
+	if err != nil {
+		log.Fatalln(err)
+		return
+	}
+
 	var mc mailer.Client
 	if conf.IsLocal() {
 		mc = mailer.NewMailhogMailer(conf.MailHost(), conf.MailPort())
@@ -43,7 +51,7 @@ func Start(conf config.Reader) {
 
 	zl := logger.NewZeroLogger(logger.Config{TimeFormat: time.RFC3339, UTC: true}, conf.IsLocal(), conf.ServiceName())
 
-	inj, err := injector.NewInjector(fb, p, txp, co, conf, rc, mc, zl)
+	inj, err := injector.NewInjector(fb, p, txp, co, conf, rc, mc, zl, minioClient)
 	if err != nil {
 		log.Fatalln(err)
 	}

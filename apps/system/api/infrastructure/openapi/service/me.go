@@ -34,3 +34,7 @@ func (s *service) APIV1MeMemberProfilePut(ctx context.Context, req *openapi.APIV
 		Bio:         bio,
 	})
 }
+
+func (s *service) APIV1MeProfilePhotoPut(ctx context.Context, req *openapi.APIV1MeProfilePhotoPutReq) (openapi.APIV1MeProfilePhotoPutRes, error) {
+	return s.ctrl.Me.UpdateProfilePhoto(ctx, me.UpdateProfilePhotoInput{Photo: req.GetPhoto().File})
+}

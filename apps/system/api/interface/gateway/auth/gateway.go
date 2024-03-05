@@ -5,17 +5,16 @@ import (
 	"fmt"
 	"time"
 
-	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
-
-	fbDr "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
-
 	"github.com/ryo034/react-go-template/apps/system/api/domain/auth"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 	authDr "github.com/ryo034/react-go-template/apps/system/api/driver/auth"
+	fbDr "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 	kvDr "github.com/ryo034/react-go-template/apps/system/api/driver/keyvalue"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/authentication"
+	userGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/user"
 	"github.com/uptrace/bun"
 )
 
@@ -23,11 +22,11 @@ type gateway struct {
 	kvd kvDr.Store
 	ad  authDr.Driver
 	fd  fbDr.Driver
-	adp Adapter
+	ua  userGw.Adapter
 }
 
-func NewGateway(kvd kvDr.Store, ad authDr.Driver, fd fbDr.Driver, adp Adapter) auth.Repository {
-	return &gateway{kvd, ad, fd, adp}
+func NewGateway(kvd kvDr.Store, ad authDr.Driver, fd fbDr.Driver, ua userGw.Adapter) auth.Repository {
+	return &gateway{kvd, ad, fd, ua}
 }
 
 const otpKeyPrefix = "otp:"
@@ -67,7 +66,7 @@ func (g *gateway) Create(ctx context.Context, exec bun.IDB, usr *user.User, ap *
 	if err != nil {
 		return nil, err
 	}
-	return g.adp.AdaptTmp(res)
+	return g.ua.AdaptTmp(res)
 }
 
 func (g *gateway) FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*user.User, error) {
@@ -75,5 +74,5 @@ func (g *gateway) FindByEmail(ctx context.Context, exec bun.IDB, email account.E
 	if err != nil {
 		return nil, err
 	}
-	return g.adp.AdaptTmp(res)
+	return g.ua.AdaptTmp(res)
 }

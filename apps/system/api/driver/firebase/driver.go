@@ -4,7 +4,12 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/url"
 	"reflect"
+
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/storage"
+
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/media"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 
@@ -70,10 +75,11 @@ type ProviderInfo struct {
 type driver struct {
 	f  *firebase.Firebase
 	co shared.ContextOperator
+	sh storage.Handler
 }
 
-func NewDriver(f *firebase.Firebase, co shared.ContextOperator) Driver {
-	return &driver{f, co}
+func NewDriver(f *firebase.Firebase, co shared.ContextOperator, sh storage.Handler) Driver {
+	return &driver{f, co, sh}
 }
 
 func (d *driver) VerifyIDToken(ctx context.Context, token string) (*auth.Token, error) {
@@ -199,11 +205,15 @@ func (d *driver) GetProviderInfo(ctx context.Context, option GetProviderInfoRequ
 	}
 
 	if u.UserInfo.PhotoURL != "" {
-		tmpPho, err := user.NewPhotoFromString(u.PhotoURL)
+		phoID, err := uuid.NewV7()
 		if err != nil {
 			return ProviderInfo{}, err
 		}
-		pho = &tmpPho
+		uri, err := url.Parse(u.UserInfo.PhotoURL)
+		if err != nil {
+			return ProviderInfo{}, err
+		}
+		pho = user.NewPhoto(media.NewIDFromUUID(phoID), media.HostingToFirebase, uri)
 	}
 
 	return ProviderInfo{
@@ -234,8 +244,12 @@ func (d *driver) UpdateProfile(ctx context.Context, usr *user.User) error {
 		}
 	}
 	if usr.HasPhoto() {
-		if u.PhotoURL != usr.Photo().FilePath().String() {
-			params = params.PhotoURL(usr.Photo().FilePath().String())
+		photoPath, err := d.sh.CreateAvatarPath(usr.Photo().HostingTo(), usr.AccountID(), usr.Photo().ID())
+		if err != nil {
+			return err
+		}
+		if u.PhotoURL != photoPath.String() {
+			params = params.PhotoURL(photoPath.String())
 		}
 	}
 

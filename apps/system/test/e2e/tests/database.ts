@@ -94,11 +94,19 @@ export class MainDb implements Database {
 
     if (csv.length > 0) {
       for (const row of csv) {
-        const query = format(`INSERT INTO ${tableName} (${columns}) VALUES %L`, [
-          row.map((value) => (value === "" ? null : value))
-        ])
-        logWithEllipsis(query)
-        await connection.query(query)
+        try {
+          const query = format(`INSERT INTO ${tableName} (${columns}) VALUES %L`, [
+            row.map((value) => (value === "" ? null : value))
+          ])
+          logWithEllipsis(query)
+          await connection.query(query)
+        } catch (e) {
+          const query = format(`INSERT INTO ${tableName} (${columns}) VALUES %L`, [
+            row.map((value) => (value === "" ? "" : value))
+          ])
+          logWithEllipsis(query)
+          await connection.query(query)
+        }
       }
     }
   }

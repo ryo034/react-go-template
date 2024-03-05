@@ -1,13 +1,15 @@
 package config
 
 import (
+	"os"
+	"strconv"
+	"time"
+
 	"github.com/rs/cors"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/datasource"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/redis"
-	"os"
-	"strconv"
-	"time"
+	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/storage/minio"
 
 	"github.com/spf13/cast"
 	"golang.org/x/text/language"
@@ -25,6 +27,7 @@ type Reader interface {
 	SourceDataSource() datasource.DataSource
 	ReplicaDataSource() datasource.DataSource
 	RedisConfig() *redis.Config
+	MinioConfig() *minio.Config
 	FirebaseStorageBucket() string
 	ServerPort() string
 	NoReplyEmail() account.Email

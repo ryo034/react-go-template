@@ -4,6 +4,10 @@ import (
 	"context"
 	"database/sql"
 
+	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
+
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/media"
+
 	"github.com/go-faster/errors"
 
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
@@ -21,6 +25,8 @@ type UseCase interface {
 	AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error)
 	UpdateName(ctx context.Context, i UpdateNameInput) (openapi.APIV1MeProfilePutRes, error)
 	UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1MeMemberProfilePutRes, error)
+	UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoInput) (openapi.APIV1MeProfilePhotoPutRes, error)
+	RemoveProfilePhoto(ctx context.Context, i RemoveProfilePhotoInput) (openapi.APIV1MeProfilePhotoDeleteRes, error)
 }
 
 type useCase struct {
@@ -139,4 +145,53 @@ func (u *useCase) UpdateMemberProfile(ctx context.Context, i UpdateMemberProfile
 	}
 
 	return u.op.UpdateMemberProfile(result.Value(0).(*me.Me))
+}
+
+func (u *useCase) UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoInput) (openapi.APIV1MeProfilePhotoPutRes, error) {
+	p := u.dbp.GetExecutor(ctx, false)
+	pr, err := u.txp.Provide(ctx)
+	if err != nil {
+		return nil, err
+	}
+	fn := func() (*me.Me, error) {
+		m, err := u.repo.FindLastLogin(pr, p, i.AccountID)
+		if err != nil {
+			return nil, err
+		}
+		photo := media.NewUploadPhotoToR2(i.Photo)
+		m = m.UpdateProfilePhoto(user.NewPhoto(photo.ID(), photo.HostingTo(), nil))
+		if err = u.repo.UpdateProfilePhoto(pr, p, m, photo); err != nil {
+			return nil, err
+		}
+		return m, nil
+	}
+	result := pr.Transactional(fn)()
+	if err = result.Error(); err != nil {
+		return nil, err
+	}
+	return u.op.UpdateProfilePhoto(result.Value(0).(*me.Me))
+}
+
+func (u *useCase) RemoveProfilePhoto(ctx context.Context, i RemoveProfilePhotoInput) (openapi.APIV1MeProfilePhotoDeleteRes, error) {
+	p := u.dbp.GetExecutor(ctx, false)
+	pr, err := u.txp.Provide(ctx)
+	if err != nil {
+		return nil, err
+	}
+	fn := func() (*me.Me, error) {
+		m, err := u.repo.FindLastLogin(pr, p, i.AccountID)
+		if err != nil {
+			return nil, err
+		}
+		m = m.RemoveProfilePhoto()
+		if err = u.repo.RemoveProfilePhoto(pr, p, m); err != nil {
+			return nil, err
+		}
+		return m, nil
+	}
+	result := pr.Transactional(fn)()
+	if err = result.Error(); err != nil {
+		return nil, err
+	}
+	return u.op.RemoveProfilePhoto(result.Value(0).(*me.Me))
 }

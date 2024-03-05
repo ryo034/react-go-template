@@ -1,6 +1,7 @@
 package injector
 
 import (
+	"github.com/minio/minio-go/v7"
 	"github.com/redis/go-redis/v9"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/config"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/core"
@@ -30,9 +31,10 @@ func NewInjector(
 	rc *redis.Client,
 	mc mailer.Client,
 	logger logger.Logger,
+	minioClient *minio.Client,
 ) (*Injector, error) {
 	defaultLang := conf.DefaultLanguage()
-	di := newDriverInjector(conf, logger, rc, f, co, mc, conf.NoReplyEmail())
+	di := newDriverInjector(conf, logger, rc, f, co, mc, minioClient, conf.NoReplyEmail())
 	ri := newRepositoryInjector(co, di, newGatewayAdapterInjector())
 	pi := newPresenterInjector()
 	la := sharedPresenter.NewLanguageAdapter(defaultLang)

@@ -1,7 +1,10 @@
 package user
 
 import (
+	"net/url"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/media"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/phone"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/database/bun/models"
@@ -47,12 +50,20 @@ func (a *adapter) AdaptTmp(u *models.Account) (*user.User, error) {
 	}
 
 	var pho *user.Photo = nil
-	if u.PhotoEvent != nil && u.PhotoEvent.AccountPhotoEvent.EventType == "upload" {
-		tmpPho, err := user.NewPhotoFromString(u.PhotoEvent.AccountPhotoEvent.Photo.PhotoPath)
+	// 最新の登録されているプロバイダ情報から写真URLを取得
+	if u.PhotoEvent == nil && u.AuthProviders != nil && u.AuthProviders[0].PhotoURL != "" {
+		phoURL, err := url.Parse(u.AuthProviders[0].PhotoURL)
 		if err != nil {
 			return nil, err
 		}
-		pho = &tmpPho
+		pho = user.NewPhotoFromFirebase(phoURL)
+	}
+	if u.PhotoEvent != nil && u.PhotoEvent.AccountPhotoEvent.EventType == "upload" {
+		pho = user.NewPhoto(
+			media.NewIDFromUUID(u.PhotoEvent.AccountPhotoEvent.Photo.PhotoID),
+			media.HostingToFirebase,
+			nil,
+		)
 	}
 
 	return user.NewUser(aID, email, nm, pn, pho), nil
