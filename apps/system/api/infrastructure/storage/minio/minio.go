@@ -10,8 +10,8 @@ type Config struct {
 	Endpoint        string
 	AccessKeyID     string
 	SecretAccessKey string
-	UseSSL          bool
 	BucketName      string
+	UseSSL          bool
 }
 
 func NewMinioClient(conf *Config) (*minio.Client, error) {

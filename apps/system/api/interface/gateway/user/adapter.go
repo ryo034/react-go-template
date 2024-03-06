@@ -61,7 +61,7 @@ func (a *adapter) AdaptTmp(u *models.Account) (*user.User, error) {
 	if u.PhotoEvent != nil && u.PhotoEvent.AccountPhotoEvent.EventType == "upload" {
 		pho = user.NewPhoto(
 			media.NewIDFromUUID(u.PhotoEvent.AccountPhotoEvent.Photo.PhotoID),
-			media.HostingToFirebase,
+			media.HostingToR2,
 			nil,
 		)
 	}

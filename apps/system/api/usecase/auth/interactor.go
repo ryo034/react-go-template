@@ -102,7 +102,7 @@ func (u *useCase) AuthByOAuth(ctx context.Context, i ByOAuthInput) (openapi.APIV
 	return u.op.AuthByAuth(m)
 }
 
-func (u *useCase) setupUserByOAuth(ctx context.Context, aID account.ID) (context.Context, *provider.Provider, error) {
+func (u *useCase) createAndSetupProvider(ctx context.Context, aID account.ID) (context.Context, *provider.Provider, error) {
 	ap, err := provider.NewProviderAsEmailOnFirebase(aID)
 	if err != nil {
 		return ctx, nil, err
@@ -111,7 +111,7 @@ func (u *useCase) setupUserByOAuth(ctx context.Context, aID account.ID) (context
 	return ctx, ap, nil
 }
 
-func (u *useCase) setupOAuthUserByOAuth(ctx context.Context, p bun.IDB, usr *user.User) (context.Context, *me.Me, error) {
+func (u *useCase) setupProvider(ctx context.Context, p bun.IDB, usr *user.User) (context.Context, *me.Me, error) {
 	meRes, err := u.meRepo.FindLastLogin(ctx, p, usr.AccountID())
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -119,7 +119,10 @@ func (u *useCase) setupOAuthUserByOAuth(ctx context.Context, p bun.IDB, usr *use
 		}
 		return ctx, nil, err
 	}
-	ap := meRes.Providers().FindByKind(provider.Email)
+	ap := meRes.Providers().FindByKind(provider.Google)
+	if ap == nil {
+		ap = meRes.Providers().FindByKind(provider.Email)
+	}
 	ctx = u.meRepo.SetCurrentProvider(ctx, ap)
 	if err = u.meRepo.SetMe(ctx, meRes); err != nil {
 		return ctx, nil, err
@@ -128,6 +131,7 @@ func (u *useCase) setupOAuthUserByOAuth(ctx context.Context, p bun.IDB, usr *use
 }
 
 // VerifyOTP User information cannot be retrieved/edited in Firebase on the backend side until VerifyOTP returns a token to the frontend and is authenticated
+// only Email provider
 func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
 	usr, err := u.repo.FindByEmail(ctx, p, i.Email)
@@ -142,11 +146,11 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 	var meRes *me.Me = nil
 	var ap *provider.Provider = nil
 
-	//set user info to context before transaction
+	// set user info to context before transaction
 	if usr == nil {
-		ctx, ap, err = u.setupUserByOAuth(ctx, newAccountID)
+		ctx, ap, err = u.createAndSetupProvider(ctx, newAccountID)
 	} else {
-		ctx, meRes, err = u.setupOAuthUserByOAuth(ctx, p, usr)
+		ctx, meRes, err = u.setupProvider(ctx, p, usr)
 	}
 
 	pr, err := u.txp.Provide(ctx)

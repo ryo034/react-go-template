@@ -36,5 +36,13 @@ func (s *service) APIV1MeMemberProfilePut(ctx context.Context, req *openapi.APIV
 }
 
 func (s *service) APIV1MeProfilePhotoPut(ctx context.Context, req *openapi.APIV1MeProfilePhotoPutReq) (openapi.APIV1MeProfilePhotoPutRes, error) {
-	return s.ctrl.Me.UpdateProfilePhoto(ctx, me.UpdateProfilePhotoInput{Photo: req.GetPhoto().File})
+	return s.ctrl.Me.UpdateProfilePhoto(ctx, me.UpdateProfilePhotoInput{
+		File:   req.GetPhoto().File,
+		Name:   req.GetPhoto().Name,
+		Header: req.GetPhoto().Header,
+	})
+}
+
+func (s *service) APIV1MeProfilePhotoDelete(ctx context.Context) (openapi.APIV1MeProfilePhotoDeleteRes, error) {
+	return s.ctrl.Me.RemoveProfilePhoto(ctx)
 }

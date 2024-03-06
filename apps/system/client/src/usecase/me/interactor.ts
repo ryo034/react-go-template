@@ -14,6 +14,7 @@ export interface MeUseCase {
   updateProfile(i: UpdateProfileInput): Promise<Error | null>
   updatePhoto(i: UpdatePhotoInput): Promise<Error | null>
   updateMemberProfile(i: UpdateMemberProfileInput): Promise<Error | null>
+  removePhoto(): Promise<Error | null>
 }
 
 export class MeInteractor implements MeUseCase {
@@ -60,6 +61,15 @@ export class MeInteractor implements MeUseCase {
 
   async updatePhoto(i: UpdatePhotoInput): Promise<Error | null> {
     const res = await this.repository.updatePhoto(i.file)
+    if (res.isErr) {
+      return res.error
+    }
+    this.presenter.set(res.value)
+    return null
+  }
+
+  async removePhoto(): Promise<Error | null> {
+    const res = await this.repository.removePhoto()
     if (res.isErr) {
       return res.error
     }

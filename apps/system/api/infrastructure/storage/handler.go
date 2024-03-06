@@ -6,7 +6,6 @@ import (
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/media"
-	"github.com/ryo034/react-go-template/apps/system/api/infrastructure/config"
 )
 
 type Handler interface {
@@ -14,26 +13,29 @@ type Handler interface {
 }
 
 type handler struct {
-	conf config.Reader
+	IsLocal    bool
+	BucketName string
+	Host       string
 }
 
-func NewHandler(conf config.Reader) Handler {
-	return &handler{conf}
+func NewHandler(isLocal bool, bucketName string, host string) Handler {
+	return &handler{isLocal, bucketName, host}
 }
 
 func (h *handler) createLocalAvatarPath(aID account.ID, id media.ID) url.URL {
+	// localhost can only jpg
 	return url.URL{
 		Scheme: "http",
-		Host:   h.conf.MinioConfig().Host,
-		Path:   fmt.Sprintf("/accounts/%s/avatar/%s", aID.ToString(), id.String()),
+		Host:   h.Host,
+		Path:   fmt.Sprintf("/%s/accounts/%s/avatar/%s.jpg", h.BucketName, aID.ToString(), id.String()),
 	}
 }
 
 func (h *handler) createMinioAvatarPath(aID account.ID, id media.ID) url.URL {
 	return url.URL{
 		Scheme: "https",
-		Host:   h.conf.MinioConfig().Host,
-		Path:   fmt.Sprintf("/accounts/%s/avatar/%s", aID.ToString(), id.String()),
+		Host:   h.Host,
+		Path:   fmt.Sprintf("/%s/accounts/%s/avatar/%s.webp", h.BucketName, aID.ToString(), id.String()),
 	}
 }
 
@@ -46,7 +48,7 @@ func (h *handler) CreateAvatarPath(hostingTo media.HostingTo, aID account.ID, id
 		return url.URL{}, fmt.Errorf("unsupported hostingTo: %s", hostingTo)
 	}
 
-	if h.conf.IsLocal() {
+	if h.IsLocal {
 		return h.createLocalAvatarPath(aID, id), nil
 	}
 	if hostingTo == media.HostingToR2 {

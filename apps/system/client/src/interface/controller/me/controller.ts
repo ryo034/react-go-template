@@ -43,6 +43,10 @@ export class MeController {
     return await this.useCase.updatePhoto({ file: i })
   }
 
+  async removePhoto(): Promise<null | Error> {
+    return await this.useCase.removePhoto()
+  }
+
   async updateMemberProfile(i: UpdateMemberProfileInput): Promise<null | Error> {
     const bio = MemberBio.create(i.bio)
     if (bio.isErr) {

@@ -208,7 +208,7 @@ func (d *driver) UpdateProfilePhoto(ctx context.Context, exec bun.IDB, aID accou
 	if err != nil {
 		return err
 	}
-	_, err = exec.NewDelete().Model(&models.AccountPhotoEvent{}).Where("account_id = ?", aID.ToString()).Exec(ctx)
+	_, err = exec.NewDelete().Model(&models.AccountLatestPhotoEvent{}).Where("account_id = ?", aID.ToString()).Exec(ctx)
 	_, err = exec.NewInsert().Model(&models.AccountPhotoEvent{
 		AccountPhotoEventID: peID.Value(),
 		AccountID:           aID.Value(),
@@ -222,7 +222,6 @@ func (d *driver) UpdateProfilePhoto(ctx context.Context, exec bun.IDB, aID accou
 		AccountPhotoEventID: peID.Value(),
 		PhotoID:             photo.ID().Value(),
 		HostingTo:           photo.HostingTo().String(),
-		AccountPhotoEvent:   nil,
 	}).Exec(ctx)
 	return err
 }
@@ -232,7 +231,7 @@ func (d *driver) RemoveProfilePhoto(ctx context.Context, exec bun.IDB, aID accou
 	if err != nil {
 		return err
 	}
-	_, err = exec.NewDelete().Model(&models.AccountPhotoEvent{}).Where("account_id = ?", aID.ToString()).Exec(ctx)
+	_, err = exec.NewDelete().Model(&models.AccountLatestPhotoEvent{}).Where("account_id = ?", aID.ToString()).Exec(ctx)
 	_, err = exec.NewInsert().Model(&models.AccountPhotoEvent{
 		AccountPhotoEventID: peID.Value(),
 		AccountID:           aID.Value(),

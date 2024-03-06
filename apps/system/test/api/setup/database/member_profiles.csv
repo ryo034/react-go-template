@@ -10,3 +10,4 @@ member_id,member_id_number,display_name,bio,created_at,updated_at
 018e0e60-4f73-72bd-84f7-ae1abaa7fef1,DEV-54321,UpdateMe UpdateProfilePhoto,bio,2024-01-10 12:00:00.000000 +00:00,2024-01-10 12:00:00.000000 +00:00
 018e0eab-df36-7295-a917-9c81e8c6671c,DEV-54321,InviteTest HasPhotoAcceptWithEmail,bio,2024-01-10 12:00:00.000000 +00:00,2024-01-10 12:00:00.000000 +00:00
 018e0ebf-0806-7f10-a73b-28db9f4d2349,DEV-54322,InviteTest HasPhotoAcceptWithGoogle,bio,2024-01-10 12:00:00.000000 +00:00,2024-01-10 12:00:00.000000 +00:00
+018e1398-3d80-7fae-a661-3c234a9c5c53,DEV-54321,HasPhotoGoogle SetupPhoto,bio,2024-01-10 12:00:00.000000 +00:00,2024-01-10 12:00:00.000000 +00:00

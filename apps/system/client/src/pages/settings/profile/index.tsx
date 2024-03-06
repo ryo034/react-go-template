@@ -41,12 +41,19 @@ export const SettingsProfilePage = () => {
       toast({ title: "Failed to update profile" })
       return
     }
-    toast({ title: "Profile updated" })
+    toast({ title: "Photo updated" })
   }
 
-  const onClickRemoveProfilePhotoButton = () => {
+  const onClickRemoveProfilePhotoButton = async () => {
     if (isUpdating) return
-    console.log("remove profile photo button clicked")
+    setIsUpdating(true)
+    const err = await controller.me.removePhoto()
+    setIsUpdating(false)
+    if (err) {
+      toast({ title: "Failed to remove profile" })
+      return
+    }
+    toast({ title: "Photo removed" })
   }
 
   return (

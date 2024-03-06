@@ -59,7 +59,7 @@ export const DashboardLayout = ({
           </div>
           <Separator />
           <Nav isCollapsed={isCollapsed} />
-          <SidebarUserNav />
+          <SidebarUserNav isCollapsed={isCollapsed} />
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={defaultLayout[2]}>

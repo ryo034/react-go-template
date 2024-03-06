@@ -1,8 +1,5 @@
 import { useContext } from "react"
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
   Card,
   DropdownMenu,
   DropdownMenuContent,
@@ -14,8 +11,13 @@ import {
   DropdownMenuTrigger
 } from "shared-ui"
 import { ContainerContext } from "~/infrastructure/injector/context"
+import { AccountAvatar } from "../account/avatar"
 
-export const SidebarUserNav = () => {
+interface Props {
+  isCollapsed: boolean
+}
+
+export const SidebarUserNav = ({ isCollapsed }: Props) => {
   const { controller, store } = useContext(ContainerContext)
   const onClickLogoutButton = async () => {
     await controller.me.signOut()
@@ -31,17 +33,30 @@ export const SidebarUserNav = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="w-full mt-auto p-2">
-          <Card className="p-2 cursor-pointer" data-testid="userNavigationOnSidebar">
-            <div className="flex items-center space-x-2">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={me.self?.photo?.photoURL} alt="avatar" data-testid="avatarOnSidebar" />
-                <AvatarFallback>{me.member?.profile.displayName?.firstTwoCharacters}</AvatarFallback>
-              </Avatar>
-              <p className="text-sm text-gray-500 truncate dark:text-gray-400" data-testid="displayNameOnSidebar">
-                {me.member?.profile.displayName?.value}
-              </p>
-            </div>
-          </Card>
+          {isCollapsed ? (
+            <AccountAvatar
+              alt="avatar"
+              url={me.self.photo?.photoURL || ""}
+              fallbackString={me.self.name?.firstTwoCharacters || ""}
+              size="sm"
+              data-testid="collapsedAvatarOnSidebar"
+            />
+          ) : (
+            <Card className="p-2 cursor-pointer" date-testid="userNavigationOnSidebar">
+              <div className="flex items-center space-x-2">
+                <AccountAvatar
+                  alt="avatar"
+                  url={me.self.photo?.photoURL || ""}
+                  fallbackString={me.self.name?.firstTwoCharacters || ""}
+                  size="sm"
+                  data-testid="avatarOnSidebar"
+                />
+                <p className="text-sm text-gray-500 truncate dark:text-gray-400" data-testid="displayNameOnSidebar">
+                  {me.member?.profile.displayName?.value}
+                </p>
+              </div>
+            </Card>
+          )}
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>

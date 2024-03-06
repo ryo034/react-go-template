@@ -14,10 +14,11 @@ const (
 
 func (r *reader) MinioConfig() *minio.Config {
 	return &minio.Config{
+		Host:            r.fromEnv(storageHost),
 		Endpoint:        r.fromEnv(storageEndpoint),
 		AccessKeyID:     r.fromEnv(storageAccessKey),
 		SecretAccessKey: r.fromEnv(storageSecretKey),
-		UseSSL:          r.IsNotLocal(),
 		BucketName:      r.fromEnv(storageBucketName),
+		UseSSL:          r.IsNotLocal(),
 	}
 }

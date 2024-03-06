@@ -3,6 +3,11 @@ package me
 import (
 	"context"
 	"io"
+	"mime"
+	"net/textproto"
+	"path/filepath"
+
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/media"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 
@@ -22,6 +27,7 @@ type Controller interface {
 	UpdateName(ctx context.Context, i UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error)
 	UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1MeMemberProfilePutRes, error)
 	UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoInput) (openapi.APIV1MeProfilePhotoPutRes, error)
+	RemoveProfilePhoto(ctx context.Context) (openapi.APIV1MeProfilePhotoDeleteRes, error)
 }
 
 type controller struct {
@@ -45,7 +51,9 @@ type UpdateMemberProfileInput struct {
 }
 
 type UpdateProfilePhotoInput struct {
-	Photo io.Reader
+	File   io.Reader
+	Name   string
+	Header textproto.MIMEHeader
 }
 
 func NewController(uc meUc.UseCase, resl shared.Resolver, co infraShared.ContextOperator) Controller {
@@ -147,10 +155,40 @@ func (c *controller) UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhot
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePhotoPutRes), nil
 	}
-	in := meUc.UpdateProfilePhotoInput{AccountID: aID, Photo: i.Photo}
+
+	_, params, err := mime.ParseMediaType(i.Header.Get("Content-Disposition"))
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePhotoPutRes), nil
+	}
+	filename := params["filename"]
+	ext := filepath.Ext(filename)
+
+	tmpPhoID, _ := uuid.NewV7()
+	phoID := media.NewIDFromUUID(tmpPhoID)
+
+	in := meUc.UpdateProfilePhotoInput{
+		AccountID: aID,
+		PhotoID:   phoID,
+		File:      i.File,
+		Ext:       ext,
+		Size:      -1,
+	}
 	res, err := c.uc.UpdateProfilePhoto(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePhotoPutRes), nil
+	}
+	return res, nil
+}
+
+func (c *controller) RemoveProfilePhoto(ctx context.Context) (openapi.APIV1MeProfilePhotoDeleteRes, error) {
+	aID, err := c.co.GetUID(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePhotoDeleteRes), nil
+	}
+	in := meUc.RemoveProfilePhotoInput{AccountID: aID}
+	res, err := c.uc.RemoveProfilePhoto(ctx, in)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePhotoDeleteRes), nil
 	}
 	return res, nil
 }

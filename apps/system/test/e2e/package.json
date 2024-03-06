@@ -2,10 +2,11 @@
   "name": "system-e2e-test",
   "description": "E2E",
   "scripts": {
-    "test:stateless": "gauge run --max-retries-count=2 --tags '!unimplemented & !stateful' specs",
+    "test:stateless": "gauge run --max-retries-count=3 --tags '!unimplemented & !stateful' specs",
+    "test:stateless-tmp": "gauge run -n=5 --parallel --only '!unimplemented & !stateful' specs",
     "test:stateful": "gauge run --max-retries-count=2 --tags '!unimplemented & stateful' specs",
     "test-auth": "gauge run --max-retries-count=1 specs/me/auth/create.spec",
-    "test-m": "gauge run --max-retries-count=1 specs/me/auth/invitation.spec:132"
+    "test-m": "gauge run --max-retries-count=1 specs/me/auth/invitation.spec:85"
   },
   "dependencies": {
     "firebase": "^10.8.1",

@@ -51,6 +51,14 @@ export class MeGateway implements MeRepository {
     return this.adapter.adapt(res.value)
   }
 
+  async removePhoto(): PromiseResult<Me, Error> {
+    const res = await this.driver.removePhoto()
+    if (res.isErr) {
+      return Result.err(res.error)
+    }
+    return this.adapter.adapt(res.value)
+  }
+
   async updateMemberProfile(profile: MemberProfile): PromiseResult<Me, Error> {
     const res = await this.driver.updateMemberProfile(profile)
     if (res.isErr) {

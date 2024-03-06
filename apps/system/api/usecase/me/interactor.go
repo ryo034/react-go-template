@@ -158,7 +158,7 @@ func (u *useCase) UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoIn
 		if err != nil {
 			return nil, err
 		}
-		photo := media.NewUploadPhotoToR2(i.Photo)
+		photo := media.NewUploadPhotoToR2(i.File, i.Size, i.Ext)
 		m = m.UpdateProfilePhoto(user.NewPhoto(photo.ID(), photo.HostingTo(), nil))
 		if err = u.repo.UpdateProfilePhoto(pr, p, m, photo); err != nil {
 			return nil, err

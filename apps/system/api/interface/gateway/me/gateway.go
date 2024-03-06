@@ -154,7 +154,7 @@ func (g *gateway) UpdateProfilePhoto(ctx context.Context, exec bun.IDB, m *me.Me
 	if err := g.md.UpdateProfilePhoto(ctx, exec, m.Self().AccountID(), photo); err != nil {
 		return err
 	}
-	return g.mediaDr.UploadAvatar(ctx, photo.ID(), photo.Content())
+	return g.mediaDr.UploadAvatar(ctx, m.Self().AccountID(), photo.FileName(), photo.Content(), photo.Size())
 }
 
 func (g *gateway) RemoveProfilePhoto(ctx context.Context, exec bun.IDB, m *me.Me) error {

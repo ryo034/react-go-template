@@ -77,13 +77,13 @@ tags: stateful
 =========== Google認証に関するテスト ===========
 
 ## 招待を受けたユーザー（メールアドレスでアカウント作成済）は招待を受けていないgoogleアカウントで招待を受諾できない
+tags: stateful
 * トークン"018d9fb5-7e56-75ed-952f-ae8aa4fed8c6"の招待画面を開く
 * "Googleで始める"ボタンをクリック
 * Googleアカウント選択画面でメールアドレス"invite_test_no_name_google_auth_with_display_name_when_invite@example.com"を選択する
 * トーストメッセージ"招待の受諾に失敗しました。お手数ですが、しばらくしてから再度お試しください"が表示されている
 
 ## 招待を受けた未登録ユーザーは名前の設定されていないgoogleアカウントで招待を受諾することができる
-tags: stateful
 * トークン"018df2fa-4598-7e13-af4d-7727a9bca288"の招待画面を開く
 * "Googleで始める"ボタンをクリック
 * Googleアカウント選択画面でメールアドレス"invite_test_no_name_google_auth_with_display_name_when_invite@example.com"を選択する
@@ -94,7 +94,6 @@ tags: stateful
 * 所属中の表示名が"NoNameGoogleAuth HasDisplayName"である
 
 ## 招待を受けた未登録ユーザーは名前の設定されているgoogleアカウントで招待を受諾することができる
-tags: stateful
 * トークン"018df2fa-2dc2-79ea-8913-e45e39379c9c"の招待画面を開く
 * "Googleで始める"ボタンをクリック
 * Googleアカウント選択画面でメールアドレス"invite_test_has_name_google_auth_no_name_when_invite@example.com"を選択する
@@ -103,7 +102,6 @@ tags: stateful
 * 所属中の表示名が"InviteGoogleAuthTest NoNameTest"である
 
 ## 招待を受けたユーザー（メールアドレスでアカウント作成済）はgoogleアカウントで招待を受諾することができる
-tags: stateful
 * トークン"018df53b-82a2-7324-9b26-f17496bfcdf8"の招待画面を開く
 * "Googleで始める"ボタンをクリック
 * Googleアカウント選択画面でメールアドレス"invite_test_already_joined_any_workspace_by_email@example.com"を選択する
@@ -112,7 +110,6 @@ tags: stateful
 * 所属中の表示名が"InviteGoogleAuthTest AlreadyJoined"である
 
 ## 招待を受けたユーザー（googleアカウントでアカウント作成済）はgoogleアカウントで招待を受諾することができる
-tags: stateful
 * トークン"018df54f-e057-7818-8c72-80d6393e39e6"の招待画面を開く
 * "Googleで始める"ボタンをクリック
 * Googleアカウント選択画面でメールアドレス"invite_test_already_joined_any_workspace_by_google@example.com"を選択する
@@ -130,17 +127,14 @@ tags: stateful
 * サイドバーのアカウント情報にプロフィール画像"https://github.com/ryo034/image/assets/55078625/af9fae15-baf3-451e-820a-99f7e246af31"が設定されている
 
 ## 招待を受けたユーザー（新たにプロフィール写真を設定しているgoogleアカウントでアカウント作成済）はメールアドレスで招待を受諾した場合、元のプロフィール画像が保持される
-* "googleで始める"ボタンをクリック
-* Googleアカウント選択画面でメールアドレス"invite_test_has_photo_by_google_accept_with_has_photo_google@example.com"を選択する
-* サイドバーの"設定"をクリック
-* "画像を変更"ボタンをクリック
-
 * トークン"018e0ec0-e54e-7476-b65c-220bfafbf631"の招待画面を開く
-* "Googleで始める"ボタンをクリック
-* Googleアカウント選択画面でメールアドレス"invite_test_has_photo_by_google_accept_with_has_photo_google@example.com"を選択する
-* 招待受諾画面でワークスペース"InviteTest 2"招待者"Invite TestTwi"の参加ボタンをクリック
+* "メールアドレスで始める"ボタンをクリック
+* メールアドレス"invite_test_has_photo_by_google_accept_with_has_photo_google@example.com"に送信されたワンタイムパスワードを取得
+* ワンタイムパスワード確認画面にワンタイムパスワードを入力する
+* 招待受諾画面でワークスペース"InviteTest 2"招待者"Invite TestTwo"の参加ボタンをクリック
 * 選択中のワークスペース名が"InviteTest 2"である
 * 所属中の表示名が"InviteTest HasPhotoAcceptWithGoogle"である
+* ホーム画面が表示されている
 * サイドバーのアカウント情報にプロフィール画像"https://github.com/ryo034/image/assets/55078625/ddeb3605-2291-4c19-81ec-6d890c7d0219"が設定されている
 
 ## 招待を受けた未登録ユーザーはプロフィール写真が設定されているgoogleアカウントで招待を受諾した場合、googleアカウントのプロフィール画像が設定される

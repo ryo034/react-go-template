@@ -34,7 +34,8 @@ func NewInjector(
 	logger logger.Logger,
 	minioClient *minio.Client,
 ) (*Injector, error) {
-	sh := storage.NewHandler(conf)
+	minioConf := conf.MinioConfig()
+	sh := storage.NewHandler(conf.IsLocal(), minioConf.BucketName, minioConf.Host)
 	defaultLang := conf.DefaultLanguage()
 	di := newDriverInjector(conf, logger, rc, f, co, mc, minioClient, sh, conf.NoReplyEmail())
 	ri := newRepositoryInjector(co, di, newGatewayAdapterInjector())

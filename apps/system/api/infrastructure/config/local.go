@@ -28,9 +28,9 @@ var localValues = map[Key]string{
 	// resend api key
 	resendAPIKey: "",
 	//	storage
-	storageHost:       "127.0.0.1:9090",
+	storageHost:       "127.0.0.1:9000",
 	storageEndpoint:   "minio:9000",
 	storageAccessKey:  "minio",
 	storageSecretKey:  "minio123",
-	storageBucketName: "system",
+	storageBucketName: "main",
 }

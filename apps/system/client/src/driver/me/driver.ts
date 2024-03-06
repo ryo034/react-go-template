@@ -44,16 +44,6 @@ export class MeDriver {
   }
 
   async updatePhoto(file: File): PromiseResult<components["schemas"]["Me"], Error> {
-    // const types = openapiFetchClient(mySchema, {
-    //   transform(schemaObject, metadata): string {
-    //     if ("format" in schemaObject && schemaObject.format === "binary") {
-    //       return schemaObject.nullable ? "Blob | null" : "Blob";
-    //     }
-    //   },
-    // });
-    // const formData = new FormData()
-    // formData.append("photo", file)
-
     try {
       const res = await this.client.PUT("/api/v1/me/profile/photo", {
         body: { photo: "" },
@@ -62,10 +52,16 @@ export class MeDriver {
           fd.append("photo", file)
           return fd
         }
-        // headers: {
-        //   "Content-Type": "multipart/form-data"
-        // }
       })
+      return res.data ? Result.ok(res.data.me) : Result.err(this.errorHandler.adapt(res))
+    } catch (e) {
+      return Result.err(this.errorHandler.adapt(e))
+    }
+  }
+
+  async removePhoto(): PromiseResult<components["schemas"]["Me"], Error> {
+    try {
+      const res = await this.client.DELETE("/api/v1/me/profile/photo")
       return res.data ? Result.ok(res.data.me) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))

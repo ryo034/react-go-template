@@ -3,6 +3,8 @@ package me
 import (
 	"io"
 
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/media"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
@@ -30,7 +32,10 @@ type AcceptInvitationInput struct {
 
 type UpdateProfilePhotoInput struct {
 	AccountID account.ID
-	Photo     io.Reader
+	PhotoID   media.ID
+	File      io.Reader
+	Ext       string
+	Size      int64
 }
 
 type RemoveProfilePhotoInput struct {

@@ -142,8 +142,8 @@ services:
     entrypoint: >
       /bin/sh -c "
       until /usr/bin/mc alias set myminio http://minio:9000 minio minio123; do echo '...waiting for MinIO...' && sleep 1; done;
-      /usr/bin/mc mb myminio/accounts;
-      /usr/bin/mc anonymous set public myminio/accounts;
+      /usr/bin/mc mb myminio/main;
+      /usr/bin/mc anonymous set public myminio/main;
       exit 0;
       "
 

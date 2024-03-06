@@ -109,7 +109,7 @@ export default class PagesStep {
 
   @Step("サイドバーのユーザーアイコンをクリック")
   async clickSidebarUserIcon() {
-    const target = page.getByTestId("userNavigationOnSidebar")
+    const target = page.getByTestId("userNavigationOnSidebar").getByTestId("avatarOnSidebar")
     await target.click()
   }
 

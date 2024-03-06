@@ -15,7 +15,7 @@ import {
   LoadingButton
 } from "shared-ui"
 import { z } from "zod"
-import { AccountFullName, AccountName } from "~/domain"
+import { AccountFullName } from "~/domain"
 
 export type SettingsAccountFormValues = {
   name: string

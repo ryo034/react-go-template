@@ -31,4 +31,8 @@ export class AccountFullName extends ValueObject<string> {
   static format(v: string): string {
     return v.trim().replace(/　/g, " ")
   }
+
+  get firstTwoCharacters(): string {
+    return this.value.slice(0, 2).toUpperCase() ?? ""
+  }
 }

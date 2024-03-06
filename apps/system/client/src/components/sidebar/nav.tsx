@@ -8,11 +8,11 @@ import { ContainerContext } from "~/infrastructure/injector/context"
 import { isSettingsPage, routeMap } from "~/infrastructure/route/path"
 import { NavItem, SidebarListItem, SidebarListItemCollapsed } from "./listItem"
 
-interface NavProps {
+interface Props {
   isCollapsed: boolean
 }
 
-export const Nav = ({ isCollapsed }: NavProps) => {
+export const Nav = ({ isCollapsed }: Props) => {
   const { i18n } = useContext(ContainerContext)
   const location = useLocation()
   const links: NavItem[] = [

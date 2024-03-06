@@ -1,20 +1,11 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { X } from "lucide-react"
 import { SubmitHandler, useForm } from "react-hook-form"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Button,
-  Input,
-  Label,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from "shared-ui"
+import { Button, Input, Label, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "shared-ui"
 import { z } from "zod"
+import { AccountAvatar } from "~/components/account/avatar"
 import { Me } from "~/domain"
 
 export type SettingsProfileUploadPhotoFormValues = {
@@ -68,84 +59,46 @@ export const SettingsProfileUploadPhotoForm = ({
   if (me.self === undefined || me.member === undefined) return <></>
 
   return (
-    <form id="settingsProfileUploadPhotoForm" onSubmit={form.handleSubmit(onSubmit)}>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div className="w-24 h-24">
-              <Label htmlFor="file">
-                <Avatar className="w-24 h-24 rounded-[36px] cursor-pointer">
-                  <AvatarImage src={me.self.photo?.photoURL} alt={"aa"} />
-                  <AvatarFallback className="rounded-[36px]">
-                    {me.member?.profile.displayName?.firstTwoCharacters}
-                  </AvatarFallback>
-                </Avatar>
-              </Label>
-              <Input
-                id="file"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                {...photoInputField}
-                onChange={onChange}
-              />
-            </div>
-          </TooltipTrigger>
-          <TooltipContent className="cursor-pointer p-0">
-            <Button variant="ghost" onClick={onClickRemoveProfilePhotoButton}>
-              <span className="text-red-600">画像を削除</span>
-            </Button>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+    <form id="settingsProfileUploadPhotoForm" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <div className="w-24 h-24 relative">
+        <Label htmlFor="file">
+          <AccountAvatar
+            alt="avatar"
+            url={me.self.photo?.photoURL || ""}
+            fallbackString={me.self.name?.firstTwoCharacters || ""}
+            size="xl"
+            className="cursor-pointer"
+            data-testid="avatarOnUpdateProfileForm"
+          />
+        </Label>
+        <Input
+          id="file"
+          type="file"
+          accept="image/png, image/jpeg, image/jpg"
+          className="hidden"
+          {...photoInputField}
+          onChange={onChange}
+        />
+        {me.self.hasPhoto && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  className="absolute right-[-4px] top-0 p-0 h-6 w-6 hover:bg-none"
+                  variant="outline"
+                  data-testid="removeProfilePhotoIconButton"
+                  onClick={onClickRemoveProfilePhotoButton}
+                >
+                  <X className="w-4 h-4" color="gray" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>画像を削除</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+      </div>
     </form>
   )
-
-  // return (
-  //   <Form {...form}>
-  //     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-  //       <FormField
-  //         control={form.control}
-  //         name="photo"
-  //         render={({ field }) => (
-  //           <FormItem>
-  //             <FormControl>
-  //               <>
-  //                 <Label htmlFor="file">
-  //                   <Avatar className="mr-auto w-24 h-24 rounded-[36px] cursor-pointer" onClick={onAvatarClick}>
-  //                     <AvatarImage src={me.self.photo?.photoURL} alt={"aa"} />
-  //                     <AvatarFallback className="rounded-[36px]">
-  //                       {me.member?.profile.displayName?.firstTwoCharacters}
-  //                     </AvatarFallback>
-  //                   </Avatar>
-  //                 </Label>
-  //                 <Input
-  //                   id="file"
-  //                   type="file"
-  //                   accept="image/*"
-  //                   className="hidden"
-  //                   {...field}
-  //                   value={field.value as any}
-  //                 />
-  //               </>
-  //             </FormControl>
-  //           </FormItem>
-  //         )}
-  //       />
-  //       <div className="flex space-x-4">
-  //         <Button type="button" onClick={onClickUpdateProfilePhotoButton} data-testid="updateProfilePhoto">
-  //           {me.self.hasPhoto ? "画像を変更" : "画像を追加"}
-  //         </Button>
-  //         <Button
-  //           type="button"
-  //           variant="ghost"
-  //           onClick={onClickRemoveProfilePhotoButton}
-  //           data-testid="removeProfilePhoto"
-  //         >
-  //           <span className="text-red-600">画像を削除</span>
-  //         </Button>
-  //       </div>
-  //     </form>
-  //   </Form>
-  // )
 }
