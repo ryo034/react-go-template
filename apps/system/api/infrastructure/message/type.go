@@ -60,6 +60,10 @@ var typeMessages = map[domainError.MessageKey]map[language.Tag]string{
 		language.Japanese: "このグループに存在していません",
 		language.English:  "You are not in group",
 	},
+	domainError.BadRequestMessageKey: {
+		language.Japanese: "不正なリクエストです",
+		language.English:  "Bad request",
+	},
 	domainError.ConflictedMessageKey: {
 		language.Japanese: "参照している情報が古くなっています。画面を更新して下さい。",
 		language.English:  "You are seeing old data. Please reload your current page",

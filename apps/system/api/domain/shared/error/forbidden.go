@@ -8,10 +8,10 @@ func NewForbidden(msg string) *Forbidden {
 	return &Forbidden{msg}
 }
 
-func (u *Forbidden) Error() string {
-	return u.msg
+func (e *Forbidden) Error() string {
+	return e.msg
 }
 
-func (u *Forbidden) MessageKey() MessageKey {
+func (e *Forbidden) MessageKey() MessageKey {
 	return ForbiddenMessageKey
 }

@@ -40,6 +40,7 @@ func (r *resolver) errTitle(tag language.Tag, err error, msgArgs ...interface{})
 	msg := r.mr.TitleMessage(string(domainErr.InternalServerErrorMessageKey)).WithLang(tag)
 
 	var t domainValidation.Error
+	var badRequest *domainErr.BadRequest
 	var unauthenticated *domainErr.Unauthenticated
 	var forbidden *domainErr.Forbidden
 	var noSuchData *domainErr.NoSuchData
@@ -53,6 +54,8 @@ func (r *resolver) errTitle(tag language.Tag, err error, msgArgs ...interface{})
 	var alreadyAcceptedInvitation *invitation.AlreadyAcceptedInvitation
 
 	switch {
+	case errors.As(err, &badRequest):
+		msg = r.mr.TitleMessage(string(domainErr.BadRequestMessageKey)).WithLang(tag)
 	case errors.As(err, &t):
 		msg = r.mr.TitleMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
 	case errors.As(err, &unauthenticated):
@@ -82,6 +85,7 @@ func (r *resolver) errTitle(tag language.Tag, err error, msgArgs ...interface{})
 func (r *resolver) errDetail(tag language.Tag, err error, msgArgs ...interface{}) string {
 	msg := r.mr.DetailMessage(string(domainErr.InternalServerErrorMessageKey)).WithLang(tag)
 	var t domainValidation.Error
+	var badRequest *domainErr.BadRequest
 	var unauthenticated *domainErr.Unauthenticated
 	var forbidden *domainErr.Forbidden
 	var noSuchData *domainErr.NoSuchData
@@ -95,6 +99,8 @@ func (r *resolver) errDetail(tag language.Tag, err error, msgArgs ...interface{}
 	var alreadyAcceptedInvitation *invitation.AlreadyAcceptedInvitation
 
 	switch {
+	case errors.As(err, &badRequest):
+		msg = r.mr.DetailMessage(string(domainErr.BadRequestMessageKey)).WithLang(tag)
 	case errors.As(err, &t):
 		msg = r.mr.DetailMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
 	case errors.As(err, &unauthenticated):
@@ -124,6 +130,7 @@ func (r *resolver) errDetail(tag language.Tag, err error, msgArgs ...interface{}
 func (r *resolver) errType(tag language.Tag, err error, msgArgs ...interface{}) string {
 	msg := r.mr.TypeMessage(string(domainErr.InternalServerErrorMessageKey)).WithLang(tag)
 	var t domainValidation.Error
+	var badRequest *domainErr.BadRequest
 	var unauthenticated *domainErr.Unauthenticated
 	var forbidden *domainErr.Forbidden
 	var noSuchData *domainErr.NoSuchData
@@ -137,6 +144,8 @@ func (r *resolver) errType(tag language.Tag, err error, msgArgs ...interface{}) 
 	var alreadyAcceptedInvitation *invitation.AlreadyAcceptedInvitation
 
 	switch {
+	case errors.As(err, &badRequest):
+		msg = r.mr.TypeMessage(string(domainErr.BadRequestMessageKey)).WithLang(tag)
 	case errors.As(err, &t):
 		msg = r.mr.TypeMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
 	case errors.As(err, &unauthenticated):
@@ -166,6 +175,7 @@ func (r *resolver) errType(tag language.Tag, err error, msgArgs ...interface{}) 
 func (r *resolver) errCode(err error) string {
 	code := "500-000"
 	var t domainValidation.Error
+	var badRequest *domainErr.BadRequest
 	var unauthenticated *domainErr.Unauthenticated
 	var forbidden *domainErr.Forbidden
 	var noSuchData *domainErr.NoSuchData
@@ -179,6 +189,8 @@ func (r *resolver) errCode(err error) string {
 	var alreadyAcceptedInvitation *invitation.AlreadyAcceptedInvitation
 
 	switch {
+	case errors.As(err, &badRequest):
+		code = "400-000"
 	case errors.As(err, &t):
 		code = "400-000"
 	case errors.As(err, &unauthenticated):
@@ -209,6 +221,7 @@ func (r *resolver) Error(c context.Context, err error) interface{} {
 	er := r.newErrorResponse(r.getLanguage(c), err)
 
 	var t domainValidation.Error
+	var badRequest *domainErr.BadRequest
 	var unauthenticated *domainErr.Unauthenticated
 	var forbidden *domainErr.Forbidden
 	//var noSuchData *domainErr.NoSuchData
@@ -222,7 +235,7 @@ func (r *resolver) Error(c context.Context, err error) interface{} {
 	var alreadyAcceptedInvitation *invitation.AlreadyAcceptedInvitation
 
 	switch {
-	case errors.As(err, &t), errors.As(err, &invalidInviteToken), errors.As(err, &expiredInvitationToken):
+	case errors.As(err, &badRequest), errors.As(err, &t), errors.As(err, &invalidInviteToken), errors.As(err, &expiredInvitationToken):
 		return &openapi.BadRequestError{
 			Type:   openapi.OptString{Value: er.Type, Set: true},
 			Title:  openapi.OptString{Value: er.Title, Set: true},
@@ -311,6 +324,7 @@ func (r *resolver) details(tag language.Tag, err error) []errDetail {
 func (r *resolver) detail(tag language.Tag, err error) errDetail {
 	msg := r.mr.ErrorMessage(string(domainErr.InternalServerErrorMessageKey)).WithLang(tag)
 	var t domainValidation.Error
+	var badRequest *domainErr.BadRequest
 	var unauthenticated *domainErr.Unauthenticated
 	var forbidden *domainErr.Forbidden
 	var noSuchData *domainErr.NoSuchData
@@ -324,6 +338,8 @@ func (r *resolver) detail(tag language.Tag, err error) errDetail {
 	var alreadyAcceptedInvitation *invitation.AlreadyAcceptedInvitation
 
 	switch {
+	case errors.As(err, &badRequest):
+		msg = r.mr.ErrorMessage(string(domainErr.BadRequestMessageKey)).WithLang(tag)
 	case errors.As(err, &t):
 		msg = r.mr.ErrorMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
 	case errors.As(err, &unauthenticated):

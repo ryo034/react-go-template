@@ -77,6 +77,10 @@ func (u *User) HasPhoto() bool {
 	return u.photo != nil
 }
 
+func (u *User) HasNotPhoto() bool {
+	return u.photo == nil
+}
+
 func (u *User) UpdateProfilePhoto(photo *Photo) *User {
 	u.photo = photo
 	return u

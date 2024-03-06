@@ -10,6 +10,7 @@ const (
 	InvalidAddressMessageKey          MessageKey = "InvalidAddress"
 	ConflictedMessageKey              MessageKey = "Conflicted"
 	ForbiddenMessageKey               MessageKey = "Forbidden"
+	BadRequestMessageKey              MessageKey = "BadRequest"
 	ConflictVersionMessageKey         MessageKey = "ConflictVersion"
 	NoSuchDataMessageKey              MessageKey = "NoSuchData"
 	UnauthenticatedMessageKey         MessageKey = "Unauthenticated"

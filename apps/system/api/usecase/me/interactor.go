@@ -174,15 +174,19 @@ func (u *useCase) UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoIn
 
 func (u *useCase) RemoveProfilePhoto(ctx context.Context, i RemoveProfilePhotoInput) (openapi.APIV1MeProfilePhotoDeleteRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
+	m, err := u.repo.FindLastLogin(ctx, p, i.AccountID)
+	if err != nil {
+		return nil, err
+	}
+	if m.Self().HasNotPhoto() {
+		return nil, domainErr.NewBadRequest("Account has no profile photo")
+	}
+
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
 		return nil, err
 	}
 	fn := func() (*me.Me, error) {
-		m, err := u.repo.FindLastLogin(pr, p, i.AccountID)
-		if err != nil {
-			return nil, err
-		}
 		m = m.RemoveProfilePhoto()
 		if err = u.repo.RemoveProfilePhoto(pr, p, m); err != nil {
 			return nil, err
