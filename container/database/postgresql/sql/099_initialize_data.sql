@@ -8,6 +8,7 @@ VALUES
 INSERT INTO accounts (account_id, created_at)
 VALUES
 ('394e67b6-2850-4ddf-a4c9-c2a619d5bf70', '2024-01-10 12:00:00'),
+('018e15d1-0ba6-78d9-b255-63bb854e9817', '2024-01-10 12:00:00'),
 ('018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', '2024-01-10 12:00:00'),
 ('018d6189-9ad0-7b72-801b-1e0de0d3c214', '2024-01-10 12:00:00'),
 ('018d96bf-8dce-7f68-a926-b5d7ed6ed883', '2024-01-10 12:00:00'),
@@ -26,6 +27,7 @@ VALUES
 INSERT INTO auth_providers (auth_provider_id, account_id, provider, photo_url, provider_uid, provided_by, registered_at)
 VALUES
 ('018de2f6-968d-7458-9c67-69ae5698a143', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'email', '', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'firebase', '2024-01-10 12:00:00'),
+('018e15d1-0ba6-7f70-8f44-bb7d4a6eb72c', '018e15d1-0ba6-78d9-b255-63bb854e9817', 'email', '', '018e15d1-0ba6-78d9-b255-63bb854e9817', 'firebase', '2024-01-10 12:00:00'),
 ('018de2f6-b536-7f9c-bd34-dcf319ee4127', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', 'email', '', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', 'firebase', '2024-01-10 12:00:00'),
 ('018de2ff-7d69-7f8d-9d19-57bb4106f594', '018d6189-9ad0-7b72-801b-1e0de0d3c214', 'email', '', '018d6189-9ad0-7b72-801b-1e0de0d3c214', 'firebase', '2024-01-10 12:00:00'),
 ('018de2f6-ca47-7fc9-832a-3d725120c55b', '018d96bf-8dce-7f68-a926-b5d7ed6ed883', 'email', '', '018d96bf-8dce-7f68-a926-b5d7ed6ed883', 'firebase', '2024-01-10 12:00:00'),
@@ -44,6 +46,7 @@ VALUES
 INSERT INTO account_emails (account_email_id, account_id, email, created_at)
 VALUES
 ('018e09c2-9924-7048-9f08-afa2f3ea5b53', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'account@example.com', '2024-01-10 12:00:00'),
+('018e15d1-0ba6-7809-9b78-6c797f821405', '018e15d1-0ba6-78d9-b255-63bb854e9817', 'long_bio@example.com', '2024-01-10 12:00:00'),
 ('018e09c2-a8d4-7eb8-966d-40069a2ad41a', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', 'login_logout_login@example.com', '2024-01-10 12:00:00'),
 ('018e09c2-d3f3-75d3-9b72-91a4c2b2d8aa', '018d6189-9ad0-7b72-801b-1e0de0d3c214', 'unfinished_onboarding@example.com', '2024-01-10 12:00:00'),
 ('018e09c2-d3f3-71bd-bbca-5cec4e063d46', '018d96bf-8dce-7f68-a926-b5d7ed6ed883', 'invite_test_1@example.com', '2024-01-10 12:00:00'),
@@ -62,6 +65,7 @@ VALUES
 INSERT INTO account_latest_emails (account_email_id, account_id)
 VALUES
 ('018e09c2-9924-7048-9f08-afa2f3ea5b53', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70'),
+('018e15d1-0ba6-7809-9b78-6c797f821405', '018e15d1-0ba6-78d9-b255-63bb854e9817'),
 ('018e09c2-a8d4-7eb8-966d-40069a2ad41a', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2'),
 ('018e09c2-d3f3-75d3-9b72-91a4c2b2d8aa', '018d6189-9ad0-7b72-801b-1e0de0d3c214'),
 ('018e09c2-d3f3-71bd-bbca-5cec4e063d46', '018d96bf-8dce-7f68-a926-b5d7ed6ed883'),
@@ -80,6 +84,7 @@ VALUES
 INSERT INTO account_names (account_name_id, account_id, name, created_at)
 VALUES
 ('018e088e-fd36-722d-a927-8cfd34a642bd', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'John Doe', '2024-01-10 12:00:00'),
+('018e15d1-0ba6-7c34-8f02-460c24c95c23', '018e15d1-0ba6-78d9-b255-63bb854e9817', 'Long Bio', '2024-01-10 12:00:00'),
 ('018e088f-9eab-78bf-9b3f-c4aacb50e666', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', 'Login LogoutRetry', '2024-01-10 12:00:00'),
 ('018e088f-af9c-7524-b0bd-f3d4dfb24f26', '018d6189-9ad0-7b72-801b-1e0de0d3c214', 'Unfinished Onboarding', '2024-01-10 12:00:00'),
 ('018e088f-c783-7e2c-9d8c-371168132855', '018d96bf-8dce-7f68-a926-b5d7ed6ed883', 'Invite TestOne', '2024-01-10 12:00:00'),
@@ -97,6 +102,7 @@ VALUES
 INSERT INTO account_latest_names (account_name_id, account_id)
 VALUES
 ('018e088e-fd36-722d-a927-8cfd34a642bd', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70'),
+('018e15d1-0ba6-7c34-8f02-460c24c95c23', '018e15d1-0ba6-78d9-b255-63bb854e9817'),
 ('018e088f-9eab-78bf-9b3f-c4aacb50e666', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2'),
 ('018e088f-af9c-7524-b0bd-f3d4dfb24f26', '018d6189-9ad0-7b72-801b-1e0de0d3c214'),
 ('018e088f-c783-7e2c-9d8c-371168132855', '018d96bf-8dce-7f68-a926-b5d7ed6ed883'),
@@ -132,6 +138,7 @@ VALUES
 INSERT INTO members (member_id, account_id, workspace_id, created_at)
 VALUES
 ('377eba35-5560-4f48-a99d-19cbd6a82b0d', '394e67b6-2850-4ddf-a4c9-c2a619d5bf70', 'c1bd2603-b9cd-4f84-8b83-3548f6ae150b', '2024-01-10 12:00:00'),
+('018e1398-3d80-79dc-9459-c7a3f1609124', '018e15d1-0ba6-78d9-b255-63bb854e9817', 'c1bd2603-b9cd-4f84-8b83-3548f6ae150b', '2024-01-10 12:00:00'),
 ('018d91d5-c061-78ba-9263-d6ef9e7e6783', '018d91d4-5a5e-799c-9cfa-de8d0c02d7f2', '018d91d5-2ed0-7211-b2e6-cf26182ac4f9', '2024-01-10 12:00:00'),
 ('018d96b9-f674-7ff6-83eb-506eca6452be', '018d96bf-8dce-7f68-a926-b5d7ed6ed883', '018d96b9-c920-7434-b5c3-02e5e920ae9d', '2024-01-10 12:00:00'),
 ('018df53e-4c77-79de-b725-c43ebcb79450', '018df53c-c5a6-71a2-bf90-2f751f342d4c', '018d96b9-c920-7434-b5c3-02e5e920ae9d', '2024-01-10 12:00:00'),
@@ -147,6 +154,7 @@ VALUES
 INSERT INTO member_roles (member_role_id, member_id, role, created_at)
 VALUES
 ('018df76b-260d-759f-9b47-fb5f611f5da6', '377eba35-5560-4f48-a99d-19cbd6a82b0d', 'owner', '2024-01-10 12:00:00'),
+('018e15d1-0ba6-7e42-bdd3-721da67bdd70', '018e1398-3d80-79dc-9459-c7a3f1609124', 'admin', '2024-01-10 12:00:00'),
 ('018df76b-3cbe-7e58-81cf-431eeef1bffe', '018d91d5-c061-78ba-9263-d6ef9e7e6783', 'owner', '2024-01-10 12:00:00'),
 ('018df76b-56e0-7371-a69b-1dea397a75d8', '018d96b9-f674-7ff6-83eb-506eca6452be', 'owner', '2024-01-10 12:00:00'),
 ('018df76b-6bf7-788f-bc7b-e1102924573d', '018df53e-4c77-79de-b725-c43ebcb79450', 'admin', '2024-01-10 12:00:00'),
@@ -162,6 +170,7 @@ VALUES
 INSERT INTO member_login_histories (member_login_history_id, member_id, login_at)
 VALUES
 ('018d6bc0-3884-7420-a802-f857192c7e24', '377eba35-5560-4f48-a99d-19cbd6a82b0d', '2024-01-10 12:00:00'),
+('018e1398-3d80-709e-9f07-1360425107ff', '018e1398-3d80-79dc-9459-c7a3f1609124', '2024-01-10 12:00:00'),
 ('018d91d6-34a8-7c2b-8d1b-37622cf2fa1d', '018d91d5-c061-78ba-9263-d6ef9e7e6783', '2024-01-10 12:00:00'),
 ('018d96ba-6ebd-77a6-9534-958f8fe487ce', '018d96b9-f674-7ff6-83eb-506eca6452be', '2024-01-10 12:00:00'),
 ('018df53e-965e-7e7e-8842-fd0e4135caf0', '018df53e-4c77-79de-b725-c43ebcb79450', '2024-01-10 12:00:00'),
@@ -177,6 +186,7 @@ VALUES
 INSERT INTO member_latest_login_histories (member_login_history_id, member_id)
 VALUES
 ('018d6bc0-3884-7420-a802-f857192c7e24', '377eba35-5560-4f48-a99d-19cbd6a82b0d'),
+('018e1398-3d80-709e-9f07-1360425107ff', '018e1398-3d80-79dc-9459-c7a3f1609124'),
 ('018d91d6-34a8-7c2b-8d1b-37622cf2fa1d', '018d91d5-c061-78ba-9263-d6ef9e7e6783'),
 ('018d96ba-6ebd-77a6-9534-958f8fe487ce', '018d96b9-f674-7ff6-83eb-506eca6452be'),
 ('018df53e-965e-7e7e-8842-fd0e4135caf0', '018df53e-4c77-79de-b725-c43ebcb79450'),
@@ -191,7 +201,8 @@ VALUES
 
 INSERT INTO member_profiles (member_id, member_id_number, display_name, bio, created_at, updated_at)
 VALUES
-('377eba35-5560-4f48-a99d-19cbd6a82b0d', 'DEV-12345', 'John Doe', 'John Doe is a passionate software engineer with 8 years of experience specializing in web development, particularly with React and Node.js. A graduate from MIT with a strong focus on clean architecture and Agile methodologies, John has successfully led multiple projects, from innovative startups to established tech giants. He''s a firm believer in continuous learning, contributing regularly to open-source projects, and sharing insights through tech blogs and meetups. Outside of work, John enjoys hiking 🚶‍♂️, drone photography 📸, and playing the guitar 🎸. He''s committed to using technology to drive positive social change.', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
+('377eba35-5560-4f48-a99d-19cbd6a82b0d', 'DEV-12345', 'John Doe', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018e1398-3d80-79dc-9459-c7a3f1609124', 'DEV-12346', 'Login Bio', 'Long Bio is a passionate software engineer with 8 years of experience specializing in web development, particularly with React and Node.js. A graduate from MIT with a strong focus on clean architecture and Agile methodologies, John has successfully led multiple projects, from innovative startups to established tech giants. He''s a firm believer in continuous learning, contributing regularly to open-source projects, and sharing insights through tech blogs and meetups. Outside of work, John enjoys hiking 🚶‍♂️, drone photography 📸, and playing the guitar 🎸. He''s committed to using technology to drive positive social change.', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018d91d5-c061-78ba-9263-d6ef9e7e6783', 'DEV-67890', 'Login LogoutRetry', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018d96b9-f674-7ff6-83eb-506eca6452be', 'DEV-54321', 'Invite TestOne', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018df53e-4c77-79de-b725-c43ebcb79450', 'DEV-54322', 'InviteGoogleAuthTest AlreadyJoined', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
@@ -211,6 +222,7 @@ VALUES
 INSERT INTO membership_periods (member_id, start_date, end_date, activity, created_at)
 VALUES
 ('377eba35-5560-4f48-a99d-19cbd6a82b0d', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
+('018e1398-3d80-79dc-9459-c7a3f1609124', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
 ('018d91d5-c061-78ba-9263-d6ef9e7e6783', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
 ('018d96b9-f674-7ff6-83eb-506eca6452be', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
 ('018df53e-4c77-79de-b725-c43ebcb79450', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
