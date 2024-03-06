@@ -59,6 +59,14 @@ func (p *presenter) RevokeInvitation(is invitation.Invitations) (openapi.RevokeI
 	return &rs, err
 }
 
+func (p *presenter) ResendInvitation(i *invitation.Invitation) (openapi.ResendInvitationRes, error) {
+	rs, err := p.inva.Adapt(i)
+	if err != nil {
+		return nil, err
+	}
+	return &rs, err
+}
+
 func (p *presenter) FindAllInvitation(is invitation.Invitations) (openapi.APIV1InvitationsGetRes, error) {
 	rs, err := p.inva.AdaptAll(is)
 	if err != nil {

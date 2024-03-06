@@ -140,6 +140,17 @@ func (s *Invitation) Validate() error {
 			Error: err,
 		})
 	}
+	if err := func() error {
+		if err := s.Inviter.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "inviter",
+			Error: err,
+		})
+	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
 	}

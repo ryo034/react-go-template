@@ -22,7 +22,7 @@ type Presenter struct {
 func newPresenterInjector(sh storage.Handler) Presenter {
 	pa := newPresenterAdapter(sh)
 	m := member.NewAdapter(pa.User)
-	inv := invitation.NewAdapter()
+	inv := invitation.NewAdapter(m)
 	meAdapter := me.NewAdapter(pa.User, pa.Member, pa.Workspace, inv)
 	mp := me.NewPresenter(meAdapter)
 	return Presenter{
@@ -46,6 +46,6 @@ func newPresenterAdapter(sh storage.Handler) PresenterAdapter {
 		ua,
 		ma,
 		workspace.NewAdapter(ma),
-		invitation.NewAdapter(),
+		invitation.NewAdapter(ma),
 	}
 }

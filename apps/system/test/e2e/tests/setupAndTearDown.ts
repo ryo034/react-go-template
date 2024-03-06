@@ -8,7 +8,6 @@ export default class SetupAndTearDown {
   @BeforeSuite()
   @BeforeScenario({ tags: ["stateful"] })
   async beforeScenarioStatefulAll() {
-    console.log("beforeScenarioStatefulAll")
     const fb = new Firebase(firebaseConfig, { showConsole: false })
     const db = new MainDb()
     await Promise.all([fb.clear(), db.clear()])

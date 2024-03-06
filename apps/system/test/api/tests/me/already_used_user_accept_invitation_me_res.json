@@ -38,7 +38,21 @@
           "expiredAt": "2200-01-10T21:00:00+09:00",
           "id": "018da09b-ed0c-7688-a8e3-4573104e006f",
           "inviteeEmail": "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com",
-          "accepted": false
+          "accepted": false,
+          "inviter": {
+            "id": "aggznopwor77na7lkbxmuzcsxy",
+            "profile": {
+              "bio": "bio",
+              "displayName": "Invite TestOne",
+              "idNumber": "DEV-54321"
+            },
+            "role": "OWNER",
+            "user": {
+              "email": "invite_test_1@example.com",
+              "name": "Invite TestOne",
+              "userId": "018d96bf-8dce-7f68-a926-b5d7ed6ed883"
+            }
+          }
         },
         "inviter": {
           "member": {

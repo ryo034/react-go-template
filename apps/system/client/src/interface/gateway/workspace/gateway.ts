@@ -1,5 +1,13 @@
 import { Result } from "true-myth"
-import { Invitations, Invitees, Members, Workspace, WorkspaceCreateInput, WorkspaceRepository } from "~/domain"
+import {
+  Invitation,
+  Invitations,
+  Invitees,
+  Members,
+  Workspace,
+  WorkspaceCreateInput,
+  WorkspaceRepository
+} from "~/domain"
 import { WorkspaceDriver } from "~/driver/workspace/driver"
 import { PromiseResult } from "~/infrastructure/shared/result"
 import { WorkspaceGatewayAdapter } from "./adapter"
@@ -40,6 +48,22 @@ export class WorkspaceGateway implements WorkspaceRepository {
 
   async findAllInvitations(): PromiseResult<Invitations, Error> {
     const res = await this.driver.findAllInvitations()
+    if (res.isErr) {
+      return Result.err(res.error)
+    }
+    return this.invitationAdapter.adaptAll(res.value)
+  }
+
+  async resendInvitation(invitation: Invitation): PromiseResult<null, Error> {
+    const res = await this.driver.resendInvitation(invitation)
+    if (res.isErr) {
+      return Result.err(res.error)
+    }
+    return Result.ok(null)
+  }
+
+  async revokeInvitation(invitation: Invitation): PromiseResult<Invitations, Error> {
+    const res = await this.driver.revokeInvitation(invitation)
     if (res.isErr) {
       return Result.err(res.error)
     }

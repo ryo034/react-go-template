@@ -3,12 +3,13 @@ package workspace
 import (
 	"context"
 
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 
 	fbDr "github.com/ryo034/react-go-template/apps/system/api/driver/firebase"
 
 	"github.com/google/uuid"
-	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
 	infraShared "github.com/ryo034/react-go-template/apps/system/api/infrastructure/shared"
 	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/shared"
@@ -21,6 +22,7 @@ type Controller interface {
 	FindAllMembers(ctx context.Context) (openapi.APIV1MembersGetRes, error)
 	InviteMembers(ctx context.Context, i InviteesInput) (openapi.InviteMultipleUsersToWorkspaceRes, error)
 	RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error)
+	ResendInvitation(ctx context.Context, i ResendInvitationInput) (openapi.ResendInvitationRes, error)
 	FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error)
 }
 
@@ -49,6 +51,10 @@ type InviteesInput struct {
 }
 
 type RevokeInvitationInput struct {
+	InvitationID uuid.UUID
+}
+
+type ResendInvitationInput struct {
 	InvitationID uuid.UUID
 }
 
@@ -86,18 +92,17 @@ func (c *controller) FindAllMembers(ctx context.Context) (openapi.APIV1MembersGe
 }
 
 func NewInviteMembersInput(cwID workspace.ID, aID account.ID, ims []Invitee) (workspaceUc.InviteMembersInput, error) {
-	ivs := make([]*invitation.Invitation, 0, len(ims))
+	ivs := make([]workspaceUc.CreateInvitation, 0, len(ims))
 	for _, im := range ims {
-		i, err := invitation.GenInvitation(im.Email, im.DisplayName)
-		if err != nil {
-			return workspaceUc.InviteMembersInput{}, err
-		}
-		ivs = append(ivs, i)
+		ivs = append(ivs, workspaceUc.CreateInvitation{
+			InviteeEmail:       im.Email,
+			InviteeDisplayName: im.DisplayName,
+		})
 	}
 	return workspaceUc.InviteMembersInput{
 		CurrentWorkspaceID: cwID,
 		AccountID:          aID,
-		Invitations:        invitation.NewInvitations(ivs),
+		Invitations:        ivs,
 	}, nil
 }
 
@@ -122,17 +127,43 @@ func (c *controller) InviteMembers(ctx context.Context, i InviteesInput) (openap
 }
 
 func (c *controller) RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error) {
+	aID, err := c.co.GetUID(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.RevokeInvitationRes), nil
+	}
 	clm, err := c.fbDr.GetProviderInfo(ctx, fbDr.GetProviderInfoRequiredOption{CurrentWorkspaceID: true})
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.RevokeInvitationRes), nil
 	}
 	in := workspaceUc.RevokeInvitationInput{
+		AccountID:          aID,
 		CurrentWorkspaceID: *clm.CustomClaim.CurrentWorkspaceID,
 		InvitationID:       invitation.NewID(i.InvitationID),
 	}
 	res, err := c.wuc.RevokeInvitation(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.RevokeInvitationRes), nil
+	}
+	return res, nil
+}
+
+func (c *controller) ResendInvitation(ctx context.Context, i ResendInvitationInput) (openapi.ResendInvitationRes, error) {
+	aID, err := c.co.GetUID(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.ResendInvitationRes), nil
+	}
+	clm, err := c.fbDr.GetProviderInfo(ctx, fbDr.GetProviderInfoRequiredOption{CurrentWorkspaceID: true})
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.ResendInvitationRes), nil
+	}
+	in := workspaceUc.ResendInvitationInput{
+		AccountID:          aID,
+		CurrentWorkspaceID: *clm.CustomClaim.CurrentWorkspaceID,
+		InvitationID:       invitation.NewID(i.InvitationID),
+	}
+	res, err := c.wuc.ResendInvitation(ctx, in)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.ResendInvitationRes), nil
 	}
 	return res, nil
 }
@@ -153,6 +184,9 @@ func (c *controller) FindAllInvitation(ctx context.Context, i FindAllInvitationI
 	res, err := c.wuc.FindAllInvitation(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1InvitationsGetRes), nil
+	}
+	if res == nil {
+		return &openapi.InvitationsResponse{Invitations: nil}, nil
 	}
 	return res, nil
 }

@@ -5,7 +5,21 @@
       "displayName": "",
       "expiredAt": "2200-01-10T21:00:00+09:00",
       "id": "018d9b6d-01cf-7d3e-8328-76736b6db971",
-      "inviteeEmail": "invite_test_already_joined_any_workspace@example.com"
+      "inviteeEmail": "invite_test_already_joined_any_workspace@example.com",
+      "inviter": {
+        "id": "aggznopwor77na7lkbxmuzcsxy",
+        "profile": {
+          "bio": "bio",
+          "displayName": "Invite TestOne",
+          "idNumber": "DEV-54321"
+        },
+        "role": "OWNER",
+        "user": {
+          "email": "invite_test_1@example.com",
+          "name": "Invite TestOne",
+          "userId": "018d96bf-8dce-7f68-a926-b5d7ed6ed883"
+        }
+      }
     },
     "inviter": {
       "member": {

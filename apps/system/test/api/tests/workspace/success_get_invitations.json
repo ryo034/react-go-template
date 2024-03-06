@@ -5,77 +5,195 @@
       "accepted": false,
       "expiredAt": "2023-01-10T21:00:00+09:00",
       "inviteeEmail": "invite_test_expired@example.com",
-      "displayName": ""
+      "displayName": "",
+      "inviter": {
+        "id": "g57lunkvmbhurkm5dhf5nkblbu",
+        "profile": {
+          "displayName": "John Doe",
+          "idNumber": "DEV-12345",
+          "bio": "John Doe is a passionate software engineer with 8 years of experience specializing in web development, particularly with React and Node.js. A graduate from MIT with a strong focus on clean architecture and Agile methodologies, John has successfully led multiple projects, from innovative startups to established tech giants. He's a firm believer in continuous learning, contributing regularly to open-source projects, and sharing insights through tech blogs and meetups. Outside of work, John enjoys hiking 🚶‍♂️, drone photography 📸, and playing the guitar 🎸. He's committed to using technology to drive positive social change."
+        },
+        "user": {
+          "userId": "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
+          "email": "account@example.com",
+          "name": "John Doe"
+        },
+        "role": "OWNER"
+      }
     },
     {
       "id": "018d96b8-2211-7862-bcbe-e9f4d002a8fc",
       "accepted": false,
       "expiredAt": "2200-01-10T21:00:00+09:00",
       "inviteeEmail": "invite_test_not_expired@example.com",
-      "displayName": ""
+      "displayName": "",
+      "inviter": {
+        "id": "g57lunkvmbhurkm5dhf5nkblbu",
+        "profile": {
+          "displayName": "John Doe",
+          "idNumber": "DEV-12345",
+          "bio": "John Doe is a passionate software engineer with 8 years of experience specializing in web development, particularly with React and Node.js. A graduate from MIT with a strong focus on clean architecture and Agile methodologies, John has successfully led multiple projects, from innovative startups to established tech giants. He's a firm believer in continuous learning, contributing regularly to open-source projects, and sharing insights through tech blogs and meetups. Outside of work, John enjoys hiking 🚶‍♂️, drone photography 📸, and playing the guitar 🎸. He's committed to using technology to drive positive social change."
+        },
+        "user": {
+          "userId": "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
+          "email": "account@example.com",
+          "name": "John Doe"
+        },
+        "role": "OWNER"
+      }
     },
     {
       "id": "018d9b6d-01cf-7d3e-8328-76736b6db971",
       "accepted": false,
       "expiredAt": "2200-01-10T21:00:00+09:00",
       "inviteeEmail": "invite_test_already_joined_any_workspace@example.com",
-      "displayName": ""
+      "displayName": "",
+      "inviter": {
+        "id": "aggznopwor77na7lkbxmuzcsxy",
+        "profile": { "displayName": "Invite TestOne", "idNumber": "DEV-54321", "bio": "bio" },
+        "user": {
+          "userId": "018d96bf-8dce-7f68-a926-b5d7ed6ed883",
+          "email": "invite_test_1@example.com",
+          "name": "Invite TestOne"
+        },
+        "role": "OWNER"
+      }
     },
     {
       "id": "018d9fb4-641f-72f9-bdeb-a493a974dba1",
       "accepted": false,
       "expiredAt": "2200-01-10T21:00:00+09:00",
       "inviteeEmail": "invite_test_not_expired_with_display_name@example.com",
-      "displayName": "Invite Test"
+      "displayName": "Invite Test",
+      "inviter": {
+        "id": "aggznopwor77na7lkbxmuzcsxy",
+        "profile": { "displayName": "Invite TestOne", "idNumber": "DEV-54321", "bio": "bio" },
+        "user": {
+          "userId": "018d96bf-8dce-7f68-a926-b5d7ed6ed883",
+          "email": "invite_test_1@example.com",
+          "name": "Invite TestOne"
+        },
+        "role": "OWNER"
+      }
     },
     {
       "id": "018da09b-ed0c-7688-a8e3-4573104e006f",
       "accepted": false,
       "expiredAt": "2200-01-10T21:00:00+09:00",
       "inviteeEmail": "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com",
-      "displayName": "Invite TestThreeChanged"
+      "displayName": "Invite TestThreeChanged",
+      "inviter": {
+        "id": "aggznopwor77na7lkbxmuzcsxy",
+        "profile": { "displayName": "Invite TestOne", "idNumber": "DEV-54321", "bio": "bio" },
+        "user": {
+          "userId": "018d96bf-8dce-7f68-a926-b5d7ed6ed883",
+          "email": "invite_test_1@example.com",
+          "name": "Invite TestOne"
+        },
+        "role": "OWNER"
+      }
     },
     {
       "id": "018df2f6-152e-7c71-84c3-a2b77306724f",
       "accepted": false,
       "expiredAt": "2200-01-10T21:00:00+09:00",
       "inviteeEmail": "invite_test_has_name_google_auth_with_display_name_when_invite@example.com",
-      "displayName": "InviteGoogleAuthTest HasNameTest"
+      "displayName": "InviteGoogleAuthTest HasNameTest",
+      "inviter": {
+        "id": "aggznopwor77na7lkbxmuzcsxy",
+        "profile": { "displayName": "Invite TestOne", "idNumber": "DEV-54321", "bio": "bio" },
+        "user": {
+          "userId": "018d96bf-8dce-7f68-a926-b5d7ed6ed883",
+          "email": "invite_test_1@example.com",
+          "name": "Invite TestOne"
+        },
+        "role": "OWNER"
+      }
     },
     {
       "id": "018df2f7-31cf-7079-899e-9e6dab375c38",
       "accepted": false,
       "expiredAt": "2200-01-10T21:00:00+09:00",
       "inviteeEmail": "invite_test_no_name_google_auth_with_display_name_when_invite@example.com",
-      "displayName": ""
+      "displayName": "",
+      "inviter": {
+        "id": "aggznopwor77na7lkbxmuzcsxy",
+        "profile": { "displayName": "Invite TestOne", "idNumber": "DEV-54321", "bio": "bio" },
+        "user": {
+          "userId": "018d96bf-8dce-7f68-a926-b5d7ed6ed883",
+          "email": "invite_test_1@example.com",
+          "name": "Invite TestOne"
+        },
+        "role": "OWNER"
+      }
     },
     {
       "id": "018df2f9-8eb2-78a2-accd-e44bb55dabef",
       "accepted": false,
       "expiredAt": "2200-01-10T21:00:00+09:00",
       "inviteeEmail": "invite_test_no_name_google_auth_no_name_when_invite@example.com",
-      "displayName": ""
+      "displayName": "",
+      "inviter": {
+        "id": "aggznopwor77na7lkbxmuzcsxy",
+        "profile": { "displayName": "Invite TestOne", "idNumber": "DEV-54321", "bio": "bio" },
+        "user": {
+          "userId": "018d96bf-8dce-7f68-a926-b5d7ed6ed883",
+          "email": "invite_test_1@example.com",
+          "name": "Invite TestOne"
+        },
+        "role": "OWNER"
+      }
     },
     {
       "id": "018df2f9-c876-700d-8bb4-8a3613bfbc71",
       "accepted": false,
       "expiredAt": "2200-01-10T21:00:00+09:00",
       "inviteeEmail": "invite_test_has_name_google_auth_no_name_when_invite@example.com",
-      "displayName": "InviteGoogleAuthTest NoNameTest"
+      "displayName": "InviteGoogleAuthTest NoNameTest",
+      "inviter": {
+        "id": "aggznopwor77na7lkbxmuzcsxy",
+        "profile": { "displayName": "Invite TestOne", "idNumber": "DEV-54321", "bio": "bio" },
+        "user": {
+          "userId": "018d96bf-8dce-7f68-a926-b5d7ed6ed883",
+          "email": "invite_test_1@example.com",
+          "name": "Invite TestOne"
+        },
+        "role": "OWNER"
+      }
     },
     {
       "id": "018df53b-4310-701e-b62d-bea4b4c7d667",
       "accepted": false,
       "expiredAt": "2200-01-10T21:00:00+09:00",
       "inviteeEmail": "invite_test_already_joined_any_workspace_by_email@example.com",
-      "displayName": ""
+      "displayName": "",
+      "inviter": {
+        "id": "aggznopwor77na7lkbxmuzcsxy",
+        "profile": { "displayName": "Invite TestOne", "idNumber": "DEV-54321", "bio": "bio" },
+        "user": {
+          "userId": "018d96bf-8dce-7f68-a926-b5d7ed6ed883",
+          "email": "invite_test_1@example.com",
+          "name": "Invite TestOne"
+        },
+        "role": "OWNER"
+      }
     },
     {
       "id": "018df54f-9c56-7209-9082-380f1096c46e",
       "accepted": false,
       "expiredAt": "2200-01-10T21:00:00+09:00",
       "inviteeEmail": "invite_test_already_joined_any_workspace_by_google@example.com",
-      "displayName": ""
+      "displayName": "",
+      "inviter": {
+        "id": "aggznopwor77na7lkbxmuzcsxy",
+        "profile": { "displayName": "Invite TestOne", "idNumber": "DEV-54321", "bio": "bio" },
+        "user": {
+          "userId": "018d96bf-8dce-7f68-a926-b5d7ed6ed883",
+          "email": "invite_test_1@example.com",
+          "name": "Invite TestOne"
+        },
+        "role": "OWNER"
+      }
     }
   ]
 }

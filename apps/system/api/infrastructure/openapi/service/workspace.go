@@ -35,6 +35,12 @@ func (s *service) RevokeInvitation(ctx context.Context, params openapi.RevokeInv
 	})
 }
 
+func (s *service) ResendInvitation(ctx context.Context, params openapi.ResendInvitationParams) (openapi.ResendInvitationRes, error) {
+	return s.ctrl.Workspace.ResendInvitation(ctx, workspace.ResendInvitationInput{
+		InvitationID: params.InvitationId,
+	})
+}
+
 func (s *service) APIV1InvitationsGet(ctx context.Context, params openapi.APIV1InvitationsGetParams) (openapi.APIV1InvitationsGetRes, error) {
 	status := ""
 	if params.Status.IsSet() {

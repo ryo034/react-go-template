@@ -175,9 +175,18 @@ func (UnimplementedHandler) ProcessInvitationOAuth(ctx context.Context, req *Pro
 	return r, ht.ErrNotImplemented
 }
 
+// ResendInvitation implements resendInvitation operation.
+//
+// Resend invitation.
+//
+// POST /api/v1/members/invitations/{invitationId}/resend
+func (UnimplementedHandler) ResendInvitation(ctx context.Context, params ResendInvitationParams) (r ResendInvitationRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // RevokeInvitation implements revokeInvitation operation.
 //
-// Revoke an invitation to join a workspace.
+// Revoke invitation.
 //
 // POST /api/v1/members/invitations/{invitationId}/revoke
 func (UnimplementedHandler) RevokeInvitation(ctx context.Context, params RevokeInvitationParams) (r RevokeInvitationRes, _ error) {

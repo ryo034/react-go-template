@@ -25,4 +25,8 @@ export class WorkspacePresenter implements WorkspaceUseCaseOutput {
   setInvitationsIsLoading(v: boolean) {
     this.invitationsStore.getState().setInvitationsIsLoading(v)
   }
+
+  setInvitationsIsUpdating(v: boolean) {
+    this.invitationsStore.getState().setInvitationsIsUpdating(v)
+  }
 }

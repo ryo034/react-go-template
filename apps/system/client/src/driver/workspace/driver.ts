@@ -1,6 +1,6 @@
 import { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
-import { Invitees, WorkspaceCreateInput, WorkspaceId } from "~/domain"
+import { Invitation, Invitees, WorkspaceCreateInput } from "~/domain"
 import { components } from "~/generated/schema/openapi/systemApi"
 import { SystemAPIClient } from "~/infrastructure/openapi/client"
 import { PromiseResult } from "~/infrastructure/shared/result"
@@ -48,8 +48,30 @@ export class WorkspaceDriver {
 
   async findAllInvitations(): PromiseResult<components["schemas"]["Invitations"], Error> {
     try {
-      const res = await this.client.GET("/api/v1/invitations", { params: { query: { status: "accepted" } } })
+      const res = await this.client.GET("/api/v1/invitations", { params: {} })
       return res.data ? Result.ok(res.data.invitations) : Result.err(this.errorHandler.adapt(res))
+    } catch (e) {
+      return Result.err(this.errorHandler.adapt(e))
+    }
+  }
+
+  async resendInvitation(invitation: Invitation): PromiseResult<components["schemas"]["Invitation"], Error> {
+    try {
+      const res = await this.client.POST("/api/v1/members/invitations/{invitationId}/resend", {
+        params: { path: { invitationId: invitation.id.value.asString } }
+      })
+      return res.data ? Result.ok(res.data) : Result.err(this.errorHandler.adapt(res))
+    } catch (e) {
+      return Result.err(this.errorHandler.adapt(e))
+    }
+  }
+
+  async revokeInvitation(invitation: Invitation): PromiseResult<components["schemas"]["Invitations"], Error> {
+    try {
+      const res = await this.client.POST("/api/v1/members/invitations/{invitationId}/revoke", {
+        params: { path: { invitationId: invitation.id.value.asString } }
+      })
+      return res.data ? Result.ok(res.data) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))
     }

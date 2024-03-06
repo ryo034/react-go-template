@@ -4,6 +4,7 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
 )
 
 type CreateInput struct {
@@ -35,10 +36,17 @@ type FindAllMembersInput struct {
 	CurrentWorkspaceID workspace.ID
 }
 
+type CreateInvitation struct {
+	InviteeEmail       string
+	InviteeDisplayName string
+}
+
 type InviteMembersInput struct {
+	InviteeEmail       account.Email
+	InviteeDisplayName member.DisplayName
 	CurrentWorkspaceID workspace.ID
 	AccountID          account.ID
-	Invitations        invitation.Invitations
+	Invitations        []CreateInvitation
 }
 
 type VerifyInvitationTokenInput struct {
@@ -46,6 +54,13 @@ type VerifyInvitationTokenInput struct {
 }
 
 type RevokeInvitationInput struct {
+	AccountID          account.ID
+	CurrentWorkspaceID workspace.ID
+	InvitationID       invitation.ID
+}
+
+type ResendInvitationInput struct {
+	AccountID          account.ID
 	CurrentWorkspaceID workspace.ID
 	InvitationID       invitation.ID
 }

@@ -22,7 +22,7 @@ type Driver interface {
 	SendInvitations(ctx context.Context, inviter workspace.Inviter, is invitation.Invitations) (invitation.Invitations, invitation.Invitations)
 }
 
-//go:embed template/*/*.html
+//go:embed template/otp/*.html
 var emailTemplates embed.FS
 
 type driver struct {
@@ -92,6 +92,9 @@ type inviteMemberTemplateData struct {
 	InviterName   string
 }
 
+//go:embed template/invite_member/*.html
+var invitationTmpFile embed.FS
+
 func (d *driver) SendInvitation(ctx context.Context, inviter workspace.Inviter, i *invitation.Invitation) error {
 	lang, err := d.co.GetLang(ctx)
 	if err != nil {
@@ -104,18 +107,18 @@ func (d *driver) SendInvitation(ctx context.Context, inviter workspace.Inviter, 
 	switch lang {
 	case language.English:
 		subject = fmt.Sprintf("%s has invited you to join the %s workspace", p.DisplayName().ToString(), wd.Name().ToString())
-		tmplPath = "driver/email/template/invite_member/en.html"
+		tmplPath = "template/invite_member/en.html"
 		if err != nil {
 			return err
 		}
 	default:
 		subject = fmt.Sprintf("%sがあなたを%sワークスペースに招待しました", p.DisplayName().ToString(), wd.Name().ToString())
-		tmplPath = "driver/email/template/invite_member/ja.html"
+		tmplPath = "template/invite_member/ja.html"
 		if err != nil {
 			return err
 		}
 	}
-	tmpl, err := template.ParseFiles(tmplPath)
+	tmpl, err := template.ParseFS(invitationTmpFile, tmplPath)
 	if err != nil {
 		return err
 	}

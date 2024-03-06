@@ -26,3 +26,7 @@ func (g *gateway) NotifyOtpByEmail(ctx context.Context, email account.Email, otp
 func (g *gateway) NotifyMembersInvited(ctx context.Context, inviter workspace.Inviter, is invitation.Invitations) (invitation.Invitations, invitation.Invitations) {
 	return g.emailDriver.SendInvitations(ctx, inviter, is)
 }
+
+func (g *gateway) NotifyInvite(ctx context.Context, inviter workspace.Inviter, i *invitation.Invitation) error {
+	return g.emailDriver.SendInvitation(ctx, inviter, i)
+}

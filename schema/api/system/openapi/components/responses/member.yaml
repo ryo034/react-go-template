@@ -27,6 +27,13 @@ RevokeInvitationResponse:
       schema:
         $ref: "#/components/schemas/Invitations"
 
+ResendInvitationResponse:
+  description: Resend invitation response
+  content:
+    application/json:
+      schema:
+        $ref: "#/components/schemas/Invitation"
+
 MembersResponse:
   description: Get workspace members
   content:

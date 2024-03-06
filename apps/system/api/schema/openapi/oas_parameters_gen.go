@@ -220,6 +220,72 @@ func decodeGetInvitationByTokenParams(args [0]string, argsEscaped bool, r *http.
 	return params, nil
 }
 
+// ResendInvitationParams is parameters of resendInvitation operation.
+type ResendInvitationParams struct {
+	// Invitation id.
+	InvitationId uuid.UUID
+}
+
+func unpackResendInvitationParams(packed middleware.Parameters) (params ResendInvitationParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "invitationId",
+			In:   "path",
+		}
+		params.InvitationId = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeResendInvitationParams(args [1]string, argsEscaped bool, r *http.Request) (params ResendInvitationParams, _ error) {
+	// Decode path: invitationId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "invitationId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.InvitationId = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "invitationId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // RevokeInvitationParams is parameters of revokeInvitation operation.
 type RevokeInvitationParams struct {
 	// Invitation id.

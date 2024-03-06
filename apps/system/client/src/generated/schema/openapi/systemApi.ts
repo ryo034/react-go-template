@@ -222,8 +222,12 @@ export interface paths {
     post: operations["acceptInvitation"];
   };
   "/api/v1/members/invitations/{invitationId}/revoke": {
-    /** Revoke an invitation to join a workspace */
+    /** Revoke invitation */
     post: operations["revokeInvitation"];
+  };
+  "/api/v1/members/invitations/{invitationId}/resend": {
+    /** Resend invitation */
+    post: operations["resendInvitation"];
   };
 }
 
@@ -309,6 +313,7 @@ export interface components {
       inviteeEmail: string;
       /** @description Display name of the invitee */
       displayName: string;
+      inviter: components["schemas"]["Member"];
     };
     Invitations: components["schemas"]["Invitation"][];
     Invitee: {
@@ -601,6 +606,12 @@ export interface components {
         "application/json": components["schemas"]["Invitations"];
       };
     };
+    /** @description Resend invitation response */
+    ResendInvitationResponse: {
+      content: {
+        "application/json": components["schemas"]["Invitation"];
+      };
+    };
     /** @description Get joined workspaces */
     WorkspacesResponse: {
       content: {
@@ -874,7 +885,7 @@ export interface operations {
       500: components["responses"]["InternalServerError"];
     };
   };
-  /** Revoke an invitation to join a workspace */
+  /** Revoke invitation */
   revokeInvitation: {
     parameters: {
       path: {
@@ -884,7 +895,27 @@ export interface operations {
     };
     responses: {
       200: components["responses"]["RevokeInvitationResponse"];
+      400: components["responses"]["BadRequestError"];
       401: components["responses"]["UnauthorizedError"];
+      403: components["responses"]["ForbiddenError"];
+      404: components["responses"]["NotFoundError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /** Resend invitation */
+  resendInvitation: {
+    parameters: {
+      path: {
+        /** @description Invitation id */
+        invitationId: string;
+      };
+    };
+    responses: {
+      200: components["responses"]["ResendInvitationResponse"];
+      400: components["responses"]["BadRequestError"];
+      401: components["responses"]["UnauthorizedError"];
+      403: components["responses"]["ForbiddenError"];
+      404: components["responses"]["NotFoundError"];
       500: components["responses"]["InternalServerError"];
     };
   };

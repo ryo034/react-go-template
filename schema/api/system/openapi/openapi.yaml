@@ -274,7 +274,7 @@ paths:
       summary: Get pending invitations
       description: Returns the pending invitations (not used yet)
       tags:
-        - Members
+        - Invitations
       security:
         - bearer: []
       parameters:
@@ -297,7 +297,7 @@ paths:
       summary: Invite multiple users to the workspace by email
       operationId: inviteMultipleUsersToWorkspace
       tags:
-        - Members
+        - Invitations
       security:
         - bearer: []
       requestBody:
@@ -340,10 +340,10 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /api/v1/members/invitations/{invitationId}/revoke:
     post:
-      summary: Revoke an invitation to join a workspace
+      summary: Revoke invitation
       operationId: revokeInvitation
       tags:
-        - Members
+        - Invitations
       security:
         - bearer: []
       parameters:
@@ -357,8 +357,43 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/RevokeInvitationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v1/members/invitations/{invitationId}/resend:
+    post:
+      summary: Resend invitation
+      operationId: resendInvitation
+      tags:
+        - Invitations
+      security:
+        - bearer: []
+      parameters:
+        - name: invitationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Invitation id
+      responses:
+        '200':
+          $ref: '#/components/responses/ResendInvitationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -494,6 +529,7 @@ components:
         - expiredAt
         - inviteeEmail
         - displayName
+        - inviter
       properties:
         id:
           type: string
@@ -511,6 +547,8 @@ components:
         displayName:
           type: string
           description: Display name of the invitee
+        inviter:
+          $ref: '#/components/schemas/Member'
     Invitations:
       type: array
       items:
@@ -1019,6 +1057,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Invitations'
+    ResendInvitationResponse:
+      description: Resend invitation response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Invitation'
     WorkspacesResponse:
       description: Get joined workspaces
       content:

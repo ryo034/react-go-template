@@ -6,6 +6,7 @@ Invitation:
     - expiredAt
     - inviteeEmail
     - displayName
+    - inviter
   properties:
     id:
       type: string
@@ -23,6 +24,8 @@ Invitation:
     displayName:
       type: string
       description: Display name of the invitee
+    inviter:
+      $ref: "#/components/schemas/Member"
 
 Invitations:
   type: array

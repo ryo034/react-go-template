@@ -13,4 +13,5 @@ import (
 type Repository interface {
 	NotifyOtpByEmail(ctx context.Context, email account.Email, otp string) error
 	NotifyMembersInvited(ctx context.Context, inviter workspace.Inviter, is invitation.Invitations) (invitation.Invitations, invitation.Invitations)
+	NotifyInvite(ctx context.Context, inviter workspace.Inviter, i *invitation.Invitation) error
 }

@@ -1,4 +1,4 @@
-import { WorkspaceRepository } from "~/domain"
+import { Invitation, WorkspaceRepository } from "~/domain"
 import { CreateWorkspaceInput, InviteMembersInput, MeUseCase, WorkspaceUseCaseOutput } from "~/usecase"
 
 export interface WorkspaceUseCase {
@@ -6,6 +6,8 @@ export interface WorkspaceUseCase {
   findAllMembers(): Promise<Error | null>
   inviteMembers(i: InviteMembersInput): Promise<Error | null>
   findAllInvitations(): Promise<Error | null>
+  resendInvitation(i: Invitation): Promise<Error | null>
+  revokeInvitation(i: Invitation): Promise<Error | null>
 }
 
 export class WorkspaceInteractor implements WorkspaceUseCase {
@@ -55,6 +57,23 @@ export class WorkspaceInteractor implements WorkspaceUseCase {
     }
     this.presenter.setInvitations(res.value)
     this.presenter.setInvitationsIsLoading(false)
+    return null
+  }
+
+  async resendInvitation(i: Invitation): Promise<Error | null> {
+    const res = await this.repository.resendInvitation(i)
+    if (res.isErr) {
+      return res.error
+    }
+    return null
+  }
+
+  async revokeInvitation(i: Invitation): Promise<Error | null> {
+    const res = await this.repository.revokeInvitation(i)
+    if (res.isErr) {
+      return res.error
+    }
+    this.presenter.setInvitations(res.value)
     return null
   }
 }

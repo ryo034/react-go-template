@@ -2,6 +2,7 @@ package invitation
 
 import (
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/invitation"
+	"github.com/ryo034/react-go-template/apps/system/api/interface/presenter/member"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 )
 
@@ -11,10 +12,11 @@ type Adapter interface {
 }
 
 type adapter struct {
+	ma member.Adapter
 }
 
-func NewAdapter() Adapter {
-	return &adapter{}
+func NewAdapter(ma member.Adapter) Adapter {
+	return &adapter{ma}
 }
 
 func (a *adapter) Adapt(i *invitation.Invitation) (openapi.Invitation, error) {
@@ -35,6 +37,7 @@ func (a *adapter) Adapt(i *invitation.Invitation) (openapi.Invitation, error) {
 		ExpiredAt:    lt,
 		InviteeEmail: i.InviteeEmail().ToString(),
 		DisplayName:  dn,
+		Inviter:      a.ma.Adapt(i.Inviter()),
 	}, nil
 }
 

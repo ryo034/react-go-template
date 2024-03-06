@@ -456,26 +456,64 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								}
 
 								elem = origElem
-							case 'r': // Prefix: "revoke"
+							case 'r': // Prefix: "re"
 								origElem := elem
-								if l := len("revoke"); len(elem) >= l && elem[0:l] == "revoke" {
+								if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
 									elem = elem[l:]
 								} else {
 									break
 								}
 
 								if len(elem) == 0 {
-									// Leaf node.
-									switch r.Method {
-									case "POST":
-										s.handleRevokeInvitationRequest([1]string{
-											args[0],
-										}, elemIsEscaped, w, r)
-									default:
-										s.notAllowed(w, r, "POST")
+									break
+								}
+								switch elem[0] {
+								case 's': // Prefix: "send"
+									origElem := elem
+									if l := len("send"); len(elem) >= l && elem[0:l] == "send" {
+										elem = elem[l:]
+									} else {
+										break
 									}
 
-									return
+									if len(elem) == 0 {
+										// Leaf node.
+										switch r.Method {
+										case "POST":
+											s.handleResendInvitationRequest([1]string{
+												args[0],
+											}, elemIsEscaped, w, r)
+										default:
+											s.notAllowed(w, r, "POST")
+										}
+
+										return
+									}
+
+									elem = origElem
+								case 'v': // Prefix: "voke"
+									origElem := elem
+									if l := len("voke"); len(elem) >= l && elem[0:l] == "voke" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									if len(elem) == 0 {
+										// Leaf node.
+										switch r.Method {
+										case "POST":
+											s.handleRevokeInvitationRequest([1]string{
+												args[0],
+											}, elemIsEscaped, w, r)
+										default:
+											s.notAllowed(w, r, "POST")
+										}
+
+										return
+									}
+
+									elem = origElem
 								}
 
 								elem = origElem
@@ -1086,28 +1124,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								}
 
 								elem = origElem
-							case 'r': // Prefix: "revoke"
+							case 'r': // Prefix: "re"
 								origElem := elem
-								if l := len("revoke"); len(elem) >= l && elem[0:l] == "revoke" {
+								if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
 									elem = elem[l:]
 								} else {
 									break
 								}
 
 								if len(elem) == 0 {
-									switch method {
-									case "POST":
-										// Leaf: RevokeInvitation
-										r.name = "RevokeInvitation"
-										r.summary = "Revoke an invitation to join a workspace"
-										r.operationID = "revokeInvitation"
-										r.pathPattern = "/api/v1/members/invitations/{invitationId}/revoke"
-										r.args = args
-										r.count = 1
-										return r, true
-									default:
-										return
+									break
+								}
+								switch elem[0] {
+								case 's': // Prefix: "send"
+									origElem := elem
+									if l := len("send"); len(elem) >= l && elem[0:l] == "send" {
+										elem = elem[l:]
+									} else {
+										break
 									}
+
+									if len(elem) == 0 {
+										switch method {
+										case "POST":
+											// Leaf: ResendInvitation
+											r.name = "ResendInvitation"
+											r.summary = "Resend invitation"
+											r.operationID = "resendInvitation"
+											r.pathPattern = "/api/v1/members/invitations/{invitationId}/resend"
+											r.args = args
+											r.count = 1
+											return r, true
+										default:
+											return
+										}
+									}
+
+									elem = origElem
+								case 'v': // Prefix: "voke"
+									origElem := elem
+									if l := len("voke"); len(elem) >= l && elem[0:l] == "voke" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									if len(elem) == 0 {
+										switch method {
+										case "POST":
+											// Leaf: RevokeInvitation
+											r.name = "RevokeInvitation"
+											r.summary = "Revoke invitation"
+											r.operationID = "revokeInvitation"
+											r.pathPattern = "/api/v1/members/invitations/{invitationId}/revoke"
+											r.args = args
+											r.count = 1
+											return r, true
+										default:
+											return
+										}
+									}
+
+									elem = origElem
 								}
 
 								elem = origElem

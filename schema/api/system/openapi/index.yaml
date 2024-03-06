@@ -41,6 +41,8 @@ paths:
     $ref: "./paths/me.yaml#/invitationsAccept"
   /api/v1/members/invitations/{invitationId}/revoke:
     $ref: "./paths/member.yaml#/invitationsRevoke"
+  /api/v1/members/invitations/{invitationId}/resend:
+    $ref: "./paths/member.yaml#/invitationsResend"
 
 components:
   securitySchemes:
@@ -126,6 +128,8 @@ components:
       $ref: "./components/responses/member.yaml#/InvitationsBulkResponse"
     RevokeInvitationResponse:
       $ref: "./components/responses/member.yaml#/RevokeInvitationResponse"
+    ResendInvitationResponse:
+      $ref: "./components/responses/member.yaml#/ResendInvitationResponse"
     WorkspacesResponse:
       $ref: "./components/responses/workspace.yaml#/WorkspacesResponse"
     InvitationsResponse:

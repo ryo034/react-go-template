@@ -19,7 +19,7 @@ invitations:
     summary: Get pending invitations
     description: Returns the pending invitations (not used yet)
     tags:
-      - Members
+      - Invitations
     security:
       - bearer: []
     parameters:
@@ -43,7 +43,7 @@ invitationsBulk:
     summary: Invite multiple users to the workspace by email
     operationId: inviteMultipleUsersToWorkspace
     tags:
-      - Members
+      - Invitations
     security:
       - bearer: []
     requestBody:
@@ -60,10 +60,10 @@ invitationsBulk:
 
 invitationsRevoke:
   post:
-    summary: Revoke an invitation to join a workspace
+    summary: Revoke invitation
     operationId: revokeInvitation
     tags:
-      - Members
+      - Invitations
     security:
       - bearer: []
     parameters:
@@ -77,7 +77,43 @@ invitationsRevoke:
     responses:
       "200":
         $ref: "#/components/responses/RevokeInvitationResponse"
+      "400":
+        $ref: "#/components/responses/BadRequestError"
       "401":
         $ref: "#/components/responses/UnauthorizedError"
+      "403":
+        $ref: "#/components/responses/ForbiddenError"
+      "404":
+        $ref: "#/components/responses/NotFoundError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+
+invitationsResend:
+  post:
+    summary: Resend invitation
+    operationId: resendInvitation
+    tags:
+      - Invitations
+    security:
+      - bearer: []
+    parameters:
+      - name: invitationId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Invitation id
+    responses:
+      "200":
+        $ref: "#/components/responses/ResendInvitationResponse"
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
+      "403":
+        $ref: "#/components/responses/ForbiddenError"
+      "404":
+        $ref: "#/components/responses/NotFoundError"
       "500":
         $ref: "#/components/responses/InternalServerError"

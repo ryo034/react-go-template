@@ -2,6 +2,7 @@ package invitation
 
 import (
 	"fmt"
+	memberGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/member"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/datetime"
@@ -16,10 +17,11 @@ type Adapter interface {
 }
 
 type adapter struct {
+	ma memberGw.Adapter
 }
 
-func NewAdapter() Adapter {
-	return &adapter{}
+func NewAdapter(ma memberGw.Adapter) Adapter {
+	return &adapter{ma}
 }
 
 func (a *adapter) Adapt(i *models.Invitation) (*invitation.Invitation, error) {
@@ -42,11 +44,17 @@ func (a *adapter) Adapt(i *models.Invitation) (*invitation.Invitation, error) {
 			evs = append(evs, invitation.NewAsRevoked(datetime.NewDatetime(ev.CreatedAt)))
 		} else if ev.EventType == "accepted" {
 			evs = append(evs, invitation.NewAsAccepted(datetime.NewDatetime(ev.CreatedAt)))
+		} else if ev.EventType == "reissued" {
+			evs = append(evs, invitation.NewAsReissued(datetime.NewDatetime(ev.CreatedAt)))
 		} else {
 			return nil, fmt.Errorf("unknown event type: %s", ev.EventType)
 		}
 	}
-	return invitation.NewInvitation(id, token, invitation.NewEvents(evs), ex, ema, dn), nil
+	inviter, err := a.ma.Adapt(i.InvitationUnit.Member)
+	if err != nil {
+		return nil, err
+	}
+	return invitation.NewInvitation(id, token, invitation.NewEvents(evs), ex, ema, dn, inviter), nil
 }
 
 func (a *adapter) AdaptAll(is []*models.Invitation) (invitation.Invitations, error) {

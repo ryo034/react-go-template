@@ -31,7 +31,21 @@ systemTest.describe("Me Invitations", () => {
             expiredAt: "2200-01-10T21:00:00+09:00",
             id: "018d96b8-2211-7862-bcbe-e9f4d002a8fc",
             inviteeEmail: "invite_test_not_expired@example.com",
-            accepted: false
+            accepted: false,
+            inviter: {
+              id: "g57lunkvmbhurkm5dhf5nkblbu",
+              profile: {
+                bio: "John Doe is a passionate software engineer with 8 years of experience specializing in web development, particularly with React and Node.js. A graduate from MIT with a strong focus on clean architecture and Agile methodologies, John has successfully led multiple projects, from innovative startups to established tech giants. He's a firm believer in continuous learning, contributing regularly to open-source projects, and sharing insights through tech blogs and meetups. Outside of work, John enjoys hiking 🚶‍♂️, drone photography 📸, and playing the guitar 🎸. He's committed to using technology to drive positive social change.",
+                displayName: "John Doe",
+                idNumber: "DEV-12345"
+              },
+              role: "OWNER",
+              user: {
+                email: "account@example.com",
+                name: "John Doe",
+                userId: "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
+              }
+            }
           },
           inviter: {
             member: {

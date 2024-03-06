@@ -12,5 +12,6 @@ type OutputPort interface {
 	FindAllMembers(ms member.Members) (openapi.APIV1MembersGetRes, error)
 	InviteMembers(is invitation.Invitations, registered invitation.Invitations, success invitation.Invitations, failed invitation.Invitations) (*openapi.InvitationsBulkResponse, error)
 	RevokeInvitation(is invitation.Invitations) (openapi.RevokeInvitationRes, error)
+	ResendInvitation(i *invitation.Invitation) (openapi.ResendInvitationRes, error)
 	FindAllInvitation(is invitation.Invitations) (openapi.APIV1InvitationsGetRes, error)
 }

@@ -1,4 +1,4 @@
-import { Invitee, Invitees, MemberDisplayName, WorkspaceSubdomain } from "~/domain"
+import { Invitation, Invitee, Invitees, MemberDisplayName, WorkspaceSubdomain } from "~/domain"
 import { Email } from "~/domain/shared"
 import { WorkspaceUseCase } from "~/usecase/workspace"
 
@@ -46,5 +46,13 @@ export class WorkspaceController {
 
   async findAllInvitations(): Promise<null | Error> {
     return await this.useCase.findAllInvitations()
+  }
+
+  async resendInvitation(i: Invitation): Promise<null | Error> {
+    return await this.useCase.resendInvitation(i)
+  }
+
+  async revokeInvitation(i: Invitation): Promise<null | Error> {
+    return await this.useCase.revokeInvitation(i)
   }
 }

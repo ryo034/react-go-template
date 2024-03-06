@@ -1544,14 +1544,19 @@ func (s *Invitation) encodeFields(e *jx.Encoder) {
 		e.FieldStart("displayName")
 		e.Str(s.DisplayName)
 	}
+	{
+		e.FieldStart("inviter")
+		s.Inviter.Encode(e)
+	}
 }
 
-var jsonFieldsNameOfInvitation = [5]string{
+var jsonFieldsNameOfInvitation = [6]string{
 	0: "id",
 	1: "accepted",
 	2: "expiredAt",
 	3: "inviteeEmail",
 	4: "displayName",
+	5: "inviter",
 }
 
 // Decode decodes Invitation from json.
@@ -1623,6 +1628,16 @@ func (s *Invitation) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"displayName\"")
 			}
+		case "inviter":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				if err := s.Inviter.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"inviter\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -1633,7 +1648,7 @@ func (s *Invitation) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00011111,
+		0b00111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -3184,6 +3199,137 @@ func (s *MembersResponse) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *MembersResponse) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *NotFoundError) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *NotFoundError) encodeFields(e *jx.Encoder) {
+	{
+		if s.Status.Set {
+			e.FieldStart("status")
+			s.Status.Encode(e)
+		}
+	}
+	{
+		if s.Type.Set {
+			e.FieldStart("type")
+			s.Type.Encode(e)
+		}
+	}
+	{
+		if s.Title.Set {
+			e.FieldStart("title")
+			s.Title.Encode(e)
+		}
+	}
+	{
+		if s.Detail.Set {
+			e.FieldStart("detail")
+			s.Detail.Encode(e)
+		}
+	}
+	{
+		if s.Code.Set {
+			e.FieldStart("code")
+			s.Code.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfNotFoundError = [5]string{
+	0: "status",
+	1: "type",
+	2: "title",
+	3: "detail",
+	4: "code",
+}
+
+// Decode decodes NotFoundError from json.
+func (s *NotFoundError) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode NotFoundError to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "status":
+			if err := func() error {
+				s.Status.Reset()
+				if err := s.Status.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"status\"")
+			}
+		case "type":
+			if err := func() error {
+				s.Type.Reset()
+				if err := s.Type.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"type\"")
+			}
+		case "title":
+			if err := func() error {
+				s.Title.Reset()
+				if err := s.Title.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"title\"")
+			}
+		case "detail":
+			if err := func() error {
+				s.Detail.Reset()
+				if err := s.Detail.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"detail\"")
+			}
+		case "code":
+			if err := func() error {
+				s.Code.Reset()
+				if err := s.Code.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"code\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode NotFoundError")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *NotFoundError) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *NotFoundError) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

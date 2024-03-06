@@ -26,6 +26,7 @@ type Driver interface {
 	VerifyByToken(ctx context.Context, exec bun.IDB, token invitation.Token) error
 	Accept(ctx context.Context, exec bun.IDB, id invitation.ID) error
 	Revoke(ctx context.Context, exec bun.IDB, id invitation.ID) error
+	Resend(ctx context.Context, exec bun.IDB, id invitation.ID) (*models.Invitation, error)
 }
 
 type driver struct {
@@ -432,4 +433,26 @@ func (d *driver) Revoke(ctx context.Context, exec bun.IDB, id invitation.ID) err
 		EventType:         "revoked",
 	}).Exec(ctx)
 	return err
+}
+
+func (d *driver) Resend(ctx context.Context, exec bun.IDB, id invitation.ID) (*models.Invitation, error) {
+	inv, err := d.Find(ctx, exec, id)
+	if err != nil {
+		return nil, err
+	}
+	eid, err := uuid.NewV7()
+	if err != nil {
+		return nil, err
+	}
+	ev := &models.InvitationEvent{
+		InvitationEventID: eid,
+		InvitationID:      id.Value(),
+		EventType:         "reissued",
+	}
+	_, err = exec.NewInsert().Model(ev).Exec(ctx)
+	if err != nil {
+		return nil, err
+	}
+	inv.Events = append(inv.Events, ev)
+	return inv, nil
 }

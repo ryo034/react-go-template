@@ -1,4 +1,4 @@
-import { InvitationId, MemberDisplayName } from "~/domain"
+import { InvitationId, Member, MemberDisplayName } from "~/domain"
 import { AppDateTime, Email, Entity } from "~/domain/shared"
 
 interface Props {
@@ -7,6 +7,7 @@ interface Props {
   expiredAt: AppDateTime
   inviteeEmail: Email
   displayName: MemberDisplayName | null
+  inviter: Member
 }
 
 export class Invitation extends Entity<Props> {
@@ -32,5 +33,9 @@ export class Invitation extends Entity<Props> {
 
   get displayName(): MemberDisplayName | null {
     return this.value.displayName
+  }
+
+  get inviter(): Member {
+    return this.value.inviter
   }
 }

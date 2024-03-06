@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "shared-ui"
 
 const AccountAvatarSizeType = {
   sm: "sm",
-  // md: "md",
+  md: "md",
   // lg: "lg",
   xl: "xl"
 } as const
@@ -19,7 +19,7 @@ interface Props extends HTMLAttributes<HTMLElement> {
 
 const accountAvatarSizeClassMap = {
   sm: "h-8 w-8 rounded-[12px]",
-  // md: "h-12 w-12 rounded-[16px]",
+  md: "h-12 w-12 rounded-[16px]",
   // lg: "h-16 w-16 rounded-[24px]",
   xl: "h-24 w-24 rounded-[36px]"
 }

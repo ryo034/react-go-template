@@ -3,8 +3,10 @@ import { Invitation, InvitationId, Invitations, MemberDisplayName } from "~/doma
 import { AppDateTime, Email } from "~/domain/shared"
 import { components } from "~/generated/schema/openapi/systemApi"
 import { AdapterError } from "~/infrastructure/error"
+import { MemberGatewayAdapter } from "../member"
 
 export class InvitationGatewayAdapter {
+  constructor(private readonly memberAdapter: MemberGatewayAdapter) {}
   adapt(invitation: components["schemas"]["Invitation"]): Result<Invitation, Error> {
     if (invitation === undefined || invitation === null) {
       console.error(new AdapterError(InvitationGatewayAdapter.name, this.adapt.name, "Invitation is required"))
@@ -35,13 +37,19 @@ export class InvitationGatewayAdapter {
       return Result.err(expiredAt.error)
     }
 
+    const inviter = this.memberAdapter.adapt(invitation.inviter)
+    if (inviter.isErr) {
+      return Result.err(inviter.error)
+    }
+
     return Result.ok(
       Invitation.create({
         id: id.value,
         displayName,
         inviteeEmail: inviteeEmail.value,
         accepted: invitation.accepted,
-        expiredAt: expiredAt.value
+        expiredAt: expiredAt.value,
+        inviter: inviter.value
       })
     )
   }

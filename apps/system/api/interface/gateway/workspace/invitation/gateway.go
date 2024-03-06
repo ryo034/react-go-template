@@ -69,3 +69,11 @@ func (g *gateway) Accept(ctx context.Context, exec bun.IDB, iID invitation.ID) e
 func (g *gateway) Revoke(ctx context.Context, exec bun.IDB, iID invitation.ID) error {
 	return g.d.Revoke(ctx, exec, iID)
 }
+
+func (g *gateway) Resend(ctx context.Context, exec bun.IDB, iID invitation.ID) (*invitation.Invitation, error) {
+	res, err := g.d.Resend(ctx, exec, iID)
+	if err != nil {
+		return nil, err
+	}
+	return g.ia.Adapt(res)
+}

@@ -18,6 +18,7 @@ type UseCase interface {
 	FindAllMembers(ctx context.Context, i FindAllMembersInput) (openapi.APIV1MembersGetRes, error)
 	InviteMembers(ctx context.Context, i InviteMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error)
 	RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error)
+	ResendInvitation(ctx context.Context, i ResendInvitationInput) (openapi.ResendInvitationRes, error)
 	FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error)
 }
 
@@ -86,8 +87,27 @@ func (u *useCase) FindAllMembers(ctx context.Context, i FindAllMembersInput) (op
 }
 
 func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error) {
+	if len(i.Invitations) == 0 {
+		return nil, nil
+	}
 	// Exclude already registered members
 	exec := u.dbp.GetExecutor(ctx, false)
+	meRes, err := u.meRepo.FindLastLogin(ctx, exec, i.AccountID)
+	if err != nil {
+		return nil, err
+	}
+	inviter := workspace.NewInviter(meRes.Member(), meRes.Workspace())
+
+	invs := make([]*invitation.Invitation, 0, len(i.Invitations))
+	for _, im := range i.Invitations {
+		inv, err := invitation.GenInvitation(im.InviteeEmail, im.InviteeDisplayName, meRes.Member())
+		if err != nil {
+			return nil, err
+		}
+		invs = append(invs, inv)
+	}
+	invitations := invitation.NewInvitations(invs)
+
 	members, err := u.repo.FindAllMembers(ctx, exec, i.CurrentWorkspaceID)
 	if err != nil {
 		return nil, err
@@ -95,20 +115,13 @@ func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (open
 
 	targets := make([]*invitation.Invitation, 0)
 	alreadyRegisteredList := make([]*invitation.Invitation, 0)
-	for _, im := range i.Invitations.AsSlice() {
+	for _, im := range invitations.AsSlice() {
 		if members.Exist(im.InviteeEmail()) {
 			alreadyRegisteredList = append(alreadyRegisteredList, im)
 		} else {
 			targets = append(targets, im)
 		}
 	}
-
-	meRes, err := u.meRepo.FindLastLogin(ctx, exec, i.AccountID)
-	if err != nil {
-		return nil, err
-	}
-
-	inviter := workspace.NewInviter(meRes.Member(), meRes.Workspace())
 
 	is := invitation.NewInvitations(targets)
 	successSendMailList, failedSendMailList := u.notificationRepo.NotifyMembersInvited(ctx, inviter, is)
@@ -117,7 +130,7 @@ func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (open
 	}
 
 	return u.op.InviteMembers(
-		i.Invitations,
+		invitations,
 		invitation.NewInvitations(alreadyRegisteredList),
 		successSendMailList,
 		failedSendMailList,
@@ -130,7 +143,7 @@ func (u *useCase) RevokeInvitation(ctx context.Context, i RevokeInvitationInput)
 	if err != nil {
 		return nil, err
 	}
-	if err = inv.ValidateCanRevoke(); err != nil {
+	if err = inv.ValidateCanRevoke(i.AccountID); err != nil {
 		return nil, err
 	}
 
@@ -149,7 +162,45 @@ func (u *useCase) RevokeInvitation(ctx context.Context, i RevokeInvitationInput)
 		return nil, err
 	}
 	res := result.Value(0).(invitation.Invitations)
-	return u.op.RevokeInvitation(res)
+	return u.op.RevokeInvitation(res.ExcludeRevoked().ExcludeVerified().ExcludeAccepted().Sort())
+}
+
+func (u *useCase) ResendInvitation(ctx context.Context, i ResendInvitationInput) (openapi.ResendInvitationRes, error) {
+	p := u.dbp.GetExecutor(ctx, false)
+	inv, err := u.invRepo.Find(ctx, p, i.InvitationID)
+	if err != nil {
+		return nil, err
+	}
+	if err = inv.ValidateCanResend(i.AccountID); err != nil {
+		return nil, err
+	}
+
+	meRes, err := u.meRepo.FindLastLogin(ctx, p, i.AccountID)
+	if err != nil {
+		return nil, err
+	}
+
+	pr, err := u.txp.Provide(ctx)
+	if err != nil {
+		return nil, err
+	}
+	fn := func() (*invitation.Invitation, error) {
+		res, err := u.invRepo.Resend(pr, p, i.InvitationID)
+		if err != nil {
+			return nil, err
+		}
+		inviter := workspace.NewInviter(meRes.Member(), meRes.Workspace())
+		if err = u.notificationRepo.NotifyInvite(ctx, inviter, inv); err != nil {
+			return nil, err
+		}
+		return res, nil
+	}
+	result := pr.Transactional(fn)()
+	if err = result.Error(); err != nil {
+		return nil, err
+	}
+	res := result.Value(0).(*invitation.Invitation)
+	return u.op.ResendInvitation(res)
 }
 
 func (u *useCase) FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error) {
@@ -158,6 +209,10 @@ func (u *useCase) FindAllInvitation(ctx context.Context, i FindAllInvitationInpu
 	if err != nil {
 		return nil, err
 	}
+	if res == nil {
+		return nil, nil
+	}
+
 	if i.IsAccepted {
 		return u.op.FindAllInvitation(res.OnlyAccepted().Sort())
 	}

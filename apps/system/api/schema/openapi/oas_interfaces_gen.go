@@ -73,6 +73,10 @@ type ProcessInvitationOAuthRes interface {
 	processInvitationOAuthRes()
 }
 
+type ResendInvitationRes interface {
+	resendInvitationRes()
+}
+
 type RevokeInvitationRes interface {
 	revokeInvitationRes()
 }

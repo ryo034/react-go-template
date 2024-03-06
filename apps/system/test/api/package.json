@@ -3,7 +3,7 @@
   "description": "API test",
   "scripts": {
     "test-mi": "PARALLEL=false SILENT=false playwright test --workers=1 test/api/tests/me/me.spec.ts",
-    "test-mii": "PARALLEL=false SILENT=false playwright test -g 'create account and add invited workspace to joinedWorkspaces and currentWorkspace set to invited workspace'",
+    "test-mii": "PARALLEL=false SILENT=false playwright test -g 'success to get invitations without revoked and already registered'",
     "test:stateless": "PARALLEL=true SILENT=false playwright test --retries=3 --workers=3 --grep-invert @stateful",
     "test:stateful": "PARALLEL=false SILENT=false playwright test --retries=1 --workers=1 --grep @stateful"
   },

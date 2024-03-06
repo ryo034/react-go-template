@@ -16,5 +16,12 @@
     "V1": "/api/v1/members/invitations/{invitationId}/revoke",
     "V2": "POST",
     "V3": "allow"
+  },
+  {
+    "PType": "p",
+    "V0": "admin",
+    "V1": "/api/v1/members/invitations/{invitationId}/resend",
+    "V2": "POST",
+    "V3": "allow"
   }
 ]

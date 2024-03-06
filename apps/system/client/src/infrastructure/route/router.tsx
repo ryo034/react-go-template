@@ -19,6 +19,7 @@ import { VerifyOtpPage } from "~/pages/otp"
 import { ReceivedInvitationsPage } from "~/pages/receivedInvitation"
 import { SettingsAccountPage } from "~/pages/settings/account"
 import { SettingsAppearancePage } from "~/pages/settings/appearance"
+import { SettingsInvitationPage } from "~/pages/settings/invitation"
 import { SettingsProfilePage } from "~/pages/settings/profile"
 
 export const accountInitialPagePath = routeMap.home
@@ -66,9 +67,10 @@ const router = createBrowserRouter([
                       {
                         element: <SettingsLayout />,
                         children: [
+                          { path: routeMap.settingsProfile, element: <SettingsProfilePage /> },
                           { path: routeMap.settingsAppearance, element: <SettingsAppearancePage /> },
                           { path: routeMap.settingsAccount, element: <SettingsAccountPage /> },
-                          { path: routeMap.settingsProfile, element: <SettingsProfilePage /> }
+                          { path: routeMap.settingsInvitation, element: <SettingsInvitationPage /> }
                         ]
                       }
                     ]

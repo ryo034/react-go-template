@@ -295,6 +295,8 @@ func (*BadRequestError) getInvitationByTokenRes()           {}
 func (*BadRequestError) inviteMultipleUsersToWorkspaceRes() {}
 func (*BadRequestError) processInvitationEmailRes()         {}
 func (*BadRequestError) processInvitationOAuthRes()         {}
+func (*BadRequestError) resendInvitationRes()               {}
+func (*BadRequestError) revokeInvitationRes()               {}
 
 type Bearer struct {
 	Token string
@@ -459,6 +461,8 @@ func (s *ForbiddenError) SetCode(val OptString) {
 }
 
 func (*ForbiddenError) aPIV1MeProfilePutRes() {}
+func (*ForbiddenError) resendInvitationRes()  {}
+func (*ForbiddenError) revokeInvitationRes()  {}
 
 type GetInvitationByTokenResponse struct {
 	ReceivedInvitation ReceivedInvitation `json:"receivedInvitation"`
@@ -625,6 +629,7 @@ func (*InternalServerError) getInvitationByTokenRes()           {}
 func (*InternalServerError) inviteMultipleUsersToWorkspaceRes() {}
 func (*InternalServerError) processInvitationEmailRes()         {}
 func (*InternalServerError) processInvitationOAuthRes()         {}
+func (*InternalServerError) resendInvitationRes()               {}
 func (*InternalServerError) revokeInvitationRes()               {}
 
 // Ref: #/components/schemas/Invitation
@@ -637,6 +642,7 @@ type Invitation struct {
 	InviteeEmail string `json:"inviteeEmail"`
 	// Display name of the invitee.
 	DisplayName string `json:"displayName"`
+	Inviter     Member `json:"inviter"`
 }
 
 // GetID returns the value of ID.
@@ -664,6 +670,11 @@ func (s *Invitation) GetDisplayName() string {
 	return s.DisplayName
 }
 
+// GetInviter returns the value of Inviter.
+func (s *Invitation) GetInviter() Member {
+	return s.Inviter
+}
+
 // SetID sets the value of ID.
 func (s *Invitation) SetID(val uuid.UUID) {
 	s.ID = val
@@ -688,6 +699,13 @@ func (s *Invitation) SetInviteeEmail(val string) {
 func (s *Invitation) SetDisplayName(val string) {
 	s.DisplayName = val
 }
+
+// SetInviter sets the value of Inviter.
+func (s *Invitation) SetInviter(val Member) {
+	s.Inviter = val
+}
+
+func (*Invitation) resendInvitationRes() {}
 
 type Invitations []Invitation
 
@@ -1109,6 +1127,73 @@ func (s *MembersResponse) SetMembers(val []Member) {
 }
 
 func (*MembersResponse) aPIV1MembersGetRes() {}
+
+// RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
+type NotFoundError struct {
+	// The HTTP status code generated for this occurrence of the problem.
+	Status OptInt `json:"status"`
+	// Error type.
+	Type OptString `json:"type"`
+	// A short, human-readable summary of the problem type.
+	Title OptString `json:"title"`
+	// A human-readable explanation specific to this occurrence of the problem.
+	Detail OptString `json:"detail"`
+	// A custom code identifying the specific error.
+	Code OptString `json:"code"`
+}
+
+// GetStatus returns the value of Status.
+func (s *NotFoundError) GetStatus() OptInt {
+	return s.Status
+}
+
+// GetType returns the value of Type.
+func (s *NotFoundError) GetType() OptString {
+	return s.Type
+}
+
+// GetTitle returns the value of Title.
+func (s *NotFoundError) GetTitle() OptString {
+	return s.Title
+}
+
+// GetDetail returns the value of Detail.
+func (s *NotFoundError) GetDetail() OptString {
+	return s.Detail
+}
+
+// GetCode returns the value of Code.
+func (s *NotFoundError) GetCode() OptString {
+	return s.Code
+}
+
+// SetStatus sets the value of Status.
+func (s *NotFoundError) SetStatus(val OptInt) {
+	s.Status = val
+}
+
+// SetType sets the value of Type.
+func (s *NotFoundError) SetType(val OptString) {
+	s.Type = val
+}
+
+// SetTitle sets the value of Title.
+func (s *NotFoundError) SetTitle(val OptString) {
+	s.Title = val
+}
+
+// SetDetail sets the value of Detail.
+func (s *NotFoundError) SetDetail(val OptString) {
+	s.Detail = val
+}
+
+// SetCode sets the value of Code.
+func (s *NotFoundError) SetCode(val OptString) {
+	s.Code = val
+}
+
+func (*NotFoundError) resendInvitationRes() {}
+func (*NotFoundError) revokeInvitationRes() {}
 
 // NewOptAPIV1InvitationsGetStatus returns new OptAPIV1InvitationsGetStatus with value set to v.
 func NewOptAPIV1InvitationsGetStatus(v APIV1InvitationsGetStatus) OptAPIV1InvitationsGetStatus {
@@ -1619,6 +1704,7 @@ func (*UnauthorizedError) aPIV1WorkspacesGetRes()             {}
 func (*UnauthorizedError) aPIV1WorkspacesPostRes()            {}
 func (*UnauthorizedError) acceptInvitationRes()               {}
 func (*UnauthorizedError) inviteMultipleUsersToWorkspaceRes() {}
+func (*UnauthorizedError) resendInvitationRes()               {}
 func (*UnauthorizedError) revokeInvitationRes()               {}
 
 type UpdateMeMemberProfileResponse struct {
