@@ -2,10 +2,15 @@ package me
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"mime"
 	"net/textproto"
 	"path/filepath"
+
+	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
+
+	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/media"
 
@@ -166,11 +171,25 @@ func (c *controller) UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhot
 	tmpPhoID, _ := uuid.NewV7()
 	phoID := media.NewIDFromUUID(tmpPhoID)
 
+	var avatarExt user.AvatarExt
+	switch ext {
+	case ".jpeg":
+		avatarExt = user.AvatarExtJpeg
+	case ".jpg":
+		avatarExt = user.AvatarExtJpg
+	case ".png":
+		avatarExt = user.AvatarExtPng
+	}
+
+	if avatarExt == "" {
+		return c.resl.Error(ctx, domainErr.NewBadRequest(fmt.Sprintf("invalid file type: %s", ext))).(openapi.APIV1MeProfilePhotoPutRes), nil
+	}
+
 	in := meUc.UpdateProfilePhotoInput{
 		AccountID: aID,
 		PhotoID:   phoID,
 		File:      i.File,
-		Ext:       ext,
+		Ext:       avatarExt,
 		Size:      -1,
 	}
 	res, err := c.uc.UpdateProfilePhoto(ctx, in)
