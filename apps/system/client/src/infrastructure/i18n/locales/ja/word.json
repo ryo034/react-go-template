@@ -8,10 +8,13 @@
     "subdomain": "ドメイン",
     "url": "URL",
     "displayName": "表示名",
-    "member": "メンバー",
     "invitation": "招待",
     "goBack": "戻る",
     "inviter": "招待者",
-    "google": "Google"
+    "google": "Google",
+    "owner": "オーナー",
+    "admin": "管理者",
+    "member": "メンバー",
+    "guest": "ゲスト"
   }
 }

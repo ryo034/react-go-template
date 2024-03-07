@@ -1,5 +1,5 @@
-import { ChevronDownIcon } from "lucide-react"
-import { useContext, useLayoutEffect, useRef, useState } from "react"
+import { CheckIcon, ChevronDownIcon } from "lucide-react"
+import { useContext, useLayoutEffect, useRef } from "react"
 import {
   Button,
   Card,
@@ -15,24 +15,22 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Separator,
-  useToast
+  Separator
 } from "shared-ui"
 import { AccountAvatar } from "~/components/account/avatar"
+import { Member, MemberRole, SelectableRoleList } from "~/domain"
 import { ContainerContext } from "~/infrastructure/injector/context"
+import { useSettingsMembersPageMessage } from "./message"
 
 export const settingsMembersPageRoute = "/settings/members"
 
 export const SettingsMembersPage = () => {
   const { store, controller } = useContext(ContainerContext)
-  const { toast } = useToast()
   const me = store.me((state) => state.me)
   const members = store.workspace((s) => s.members)
   const membersIsLoading = store.workspace((s) => s.membersIsLoading)
   const membersRef = useRef(members)
-  // const { toast } = useToast()
-
-  const [isUpdating, setIsUpdating] = useState(false)
+  const message = useSettingsMembersPageMessage()
 
   useLayoutEffect(() => {
     store.workspace.subscribe((v) => {
@@ -49,6 +47,25 @@ export const SettingsMembersPage = () => {
   }, [])
 
   if (!me) return <></>
+
+  const translatedRoles = {
+    owner: {
+      name: message.word.ownerRole
+    },
+    admin: {
+      name: message.word.adminRole
+    },
+    member: {
+      name: message.word.memberRole
+    },
+    guest: {
+      name: message.word.guestRole
+    }
+  }
+
+  const onSelectRole = async (member: Member, role: MemberRole) => {
+    console.log("onSelectRole", member, role)
+  }
 
   return (
     <div className="space-y-6">
@@ -84,13 +101,14 @@ export const SettingsMembersPage = () => {
                 </div>
                 {m.isOwner ? (
                   <Button variant="outline" className="ml-auto" disabled>
-                    Owner
+                    {message.word.ownerRole}
                   </Button>
                 ) : (
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button variant="outline" className="ml-auto">
-                        {m.role} <ChevronDownIcon className="ml-2 h-4 w-4 text-muted-foreground" />
+                        {translatedRoles[m.role].name}
+                        <ChevronDownIcon className="ml-2 h-4 w-4 text-muted-foreground" />
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="p-0" align="end">
@@ -98,18 +116,20 @@ export const SettingsMembersPage = () => {
                         <CommandList>
                           <CommandEmpty>No roles found.</CommandEmpty>
                           <CommandGroup>
-                            <CommandItem className="teamaspace-y-1 flex flex-col items-start px-4 py-2">
-                              <p>Guest</p>
-                              <p className="text-sm text-muted-foreground">Can view and comment.</p>
-                            </CommandItem>
-                            <CommandItem className="teamaspace-y-1 flex flex-col items-start px-4 py-2">
-                              <p>Member</p>
-                              <p className="text-sm text-muted-foreground">Can view, comment and edit.</p>
-                            </CommandItem>
-                            <CommandItem className="teamaspace-y-1 flex flex-col items-start px-4 py-2">
-                              <p>Admin</p>
-                              <p className="text-sm text-muted-foreground">Can view, comment and manage billing.</p>
-                            </CommandItem>
+                            {SelectableRoleList.map((role) => {
+                              return (
+                                <CommandItem
+                                  className="space-y-1 flex flex-col items-start px-4 py-2 cursor-pointer"
+                                  onSelect={(v) => onSelectRole(m, role)}
+                                  key={`${m.id.value.asString}-selectRole-${role}`}
+                                >
+                                  <p className="flex items-center">
+                                    <span className="pr-2">{translatedRoles[role].name}</span>
+                                    {role !== m.role ? null : <CheckIcon size={16} />}
+                                  </p>
+                                </CommandItem>
+                              )
+                            })}
                           </CommandGroup>
                         </CommandList>
                       </Command>

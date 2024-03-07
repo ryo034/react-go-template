@@ -66,10 +66,13 @@ export const i18nKeys = {
     accountName: `${i18nRootKeys.word}.accountName`,
     subdomain: `${i18nRootKeys.word}.subdomain`,
     displayName: `${i18nRootKeys.word}.displayName`,
-    member: `${i18nRootKeys.word}.member`,
     goBack: `${i18nRootKeys.word}.goBack`,
     inviter: `${i18nRootKeys.word}.inviter`,
-    google: `${i18nRootKeys.word}.google`
+    google: `${i18nRootKeys.word}.google`,
+    owner: `${i18nRootKeys.word}.owner`,
+    admin: `${i18nRootKeys.word}.admin`,
+    member: `${i18nRootKeys.word}.member`,
+    guest: `${i18nRootKeys.word}.guest`
   },
   action: {
     submit: `${i18nRootKeys.action}.submit`,

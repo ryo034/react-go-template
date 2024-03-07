@@ -8,10 +8,13 @@
     "subdomain": "Domain",
     "url": "URL",
     "displayName": "Display Name",
-    "member": "Member",
     "invitation": "Invitation",
     "goBack": "Go back",
     "inviter": "inviter",
-    "google": "Google"
+    "google": "Google",
+    "owner": "Owner",
+    "admin": "Admin",
+    "member": "Member",
+    "guest": "Guest"
   }
 }
