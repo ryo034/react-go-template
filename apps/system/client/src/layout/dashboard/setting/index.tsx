@@ -20,6 +20,10 @@ const sidebarNavWorkspaceSettingItems = [
     href: routeMap.settingsAccount
   },
   {
+    title: "Members",
+    href: routeMap.settingsMembers
+  },
+  {
     title: "Invitation",
     href: routeMap.settingsInvitation
   }

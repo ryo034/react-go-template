@@ -28,4 +28,8 @@ export class Member extends Entity<Props> {
   get role(): MemberRole {
     return this.value.role
   }
+
+  get isOwner(): boolean {
+    return this.value.role === "owner"
+  }
 }

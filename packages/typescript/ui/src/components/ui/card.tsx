@@ -2,11 +2,7 @@ import { HTMLAttributes, forwardRef } from "react"
 import { cn } from "~/infrastructure/tailwindcss"
 
 const Card = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("rounded-lg border bg-card text-card-foreground shadow-sm space-y-6 p-6", className)}
-    {...props}
-  />
+  <div ref={ref} className={cn("rounded-lg border bg-card text-card-foreground shadow-sm p-6", className)} {...props} />
 ))
 Card.displayName = "Card"
 

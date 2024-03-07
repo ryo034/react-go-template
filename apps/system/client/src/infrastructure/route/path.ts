@@ -9,6 +9,7 @@ import { receivedInvitationsPageRoute } from "~/pages/receivedInvitation"
 import { settingsAccountPageRoute } from "~/pages/settings/account"
 import { settingsAppearancePageRoute } from "~/pages/settings/appearance"
 import { settingsInvitationPageRoute } from "~/pages/settings/invitation"
+import { settingsMembersPageRoute } from "~/pages/settings/members"
 import { settingsProfilePageRoute } from "~/pages/settings/profile"
 
 export const routeMap = {
@@ -24,6 +25,7 @@ export const routeMap = {
   settingsProfile: settingsProfilePageRoute,
   settingsAccount: settingsAccountPageRoute,
   settingsInvitation: settingsInvitationPageRoute,
+  settingsMembers: settingsMembersPageRoute,
   settingsAppearance: settingsAppearancePageRoute,
   members: membersPageRoute
 } as const
