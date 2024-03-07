@@ -15,9 +15,8 @@
 * トーストメッセージ"Failed to update role"が表示されている
 
 ## 管理者権限を持つユーザーは、他のメンバーの権限を更新することができる
-tags: stateful
 * ログイン画面を開く
-* メールアドレス"update_role_admin@example.com"で始める
+* メールアドレス"update_role_admin_2@example.com"で始める
 * ホーム画面が表示されている
 * 設定のメンバー設定を開く
 * メンバー設定のメンバー"update_role_member@example.com"の権限が"メンバー"である

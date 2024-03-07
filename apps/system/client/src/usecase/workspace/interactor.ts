@@ -33,10 +33,12 @@ export class WorkspaceInteractor implements WorkspaceUseCase {
   async findAllMembers(): Promise<Error | null> {
     this.presenter.setMembersIsLoading(true)
     const res = await this.repository.findAllMembers()
+    console.log("res.value", res)
     if (res.isErr) {
       this.presenter.setMembersIsLoading(false)
       return res.error
     }
+
     this.presenter.setMembers(res.value)
     this.presenter.setMembersIsLoading(false)
     return null
