@@ -299,10 +299,7 @@ export interface components {
       workspace: components["schemas"]["Workspace"];
     };
     Member: {
-      /**
-       * @description base32 encoded UUID
-       * @example 3VZ6ZJ2Z6VZ6ZJ2Z
-       */
+      /** Format: uuid */
       id: string;
       profile: components["schemas"]["MemberProfile"];
       user: components["schemas"]["User"];
@@ -847,7 +844,7 @@ export interface components {
       content: {
         "application/json": {
           /** @enum {string} */
-          role: "owner" | "admin" | "member" | "guest";
+          role: "admin" | "member" | "guest";
         };
       };
     };

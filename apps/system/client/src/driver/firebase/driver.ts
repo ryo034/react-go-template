@@ -9,6 +9,7 @@ import {
 } from "firebase/auth"
 import { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
+import { AccountId } from "~/domain"
 import { CustomToken } from "~/domain/auth"
 import { AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
 import { PromiseResult } from "~/infrastructure/shared"
@@ -31,6 +32,7 @@ export interface AuthProviderDriver {
   signOut(): PromiseResult<null, Error>
   signInWithCustomToken(customToken: CustomToken): PromiseResult<UserCredential, Error>
   startWithGoogle(): PromiseResult<null, Error>
+  refreshToken(): PromiseResult<null, Error>
 }
 
 export class FirebaseDriver implements AuthProviderDriver {
@@ -62,6 +64,18 @@ export class FirebaseDriver implements AuthProviderDriver {
         return Result.err(new AuthProviderCurrentUserNotFoundError("currentUser is null"))
       }
       await reload(this.client.currentUser)
+      return Result.ok(null)
+    } catch (e) {
+      return Result.err(this.errorHandler.adapt(e))
+    }
+  }
+
+  async refreshToken(): PromiseResult<null, Error> {
+    try {
+      if (this.client.currentUser === null) {
+        return Result.err(new AuthProviderCurrentUserNotFoundError("currentUser is null"))
+      }
+      await this.client.currentUser.getIdToken(true)
       return Result.ok(null)
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))

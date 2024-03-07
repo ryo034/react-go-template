@@ -172,10 +172,12 @@ CREATE TYPE member_role_type AS ENUM ('owner', 'admin', 'member', 'guest');
 CREATE TABLE member_roles (
   member_role_id uuid NOT NULL,
   member_id uuid NOT NULL,
+  assigned_by uuid NOT NULL,
   role member_role_type NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  assigned_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (member_role_id),
-  CONSTRAINT fk_member_roles_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id)
+  CONSTRAINT fk_member_roles_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id),
+  CONSTRAINT fk_member_roles_members_assigned_by FOREIGN KEY (assigned_by) REFERENCES members(member_id)
 );
 
 CREATE TABLE member_latest_roles (

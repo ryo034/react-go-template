@@ -583,8 +583,6 @@ func (s *APIV1MembersMemberIdRolePutReqRole) Decode(d *jx.Decoder) error {
 	}
 	// Try to use constant string.
 	switch APIV1MembersMemberIdRolePutReqRole(v) {
-	case APIV1MembersMemberIdRolePutReqRoleOwner:
-		*s = APIV1MembersMemberIdRolePutReqRoleOwner
 	case APIV1MembersMemberIdRolePutReqRoleAdmin:
 		*s = APIV1MembersMemberIdRolePutReqRoleAdmin
 	case APIV1MembersMemberIdRolePutReqRoleMember:
@@ -2931,7 +2929,7 @@ func (s *Member) Encode(e *jx.Encoder) {
 func (s *Member) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("id")
-		e.Str(s.ID)
+		json.EncodeUUID(e, s.ID)
 	}
 	{
 		e.FieldStart("profile")
@@ -2966,8 +2964,8 @@ func (s *Member) Decode(d *jx.Decoder) error {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				v, err := d.Str()
-				s.ID = string(v)
+				v, err := json.DecodeUUID(d)
+				s.ID = v
 				if err != nil {
 					return err
 				}

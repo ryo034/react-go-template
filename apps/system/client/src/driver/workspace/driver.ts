@@ -1,12 +1,17 @@
 import { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
-import { Invitation, Invitees, WorkspaceCreateInput } from "~/domain"
+import { Invitation, Invitees, MemberId, SelectableRole, WorkspaceCreateInput } from "~/domain"
 import { components } from "~/generated/schema/openapi/systemApi"
 import { SystemAPIClient } from "~/infrastructure/openapi/client"
 import { PromiseResult } from "~/infrastructure/shared/result"
+import { FirebaseDriver } from "../firebase/driver"
 
 export class WorkspaceDriver {
-  constructor(private readonly client: SystemAPIClient, private readonly errorHandler: ApiErrorHandler) {}
+  constructor(
+    private readonly client: SystemAPIClient,
+    private readonly errorHandler: ApiErrorHandler,
+    private readonly fbDriver: FirebaseDriver
+  ) {}
 
   async create(i: WorkspaceCreateInput): PromiseResult<components["schemas"]["Workspace"], Error> {
     try {
@@ -72,6 +77,22 @@ export class WorkspaceDriver {
         params: { path: { invitationId: invitation.id.value.asString } }
       })
       return res.data ? Result.ok(res.data) : Result.err(this.errorHandler.adapt(res))
+    } catch (e) {
+      return Result.err(this.errorHandler.adapt(e))
+    }
+  }
+
+  async updateMemberRole(
+    memberId: MemberId,
+    role: SelectableRole
+  ): PromiseResult<components["schemas"]["Member"], Error> {
+    try {
+      const res = await this.client.PUT("/api/v1/members/{memberId}/role", {
+        params: { path: { memberId: memberId.value.asString } },
+        body: { role }
+      })
+      await this.fbDriver.refreshToken()
+      return res.data ? Result.ok(res.data.member) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))
     }

@@ -163,7 +163,6 @@ func (s *APIV1MembersMemberIdRolePutReq) SetRole(val APIV1MembersMemberIdRolePut
 type APIV1MembersMemberIdRolePutReqRole string
 
 const (
-	APIV1MembersMemberIdRolePutReqRoleOwner  APIV1MembersMemberIdRolePutReqRole = "owner"
 	APIV1MembersMemberIdRolePutReqRoleAdmin  APIV1MembersMemberIdRolePutReqRole = "admin"
 	APIV1MembersMemberIdRolePutReqRoleMember APIV1MembersMemberIdRolePutReqRole = "member"
 	APIV1MembersMemberIdRolePutReqRoleGuest  APIV1MembersMemberIdRolePutReqRole = "guest"
@@ -172,7 +171,6 @@ const (
 // AllValues returns all APIV1MembersMemberIdRolePutReqRole values.
 func (APIV1MembersMemberIdRolePutReqRole) AllValues() []APIV1MembersMemberIdRolePutReqRole {
 	return []APIV1MembersMemberIdRolePutReqRole{
-		APIV1MembersMemberIdRolePutReqRoleOwner,
 		APIV1MembersMemberIdRolePutReqRoleAdmin,
 		APIV1MembersMemberIdRolePutReqRoleMember,
 		APIV1MembersMemberIdRolePutReqRoleGuest,
@@ -182,8 +180,6 @@ func (APIV1MembersMemberIdRolePutReqRole) AllValues() []APIV1MembersMemberIdRole
 // MarshalText implements encoding.TextMarshaler.
 func (s APIV1MembersMemberIdRolePutReqRole) MarshalText() ([]byte, error) {
 	switch s {
-	case APIV1MembersMemberIdRolePutReqRoleOwner:
-		return []byte(s), nil
 	case APIV1MembersMemberIdRolePutReqRoleAdmin:
 		return []byte(s), nil
 	case APIV1MembersMemberIdRolePutReqRoleMember:
@@ -198,9 +194,6 @@ func (s APIV1MembersMemberIdRolePutReqRole) MarshalText() ([]byte, error) {
 // UnmarshalText implements encoding.TextUnmarshaler.
 func (s *APIV1MembersMemberIdRolePutReqRole) UnmarshalText(data []byte) error {
 	switch APIV1MembersMemberIdRolePutReqRole(data) {
-	case APIV1MembersMemberIdRolePutReqRoleOwner:
-		*s = APIV1MembersMemberIdRolePutReqRoleOwner
-		return nil
 	case APIV1MembersMemberIdRolePutReqRoleAdmin:
 		*s = APIV1MembersMemberIdRolePutReqRoleAdmin
 		return nil
@@ -1042,15 +1035,14 @@ func (*MeResponse) aPIV1MeGetRes() {}
 
 // Ref: #/components/schemas/Member
 type Member struct {
-	// Base32 encoded UUID.
-	ID      string        `json:"id"`
+	ID      uuid.UUID     `json:"id"`
 	Profile MemberProfile `json:"profile"`
 	User    User          `json:"user"`
 	Role    MemberRole    `json:"role"`
 }
 
 // GetID returns the value of ID.
-func (s *Member) GetID() string {
+func (s *Member) GetID() uuid.UUID {
 	return s.ID
 }
 
@@ -1070,7 +1062,7 @@ func (s *Member) GetRole() MemberRole {
 }
 
 // SetID sets the value of ID.
-func (s *Member) SetID(val string) {
+func (s *Member) SetID(val uuid.UUID) {
 	s.ID = val
 }
 

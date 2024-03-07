@@ -106,8 +106,6 @@ func (s *APIV1MembersMemberIdRolePutReq) Validate() error {
 
 func (s APIV1MembersMemberIdRolePutReqRole) Validate() error {
 	switch s {
-	case "owner":
-		return nil
 	case "admin":
 		return nil
 	case "member":

@@ -33,16 +33,23 @@ func Test_driver_FindByToken_OK(t *testing.T) {
 	anID := uuid.MustParse("018e088e-fd36-722d-a927-8cfd34a642bd")
 	aeID := uuid.MustParse("018e09c2-9924-7048-9f08-afa2f3ea5b53")
 
+	mrID := uuid.MustParse("018df76b-260d-759f-9b47-fb5f611f5da6")
+
 	invitedBy := &models.Member{
 		MemberID:    mID,
 		WorkspaceID: wID,
 		AccountID:   inviteeAccountID,
 		CreatedAt:   defaultTime,
-		Role: &models.MemberRole{
-			MemberRoleID: uuid.MustParse("018df76b-260d-759f-9b47-fb5f611f5da6"),
+		Role: &models.MemberLatestRole{
+			MemberRoleID: mrID,
 			MemberID:     mID,
-			Role:         "owner",
-			CreatedAt:    defaultTime,
+			MemberRole: &models.MemberRole{
+				MemberRoleID: mrID,
+				MemberID:     mID,
+				Role:         "owner",
+				AssignedAt:   defaultTime,
+				AssignedBy:   mID,
+			},
 		},
 		Account: &models.Account{
 			AccountID: inviteeAccountID,
@@ -82,7 +89,7 @@ func Test_driver_FindByToken_OK(t *testing.T) {
 			MemberID:       mID,
 			MemberIDNumber: "DEV-12345",
 			DisplayName:    "John Doe",
-			Bio:            "John Doe is a passionate software engineer with 8 years of experience specializing in web development, particularly with React and Node.js. A graduate from MIT with a strong focus on clean architecture and Agile methodologies, John has successfully led multiple projects, from innovative startups to established tech giants. He's a firm believer in continuous learning, contributing regularly to open-source projects, and sharing insights through tech blogs and meetups. Outside of work, John enjoys hiking 🚶‍♂️, drone photography 📸, and playing the guitar 🎸. He's committed to using technology to drive positive social change.",
+			Bio:            "bio",
 			CreatedAt:      defaultTime,
 			UpdatedAt:      defaultTime,
 			Member:         nil,

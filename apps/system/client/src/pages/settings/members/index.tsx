@@ -1,5 +1,5 @@
 import { CheckIcon, ChevronDownIcon } from "lucide-react"
-import { useContext, useLayoutEffect, useRef } from "react"
+import { useContext, useLayoutEffect, useRef, useState } from "react"
 import {
   Button,
   Card,
@@ -15,10 +15,11 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Separator
+  Separator,
+  useToast
 } from "shared-ui"
 import { AccountAvatar } from "~/components/account/avatar"
-import { Member, MemberRole, SelectableRoleList } from "~/domain"
+import { Member, MemberRole, SelectableRole, SelectableRoleList } from "~/domain"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { useSettingsMembersPageMessage } from "./message"
 
@@ -26,11 +27,14 @@ export const settingsMembersPageRoute = "/settings/members"
 
 export const SettingsMembersPage = () => {
   const { store, controller } = useContext(ContainerContext)
+  const { toast } = useToast()
   const me = store.me((state) => state.me)
   const members = store.workspace((s) => s.members)
   const membersIsLoading = store.workspace((s) => s.membersIsLoading)
   const membersRef = useRef(members)
   const message = useSettingsMembersPageMessage()
+
+  const [isUpdating, setIsUpdating] = useState(false)
 
   useLayoutEffect(() => {
     store.workspace.subscribe((v) => {
@@ -63,8 +67,14 @@ export const SettingsMembersPage = () => {
     }
   }
 
-  const onSelectRole = async (member: Member, role: MemberRole) => {
-    console.log("onSelectRole", member, role)
+  const onSelectRole = async (member: Member, role: SelectableRole) => {
+    setIsUpdating(true)
+    const err = await controller.workspace.updateMemberRole(member.id, role)
+    setIsUpdating(false)
+    if (err) {
+      toast({ title: "Failed to update role", variant: "destructive" })
+      return
+    }
   }
 
   return (
@@ -82,11 +92,15 @@ export const SettingsMembersPage = () => {
           <CardTitle>Team Members</CardTitle>
           <CardDescription>Invite your team members to collaborate.</CardDescription>
         </CardHeader>
-        <CardContent className="grid gap-6">
+        <CardContent className="grid gap-6" data-testid="settingMembers">
           {membersIsLoading && <p>loading...</p>}
           {!membersIsLoading &&
             membersRef.current.values.map((m) => (
-              <div className="flex items-center justify-between space-x-4" key={m.id.value.asString}>
+              <div
+                className="flex items-center justify-between space-x-4"
+                key={m.id.value.asString}
+                data-testid={`settingMember-${m.user.email.value}`}
+              >
                 <div className="flex items-center space-x-4">
                   <AccountAvatar
                     alt={`${m.user.name?.value} avatar`}
@@ -106,14 +120,14 @@ export const SettingsMembersPage = () => {
                 ) : (
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" className="ml-auto">
+                      <Button variant="outline" className="ml-auto" disabled={isUpdating}>
                         {translatedRoles[m.role].name}
                         <ChevronDownIcon className="ml-2 h-4 w-4 text-muted-foreground" />
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="p-0" align="end">
                       <Command>
-                        <CommandList>
+                        <CommandList data-testid="selectMemberRole">
                           <CommandEmpty>No roles found.</CommandEmpty>
                           <CommandGroup>
                             {SelectableRoleList.map((role) => {

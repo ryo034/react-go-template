@@ -26,10 +26,7 @@ const systemAccountID = "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
 var accountIDUUID = uuid.MustParse(systemAccountID)
 
 func Test_driver_Find_OK(t *testing.T) {
-	defaultTime, err := time.Parse("2006-01-02 15:04:05", "2024-01-10 12:00:00")
-	if err != nil {
-		t.Fatalf("failed to parse defaultTime: %v", err)
-	}
+	defaultTime, _ := time.Parse("2006-01-02 15:04:05", "2024-01-10 12:00:00")
 	memberID := uuid.MustParse("377eba35-5560-4f48-a99d-19cbd6a82b0d")
 
 	workspaceID := uuid.MustParse("c1bd2603-b9cd-4f84-8b83-3548f6ae150b")
@@ -37,16 +34,23 @@ func Test_driver_Find_OK(t *testing.T) {
 	anID := uuid.MustParse("018e088e-fd36-722d-a927-8cfd34a642bd")
 	aeID := uuid.MustParse("018e09c2-9924-7048-9f08-afa2f3ea5b53")
 
+	mrID := uuid.MustParse("018df76b-260d-759f-9b47-fb5f611f5da6")
+
 	want := &models.Member{
 		MemberID:    memberID,
 		WorkspaceID: wID.Value(),
 		AccountID:   accountIDUUID,
 		CreatedAt:   defaultTime,
-		Role: &models.MemberRole{
-			MemberRoleID: uuid.MustParse("018df76b-260d-759f-9b47-fb5f611f5da6"),
+		Role: &models.MemberLatestRole{
+			MemberRoleID: mrID,
 			MemberID:     memberID,
-			Role:         "owner",
-			CreatedAt:    defaultTime,
+			MemberRole: &models.MemberRole{
+				MemberRoleID: mrID,
+				MemberID:     memberID,
+				Role:         "owner",
+				AssignedAt:   defaultTime,
+				AssignedBy:   memberID,
+			},
 		},
 		Account: &models.Account{
 			AccountID: accountIDUUID,
@@ -87,7 +91,7 @@ func Test_driver_Find_OK(t *testing.T) {
 			MemberID:       memberID,
 			MemberIDNumber: "DEV-12345",
 			DisplayName:    "John Doe",
-			Bio:            "John Doe is a passionate software engineer with 8 years of experience specializing in web development, particularly with React and Node.js. A graduate from MIT with a strong focus on clean architecture and Agile methodologies, John has successfully led multiple projects, from innovative startups to established tech giants. He's a firm believer in continuous learning, contributing regularly to open-source projects, and sharing insights through tech blogs and meetups. Outside of work, John enjoys hiking 🚶‍♂️, drone photography 📸, and playing the guitar 🎸. He's committed to using technology to drive positive social change.",
+			Bio:            "bio",
 			CreatedAt:      defaultTime,
 			UpdatedAt:      defaultTime,
 		},

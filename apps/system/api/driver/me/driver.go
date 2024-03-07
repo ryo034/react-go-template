@@ -44,6 +44,7 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*models
 		Model(mem).
 		Relation("Profile").
 		Relation("Role").
+		Relation("Role.MemberRole").
 		Relation("Workspace").
 		Relation("Workspace.Detail").
 		Relation("Account").

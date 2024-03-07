@@ -6,7 +6,7 @@
     "test:stateless-tmp": "gauge run -n=5 --parallel --only '!unimplemented & !stateful' specs",
     "test:stateful": "gauge run --max-retries-count=2 --tags '!unimplemented & stateful' specs",
     "test-auth": "gauge run --max-retries-count=1 specs/me/auth/create.spec",
-    "test-m": "gauge run --max-retries-count=1 specs/me/auth/invitation.spec:85"
+    "test-m": "gauge run --max-retries-count=1 specs/workspace/member/updateRole.spec"
   },
   "dependencies": {
     "firebase": "^10.8.1",

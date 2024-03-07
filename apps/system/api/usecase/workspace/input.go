@@ -71,6 +71,7 @@ type FindAllInvitationInput struct {
 }
 
 type UpdateMemberRoleInput struct {
-	MemberID member.ID
-	Role     member.Role
+	AccountID account.ID
+	MemberID  member.ID
+	Role      member.Role
 }

@@ -520,8 +520,7 @@ components:
       properties:
         id:
           type: string
-          description: base32 encoded UUID
-          example: 3VZ6ZJ2Z6VZ6ZJ2Z
+          format: uuid
         profile:
           $ref: '#/components/schemas/MemberProfile'
         user:
@@ -792,7 +791,6 @@ components:
               role:
                 type: string
                 enum:
-                  - owner
                   - admin
                   - member
                   - guest

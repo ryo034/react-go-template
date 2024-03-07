@@ -24,7 +24,6 @@ UpdateMemberRole:
           role:
             type: string
             enum:
-              - owner
               - admin
               - member
               - guest

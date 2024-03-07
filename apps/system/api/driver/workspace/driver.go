@@ -18,7 +18,7 @@ type Driver interface {
 	FindAll(ctx context.Context, exec bun.IDB, aID account.ID) (models.Workspaces, error)
 	Create(ctx context.Context, exec bun.IDB, w *workspace.Workspace) (*models.Workspace, error)
 	AddMember(ctx context.Context, exec bun.IDB, w *workspace.Workspace, m *member.Member) (*models.Member, error)
-	UpdateMemberRole(ctx context.Context, exec bun.IDB, m *member.Member) error
+	UpdateMemberRole(ctx context.Context, exec bun.IDB, assignor *member.Member, m *member.Member) error
 	FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error)
 	FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace.ID) (models.Members, error)
 	InviteMembers(ctx context.Context, exec bun.IDB, inviter workspace.Inviter, is invitation.Invitations) error
@@ -116,6 +116,7 @@ func (d *driver) AddMember(ctx context.Context, exec bun.IDB, w *workspace.Works
 		MemberRoleID: mrID,
 		MemberID:     m.ID().Value(),
 		Role:         adaptMemberRole(m.Role()),
+		AssignedBy:   m.ID().Value(),
 	}
 	if _, err := exec.NewInsert().Model(mr).Exec(ctx); err != nil {
 		return nil, err
@@ -132,7 +133,7 @@ func (d *driver) AddMember(ctx context.Context, exec bun.IDB, w *workspace.Works
 	return mm, nil
 }
 
-func (d *driver) UpdateMemberRole(ctx context.Context, exec bun.IDB, m *member.Member) error {
+func (d *driver) UpdateMemberRole(ctx context.Context, exec bun.IDB, assignor *member.Member, m *member.Member) error {
 	mrID, err := uuid.NewV7()
 	if err != nil {
 		return err
@@ -142,6 +143,7 @@ func (d *driver) UpdateMemberRole(ctx context.Context, exec bun.IDB, m *member.M
 		MemberRoleID: mrID,
 		MemberID:     m.ID().Value(),
 		Role:         adaptMemberRole(m.Role()),
+		AssignedBy:   assignor.ID().Value(),
 	}
 
 	if _, err = exec.NewDelete().Model(&models.MemberLatestRole{}).Where("member_id = ?", m.ID().Value()).Exec(ctx); err != nil {
@@ -166,6 +168,7 @@ func (d *driver) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, w
 		Model(m).
 		Relation("Profile").
 		Relation("Role").
+		Relation("Role.MemberRole").
 		Relation("Account").
 		Relation("Account.AuthProviders").
 		Relation("Account.Name").
@@ -194,6 +197,7 @@ func (d *driver) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace
 		Model(&ms).
 		Relation("Profile").
 		Relation("Role").
+		Relation("Role.MemberRole").
 		Relation("Account").
 		Relation("Account.AuthProviders").
 		Relation("Account.Name").

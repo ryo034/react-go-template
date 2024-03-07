@@ -17,4 +17,23 @@ export default class WorkspaceInfoStep {
     const text = await target.textContent()
     expect(text).toBe(displayName)
   }
+
+  @Step("メンバー設定のメンバー<email>の権限が<role>である")
+  async checkMemberRole(email: string, role: string) {
+    const target = page.getByTestId(`settingMember-${email}`).locator("button").getByText(role)
+    await target.waitFor()
+    expect(target).toBeVisible()
+  }
+
+  @Step("メンバー設定のメンバー<email>の権限変更ボタンをクリック")
+  async clickRoleChangeButton(email: string) {
+    const target = page.getByTestId(`settingMember-${email}`).locator("button")
+    await target.waitFor()
+    await target.click()
+  }
+
+  @Step("権限選択ポップアップの<role>をクリック")
+  async clickRoleSelectButton(role: string) {
+    await page.getByTestId("selectMemberRole").getByText(role).click()
+  }
 }

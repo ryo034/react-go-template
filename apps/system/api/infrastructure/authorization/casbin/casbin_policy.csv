@@ -1,0 +1,12 @@
+p,owner,*,*,allow
+p,*,/api/v1/me,GET,allow
+p,*,/api/v1/me/profile,PUT,allow
+p,*,/api/v1/me/member/profile,PUT,allow
+p,*,/api/v1/workspaces,*,allow
+p,*,/api/v1/members,GET,allow
+p,*,/api/v1/invitations,GET,allow
+p,*,/api/v1/members/invitations/:invitationId/accept,*,allow
+p,admin,/api/v1/members/invitations/bulk,POST,allow
+p,admin,/api/v1/members/invitations/:invitationId/revoke,POST,allow
+p,admin,/api/v1/members/invitations/:invitationId/resend,POST,allow
+p,admin,/api/v1/members/:memberId/role,PUT,allow

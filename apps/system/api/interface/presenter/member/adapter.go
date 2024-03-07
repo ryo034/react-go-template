@@ -56,7 +56,7 @@ func (a *adapter) Adapt(m *member.Member) openapi.Member {
 	}
 
 	return openapi.Member{
-		ID:   m.ID().ToFriendlyString(),
+		ID:   m.ID().Value(),
 		User: a.ua.Adapt(m.User()),
 		Role: a.adaptRole(m.Role()),
 		Profile: openapi.MemberProfile{

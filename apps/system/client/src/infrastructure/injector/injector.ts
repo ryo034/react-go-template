@@ -54,7 +54,7 @@ const setupDriver = () => {
     theme: new ThemeDriver(ls),
     me: new MeDriver(openapiFetchClient, apiErrorHandler),
     auth: new AuthDriver(openapiFetchClient, apiErrorHandler),
-    workspace: new WorkspaceDriver(openapiFetchClient, apiErrorHandler)
+    workspace: new WorkspaceDriver(openapiFetchClient, apiErrorHandler, firebase)
   }
 }
 

@@ -1,4 +1,4 @@
-import { Invitation, WorkspaceRepository } from "~/domain"
+import { Invitation, MemberId, SelectableRole, WorkspaceRepository } from "~/domain"
 import { CreateWorkspaceInput, InviteMembersInput, MeUseCase, WorkspaceUseCaseOutput } from "~/usecase"
 
 export interface WorkspaceUseCase {
@@ -8,6 +8,7 @@ export interface WorkspaceUseCase {
   findAllInvitations(): Promise<Error | null>
   resendInvitation(i: Invitation): Promise<Error | null>
   revokeInvitation(i: Invitation): Promise<Error | null>
+  updateMemberRole(memberId: MemberId, role: SelectableRole): Promise<Error | null>
 }
 
 export class WorkspaceInteractor implements WorkspaceUseCase {
@@ -74,6 +75,15 @@ export class WorkspaceInteractor implements WorkspaceUseCase {
       return res.error
     }
     this.presenter.setInvitations(res.value)
+    return null
+  }
+
+  async updateMemberRole(memberId: MemberId, role: SelectableRole): Promise<Error | null> {
+    const res = await this.repository.updateMemberRole(memberId, role)
+    if (res.isErr) {
+      return res.error
+    }
+    this.presenter.updateMember(res.value)
     return null
   }
 }

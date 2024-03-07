@@ -1,4 +1,4 @@
-import { Invitations, Members } from "~/domain"
+import { Invitations, Member, Members } from "~/domain"
 import { InvitationsStoreType } from "~/store/invitations/store"
 import { WorkspaceStoreType } from "~/store/workspace/store"
 import { WorkspaceUseCaseOutput } from "~/usecase"
@@ -8,6 +8,16 @@ export class WorkspacePresenter implements WorkspaceUseCaseOutput {
 
   setMembers(vs: Members) {
     this.store.getState().setMembers(vs)
+  }
+
+  updateMember(m: Member) {
+    const tmpMembers = [...this.store.getState().members.values]
+    const targetIndex = tmpMembers.findIndex((v) => v.id.value.asString === m.id.value.asString)
+    if (targetIndex === -1) {
+      return
+    }
+    tmpMembers[targetIndex] = m
+    this.store.getState().setMembers(Members.create(tmpMembers))
   }
 
   setMembersIsLoading(v: boolean) {
@@ -24,9 +34,5 @@ export class WorkspacePresenter implements WorkspaceUseCaseOutput {
 
   setInvitationsIsLoading(v: boolean) {
     this.invitationsStore.getState().setInvitationsIsLoading(v)
-  }
-
-  setInvitationsIsUpdating(v: boolean) {
-    this.invitationsStore.getState().setInvitationsIsUpdating(v)
   }
 }

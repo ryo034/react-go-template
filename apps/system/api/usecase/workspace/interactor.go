@@ -221,8 +221,12 @@ func (u *useCase) FindAllInvitation(ctx context.Context, i FindAllInvitationInpu
 }
 
 func (u *useCase) UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput) (openapi.APIV1MembersMemberIdRolePutRes, error) {
-	p := u.dbp.GetExecutor(ctx, false)
-	m, err := u.meRepo.Find(ctx, p, i.MemberID)
+	exec := u.dbp.GetExecutor(ctx, false)
+	meRes, err := u.meRepo.FindLastLogin(ctx, exec, i.AccountID)
+	if err != nil {
+		return nil, err
+	}
+	m, err := u.meRepo.Find(ctx, exec, i.MemberID)
 	if err != nil {
 		return nil, err
 	}
@@ -237,9 +241,14 @@ func (u *useCase) UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput)
 		return nil, err
 	}
 	fn := func() (*member.Member, error) {
-		res, err := u.repo.UpdateMemberRole(pr, p, m.Member())
+		res, err := u.repo.UpdateMemberRole(pr, exec, meRes.Member(), m.Member())
 		if err != nil {
 			return nil, err
+		}
+		if meRes.SameAs(m) {
+			if err = u.meRepo.SetMe(pr, m); err != nil {
+				return nil, err
+			}
 		}
 		return res, nil
 	}

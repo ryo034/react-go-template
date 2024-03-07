@@ -1,4 +1,14 @@
-import { Invitation, Invitations, Invitees, Members, Workspace, WorkspaceSubdomain } from "~/domain"
+import {
+  Invitation,
+  Invitations,
+  Invitees,
+  Member,
+  MemberId,
+  Members,
+  SelectableRole,
+  Workspace,
+  WorkspaceSubdomain
+} from "~/domain"
 import { PromiseResult } from "~/infrastructure/shared"
 
 export interface WorkspaceCreateInput {
@@ -12,4 +22,5 @@ export interface WorkspaceRepository {
   findAllInvitations(): PromiseResult<Invitations, Error>
   resendInvitation(invitation: Invitation): PromiseResult<null, Error>
   revokeInvitation(invitation: Invitation): PromiseResult<Invitations, Error>
+  updateMemberRole(memberId: MemberId, role: SelectableRole): PromiseResult<Member, Error>
 }

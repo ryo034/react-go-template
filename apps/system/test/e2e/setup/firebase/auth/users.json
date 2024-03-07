@@ -2,6 +2,46 @@
   "kind": "identitytoolkit#DownloadAccountResponse",
   "users": [
     {
+      "localId": "018e18ba-dc87-705a-9ba9-2db0f8ead09f",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "UpdateRole Owner",
+      "validSince": "1709725349",
+      "email": "update_role_owner@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "018e18ba-dc87-7e16-83a6-e8ffccf96552",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "UpdateRole Admin",
+      "validSince": "1709725349",
+      "email": "update_role_admin@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "018e18ba-dc87-7758-929e-cf1d52320f0c",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "UpdateRole Member",
+      "validSince": "1709725349",
+      "email": "update_role_member@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "018e18ba-dc87-739e-9206-47a7b99de453",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "UpdateRole Guest",
+      "validSince": "1709725349",
+      "email": "update_role_guest@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
       "localId": "018d6189-9ad0-7b72-801b-1e0de0d3c214",
       "createdAt": "1706825570522",
       "lastLoginAt": "1706825570547",

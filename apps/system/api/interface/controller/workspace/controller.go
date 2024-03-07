@@ -200,13 +200,18 @@ func (c *controller) FindAllInvitation(ctx context.Context, i FindAllInvitationI
 }
 
 func (c *controller) UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput) (openapi.APIV1MembersMemberIdRolePutRes, error) {
+	aID, err := c.co.GetUID(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MembersMemberIdRolePutRes), nil
+	}
 	role, err := member.NewRole(i.Role)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MembersMemberIdRolePutRes), nil
 	}
 	in := workspaceUc.UpdateMemberRoleInput{
-		MemberID: member.NewIDFromUUID(i.MemberID),
-		Role:     role,
+		AccountID: aID,
+		MemberID:  member.NewIDFromUUID(i.MemberID),
+		Role:      role,
 	}
 	res, err := c.wuc.UpdateMemberRole(ctx, in)
 	if err != nil {

@@ -3,7 +3,10 @@ import {
   Invitation,
   Invitations,
   Invitees,
+  Member,
+  MemberId,
   Members,
+  SelectableRole,
   Workspace,
   WorkspaceCreateInput,
   WorkspaceRepository
@@ -68,5 +71,13 @@ export class WorkspaceGateway implements WorkspaceRepository {
       return Result.err(res.error)
     }
     return this.invitationAdapter.adaptAll(res.value)
+  }
+
+  async updateMemberRole(memberId: MemberId, role: SelectableRole): PromiseResult<Member, Error> {
+    const res = await this.driver.updateMemberRole(memberId, role)
+    if (res.isErr) {
+      return Result.err(res.error)
+    }
+    return this.memberAdapter.adapt(res.value)
   }
 }

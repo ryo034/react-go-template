@@ -99,3 +99,7 @@ func (m *Me) UpdateProfilePhoto(photo *user.Photo) *Me {
 func (m *Me) RemoveProfilePhoto() *Me {
 	return m.UpdateSelf(m.self.RemoveProfilePhoto())
 }
+
+func (m *Me) SameAs(t *Me) bool {
+	return m.Self().AccountID().Value().String() == t.Self().AccountID().Value().String()
+}

@@ -42,10 +42,12 @@ type MemberRole struct {
 	MemberRoleID uuid.UUID `bun:"member_role_id,pk"`
 	MemberID     uuid.UUID `bun:"member_id,notnull"`
 	Role         string    `bun:"role,notnull"`
-	CreatedAt    time.Time `bun:"created_at,notnull,default:current_timestamp"`
+	AssignedAt   time.Time `bun:"assigned_at,notnull,default:current_timestamp"`
+	AssignedBy   uuid.UUID `bun:"assigned_by,notnull"`
 
 	Member           *Member           `bun:"rel:belongs-to"`
 	MemberLatestRole *MemberLatestRole `bun:"rel:has-one"`
+	Assignor         *Member           `bun:"rel:belongs-to,join:assigned_by=member_id"`
 }
 
 type MemberLatestRole struct {
