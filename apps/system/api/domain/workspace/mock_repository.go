@@ -177,3 +177,18 @@ func (mr *MockRepositoryMockRecorder) InviteMembers(ctx, exec, inviter, is any) 
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InviteMembers", reflect.TypeOf((*MockRepository)(nil).InviteMembers), ctx, exec, inviter, is)
 }
+
+// UpdateMemberRole mocks base method.
+func (m_2 *MockRepository) UpdateMemberRole(ctx context.Context, exec bun.IDB, assignor, m *member.Member) (*member.Member, error) {
+	m_2.ctrl.T.Helper()
+	ret := m_2.ctrl.Call(m_2, "UpdateMemberRole", ctx, exec, assignor, m)
+	ret0, _ := ret[0].(*member.Member)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateMemberRole indicates an expected call of UpdateMemberRole.
+func (mr *MockRepositoryMockRecorder) UpdateMemberRole(ctx, exec, assignor, m any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateMemberRole", reflect.TypeOf((*MockRepository)(nil).UpdateMemberRole), ctx, exec, assignor, m)
+}

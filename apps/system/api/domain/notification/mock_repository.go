@@ -42,6 +42,20 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 	return m.recorder
 }
 
+// NotifyInvite mocks base method.
+func (m *MockRepository) NotifyInvite(ctx context.Context, inviter workspace.Inviter, i *invitation.Invitation) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "NotifyInvite", ctx, inviter, i)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// NotifyInvite indicates an expected call of NotifyInvite.
+func (mr *MockRepositoryMockRecorder) NotifyInvite(ctx, inviter, i any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NotifyInvite", reflect.TypeOf((*MockRepository)(nil).NotifyInvite), ctx, inviter, i)
+}
+
 // NotifyMembersInvited mocks base method.
 func (m *MockRepository) NotifyMembersInvited(ctx context.Context, inviter workspace.Inviter, is invitation.Invitations) (invitation.Invitations, invitation.Invitations) {
 	m.ctrl.T.Helper()

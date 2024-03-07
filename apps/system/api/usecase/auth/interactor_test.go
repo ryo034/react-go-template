@@ -145,7 +145,7 @@ func Test_useCase_ProcessInvitationEmail_OK(t *testing.T) {
 		expiredAt := invitation.NewExpiredAt(datetime.Now())
 		inviteeEmail, _ := account.NewEmail("test_invitee@exampel.com")
 		displayName := member.NewDisplayName("test")
-		mockFindActiveByEmail := invitation.NewInvitation(invID, mockToken, events, expiredAt, inviteeEmail, displayName)
+		mockFindActiveByEmail := invitation.NewInvitation(invID, mockToken, events, expiredAt, inviteeEmail, displayName, nil)
 
 		mockDbProvider.EXPECT().GetExecutor(gomock.Any(), gomock.Any()).Return(nil)
 		mockInvRepo.EXPECT().FindActiveByEmail(gomock.Any(), gomock.Any(), gomock.Any()).Return(mockFindActiveByEmail, nil)
@@ -164,7 +164,7 @@ func Test_useCase_ProcessInvitationEmail_OK(t *testing.T) {
 		expiredAt := invitation.NewExpiredAt(datetime.Now())
 		inviteeEmail, _ := account.NewEmail("test_invitee@exampel.com")
 		displayName := member.NewDisplayName("test")
-		mockFindActiveByEmail := invitation.NewInvitation(invID, mockInputToken, events, expiredAt, inviteeEmail, displayName)
+		mockFindActiveByEmail := invitation.NewInvitation(invID, mockInputToken, events, expiredAt, inviteeEmail, displayName, nil)
 
 		mockDbProvider.EXPECT().GetExecutor(gomock.Any(), gomock.Any()).Return(nil)
 		mockInvRepo.EXPECT().FindActiveByEmail(gomock.Any(), gomock.Any(), gomock.Any()).Return(mockFindActiveByEmail, nil)

@@ -130,6 +130,21 @@ func (mr *MockRepositoryMockRecorder) FindByToken(ctx, exec, token any) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByToken", reflect.TypeOf((*MockRepository)(nil).FindByToken), ctx, exec, token)
 }
 
+// Resend mocks base method.
+func (m *MockRepository) Resend(ctx context.Context, exec bun.IDB, id ID) (*Invitation, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Resend", ctx, exec, id)
+	ret0, _ := ret[0].(*Invitation)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Resend indicates an expected call of Resend.
+func (mr *MockRepositoryMockRecorder) Resend(ctx, exec, id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Resend", reflect.TypeOf((*MockRepository)(nil).Resend), ctx, exec, id)
+}
+
 // Revoke mocks base method.
 func (m *MockRepository) Revoke(ctx context.Context, exec bun.IDB, id ID) error {
 	m.ctrl.T.Helper()
