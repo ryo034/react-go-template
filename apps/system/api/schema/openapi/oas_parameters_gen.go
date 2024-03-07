@@ -96,6 +96,72 @@ func decodeAPIV1InvitationsGetParams(args [0]string, argsEscaped bool, r *http.R
 	return params, nil
 }
 
+// APIV1MembersMemberIdRolePutParams is parameters of PUT /api/v1/members/{memberId}/role operation.
+type APIV1MembersMemberIdRolePutParams struct {
+	// Member id.
+	MemberId uuid.UUID
+}
+
+func unpackAPIV1MembersMemberIdRolePutParams(packed middleware.Parameters) (params APIV1MembersMemberIdRolePutParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "memberId",
+			In:   "path",
+		}
+		params.MemberId = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeAPIV1MembersMemberIdRolePutParams(args [1]string, argsEscaped bool, r *http.Request) (params APIV1MembersMemberIdRolePutParams, _ error) {
+	// Decode path: memberId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "memberId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.MemberId = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "memberId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // AcceptInvitationParams is parameters of acceptInvitation operation.
 type AcceptInvitationParams struct {
 	// Invitation token.

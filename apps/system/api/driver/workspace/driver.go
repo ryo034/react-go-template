@@ -18,6 +18,7 @@ type Driver interface {
 	FindAll(ctx context.Context, exec bun.IDB, aID account.ID) (models.Workspaces, error)
 	Create(ctx context.Context, exec bun.IDB, w *workspace.Workspace) (*models.Workspace, error)
 	AddMember(ctx context.Context, exec bun.IDB, w *workspace.Workspace, m *member.Member) (*models.Member, error)
+	UpdateMemberRole(ctx context.Context, exec bun.IDB, m *member.Member) error
 	FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error)
 	FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace.ID) (models.Members, error)
 	InviteMembers(ctx context.Context, exec bun.IDB, inviter workspace.Inviter, is invitation.Invitations) error
@@ -119,8 +120,43 @@ func (d *driver) AddMember(ctx context.Context, exec bun.IDB, w *workspace.Works
 	if _, err := exec.NewInsert().Model(mr).Exec(ctx); err != nil {
 		return nil, err
 	}
-	mm.Role = mr
+	mlr := &models.MemberLatestRole{
+		MemberRoleID: mrID,
+		MemberID:     m.ID().Value(),
+	}
+	if _, err := exec.NewInsert().Model(mlr).Exec(ctx); err != nil {
+		return nil, err
+	}
+	mlr.MemberRole = mr
+	mm.Role = mlr
 	return mm, nil
+}
+
+func (d *driver) UpdateMemberRole(ctx context.Context, exec bun.IDB, m *member.Member) error {
+	mrID, err := uuid.NewV7()
+	if err != nil {
+		return err
+	}
+
+	mr := &models.MemberRole{
+		MemberRoleID: mrID,
+		MemberID:     m.ID().Value(),
+		Role:         adaptMemberRole(m.Role()),
+	}
+
+	if _, err = exec.NewDelete().Model(&models.MemberLatestRole{}).Where("member_id = ?", m.ID().Value()).Exec(ctx); err != nil {
+		return err
+	}
+	if _, err = exec.NewInsert().Model(mr).Exec(ctx); err != nil {
+		return err
+	}
+	if _, err = exec.NewInsert().Model(&models.MemberLatestRole{
+		MemberRoleID: mrID,
+		MemberID:     m.ID().Value(),
+	}).Exec(ctx); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d *driver) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error) {

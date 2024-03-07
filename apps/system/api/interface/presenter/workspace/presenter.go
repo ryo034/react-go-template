@@ -74,3 +74,8 @@ func (p *presenter) FindAllInvitation(is invitation.Invitations) (openapi.APIV1I
 	}
 	return &openapi.InvitationsResponse{Invitations: rs}, err
 }
+
+func (p *presenter) UpdateMemberRole(m *member.Member) (openapi.APIV1MembersMemberIdRolePutRes, error) {
+	res := p.ma.Adapt(m)
+	return &openapi.UpdateMemberRoleResponse{Member: res}, nil
+}

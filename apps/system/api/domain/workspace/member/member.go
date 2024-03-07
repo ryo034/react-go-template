@@ -1,6 +1,7 @@
 package member
 
 import (
+	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 )
 
@@ -67,7 +68,16 @@ func (w *Member) UpdateUser(u *user.User) *Member {
 	return w
 }
 
-func (w *Member) UpdateRole(role Role) *Member {
+func (w *Member) UpdateRole(role Role) (*Member, error) {
+	if role == RoleOwner {
+		return nil, domainErr.NewForbidden("cannot change the role to owner")
+	}
+	if role == w.role {
+		return nil, domainErr.NewBadRequest("the role is already the same")
+	}
+	if w.role.IsOwner() {
+		return nil, domainErr.NewForbidden("cannot change the role")
+	}
 	w.role = role
-	return w
+	return w, nil
 }

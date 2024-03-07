@@ -3,6 +3,8 @@ package workspace
 import (
 	"context"
 
+	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace/member"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
@@ -24,6 +26,7 @@ type Controller interface {
 	RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error)
 	ResendInvitation(ctx context.Context, i ResendInvitationInput) (openapi.ResendInvitationRes, error)
 	FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error)
+	UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput) (openapi.APIV1MembersMemberIdRolePutRes, error)
 }
 
 type controller struct {
@@ -60,6 +63,11 @@ type ResendInvitationInput struct {
 
 type FindAllInvitationInput struct {
 	Status string
+}
+
+type UpdateMemberRoleInput struct {
+	MemberID uuid.UUID
+	Role     string
 }
 
 func (c *controller) Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error) {
@@ -187,6 +195,22 @@ func (c *controller) FindAllInvitation(ctx context.Context, i FindAllInvitationI
 	}
 	if res == nil {
 		return &openapi.InvitationsResponse{Invitations: nil}, nil
+	}
+	return res, nil
+}
+
+func (c *controller) UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput) (openapi.APIV1MembersMemberIdRolePutRes, error) {
+	role, err := member.NewRole(i.Role)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MembersMemberIdRolePutRes), nil
+	}
+	in := workspaceUc.UpdateMemberRoleInput{
+		MemberID: member.NewIDFromUUID(i.MemberID),
+		Role:     role,
+	}
+	res, err := c.wuc.UpdateMemberRole(ctx, in)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MembersMemberIdRolePutRes), nil
 	}
 	return res, nil
 }

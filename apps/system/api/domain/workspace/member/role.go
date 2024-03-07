@@ -39,6 +39,10 @@ func NewRole(s string) (Role, error) {
 	}
 }
 
+func (r Role) IsOwner() bool {
+	return r == RoleOwner
+}
+
 func (r Role) IsAdmin() bool {
 	return r == RoleAdmin
 }

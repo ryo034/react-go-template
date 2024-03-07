@@ -61,3 +61,15 @@ InvitationsResponse:
             type: array
             items:
               $ref: "#/components/schemas/Invitation"
+
+UpdateMemberRoleResponse:
+  description: Update member role response
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - member
+        properties:
+          member:
+            $ref: "#/components/schemas/Member"

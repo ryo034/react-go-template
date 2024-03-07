@@ -68,6 +68,12 @@ type Handler interface {
 	//
 	// GET /api/v1/members
 	APIV1MembersGet(ctx context.Context) (APIV1MembersGetRes, error)
+	// APIV1MembersMemberIdRolePut implements PUT /api/v1/members/{memberId}/role operation.
+	//
+	// Updates the role of a member.
+	//
+	// PUT /api/v1/members/{memberId}/role
+	APIV1MembersMemberIdRolePut(ctx context.Context, req *APIV1MembersMemberIdRolePutReq, params APIV1MembersMemberIdRolePutParams) (APIV1MembersMemberIdRolePutRes, error)
 	// APIV1PingGet implements GET /api/v1/ping operation.
 	//
 	// Checks if the server is running.

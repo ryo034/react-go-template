@@ -103,6 +103,15 @@ func (UnimplementedHandler) APIV1MembersGet(ctx context.Context) (r APIV1Members
 	return r, ht.ErrNotImplemented
 }
 
+// APIV1MembersMemberIdRolePut implements PUT /api/v1/members/{memberId}/role operation.
+//
+// Updates the role of a member.
+//
+// PUT /api/v1/members/{memberId}/role
+func (UnimplementedHandler) APIV1MembersMemberIdRolePut(ctx context.Context, req *APIV1MembersMemberIdRolePutReq, params APIV1MembersMemberIdRolePutParams) (r APIV1MembersMemberIdRolePutRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIV1PingGet implements GET /api/v1/ping operation.
 //
 // Checks if the server is running.

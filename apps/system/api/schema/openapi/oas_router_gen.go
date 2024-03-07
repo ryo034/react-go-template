@@ -374,9 +374,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/invitations/"
+					case '/': // Prefix: "/"
 						origElem := elem
-						if l := len("/invitations/"); len(elem) >= l && elem[0:l] == "/invitations/" {
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 							elem = elem[l:]
 						} else {
 							break
@@ -386,29 +386,157 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							break
 						}
 						switch elem[0] {
-						case 'b': // Prefix: "bulk"
+						case 'i': // Prefix: "invitations/"
 							origElem := elem
-							if l := len("bulk"); len(elem) >= l && elem[0:l] == "bulk" {
+							if l := len("invitations/"); len(elem) >= l && elem[0:l] == "invitations/" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
 							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleInviteMultipleUsersToWorkspaceRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
+								break
+							}
+							switch elem[0] {
+							case 'b': // Prefix: "bulk"
+								origElem := elem
+								if l := len("bulk"); len(elem) >= l && elem[0:l] == "bulk" {
+									elem = elem[l:]
+								} else {
+									break
 								}
 
-								return
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "POST":
+										s.handleInviteMultipleUsersToWorkspaceRequest([0]string{}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "POST")
+									}
+
+									return
+								}
+
+								elem = origElem
+							}
+							// Param: "invitationId"
+							// Match until "/"
+							idx := strings.IndexByte(elem, '/')
+							if idx < 0 {
+								idx = len(elem)
+							}
+							args[0] = elem[:idx]
+							elem = elem[idx:]
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case '/': // Prefix: "/"
+								origElem := elem
+								if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									break
+								}
+								switch elem[0] {
+								case 'a': // Prefix: "accept"
+									origElem := elem
+									if l := len("accept"); len(elem) >= l && elem[0:l] == "accept" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									if len(elem) == 0 {
+										// Leaf node.
+										switch r.Method {
+										case "POST":
+											s.handleAcceptInvitationRequest([1]string{
+												args[0],
+											}, elemIsEscaped, w, r)
+										default:
+											s.notAllowed(w, r, "POST")
+										}
+
+										return
+									}
+
+									elem = origElem
+								case 'r': // Prefix: "re"
+									origElem := elem
+									if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									if len(elem) == 0 {
+										break
+									}
+									switch elem[0] {
+									case 's': // Prefix: "send"
+										origElem := elem
+										if l := len("send"); len(elem) >= l && elem[0:l] == "send" {
+											elem = elem[l:]
+										} else {
+											break
+										}
+
+										if len(elem) == 0 {
+											// Leaf node.
+											switch r.Method {
+											case "POST":
+												s.handleResendInvitationRequest([1]string{
+													args[0],
+												}, elemIsEscaped, w, r)
+											default:
+												s.notAllowed(w, r, "POST")
+											}
+
+											return
+										}
+
+										elem = origElem
+									case 'v': // Prefix: "voke"
+										origElem := elem
+										if l := len("voke"); len(elem) >= l && elem[0:l] == "voke" {
+											elem = elem[l:]
+										} else {
+											break
+										}
+
+										if len(elem) == 0 {
+											// Leaf node.
+											switch r.Method {
+											case "POST":
+												s.handleRevokeInvitationRequest([1]string{
+													args[0],
+												}, elemIsEscaped, w, r)
+											default:
+												s.notAllowed(w, r, "POST")
+											}
+
+											return
+										}
+
+										elem = origElem
+									}
+
+									elem = origElem
+								}
+
+								elem = origElem
 							}
 
 							elem = origElem
 						}
-						// Param: "invitationId"
+						// Param: "memberId"
 						// Match until "/"
 						idx := strings.IndexByte(elem, '/')
 						if idx < 0 {
@@ -421,102 +549,26 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							break
 						}
 						switch elem[0] {
-						case '/': // Prefix: "/"
+						case '/': // Prefix: "/role"
 							origElem := elem
-							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							if l := len("/role"); len(elem) >= l && elem[0:l] == "/role" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
 							if len(elem) == 0 {
-								break
-							}
-							switch elem[0] {
-							case 'a': // Prefix: "accept"
-								origElem := elem
-								if l := len("accept"); len(elem) >= l && elem[0:l] == "accept" {
-									elem = elem[l:]
-								} else {
-									break
+								// Leaf node.
+								switch r.Method {
+								case "PUT":
+									s.handleAPIV1MembersMemberIdRolePutRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "PUT")
 								}
 
-								if len(elem) == 0 {
-									// Leaf node.
-									switch r.Method {
-									case "POST":
-										s.handleAcceptInvitationRequest([1]string{
-											args[0],
-										}, elemIsEscaped, w, r)
-									default:
-										s.notAllowed(w, r, "POST")
-									}
-
-									return
-								}
-
-								elem = origElem
-							case 'r': // Prefix: "re"
-								origElem := elem
-								if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									break
-								}
-								switch elem[0] {
-								case 's': // Prefix: "send"
-									origElem := elem
-									if l := len("send"); len(elem) >= l && elem[0:l] == "send" {
-										elem = elem[l:]
-									} else {
-										break
-									}
-
-									if len(elem) == 0 {
-										// Leaf node.
-										switch r.Method {
-										case "POST":
-											s.handleResendInvitationRequest([1]string{
-												args[0],
-											}, elemIsEscaped, w, r)
-										default:
-											s.notAllowed(w, r, "POST")
-										}
-
-										return
-									}
-
-									elem = origElem
-								case 'v': // Prefix: "voke"
-									origElem := elem
-									if l := len("voke"); len(elem) >= l && elem[0:l] == "voke" {
-										elem = elem[l:]
-									} else {
-										break
-									}
-
-									if len(elem) == 0 {
-										// Leaf node.
-										switch r.Method {
-										case "POST":
-											s.handleRevokeInvitationRequest([1]string{
-												args[0],
-											}, elemIsEscaped, w, r)
-										default:
-											s.notAllowed(w, r, "POST")
-										}
-
-										return
-									}
-
-									elem = origElem
-								}
-
-								elem = origElem
+								return
 							}
 
 							elem = origElem
@@ -1036,9 +1088,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/invitations/"
+					case '/': // Prefix: "/"
 						origElem := elem
-						if l := len("/invitations/"); len(elem) >= l && elem[0:l] == "/invitations/" {
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 							elem = elem[l:]
 						} else {
 							break
@@ -1048,33 +1100,167 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							break
 						}
 						switch elem[0] {
-						case 'b': // Prefix: "bulk"
+						case 'i': // Prefix: "invitations/"
 							origElem := elem
-							if l := len("bulk"); len(elem) >= l && elem[0:l] == "bulk" {
+							if l := len("invitations/"); len(elem) >= l && elem[0:l] == "invitations/" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
 							if len(elem) == 0 {
-								switch method {
-								case "POST":
-									// Leaf: InviteMultipleUsersToWorkspace
-									r.name = "InviteMultipleUsersToWorkspace"
-									r.summary = "Invite multiple users to the workspace by email"
-									r.operationID = "inviteMultipleUsersToWorkspace"
-									r.pathPattern = "/api/v1/members/invitations/bulk"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
+								break
+							}
+							switch elem[0] {
+							case 'b': // Prefix: "bulk"
+								origElem := elem
+								if l := len("bulk"); len(elem) >= l && elem[0:l] == "bulk" {
+									elem = elem[l:]
+								} else {
+									break
 								}
+
+								if len(elem) == 0 {
+									switch method {
+									case "POST":
+										// Leaf: InviteMultipleUsersToWorkspace
+										r.name = "InviteMultipleUsersToWorkspace"
+										r.summary = "Invite multiple users to the workspace by email"
+										r.operationID = "inviteMultipleUsersToWorkspace"
+										r.pathPattern = "/api/v1/members/invitations/bulk"
+										r.args = args
+										r.count = 0
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							}
+							// Param: "invitationId"
+							// Match until "/"
+							idx := strings.IndexByte(elem, '/')
+							if idx < 0 {
+								idx = len(elem)
+							}
+							args[0] = elem[:idx]
+							elem = elem[idx:]
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case '/': // Prefix: "/"
+								origElem := elem
+								if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									break
+								}
+								switch elem[0] {
+								case 'a': // Prefix: "accept"
+									origElem := elem
+									if l := len("accept"); len(elem) >= l && elem[0:l] == "accept" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									if len(elem) == 0 {
+										switch method {
+										case "POST":
+											// Leaf: AcceptInvitation
+											r.name = "AcceptInvitation"
+											r.summary = "Accept an invitation to join a workspace"
+											r.operationID = "acceptInvitation"
+											r.pathPattern = "/api/v1/members/invitations/{invitationId}/accept"
+											r.args = args
+											r.count = 1
+											return r, true
+										default:
+											return
+										}
+									}
+
+									elem = origElem
+								case 'r': // Prefix: "re"
+									origElem := elem
+									if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									if len(elem) == 0 {
+										break
+									}
+									switch elem[0] {
+									case 's': // Prefix: "send"
+										origElem := elem
+										if l := len("send"); len(elem) >= l && elem[0:l] == "send" {
+											elem = elem[l:]
+										} else {
+											break
+										}
+
+										if len(elem) == 0 {
+											switch method {
+											case "POST":
+												// Leaf: ResendInvitation
+												r.name = "ResendInvitation"
+												r.summary = "Resend invitation"
+												r.operationID = "resendInvitation"
+												r.pathPattern = "/api/v1/members/invitations/{invitationId}/resend"
+												r.args = args
+												r.count = 1
+												return r, true
+											default:
+												return
+											}
+										}
+
+										elem = origElem
+									case 'v': // Prefix: "voke"
+										origElem := elem
+										if l := len("voke"); len(elem) >= l && elem[0:l] == "voke" {
+											elem = elem[l:]
+										} else {
+											break
+										}
+
+										if len(elem) == 0 {
+											switch method {
+											case "POST":
+												// Leaf: RevokeInvitation
+												r.name = "RevokeInvitation"
+												r.summary = "Revoke invitation"
+												r.operationID = "revokeInvitation"
+												r.pathPattern = "/api/v1/members/invitations/{invitationId}/revoke"
+												r.args = args
+												r.count = 1
+												return r, true
+											default:
+												return
+											}
+										}
+
+										elem = origElem
+									}
+
+									elem = origElem
+								}
+
+								elem = origElem
 							}
 
 							elem = origElem
 						}
-						// Param: "invitationId"
+						// Param: "memberId"
 						// Match until "/"
 						idx := strings.IndexByte(elem, '/')
 						if idx < 0 {
@@ -1087,108 +1273,28 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							break
 						}
 						switch elem[0] {
-						case '/': // Prefix: "/"
+						case '/': // Prefix: "/role"
 							origElem := elem
-							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							if l := len("/role"); len(elem) >= l && elem[0:l] == "/role" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
 							if len(elem) == 0 {
-								break
-							}
-							switch elem[0] {
-							case 'a': // Prefix: "accept"
-								origElem := elem
-								if l := len("accept"); len(elem) >= l && elem[0:l] == "accept" {
-									elem = elem[l:]
-								} else {
-									break
+								switch method {
+								case "PUT":
+									// Leaf: APIV1MembersMemberIdRolePut
+									r.name = "APIV1MembersMemberIdRolePut"
+									r.summary = "Update Member Role"
+									r.operationID = ""
+									r.pathPattern = "/api/v1/members/{memberId}/role"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
 								}
-
-								if len(elem) == 0 {
-									switch method {
-									case "POST":
-										// Leaf: AcceptInvitation
-										r.name = "AcceptInvitation"
-										r.summary = "Accept an invitation to join a workspace"
-										r.operationID = "acceptInvitation"
-										r.pathPattern = "/api/v1/members/invitations/{invitationId}/accept"
-										r.args = args
-										r.count = 1
-										return r, true
-									default:
-										return
-									}
-								}
-
-								elem = origElem
-							case 'r': // Prefix: "re"
-								origElem := elem
-								if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									break
-								}
-								switch elem[0] {
-								case 's': // Prefix: "send"
-									origElem := elem
-									if l := len("send"); len(elem) >= l && elem[0:l] == "send" {
-										elem = elem[l:]
-									} else {
-										break
-									}
-
-									if len(elem) == 0 {
-										switch method {
-										case "POST":
-											// Leaf: ResendInvitation
-											r.name = "ResendInvitation"
-											r.summary = "Resend invitation"
-											r.operationID = "resendInvitation"
-											r.pathPattern = "/api/v1/members/invitations/{invitationId}/resend"
-											r.args = args
-											r.count = 1
-											return r, true
-										default:
-											return
-										}
-									}
-
-									elem = origElem
-								case 'v': // Prefix: "voke"
-									origElem := elem
-									if l := len("voke"); len(elem) >= l && elem[0:l] == "voke" {
-										elem = elem[l:]
-									} else {
-										break
-									}
-
-									if len(elem) == 0 {
-										switch method {
-										case "POST":
-											// Leaf: RevokeInvitation
-											r.name = "RevokeInvitation"
-											r.summary = "Revoke invitation"
-											r.operationID = "revokeInvitation"
-											r.pathPattern = "/api/v1/members/invitations/{invitationId}/revoke"
-											r.args = args
-											r.count = 1
-											return r, true
-										default:
-											return
-										}
-									}
-
-									elem = origElem
-								}
-
-								elem = origElem
 							}
 
 							elem = origElem

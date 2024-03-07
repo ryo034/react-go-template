@@ -10,3 +10,21 @@ InvitationsBulk:
             type: array
             items:
               $ref: "#/components/schemas/Invitee"
+
+UpdateMemberRole:
+  required: true
+  description: Update member role
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - role
+        properties:
+          role:
+            type: string
+            enum:
+              - owner
+              - admin
+              - member
+              - guest

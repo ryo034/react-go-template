@@ -41,6 +41,10 @@ type APIV1MembersGetRes interface {
 	aPIV1MembersGetRes()
 }
 
+type APIV1MembersMemberIdRolePutRes interface {
+	aPIV1MembersMemberIdRolePutRes()
+}
+
 type APIV1PingGetRes interface {
 	aPIV1PingGetRes()
 }

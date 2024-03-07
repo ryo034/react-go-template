@@ -3,7 +3,7 @@ members:
     summary: Get Members
     description: Returns the members of the workspace
     tags:
-      - Admin
+      - Member
     security:
       - bearer: []
     responses:
@@ -11,6 +11,38 @@ members:
         $ref: "#/components/responses/MembersResponse"
       "401":
         $ref: "#/components/responses/UnauthorizedError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+
+memberRole:
+  put:
+    summary: Update Member Role
+    description: Updates the role of a member
+    tags:
+      - Member
+    security:
+      - bearer: []
+    parameters:
+      - name: memberId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Member id
+    requestBody:
+      $ref: "#/components/requestBodies/UpdateMemberRole"
+    responses:
+      "200":
+        $ref: "#/components/responses/UpdateMemberRoleResponse"
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
+      "403":
+        $ref: "#/components/responses/ForbiddenError"
+      "404":
+        $ref: "#/components/responses/NotFoundError"
       "500":
         $ref: "#/components/responses/InternalServerError"
 

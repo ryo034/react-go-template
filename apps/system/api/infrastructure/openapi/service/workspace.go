@@ -3,6 +3,8 @@ package service
 import (
 	"context"
 
+	"github.com/spf13/cast"
+
 	"github.com/ryo034/react-go-template/apps/system/api/interface/controller/workspace"
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 )
@@ -48,4 +50,11 @@ func (s *service) APIV1InvitationsGet(ctx context.Context, params openapi.APIV1I
 		status = string(params.Status.Value)
 	}
 	return s.ctrl.Workspace.FindAllInvitation(ctx, workspace.FindAllInvitationInput{Status: status})
+}
+
+func (s *service) APIV1MembersMemberIdRolePut(ctx context.Context, req *openapi.APIV1MembersMemberIdRolePutReq, params openapi.APIV1MembersMemberIdRolePutParams) (openapi.APIV1MembersMemberIdRolePutRes, error) {
+	return s.ctrl.Workspace.UpdateMemberRole(ctx, workspace.UpdateMemberRoleInput{
+		MemberID: params.MemberId,
+		Role:     cast.ToString(req.GetRole()),
+	})
 }

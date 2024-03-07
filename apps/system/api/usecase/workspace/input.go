@@ -69,3 +69,8 @@ type FindAllInvitationInput struct {
 	CurrentWorkspaceID workspace.ID
 	IsAccepted         bool
 }
+
+type UpdateMemberRoleInput struct {
+	MemberID member.ID
+	Role     member.Role
+}

@@ -56,7 +56,7 @@ func (a *adapter) Adapt(m *models.Member) (*member.Member, error) {
 	}
 
 	pro := member.NewProfile(dn, &idNumber, bio)
-	ar, err := a.adaptRole(m.Role)
+	ar, err := a.adaptRole(m.Role.MemberRole)
 	if err != nil {
 		return nil, err
 	}

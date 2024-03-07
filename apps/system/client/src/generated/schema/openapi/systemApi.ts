@@ -194,6 +194,29 @@ export interface paths {
       };
     };
   };
+  "/api/v1/members/{memberId}/role": {
+    /**
+     * Update Member Role
+     * @description Updates the role of a member
+     */
+    put: {
+      parameters: {
+        path: {
+          /** @description Member id */
+          memberId: string;
+        };
+      };
+      requestBody: components["requestBodies"]["UpdateMemberRole"];
+      responses: {
+        200: components["responses"]["UpdateMemberRoleResponse"];
+        400: components["responses"]["BadRequestError"];
+        401: components["responses"]["UnauthorizedError"];
+        403: components["responses"]["ForbiddenError"];
+        404: components["responses"]["NotFoundError"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+  };
   "/api/v1/invitations": {
     /**
      * Get pending invitations
@@ -716,6 +739,14 @@ export interface components {
         "application/json": components["schemas"]["Me"];
       };
     };
+    /** @description Update member role response */
+    UpdateMemberRoleResponse: {
+      content: {
+        "application/json": {
+          member: components["schemas"]["Member"];
+        };
+      };
+    };
   };
   parameters: never;
   requestBodies: {
@@ -808,6 +839,15 @@ export interface components {
       content: {
         "application/json": {
           memberProfile: components["schemas"]["MemberProfile"];
+        };
+      };
+    };
+    /** @description Update member role */
+    UpdateMemberRole: {
+      content: {
+        "application/json": {
+          /** @enum {string} */
+          role: "owner" | "admin" | "member" | "guest";
         };
       };
     };

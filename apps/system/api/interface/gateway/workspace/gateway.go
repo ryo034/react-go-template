@@ -56,6 +56,10 @@ func (g *gateway) AddMember(ctx context.Context, exec bun.IDB, w *workspace.Work
 	return g.ma.Adapt(res)
 }
 
+func (g *gateway) UpdateMemberRole(ctx context.Context, exec bun.IDB, m *member.Member) (*member.Member, error) {
+	return m, g.d.UpdateMemberRole(ctx, exec, m)
+}
+
 func (g *gateway) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*member.Member, error) {
 	res, err := g.d.FindMember(ctx, exec, aID, wID)
 	if err != nil {

@@ -177,7 +177,14 @@ CREATE TABLE member_roles (
   PRIMARY KEY (member_role_id),
   CONSTRAINT fk_member_roles_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id)
 );
-CREATE INDEX member_roles_created_at_index ON member_roles(created_at);
+
+CREATE TABLE member_latest_roles (
+  member_role_id uuid NOT NULL,
+  member_id uuid NOT NULL UNIQUE,
+  PRIMARY KEY (member_role_id),
+  CONSTRAINT fk_mlr_member_roles_member_role_id FOREIGN KEY (member_role_id) REFERENCES member_roles(member_role_id),
+  CONSTRAINT fk_mlr_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id)
+);
 
 CREATE TABLE member_login_histories (
   member_login_history_id uuid NOT NULL,

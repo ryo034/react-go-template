@@ -14,4 +14,5 @@ type OutputPort interface {
 	RevokeInvitation(is invitation.Invitations) (openapi.RevokeInvitationRes, error)
 	ResendInvitation(i *invitation.Invitation) (openapi.ResendInvitationRes, error)
 	FindAllInvitation(is invitation.Invitations) (openapi.APIV1InvitationsGetRes, error)
+	UpdateMemberRole(m *member.Member) (openapi.APIV1MembersMemberIdRolePutRes, error)
 }

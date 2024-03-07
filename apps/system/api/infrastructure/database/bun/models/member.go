@@ -15,10 +15,10 @@ type Member struct {
 	AccountID   uuid.UUID `bun:"account_id,notnull"`
 	CreatedAt   time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	Account   *Account       `bun:"sa,rel:belongs-to"`
-	Profile   *MemberProfile `bun:"mp,rel:has-one"`
-	Workspace *Workspace     `bun:"ws,rel:belongs-to"`
-	Role      *MemberRole    `bun:"rel:has-one"`
+	Account   *Account          `bun:"sa,rel:belongs-to"`
+	Profile   *MemberProfile    `bun:"mp,rel:has-one"`
+	Workspace *Workspace        `bun:"ws,rel:belongs-to"`
+	Role      *MemberLatestRole `bun:"mlr,rel:has-one"`
 }
 
 type Members []*Member
@@ -44,7 +44,18 @@ type MemberRole struct {
 	Role         string    `bun:"role,notnull"`
 	CreatedAt    time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	Member *Member `bun:"rel:belongs-to"`
+	Member           *Member           `bun:"rel:belongs-to"`
+	MemberLatestRole *MemberLatestRole `bun:"rel:has-one"`
+}
+
+type MemberLatestRole struct {
+	bun.BaseModel `bun:"table:member_latest_roles,alias:mlr"`
+
+	MemberRoleID uuid.UUID `bun:"member_role_id,pk"`
+	MemberID     uuid.UUID `bun:"member_id,notnull"`
+
+	MemberRole *MemberRole `bun:"rel:has-one"`
+	Member     *Member     `bun:"rel:belongs-to"`
 }
 
 type MemberLoginHistory struct {

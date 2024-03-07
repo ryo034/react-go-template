@@ -146,6 +146,75 @@ func (s *APIV1MeProfilePutReqProfile) SetName(val OptString) {
 	s.Name = val
 }
 
+type APIV1MembersMemberIdRolePutReq struct {
+	Role APIV1MembersMemberIdRolePutReqRole `json:"role"`
+}
+
+// GetRole returns the value of Role.
+func (s *APIV1MembersMemberIdRolePutReq) GetRole() APIV1MembersMemberIdRolePutReqRole {
+	return s.Role
+}
+
+// SetRole sets the value of Role.
+func (s *APIV1MembersMemberIdRolePutReq) SetRole(val APIV1MembersMemberIdRolePutReqRole) {
+	s.Role = val
+}
+
+type APIV1MembersMemberIdRolePutReqRole string
+
+const (
+	APIV1MembersMemberIdRolePutReqRoleOwner  APIV1MembersMemberIdRolePutReqRole = "owner"
+	APIV1MembersMemberIdRolePutReqRoleAdmin  APIV1MembersMemberIdRolePutReqRole = "admin"
+	APIV1MembersMemberIdRolePutReqRoleMember APIV1MembersMemberIdRolePutReqRole = "member"
+	APIV1MembersMemberIdRolePutReqRoleGuest  APIV1MembersMemberIdRolePutReqRole = "guest"
+)
+
+// AllValues returns all APIV1MembersMemberIdRolePutReqRole values.
+func (APIV1MembersMemberIdRolePutReqRole) AllValues() []APIV1MembersMemberIdRolePutReqRole {
+	return []APIV1MembersMemberIdRolePutReqRole{
+		APIV1MembersMemberIdRolePutReqRoleOwner,
+		APIV1MembersMemberIdRolePutReqRoleAdmin,
+		APIV1MembersMemberIdRolePutReqRoleMember,
+		APIV1MembersMemberIdRolePutReqRoleGuest,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APIV1MembersMemberIdRolePutReqRole) MarshalText() ([]byte, error) {
+	switch s {
+	case APIV1MembersMemberIdRolePutReqRoleOwner:
+		return []byte(s), nil
+	case APIV1MembersMemberIdRolePutReqRoleAdmin:
+		return []byte(s), nil
+	case APIV1MembersMemberIdRolePutReqRoleMember:
+		return []byte(s), nil
+	case APIV1MembersMemberIdRolePutReqRoleGuest:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APIV1MembersMemberIdRolePutReqRole) UnmarshalText(data []byte) error {
+	switch APIV1MembersMemberIdRolePutReqRole(data) {
+	case APIV1MembersMemberIdRolePutReqRoleOwner:
+		*s = APIV1MembersMemberIdRolePutReqRoleOwner
+		return nil
+	case APIV1MembersMemberIdRolePutReqRoleAdmin:
+		*s = APIV1MembersMemberIdRolePutReqRoleAdmin
+		return nil
+	case APIV1MembersMemberIdRolePutReqRoleMember:
+		*s = APIV1MembersMemberIdRolePutReqRoleMember
+		return nil
+	case APIV1MembersMemberIdRolePutReqRoleGuest:
+		*s = APIV1MembersMemberIdRolePutReqRoleGuest
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 type APIV1PingGetOK struct {
 	// Ping response message.
 	Message OptString `json:"message"`
@@ -290,6 +359,7 @@ func (*BadRequestError) aPIV1AuthOtpVerifyPostRes()         {}
 func (*BadRequestError) aPIV1MeMemberProfilePutRes()        {}
 func (*BadRequestError) aPIV1MeProfilePhotoPutRes()         {}
 func (*BadRequestError) aPIV1MeProfilePutRes()              {}
+func (*BadRequestError) aPIV1MembersMemberIdRolePutRes()    {}
 func (*BadRequestError) aPIV1WorkspacesPostRes()            {}
 func (*BadRequestError) getInvitationByTokenRes()           {}
 func (*BadRequestError) inviteMultipleUsersToWorkspaceRes() {}
@@ -460,9 +530,10 @@ func (s *ForbiddenError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*ForbiddenError) aPIV1MeProfilePutRes() {}
-func (*ForbiddenError) resendInvitationRes()  {}
-func (*ForbiddenError) revokeInvitationRes()  {}
+func (*ForbiddenError) aPIV1MeProfilePutRes()           {}
+func (*ForbiddenError) aPIV1MembersMemberIdRolePutRes() {}
+func (*ForbiddenError) resendInvitationRes()            {}
+func (*ForbiddenError) revokeInvitationRes()            {}
 
 type GetInvitationByTokenResponse struct {
 	ReceivedInvitation ReceivedInvitation `json:"receivedInvitation"`
@@ -621,6 +692,7 @@ func (*InternalServerError) aPIV1MeProfilePhotoDeleteRes()      {}
 func (*InternalServerError) aPIV1MeProfilePhotoPutRes()         {}
 func (*InternalServerError) aPIV1MeProfilePutRes()              {}
 func (*InternalServerError) aPIV1MembersGetRes()                {}
+func (*InternalServerError) aPIV1MembersMemberIdRolePutRes()    {}
 func (*InternalServerError) aPIV1PingGetRes()                   {}
 func (*InternalServerError) aPIV1WorkspacesGetRes()             {}
 func (*InternalServerError) aPIV1WorkspacesPostRes()            {}
@@ -1192,8 +1264,9 @@ func (s *NotFoundError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*NotFoundError) resendInvitationRes() {}
-func (*NotFoundError) revokeInvitationRes() {}
+func (*NotFoundError) aPIV1MembersMemberIdRolePutRes() {}
+func (*NotFoundError) resendInvitationRes()            {}
+func (*NotFoundError) revokeInvitationRes()            {}
 
 // NewOptAPIV1InvitationsGetStatus returns new OptAPIV1InvitationsGetStatus with value set to v.
 func NewOptAPIV1InvitationsGetStatus(v APIV1InvitationsGetStatus) OptAPIV1InvitationsGetStatus {
@@ -1700,6 +1773,7 @@ func (*UnauthorizedError) aPIV1MeProfilePhotoDeleteRes()      {}
 func (*UnauthorizedError) aPIV1MeProfilePhotoPutRes()         {}
 func (*UnauthorizedError) aPIV1MeProfilePutRes()              {}
 func (*UnauthorizedError) aPIV1MembersGetRes()                {}
+func (*UnauthorizedError) aPIV1MembersMemberIdRolePutRes()    {}
 func (*UnauthorizedError) aPIV1WorkspacesGetRes()             {}
 func (*UnauthorizedError) aPIV1WorkspacesPostRes()            {}
 func (*UnauthorizedError) acceptInvitationRes()               {}
@@ -1722,6 +1796,22 @@ func (s *UpdateMeMemberProfileResponse) SetMe(val Me) {
 }
 
 func (*UpdateMeMemberProfileResponse) aPIV1MeMemberProfilePutRes() {}
+
+type UpdateMemberRoleResponse struct {
+	Member Member `json:"member"`
+}
+
+// GetMember returns the value of Member.
+func (s *UpdateMemberRoleResponse) GetMember() Member {
+	return s.Member
+}
+
+// SetMember sets the value of Member.
+func (s *UpdateMemberRoleResponse) SetMember(val Member) {
+	s.Member = val
+}
+
+func (*UpdateMemberRoleResponse) aPIV1MembersMemberIdRolePutRes() {}
 
 type UpdateProfilePhotoResponse struct {
 	Me Me `json:"me"`

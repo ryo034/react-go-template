@@ -20,6 +20,7 @@ type UseCase interface {
 	RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error)
 	ResendInvitation(ctx context.Context, i ResendInvitationInput) (openapi.ResendInvitationRes, error)
 	FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error)
+	UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput) (openapi.APIV1MembersMemberIdRolePutRes, error)
 }
 
 type useCase struct {
@@ -217,4 +218,35 @@ func (u *useCase) FindAllInvitation(ctx context.Context, i FindAllInvitationInpu
 		return u.op.FindAllInvitation(res.OnlyAccepted().Sort())
 	}
 	return u.op.FindAllInvitation(res.ExcludeRevoked().ExcludeVerified().ExcludeAccepted().Sort())
+}
+
+func (u *useCase) UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput) (openapi.APIV1MembersMemberIdRolePutRes, error) {
+	p := u.dbp.GetExecutor(ctx, false)
+	m, err := u.meRepo.Find(ctx, p, i.MemberID)
+	if err != nil {
+		return nil, err
+	}
+	mem, err := m.Member().UpdateRole(i.Role)
+	if err != nil {
+		return nil, err
+	}
+	m = m.UpdateMember(mem)
+
+	pr, err := u.txp.Provide(ctx)
+	if err != nil {
+		return nil, err
+	}
+	fn := func() (*member.Member, error) {
+		res, err := u.repo.UpdateMemberRole(pr, p, m.Member())
+		if err != nil {
+			return nil, err
+		}
+		return res, nil
+	}
+	result := pr.Transactional(fn)()
+	if err = result.Error(); err != nil {
+		return nil, err
+	}
+	res := result.Value(0).(*member.Member)
+	return u.op.UpdateMemberRole(res)
 }
