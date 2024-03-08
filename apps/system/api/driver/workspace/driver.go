@@ -37,6 +37,7 @@ func (d *driver) FindAll(ctx context.Context, exec bun.IDB, aID account.ID) (mod
 		NewSelect().
 		Model(&ws).
 		Relation("Detail").
+		Relation("Detail.WorkspaceDetail").
 		Join("JOIN members ms ON ms.workspace_id = ws.workspace_id").
 		Where("ms.account_id = ?", aID.ToString()).
 		Scan(ctx)
@@ -47,26 +48,36 @@ func (d *driver) FindAll(ctx context.Context, exec bun.IDB, aID account.ID) (mod
 }
 
 func (d *driver) Create(ctx context.Context, exec bun.IDB, w *workspace.Workspace) (*models.Workspace, error) {
-	wd := w.Detail()
-	m := &models.Workspace{
+	wdt := w.Detail()
+	wldID, _ := uuid.NewV7()
+	wo := &models.Workspace{
 		WorkspaceID: w.ID().Value(),
 	}
-	md := &models.WorkspaceDetail{
-		WorkspaceID: w.ID().Value(),
-		Subdomain:   wd.Subdomain().ToString(),
-		Name:        wd.Name().ToString(),
+	wd := &models.WorkspaceDetail{
+		WorkspaceDetailID: wldID,
+		WorkspaceID:       w.ID().Value(),
+		Subdomain:         wdt.Subdomain().ToString(),
+		Name:              wdt.Name().ToString(),
 	}
-	if _, err := exec.NewInsert().Model(m).Exec(ctx); err != nil {
+	wld := &models.WorkspaceLatestDetail{
+		WorkspaceDetailID: wldID,
+		WorkspaceID:       w.ID().Value(),
+	}
+	if _, err := exec.NewInsert().Model(wo).Exec(ctx); err != nil {
 		return nil, err
 	}
-	if _, err := exec.NewInsert().Model(md).Exec(ctx); err != nil {
+	if _, err := exec.NewInsert().Model(wd).Exec(ctx); err != nil {
 		if dbErr.IsDuplicateError(err) {
 			return nil, domainErr.NewConflicted("workspace_details", "subdomain")
 		}
 		return nil, err
 	}
-	m.Detail = md
-	return m, nil
+	if _, err := exec.NewInsert().Model(wld).Exec(ctx); err != nil {
+		return nil, err
+	}
+	wld.WorkspaceDetail = wd
+	wo.Detail = wld
+	return wo, nil
 }
 
 func adaptMemberRole(mr member.Role) string {

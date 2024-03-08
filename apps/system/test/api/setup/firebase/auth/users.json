@@ -52,6 +52,16 @@
       "disabled": false
     },
     {
+      "localId": "018e201b-67d4-771c-b67c-91433823f052",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "UpdateWorkspace Detail",
+      "validSince": "1709725349",
+      "email": "update_workspace_detail@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
       "localId": "018d6189-9ad0-7b72-801b-1e0de0d3c214",
       "createdAt": "1706825570522",
       "lastLoginAt": "1706825570547",

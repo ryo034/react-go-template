@@ -22,11 +22,11 @@ func NewAdapter(ma member.Adapter) Adapter {
 
 func (a *adapter) Adapt(w *models.Workspace) (*workspace.Workspace, error) {
 	id := workspace.NewIDFromUUID(w.WorkspaceID)
-	name, err := workspace.NewName(w.Detail.Name)
+	name, err := workspace.NewName(w.Detail.WorkspaceDetail.Name)
 	if err != nil {
 		return nil, err
 	}
-	sd, err := workspace.NewSubdomain(w.Detail.Subdomain)
+	sd, err := workspace.NewSubdomain(w.Detail.WorkspaceDetail.Subdomain)
 	if err != nil {
 		return nil, err
 	}

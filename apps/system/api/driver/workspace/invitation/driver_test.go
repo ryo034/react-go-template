@@ -97,6 +97,8 @@ func Test_driver_FindByToken_OK(t *testing.T) {
 		Workspace: nil,
 	}
 
+	wdID := uuid.MustParse("018e200b-9d01-70ed-8c5a-5a5df2a98f11")
+
 	invUnit := &models.InvitationUnit{
 		InvitationUnitID: uuid.MustParse("018db4a4-c350-747b-8c4f-bd827e08174b"),
 		WorkspaceID:      wID,
@@ -105,12 +107,16 @@ func Test_driver_FindByToken_OK(t *testing.T) {
 		Workspace: &models.Workspace{
 			WorkspaceID: wID,
 			CreatedAt:   defaultTime,
-			Detail: &models.WorkspaceDetail{
-				WorkspaceID: wID,
-				Name:        "Example",
-				Subdomain:   "example",
-				CreatedAt:   defaultTime,
-				UpdatedAt:   defaultTime,
+			Detail: &models.WorkspaceLatestDetail{
+				WorkspaceDetailID: wdID,
+				WorkspaceID:       wID,
+				WorkspaceDetail: &models.WorkspaceDetail{
+					WorkspaceID:       wID,
+					WorkspaceDetailID: wdID,
+					Name:              "Example",
+					Subdomain:         "example",
+					CreatedAt:         defaultTime,
+				},
 			},
 			Members: nil,
 		},

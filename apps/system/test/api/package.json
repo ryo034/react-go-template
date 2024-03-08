@@ -3,7 +3,7 @@
   "description": "API test",
   "scripts": {
     "test-mi": "PARALLEL=false SILENT=false playwright test --workers=1 test/api/tests/me/me.spec.ts",
-    "test-mii": "PARALLEL=false SILENT=false playwright test -g 'Can not update to same role'",
+    "test-mii": "PARALLEL=false SILENT=false playwright test -g 'failed to accept already expired invitation return GoneError'",
     "test:stateless": "PARALLEL=true SILENT=false playwright test --retries=3 --workers=3 --grep-invert @stateful",
     "test:stateful": "PARALLEL=false SILENT=false playwright test --retries=1 --workers=1 --grep @stateful"
   },

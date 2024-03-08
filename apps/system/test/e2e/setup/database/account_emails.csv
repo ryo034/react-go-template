@@ -20,3 +20,4 @@ account_email_id,account_id,email,created_at
 018e1952-009b-769d-a948-9677102ef6b8,018e1952-009b-7a7b-b1a5-3938a11784f9,update_role_admin_2@example.com,2024-01-10 12:00:00.000000 +00:00
 018e18ba-dc87-7d52-a12f-95c843831cc6,018e18ba-dc87-7758-929e-cf1d52320f0c,update_role_member@example.com,2024-01-10 12:00:00.000000 +00:00
 018e18ba-dc87-7868-82b7-a44909ce5d5a,018e18ba-dc87-739e-9206-47a7b99de453,update_role_guest@example.com,2024-01-10 12:00:00.000000 +00:00
+018e201b-67d4-76de-86f5-2a6b6acd72b6,018e201b-67d4-771c-b67c-91433823f052,update_workspace_detail@example.com,2024-01-10 12:00:00.000000 +00:00

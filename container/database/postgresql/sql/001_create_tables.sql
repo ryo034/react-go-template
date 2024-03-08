@@ -144,18 +144,22 @@ CREATE TABLE workspaces (
 );
 
 CREATE TABLE workspace_details (
+  workspace_detail_id uuid NOT NULL,
   workspace_id uuid NOT NULL,
   name VARCHAR(100) NOT NULL,
   subdomain VARCHAR(63) NOT NULL UNIQUE,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (workspace_id),
+  PRIMARY KEY (workspace_detail_id),
   CONSTRAINT fk_workspace_details_workspaces_workspace_id FOREIGN KEY (workspace_id) REFERENCES workspaces(workspace_id)
 );
 
-CREATE TRIGGER refresh_workspace_details_updated_at_step1 BEFORE UPDATE ON workspace_details FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step1();
-CREATE TRIGGER refresh_workspace_details_updated_at_step2 BEFORE UPDATE OF updated_at ON workspace_details FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step2();
-CREATE TRIGGER refresh_workspace_details_updated_at_step3 BEFORE UPDATE ON workspace_details FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step3();
+CREATE TABLE workspace_latest_details (
+  workspace_detail_id uuid NOT NULL,
+  workspace_id uuid NOT NULL UNIQUE,
+  PRIMARY KEY (workspace_detail_id),
+  CONSTRAINT fk_wlds_workspace_details_workspace_detail_id FOREIGN KEY (workspace_detail_id) REFERENCES workspace_details(workspace_detail_id),
+  CONSTRAINT fk_wlds_workspaces_workspace_id FOREIGN KEY (workspace_id) REFERENCES workspaces(workspace_id)
+);
 
 CREATE TABLE members (
   member_id uuid NOT NULL,

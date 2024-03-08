@@ -47,6 +47,7 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, id invitation.ID) (*mod
 		Relation("InvitationUnit").
 		Relation("InvitationUnit.Workspace").
 		Relation("InvitationUnit.Workspace.Detail").
+		Relation("InvitationUnit.Workspace.Detail.WorkspaceDetail").
 		Relation("InvitationUnit.Member").
 		Relation("InvitationUnit.Member.Profile").
 		Relation("InvitationUnit.Member.Role").
@@ -116,6 +117,7 @@ func (d *driver) FindActiveByEmail(ctx context.Context, exec bun.IDB, email acco
 		Relation("InvitationUnit").
 		Relation("InvitationUnit.Workspace").
 		Relation("InvitationUnit.Workspace.Detail").
+		Relation("InvitationUnit.Workspace.Detail.WorkspaceDetail").
 		Relation("InvitationUnit.Member").
 		Relation("InvitationUnit.Member.Profile").
 		Relation("InvitationUnit.Member.Role").
@@ -251,6 +253,7 @@ func (d *driver) FindAllReceivedByEmail(ctx context.Context, exec bun.IDB, email
 		Relation("InvitationUnit").
 		Relation("InvitationUnit.Workspace").
 		Relation("InvitationUnit.Workspace.Detail").
+		Relation("InvitationUnit.Workspace.Detail.WorkspaceDetail").
 		Relation("InvitationUnit.Member").
 		Relation("InvitationUnit.Member.Profile").
 		Relation("InvitationUnit.Member.Role").
@@ -330,6 +333,7 @@ func (d *driver) FindActiveByToken(ctx context.Context, exec bun.IDB, token invi
 		Relation("InvitationUnit").
 		Relation("InvitationUnit.Workspace").
 		Relation("InvitationUnit.Workspace.Detail").
+		Relation("InvitationUnit.Workspace.Detail.WorkspaceDetail").
 		Relation("InvitationUnit.Member").
 		Relation("InvitationUnit.Member.Profile").
 		Relation("InvitationUnit.Member.Role").
@@ -371,6 +375,7 @@ func (d *driver) FindAllByWorkspace(ctx context.Context, exec bun.IDB, wID works
 		Relation("InvitationUnit").
 		Relation("InvitationUnit.Workspace").
 		Relation("InvitationUnit.Workspace.Detail").
+		Relation("InvitationUnit.Workspace.Detail.WorkspaceDetail").
 		Relation("InvitationUnit.Member").
 		Relation("InvitationUnit.Member.Profile").
 		Relation("InvitationUnit.Member.Role").

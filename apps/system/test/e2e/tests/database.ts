@@ -39,6 +39,7 @@ export const targetTables = [
   "account_latest_photo_events",
   "workspaces",
   "workspace_details",
+  "workspace_latest_details",
   "members",
   "member_roles",
   "member_latest_roles",
