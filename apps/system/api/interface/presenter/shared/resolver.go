@@ -127,51 +127,6 @@ func (r *resolver) errDetail(tag language.Tag, err error, msgArgs ...interface{}
 	return msg
 }
 
-func (r *resolver) errType(tag language.Tag, err error, msgArgs ...interface{}) string {
-	msg := r.mr.TypeMessage(string(domainErr.InternalServerErrorMessageKey)).WithLang(tag)
-	var t domainValidation.Error
-	var badRequest *domainErr.BadRequest
-	var unauthenticated *domainErr.Unauthenticated
-	var forbidden *domainErr.Forbidden
-	var noSuchData *domainErr.NoSuchData
-	var conflict *domainErr.Conflicted
-
-	var invalidInviteToken *invitation.InvalidInvitationToken
-	var expiredInvitationToken *invitation.ExpiredInvitationToken
-	var alreadyExpiredInvitation *invitation.AlreadyExpiredInvitation
-	var alreadyRevokedInvitation *invitation.AlreadyRevokedInvitation
-	var alreadyVerifiedInvitation *invitation.AlreadyVerifiedInvitation
-	var alreadyAcceptedInvitation *invitation.AlreadyAcceptedInvitation
-
-	switch {
-	case errors.As(err, &badRequest):
-		msg = r.mr.TypeMessage(string(domainErr.BadRequestMessageKey)).WithLang(tag)
-	case errors.As(err, &t):
-		msg = r.mr.TypeMessage(string(t.MessageKey())).WithLang(tag, t.Args()...)
-	case errors.As(err, &unauthenticated):
-		msg = r.mr.TypeMessage(string(domainErr.UnauthenticatedMessageKey)).WithLang(tag)
-	case errors.As(err, &forbidden):
-		msg = r.mr.TypeMessage(string(domainErr.ForbiddenMessageKey)).WithLang(tag)
-	case errors.As(err, &noSuchData):
-		msg = r.mr.TypeMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
-	case errors.As(err, &conflict):
-		msg = r.mr.TypeMessage(string(domainErr.ConflictedMessageKey)).WithLang(tag)
-	case errors.As(err, &invalidInviteToken):
-		msg = r.mr.TypeMessage(string(invitation.InvalidInviteTokenMessageKey)).WithLang(tag)
-	case errors.As(err, &expiredInvitationToken):
-		msg = r.mr.TypeMessage(string(invitation.ExpiredInviteTokenMessageKey)).WithLang(tag)
-	case errors.As(err, &alreadyExpiredInvitation):
-		msg = r.mr.TypeMessage(string(invitation.AlreadyExpiredInvitationMessageKey)).WithLang(tag)
-	case errors.As(err, &alreadyRevokedInvitation):
-		msg = r.mr.TypeMessage(string(invitation.AlreadyRevokedInvitationMessageKey)).WithLang(tag)
-	case errors.As(err, &alreadyVerifiedInvitation):
-		msg = r.mr.TypeMessage(string(invitation.AlreadyVerifiedInvitationMessageKey)).WithLang(tag)
-	case errors.As(err, &alreadyAcceptedInvitation):
-		msg = r.mr.TypeMessage(string(invitation.AlreadyAcceptedInvitationMessageKey)).WithLang(tag)
-	}
-	return msg
-}
-
 func (r *resolver) errCode(err error) string {
 	code := "500-000"
 	var t domainValidation.Error
@@ -237,21 +192,18 @@ func (r *resolver) Error(c context.Context, err error) interface{} {
 	switch {
 	case errors.As(err, &badRequest), errors.As(err, &t), errors.As(err, &invalidInviteToken), errors.As(err, &expiredInvitationToken):
 		return &openapi.BadRequestError{
-			Type:   openapi.OptString{Value: er.Type, Set: true},
 			Title:  openapi.OptString{Value: er.Title, Set: true},
 			Detail: openapi.OptString{Value: er.Detail, Set: true},
 			Code:   openapi.OptString{Value: er.Code, Set: true},
 		}
 	case errors.As(err, &unauthenticated):
 		return &openapi.UnauthorizedError{
-			Type:   openapi.OptString{Value: er.Type, Set: true},
 			Title:  openapi.OptString{Value: er.Title, Set: true},
 			Detail: openapi.OptString{Value: er.Detail, Set: true},
 			Code:   openapi.OptString{Value: er.Code, Set: true},
 		}
 	case errors.As(err, &forbidden):
 		return &openapi.ForbiddenError{
-			Type:   openapi.OptString{Value: er.Type, Set: true},
 			Title:  openapi.OptString{Value: er.Title, Set: true},
 			Detail: openapi.OptString{Value: er.Detail, Set: true},
 			Code:   openapi.OptString{Value: er.Code, Set: true},
@@ -265,14 +217,12 @@ func (r *resolver) Error(c context.Context, err error) interface{} {
 	//	}
 	case errors.As(err, &conflict), errors.As(err, &alreadyVerifiedInvitation):
 		return &openapi.ConflictError{
-			Type:   openapi.OptString{Value: er.Type, Set: true},
 			Title:  openapi.OptString{Value: er.Title, Set: true},
 			Detail: openapi.OptString{Value: er.Detail, Set: true},
 			Code:   openapi.OptString{Value: er.Code, Set: true},
 		}
 	case errors.As(err, &alreadyExpiredInvitation), errors.As(err, &alreadyRevokedInvitation), errors.As(err, &alreadyAcceptedInvitation):
 		return &openapi.GoneError{
-			Type:   openapi.OptString{Value: er.Type, Set: true},
 			Title:  openapi.OptString{Value: er.Title, Set: true},
 			Detail: openapi.OptString{Value: er.Detail, Set: true},
 			Code:   openapi.OptString{Value: er.Code, Set: true},
@@ -280,7 +230,7 @@ func (r *resolver) Error(c context.Context, err error) interface{} {
 	}
 
 	return &openapi.InternalServerError{
-		Type:   openapi.OptString{Value: er.Type, Set: true},
+		//Type:   openapi.OptString{Value: er.Type, Set: true},
 		Title:  openapi.OptString{Value: er.Title, Set: true},
 		Detail: openapi.OptString{Value: er.Detail, Set: true},
 		Code:   openapi.OptString{Value: er.Code, Set: true},
@@ -292,11 +242,12 @@ func (r *resolver) getLanguage(c context.Context) language.Tag {
 }
 
 func (r *resolver) newErrorResponse(tag language.Tag, err error) ErrorResponse {
+	//一旦ログは全て英語で出す
+	forceTag := language.English
 	return ErrorResponse{
-		r.errTitle(tag, err),
-		r.errDetail(tag, err),
-		r.errType(tag, err),
-		r.details(tag, err),
+		r.errTitle(forceTag, err),
+		r.errDetail(forceTag, err),
+		r.details(forceTag, err),
 		r.errCode(err),
 	}
 }

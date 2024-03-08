@@ -824,12 +824,6 @@ func (s *BadRequestError) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-		if s.Type.Set {
-			e.FieldStart("type")
-			s.Type.Encode(e)
-		}
-	}
-	{
 		if s.Title.Set {
 			e.FieldStart("title")
 			s.Title.Encode(e)
@@ -849,12 +843,11 @@ func (s *BadRequestError) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfBadRequestError = [5]string{
+var jsonFieldsNameOfBadRequestError = [4]string{
 	0: "status",
-	1: "type",
-	2: "title",
-	3: "detail",
-	4: "code",
+	1: "title",
+	2: "detail",
+	3: "code",
 }
 
 // Decode decodes BadRequestError from json.
@@ -874,16 +867,6 @@ func (s *BadRequestError) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"status\"")
-			}
-		case "type":
-			if err := func() error {
-				s.Type.Reset()
-				if err := s.Type.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"type\"")
 			}
 		case "title":
 			if err := func() error {
@@ -955,12 +938,6 @@ func (s *ConflictError) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-		if s.Type.Set {
-			e.FieldStart("type")
-			s.Type.Encode(e)
-		}
-	}
-	{
 		if s.Title.Set {
 			e.FieldStart("title")
 			s.Title.Encode(e)
@@ -980,12 +957,11 @@ func (s *ConflictError) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfConflictError = [5]string{
+var jsonFieldsNameOfConflictError = [4]string{
 	0: "status",
-	1: "type",
-	2: "title",
-	3: "detail",
-	4: "code",
+	1: "title",
+	2: "detail",
+	3: "code",
 }
 
 // Decode decodes ConflictError from json.
@@ -1005,16 +981,6 @@ func (s *ConflictError) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"status\"")
-			}
-		case "type":
-			if err := func() error {
-				s.Type.Reset()
-				if err := s.Type.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"type\"")
 			}
 		case "title":
 			if err := func() error {
@@ -1180,12 +1146,6 @@ func (s *ForbiddenError) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-		if s.Type.Set {
-			e.FieldStart("type")
-			s.Type.Encode(e)
-		}
-	}
-	{
 		if s.Title.Set {
 			e.FieldStart("title")
 			s.Title.Encode(e)
@@ -1205,12 +1165,11 @@ func (s *ForbiddenError) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfForbiddenError = [5]string{
+var jsonFieldsNameOfForbiddenError = [4]string{
 	0: "status",
-	1: "type",
-	2: "title",
-	3: "detail",
-	4: "code",
+	1: "title",
+	2: "detail",
+	3: "code",
 }
 
 // Decode decodes ForbiddenError from json.
@@ -1230,16 +1189,6 @@ func (s *ForbiddenError) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"status\"")
-			}
-		case "type":
-			if err := func() error {
-				s.Type.Reset()
-				if err := s.Type.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"type\"")
 			}
 		case "title":
 			if err := func() error {
@@ -1405,12 +1354,6 @@ func (s *GoneError) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-		if s.Type.Set {
-			e.FieldStart("type")
-			s.Type.Encode(e)
-		}
-	}
-	{
 		if s.Title.Set {
 			e.FieldStart("title")
 			s.Title.Encode(e)
@@ -1430,12 +1373,11 @@ func (s *GoneError) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfGoneError = [5]string{
+var jsonFieldsNameOfGoneError = [4]string{
 	0: "status",
-	1: "type",
-	2: "title",
-	3: "detail",
-	4: "code",
+	1: "title",
+	2: "detail",
+	3: "code",
 }
 
 // Decode decodes GoneError from json.
@@ -1455,16 +1397,6 @@ func (s *GoneError) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"status\"")
-			}
-		case "type":
-			if err := func() error {
-				s.Type.Reset()
-				if err := s.Type.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"type\"")
 			}
 		case "title":
 			if err := func() error {
@@ -1536,12 +1468,6 @@ func (s *InternalServerError) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-		if s.Type.Set {
-			e.FieldStart("type")
-			s.Type.Encode(e)
-		}
-	}
-	{
 		if s.Title.Set {
 			e.FieldStart("title")
 			s.Title.Encode(e)
@@ -1561,12 +1487,11 @@ func (s *InternalServerError) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfInternalServerError = [5]string{
+var jsonFieldsNameOfInternalServerError = [4]string{
 	0: "status",
-	1: "type",
-	2: "title",
-	3: "detail",
-	4: "code",
+	1: "title",
+	2: "detail",
+	3: "code",
 }
 
 // Decode decodes InternalServerError from json.
@@ -1586,16 +1511,6 @@ func (s *InternalServerError) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"status\"")
-			}
-		case "type":
-			if err := func() error {
-				s.Type.Reset()
-				if err := s.Type.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"type\"")
 			}
 		case "title":
 			if err := func() error {
@@ -3355,12 +3270,6 @@ func (s *NotFoundError) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-		if s.Type.Set {
-			e.FieldStart("type")
-			s.Type.Encode(e)
-		}
-	}
-	{
 		if s.Title.Set {
 			e.FieldStart("title")
 			s.Title.Encode(e)
@@ -3380,12 +3289,11 @@ func (s *NotFoundError) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfNotFoundError = [5]string{
+var jsonFieldsNameOfNotFoundError = [4]string{
 	0: "status",
-	1: "type",
-	2: "title",
-	3: "detail",
-	4: "code",
+	1: "title",
+	2: "detail",
+	3: "code",
 }
 
 // Decode decodes NotFoundError from json.
@@ -3405,16 +3313,6 @@ func (s *NotFoundError) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"status\"")
-			}
-		case "type":
-			if err := func() error {
-				s.Type.Reset()
-				if err := s.Type.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"type\"")
 			}
 		case "title":
 			if err := func() error {
@@ -4069,12 +3967,6 @@ func (s *TooManyRequestsError) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-		if s.Type.Set {
-			e.FieldStart("type")
-			s.Type.Encode(e)
-		}
-	}
-	{
 		if s.Title.Set {
 			e.FieldStart("title")
 			s.Title.Encode(e)
@@ -4094,12 +3986,11 @@ func (s *TooManyRequestsError) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfTooManyRequestsError = [5]string{
+var jsonFieldsNameOfTooManyRequestsError = [4]string{
 	0: "status",
-	1: "type",
-	2: "title",
-	3: "detail",
-	4: "code",
+	1: "title",
+	2: "detail",
+	3: "code",
 }
 
 // Decode decodes TooManyRequestsError from json.
@@ -4119,16 +4010,6 @@ func (s *TooManyRequestsError) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"status\"")
-			}
-		case "type":
-			if err := func() error {
-				s.Type.Reset()
-				if err := s.Type.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"type\"")
 			}
 		case "title":
 			if err := func() error {
@@ -4200,12 +4081,6 @@ func (s *UnauthorizedError) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-		if s.Type.Set {
-			e.FieldStart("type")
-			s.Type.Encode(e)
-		}
-	}
-	{
 		if s.Title.Set {
 			e.FieldStart("title")
 			s.Title.Encode(e)
@@ -4225,12 +4100,11 @@ func (s *UnauthorizedError) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfUnauthorizedError = [5]string{
+var jsonFieldsNameOfUnauthorizedError = [4]string{
 	0: "status",
-	1: "type",
-	2: "title",
-	3: "detail",
-	4: "code",
+	1: "title",
+	2: "detail",
+	3: "code",
 }
 
 // Decode decodes UnauthorizedError from json.
@@ -4250,16 +4124,6 @@ func (s *UnauthorizedError) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"status\"")
-			}
-		case "type":
-			if err := func() error {
-				s.Type.Reset()
-				if err := s.Type.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"type\"")
 			}
 		case "title":
 			if err := func() error {

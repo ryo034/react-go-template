@@ -42,11 +42,3 @@ func (p *Photo) IsR2() bool {
 func (p *Photo) URL() *url.URL {
 	return p.url
 }
-
-type AvatarExt string
-
-const (
-	AvatarExtJpeg AvatarExt = "jpeg"
-	AvatarExtJpg  AvatarExt = "jpg"
-	AvatarExtPng  AvatarExt = "png"
-)

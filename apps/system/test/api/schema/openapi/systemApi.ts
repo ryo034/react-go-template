@@ -375,11 +375,6 @@ export interface components {
            * @example 400
            */
           status?: number;
-          /**
-           * @description error type
-           * @example invalid_item_id
-           */
-          type?: string;
           /** @description A short, human-readable summary of the problem type */
           title?: string;
           /** @description A human-readable explanation specific to this occurrence of the problem. */
@@ -401,11 +396,6 @@ export interface components {
            * @example 400
            */
           status?: number;
-          /**
-           * @description error type
-           * @example invalid_item_id
-           */
-          type?: string;
           /** @description A short, human-readable summary of the problem type */
           title?: string;
           /** @description A human-readable explanation specific to this occurrence of the problem. */
@@ -427,11 +417,6 @@ export interface components {
            * @example 400
            */
           status?: number;
-          /**
-           * @description error type
-           * @example invalid_item_id
-           */
-          type?: string;
           /** @description A short, human-readable summary of the problem type */
           title?: string;
           /** @description A human-readable explanation specific to this occurrence of the problem. */
@@ -453,11 +438,6 @@ export interface components {
            * @example 400
            */
           status?: number;
-          /**
-           * @description error type
-           * @example invalid_item_id
-           */
-          type?: string;
           /** @description A short, human-readable summary of the problem type */
           title?: string;
           /** @description A human-readable explanation specific to this occurrence of the problem. */
@@ -479,11 +459,6 @@ export interface components {
            * @example 400
            */
           status?: number;
-          /**
-           * @description error type
-           * @example invalid_item_id
-           */
-          type?: string;
           /** @description A short, human-readable summary of the problem type */
           title?: string;
           /** @description A human-readable explanation specific to this occurrence of the problem. */
@@ -505,11 +480,6 @@ export interface components {
            * @example 400
            */
           status?: number;
-          /**
-           * @description error type
-           * @example invalid_item_id
-           */
-          type?: string;
           /** @description A short, human-readable summary of the problem type */
           title?: string;
           /** @description A human-readable explanation specific to this occurrence of the problem. */
@@ -531,11 +501,6 @@ export interface components {
            * @example 400
            */
           status?: number;
-          /**
-           * @description error type
-           * @example invalid_item_id
-           */
-          type?: string;
           /** @description A short, human-readable summary of the problem type */
           title?: string;
           /** @description A human-readable explanation specific to this occurrence of the problem. */
@@ -557,11 +522,6 @@ export interface components {
            * @example 400
            */
           status?: number;
-          /**
-           * @description error type
-           * @example invalid_item_id
-           */
-          type?: string;
           /** @description A short, human-readable summary of the problem type */
           title?: string;
           /** @description A human-readable explanation specific to this occurrence of the problem. */
@@ -583,11 +543,6 @@ export interface components {
            * @example 400
            */
           status?: number;
-          /**
-           * @description error type
-           * @example invalid_item_id
-           */
-          type?: string;
           /** @description A short, human-readable summary of the problem type */
           title?: string;
           /** @description A human-readable explanation specific to this occurrence of the problem. */

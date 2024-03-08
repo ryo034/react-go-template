@@ -3,8 +3,6 @@ package me
 import (
 	"io"
 
-	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
-
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/media"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me"
@@ -36,7 +34,7 @@ type UpdateProfilePhotoInput struct {
 	AccountID account.ID
 	PhotoID   media.ID
 	File      io.Reader
-	Ext       user.AvatarExt
+	Ext       media.AvatarExt
 	Size      int64
 }
 

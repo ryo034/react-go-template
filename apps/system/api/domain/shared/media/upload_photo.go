@@ -22,15 +22,15 @@ type UploadPhoto struct {
 	id        ID
 	content   io.Reader
 	size      int64
-	ext       string
+	ext       AvatarExt
 	hostingTo HostingTo
 }
 
-func newUploadPhoto(id ID, content io.Reader, size int64, ext string, hostingTo HostingTo) *UploadPhoto {
+func newUploadPhoto(id ID, content io.Reader, size int64, ext AvatarExt, hostingTo HostingTo) *UploadPhoto {
 	return &UploadPhoto{id, content, size, ext, hostingTo}
 }
 
-func NewUploadPhotoToR2(content io.Reader, size int64, ext string) *UploadPhoto {
+func NewUploadPhotoToR2(content io.Reader, size int64, ext AvatarExt) *UploadPhoto {
 	nid, _ := uuid.NewV7()
 	return newUploadPhoto(NewIDFromUUID(nid), content, size, ext, HostingToR2)
 }
@@ -47,7 +47,7 @@ func (p *UploadPhoto) Size() int64 {
 	return p.size
 }
 
-func (p *UploadPhoto) Ext() string {
+func (p *UploadPhoto) Ext() AvatarExt {
 	return p.ext
 }
 

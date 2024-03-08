@@ -10,8 +10,6 @@ import (
 
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 
-	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
-
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/media"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
@@ -171,14 +169,14 @@ func (c *controller) UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhot
 	tmpPhoID, _ := uuid.NewV7()
 	phoID := media.NewIDFromUUID(tmpPhoID)
 
-	var avatarExt user.AvatarExt
+	var avatarExt media.AvatarExt
 	switch ext {
 	case ".jpeg":
-		avatarExt = user.AvatarExtJpeg
+		avatarExt = media.AvatarExtJpeg
 	case ".jpg":
-		avatarExt = user.AvatarExtJpg
+		avatarExt = media.AvatarExtJpg
 	case ".png":
-		avatarExt = user.AvatarExtPng
+		avatarExt = media.AvatarExtPng
 	}
 
 	if avatarExt == "" {

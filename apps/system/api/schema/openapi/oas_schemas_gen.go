@@ -287,8 +287,6 @@ func (s *AuthProvider) UnmarshalText(data []byte) error {
 type BadRequestError struct {
 	// The HTTP status code generated for this occurrence of the problem.
 	Status OptInt `json:"status"`
-	// Error type.
-	Type OptString `json:"type"`
 	// A short, human-readable summary of the problem type.
 	Title OptString `json:"title"`
 	// A human-readable explanation specific to this occurrence of the problem.
@@ -300,11 +298,6 @@ type BadRequestError struct {
 // GetStatus returns the value of Status.
 func (s *BadRequestError) GetStatus() OptInt {
 	return s.Status
-}
-
-// GetType returns the value of Type.
-func (s *BadRequestError) GetType() OptString {
-	return s.Type
 }
 
 // GetTitle returns the value of Title.
@@ -325,11 +318,6 @@ func (s *BadRequestError) GetCode() OptString {
 // SetStatus sets the value of Status.
 func (s *BadRequestError) SetStatus(val OptInt) {
 	s.Status = val
-}
-
-// SetType sets the value of Type.
-func (s *BadRequestError) SetType(val OptString) {
-	s.Type = val
 }
 
 // SetTitle sets the value of Title.
@@ -379,8 +367,6 @@ func (s *Bearer) SetToken(val string) {
 type ConflictError struct {
 	// The HTTP status code generated for this occurrence of the problem.
 	Status OptInt `json:"status"`
-	// Error type.
-	Type OptString `json:"type"`
 	// A short, human-readable summary of the problem type.
 	Title OptString `json:"title"`
 	// A human-readable explanation specific to this occurrence of the problem.
@@ -392,11 +378,6 @@ type ConflictError struct {
 // GetStatus returns the value of Status.
 func (s *ConflictError) GetStatus() OptInt {
 	return s.Status
-}
-
-// GetType returns the value of Type.
-func (s *ConflictError) GetType() OptString {
-	return s.Type
 }
 
 // GetTitle returns the value of Title.
@@ -417,11 +398,6 @@ func (s *ConflictError) GetCode() OptString {
 // SetStatus sets the value of Status.
 func (s *ConflictError) SetStatus(val OptInt) {
 	s.Status = val
-}
-
-// SetType sets the value of Type.
-func (s *ConflictError) SetType(val OptString) {
-	s.Type = val
 }
 
 // SetTitle sets the value of Title.
@@ -463,8 +439,6 @@ func (*CreateWorkspaceResponse) aPIV1WorkspacesPostRes() {}
 type ForbiddenError struct {
 	// The HTTP status code generated for this occurrence of the problem.
 	Status OptInt `json:"status"`
-	// Error type.
-	Type OptString `json:"type"`
 	// A short, human-readable summary of the problem type.
 	Title OptString `json:"title"`
 	// A human-readable explanation specific to this occurrence of the problem.
@@ -476,11 +450,6 @@ type ForbiddenError struct {
 // GetStatus returns the value of Status.
 func (s *ForbiddenError) GetStatus() OptInt {
 	return s.Status
-}
-
-// GetType returns the value of Type.
-func (s *ForbiddenError) GetType() OptString {
-	return s.Type
 }
 
 // GetTitle returns the value of Title.
@@ -501,11 +470,6 @@ func (s *ForbiddenError) GetCode() OptString {
 // SetStatus sets the value of Status.
 func (s *ForbiddenError) SetStatus(val OptInt) {
 	s.Status = val
-}
-
-// SetType sets the value of Type.
-func (s *ForbiddenError) SetType(val OptString) {
-	s.Type = val
 }
 
 // SetTitle sets the value of Title.
@@ -548,8 +512,6 @@ func (*GetInvitationByTokenResponse) getInvitationByTokenRes() {}
 type GoneError struct {
 	// The HTTP status code generated for this occurrence of the problem.
 	Status OptInt `json:"status"`
-	// Error type.
-	Type OptString `json:"type"`
 	// A short, human-readable summary of the problem type.
 	Title OptString `json:"title"`
 	// A human-readable explanation specific to this occurrence of the problem.
@@ -561,11 +523,6 @@ type GoneError struct {
 // GetStatus returns the value of Status.
 func (s *GoneError) GetStatus() OptInt {
 	return s.Status
-}
-
-// GetType returns the value of Type.
-func (s *GoneError) GetType() OptString {
-	return s.Type
 }
 
 // GetTitle returns the value of Title.
@@ -586,11 +543,6 @@ func (s *GoneError) GetCode() OptString {
 // SetStatus sets the value of Status.
 func (s *GoneError) SetStatus(val OptInt) {
 	s.Status = val
-}
-
-// SetType sets the value of Type.
-func (s *GoneError) SetType(val OptString) {
-	s.Type = val
 }
 
 // SetTitle sets the value of Title.
@@ -615,8 +567,6 @@ func (*GoneError) getInvitationByTokenRes() {}
 type InternalServerError struct {
 	// The HTTP status code generated for this occurrence of the problem.
 	Status OptInt `json:"status"`
-	// Error type.
-	Type OptString `json:"type"`
 	// A short, human-readable summary of the problem type.
 	Title OptString `json:"title"`
 	// A human-readable explanation specific to this occurrence of the problem.
@@ -628,11 +578,6 @@ type InternalServerError struct {
 // GetStatus returns the value of Status.
 func (s *InternalServerError) GetStatus() OptInt {
 	return s.Status
-}
-
-// GetType returns the value of Type.
-func (s *InternalServerError) GetType() OptString {
-	return s.Type
 }
 
 // GetTitle returns the value of Title.
@@ -653,11 +598,6 @@ func (s *InternalServerError) GetCode() OptString {
 // SetStatus sets the value of Status.
 func (s *InternalServerError) SetStatus(val OptInt) {
 	s.Status = val
-}
-
-// SetType sets the value of Type.
-func (s *InternalServerError) SetType(val OptString) {
-	s.Type = val
 }
 
 // SetTitle sets the value of Title.
@@ -1196,8 +1136,6 @@ func (*MembersResponse) aPIV1MembersGetRes() {}
 type NotFoundError struct {
 	// The HTTP status code generated for this occurrence of the problem.
 	Status OptInt `json:"status"`
-	// Error type.
-	Type OptString `json:"type"`
 	// A short, human-readable summary of the problem type.
 	Title OptString `json:"title"`
 	// A human-readable explanation specific to this occurrence of the problem.
@@ -1209,11 +1147,6 @@ type NotFoundError struct {
 // GetStatus returns the value of Status.
 func (s *NotFoundError) GetStatus() OptInt {
 	return s.Status
-}
-
-// GetType returns the value of Type.
-func (s *NotFoundError) GetType() OptString {
-	return s.Type
 }
 
 // GetTitle returns the value of Title.
@@ -1234,11 +1167,6 @@ func (s *NotFoundError) GetCode() OptString {
 // SetStatus sets the value of Status.
 func (s *NotFoundError) SetStatus(val OptInt) {
 	s.Status = val
-}
-
-// SetType sets the value of Type.
-func (s *NotFoundError) SetType(val OptString) {
-	s.Type = val
 }
 
 // SetTitle sets the value of Title.
@@ -1629,8 +1557,6 @@ func (*RemoveProfilePhotoResponse) aPIV1MeProfilePhotoDeleteRes() {}
 type TooManyRequestsError struct {
 	// The HTTP status code generated for this occurrence of the problem.
 	Status OptInt `json:"status"`
-	// Error type.
-	Type OptString `json:"type"`
 	// A short, human-readable summary of the problem type.
 	Title OptString `json:"title"`
 	// A human-readable explanation specific to this occurrence of the problem.
@@ -1642,11 +1568,6 @@ type TooManyRequestsError struct {
 // GetStatus returns the value of Status.
 func (s *TooManyRequestsError) GetStatus() OptInt {
 	return s.Status
-}
-
-// GetType returns the value of Type.
-func (s *TooManyRequestsError) GetType() OptString {
-	return s.Type
 }
 
 // GetTitle returns the value of Title.
@@ -1667,11 +1588,6 @@ func (s *TooManyRequestsError) GetCode() OptString {
 // SetStatus sets the value of Status.
 func (s *TooManyRequestsError) SetStatus(val OptInt) {
 	s.Status = val
-}
-
-// SetType sets the value of Type.
-func (s *TooManyRequestsError) SetType(val OptString) {
-	s.Type = val
 }
 
 // SetTitle sets the value of Title.
@@ -1696,8 +1612,6 @@ func (*TooManyRequestsError) aPIV1AuthOtpVerifyPostRes() {}
 type UnauthorizedError struct {
 	// The HTTP status code generated for this occurrence of the problem.
 	Status OptInt `json:"status"`
-	// Error type.
-	Type OptString `json:"type"`
 	// A short, human-readable summary of the problem type.
 	Title OptString `json:"title"`
 	// A human-readable explanation specific to this occurrence of the problem.
@@ -1709,11 +1623,6 @@ type UnauthorizedError struct {
 // GetStatus returns the value of Status.
 func (s *UnauthorizedError) GetStatus() OptInt {
 	return s.Status
-}
-
-// GetType returns the value of Type.
-func (s *UnauthorizedError) GetType() OptString {
-	return s.Type
 }
 
 // GetTitle returns the value of Title.
@@ -1734,11 +1643,6 @@ func (s *UnauthorizedError) GetCode() OptString {
 // SetStatus sets the value of Status.
 func (s *UnauthorizedError) SetStatus(val OptInt) {
 	s.Status = val
-}
-
-// SetType sets the value of Type.
-func (s *UnauthorizedError) SetType(val OptString) {
-	s.Type = val
 }
 
 // SetTitle sets the value of Title.

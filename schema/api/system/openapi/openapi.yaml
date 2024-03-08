@@ -809,10 +809,6 @@ components:
                 description: >-
                   The HTTP status code generated for this occurrence of the
                   problem.
-              type:
-                type: string
-                example: invalid_item_id
-                description: error type
               title:
                 type: string
                 description: A short, human-readable summary of the problem type
@@ -839,10 +835,6 @@ components:
                 description: >-
                   The HTTP status code generated for this occurrence of the
                   problem.
-              type:
-                type: string
-                example: invalid_item_id
-                description: error type
               title:
                 type: string
                 description: A short, human-readable summary of the problem type
@@ -869,10 +861,6 @@ components:
                 description: >-
                   The HTTP status code generated for this occurrence of the
                   problem.
-              type:
-                type: string
-                example: invalid_item_id
-                description: error type
               title:
                 type: string
                 description: A short, human-readable summary of the problem type
@@ -899,10 +887,6 @@ components:
                 description: >-
                   The HTTP status code generated for this occurrence of the
                   problem.
-              type:
-                type: string
-                example: invalid_item_id
-                description: error type
               title:
                 type: string
                 description: A short, human-readable summary of the problem type
@@ -929,10 +913,6 @@ components:
                 description: >-
                   The HTTP status code generated for this occurrence of the
                   problem.
-              type:
-                type: string
-                example: invalid_item_id
-                description: error type
               title:
                 type: string
                 description: A short, human-readable summary of the problem type
@@ -959,10 +939,6 @@ components:
                 description: >-
                   The HTTP status code generated for this occurrence of the
                   problem.
-              type:
-                type: string
-                example: invalid_item_id
-                description: error type
               title:
                 type: string
                 description: A short, human-readable summary of the problem type
@@ -989,10 +965,6 @@ components:
                 description: >-
                   The HTTP status code generated for this occurrence of the
                   problem.
-              type:
-                type: string
-                example: invalid_item_id
-                description: error type
               title:
                 type: string
                 description: A short, human-readable summary of the problem type
@@ -1019,10 +991,6 @@ components:
                 description: >-
                   The HTTP status code generated for this occurrence of the
                   problem.
-              type:
-                type: string
-                example: invalid_item_id
-                description: error type
               title:
                 type: string
                 description: A short, human-readable summary of the problem type
@@ -1049,10 +1017,6 @@ components:
                 description: >-
                   The HTTP status code generated for this occurrence of the
                   problem.
-              type:
-                type: string
-                example: invalid_item_id
-                description: error type
               title:
                 type: string
                 description: A short, human-readable summary of the problem type

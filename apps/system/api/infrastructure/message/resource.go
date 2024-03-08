@@ -2,11 +2,11 @@ package message
 
 import (
 	"fmt"
+
 	"golang.org/x/text/language"
 )
 
 type Resource interface {
-	TypeMessage(key string) Message
 	TitleMessage(key string) Message
 	DetailMessage(key string) Message
 	ErrorMessage(key string) Message
@@ -37,13 +37,11 @@ func (m message) WithLang(tag language.Tag, args ...interface{}) string {
 }
 
 type resource struct {
-	successMessages  map[string]Message
-	errorMessages    map[string]Message
-	titleMessages    map[string]Message
-	detailMessages   map[string]Message
-	typeMessages     map[string]Message
-	instanceMessages map[string]Message
-	fieldNames       map[string]Message
+	successMessages map[string]Message
+	errorMessages   map[string]Message
+	titleMessages   map[string]Message
+	detailMessages  map[string]Message
+	fieldNames      map[string]Message
 }
 
 func NewResource(defaultLang language.Tag) Resource {
@@ -74,33 +72,13 @@ func NewResource(defaultLang language.Tag) Resource {
 		dms[string(k)] = v
 	}
 
-	tyms := make(map[string]map[language.Tag]string, len(typeMessages))
-	for k, v := range typeMessages {
-		tyms[string(k)] = v
-	}
-
-	ims := make(map[string]map[language.Tag]string, len(instanceMessages))
-	for k, v := range instanceMessages {
-		ims[string(k)] = v
-	}
-
 	return &resource{
 		toMassages(successMessages),
 		toMassages(errorMessages),
 		toMassages(tims),
 		toMassages(dms),
-		toMassages(tyms),
-		toMassages(ims),
 		toMassages(filedNames),
 	}
-}
-
-func (m *resource) TypeMessage(key string) Message {
-	return m.typeMessages[key]
-}
-
-func (m *resource) InstanceMessage(key string) Message {
-	return m.instanceMessages[key]
 }
 
 func (m *resource) TitleMessage(key string) Message {
