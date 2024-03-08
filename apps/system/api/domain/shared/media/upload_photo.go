@@ -52,7 +52,7 @@ func (p *UploadPhoto) Ext() AvatarExt {
 }
 
 func (p *UploadPhoto) FileName() string {
-	return fmt.Sprintf("%s%s", p.id.String(), p.ext)
+	return fmt.Sprintf("%s.%s", p.id.String(), p.ext)
 }
 
 func (p *UploadPhoto) HostingTo() HostingTo {
