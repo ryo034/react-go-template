@@ -40,7 +40,7 @@
           "inviteeEmail": "invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com",
           "accepted": false,
           "inviter": {
-            "id": "aggznopwor77na7lkbxmuzcsxy",
+            "id": "018d96b9-f674-7ff6-83eb-506eca6452be",
             "profile": {
               "bio": "bio",
               "displayName": "Invite TestOne",
@@ -56,7 +56,7 @@
         },
         "inviter": {
           "member": {
-            "id": "aggznopwor77na7lkbxmuzcsxy",
+            "id": "018d96b9-f674-7ff6-83eb-506eca6452be",
             "profile": {
               "bio": "bio",
               "displayName": "Invite TestOne",

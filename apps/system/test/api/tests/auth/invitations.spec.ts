@@ -13,7 +13,7 @@ systemTest.describe("Invalidations", () => {
     })
     expect(processRes.response.status).toBe(400)
     expect(processRes.error?.code).toBe("400-000")
-    expect(processRes.error?.title).toBe("不正な招待トークンです")
+    expect(processRes.error?.title).toBe("Invalid invite token")
   })
 
   systemTest(

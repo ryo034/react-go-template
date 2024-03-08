@@ -7,7 +7,7 @@
       "id": "018d9b6d-01cf-7d3e-8328-76736b6db971",
       "inviteeEmail": "invite_test_already_joined_any_workspace@example.com",
       "inviter": {
-        "id": "aggznopwor77na7lkbxmuzcsxy",
+        "id": "018d96b9-f674-7ff6-83eb-506eca6452be",
         "profile": {
           "bio": "bio",
           "displayName": "Invite TestOne",
@@ -23,7 +23,7 @@
     },
     "inviter": {
       "member": {
-        "id": "aggznopwor77na7lkbxmuzcsxy",
+        "id": "018d96b9-f674-7ff6-83eb-506eca6452be",
         "profile": {
           "bio": "bio",
           "displayName": "Invite TestOne",

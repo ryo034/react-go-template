@@ -33,7 +33,7 @@ systemTest.describe("Me Invitations", () => {
             inviteeEmail: "invite_test_not_expired@example.com",
             accepted: false,
             inviter: {
-              id: "g57lunkvmbhurkm5dhf5nkblbu",
+              id: "377eba35-5560-4f48-a99d-19cbd6a82b0d",
               profile: {
                 bio: "bio",
                 displayName: "John Doe",
@@ -49,7 +49,7 @@ systemTest.describe("Me Invitations", () => {
           },
           inviter: {
             member: {
-              id: "g57lunkvmbhurkm5dhf5nkblbu",
+              id: "377eba35-5560-4f48-a99d-19cbd6a82b0d",
               profile: {
                 displayName: "John Doe",
                 idNumber: "DEV-12345",
