@@ -133,8 +133,8 @@ func (u *useCase) setupProvider(ctx context.Context, p bun.IDB, usr *user.User) 
 // VerifyOTP User information cannot be retrieved/edited in Firebase on the backend side until VerifyOTP returns a token to the frontend and is authenticated
 // only Email provider
 func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error) {
-	p := u.dbp.GetExecutor(ctx, false)
-	usr, err := u.repo.FindByEmail(ctx, p, i.Email)
+	exec := u.dbp.GetExecutor(ctx, true)
+	usr, err := u.repo.FindByEmail(ctx, exec, i.Email)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		return nil, err
 	}
@@ -150,7 +150,7 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 	if usr == nil {
 		ctx, ap, err = u.createAndSetupProvider(ctx, newAccountID)
 	} else {
-		ctx, meRes, err = u.setupProvider(ctx, p, usr)
+		ctx, meRes, err = u.setupProvider(ctx, exec, usr)
 	}
 
 	pr, err := u.txp.Provide(ctx)
@@ -158,14 +158,16 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 		return nil, err
 	}
 
+	exec = u.dbp.GetExecutor(pr, false)
+
 	fn := func() (string, error) {
 		if usr == nil {
-			_, err = u.repo.Create(ctx, p, user.NewUser(newAccountID, i.Email, nil, nil, nil), ap)
+			_, err = u.repo.Create(pr, exec, user.NewUser(newAccountID, i.Email, nil, nil, nil), ap)
 			if err != nil {
 				return "", err
 			}
 		} else {
-			if err = u.meRepo.RecordLogin(ctx, p, meRes); err != nil {
+			if err = u.meRepo.RecordLogin(pr, exec, meRes); err != nil {
 				return "", err
 			}
 		}
@@ -182,8 +184,8 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 }
 
 func (u *useCase) ProcessInvitationEmail(ctx context.Context, i ProcessInvitationEmailInput) (openapi.ProcessInvitationEmailRes, error) {
-	p := u.dbp.GetExecutor(ctx, false)
-	invRes, err := u.invRepo.FindActiveByEmail(ctx, p, i.Email)
+	exec := u.dbp.GetExecutor(ctx, true)
+	invRes, err := u.invRepo.FindActiveByEmail(ctx, exec, i.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -195,8 +197,9 @@ func (u *useCase) ProcessInvitationEmail(ctx context.Context, i ProcessInvitatio
 	if err != nil {
 		return nil, err
 	}
+	exec = u.dbp.GetExecutor(pr, false)
 	fn := func() error {
-		if err = u.invRepo.VerifyByToken(pr, p, i.Token); err != nil {
+		if err = u.invRepo.VerifyByToken(pr, exec, i.Token); err != nil {
 			return err
 		}
 		code, err := u.repo.GenOTP(pr, i.Email)
@@ -209,8 +212,8 @@ func (u *useCase) ProcessInvitationEmail(ctx context.Context, i ProcessInvitatio
 }
 
 func (u *useCase) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitationOAuthInput) (openapi.ProcessInvitationOAuthRes, error) {
-	p := u.dbp.GetExecutor(ctx, false)
-	invRes, err := u.invRepo.FindActiveByEmail(ctx, p, i.Email)
+	exec := u.dbp.GetExecutor(ctx, true)
+	invRes, err := u.invRepo.FindActiveByEmail(ctx, exec, i.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -219,7 +222,7 @@ func (u *useCase) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitatio
 	}
 
 	// check Account Exists
-	usr, err := u.repo.FindByEmail(ctx, p, i.Email)
+	usr, err := u.repo.FindByEmail(ctx, exec, i.Email)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		return nil, err
 	}
@@ -228,13 +231,14 @@ func (u *useCase) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitatio
 	if err != nil {
 		return nil, err
 	}
+	exec = u.dbp.GetExecutor(pr, false)
 	fn := func() (*me.Me, error) {
-		if err = u.invRepo.VerifyByToken(pr, p, i.Token); err != nil {
+		if err = u.invRepo.VerifyByToken(pr, exec, i.Token); err != nil {
 			return nil, err
 		}
 		var meRes *me.Me = nil
 		if usr != nil {
-			if meRes, err = u.meRepo.FindLastLogin(pr, p, usr.AccountID()); err != nil && !errors.Is(err, sql.ErrNoRows) {
+			if meRes, err = u.meRepo.FindLastLogin(pr, exec, usr.AccountID()); err != nil && !errors.Is(err, sql.ErrNoRows) {
 				return nil, err
 			}
 		}
@@ -242,14 +246,14 @@ func (u *useCase) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitatio
 			if i.CreateInfo == nil {
 				return nil, domainErr.NewUnauthenticated("User not found")
 			}
-			if meRes, err = u.createUser(pr, p, *i.CreateInfo); err != nil {
+			if meRes, err = u.createUser(pr, exec, *i.CreateInfo); err != nil {
 				return nil, err
 			}
 		}
 		if meRes.NotJoined() {
 			return meRes, nil
 		}
-		if err = u.meRepo.RecordLogin(pr, p, meRes); err != nil {
+		if err = u.meRepo.RecordLogin(pr, exec, meRes); err != nil {
 			return nil, err
 		}
 		return meRes, nil

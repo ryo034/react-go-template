@@ -38,18 +38,18 @@ func NewUseCase(txp core.TransactionProvider, dbp core.Provider, repo workspace.
 }
 
 func (u *useCase) Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error) {
-	p := u.dbp.GetExecutor(ctx, false)
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
 		return nil, err
 	}
+	exec := u.dbp.GetExecutor(pr, false)
 	fn := func() (*workspace.Workspace, error) {
-		meRes, err := u.meRepo.FindBeforeOnboard(pr, p, i.AccountID)
+		meRes, err := u.meRepo.FindBeforeOnboard(pr, exec, i.AccountID)
 		if err != nil {
 			return nil, err
 		}
 		w := i.Workspace
-		wres, err := u.repo.Create(pr, p, w)
+		wres, err := u.repo.Create(pr, exec, w)
 		if err != nil {
 			return nil, err
 		}
@@ -57,15 +57,15 @@ func (u *useCase) Create(ctx context.Context, i CreateInput) (openapi.APIV1Works
 		if err != nil {
 			return nil, err
 		}
-		memRes, err := u.repo.AddMember(pr, p, wres, m)
+		memRes, err := u.repo.AddMember(pr, exec, wres, m)
 		if err != nil {
 			return nil, err
 		}
-		meRes, err = u.meRepo.Find(pr, p, memRes.ID())
+		meRes, err = u.meRepo.Find(pr, exec, memRes.ID())
 		if err != nil {
 			return nil, err
 		}
-		if err = u.meRepo.RecordLogin(pr, p, meRes); err != nil {
+		if err = u.meRepo.RecordLogin(pr, exec, meRes); err != nil {
 			return nil, err
 		}
 		return wres, nil
@@ -139,8 +139,8 @@ func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (open
 }
 
 func (u *useCase) RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error) {
-	p := u.dbp.GetExecutor(ctx, false)
-	inv, err := u.invRepo.Find(ctx, p, i.InvitationID)
+	exec := u.dbp.GetExecutor(ctx, true)
+	inv, err := u.invRepo.Find(ctx, exec, i.InvitationID)
 	if err != nil {
 		return nil, err
 	}
@@ -152,11 +152,12 @@ func (u *useCase) RevokeInvitation(ctx context.Context, i RevokeInvitationInput)
 	if err != nil {
 		return nil, err
 	}
+	exec = u.dbp.GetExecutor(pr, false)
 	fn := func() (invitation.Invitations, error) {
-		if err = u.invRepo.Revoke(pr, p, i.InvitationID); err != nil {
+		if err = u.invRepo.Revoke(pr, exec, i.InvitationID); err != nil {
 			return nil, err
 		}
-		return u.repo.FindAllInvitations(pr, p, i.CurrentWorkspaceID)
+		return u.repo.FindAllInvitations(pr, exec, i.CurrentWorkspaceID)
 	}
 	result := pr.Transactional(fn)()
 	if err = result.Error(); err != nil {
@@ -167,8 +168,8 @@ func (u *useCase) RevokeInvitation(ctx context.Context, i RevokeInvitationInput)
 }
 
 func (u *useCase) ResendInvitation(ctx context.Context, i ResendInvitationInput) (openapi.ResendInvitationRes, error) {
-	p := u.dbp.GetExecutor(ctx, false)
-	inv, err := u.invRepo.Find(ctx, p, i.InvitationID)
+	exec := u.dbp.GetExecutor(ctx, true)
+	inv, err := u.invRepo.Find(ctx, exec, i.InvitationID)
 	if err != nil {
 		return nil, err
 	}
@@ -176,7 +177,7 @@ func (u *useCase) ResendInvitation(ctx context.Context, i ResendInvitationInput)
 		return nil, err
 	}
 
-	meRes, err := u.meRepo.FindLastLogin(ctx, p, i.AccountID)
+	meRes, err := u.meRepo.FindLastLogin(ctx, exec, i.AccountID)
 	if err != nil {
 		return nil, err
 	}
@@ -185,13 +186,14 @@ func (u *useCase) ResendInvitation(ctx context.Context, i ResendInvitationInput)
 	if err != nil {
 		return nil, err
 	}
+	exec = u.dbp.GetExecutor(pr, false)
 	fn := func() (*invitation.Invitation, error) {
-		res, err := u.invRepo.Resend(pr, p, i.InvitationID)
+		res, err := u.invRepo.Resend(pr, exec, i.InvitationID)
 		if err != nil {
 			return nil, err
 		}
 		inviter := workspace.NewInviter(meRes.Member(), meRes.Workspace())
-		if err = u.notificationRepo.NotifyInvite(ctx, inviter, inv); err != nil {
+		if err = u.notificationRepo.NotifyInvite(pr, inviter, inv); err != nil {
 			return nil, err
 		}
 		return res, nil
@@ -205,8 +207,8 @@ func (u *useCase) ResendInvitation(ctx context.Context, i ResendInvitationInput)
 }
 
 func (u *useCase) FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error) {
-	p := u.dbp.GetExecutor(ctx, true)
-	res, err := u.repo.FindAllInvitations(ctx, p, i.CurrentWorkspaceID)
+	exec := u.dbp.GetExecutor(ctx, true)
+	res, err := u.repo.FindAllInvitations(ctx, exec, i.CurrentWorkspaceID)
 	if err != nil {
 		return nil, err
 	}
@@ -221,7 +223,7 @@ func (u *useCase) FindAllInvitation(ctx context.Context, i FindAllInvitationInpu
 }
 
 func (u *useCase) UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput) (openapi.APIV1MembersMemberIdRolePutRes, error) {
-	exec := u.dbp.GetExecutor(ctx, false)
+	exec := u.dbp.GetExecutor(ctx, true)
 	meRes, err := u.meRepo.FindLastLogin(ctx, exec, i.AccountID)
 	if err != nil {
 		return nil, err
@@ -240,6 +242,7 @@ func (u *useCase) UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput)
 	if err != nil {
 		return nil, err
 	}
+	exec = u.dbp.GetExecutor(pr, false)
 	fn := func() (*member.Member, error) {
 		res, err := u.repo.UpdateMemberRole(pr, exec, meRes.Member(), m.Member())
 		if err != nil {

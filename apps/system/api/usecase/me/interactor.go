@@ -51,13 +51,9 @@ func (u *useCase) Find(ctx context.Context, aID account.ID) (openapi.APIV1MeGetR
 }
 
 func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error) {
-	p := u.dbp.GetExecutor(ctx, false)
-	pr, err := u.txp.Provide(ctx)
-	if err != nil {
-		return nil, err
-	}
+	exec := u.dbp.GetExecutor(ctx, true)
 
-	invRes, wRes, err := u.wRepo.FindActiveInvitation(ctx, p, i.InvitationID)
+	invRes, wRes, err := u.wRepo.FindActiveInvitation(ctx, exec, i.InvitationID)
 	if err != nil {
 		return nil, err
 	}
@@ -66,8 +62,13 @@ func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput)
 		return nil, err
 	}
 
+	pr, err := u.txp.Provide(ctx)
+	if err != nil {
+		return nil, err
+	}
+	exec = u.dbp.GetExecutor(pr, false)
 	fn := func() (*me.Me, error) {
-		m, err := u.repo.FindByEmail(pr, p, invRes.InviteeEmail())
+		m, err := u.repo.FindByEmail(pr, exec, invRes.InviteeEmail())
 		if err != nil {
 			return nil, err
 		}
@@ -75,18 +76,18 @@ func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput)
 		if err != nil {
 			return nil, err
 		}
-		mem, err = u.wRepo.AddMember(pr, p, wRes, mem)
+		mem, err = u.wRepo.AddMember(pr, exec, wRes, mem)
 		if err != nil {
 			return nil, err
 		}
-		if err = u.repo.AcceptInvitation(pr, p, invRes.ID()); err != nil {
+		if err = u.repo.AcceptInvitation(pr, exec, invRes.ID()); err != nil {
 			return nil, err
 		}
-		m, err = u.repo.Find(pr, p, mem.ID())
+		m, err = u.repo.Find(pr, exec, mem.ID())
 		if err != nil {
 			return nil, err
 		}
-		if err = u.repo.RecordLogin(pr, p, m); err != nil {
+		if err = u.repo.RecordLogin(pr, exec, m); err != nil {
 			return nil, err
 		}
 		return m, nil
@@ -99,18 +100,18 @@ func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput)
 }
 
 func (u *useCase) UpdateName(ctx context.Context, i UpdateNameInput) (openapi.APIV1MeProfilePutRes, error) {
-	p := u.dbp.GetExecutor(ctx, false)
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
 		return nil, err
 	}
+	exec := u.dbp.GetExecutor(pr, false)
 	fn := func() (*me.Me, error) {
-		current, err := u.repo.FindLastLogin(pr, p, i.AccountID)
+		current, err := u.repo.FindLastLogin(pr, exec, i.AccountID)
 		if err != nil {
 			return nil, err
 		}
 		current = current.UpdateName(i.Name)
-		return current, u.repo.UpdateName(pr, p, current.Self())
+		return current, u.repo.UpdateName(pr, exec, current.Self())
 	}
 	result := pr.Transactional(fn)()
 	if err = result.Error(); err != nil {
@@ -120,13 +121,13 @@ func (u *useCase) UpdateName(ctx context.Context, i UpdateNameInput) (openapi.AP
 }
 
 func (u *useCase) UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1MeMemberProfilePutRes, error) {
-	p := u.dbp.GetExecutor(ctx, false)
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
 		return nil, err
 	}
+	exec := u.dbp.GetExecutor(pr, false)
 	fn := func() (*me.Me, error) {
-		m, err := u.repo.FindLastLogin(pr, p, i.AccountID)
+		m, err := u.repo.FindLastLogin(pr, exec, i.AccountID)
 		if err != nil {
 			return nil, err
 		}
@@ -134,7 +135,7 @@ func (u *useCase) UpdateMemberProfile(ctx context.Context, i UpdateMemberProfile
 			return nil, domainErr.NewUnauthenticated("Not joined")
 		}
 		m = m.UpdateMember(m.Member().UpdateProfile(i.Profile))
-		if _, err = u.repo.UpdateMemberProfile(pr, p, m.Member()); err != nil {
+		if _, err = u.repo.UpdateMemberProfile(pr, exec, m.Member()); err != nil {
 			return nil, err
 		}
 		return m, nil
@@ -148,19 +149,19 @@ func (u *useCase) UpdateMemberProfile(ctx context.Context, i UpdateMemberProfile
 }
 
 func (u *useCase) UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoInput) (openapi.APIV1MeProfilePhotoPutRes, error) {
-	p := u.dbp.GetExecutor(ctx, false)
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
 		return nil, err
 	}
+	exec := u.dbp.GetExecutor(ctx, false)
 	fn := func() (*me.Me, error) {
-		m, err := u.repo.FindLastLogin(pr, p, i.AccountID)
+		m, err := u.repo.FindLastLogin(pr, exec, i.AccountID)
 		if err != nil {
 			return nil, err
 		}
 		photo := media.NewUploadPhotoToR2(i.File, i.Size, i.Ext)
 		m = m.UpdateProfilePhoto(user.NewPhoto(photo.ID(), photo.HostingTo(), nil))
-		if err = u.repo.UpdateProfilePhoto(pr, p, m, photo); err != nil {
+		if err = u.repo.UpdateProfilePhoto(pr, exec, m, photo); err != nil {
 			return nil, err
 		}
 		return m, nil
@@ -173,8 +174,8 @@ func (u *useCase) UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoIn
 }
 
 func (u *useCase) RemoveProfilePhoto(ctx context.Context, i RemoveProfilePhotoInput) (openapi.APIV1MeProfilePhotoDeleteRes, error) {
-	p := u.dbp.GetExecutor(ctx, false)
-	m, err := u.repo.FindLastLogin(ctx, p, i.AccountID)
+	exec := u.dbp.GetExecutor(ctx, true)
+	m, err := u.repo.FindLastLogin(ctx, exec, i.AccountID)
 	if err != nil {
 		return nil, err
 	}
@@ -186,9 +187,10 @@ func (u *useCase) RemoveProfilePhoto(ctx context.Context, i RemoveProfilePhotoIn
 	if err != nil {
 		return nil, err
 	}
+	exec = u.dbp.GetExecutor(pr, false)
 	fn := func() (*me.Me, error) {
 		m = m.RemoveProfilePhoto()
-		if err = u.repo.RemoveProfilePhoto(pr, p, m); err != nil {
+		if err = u.repo.RemoveProfilePhoto(pr, exec, m); err != nil {
 			return nil, err
 		}
 		return m, nil
