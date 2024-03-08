@@ -32,4 +32,12 @@ export class Member extends Entity<Props> {
   get isOwner(): boolean {
     return this.value.role === "owner"
   }
+
+  get isAdmin(): boolean {
+    return this.value.role === "admin"
+  }
+
+  get canEditRole(): boolean {
+    return this.isOwner || this.isAdmin
+  }
 }

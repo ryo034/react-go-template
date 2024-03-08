@@ -19,7 +19,7 @@ import {
   useToast
 } from "shared-ui"
 import { AccountAvatar } from "~/components/account/avatar"
-import { Member, MemberRole, SelectableRole, SelectableRoleList } from "~/domain"
+import { Member, SelectableRole, SelectableRoleList } from "~/domain"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { useSettingsMembersPageMessage } from "./message"
 
@@ -113,9 +113,10 @@ export const SettingsMembersPage = () => {
                     <p className="text-sm text-muted-foreground w-[420px]">{m.user.email.value}</p>
                   </div>
                 </div>
-                {m.isOwner ? (
-                  <Button variant="outline" className="ml-auto" disabled>
-                    {message.word.ownerRole}
+                {m.isOwner || !me.member?.canEditRole ? (
+                  <Button variant="outline" className="ml-auto" disabled data-testid="notSelectableRoleButton">
+                    {translatedRoles[m.role].name}
+                    <ChevronDownIcon className="ml-2 h-4 w-4 text-muted-foreground" />
                   </Button>
                 ) : (
                   <Popover>
