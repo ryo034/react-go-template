@@ -6,7 +6,7 @@ import { firebaseAuth } from "~/infrastructure/firebase"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { unprotectedInitialPagePath } from "~/infrastructure/route/path"
 
-export const AuthLayout = () => {
+export const AuthenticationLayout = () => {
   const { controller, store } = useContext(ContainerContext)
   const navigate = useNavigate()
   const me = store.me((state) => state.me)

@@ -1,5 +1,7 @@
+import { useContext } from "react"
 import { Outlet } from "react-router-dom"
 import { Separator } from "shared-ui"
+import { ContainerContext } from "~/infrastructure/injector/context"
 import { routeMap } from "~/infrastructure/route/path"
 import { SidebarNav } from "../../../components/sidebar/settingsSidebarNav"
 
@@ -42,6 +44,12 @@ const SideNavSectionTitle = ({ title }: Props) => {
 }
 
 export const SettingsLayout = () => {
+  const { store } = useContext(ContainerContext)
+  const me = store.me((state) => state.me)
+  if (me === null || !me.member) return <></>
+
+  const showWorkspaceSetting = me.member.isOwner || me.member.isAdmin
+
   return (
     <>
       <h2 className="text-2xl font-bold tracking-tight" data-testid="pageTitle">
@@ -53,10 +61,12 @@ export const SettingsLayout = () => {
           <div key="accountSettings">
             <SidebarNav items={sidebarNavAccountSettingItems} />
           </div>
-          <div key="workspaceSettings">
-            <SideNavSectionTitle title="Workspace" />
-            <SidebarNav items={sidebarNavWorkspaceSettingItems} />
-          </div>
+          {showWorkspaceSetting && (
+            <div key="workspaceSettings">
+              <SideNavSectionTitle title="Workspace" />
+              <SidebarNav items={sidebarNavWorkspaceSettingItems} />
+            </div>
+          )}
         </aside>
         <div className="flex-1 lg:max-w-2xl">
           <Outlet />

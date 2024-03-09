@@ -28,7 +28,9 @@ VALUES
 ('018e1952-009b-7a7b-b1a5-3938a11784f9', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-7758-929e-cf1d52320f0c', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-739e-9206-47a7b99de453', '2024-01-10 12:00:00'),
-('018e201b-67d4-771c-b67c-91433823f052', '2024-01-10 12:00:00');
+('018e201b-67d4-771c-b67c-91433823f052', '2024-01-10 12:00:00'),
+('018e21d7-6278-7bb7-bf7f-a5f9095c10dc', '2024-01-10 12:00:00'),
+('018e21d7-6278-71da-ae8f-18d988f5883f', '2024-01-10 12:00:00');
 
 INSERT INTO auth_providers (auth_provider_id, account_id, provider, photo_url, provider_uid, provided_by, registered_at)
 VALUES
@@ -53,7 +55,10 @@ VALUES
 ('018e1952-009b-72ed-95b8-48b869c2b1d3', '018e1952-009b-7a7b-b1a5-3938a11784f9', 'email', '', '018e1952-009b-7a7b-b1a5-3938a11784f9', 'firebase', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-7195-8b7c-3e1f4cd27f13', '018e18ba-dc87-7758-929e-cf1d52320f0c', 'email', '', '018e18ba-dc87-7758-929e-cf1d52320f0c', 'firebase', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-7927-be6e-eb5bb6998b0c', '018e18ba-dc87-739e-9206-47a7b99de453', 'email', '', '018e18ba-dc87-739e-9206-47a7b99de453', 'firebase', '2024-01-10 12:00:00'),
-('018e201b-67d4-714a-800d-276bda4c856c', '018e201b-67d4-771c-b67c-91433823f052', 'email', '', '018e201b-67d4-771c-b67c-91433823f052', 'firebase', '2024-01-10 12:00:00');
+('018e201b-67d4-714a-800d-276bda4c856c', '018e201b-67d4-771c-b67c-91433823f052', 'email', '', '018e201b-67d4-771c-b67c-91433823f052', 'firebase', '2024-01-10 12:00:00'),
+('018e21d7-6278-7e46-b48e-f958f37e65b6', '018e21d7-6278-7bb7-bf7f-a5f9095c10dc', 'email', '', '018e21d7-6278-7bb7-bf7f-a5f9095c10dc', 'firebase', '2024-01-10 12:00:00'),
+('018e21d7-6278-79a1-bb03-bb2004307831', '018e21d7-6278-71da-ae8f-18d988f5883f', 'email', '', '018e21d7-6278-71da-ae8f-18d988f5883f', 'firebase', '2024-01-10 12:00:00');
+
 
 INSERT INTO account_emails (account_email_id, account_id, email, created_at)
 VALUES
@@ -78,7 +83,9 @@ VALUES
 ('018e1952-009b-769d-a948-9677102ef6b8', '018e1952-009b-7a7b-b1a5-3938a11784f9', 'update_role_admin_2@example.com', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-7d52-a12f-95c843831cc6', '018e18ba-dc87-7758-929e-cf1d52320f0c', 'update_role_member@example.com', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-7868-82b7-a44909ce5d5a', '018e18ba-dc87-739e-9206-47a7b99de453', 'update_role_guest@example.com', '2024-01-10 12:00:00'),
-('018e201b-67d4-76de-86f5-2a6b6acd72b6', '018e201b-67d4-771c-b67c-91433823f052', 'update_workspace_detail@example.com', '2024-01-10 12:00:00');
+('018e201b-67d4-76de-86f5-2a6b6acd72b6', '018e201b-67d4-771c-b67c-91433823f052', 'update_workspace_detail@example.com', '2024-01-10 12:00:00'),
+('018e21d7-6278-74f0-bd83-a7b42f138eb2', '018e21d7-6278-7bb7-bf7f-a5f9095c10dc', 'update_workspace_detail_member_role@example.com', '2024-01-10 12:00:00'),
+('018e21d7-6278-7156-9139-3d0326e1c300', '018e21d7-6278-71da-ae8f-18d988f5883f', 'update_workspace_detail_guest_role@example.com', '2024-01-10 12:00:00');
 
 INSERT INTO account_latest_emails (account_email_id, account_id)
 VALUES
@@ -103,7 +110,9 @@ VALUES
 ('018e1952-009b-769d-a948-9677102ef6b8', '018e1952-009b-7a7b-b1a5-3938a11784f9'),
 ('018e18ba-dc87-7d52-a12f-95c843831cc6', '018e18ba-dc87-7758-929e-cf1d52320f0c'),
 ('018e18ba-dc87-7868-82b7-a44909ce5d5a', '018e18ba-dc87-739e-9206-47a7b99de453'),
-('018e201b-67d4-76de-86f5-2a6b6acd72b6', '018e201b-67d4-771c-b67c-91433823f052');
+('018e201b-67d4-76de-86f5-2a6b6acd72b6', '018e201b-67d4-771c-b67c-91433823f052'),
+('018e21d7-6278-74f0-bd83-a7b42f138eb2', '018e21d7-6278-7bb7-bf7f-a5f9095c10dc'),
+('018e21d7-6278-7156-9139-3d0326e1c300', '018e21d7-6278-71da-ae8f-18d988f5883f');
 
 INSERT INTO account_names (account_name_id, account_id, name, created_at)
 VALUES
@@ -127,7 +136,9 @@ VALUES
 ('018e1952-009b-7383-8ae8-d5d32bb9ddcb', '018e1952-009b-7a7b-b1a5-3938a11784f9', 'UpdateRole AdminTwo', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-77a6-bbd6-2c84421cad82', '018e18ba-dc87-7758-929e-cf1d52320f0c', 'UpdateRole Member', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-7425-a2ed-bd1c7f551f4e', '018e18ba-dc87-739e-9206-47a7b99de453', 'UpdateRole Guest', '2024-01-10 12:00:00'),
-('018e201b-67d4-75a4-a1ff-95f77b5bfe03', '018e201b-67d4-771c-b67c-91433823f052', 'UpdateWorkspace Detail', '2024-01-10 12:00:00');
+('018e201b-67d4-75a4-a1ff-95f77b5bfe03', '018e201b-67d4-771c-b67c-91433823f052', 'UpdateWorkspace Detail', '2024-01-10 12:00:00'),
+('018e21d7-6279-7ed5-b114-03fc1a4eca60', '018e21d7-6278-7bb7-bf7f-a5f9095c10dc', 'UpdateWorkspace DetailMemberRole', '2024-01-10 12:00:00'),
+('018e21d7-6279-71de-8f55-f218b06ef69e', '018e21d7-6278-71da-ae8f-18d988f5883f', 'UpdateWorkspace DetailGuestRole', '2024-01-10 12:00:00');
 
 INSERT INTO account_latest_names (account_name_id, account_id)
 VALUES
@@ -151,7 +162,9 @@ VALUES
 ('018e1952-009b-7383-8ae8-d5d32bb9ddcb', '018e1952-009b-7a7b-b1a5-3938a11784f9'),
 ('018e18ba-dc87-77a6-bbd6-2c84421cad82', '018e18ba-dc87-7758-929e-cf1d52320f0c'),
 ('018e18ba-dc87-7425-a2ed-bd1c7f551f4e', '018e18ba-dc87-739e-9206-47a7b99de453'),
-('018e201b-67d4-75a4-a1ff-95f77b5bfe03', '018e201b-67d4-771c-b67c-91433823f052');
+('018e201b-67d4-75a4-a1ff-95f77b5bfe03', '018e201b-67d4-771c-b67c-91433823f052'),
+('018e21d7-6279-7ed5-b114-03fc1a4eca60', '018e21d7-6278-7bb7-bf7f-a5f9095c10dc'),
+('018e21d7-6279-71de-8f55-f218b06ef69e', '018e21d7-6278-71da-ae8f-18d988f5883f');
 
 INSERT INTO workspaces (workspace_id, created_at)
 VALUES
@@ -206,7 +219,9 @@ VALUES
 ('018e1952-009b-7138-aea6-24b2f9596ad7', '018e1952-009b-7a7b-b1a5-3938a11784f9', '018e18ba-dc87-7658-9591-672daaddb95b', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-7a3e-8181-7186458e84b6', '018e18ba-dc87-7758-929e-cf1d52320f0c', '018e18ba-dc87-7658-9591-672daaddb95b', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-7c1a-81c6-6f6415c53966', '018e18ba-dc87-739e-9206-47a7b99de453', '018e18ba-dc87-7658-9591-672daaddb95b', '2024-01-10 12:00:00'),
-('018e201b-67d4-7460-bbb2-1428e7c2d949', '018e201b-67d4-771c-b67c-91433823f052', '018e201b-67d4-7265-a022-1b29793b2a91', '2024-01-10 12:00:00');
+('018e201b-67d4-7460-bbb2-1428e7c2d949', '018e201b-67d4-771c-b67c-91433823f052', '018e201b-67d4-7265-a022-1b29793b2a91', '2024-01-10 12:00:00'),
+('018e21d7-6279-70f6-8170-5d3bfdc5c378', '018e21d7-6278-7bb7-bf7f-a5f9095c10dc', '018e201b-67d4-7265-a022-1b29793b2a91', '2024-01-10 12:00:00'),
+('018e21d7-6279-788c-9a65-9932d4649535', '018e21d7-6278-71da-ae8f-18d988f5883f', '018e201b-67d4-7265-a022-1b29793b2a91', '2024-01-10 12:00:00');
 
 INSERT INTO member_roles (member_role_id, member_id, assigned_by, role, assigned_at)
 VALUES
@@ -228,7 +243,9 @@ VALUES
 ('018e1952-009b-71ea-9dbf-9a34b8974ac3', '018e1952-009b-7138-aea6-24b2f9596ad7', '018e1952-009b-7138-aea6-24b2f9596ad7', 'admin', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-7515-bf20-937fcdcee67b', '018e18ba-dc87-7a3e-8181-7186458e84b6', '018e18ba-dc87-7a3e-8181-7186458e84b6', 'member', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-7c3b-a67b-1ecf60ff8130', '018e18ba-dc87-7c1a-81c6-6f6415c53966', '018e18ba-dc87-7c1a-81c6-6f6415c53966', 'guest', '2024-01-10 12:00:00'),
-('018e201b-67d4-7006-a732-e271820a5832', '018e201b-67d4-7460-bbb2-1428e7c2d949', '018e201b-67d4-7460-bbb2-1428e7c2d949', 'owner', '2024-01-10 12:00:00');
+('018e201b-67d4-7006-a732-e271820a5832', '018e201b-67d4-7460-bbb2-1428e7c2d949', '018e201b-67d4-7460-bbb2-1428e7c2d949', 'owner', '2024-01-10 12:00:00'),
+('018e21d7-6279-7f68-966f-269ab1df9803', '018e21d7-6279-70f6-8170-5d3bfdc5c378', '018e21d7-6279-70f6-8170-5d3bfdc5c378', 'member', '2024-01-10 12:00:00'),
+('018e21d7-6279-72bb-9b61-2d8692d7c75d', '018e21d7-6279-788c-9a65-9932d4649535', '018e21d7-6279-788c-9a65-9932d4649535', 'guest', '2024-01-10 12:00:00');
 
 INSERT INTO member_latest_roles (member_role_id, member_id)
 VALUES
@@ -250,7 +267,9 @@ VALUES
 ('018e1952-009b-71ea-9dbf-9a34b8974ac3', '018e1952-009b-7138-aea6-24b2f9596ad7'),
 ('018e18ba-dc87-7515-bf20-937fcdcee67b', '018e18ba-dc87-7a3e-8181-7186458e84b6'),
 ('018e18ba-dc87-7c3b-a67b-1ecf60ff8130', '018e18ba-dc87-7c1a-81c6-6f6415c53966'),
-('018e201b-67d4-7006-a732-e271820a5832', '018e201b-67d4-7460-bbb2-1428e7c2d949');
+('018e201b-67d4-7006-a732-e271820a5832', '018e201b-67d4-7460-bbb2-1428e7c2d949'),
+('018e21d7-6279-7f68-966f-269ab1df9803', '018e21d7-6279-70f6-8170-5d3bfdc5c378'),
+('018e21d7-6279-72bb-9b61-2d8692d7c75d', '018e21d7-6279-788c-9a65-9932d4649535');
 
 INSERT INTO member_login_histories (member_login_history_id, member_id, login_at)
 VALUES
@@ -272,7 +291,9 @@ VALUES
 ('018e1952-009b-7457-9ba7-1b002fbb0415', '018e1952-009b-7138-aea6-24b2f9596ad7', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-7897-8585-808a56e2c48e', '018e18ba-dc87-7a3e-8181-7186458e84b6', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-7be6-9dba-05be861174a2', '018e18ba-dc87-7c1a-81c6-6f6415c53966', '2024-01-10 12:00:00'),
-('018e201b-67d4-7fd4-897a-88322769bd4b', '018e201b-67d4-7460-bbb2-1428e7c2d949', '2024-01-10 12:00:00');
+('018e201b-67d4-7fd4-897a-88322769bd4b', '018e201b-67d4-7460-bbb2-1428e7c2d949', '2024-01-10 12:00:00'),
+('018e21d7-6279-77d5-b7bf-63c61e7378eb', '018e21d7-6279-70f6-8170-5d3bfdc5c378', '2024-01-10 12:00:00'),
+('018e21d7-6279-744f-b122-9be9ff63feb9', '018e21d7-6279-788c-9a65-9932d4649535', '2024-01-10 12:00:00');
 
 INSERT INTO member_latest_login_histories (member_login_history_id, member_id)
 VALUES
@@ -294,7 +315,9 @@ VALUES
 ('018e1952-009b-7457-9ba7-1b002fbb0415', '018e1952-009b-7138-aea6-24b2f9596ad7'),
 ('018e18ba-dc87-7897-8585-808a56e2c48e', '018e18ba-dc87-7a3e-8181-7186458e84b6'),
 ('018e18ba-dc87-7be6-9dba-05be861174a2', '018e18ba-dc87-7c1a-81c6-6f6415c53966'),
-('018e201b-67d4-7fd4-897a-88322769bd4b', '018e201b-67d4-7460-bbb2-1428e7c2d949');
+('018e201b-67d4-7fd4-897a-88322769bd4b', '018e201b-67d4-7460-bbb2-1428e7c2d949'),
+('018e21d7-6279-77d5-b7bf-63c61e7378eb', '018e21d7-6279-70f6-8170-5d3bfdc5c378'),
+('018e21d7-6279-744f-b122-9be9ff63feb9', '018e21d7-6279-788c-9a65-9932d4649535');
 
 INSERT INTO member_profiles (member_id, member_id_number, display_name, bio, created_at, updated_at)
 VALUES
@@ -316,7 +339,9 @@ VALUES
 ('018e1952-009b-7138-aea6-24b2f9596ad7', 'DEV-54323', 'UpdateRole AdminTwo', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-7a3e-8181-7186458e84b6', 'DEV-54323', 'UpdateRole Member', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-7c1a-81c6-6f6415c53966', 'DEV-54324', 'UpdateRole Guest', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018e201b-67d4-7460-bbb2-1428e7c2d949', 'DEV-54321', 'UpdateWorkspace Detail', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
+('018e201b-67d4-7460-bbb2-1428e7c2d949', 'DEV-54321', 'UpdateWorkspace Detail', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018e21d7-6279-70f6-8170-5d3bfdc5c378', 'DEV-54321', 'UpdateWorkspace DetailTwo', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
+('018e21d7-6279-788c-9a65-9932d4649535', 'DEV-54322', 'UpdateWorkspace DetailThree', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
 
 INSERT INTO member_addresses (member_id, postal_code, building_component_id, street_address_component_id, city_component_id, state_component_id, country_component_id, created_at)
 VALUES
@@ -342,7 +367,9 @@ VALUES
 ('018e1952-009b-7138-aea6-24b2f9596ad7', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-7a3e-8181-7186458e84b6', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
 ('018e18ba-dc87-7c1a-81c6-6f6415c53966', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018e201b-67d4-7460-bbb2-1428e7c2d949', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00');
+('018e201b-67d4-7460-bbb2-1428e7c2d949', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
+('018e21d7-6279-70f6-8170-5d3bfdc5c378', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
+('018e21d7-6279-788c-9a65-9932d4649535', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00');
 
 INSERT INTO invitation_units (invitation_unit_id, workspace_id, invited_by, created_at)
 VALUES

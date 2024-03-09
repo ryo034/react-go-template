@@ -62,6 +62,26 @@
       "disabled": false
     },
     {
+      "localId": "018e21d7-6278-7bb7-bf7f-a5f9095c10dc",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "UpdateWorkspace DetailMemberRole",
+      "validSince": "1709725349",
+      "email": "update_workspace_detail_member_role@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "018e21d7-6278-71da-ae8f-18d988f5883f",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "UpdateWorkspace DetailGuestRole",
+      "validSince": "1709725349",
+      "email": "update_workspace_detail_guest_role@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
       "localId": "018d6189-9ad0-7b72-801b-1e0de0d3c214",
       "createdAt": "1706825570522",
       "lastLoginAt": "1706825570547",

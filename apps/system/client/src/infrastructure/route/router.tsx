@@ -1,6 +1,8 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
+import { MemberRoleList } from "~/domain"
 import { routeMap } from "~/infrastructure/route/path"
-import { AuthLayout, AuthenticatedLayout } from "~/layout/auth"
+import { AuthenticatedLayout, AuthenticationLayout } from "~/layout/authentication"
+import { AuthorizationLayout } from "~/layout/authorization"
 import { DashboardLayout } from "~/layout/dashboard"
 import { SettingsLayout } from "~/layout/dashboard/setting"
 import { InvitationLayout } from "~/layout/invitation"
@@ -9,6 +11,7 @@ import { OnboardingLayout } from "~/layout/onboarding"
 import { ThemeLayout } from "~/layout/theme"
 import { TrackingLayout } from "~/layout/tracking"
 import { AuthPage } from "~/pages/auth"
+import { ForbiddenPage } from "~/pages/error/forbidden"
 import { NotFoundPage } from "~/pages/error/notFound"
 import { HomePage } from "~/pages/home"
 import { StartInvitationPage } from "~/pages/invitation"
@@ -59,7 +62,7 @@ const router = createBrowserRouter([
                 ]
               },
               {
-                element: <AuthLayout />,
+                element: <AuthenticationLayout />,
                 children: [
                   {
                     element: <DashboardLayout />,
@@ -71,10 +74,23 @@ const router = createBrowserRouter([
                         children: [
                           { path: routeMap.settingsProfile, element: <SettingsProfilePage /> },
                           { path: routeMap.settingsAppearance, element: <SettingsAppearancePage /> },
-                          { path: routeMap.settingsWorkspaceAccount, element: <SettingsWorkspaceAccountPage /> },
-                          { path: routeMap.settingsWorkspaceInvitation, element: <SettingsWorkspaceInvitationsPage /> },
-                          { path: routeMap.settingsWorkspaceMembers, element: <SettingsWorkspaceMembersPage /> },
-                          { path: routeMap.settingsWorkspaceSetting, element: <SettingsWorkspaceSettingPage /> }
+                          {
+                            element: (
+                              <AuthorizationLayout
+                                roles={[MemberRoleList.Owner, MemberRoleList.Admin]}
+                                fallback={<ForbiddenPage />}
+                              />
+                            ),
+                            children: [
+                              { path: routeMap.settingsWorkspaceAccount, element: <SettingsWorkspaceAccountPage /> },
+                              {
+                                path: routeMap.settingsWorkspaceInvitation,
+                                element: <SettingsWorkspaceInvitationsPage />
+                              },
+                              { path: routeMap.settingsWorkspaceMembers, element: <SettingsWorkspaceMembersPage /> },
+                              { path: routeMap.settingsWorkspaceSetting, element: <SettingsWorkspaceSettingPage /> }
+                            ]
+                          }
                         ]
                       }
                     ]

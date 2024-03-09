@@ -27,7 +27,7 @@ systemTest.describe("Create Workspace", () => {
 })
 
 test.describe("Update workspace", () => {
-  test("Update workspace detail", async () => {
+  test("Admin role can update workspace detail", async () => {
     const authInfo = await getAuthInfo("update_workspace_detail@example.com")
     const res = await client.PUT("/api/v1/workspaces/{workspaceId}", {
       headers: authHeaders(authInfo.token),
@@ -36,5 +36,25 @@ test.describe("Update workspace", () => {
     })
     expect(res.response.status).toBe(200)
     expect(res.data).toStrictEqual((await import("./success_update_workspace.json")).default)
+  })
+
+  test("Member role can not update workspace detail", async () => {
+    const authInfo = await getAuthInfo("update_workspace_detail_member_role@example.com")
+    const res = await client.PUT("/api/v1/workspaces/{workspaceId}", {
+      headers: authHeaders(authInfo.token),
+      params: { path: { workspaceId: "018e201b-67d4-7265-a022-1b29793b2a91" } },
+      body: { name: "Update TestUpdated", subdomain: "update-test-updated" }
+    })
+    expect(res.response.status).toBe(403)
+  })
+
+  test("Guest role can not update workspace detail", async () => {
+    const authInfo = await getAuthInfo("update_workspace_detail_guest_role@example.com")
+    const res = await client.PUT("/api/v1/workspaces/{workspaceId}", {
+      headers: authHeaders(authInfo.token),
+      params: { path: { workspaceId: "018e201b-67d4-7265-a022-1b29793b2a91" } },
+      body: { name: "Update TestUpdated", subdomain: "update-test-updated" }
+    })
+    expect(res.response.status).toBe(403)
   })
 })
