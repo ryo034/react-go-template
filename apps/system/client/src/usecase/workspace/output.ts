@@ -6,5 +6,6 @@ export interface WorkspaceUseCaseOutput {
   setMembersIsLoading: (v: boolean) => void
   clearMembers: () => void
   setInvitations: (vs: Invitations) => void
+  addInvitations: (vs: Invitations) => void
   setInvitationsIsLoading: (v: boolean) => void
 }

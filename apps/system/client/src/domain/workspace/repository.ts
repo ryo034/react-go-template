@@ -20,7 +20,7 @@ export interface WorkspaceCreateInput {
 export interface WorkspaceRepository {
   create(i: WorkspaceCreateInput): PromiseResult<Workspace, Error>
   findAllMembers(): PromiseResult<Members, Error>
-  inviteMembers(invitees: Invitees): PromiseResult<null, Error>
+  inviteMembers(invitees: Invitees): PromiseResult<Invitations, Error>
   findAllInvitations(): PromiseResult<Invitations, Error>
   resendInvitation(invitation: Invitation): PromiseResult<null, Error>
   revokeInvitation(invitation: Invitation): PromiseResult<Invitations, Error>

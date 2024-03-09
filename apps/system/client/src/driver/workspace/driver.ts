@@ -44,7 +44,7 @@ export class WorkspaceDriver {
     }
   }
 
-  async inviteMembers(invitees: Invitees): PromiseResult<null, Error> {
+  async inviteMembers(invitees: Invitees): PromiseResult<components["schemas"]["Invitations"], Error> {
     try {
       const res = await this.client.POST("/api/v1/members/invitations/bulk", {
         body: {
@@ -54,7 +54,7 @@ export class WorkspaceDriver {
           }))
         }
       })
-      return res.data ? Result.ok(null) : Result.err(this.errorHandler.adapt(res))
+      return res.data ? Result.ok(res.data.successfulInvitations) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))
     }

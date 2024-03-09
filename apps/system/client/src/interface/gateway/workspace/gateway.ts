@@ -44,12 +44,12 @@ export class WorkspaceGateway implements WorkspaceRepository {
     return this.memberAdapter.adaptAll(res.value)
   }
 
-  async inviteMembers(invitees: Invitees): PromiseResult<null, Error> {
+  async inviteMembers(invitees: Invitees): PromiseResult<Invitations, Error> {
     const res = await this.driver.inviteMembers(invitees)
     if (res.isErr) {
       return Result.err(res.error)
     }
-    return Result.ok(null)
+    return this.invitationAdapter.adaptAll(res.value)
   }
 
   async findAllInvitations(): PromiseResult<Invitations, Error> {

@@ -271,12 +271,19 @@ func (d *driver) InviteMembers(ctx context.Context, exec bun.IDB, inviter worksp
 	}
 
 	invs := make([]*models.Invitation, 0, is.Size())
+	invts := make([]*models.InvitationToken, 0)
 	invitees := make([]*models.Invitee, 0, is.Size())
 	invns := make([]*models.InviteeName, 0)
 	for _, i := range is.AsSlice() {
 		invs = append(invs, &models.Invitation{
 			InvitationID:     i.ID().Value(),
 			InvitationUnitID: invu.InvitationUnitID,
+		})
+
+		invts = append(invts, &models.InvitationToken{
+			InvitationID: i.ID().Value(),
+			Token:        i.Token().Value(),
+			ExpiredAt:    i.ExpiredAt().Value().ToTime(),
 		})
 
 		invitees = append(invitees, &models.Invitee{
@@ -301,6 +308,9 @@ func (d *driver) InviteMembers(ctx context.Context, exec bun.IDB, inviter worksp
 		if _, err = exec.NewInsert().Model(&invns).Exec(ctx); err != nil {
 			return err
 		}
+	}
+	if _, err = exec.NewInsert().Model(&invts).Exec(ctx); err != nil {
+		return err
 	}
 	return nil
 }

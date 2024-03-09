@@ -1,5 +1,6 @@
 import { HTMLAttributes, useContext, useLayoutEffect, useRef, useState } from "react"
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Separator, useToast } from "shared-ui"
+import { InviteMembersDialog } from "~/components/member/inviteDialog"
 import { Invitation, Me } from "~/domain"
 import { ContainerContext } from "~/infrastructure/injector/context"
 
@@ -14,15 +15,16 @@ export interface Props extends HTMLAttributes<HTMLDivElement> {
 }
 
 const InviteeListItem = ({ isUpdating, me, invitation, onClickResend, onClickRevoke, ...props }: Props) => {
+  const isInviter = me.self.id.value.asString === invitation.inviter.user.id.value.asString
   return (
     <div className="flex items-center justify-between space-x-4" {...props}>
       <div className="flex items-center justify-between space-x-4 w-full">
-        <div className="">
+        <div className="max-w-[420px]">
           <p className="text-sm font-medium leading-none">{invitation.displayName?.value || "(unknown)"}</p>
-          <p className="text-sm text-muted-foreground truncate">{invitation.inviteeEmail.value}</p>
+          <p className="text-sm text-muted-foreground break-words">{invitation.inviteeEmail.value}</p>
           <p className="text-sm text-muted-foreground truncate">inviter: {invitation.inviter.user.name?.value}</p>
         </div>
-        {me.self.id.value.asString === invitation.inviter.user.id.value.asString && (
+        {isInviter ? (
           <div className="flex space-x-4">
             <Button variant="outline" onClick={() => onClickResend(invitation)} disabled={isUpdating}>
               再送
@@ -31,6 +33,10 @@ const InviteeListItem = ({ isUpdating, me, invitation, onClickResend, onClickRev
               取消
             </Button>
           </div>
+        ) : (
+          <Button variant="outline" disabled>
+            招待者のみ操作可
+          </Button>
         )}
       </div>
     </div>
@@ -98,6 +104,8 @@ export const SettingsWorkspaceInvitationsPage = () => {
         </p>
       </div>
       <Separator />
+
+      <InviteMembersDialog />
 
       <Card className="p-0">
         <CardHeader>

@@ -46,7 +46,7 @@ func (a *adapter) AdaptAll(is invitation.Invitations) (openapi.Invitations, erro
 		return nil, nil
 	}
 	res := make([]openapi.Invitation, 0, is.Size())
-	for _, w := range is.AsSlice() {
+	for _, w := range is.SortByExpiryAt().AsSlice() {
 		a, err := a.Adapt(w)
 		if err != nil {
 			return nil, err

@@ -32,6 +32,14 @@ export class WorkspacePresenter implements WorkspaceUseCaseOutput {
     this.invitationsStore.getState().setInvitations(vs)
   }
 
+  addInvitations(vs: Invitations) {
+    const tmpInvitations = [...this.invitationsStore.getState().invitations.values]
+    for (const v of vs.values) {
+      tmpInvitations.unshift(v)
+    }
+    this.invitationsStore.getState().setInvitations(Invitations.create(tmpInvitations))
+  }
+
   setInvitationsIsLoading(v: boolean) {
     this.invitationsStore.getState().setInvitationsIsLoading(v)
   }

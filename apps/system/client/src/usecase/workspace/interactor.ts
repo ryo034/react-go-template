@@ -55,6 +55,7 @@ export class WorkspaceInteractor implements WorkspaceUseCase {
     if (res.isErr) {
       return res.error
     }
+    this.presenter.addInvitations(res.value)
     return null
   }
 
