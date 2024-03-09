@@ -7,6 +7,8 @@ import {
   Members,
   SelectableRole,
   Workspace,
+  WorkspaceId,
+  WorkspaceName,
   WorkspaceSubdomain
 } from "~/domain"
 import { PromiseResult } from "~/infrastructure/shared"
@@ -23,4 +25,9 @@ export interface WorkspaceRepository {
   resendInvitation(invitation: Invitation): PromiseResult<null, Error>
   revokeInvitation(invitation: Invitation): PromiseResult<Invitations, Error>
   updateMemberRole(memberId: MemberId, role: SelectableRole): PromiseResult<Member, Error>
+  updateWorkspace(
+    workspaceId: WorkspaceId,
+    name: WorkspaceName,
+    subdomain: WorkspaceSubdomain
+  ): PromiseResult<Workspace, Error>
 }

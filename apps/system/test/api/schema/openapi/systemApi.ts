@@ -181,6 +181,30 @@ export interface paths {
       };
     };
   };
+  "/api/v1/workspaces/{workspaceId}": {
+    /**
+     * Update Workspace
+     * @description Updates the workspace
+     */
+    put: {
+      parameters: {
+        path: {
+          /** @description Workspace id */
+          workspaceId: string;
+        };
+      };
+      requestBody: components["requestBodies"]["UpdateWorkspace"];
+      responses: {
+        200: components["responses"]["UpdateWorkspaceResponse"];
+        400: components["responses"]["BadRequestError"];
+        401: components["responses"]["UnauthorizedError"];
+        403: components["responses"]["ForbiddenError"];
+        404: components["responses"]["NotFoundError"];
+        409: components["responses"]["ConflictError"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+  };
   "/api/v1/members": {
     /**
      * Get Members
@@ -699,6 +723,14 @@ export interface components {
         };
       };
     };
+    /** @description Workspace updated */
+    UpdateWorkspaceResponse: {
+      content: {
+        "application/json": {
+          workspace: components["schemas"]["Workspace"];
+        };
+      };
+    };
   };
   parameters: never;
   requestBodies: {
@@ -800,6 +832,17 @@ export interface components {
         "application/json": {
           /** @enum {string} */
           role: "admin" | "member" | "guest";
+        };
+      };
+    };
+    /** @description Update workspace */
+    UpdateWorkspace: {
+      content: {
+        "application/json": {
+          /** @description workspace name */
+          name?: string;
+          /** @description workspace subdomain */
+          subdomain?: string;
         };
       };
     };

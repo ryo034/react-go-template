@@ -44,6 +44,10 @@ func (g *gateway) Create(ctx context.Context, exec bun.IDB, w *workspace.Workspa
 	return g.adp.Adapt(res)
 }
 
+func (g *gateway) Update(ctx context.Context, exec bun.IDB, w *workspace.Workspace) error {
+	return g.d.Update(ctx, exec, w)
+}
+
 func (g *gateway) AddMember(ctx context.Context, exec bun.IDB, w *workspace.Workspace, m *member.Member) (*member.Member, error) {
 	_, err := g.d.AddMember(ctx, exec, w, m)
 	if err != nil {

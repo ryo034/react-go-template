@@ -27,21 +27,16 @@ type PopoverTriggerProps = ComponentPropsWithoutRef<typeof PopoverTrigger>
 
 type TeamSwitcherProps = PopoverTriggerProps & {
   isCollapsed: boolean
-  workspaces?: Workspaces
-  currentWorkspace?: Workspace
 }
 
-export const WorkspaceSwitcher = ({ className, isCollapsed, workspaces, currentWorkspace }: TeamSwitcherProps) => {
+export const WorkspaceSwitcher = ({ className, isCollapsed }: TeamSwitcherProps) => {
   const [open, setOpen] = useState(false)
   const [showNewWorkspaceDialog, setShowNewWorkspaceDialog] = useState(false)
 
   const { store } = useContext(ContainerContext)
   const me = store.me((state) => state.me)
 
-  if (!currentWorkspace || !workspaces || !me) {
-    return null
-  }
-  const [selectedWorkspace, setSelectedWorkspace] = useState<Workspace>(currentWorkspace)
+  if (!me || !me.workspace) return <></>
 
   return (
     <Dialog open={showNewWorkspaceDialog} onOpenChange={setShowNewWorkspaceDialog}>
@@ -56,12 +51,12 @@ export const WorkspaceSwitcher = ({ className, isCollapsed, workspaces, currentW
             className={cn(`justify-between ${isCollapsed && "w-10"}`, className)}
           >
             <Avatar className="mr-2 h-5 w-5">
-              <AvatarImage src={""} alt={selectedWorkspace.name.value} className="grayscale" />
-              <AvatarFallback>{selectedWorkspace.subdomain.value.slice(0, 1).toUpperCase()}</AvatarFallback>
+              <AvatarImage src={""} alt={me.workspace.name.value} className="grayscale" />
+              <AvatarFallback>{me.workspace.subdomain.value.slice(0, 1).toUpperCase()}</AvatarFallback>
             </Avatar>
             {!isCollapsed && (
               <p className="truncate" date-testid="currentWorkspaceName">
-                {selectedWorkspace.name.value}
+                {me.workspace.name.value}
               </p>
             )}
             {!isCollapsed && <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />}
@@ -72,12 +67,12 @@ export const WorkspaceSwitcher = ({ className, isCollapsed, workspaces, currentW
             <CommandInput placeholder="Search workspace..." />
             <CommandList>
               <CommandEmpty>No workspace found.</CommandEmpty>
-              {workspaces.values.map((w) => (
-                <CommandGroup key={w.id.value.asString} heading={w.name.value}>
+              {me.joinedWorkspaces.values.map((w) => (
+                <CommandGroup key={w.id.value.asString}>
                   <CommandItem
                     key={w.id.value.asString}
                     onSelect={() => {
-                      setSelectedWorkspace(w)
+                      // setSelectedWorkspace(me.workspace
                       setOpen(false)
                     }}
                     className="text-sm"
@@ -88,7 +83,10 @@ export const WorkspaceSwitcher = ({ className, isCollapsed, workspaces, currentW
                     </Avatar>
                     {w.name.value}
                     <CheckIcon
-                      className={cn("ml-auto h-4 w-4", selectedWorkspace.equals(w) ? "opacity-100" : "opacity-0")}
+                      className={cn(
+                        "ml-auto h-4 w-4",
+                        me.workspace?.id.value.eq(w.id.value) ? "opacity-100" : "opacity-0"
+                      )}
                     />
                   </CommandItem>
                 </CommandGroup>

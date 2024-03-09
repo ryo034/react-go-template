@@ -23,3 +23,15 @@ CreateWorkspaceResponse:
         properties:
           workspace:
             $ref: "#/components/schemas/Workspace"
+
+UpdateWorkspaceResponse:
+  description: Workspace updated
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - workspace
+        properties:
+          workspace:
+            $ref: "#/components/schemas/Workspace"

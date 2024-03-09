@@ -5,6 +5,8 @@ import {
   MemberDisplayName,
   MemberId,
   SelectableRole,
+  WorkspaceId,
+  WorkspaceName,
   WorkspaceSubdomain
 } from "~/domain"
 import { Email } from "~/domain/shared"
@@ -19,6 +21,12 @@ interface InviteMembersInput {
     email: string
     name: string
   }[]
+}
+
+interface UpdateWorkspaceInput {
+  workspaceId: WorkspaceId
+  name: string
+  subdomain: string
 }
 
 export class WorkspaceController {
@@ -66,5 +74,17 @@ export class WorkspaceController {
 
   async updateMemberRole(memberId: MemberId, role: SelectableRole): Promise<null | Error> {
     return await this.useCase.updateMemberRole(memberId, role)
+  }
+
+  async updateWorkspace(i: UpdateWorkspaceInput): Promise<null | Error> {
+    const n = WorkspaceName.create(i.name)
+    if (n.isErr) {
+      return n.error
+    }
+    const s = WorkspaceSubdomain.create(i.subdomain)
+    if (s.isErr) {
+      return s.error
+    }
+    return await this.useCase.updateWorkspace({ workspaceId: i.workspaceId, name: n.value, subdomain: s.value })
   }
 }

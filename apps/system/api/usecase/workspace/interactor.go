@@ -21,6 +21,7 @@ type UseCase interface {
 	ResendInvitation(ctx context.Context, i ResendInvitationInput) (openapi.ResendInvitationRes, error)
 	FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error)
 	UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput) (openapi.APIV1MembersMemberIdRolePutRes, error)
+	UpdateWorkspace(ctx context.Context, i UpdateWorkspaceInput) (openapi.APIV1WorkspacesWorkspaceIdPutRes, error)
 }
 
 type useCase struct {
@@ -261,4 +262,36 @@ func (u *useCase) UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput)
 	}
 	res := result.Value(0).(*member.Member)
 	return u.op.UpdateMemberRole(res)
+}
+
+func (u *useCase) UpdateWorkspace(ctx context.Context, i UpdateWorkspaceInput) (openapi.APIV1WorkspacesWorkspaceIdPutRes, error) {
+	exec := u.dbp.GetExecutor(ctx, true)
+	meRes, err := u.meRepo.FindLastLogin(ctx, exec, i.AccountID)
+	if err != nil {
+		return nil, err
+	}
+
+	if err = meRes.ValidateCanUpdateWorkspace(i.WorkspaceID); err != nil {
+		return nil, err
+	}
+
+	w := workspace.NewWorkspace(i.WorkspaceID, workspace.NewDetail(i.Name, i.Subdomain))
+
+	pr, err := u.txp.Provide(ctx)
+	if err != nil {
+		return nil, err
+	}
+	exec = u.dbp.GetExecutor(pr, false)
+	fn := func() (*workspace.Workspace, error) {
+		if err := u.repo.Update(pr, exec, w); err != nil {
+			return nil, err
+		}
+		return w, nil
+	}
+	result := pr.Transactional(fn)()
+	if err = result.Error(); err != nil {
+		return nil, err
+	}
+	res := result.Value(0).(*workspace.Workspace)
+	return u.op.UpdateWorkspace(res)
 }

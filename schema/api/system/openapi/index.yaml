@@ -31,6 +31,8 @@ paths:
   # Workspaces
   /api/v1/workspaces:
     $ref: "./paths/workspace.yaml#/workspaces"
+  /api/v1/workspaces/{workspaceId}:
+    $ref: "./paths/workspace.yaml#/workspace"
   /api/v1/members:
     $ref: "./paths/member.yaml#/members"
   /api/v1/members/{memberId}/role:
@@ -107,6 +109,8 @@ components:
       $ref: "./components/requestBodies/me.yaml#/UpdateMeMemberProfile"
     UpdateMemberRole:
       $ref: "./components/requestBodies/member.yaml#/UpdateMemberRole"
+    UpdateWorkspace:
+      $ref: "./components/requestBodies/workspace.yaml#/UpdateWorkspace"
   responses:
     GeneralError:
       $ref: "./components/responses/error.yaml#/components/responses/GeneralError"
@@ -164,3 +168,5 @@ components:
       $ref: "./components/responses/auth.yaml#/InvitationProcessOAuthResponse"
     UpdateMemberRoleResponse:
       $ref: "./components/responses/member.yaml#/UpdateMemberRoleResponse"
+    UpdateWorkspaceResponse:
+      $ref: "./components/responses/workspace.yaml#/UpdateWorkspaceResponse"

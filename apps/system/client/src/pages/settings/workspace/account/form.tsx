@@ -41,9 +41,7 @@ export const SettingsAccountForm = ({ isUpdating, onSubmit, defaultValues }: Set
       })
   })
 
-  type AccountFormValues = z.infer<typeof accountFormSchema>
-
-  const form = useForm<AccountFormValues>({
+  const form = useForm<z.infer<typeof accountFormSchema>>({
     resolver: zodResolver(accountFormSchema),
     defaultValues
   })
@@ -65,7 +63,7 @@ export const SettingsAccountForm = ({ isUpdating, onSubmit, defaultValues }: Set
             </FormItem>
           )}
         />
-        {isUpdating ? <LoadingButton /> : <Button type="submit">Update account</Button>}
+        {isUpdating ? <LoadingButton /> : <Button type="submit">Update</Button>}
       </form>
     </Form>
   )

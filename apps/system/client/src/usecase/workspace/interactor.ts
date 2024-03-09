@@ -1,5 +1,11 @@
 import { Invitation, MemberId, SelectableRole, WorkspaceRepository } from "~/domain"
-import { CreateWorkspaceInput, InviteMembersInput, MeUseCase, WorkspaceUseCaseOutput } from "~/usecase"
+import {
+  CreateWorkspaceInput,
+  InviteMembersInput,
+  MeUseCase,
+  UpdateWorkspaceInput,
+  WorkspaceUseCaseOutput
+} from "~/usecase"
 
 export interface WorkspaceUseCase {
   create(i: CreateWorkspaceInput): Promise<Error | null>
@@ -9,6 +15,7 @@ export interface WorkspaceUseCase {
   resendInvitation(i: Invitation): Promise<Error | null>
   revokeInvitation(i: Invitation): Promise<Error | null>
   updateMemberRole(memberId: MemberId, role: SelectableRole): Promise<Error | null>
+  updateWorkspace(i: UpdateWorkspaceInput): Promise<Error | null>
 }
 
 export class WorkspaceInteractor implements WorkspaceUseCase {
@@ -23,9 +30,9 @@ export class WorkspaceInteractor implements WorkspaceUseCase {
     if (res.isErr) {
       return res.error
     }
-    const meRes = await this.meUseCase.find()
-    if (meRes) {
-      return meRes
+    const meErr = await this.meUseCase.find()
+    if (meErr) {
+      return meErr
     }
     return null
   }
@@ -33,7 +40,6 @@ export class WorkspaceInteractor implements WorkspaceUseCase {
   async findAllMembers(): Promise<Error | null> {
     this.presenter.setMembersIsLoading(true)
     const res = await this.repository.findAllMembers()
-    console.log("res.value", res)
     if (res.isErr) {
       this.presenter.setMembersIsLoading(false)
       return res.error
@@ -86,6 +92,18 @@ export class WorkspaceInteractor implements WorkspaceUseCase {
       return res.error
     }
     this.presenter.updateMember(res.value)
+    return null
+  }
+
+  async updateWorkspace(i: UpdateWorkspaceInput): Promise<Error | null> {
+    const res = await this.repository.updateWorkspace(i.workspaceId, i.name, i.subdomain)
+    if (res.isErr) {
+      return res.error
+    }
+    const meErr = await this.meUseCase.refetch()
+    if (meErr) {
+      return meErr
+    }
     return null
   }
 }

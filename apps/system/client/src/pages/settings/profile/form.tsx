@@ -46,13 +46,13 @@ export const SettingsProfileForm = ({ defaultValues, onSubmit, isUpdating = fals
     bio: z.string().max(MemberBio.max)
   })
 
-  type ProfileFormValues = z.infer<typeof profileFormSchema>
-
-  const form = useForm<ProfileFormValues>({
+  const form = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
     mode: "onChange"
   })
+
+  const disabledSubmitButton = !form.getFieldState("displayName").isDirty && !form.getFieldState("bio").isDirty
 
   return (
     <Form {...form}>
@@ -95,7 +95,13 @@ export const SettingsProfileForm = ({ defaultValues, onSubmit, isUpdating = fals
             </FormItem>
           )}
         />
-        {isUpdating ? <LoadingButton /> : <Button type="submit">Update profile</Button>}
+        {isUpdating ? (
+          <LoadingButton />
+        ) : (
+          <Button type="submit" disabled={disabledSubmitButton}>
+            Update
+          </Button>
+        )}
       </form>
     </Form>
   )

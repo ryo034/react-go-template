@@ -3,6 +3,8 @@ package me
 import (
 	"slices"
 
+	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
@@ -102,4 +104,15 @@ func (m *Me) RemoveProfilePhoto() *Me {
 
 func (m *Me) SameAs(t *Me) bool {
 	return m.Self().AccountID().Value().String() == t.Self().AccountID().Value().String()
+}
+
+func (m *Me) ValidateCanUpdateWorkspace(wID workspace.ID) error {
+	if m.Workspace().ID().ToString() != wID.ToString() {
+		return domainErr.NewForbidden("Cannot update workspace")
+	}
+	ok := m.Member().Role().IsOwner() || m.Member().Role().IsAdmin()
+	if !ok {
+		return domainErr.NewForbidden("Can update only owner or admin")
+	}
+	return nil
 }

@@ -11,3 +11,18 @@ CreateWorkspace:
           subdomain:
             type: string
             description: workspace subdomain (e.x. example-test)
+
+UpdateWorkspace:
+  description: Update workspace
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+            description: workspace name
+          subdomain:
+            type: string
+            description: workspace subdomain

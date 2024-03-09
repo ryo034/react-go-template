@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { Outlet } from "react-router-dom"
 import {
   ResizableHandle,
@@ -30,6 +30,15 @@ export const DashboardLayout = ({
   const { store } = useContext(ContainerContext)
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed)
   const me = store.me((state) => state.me)
+  const meRef = useRef(me)
+
+  useEffect(() => {
+    store.me.subscribe((state) => {
+      meRef.current = state.me
+    })
+  })
+
+  if (!me || !meRef.current) return <></>
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -51,11 +60,7 @@ export const DashboardLayout = ({
           className={cn(isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out")}
         >
           <div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? "h-[52px]" : "px-2")}>
-            <WorkspaceSwitcher
-              isCollapsed={isCollapsed}
-              workspaces={me?.joinedWorkspaces}
-              currentWorkspace={me?.workspace}
-            />
+            <WorkspaceSwitcher isCollapsed={isCollapsed} />
           </div>
           <Separator />
           <Nav isCollapsed={isCollapsed} />

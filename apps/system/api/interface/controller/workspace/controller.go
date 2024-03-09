@@ -27,6 +27,7 @@ type Controller interface {
 	ResendInvitation(ctx context.Context, i ResendInvitationInput) (openapi.ResendInvitationRes, error)
 	FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error)
 	UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput) (openapi.APIV1MembersMemberIdRolePutRes, error)
+	UpdateWorkspace(ctx context.Context, i UpdateWorkspaceInput) (openapi.APIV1WorkspacesWorkspaceIdPutRes, error)
 }
 
 type controller struct {
@@ -68,6 +69,12 @@ type FindAllInvitationInput struct {
 type UpdateMemberRoleInput struct {
 	MemberID uuid.UUID
 	Role     string
+}
+
+type UpdateWorkspaceInput struct {
+	WorkspaceID uuid.UUID
+	Name        string
+	Subdomain   string
 }
 
 func (c *controller) Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error) {
@@ -216,6 +223,32 @@ func (c *controller) UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInp
 	res, err := c.wuc.UpdateMemberRole(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MembersMemberIdRolePutRes), nil
+	}
+	return res, nil
+}
+
+func (c *controller) UpdateWorkspace(ctx context.Context, i UpdateWorkspaceInput) (openapi.APIV1WorkspacesWorkspaceIdPutRes, error) {
+	aID, err := c.co.GetUID(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1WorkspacesWorkspaceIdPutRes), nil
+	}
+	n, err := workspace.NewName(i.Name)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1WorkspacesWorkspaceIdPutRes), nil
+	}
+	su, err := workspace.NewSubdomain(i.Subdomain)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1WorkspacesWorkspaceIdPutRes), nil
+	}
+	in := workspaceUc.UpdateWorkspaceInput{
+		AccountID:   aID,
+		WorkspaceID: workspace.NewIDFromUUID(i.WorkspaceID),
+		Name:        n,
+		Subdomain:   su,
+	}
+	res, err := c.wuc.UpdateWorkspace(ctx, in)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1WorkspacesWorkspaceIdPutRes), nil
 	}
 	return res, nil
 }

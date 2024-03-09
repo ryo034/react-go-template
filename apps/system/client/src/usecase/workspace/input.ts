@@ -1,4 +1,4 @@
-import { Invitees, WorkspaceSubdomain } from "~/domain"
+import { Invitees, WorkspaceId, WorkspaceName, WorkspaceSubdomain } from "~/domain"
 
 export type CreateWorkspaceInput = {
   subdomain: WorkspaceSubdomain
@@ -6,4 +6,10 @@ export type CreateWorkspaceInput = {
 
 export type InviteMembersInput = {
   invitees: Invitees
+}
+
+export type UpdateWorkspaceInput = {
+  workspaceId: WorkspaceId
+  name: WorkspaceName
+  subdomain: WorkspaceSubdomain
 }

@@ -240,6 +240,33 @@ func (s *APIV1WorkspacesPostReq) SetSubdomain(val string) {
 	s.Subdomain = val
 }
 
+type APIV1WorkspacesWorkspaceIdPutReq struct {
+	// Workspace name.
+	Name OptString `json:"name"`
+	// Workspace subdomain.
+	Subdomain OptString `json:"subdomain"`
+}
+
+// GetName returns the value of Name.
+func (s *APIV1WorkspacesWorkspaceIdPutReq) GetName() OptString {
+	return s.Name
+}
+
+// GetSubdomain returns the value of Subdomain.
+func (s *APIV1WorkspacesWorkspaceIdPutReq) GetSubdomain() OptString {
+	return s.Subdomain
+}
+
+// SetName sets the value of Name.
+func (s *APIV1WorkspacesWorkspaceIdPutReq) SetName(val OptString) {
+	s.Name = val
+}
+
+// SetSubdomain sets the value of Subdomain.
+func (s *APIV1WorkspacesWorkspaceIdPutReq) SetSubdomain(val OptString) {
+	s.Subdomain = val
+}
+
 // Authentication provider.
 // Ref: #/components/schemas/AuthProvider
 type AuthProvider string
@@ -342,6 +369,7 @@ func (*BadRequestError) aPIV1MeProfilePhotoPutRes()         {}
 func (*BadRequestError) aPIV1MeProfilePutRes()              {}
 func (*BadRequestError) aPIV1MembersMemberIdRolePutRes()    {}
 func (*BadRequestError) aPIV1WorkspacesPostRes()            {}
+func (*BadRequestError) aPIV1WorkspacesWorkspaceIdPutRes()  {}
 func (*BadRequestError) getInvitationByTokenRes()           {}
 func (*BadRequestError) inviteMultipleUsersToWorkspaceRes() {}
 func (*BadRequestError) processInvitationEmailRes()         {}
@@ -415,9 +443,10 @@ func (s *ConflictError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*ConflictError) aPIV1WorkspacesPostRes()  {}
-func (*ConflictError) acceptInvitationRes()     {}
-func (*ConflictError) getInvitationByTokenRes() {}
+func (*ConflictError) aPIV1WorkspacesPostRes()           {}
+func (*ConflictError) aPIV1WorkspacesWorkspaceIdPutRes() {}
+func (*ConflictError) acceptInvitationRes()              {}
+func (*ConflictError) getInvitationByTokenRes()          {}
 
 type CreateWorkspaceResponse struct {
 	Workspace Workspace `json:"workspace"`
@@ -487,10 +516,11 @@ func (s *ForbiddenError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*ForbiddenError) aPIV1MeProfilePutRes()           {}
-func (*ForbiddenError) aPIV1MembersMemberIdRolePutRes() {}
-func (*ForbiddenError) resendInvitationRes()            {}
-func (*ForbiddenError) revokeInvitationRes()            {}
+func (*ForbiddenError) aPIV1MeProfilePutRes()             {}
+func (*ForbiddenError) aPIV1MembersMemberIdRolePutRes()   {}
+func (*ForbiddenError) aPIV1WorkspacesWorkspaceIdPutRes() {}
+func (*ForbiddenError) resendInvitationRes()              {}
+func (*ForbiddenError) revokeInvitationRes()              {}
 
 type GetInvitationByTokenResponse struct {
 	ReceivedInvitation ReceivedInvitation `json:"receivedInvitation"`
@@ -629,6 +659,7 @@ func (*InternalServerError) aPIV1MembersMemberIdRolePutRes()    {}
 func (*InternalServerError) aPIV1PingGetRes()                   {}
 func (*InternalServerError) aPIV1WorkspacesGetRes()             {}
 func (*InternalServerError) aPIV1WorkspacesPostRes()            {}
+func (*InternalServerError) aPIV1WorkspacesWorkspaceIdPutRes()  {}
 func (*InternalServerError) acceptInvitationRes()               {}
 func (*InternalServerError) getInvitationByTokenRes()           {}
 func (*InternalServerError) inviteMultipleUsersToWorkspaceRes() {}
@@ -1184,9 +1215,10 @@ func (s *NotFoundError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*NotFoundError) aPIV1MembersMemberIdRolePutRes() {}
-func (*NotFoundError) resendInvitationRes()            {}
-func (*NotFoundError) revokeInvitationRes()            {}
+func (*NotFoundError) aPIV1MembersMemberIdRolePutRes()   {}
+func (*NotFoundError) aPIV1WorkspacesWorkspaceIdPutRes() {}
+func (*NotFoundError) resendInvitationRes()              {}
+func (*NotFoundError) revokeInvitationRes()              {}
 
 // NewOptAPIV1InvitationsGetStatus returns new OptAPIV1InvitationsGetStatus with value set to v.
 func NewOptAPIV1InvitationsGetStatus(v APIV1InvitationsGetStatus) OptAPIV1InvitationsGetStatus {
@@ -1672,6 +1704,7 @@ func (*UnauthorizedError) aPIV1MembersGetRes()                {}
 func (*UnauthorizedError) aPIV1MembersMemberIdRolePutRes()    {}
 func (*UnauthorizedError) aPIV1WorkspacesGetRes()             {}
 func (*UnauthorizedError) aPIV1WorkspacesPostRes()            {}
+func (*UnauthorizedError) aPIV1WorkspacesWorkspaceIdPutRes()  {}
 func (*UnauthorizedError) acceptInvitationRes()               {}
 func (*UnauthorizedError) inviteMultipleUsersToWorkspaceRes() {}
 func (*UnauthorizedError) resendInvitationRes()               {}
@@ -1740,6 +1773,22 @@ func (s *UpdateProfileResponse) SetMe(val Me) {
 }
 
 func (*UpdateProfileResponse) aPIV1MeProfilePutRes() {}
+
+type UpdateWorkspaceResponse struct {
+	Workspace Workspace `json:"workspace"`
+}
+
+// GetWorkspace returns the value of Workspace.
+func (s *UpdateWorkspaceResponse) GetWorkspace() Workspace {
+	return s.Workspace
+}
+
+// SetWorkspace sets the value of Workspace.
+func (s *UpdateWorkspaceResponse) SetWorkspace(val Workspace) {
+	s.Workspace = val
+}
+
+func (*UpdateWorkspaceResponse) aPIV1WorkspacesWorkspaceIdPutRes() {}
 
 // Ref: #/components/schemas/User
 type User struct {

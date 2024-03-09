@@ -9,7 +9,10 @@ import {
   SelectableRole,
   Workspace,
   WorkspaceCreateInput,
-  WorkspaceRepository
+  WorkspaceId,
+  WorkspaceName,
+  WorkspaceRepository,
+  WorkspaceSubdomain
 } from "~/domain"
 import { WorkspaceDriver } from "~/driver/workspace/driver"
 import { PromiseResult } from "~/infrastructure/shared/result"
@@ -79,5 +82,17 @@ export class WorkspaceGateway implements WorkspaceRepository {
       return Result.err(res.error)
     }
     return this.memberAdapter.adapt(res.value)
+  }
+
+  async updateWorkspace(
+    workspaceId: WorkspaceId,
+    name: WorkspaceName,
+    subdomain: WorkspaceSubdomain
+  ): PromiseResult<Workspace, Error> {
+    const res = await this.driver.updateWorkspace(workspaceId, name, subdomain)
+    if (res.isErr) {
+      return Result.err(res.error)
+    }
+    return this.adapter.adapt(res.value)
   }
 }

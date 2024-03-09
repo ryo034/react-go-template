@@ -1,4 +1,4 @@
-import { AccountId, WorkspaceId, WorkspaceName, WorkspaceSubdomain } from "~/domain"
+import { WorkspaceId, WorkspaceName, WorkspaceSubdomain } from "~/domain"
 import { Entity } from "~/domain/shared"
 
 interface Props {
@@ -12,7 +12,7 @@ export class Workspace extends Entity<Props> {
     return new Workspace(v)
   }
 
-  get id(): AccountId {
+  get id(): WorkspaceId {
     return this.value.id
   }
 

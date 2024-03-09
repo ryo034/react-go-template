@@ -75,3 +75,10 @@ type UpdateMemberRoleInput struct {
 	MemberID  member.ID
 	Role      member.Role
 }
+
+type UpdateWorkspaceInput struct {
+	AccountID   account.ID
+	WorkspaceID workspace.ID
+	Name        workspace.Name
+	Subdomain   workspace.Subdomain
+}

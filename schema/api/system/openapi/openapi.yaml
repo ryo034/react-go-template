@@ -225,6 +225,7 @@ paths:
       description: Returns the workspaces the user is a member of
       tags:
         - Admin
+        - Workspaces
       security:
         - bearer: []
       responses:
@@ -239,6 +240,7 @@ paths:
       description: Creates a new workspace
       tags:
         - Admin
+        - Workspaces
       security:
         - bearer: []
       requestBody:
@@ -250,6 +252,40 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v1/workspaces/{workspaceId}:
+    put:
+      summary: Update Workspace
+      description: Updates the workspace
+      tags:
+        - Admin
+        - Workspaces
+      security:
+        - bearer: []
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Workspace id
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateWorkspace'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateWorkspaceResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
         '409':
           $ref: '#/components/responses/ConflictError'
         '500':
@@ -794,6 +830,20 @@ components:
                   - admin
                   - member
                   - guest
+    UpdateWorkspace:
+      description: Update workspace
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: workspace name
+              subdomain:
+                type: string
+                description: workspace subdomain
   responses:
     GeneralError:
       description: General Error
@@ -1224,3 +1274,14 @@ components:
             properties:
               member:
                 $ref: '#/components/schemas/Member'
+    UpdateWorkspaceResponse:
+      description: Workspace updated
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - workspace
+            properties:
+              workspace:
+                $ref: '#/components/schemas/Workspace'

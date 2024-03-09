@@ -139,6 +139,15 @@ func (UnimplementedHandler) APIV1WorkspacesPost(ctx context.Context, req *APIV1W
 	return r, ht.ErrNotImplemented
 }
 
+// APIV1WorkspacesWorkspaceIdPut implements PUT /api/v1/workspaces/{workspaceId} operation.
+//
+// Updates the workspace.
+//
+// PUT /api/v1/workspaces/{workspaceId}
+func (UnimplementedHandler) APIV1WorkspacesWorkspaceIdPut(ctx context.Context, req *APIV1WorkspacesWorkspaceIdPutReq, params APIV1WorkspacesWorkspaceIdPutParams) (r APIV1WorkspacesWorkspaceIdPutRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // AcceptInvitation implements acceptInvitation operation.
 //
 // Accept an invitation to join a workspace.

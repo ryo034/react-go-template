@@ -17,6 +17,7 @@ import (
 type Driver interface {
 	FindAll(ctx context.Context, exec bun.IDB, aID account.ID) (models.Workspaces, error)
 	Create(ctx context.Context, exec bun.IDB, w *workspace.Workspace) (*models.Workspace, error)
+	Update(ctx context.Context, exec bun.IDB, w *workspace.Workspace) error
 	AddMember(ctx context.Context, exec bun.IDB, w *workspace.Workspace, m *member.Member) (*models.Member, error)
 	UpdateMemberRole(ctx context.Context, exec bun.IDB, assignor *member.Member, m *member.Member) error
 	FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error)
@@ -78,6 +79,32 @@ func (d *driver) Create(ctx context.Context, exec bun.IDB, w *workspace.Workspac
 	wld.WorkspaceDetail = wd
 	wo.Detail = wld
 	return wo, nil
+}
+
+func (d *driver) Update(ctx context.Context, exec bun.IDB, w *workspace.Workspace) error {
+	wdID, _ := uuid.NewV7()
+	wdt := w.Detail()
+	if _, err := exec.NewDelete().Model(&models.WorkspaceLatestDetail{}).Where("workspace_id = ?", w.ID().Value()).Exec(ctx); err != nil {
+		return err
+	}
+	if _, err := exec.NewInsert().Model(&models.WorkspaceDetail{
+		WorkspaceDetailID: wdID,
+		WorkspaceID:       w.ID().Value(),
+		Subdomain:         wdt.Subdomain().ToString(),
+		Name:              wdt.Name().ToString(),
+	}).Exec(ctx); err != nil {
+		if dbErr.IsDuplicateError(err) {
+			return domainErr.NewConflicted("workspace_details", "subdomain")
+		}
+		return err
+	}
+	if _, err := exec.NewInsert().Model(&models.WorkspaceLatestDetail{
+		WorkspaceDetailID: wdID,
+		WorkspaceID:       w.ID().Value(),
+	}).Exec(ctx); err != nil {
+		return err
+	}
+	return nil
 }
 
 func adaptMemberRole(mr member.Role) string {

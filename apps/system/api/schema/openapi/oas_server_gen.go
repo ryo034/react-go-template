@@ -92,6 +92,12 @@ type Handler interface {
 	//
 	// POST /api/v1/workspaces
 	APIV1WorkspacesPost(ctx context.Context, req *APIV1WorkspacesPostReq) (APIV1WorkspacesPostRes, error)
+	// APIV1WorkspacesWorkspaceIdPut implements PUT /api/v1/workspaces/{workspaceId} operation.
+	//
+	// Updates the workspace.
+	//
+	// PUT /api/v1/workspaces/{workspaceId}
+	APIV1WorkspacesWorkspaceIdPut(ctx context.Context, req *APIV1WorkspacesWorkspaceIdPutReq, params APIV1WorkspacesWorkspaceIdPutParams) (APIV1WorkspacesWorkspaceIdPutRes, error)
 	// AcceptInvitation implements acceptInvitation operation.
 	//
 	// Accept an invitation to join a workspace.

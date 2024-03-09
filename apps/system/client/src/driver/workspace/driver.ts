@@ -1,6 +1,15 @@
 import { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
-import { Invitation, Invitees, MemberId, SelectableRole, WorkspaceCreateInput } from "~/domain"
+import {
+  Invitation,
+  Invitees,
+  MemberId,
+  SelectableRole,
+  WorkspaceCreateInput,
+  WorkspaceId,
+  WorkspaceName,
+  WorkspaceSubdomain
+} from "~/domain"
 import { components } from "~/generated/schema/openapi/systemApi"
 import { SystemAPIClient } from "~/infrastructure/openapi/client"
 import { PromiseResult } from "~/infrastructure/shared/result"
@@ -93,6 +102,22 @@ export class WorkspaceDriver {
       })
       await this.fbDriver.refreshToken()
       return res.data ? Result.ok(res.data.member) : Result.err(this.errorHandler.adapt(res))
+    } catch (e) {
+      return Result.err(this.errorHandler.adapt(e))
+    }
+  }
+
+  async updateWorkspace(
+    workspaceId: WorkspaceId,
+    name: WorkspaceName,
+    subdomain: WorkspaceSubdomain
+  ): PromiseResult<components["schemas"]["Workspace"], Error> {
+    try {
+      const res = await this.client.PUT("/api/v1/workspaces/{workspaceId}", {
+        params: { path: { workspaceId: workspaceId.value.asString } },
+        body: { name: name.value, subdomain: subdomain.value }
+      })
+      return res.data ? Result.ok(res.data.workspace) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))
     }

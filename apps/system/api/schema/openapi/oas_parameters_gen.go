@@ -162,6 +162,72 @@ func decodeAPIV1MembersMemberIdRolePutParams(args [1]string, argsEscaped bool, r
 	return params, nil
 }
 
+// APIV1WorkspacesWorkspaceIdPutParams is parameters of PUT /api/v1/workspaces/{workspaceId} operation.
+type APIV1WorkspacesWorkspaceIdPutParams struct {
+	// Workspace id.
+	WorkspaceId uuid.UUID
+}
+
+func unpackAPIV1WorkspacesWorkspaceIdPutParams(packed middleware.Parameters) (params APIV1WorkspacesWorkspaceIdPutParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeAPIV1WorkspacesWorkspaceIdPutParams(args [1]string, argsEscaped bool, r *http.Request) (params APIV1WorkspacesWorkspaceIdPutParams, _ error) {
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.WorkspaceId = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // AcceptInvitationParams is parameters of acceptInvitation operation.
 type AcceptInvitationParams struct {
 	// Invitation token.

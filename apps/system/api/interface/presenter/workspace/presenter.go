@@ -79,3 +79,8 @@ func (p *presenter) UpdateMemberRole(m *member.Member) (openapi.APIV1MembersMemb
 	res := p.ma.Adapt(m)
 	return &openapi.UpdateMemberRoleResponse{Member: res}, nil
 }
+
+func (p *presenter) UpdateWorkspace(w *workspace.Workspace) (openapi.APIV1WorkspacesWorkspaceIdPutRes, error) {
+	res := p.wa.Adapt(w)
+	return &openapi.UpdateWorkspaceResponse{Workspace: res}, nil
+}

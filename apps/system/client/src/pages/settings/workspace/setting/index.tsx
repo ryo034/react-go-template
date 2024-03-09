@@ -1,29 +1,40 @@
-import { useContext, useState } from "react"
+import { useContext, useMemo, useState } from "react"
 import { Separator, useToast } from "shared-ui"
 import { ContainerContext } from "~/infrastructure/injector/context"
-import { SettingsAccountForm, SettingsAccountFormValues } from "./form"
+import { SettingsWorkspaceSettingForm, SettingsWorkspaceSettingFormValues } from "./form"
 
 export const settingsWorkspaceSettingPageRoute = "/settings/workspace/setting"
 
 export const SettingsWorkspaceSettingPage = () => {
   const { store, controller } = useContext(ContainerContext)
   const { toast } = useToast()
-
+  const me = store.me((state) => state.me)
+  const meIsLoading = store.me((state) => state.isLoading)
   const [isUpdating, setIsUpdating] = useState(false)
 
-  const me = store.me((state) => state.me)
+  if (!me || meIsLoading || !me.workspace) return <></>
 
-  if (!me) return <></>
+  const defaultValues = useMemo(() => {
+    return {
+      name: me.workspace?.name.value || ""
+    }
+  }, [me])
 
-  const onSubmit = async (d: SettingsAccountFormValues) => {
+  const onSubmit = async (d: SettingsWorkspaceSettingFormValues) => {
+    if (!me.workspace) return
+
     setIsUpdating(true)
-    const err = await controller.me.updateProfile({ name: d.name })
+    const err = await controller.workspace.updateWorkspace({
+      name: d.name,
+      subdomain: me.workspace?.subdomain.value,
+      workspaceId: me.workspace?.id
+    })
     setIsUpdating(false)
     if (err) {
-      toast({ title: "Failed to update profile" })
+      toast({ title: "Failed to update workspace" })
       return
     }
-    toast({ title: "Profile updated" })
+    toast({ title: "Workspace updated" })
   }
 
   return (
@@ -35,6 +46,7 @@ export const SettingsWorkspaceSettingPage = () => {
         </p>
       </div>
       <Separator />
+      <SettingsWorkspaceSettingForm isUpdating={isUpdating} onSubmit={onSubmit} defaultValues={defaultValues} />
     </div>
   )
 }

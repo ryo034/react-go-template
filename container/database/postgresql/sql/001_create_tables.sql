@@ -147,7 +147,7 @@ CREATE TABLE workspace_details (
   workspace_detail_id uuid NOT NULL,
   workspace_id uuid NOT NULL,
   name VARCHAR(100) NOT NULL,
-  subdomain VARCHAR(63) NOT NULL UNIQUE,
+  subdomain VARCHAR(63) NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (workspace_detail_id),
   CONSTRAINT fk_workspace_details_workspaces_workspace_id FOREIGN KEY (workspace_id) REFERENCES workspaces(workspace_id)

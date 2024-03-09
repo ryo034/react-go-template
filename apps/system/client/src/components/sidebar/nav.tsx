@@ -1,6 +1,6 @@
 "use client"
 
-import { Settings, Users2, UsersRound } from "lucide-react"
+import { Home, Settings, UsersRound } from "lucide-react"
 import { useContext } from "react"
 import { useLocation } from "react-router-dom"
 import { Tooltip, TooltipContent, TooltipTrigger } from "shared-ui"
@@ -18,7 +18,7 @@ export const Nav = ({ isCollapsed }: Props) => {
   const links: NavItem[] = [
     {
       title: i18n.translate("router.home"),
-      icon: Users2,
+      icon: Home,
       variant: location.pathname === routeMap.home ? "default" : "ghost",
       to: routeMap.home
     },

@@ -10,3 +10,4 @@ p,admin,/api/v1/members/invitations/bulk,POST,allow
 p,admin,/api/v1/members/invitations/:invitationId/revoke,POST,allow
 p,admin,/api/v1/members/invitations/:invitationId/resend,POST,allow
 p,admin,/api/v1/members/:memberId/role,PUT,allow
+p,admin,/api/v1/workspaces/:workspaceId,PUT,allow

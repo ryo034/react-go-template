@@ -57,6 +57,10 @@ type APIV1WorkspacesPostRes interface {
 	aPIV1WorkspacesPostRes()
 }
 
+type APIV1WorkspacesWorkspaceIdPutRes interface {
+	aPIV1WorkspacesWorkspaceIdPutRes()
+}
+
 type AcceptInvitationRes interface {
 	acceptInvitationRes()
 }

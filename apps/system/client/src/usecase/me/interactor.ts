@@ -10,6 +10,7 @@ import {
 export interface MeUseCase {
   signOut(): Promise<Error | null>
   find(): Promise<Error | null>
+  refetch(): Promise<Error | null>
   acceptInvitation(i: AcceptInvitationInput): Promise<Error | null>
   updateProfile(i: UpdateProfileInput): Promise<Error | null>
   updatePhoto(i: UpdatePhotoInput): Promise<Error | null>
@@ -38,6 +39,15 @@ export class MeInteractor implements MeUseCase {
     }
     this.presenter.set(res.value)
     this.presenter.setIsLoading(false)
+    return null
+  }
+
+  async refetch(): Promise<Error | null> {
+    const res = await this.repository.find()
+    if (res.isErr) {
+      return res.error
+    }
+    this.presenter.set(res.value)
     return null
   }
 

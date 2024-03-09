@@ -4,6 +4,7 @@ workspaces:
     description: Returns the workspaces the user is a member of
     tags:
       - Admin
+      - Workspaces
     security:
       - bearer: []
     responses:
@@ -18,6 +19,7 @@ workspaces:
     description: Creates a new workspace
     tags:
       - Admin
+      - Workspaces
     security:
       - bearer: []
     requestBody:
@@ -29,6 +31,41 @@ workspaces:
         $ref: "#/components/responses/BadRequestError"
       "401":
         $ref: "#/components/responses/UnauthorizedError"
+      "409":
+        $ref: "#/components/responses/ConflictError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+
+workspace:
+  put:
+    summary: Update Workspace
+    description: Updates the workspace
+    tags:
+      - Admin
+      - Workspaces
+    security:
+      - bearer: []
+    parameters:
+      - name: workspaceId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Workspace id
+    requestBody:
+      $ref: "#/components/requestBodies/UpdateWorkspace"
+    responses:
+      "200":
+        $ref: "#/components/responses/UpdateWorkspaceResponse"
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
+      "403":
+        $ref: "#/components/responses/ForbiddenError"
+      "404":
+        $ref: "#/components/responses/NotFoundError"
       "409":
         $ref: "#/components/responses/ConflictError"
       "500":

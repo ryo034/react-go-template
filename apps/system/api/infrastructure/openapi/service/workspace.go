@@ -56,3 +56,19 @@ func (s *service) APIV1MembersMemberIdRolePut(ctx context.Context, req *openapi.
 		Role:     string(req.GetRole()),
 	})
 }
+
+func (s *service) APIV1WorkspacesWorkspaceIdPut(ctx context.Context, req *openapi.APIV1WorkspacesWorkspaceIdPutReq, params openapi.APIV1WorkspacesWorkspaceIdPutParams) (openapi.APIV1WorkspacesWorkspaceIdPutRes, error) {
+	n, ok := req.Name.Get()
+	if !ok {
+		n = ""
+	}
+	su, ok := req.Subdomain.Get()
+	if !ok {
+		su = ""
+	}
+	return s.ctrl.Workspace.UpdateWorkspace(ctx, workspace.UpdateWorkspaceInput{
+		WorkspaceID: params.WorkspaceId,
+		Name:        n,
+		Subdomain:   su,
+	})
+}
