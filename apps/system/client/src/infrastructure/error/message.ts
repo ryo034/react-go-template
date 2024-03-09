@@ -1,4 +1,4 @@
-import { BadRequestError, NetworkBaseError } from "shared-network"
+import { AuthenticationError, NetworkBaseError } from "shared-network"
 import {
   AuthProviderCustomError,
   AuthProviderEmailAlreadyInUseError,
@@ -19,20 +19,20 @@ import {
 } from "~/infrastructure/error/network"
 import { ReactI18nextProvider, i18nKeys } from "~/infrastructure/i18n"
 
-const adaptNetworkError = (err: Error): string => {
-  let msg = "不明なエラーが発生しました"
-  if (err instanceof BadRequestError) {
-    msg = "不正なリクエストです"
-  } else if (err instanceof EmailAlreadyInUseError) {
-    msg = "すでにそのメールアドレスは使用されています"
-  } else if (err instanceof InvalidEmailUseError) {
-    msg = "不正なメールアドレスです"
-  } else if (err instanceof InvalidAddressError) {
-    msg = "住所が正しくありません。正しい住所を入力して下さい"
-  } else if (err instanceof EmailNotVerifiedError) {
-    msg = "メールアドレスが認証されていません"
+const adaptNetworkError = (err: Error): string | null => {
+  if (err instanceof EmailAlreadyInUseError) {
+    return "すでにそのメールアドレスは使用されています"
   }
-  return msg
+  if (err instanceof InvalidEmailUseError) {
+    return "不正なメールアドレスです"
+  }
+  if (err instanceof InvalidAddressError) {
+    return "住所が正しくありません。正しい住所を入力して下さい"
+  }
+  if (err instanceof EmailNotVerifiedError) {
+    return "メールアドレスが認証されていません"
+  }
+  return null
 }
 
 export const adaptAuthProviderError = (err: AuthProviderCustomError): string => {
@@ -62,7 +62,7 @@ export const adaptAuthProviderError = (err: AuthProviderCustomError): string => 
 
 export class MessageProvider {
   constructor(private readonly i18n: ReactI18nextProvider) {}
-  translate(err: Error): string {
+  translate(err: Error): string | null {
     if (err instanceof NetworkBaseError) {
       return adaptNetworkError(err)
     }

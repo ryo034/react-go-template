@@ -173,20 +173,29 @@ func (d *driver) FindByEmail(ctx context.Context, exec bun.IDB, email account.Em
 }
 
 func (d *driver) UpdateName(ctx context.Context, exec bun.IDB, usr *user.User) error {
+	if usr.Name() == nil {
+		return nil
+	}
 	sanID, err := uuid.NewV7()
 	if err != nil {
 		return err
 	}
-	_, err = exec.NewDelete().Model(&models.AccountLatestName{}).Where("account_id = ?", usr.AccountID().Value()).Exec(ctx)
-	_, err = exec.NewInsert().Model(&models.AccountName{
+	if _, err = exec.NewDelete().Model(&models.AccountLatestName{}).Where("account_id = ?", usr.AccountID().Value()).Exec(ctx); err != nil {
+		return err
+	}
+	if _, err = exec.NewInsert().Model(&models.AccountName{
 		AccountNameID: sanID,
 		AccountID:     usr.AccountID().Value(),
 		Name:          usr.Name().ToString(),
-	}).Exec(ctx)
-	_, err = exec.NewInsert().Model(&models.AccountLatestName{
+	}).Exec(ctx); err != nil {
+		return err
+	}
+	if _, err = exec.NewInsert().Model(&models.AccountLatestName{
 		AccountNameID: sanID,
 		AccountID:     usr.AccountID().Value(),
-	}).Exec(ctx)
+	}).Exec(ctx); err != nil {
+		return err
+	}
 	return err
 }
 

@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Button, Card, Separator, useToast } from "shared-ui"
 import { InvitationId } from "~/domain"
+import { useErrorHandler, useErrorMessageHandler } from "~/infrastructure/hooks/error"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { routeMap } from "~/infrastructure/route/path"
 import { useReceivedInvitationsPageMessage } from "./message"
@@ -9,9 +10,12 @@ import { useReceivedInvitationsPageMessage } from "./message"
 export const receivedInvitationsPageRoute = "/received-invitations"
 
 export const ReceivedInvitationsPage = () => {
-  const { store, controller, errorMessageProvider } = useContext(ContainerContext)
+  const { store, controller } = useContext(ContainerContext)
   const me = store.me((state) => state.me)
   const { toast } = useToast()
+  const { handleError } = useErrorHandler()
+  const { handleErrorMessage } = useErrorMessageHandler()
+
   const meIsLoading = store.me((state) => state.isLoading)
   const navigate = useNavigate()
 
@@ -28,7 +32,8 @@ export const ReceivedInvitationsPage = () => {
   const onClickJoinButton = async (invitationId: InvitationId) => {
     const err = await controller.me.acceptInvitation({ invitationId })
     if (err !== null) {
-      toast({ title: errorMessageProvider.resolve(err), variant: "destructive" })
+      toast({ title: handleErrorMessage(err), variant: "destructive" })
+      handleError(err)
       return
     }
     navigate(routeMap.home)

@@ -1,12 +1,14 @@
 {
-  "error": {
-    "cannotConnect": "接続できません",
-    "requestTimeout": "リクエストがタイムアウトしました",
-    "badRequest": "不正なリクエストです",
-    "forbidden": "権限がありません",
-    "authentication": "認証情報が間違っています",
-    "notFound": "みつかりません",
-    "alreadyExist": "すでに存在します",
-    "internalServer": "サーバーエラーが発生しました"
+  "network": {
+    "error": {
+      "cannotConnect": "接続できません",
+      "requestTimeout": "リクエストがタイムアウトしました",
+      "badRequest": "不正なリクエストです",
+      "forbidden": "権限がありません",
+      "authentication": "認証エラーが発生しました",
+      "notFound": "データが見つかりません",
+      "alreadyExist": "すでにデータが存在します",
+      "internalServer": "サーバーエラーが発生しました"
+    }
   }
 }

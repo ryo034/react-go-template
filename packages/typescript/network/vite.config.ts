@@ -11,7 +11,8 @@ export default ({ mode }: { mode: Mode }) => {
 
   return defineConfig({
     build: {
-      minify: mode === "production" ? true : false,
+      // minify will make Constructor disappear, so set it to false
+      minify: false,
       emptyOutDir: false,
       sourcemap: mode !== "production" ? true : false,
       lib: {

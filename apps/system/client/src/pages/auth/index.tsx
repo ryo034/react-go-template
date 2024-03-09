@@ -3,6 +3,7 @@ import { useContext, useLayoutEffect, useRef, useState } from "react"
 import { SubmitHandler } from "react-hook-form"
 import { Link, createSearchParams, useNavigate } from "react-router-dom"
 import { AuthPageForm, LoginFormValues } from "~/components/auth/form"
+import { useErrorMessageHandler } from "~/infrastructure/hooks/error"
 import { i18nKeys } from "~/infrastructure/i18n"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { routeMap } from "~/infrastructure/route/path"
@@ -10,7 +11,8 @@ import { routeMap } from "~/infrastructure/route/path"
 export const authPageRoute = "/"
 
 export const AuthPage = () => {
-  const { store, controller, i18n, errorMessageProvider, driver } = useContext(ContainerContext)
+  const { store, controller, i18n, driver } = useContext(ContainerContext)
+  const { handleErrorMessage } = useErrorMessageHandler()
   const me = store.me((state) => state.me)
   const meRef = useRef(me)
   const authIsLoading = store.auth((state) => state.isLoading)
@@ -30,7 +32,7 @@ export const AuthPage = () => {
       }
       const err = await controller.auth.createByOAuth()
       if (err) {
-        setErrorMessage(errorMessageProvider.resolve(err))
+        setErrorMessage(handleErrorMessage(err))
         return
       }
 
@@ -62,7 +64,7 @@ export const AuthPage = () => {
   const onSubmit: SubmitHandler<LoginFormValues> = async (d) => {
     const res = await controller.auth.startWithEmail(d.email)
     if (res) {
-      setErrorMessage(errorMessageProvider.resolve(res))
+      setErrorMessage(handleErrorMessage(res))
       return
     }
     navigate({ pathname: routeMap.verifyOtp, search: createSearchParams({ email: d.email }).toString() })

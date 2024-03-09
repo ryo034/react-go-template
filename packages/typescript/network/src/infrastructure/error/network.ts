@@ -22,13 +22,48 @@ export class CannotConnectNetworkError extends Error {
   }
 }
 
-export class BadRequestError extends NetworkBaseError {}
-export class ForbiddenError extends NetworkBaseError {}
-export class AuthenticationError extends NetworkBaseError {}
-export class NotFoundError extends NetworkBaseError {}
-export class AlreadyExistError extends NetworkBaseError {}
-export class RequestTimeoutError extends NetworkBaseError {}
-export class InternalServerError extends NetworkBaseError {}
+export class BadRequestError extends NetworkBaseError {
+  constructor(statusCode: number, message: string) {
+    super(statusCode, message)
+    this.name = "BadRequestError"
+  }
+}
+export class ForbiddenError extends NetworkBaseError {
+  constructor(statusCode: number, message: string) {
+    super(statusCode, message)
+    this.name = "ForbiddenError"
+  }
+}
+export class AuthenticationError extends NetworkBaseError {
+  constructor(statusCode: number, message: string) {
+    super(statusCode, message)
+    this.name = "AuthenticationError"
+  }
+}
+export class NotFoundError extends NetworkBaseError {
+  constructor(statusCode: number, message: string) {
+    super(statusCode, message)
+    this.name = "NotFoundError"
+  }
+}
+export class AlreadyExistError extends NetworkBaseError {
+  constructor(statusCode: number, message: string) {
+    super(statusCode, message)
+    this.name = "AlreadyExistError"
+  }
+}
+export class RequestTimeoutError extends NetworkBaseError {
+  constructor(statusCode: number, message: string) {
+    super(statusCode, message)
+    this.name = "RequestTimeoutError"
+  }
+}
+export class InternalServerError extends NetworkBaseError {
+  constructor(statusCode: number, message: string) {
+    super(statusCode, message)
+    this.name = "InternalServerError"
+  }
+}
 
 export const isCannotConnectNetworkError = (e: unknown): e is CannotConnectNetworkError =>
   e instanceof CannotConnectNetworkError

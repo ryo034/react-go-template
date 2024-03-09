@@ -5,6 +5,7 @@ import {
   CannotConnectNetworkError,
   ForbiddenError,
   InternalServerError,
+  NetworkBaseError,
   NotFoundError,
   RequestTimeoutError
 } from "./network"
@@ -60,10 +61,10 @@ export class ErrorHandlingServiceMessageProvider {
     if (customErrorMessage) {
       return customErrorMessage
     }
-    // If the error is not in SpecificErrorNameMap, return "Unknown Error" message.
-    if (err instanceof Error && !(err.constructor.name in SpecificErrorNameMap)) {
-      return "Unknown Error"
+
+    if (err instanceof NetworkBaseError) {
+      return this.errorHandlers[err.constructor.name as keyof typeof SpecificErrorNameMap](err as any)
     }
-    return this.errorHandlers[err.constructor.name as keyof typeof SpecificErrorNameMap](err as any)
+    return "Unknown Error"
   }
 }

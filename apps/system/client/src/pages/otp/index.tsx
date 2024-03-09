@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { OtpFormValues, VerifyOTPPageForm } from "~/components/auth/otp/form"
 import { Email } from "~/domain/shared"
 import { useAuthenticator } from "~/infrastructure/hooks/auth"
+import { useErrorMessageHandler } from "~/infrastructure/hooks/error"
 import { i18nKeys } from "~/infrastructure/i18n"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { routeMap } from "~/infrastructure/route/path"
@@ -11,7 +12,8 @@ import { routeMap } from "~/infrastructure/route/path"
 export const verifyOtpPageRoute = "/verify-otp"
 
 export const VerifyOtpPage = () => {
-  const { store, controller, i18n, errorMessageProvider } = useContext(ContainerContext)
+  const { store, controller, i18n } = useContext(ContainerContext)
+  const { handleErrorMessage } = useErrorMessageHandler()
   const [searchParams] = useSearchParams()
   const [errorMessage, setErrorMessage] = useState("")
   const { nextNavigate } = useAuthenticator()
@@ -33,13 +35,13 @@ export const VerifyOtpPage = () => {
 
   const onSubmit: SubmitHandler<OtpFormValues> = async (d) => {
     if (ema.isErr) {
-      setErrorMessage(errorMessageProvider.resolve(ema.error))
+      setErrorMessage(handleErrorMessage(ema.error))
       return
     }
     const opt = `${d.otpInput1}${d.otpInput2}${d.otpInput3}${d.otpInput4}${d.otpInput5}${d.otpInput6}`
     const err = await controller.auth.verifyOtp(ema.value, opt)
     if (err) {
-      setErrorMessage(errorMessageProvider.resolve(err))
+      setErrorMessage(handleErrorMessage(err))
       return
     }
     if (meRef.current === null) {

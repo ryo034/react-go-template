@@ -1,13 +1,14 @@
 import i18n from "i18next"
 import { initReactI18next } from "react-i18next"
-
 import translationActionEn from "~/infrastructure/i18n/locales/en/action.json"
 import translationFormEn from "~/infrastructure/i18n/locales/en/form.json"
+import translationNetworkEn from "~/infrastructure/i18n/locales/en/network.json"
 import translationPageEn from "~/infrastructure/i18n/locales/en/page.json"
 import translationRouterEn from "~/infrastructure/i18n/locales/en/router.json"
 import translationWordEn from "~/infrastructure/i18n/locales/en/word.json"
 import translationActionJa from "~/infrastructure/i18n/locales/ja/action.json"
 import translationFormJa from "~/infrastructure/i18n/locales/ja/form.json"
+import translationNetworkJa from "~/infrastructure/i18n/locales/ja/network.json"
 import translationPageJa from "~/infrastructure/i18n/locales/ja/page.json"
 import translationRouterJa from "~/infrastructure/i18n/locales/ja/router.json"
 import translationWordJa from "~/infrastructure/i18n/locales/ja/word.json"
@@ -17,6 +18,7 @@ const resources = {
     translation: {
       ...translationWordEn,
       ...translationFormEn,
+      ...translationNetworkEn,
       ...translationPageEn,
       ...translationActionEn,
       ...translationRouterEn
@@ -26,6 +28,7 @@ const resources = {
     translation: {
       ...translationWordJa,
       ...translationFormJa,
+      ...translationNetworkJa,
       ...translationPageJa,
       ...translationActionJa,
       ...translationRouterJa

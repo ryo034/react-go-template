@@ -65,8 +65,10 @@ func (u *useCase) createUser(ctx context.Context, p bun.IDB, ci CreateInfo) (*me
 	if err != nil {
 		return nil, err
 	}
-	if err = u.meRepo.UpdateName(ctx, p, usr); err != nil {
-		return nil, err
+	if usr.HasName() {
+		if err = u.meRepo.UpdateName(ctx, p, usr); err != nil {
+			return nil, err
+		}
 	}
 	res, err := u.meRepo.FindBeforeOnboard(ctx, p, usr.AccountID())
 	if err != nil {

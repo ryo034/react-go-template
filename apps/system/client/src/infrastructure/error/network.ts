@@ -24,7 +24,6 @@ export const openapiFetchErrorInterpreter = (res: unknown): Error | null => {
       console.error("Network error", err)
       return err
     }
-
     return convertToErrorByStatusCode(r.response.status, r.error?.message)
   }
   return null

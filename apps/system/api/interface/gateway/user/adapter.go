@@ -32,7 +32,7 @@ func (a *adapter) AdaptTmp(u *models.Account) (*user.User, error) {
 	}
 
 	var nm *account.Name = nil
-	if u.Name != nil {
+	if u.Name != nil && u.Name.AccountName != nil {
 		name, err := account.NewName(u.Name.AccountName.Name)
 		if err != nil {
 			return nil, err
@@ -41,7 +41,7 @@ func (a *adapter) AdaptTmp(u *models.Account) (*user.User, error) {
 	}
 
 	var pn *phone.Number = nil
-	if u.PhoneNumber != nil {
+	if u.PhoneNumber != nil && u.PhoneNumber.AccountPhoneNumber != nil {
 		tmpPn, err := phone.NewInternationalPhoneNumber(u.PhoneNumber.AccountPhoneNumber.PhoneNumber, u.PhoneNumber.AccountPhoneNumber.CountryCode)
 		if err != nil {
 			return nil, err

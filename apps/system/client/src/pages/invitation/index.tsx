@@ -47,7 +47,7 @@ const InvitationSection = ({
   errorMessageType: ErrorMessageType | null
 }) => {
   const [searchParams] = useSearchParams()
-  const { controller, store, driver, errorMessageProvider } = useContext(ContainerContext)
+  const { controller, store, driver } = useContext(ContainerContext)
   const navigate = useNavigate()
   const { toast } = useToast()
   const [errorMessage, setErrorMessage] = useState("")
