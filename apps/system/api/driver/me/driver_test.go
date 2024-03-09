@@ -34,7 +34,9 @@ func Test_driver_Find_OK(t *testing.T) {
 	anID := uuid.MustParse("018e088e-fd36-722d-a927-8cfd34a642bd")
 	aeID := uuid.MustParse("018e09c2-9924-7048-9f08-afa2f3ea5b53")
 
+	mpID := uuid.MustParse("018e2216-64a3-7438-9300-1cdc4354d1de")
 	mrID := uuid.MustParse("018df76b-260d-759f-9b47-fb5f611f5da6")
+	wdID := uuid.MustParse("018e200b-9d01-70ed-8c5a-5a5df2a98f11")
 
 	want := &models.Member{
 		MemberID:    memberID,
@@ -87,23 +89,31 @@ func Test_driver_Find_OK(t *testing.T) {
 			},
 			PhoneNumber: nil,
 		},
-		Profile: &models.MemberProfile{
-			MemberID:       memberID,
-			MemberIDNumber: "DEV-12345",
-			DisplayName:    "John Doe",
-			Bio:            "bio",
-			CreatedAt:      defaultTime,
-			UpdatedAt:      defaultTime,
+		Profile: &models.MemberLatestProfile{
+			MemberID:        memberID,
+			MemberProfileID: mpID,
+			MemberProfile: &models.MemberProfile{
+				MemberProfileID: mpID,
+				MemberID:        memberID,
+				MemberIDNumber:  "DEV-12345",
+				DisplayName:     "John Doe",
+				Bio:             "bio",
+				CreatedAt:       defaultTime,
+			},
 		},
 		Workspace: &models.Workspace{
 			WorkspaceID: wID.Value(),
 			CreatedAt:   defaultTime,
-			Detail: &models.WorkspaceDetail{
-				WorkspaceID: wID.Value(),
-				Name:        "Example",
-				Subdomain:   "example",
-				CreatedAt:   defaultTime,
-				UpdatedAt:   defaultTime,
+			Detail: &models.WorkspaceLatestDetail{
+				WorkspaceDetailID: wdID,
+				WorkspaceID:       wID.Value(),
+				WorkspaceDetail: &models.WorkspaceDetail{
+					WorkspaceDetailID: wdID,
+					WorkspaceID:       wID.Value(),
+					Name:              "Example",
+					Subdomain:         "example",
+					CreatedAt:         defaultTime,
+				},
 			},
 			Members: nil,
 		},

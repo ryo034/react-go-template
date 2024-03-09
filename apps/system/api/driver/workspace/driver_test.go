@@ -28,17 +28,22 @@ func Test_driver_FindAll_OK(t *testing.T) {
 	wantErr := false
 
 	wID := uuid.MustParse("c1bd2603-b9cd-4f84-8b83-3548f6ae150b")
+	wdID := uuid.MustParse("018e200b-9d01-70ed-8c5a-5a5df2a98f11")
 
 	want := models.Workspaces{
 		{
 			WorkspaceID: wID,
 			CreatedAt:   defaultTime,
-			Detail: &models.WorkspaceDetail{
-				WorkspaceID: wID,
-				Name:        "Example",
-				Subdomain:   "example",
-				CreatedAt:   defaultTime,
-				UpdatedAt:   defaultTime,
+			Detail: &models.WorkspaceLatestDetail{
+				WorkspaceDetailID: wdID,
+				WorkspaceID:       wID,
+				WorkspaceDetail: &models.WorkspaceDetail{
+					WorkspaceDetailID: wdID,
+					WorkspaceID:       wID,
+					Name:              "Example",
+					Subdomain:         "example",
+					CreatedAt:         defaultTime,
+				},
 			},
 			Members: nil,
 		},
@@ -61,9 +66,9 @@ func Test_driver_FindAll_OK(t *testing.T) {
 
 func workspacesEqual(a, b *models.Workspace) bool {
 	return a.WorkspaceID == b.WorkspaceID &&
-		a.Detail.Name == b.Detail.Name &&
+		a.Detail.WorkspaceDetail.Name == b.Detail.WorkspaceDetail.Name &&
 		a.Detail.WorkspaceID == b.Detail.WorkspaceID &&
-		a.Detail.Subdomain == b.Detail.Subdomain
+		a.Detail.WorkspaceDetail.Subdomain == b.Detail.WorkspaceDetail.Subdomain
 }
 
 func Test_driver_Create_OK(t *testing.T) {
@@ -71,16 +76,21 @@ func Test_driver_Create_OK(t *testing.T) {
 	wantErr := false
 
 	wID := workspace.NewIDFromUUID(uuid.MustParse("018d5d05-6061-7f67-ba81-1626c15622c7"))
+	wdID := uuid.MustParse("018e2216-64a3-7e72-8758-a948a5b8296a")
 
 	want := &models.Workspace{
 		WorkspaceID: wID.Value(),
 		CreatedAt:   defaultTime,
-		Detail: &models.WorkspaceDetail{
-			WorkspaceID: wID.Value(),
-			Name:        "Example",
-			Subdomain:   "example-test",
-			CreatedAt:   defaultTime,
-			UpdatedAt:   defaultTime,
+		Detail: &models.WorkspaceLatestDetail{
+			WorkspaceDetailID: wdID,
+			WorkspaceID:       wID.Value(),
+			WorkspaceDetail: &models.WorkspaceDetail{
+				WorkspaceDetailID: wdID,
+				WorkspaceID:       wID.Value(),
+				Name:              "Example",
+				Subdomain:         "example-test",
+				CreatedAt:         defaultTime,
+			},
 		},
 		Members: nil,
 	}
@@ -114,21 +124,26 @@ func Test_driver_AddMember_OK(t *testing.T) {
 
 	wID := workspace.NewIDFromUUID(uuid.MustParse("018d5e03-498c-7db0-ace0-d915c3449a06"))
 	mID := member.NewIDFromUUID(uuid.MustParse("018d5e05-4db2-7665-a362-8db2681f0666"))
+	wdID := uuid.MustParse("018e200b-9d01-70ed-8c5a-5a5df2a98f11")
 
 	ws := &models.Workspace{
 		WorkspaceID: wID.Value(),
 		CreatedAt:   defaultTime,
-		Detail: &models.WorkspaceDetail{
-			WorkspaceID: wID.Value(),
-			Name:        "Example",
-			Subdomain:   "example-test",
-			CreatedAt:   defaultTime,
-			UpdatedAt:   defaultTime,
+		Detail: &models.WorkspaceLatestDetail{
+			WorkspaceDetailID: wdID,
+			WorkspaceID:       wID.Value(),
+			WorkspaceDetail: &models.WorkspaceDetail{
+				WorkspaceDetailID: wdID,
+				WorkspaceID:       wID.Value(),
+				Name:              "Example",
+				Subdomain:         "example",
+				CreatedAt:         defaultTime,
+			},
 		},
 	}
 
-	wsub, _ := workspace.NewSubdomain(ws.Detail.Subdomain)
-	wn, _ := workspace.NewName(ws.Detail.Name)
+	wsub, _ := workspace.NewSubdomain(ws.Detail.WorkspaceDetail.Subdomain)
+	wn, _ := workspace.NewName(ws.Detail.WorkspaceDetail.Name)
 	wd := workspace.NewDetail(wn, wsub)
 	w := workspace.NewWorkspace(wID, wd)
 

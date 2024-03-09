@@ -8,6 +8,6 @@ tags: stateful
 * 設定のプロフィール設定を開く
 * 入力欄"DisplayName"に"Updated DisplayName"と入力する
 * 入力欄"Bio"に"bio hogehoge"と入力する
-* "Update profile"ボタンをクリック
+* 入力フォームの"Update"ボタンをクリック
 * トーストメッセージ"Profile updated"が表示されている
 * 所属中の表示名が"Updated DisplayName"である

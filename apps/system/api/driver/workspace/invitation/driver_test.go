@@ -33,7 +33,9 @@ func Test_driver_FindByToken_OK(t *testing.T) {
 	anID := uuid.MustParse("018e088e-fd36-722d-a927-8cfd34a642bd")
 	aeID := uuid.MustParse("018e09c2-9924-7048-9f08-afa2f3ea5b53")
 
+	mpID := uuid.MustParse("018e2216-64a3-7438-9300-1cdc4354d1de")
 	mrID := uuid.MustParse("018df76b-260d-759f-9b47-fb5f611f5da6")
+	wdID := uuid.MustParse("018e200b-9d01-70ed-8c5a-5a5df2a98f11")
 
 	invitedBy := &models.Member{
 		MemberID:    mID,
@@ -85,19 +87,20 @@ func Test_driver_FindByToken_OK(t *testing.T) {
 				},
 			},
 		},
-		Profile: &models.MemberProfile{
-			MemberID:       mID,
-			MemberIDNumber: "DEV-12345",
-			DisplayName:    "John Doe",
-			Bio:            "bio",
-			CreatedAt:      defaultTime,
-			UpdatedAt:      defaultTime,
-			Member:         nil,
+		Profile: &models.MemberLatestProfile{
+			MemberID:        mID,
+			MemberProfileID: mpID,
+			MemberProfile: &models.MemberProfile{
+				MemberProfileID: mpID,
+				MemberID:        mID,
+				MemberIDNumber:  "DEV-12345",
+				DisplayName:     "John Doe",
+				Bio:             "bio",
+				CreatedAt:       defaultTime,
+			},
 		},
 		Workspace: nil,
 	}
-
-	wdID := uuid.MustParse("018e200b-9d01-70ed-8c5a-5a5df2a98f11")
 
 	invUnit := &models.InvitationUnit{
 		InvitationUnitID: uuid.MustParse("018db4a4-c350-747b-8c4f-bd827e08174b"),

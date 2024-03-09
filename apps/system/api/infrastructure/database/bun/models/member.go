@@ -15,10 +15,10 @@ type Member struct {
 	AccountID   uuid.UUID `bun:"account_id,notnull"`
 	CreatedAt   time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	Account   *Account          `bun:"sa,rel:belongs-to"`
-	Profile   *MemberProfile    `bun:"mp,rel:has-one"`
-	Workspace *Workspace        `bun:"ws,rel:belongs-to"`
-	Role      *MemberLatestRole `bun:"mlr,rel:has-one"`
+	Account   *Account             `bun:"sa,rel:belongs-to"`
+	Profile   *MemberLatestProfile `bun:"mlp,rel:has-one"`
+	Workspace *Workspace           `bun:"ws,rel:belongs-to"`
+	Role      *MemberLatestRole    `bun:"mlr,rel:has-one"`
 }
 
 type Members []*Member
@@ -26,14 +26,25 @@ type Members []*Member
 type MemberProfile struct {
 	bun.BaseModel `bun:"table:member_profiles,alias:mp"`
 
-	MemberID       uuid.UUID `bun:"member_id,pk"`
-	MemberIDNumber string    `bun:"member_id_number"`
-	DisplayName    string    `bun:"display_name,notnull"`
-	Bio            string    `bun:"bio,notnull"`
-	CreatedAt      time.Time `bun:"created_at,notnull,default:current_timestamp"`
-	UpdatedAt      time.Time `bun:"updated_at,notnull,default:current_timestamp"`
+	MemberProfileID uuid.UUID `bun:"member_profile_id,pk"`
+	MemberID        uuid.UUID `bun:"member_id,notnull"`
+	MemberIDNumber  string    `bun:"member_id_number"`
+	DisplayName     string    `bun:"display_name,notnull"`
+	Bio             string    `bun:"bio,notnull"`
+	CreatedAt       time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	Member *Member `bun:"rel:has-one"`
+	Member        *Member              `bun:"rel:belongs-to"`
+	MemberProfile *MemberLatestProfile `bun:"rel:has-one"`
+}
+
+type MemberLatestProfile struct {
+	bun.BaseModel `bun:"table:member_latest_profiles,alias:mlp"`
+
+	MemberProfileID uuid.UUID `bun:"member_profile_id,pk"`
+	MemberID        uuid.UUID `bun:"member_id,notnull"`
+
+	MemberProfile *MemberProfile `bun:"rel:has-one"`
+	Member        *Member        `bun:"rel:belongs-to"`
 }
 
 type MemberRole struct {

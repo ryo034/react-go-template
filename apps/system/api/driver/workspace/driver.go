@@ -50,6 +50,15 @@ func (d *driver) FindAll(ctx context.Context, exec bun.IDB, aID account.ID) (mod
 
 func (d *driver) Create(ctx context.Context, exec bun.IDB, w *workspace.Workspace) (*models.Workspace, error) {
 	wdt := w.Detail()
+
+	exist, err := exec.NewSelect().Model(&models.WorkspaceDetail{}).Where("subdomain = ?", wdt.Subdomain().ToString()).Exists(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if exist {
+		return nil, domainErr.NewConflicted("workspace_details", "subdomain")
+	}
+
 	wldID, _ := uuid.NewV7()
 	wo := &models.Workspace{
 		WorkspaceID: w.ID().Value(),
@@ -64,16 +73,13 @@ func (d *driver) Create(ctx context.Context, exec bun.IDB, w *workspace.Workspac
 		WorkspaceDetailID: wldID,
 		WorkspaceID:       w.ID().Value(),
 	}
-	if _, err := exec.NewInsert().Model(wo).Exec(ctx); err != nil {
+	if _, err = exec.NewInsert().Model(wo).Exec(ctx); err != nil {
 		return nil, err
 	}
-	if _, err := exec.NewInsert().Model(wd).Exec(ctx); err != nil {
-		if dbErr.IsDuplicateError(err) {
-			return nil, domainErr.NewConflicted("workspace_details", "subdomain")
-		}
+	if _, err = exec.NewInsert().Model(wd).Exec(ctx); err != nil {
 		return nil, err
 	}
-	if _, err := exec.NewInsert().Model(wld).Exec(ctx); err != nil {
+	if _, err = exec.NewInsert().Model(wld).Exec(ctx); err != nil {
 		return nil, err
 	}
 	wld.WorkspaceDetail = wd
@@ -135,21 +141,25 @@ func (d *driver) AddMember(ctx context.Context, exec bun.IDB, w *workspace.Works
 	if p.HasDisplayName() {
 		dn = p.DisplayName().ToString()
 	}
+	mpID, _ := uuid.NewV7()
 	mp := &models.MemberProfile{
-		MemberID:       m.ID().Value(),
-		MemberIDNumber: "",
-		DisplayName:    dn,
-		Bio:            "",
+		MemberProfileID: mpID,
+		MemberID:        m.ID().Value(),
+		MemberIDNumber:  "",
+		DisplayName:     dn,
+		Bio:             "",
 	}
 	if _, err := exec.NewInsert().Model(mp).Exec(ctx); err != nil {
 		return nil, err
 	}
-
-	mrID, err := uuid.NewV7()
-
-	if err != nil {
+	if _, err := exec.NewInsert().Model(&models.MemberLatestProfile{
+		MemberProfileID: mpID,
+		MemberID:        m.ID().Value(),
+	}).Exec(ctx); err != nil {
 		return nil, err
 	}
+
+	mrID, _ := uuid.NewV7()
 	mr := &models.MemberRole{
 		MemberRoleID: mrID,
 		MemberID:     m.ID().Value(),
@@ -205,6 +215,7 @@ func (d *driver) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, w
 		NewSelect().
 		Model(m).
 		Relation("Profile").
+		Relation("Profile.MemberProfile").
 		Relation("Role").
 		Relation("Role.MemberRole").
 		Relation("Account").
@@ -234,6 +245,7 @@ func (d *driver) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace
 		NewSelect().
 		Model(&ms).
 		Relation("Profile").
+		Relation("Profile.MemberProfile").
 		Relation("Role").
 		Relation("Role.MemberRole").
 		Relation("Account").

@@ -47,8 +47,12 @@ export default class PagesStep {
 
   @Step("<buttonName>ボタンをクリック")
   async clickButtonByName(buttonName: string) {
-    const target = page.locator("button").getByText(buttonName)
-    await target.click()
+    await page.locator("button").getByText(buttonName).click()
+  }
+
+  @Step("入力フォームの<buttonName>ボタンをクリック")
+  async clickButtonByNameOnForm(buttonName: string) {
+    await page.locator("form").locator("button").getByText(buttonName).click()
   }
 
   @Step("<text>をクリック")

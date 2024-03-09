@@ -1,33 +1,3 @@
-CREATE FUNCTION refresh_updated_at_step1() RETURNS trigger AS
-$$
-BEGIN
-  IF NEW.updated_at = OLD.updated_at THEN
-    NEW.updated_at := NULL;
-  END IF;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE FUNCTION refresh_updated_at_step2() RETURNS trigger AS
-$$
-BEGIN
-  IF NEW.updated_at IS NULL THEN
-    NEW.updated_at := OLD.updated_at;
-  END IF;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE FUNCTION refresh_updated_at_step3() RETURNS trigger AS
-$$
-BEGIN
-  IF NEW.updated_at IS NULL THEN
-    NEW.updated_at := CURRENT_TIMESTAMP;
-  END IF;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
 CREATE TABLE address_components (
   component_id uuid NOT NULL,
   component_type VARCHAR(50) NOT NULL,
@@ -209,19 +179,23 @@ CREATE TABLE member_latest_login_histories (
 );
 
 CREATE TABLE member_profiles (
+  member_profile_id uuid NOT NULL,
   member_id uuid NOT NULL,
   member_id_number VARCHAR(255) NOT NULL,
   display_name VARCHAR(50) NOT NULL,
   bio TEXT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (member_id),
+  PRIMARY KEY (member_profile_id),
   CONSTRAINT fk_member_profiles_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id)
 );
 
-CREATE TRIGGER refresh_member_profiles_updated_at_step1 BEFORE UPDATE ON member_profiles FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step1();
-CREATE TRIGGER refresh_member_profiles_updated_at_step2 BEFORE UPDATE OF updated_at ON member_profiles FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step2();
-CREATE TRIGGER refresh_member_profiles_updated_at_step3 BEFORE UPDATE ON member_profiles FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step3();
+CREATE TABLE member_latest_profiles (
+  member_profile_id uuid NOT NULL,
+  member_id uuid NOT NULL UNIQUE,
+  PRIMARY KEY (member_profile_id),
+  CONSTRAINT fk_mlp_member_profiles_member_profile_id FOREIGN KEY (member_profile_id) REFERENCES member_profiles(member_profile_id),
+  CONSTRAINT fk_mlp_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id)
+);
 
 CREATE TABLE member_addresses (
   member_id uuid NOT NULL,
@@ -241,20 +215,15 @@ CREATE TABLE member_addresses (
   CONSTRAINT fk_member_addresses_country_component_id FOREIGN KEY (country_component_id) REFERENCES address_components(component_id)
 );
 
-CREATE TABLE membership_periods (
-  member_id uuid NOT NULL,
-  start_date DATE NOT NULL,
-  end_date DATE,
-  activity VARCHAR(20) NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (member_id, start_date),
-  CONSTRAINT fk_membership_periods_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id)
-);
-
-CREATE TRIGGER refresh_membership_periods_updated_at_step1 BEFORE UPDATE ON membership_periods FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step1();
-CREATE TRIGGER refresh_membership_periods_updated_at_step2 BEFORE UPDATE OF updated_at ON membership_periods FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step2();
-CREATE TRIGGER refresh_membership_periods_updated_at_step3 BEFORE UPDATE ON membership_periods FOR EACH ROW EXECUTE PROCEDURE refresh_updated_at_step3();
+-- CREATE TABLE membership_periods (
+--   member_id uuid NOT NULL,
+--   start_date DATE NOT NULL,
+--   end_date DATE,
+--   activity VARCHAR(20) NOT NULL,
+--   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+--   PRIMARY KEY (member_id, start_date),
+--   CONSTRAINT fk_membership_periods_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id)
+-- );
 
 CREATE TABLE invitation_units (
   invitation_unit_id uuid NOT NULL,

@@ -319,57 +319,57 @@ VALUES
 ('018e21d7-6279-77d5-b7bf-63c61e7378eb', '018e21d7-6279-70f6-8170-5d3bfdc5c378'),
 ('018e21d7-6279-744f-b122-9be9ff63feb9', '018e21d7-6279-788c-9a65-9932d4649535');
 
-INSERT INTO member_profiles (member_id, member_id_number, display_name, bio, created_at, updated_at)
+INSERT INTO member_profiles (member_profile_id, member_id, member_id_number, display_name, bio, created_at)
 VALUES
-('377eba35-5560-4f48-a99d-19cbd6a82b0d', 'DEV-12345', 'John Doe', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018e1398-3d80-79dc-9459-c7a3f1609124', 'DEV-12346', 'Login Bio', 'Long Bio is a passionate software engineer with 8 years of experience specializing in web development, particularly with React and Node.js. A graduate from MIT with a strong focus on clean architecture and Agile methodologies, John has successfully led multiple projects, from innovative startups to established tech giants. He''s a firm believer in continuous learning, contributing regularly to open-source projects, and sharing insights through tech blogs and meetups. Outside of work, John enjoys hiking 🚶‍♂️, drone photography 📸, and playing the guitar 🎸. He''s committed to using technology to drive positive social change.', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018d91d5-c061-78ba-9263-d6ef9e7e6783', 'DEV-67890', 'Login LogoutRetry', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018d96b9-f674-7ff6-83eb-506eca6452be', 'DEV-54321', 'Invite TestOne', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018df53e-4c77-79de-b725-c43ebcb79450', 'DEV-54322', 'InviteGoogleAuthTest AlreadyJoined', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018df552-5086-7b84-8601-d04c319d2e44', 'DEV-54323', 'InviteGoogleAuthTest AlreadyJoinedGoogle', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018d9b4e-d8fb-73be-95c5-46fbc7a37a7d', 'DEV-09876', 'Invite TestTwo', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018da0dc-dad2-7ac8-95cc-9c3afdd0dbd5', 'DEV-54321', 'Invite TestThree', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018ddee7-2419-7c62-a9be-a56a2c07916e', 'DEV-54321', 'UpdateMe MemberProfile DisplayName', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018e0e60-4f73-72bd-84f7-ae1abaa7fef1', 'DEV-54321', 'UpdateMe UpdateProfilePhoto', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018e0eab-df36-7295-a917-9c81e8c6671c', 'DEV-54321', 'InviteTest HasPhotoAcceptWithEmail', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018e0ebf-0806-7f10-a73b-28db9f4d2349', 'DEV-54322', 'InviteTest HasPhotoAcceptWithGoogle', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018e1398-3d80-7fae-a661-3c234a9c5c53', 'DEV-54321', 'HasPhotoGoogle SetupPhoto', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018e18ba-dc87-72e2-bb4b-c43252f51492', 'DEV-54321', 'UpdateRole Owner', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018e18ba-dc87-740c-9aeb-ba7f8f7d490e', 'DEV-54322', 'UpdateRole Admin', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018e1952-009b-7138-aea6-24b2f9596ad7', 'DEV-54323', 'UpdateRole AdminTwo', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018e18ba-dc87-7a3e-8181-7186458e84b6', 'DEV-54323', 'UpdateRole Member', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018e18ba-dc87-7c1a-81c6-6f6415c53966', 'DEV-54324', 'UpdateRole Guest', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018e201b-67d4-7460-bbb2-1428e7c2d949', 'DEV-54321', 'UpdateWorkspace Detail', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018e21d7-6279-70f6-8170-5d3bfdc5c378', 'DEV-54321', 'UpdateWorkspace DetailTwo', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00'),
-('018e21d7-6279-788c-9a65-9932d4649535', 'DEV-54322', 'UpdateWorkspace DetailThree', 'bio', '2024-01-10 12:00:00', '2024-01-10 12:00:00');
+('018e2216-64a3-7438-9300-1cdc4354d1de', '377eba35-5560-4f48-a99d-19cbd6a82b0d', 'DEV-12345', 'John Doe', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-7fb7-93ab-d63cbfb93a16', '018e1398-3d80-79dc-9459-c7a3f1609124', 'DEV-12346', 'Login Bio', 'Long Bio is a passionate software engineer with 8 years of experience specializing in web development, particularly with React and Node.js. A graduate from MIT with a strong focus on clean architecture and Agile methodologies, John has successfully led multiple projects, from innovative startups to established tech giants. He''s a firm believer in continuous learning, contributing regularly to open-source projects, and sharing insights through tech blogs and meetups. Outside of work, John enjoys hiking 🚶‍♂️, drone photography 📸, and playing the guitar 🎸. He''s committed to using technology to drive positive social change.', '2024-01-10 12:00:00'),
+('018e2216-64a3-7c4c-883c-4e8eec98c901', '018d91d5-c061-78ba-9263-d6ef9e7e6783', 'DEV-67890', 'Login LogoutRetry', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-7bff-b630-555c8cd00f5b', '018d96b9-f674-7ff6-83eb-506eca6452be', 'DEV-54321', 'Invite TestOne', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-7956-bae1-1d29495831b3', '018df53e-4c77-79de-b725-c43ebcb79450', 'DEV-54322', 'InviteGoogleAuthTest AlreadyJoined', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-746b-b5f4-847aef64aede', '018df552-5086-7b84-8601-d04c319d2e44', 'DEV-54323', 'InviteGoogleAuthTest AlreadyJoinedGoogle', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-761f-951d-b57715af0d47', '018d9b4e-d8fb-73be-95c5-46fbc7a37a7d', 'DEV-09876', 'Invite TestTwo', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-7bd4-bf8a-b87614b92150', '018da0dc-dad2-7ac8-95cc-9c3afdd0dbd5', 'DEV-54321', 'Invite TestThree', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-7e62-9f98-3e7cb870fc15', '018ddee7-2419-7c62-a9be-a56a2c07916e', 'DEV-54321', 'UpdateMe MemberProfile DisplayName', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-7536-8c7c-327a4585300f', '018e0e60-4f73-72bd-84f7-ae1abaa7fef1', 'DEV-54321', 'UpdateMe UpdateProfilePhoto', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-7739-80a1-bf8048c536ea', '018e0eab-df36-7295-a917-9c81e8c6671c', 'DEV-54321', 'InviteTest HasPhotoAcceptWithEmail', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-75da-982f-52bd79c3bbba', '018e0ebf-0806-7f10-a73b-28db9f4d2349', 'DEV-54322', 'InviteTest HasPhotoAcceptWithGoogle', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-7b23-bdf9-ce4aac4fc1b2', '018e1398-3d80-7fae-a661-3c234a9c5c53', 'DEV-54321', 'HasPhotoGoogle SetupPhoto', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-7536-85ee-1aef8764ab43', '018e18ba-dc87-72e2-bb4b-c43252f51492', 'DEV-54321', 'UpdateRole Owner', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-7155-9422-57888faecafd', '018e18ba-dc87-740c-9aeb-ba7f8f7d490e', 'DEV-54322', 'UpdateRole Admin', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-7ae9-b464-4e1d78103c23', '018e1952-009b-7138-aea6-24b2f9596ad7', 'DEV-54323', 'UpdateRole AdminTwo', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-7e49-9c65-577f12495115', '018e18ba-dc87-7a3e-8181-7186458e84b6', 'DEV-54323', 'UpdateRole Member', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-7d09-8649-e13bd8261c89', '018e18ba-dc87-7c1a-81c6-6f6415c53966', 'DEV-54324', 'UpdateRole Guest', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-71c3-b1d9-522a8d5d0d7b', '018e201b-67d4-7460-bbb2-1428e7c2d949', 'DEV-54321', 'UpdateWorkspace Detail', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-76e2-98cb-37dc6b092c49', '018e21d7-6279-70f6-8170-5d3bfdc5c378', 'DEV-54321', 'UpdateWorkspace DetailTwo', 'bio', '2024-01-10 12:00:00'),
+('018e2216-64a3-7dff-8c61-1c882827448a', '018e21d7-6279-788c-9a65-9932d4649535', 'DEV-54322', 'UpdateWorkspace DetailThree', 'bio', '2024-01-10 12:00:00');
+
+INSERT INTO member_latest_profiles (member_profile_id, member_id)
+VALUES
+('018e2216-64a3-7438-9300-1cdc4354d1de', '377eba35-5560-4f48-a99d-19cbd6a82b0d'),
+('018e2216-64a3-7fb7-93ab-d63cbfb93a16', '018e1398-3d80-79dc-9459-c7a3f1609124'),
+('018e2216-64a3-7c4c-883c-4e8eec98c901', '018d91d5-c061-78ba-9263-d6ef9e7e6783'),
+('018e2216-64a3-7bff-b630-555c8cd00f5b', '018d96b9-f674-7ff6-83eb-506eca6452be'),
+('018e2216-64a3-7956-bae1-1d29495831b3', '018df53e-4c77-79de-b725-c43ebcb79450'),
+('018e2216-64a3-746b-b5f4-847aef64aede', '018df552-5086-7b84-8601-d04c319d2e44'),
+('018e2216-64a3-761f-951d-b57715af0d47', '018d9b4e-d8fb-73be-95c5-46fbc7a37a7d'),
+('018e2216-64a3-7bd4-bf8a-b87614b92150', '018da0dc-dad2-7ac8-95cc-9c3afdd0dbd5'),
+('018e2216-64a3-7e62-9f98-3e7cb870fc15', '018ddee7-2419-7c62-a9be-a56a2c07916e'),
+('018e2216-64a3-7536-8c7c-327a4585300f', '018e0e60-4f73-72bd-84f7-ae1abaa7fef1'),
+('018e2216-64a3-7739-80a1-bf8048c536ea', '018e0eab-df36-7295-a917-9c81e8c6671c'),
+('018e2216-64a3-75da-982f-52bd79c3bbba', '018e0ebf-0806-7f10-a73b-28db9f4d2349'),
+('018e2216-64a3-7b23-bdf9-ce4aac4fc1b2', '018e1398-3d80-7fae-a661-3c234a9c5c53'),
+('018e2216-64a3-7536-85ee-1aef8764ab43', '018e18ba-dc87-72e2-bb4b-c43252f51492'),
+('018e2216-64a3-7155-9422-57888faecafd', '018e18ba-dc87-740c-9aeb-ba7f8f7d490e'),
+('018e2216-64a3-7ae9-b464-4e1d78103c23', '018e1952-009b-7138-aea6-24b2f9596ad7'),
+('018e2216-64a3-7e49-9c65-577f12495115', '018e18ba-dc87-7a3e-8181-7186458e84b6'),
+('018e2216-64a3-7d09-8649-e13bd8261c89', '018e18ba-dc87-7c1a-81c6-6f6415c53966'),
+('018e2216-64a3-71c3-b1d9-522a8d5d0d7b', '018e201b-67d4-7460-bbb2-1428e7c2d949'),
+('018e2216-64a3-76e2-98cb-37dc6b092c49', '018e21d7-6279-70f6-8170-5d3bfdc5c378'),
+('018e2216-64a3-7dff-8c61-1c882827448a', '018e21d7-6279-788c-9a65-9932d4649535');
 
 INSERT INTO member_addresses (member_id, postal_code, building_component_id, street_address_component_id, city_component_id, state_component_id, country_component_id, created_at)
 VALUES
 ('377eba35-5560-4f48-a99d-19cbd6a82b0d', '150-0002', null, '44002c51-cc57-489f-bcf7-4f2abc6ddeb8', '0f40229e-dc58-4111-b709-b9a5266f587f', '90c3287b-2ff8-46b4-bfb5-332a979a199a', '10269b87-98ce-490e-aeab-2a5230a48d4f', '2024-01-10 12:00:00');
-
-INSERT INTO membership_periods (member_id, start_date, end_date, activity, created_at)
-VALUES
-('377eba35-5560-4f48-a99d-19cbd6a82b0d', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018e1398-3d80-79dc-9459-c7a3f1609124', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018d91d5-c061-78ba-9263-d6ef9e7e6783', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018d96b9-f674-7ff6-83eb-506eca6452be', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018df53e-4c77-79de-b725-c43ebcb79450', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018df552-5086-7b84-8601-d04c319d2e44', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018d9b4e-d8fb-73be-95c5-46fbc7a37a7d', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018da0dc-dad2-7ac8-95cc-9c3afdd0dbd5', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018ddee7-2419-7c62-a9be-a56a2c07916e', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018e0e60-4f73-72bd-84f7-ae1abaa7fef1', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018e0eab-df36-7295-a917-9c81e8c6671c', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018e0ebf-0806-7f10-a73b-28db9f4d2349', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018e1398-3d80-7fae-a661-3c234a9c5c53', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018e18ba-dc87-72e2-bb4b-c43252f51492', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018e18ba-dc87-740c-9aeb-ba7f8f7d490e', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018e1952-009b-7138-aea6-24b2f9596ad7', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018e18ba-dc87-7a3e-8181-7186458e84b6', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018e18ba-dc87-7c1a-81c6-6f6415c53966', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018e201b-67d4-7460-bbb2-1428e7c2d949', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018e21d7-6279-70f6-8170-5d3bfdc5c378', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00'),
-('018e21d7-6279-788c-9a65-9932d4649535', '2024-01-01', NULL, 'Active', '2024-01-10 12:00:00');
 
 INSERT INTO invitation_units (invitation_unit_id, workspace_id, invited_by, created_at)
 VALUES

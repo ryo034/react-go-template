@@ -44,7 +44,10 @@ func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo me.Repos
 func (u *useCase) Find(ctx context.Context, aID account.ID) (openapi.APIV1MeGetRes, error) {
 	exec := u.dbp.GetExecutor(ctx, false)
 	lastLoginRes, err := u.repo.FindLastLogin(ctx, exec, aID)
-	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, domainErr.NewUnauthenticated("Not logged in")
+		}
 		return nil, err
 	}
 	return u.op.Find(lastLoginRes)

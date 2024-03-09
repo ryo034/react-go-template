@@ -16,6 +16,15 @@ const fetchRequestInterceptor: Middleware = {
   }
 }
 
+const fetchResponseInterceptor: Middleware = {
+  async onResponse(res, options) {
+    if (res.status === 401) {
+      await firebaseAuth.signOut()
+    }
+    return res
+  }
+}
+
 const debugMiddleware: Middleware = {
   async onRequest(req, options) {
     console.log("onRequest", req, options)
@@ -32,6 +41,7 @@ export const openapiFetchClient = createClient<paths>({
 })
 
 openapiFetchClient.use(fetchRequestInterceptor)
+openapiFetchClient.use(fetchResponseInterceptor)
 
 if (import.meta.env.MODE === "development") {
   openapiFetchClient.use(debugMiddleware)

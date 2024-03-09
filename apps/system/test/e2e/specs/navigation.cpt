@@ -5,13 +5,13 @@
 * "/"を開く
 
 # 設定のアカウント設定を開く
-* "/settings/account"を開く
+* "/settings/workspace/account"を開く
 
 # 設定のプロフィール設定を開く
 * "/settings/profile"を開く
 
 # 設定のメンバー設定を開く
-* "/settings/members"を開く
+* "/settings/workspace/members"を開く
 
 # 設定ページが表示されている
 * ページタイトルが"Settings"である

@@ -40,17 +40,17 @@ func (a *adapter) Adapt(m *models.Member) (*member.Member, error) {
 	if err != nil {
 		return nil, err
 	}
-	idNumber, err := member.NewIDNumber(m.Profile.MemberIDNumber)
+	idNumber, err := member.NewIDNumber(m.Profile.MemberProfile.MemberIDNumber)
 	if err != nil {
 		return nil, err
 	}
 
-	dn := member.NewDisplayName(m.Profile.DisplayName)
+	dn := member.NewDisplayName(m.Profile.MemberProfile.DisplayName)
 	if err != nil {
 		return nil, err
 	}
 	id := member.NewIDFromUUID(m.MemberID)
-	bio, err := member.NewBio(m.Profile.Bio)
+	bio, err := member.NewBio(m.Profile.MemberProfile.Bio)
 	if err != nil {
 		return nil, err
 	}

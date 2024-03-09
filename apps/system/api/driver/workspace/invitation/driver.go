@@ -50,6 +50,7 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, id invitation.ID) (*mod
 		Relation("InvitationUnit.Workspace.Detail.WorkspaceDetail").
 		Relation("InvitationUnit.Member").
 		Relation("InvitationUnit.Member.Profile").
+		Relation("InvitationUnit.Member.Profile.MemberProfile").
 		Relation("InvitationUnit.Member.Role").
 		Relation("InvitationUnit.Member.Role.MemberRole").
 		Relation("InvitationUnit.Member.Account").
@@ -120,6 +121,7 @@ func (d *driver) FindActiveByEmail(ctx context.Context, exec bun.IDB, email acco
 		Relation("InvitationUnit.Workspace.Detail.WorkspaceDetail").
 		Relation("InvitationUnit.Member").
 		Relation("InvitationUnit.Member.Profile").
+		Relation("InvitationUnit.Member.Profile.MemberProfile").
 		Relation("InvitationUnit.Member.Role").
 		Relation("InvitationUnit.Member.Role.MemberRole").
 		Relation("InvitationUnit.Member.Account").
@@ -256,6 +258,7 @@ func (d *driver) FindAllReceivedByEmail(ctx context.Context, exec bun.IDB, email
 		Relation("InvitationUnit.Workspace.Detail.WorkspaceDetail").
 		Relation("InvitationUnit.Member").
 		Relation("InvitationUnit.Member.Profile").
+		Relation("InvitationUnit.Member.Profile.MemberProfile").
 		Relation("InvitationUnit.Member.Role").
 		Relation("InvitationUnit.Member.Role.MemberRole").
 		Relation("InvitationUnit.Member.Account").
@@ -336,6 +339,7 @@ func (d *driver) FindActiveByToken(ctx context.Context, exec bun.IDB, token invi
 		Relation("InvitationUnit.Workspace.Detail.WorkspaceDetail").
 		Relation("InvitationUnit.Member").
 		Relation("InvitationUnit.Member.Profile").
+		Relation("InvitationUnit.Member.Profile.MemberProfile").
 		Relation("InvitationUnit.Member.Role").
 		Relation("InvitationUnit.Member.Role.MemberRole").
 		Relation("InvitationUnit.Member.Account").
@@ -378,6 +382,7 @@ func (d *driver) FindAllByWorkspace(ctx context.Context, exec bun.IDB, wID works
 		Relation("InvitationUnit.Workspace.Detail.WorkspaceDetail").
 		Relation("InvitationUnit.Member").
 		Relation("InvitationUnit.Member.Profile").
+		Relation("InvitationUnit.Member.Profile.MemberProfile").
 		Relation("InvitationUnit.Member.Role").
 		Relation("InvitationUnit.Member.Role.MemberRole").
 		Relation("InvitationUnit.Member.Account").
