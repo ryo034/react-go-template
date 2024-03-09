@@ -20,19 +20,19 @@ import {
 } from "shared-ui"
 import { AccountAvatar } from "~/components/account/avatar"
 import { Member, SelectableRole, SelectableRoleList } from "~/domain"
+import { useRole } from "~/infrastructure/hooks/role"
 import { ContainerContext } from "~/infrastructure/injector/context"
-import { useSettingsMembersPageMessage } from "./message"
 
 export const settingsWorkspaceMembersPageRoute = "/settings/workspace/members"
 
 export const SettingsWorkspaceMembersPage = () => {
   const { store, controller } = useContext(ContainerContext)
   const { toast } = useToast()
+  const { translateRole } = useRole()
   const me = store.me((state) => state.me)
   const members = store.workspace((s) => s.members)
   const membersIsLoading = store.workspace((s) => s.membersIsLoading)
   const membersRef = useRef(members)
-  const message = useSettingsMembersPageMessage()
 
   const [isUpdating, setIsUpdating] = useState(false)
 
@@ -51,21 +51,6 @@ export const SettingsWorkspaceMembersPage = () => {
   }, [])
 
   if (!me) return <></>
-
-  const translatedRoles = {
-    owner: {
-      name: message.word.ownerRole
-    },
-    admin: {
-      name: message.word.adminRole
-    },
-    member: {
-      name: message.word.memberRole
-    },
-    guest: {
-      name: message.word.guestRole
-    }
-  }
 
   const onSelectRole = async (member: Member, role: SelectableRole) => {
     setIsUpdating(true)
@@ -115,14 +100,14 @@ export const SettingsWorkspaceMembersPage = () => {
                 </div>
                 {m.isOwner || !me.member?.canEditRole ? (
                   <Button variant="outline" className="ml-auto" disabled data-testid="notSelectableRoleButton">
-                    {translatedRoles[m.role].name}
+                    {translateRole(m.role)}
                     <ChevronDownIcon className="ml-2 h-4 w-4 text-muted-foreground" />
                   </Button>
                 ) : (
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button variant="outline" className="ml-auto" disabled={isUpdating}>
-                        {translatedRoles[m.role].name}
+                        {translateRole(m.role)}
                         <ChevronDownIcon className="ml-2 h-4 w-4 text-muted-foreground" />
                       </Button>
                     </PopoverTrigger>
@@ -139,7 +124,7 @@ export const SettingsWorkspaceMembersPage = () => {
                                   key={`${m.id.value.asString}-selectRole-${role}`}
                                 >
                                   <p className="flex items-center">
-                                    <span className="pr-2">{translatedRoles[role].name}</span>
+                                    <span className="pr-2">{translateRole(role)}</span>
                                     {role !== m.role ? null : <CheckIcon size={16} />}
                                   </p>
                                 </CommandItem>
