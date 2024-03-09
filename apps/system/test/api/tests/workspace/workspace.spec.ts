@@ -1,4 +1,4 @@
-import { expect } from "@playwright/test"
+import test, { expect } from "@playwright/test"
 import { authHeaders } from "../../config/config"
 import { genAPIClient, getAuthInfo, systemTest } from "../../scripts"
 
@@ -23,5 +23,18 @@ systemTest.describe("Create Workspace", () => {
     })
     expect(res.response.status).toBe(201)
     expect(res.error).toBeUndefined()
+  })
+})
+
+test.describe("Update workspace", () => {
+  test("Update workspace detail", async () => {
+    const authInfo = await getAuthInfo("update_workspace_detail@example.com")
+    const res = await client.PUT("/api/v1/workspaces/{workspaceId}", {
+      headers: authHeaders(authInfo.token),
+      params: { path: { workspaceId: "018e201b-67d4-7265-a022-1b29793b2a91" } },
+      body: { name: "Update TestUpdated", subdomain: "update-test-updated" }
+    })
+    expect(res.response.status).toBe(200)
+    expect(res.data).toStrictEqual((await import("./success_update_workspace.json")).default)
   })
 })

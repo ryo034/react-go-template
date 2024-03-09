@@ -106,7 +106,7 @@ export class MainDb implements Database {
           const query = format(`INSERT INTO ${tableName} (${columns}) VALUES %L`, [
             row.map((value) => (value === "" ? "" : value))
           ])
-          logWithEllipsis(query)
+          logWithEllipsis(`Retry: ${query}`)
           await connection.query(query)
         }
       }
