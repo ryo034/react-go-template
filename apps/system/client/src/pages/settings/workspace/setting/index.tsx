@@ -3,9 +3,9 @@ import { Separator, useToast } from "shared-ui"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { SettingsAccountForm, SettingsAccountFormValues } from "./form"
 
-export const settingsWorkspaceAccountPageRoute = "/settings/workspace/account"
+export const settingsWorkspaceSettingPageRoute = "/settings/workspace/setting"
 
-export const SettingsWorkspaceAccountPage = () => {
+export const SettingsWorkspaceSettingPage = () => {
   const { store, controller } = useContext(ContainerContext)
   const { toast } = useToast()
 
@@ -29,17 +29,12 @@ export const SettingsWorkspaceAccountPage = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">Account</h3>
+        <h3 className="text-lg font-medium">Workspace Setting</h3>
         <p className="text-sm text-muted-foreground">
           Update your account settings. Set your preferred language and timezone.
         </p>
       </div>
       <Separator />
-      <SettingsAccountForm
-        defaultValues={{ name: me.self.name?.value ?? "" }}
-        onSubmit={onSubmit}
-        isUpdating={isUpdating}
-      />
     </div>
   )
 }

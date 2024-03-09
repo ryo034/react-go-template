@@ -6,11 +6,12 @@ import { onboardingSettingNamePageRoute } from "~/pages/onboarding/name"
 import { onboardingSettingWorkspacePageRoute } from "~/pages/onboarding/workspace"
 import { verifyOtpPageRoute } from "~/pages/otp"
 import { receivedInvitationsPageRoute } from "~/pages/receivedInvitation"
-import { settingsAccountPageRoute } from "~/pages/settings/account"
+import { settingsWorkspaceAccountPageRoute } from "~/pages/settings/account"
 import { settingsAppearancePageRoute } from "~/pages/settings/appearance"
-import { settingsInvitationPageRoute } from "~/pages/settings/invitation"
-import { settingsMembersPageRoute } from "~/pages/settings/members"
+import { settingsWorkspaceInvitationsPageRoute } from "~/pages/settings/invitation"
+import { settingsWorkspaceMembersPageRoute } from "~/pages/settings/members"
 import { settingsProfilePageRoute } from "~/pages/settings/profile"
+import { settingsWorkspaceSettingPageRoute } from "~/pages/settings/workspace/setting"
 
 export const routeMap = {
   auth: authPageRoute,
@@ -23,10 +24,11 @@ export const routeMap = {
   // dashboard
   home: homePageRoute,
   settingsProfile: settingsProfilePageRoute,
-  settingsAccount: settingsAccountPageRoute,
-  settingsInvitation: settingsInvitationPageRoute,
-  settingsMembers: settingsMembersPageRoute,
   settingsAppearance: settingsAppearancePageRoute,
+  settingsWorkspaceAccount: settingsWorkspaceAccountPageRoute,
+  settingsWorkspaceInvitation: settingsWorkspaceInvitationsPageRoute,
+  settingsWorkspaceMembers: settingsWorkspaceMembersPageRoute,
+  settingsWorkspaceSetting: settingsWorkspaceSettingPageRoute,
   members: membersPageRoute
 } as const
 
@@ -34,7 +36,10 @@ export const isSettingsPage = (path: string) => {
   return (
     path.includes(routeMap.settingsAppearance) ||
     path.includes(routeMap.settingsProfile) ||
-    path.includes(routeMap.settingsAccount)
+    path.includes(routeMap.settingsWorkspaceAccount) ||
+    path.includes(routeMap.settingsWorkspaceInvitation) ||
+    path.includes(routeMap.settingsWorkspaceMembers) ||
+    path.includes(routeMap.settingsWorkspaceSetting)
   )
 }
 

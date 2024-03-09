@@ -3,7 +3,7 @@ import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Sepa
 import { Invitation, Me } from "~/domain"
 import { ContainerContext } from "~/infrastructure/injector/context"
 
-export const settingsInvitationPageRoute = "/settings/invitation"
+export const settingsWorkspaceInvitationsPageRoute = "/settings/workspace/invitations"
 
 export interface Props extends HTMLAttributes<HTMLDivElement> {
   isUpdating?: boolean
@@ -37,7 +37,7 @@ const InviteeListItem = ({ isUpdating, me, invitation, onClickResend, onClickRev
   )
 }
 
-export const SettingsInvitationPage = () => {
+export const SettingsWorkspaceInvitationsPage = () => {
   const { store, controller } = useContext(ContainerContext)
   const { toast } = useToast()
   const me = store.me((state) => state.me)

@@ -32,7 +32,7 @@ export const SidebarUserNav = ({ isCollapsed }: Props) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="w-full mt-auto p-2">
+        <div className={`w-full mt-auto p-2 ${isCollapsed && "flex justify-center"}`}>
           {isCollapsed ? (
             <AccountAvatar
               alt="avatar"
@@ -40,6 +40,7 @@ export const SidebarUserNav = ({ isCollapsed }: Props) => {
               fallbackString={me.self.name?.firstTwoCharacters || ""}
               size="sm"
               data-testid="collapsedAvatarOnSidebar"
+              className="cursor-pointer"
             />
           ) : (
             <Card className="p-2 cursor-pointer" date-testid="userNavigationOnSidebar">

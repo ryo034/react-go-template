@@ -23,9 +23,9 @@ import { Member, SelectableRole, SelectableRoleList } from "~/domain"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { useSettingsMembersPageMessage } from "./message"
 
-export const settingsMembersPageRoute = "/settings/members"
+export const settingsWorkspaceMembersPageRoute = "/settings/workspace/members"
 
-export const SettingsMembersPage = () => {
+export const SettingsWorkspaceMembersPage = () => {
   const { store, controller } = useContext(ContainerContext)
   const { toast } = useToast()
   const me = store.me((state) => state.me)

@@ -17,11 +17,12 @@ import { OnboardingSettingNamePage } from "~/pages/onboarding/name"
 import { OnboardingSettingWorkspacePage } from "~/pages/onboarding/workspace"
 import { VerifyOtpPage } from "~/pages/otp"
 import { ReceivedInvitationsPage } from "~/pages/receivedInvitation"
-import { SettingsAccountPage } from "~/pages/settings/account"
+import { SettingsWorkspaceAccountPage } from "~/pages/settings/account"
 import { SettingsAppearancePage } from "~/pages/settings/appearance"
-import { SettingsInvitationPage } from "~/pages/settings/invitation"
-import { SettingsMembersPage } from "~/pages/settings/members"
+import { SettingsWorkspaceInvitationsPage } from "~/pages/settings/invitation"
+import { SettingsWorkspaceMembersPage } from "~/pages/settings/members"
 import { SettingsProfilePage } from "~/pages/settings/profile"
+import { SettingsWorkspaceSettingPage } from "~/pages/settings/workspace/setting"
 
 export const accountInitialPagePath = routeMap.home
 
@@ -70,9 +71,10 @@ const router = createBrowserRouter([
                         children: [
                           { path: routeMap.settingsProfile, element: <SettingsProfilePage /> },
                           { path: routeMap.settingsAppearance, element: <SettingsAppearancePage /> },
-                          { path: routeMap.settingsAccount, element: <SettingsAccountPage /> },
-                          { path: routeMap.settingsInvitation, element: <SettingsInvitationPage /> },
-                          { path: routeMap.settingsMembers, element: <SettingsMembersPage /> }
+                          { path: routeMap.settingsWorkspaceAccount, element: <SettingsWorkspaceAccountPage /> },
+                          { path: routeMap.settingsWorkspaceInvitation, element: <SettingsWorkspaceInvitationsPage /> },
+                          { path: routeMap.settingsWorkspaceMembers, element: <SettingsWorkspaceMembersPage /> },
+                          { path: routeMap.settingsWorkspaceSetting, element: <SettingsWorkspaceSettingPage /> }
                         ]
                       }
                     ]
