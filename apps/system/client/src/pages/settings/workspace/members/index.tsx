@@ -93,9 +93,9 @@ export const SettingsWorkspaceMembersPage = () => {
                     fallbackString={m.user.name?.firstTwoCharacters ?? ""}
                     size="sm"
                   />
-                  <div className="max-w-[420px] w-full break-all">
+                  <div className="max-w-[360px] w-full break-all">
                     <p className="text-sm font-medium leading-none">{m.user.name?.value}</p>
-                    <p className="text-sm text-muted-foreground w-[420px]">{m.user.email.value}</p>
+                    <p className="text-sm text-muted-foreground w-[360px]">{m.user.email.value}</p>
                   </div>
                 </div>
                 {m.isOwner || !me.member?.canEditRole ? (
