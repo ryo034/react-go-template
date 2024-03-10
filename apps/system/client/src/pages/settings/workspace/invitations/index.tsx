@@ -1,7 +1,7 @@
-import { HTMLAttributes, useContext, useLayoutEffect, useRef, useState } from "react"
+import { type HTMLAttributes, useContext, useLayoutEffect, useRef, useState } from "react"
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Separator, useToast } from "shared-ui"
 import { InviteMembersDialog } from "~/components/member/inviteDialog"
-import { Invitation, Me } from "~/domain"
+import type { Invitation, Me } from "~/domain"
 import { ContainerContext } from "~/infrastructure/injector/context"
 
 export const settingsWorkspaceInvitationsPageRoute = "/settings/workspace/invitations"

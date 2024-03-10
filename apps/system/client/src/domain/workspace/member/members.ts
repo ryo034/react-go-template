@@ -1,4 +1,4 @@
-import { Member } from "~/domain"
+import type { Member } from "~/domain"
 import { Entities } from "~/domain/shared"
 
 export class Members extends Entities<Member> {

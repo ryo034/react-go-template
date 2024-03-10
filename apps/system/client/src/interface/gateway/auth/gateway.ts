@@ -1,9 +1,9 @@
 import { Result } from "true-myth"
-import { AuthRepository, CustomToken, Me, Otp, ReceivedInvitation } from "~/domain"
-import { Email } from "~/domain/shared"
-import { AuthDriver, AuthProviderDriver } from "~/driver"
-import { PromiseResult } from "~/infrastructure/shared/result"
-import { AuthGatewayAdapter, MeGatewayAdapter } from "~/interface/gateway"
+import type { AuthRepository, CustomToken, Me, Otp, ReceivedInvitation } from "~/domain"
+import type { Email } from "~/domain/shared"
+import type { AuthDriver, AuthProviderDriver } from "~/driver"
+import type { PromiseResult } from "~/infrastructure/shared/result"
+import type { AuthGatewayAdapter, MeGatewayAdapter } from "~/interface/gateway"
 
 export class AuthGateway implements AuthRepository {
   constructor(

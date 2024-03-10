@@ -1,4 +1,4 @@
-import { ThemeType } from "~/store"
+import type { ThemeType } from "~/store"
 
 const key = "theme"
 const darkThemeKey = "dark"

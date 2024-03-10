@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { MemberRole } from "~/domain"
+import type { MemberRole } from "~/domain"
 import { i18nKeys } from "../i18n"
 import { ContainerContext } from "../injector/context"
 

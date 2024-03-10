@@ -1,10 +1,11 @@
 import { getRedirectResult } from "firebase/auth"
 import { useContext, useLayoutEffect, useRef, useState } from "react"
+import { useAuthState } from "react-firebase-hooks/auth"
 import { Trans } from "react-i18next"
 import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom"
 import { isBadRequestError } from "shared-network"
 import { Button, LoadingButton, useToast } from "shared-ui"
-import { ReceivedInvitation } from "~/domain"
+import type { ReceivedInvitation } from "~/domain"
 import {
   isAlreadyAcceptedInvitationError,
   isAlreadyExpiredInvitationError,
@@ -53,6 +54,7 @@ const InvitationSection = ({
   const [errorMessage, setErrorMessage] = useState("")
   const me = store.me((state) => state.me)
   const meRef = useRef(me)
+  const [_, loading] = useAuthState(driver.firebase.getClient)
 
   const onClickStartWithEmailButton = async () => {
     if (receivedInvitation === null) {

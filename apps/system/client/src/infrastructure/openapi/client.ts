@@ -1,5 +1,5 @@
-import createClient, { Middleware } from "openapi-fetch"
-import { paths } from "~/generated/schema/openapi/systemApi"
+import createClient, { type Middleware } from "openapi-fetch"
+import type { paths } from "~/generated/schema/openapi/systemApi"
 import { firebaseAuth } from "~/infrastructure/firebase"
 
 const fetchRequestInterceptor: Middleware = {

@@ -1,4 +1,4 @@
-export * from "./auth"
+export * from "./auth/driver"
 export * from "./firebase/driver"
 export * from "./localStorage/driver"
 export * from "./me/driver"

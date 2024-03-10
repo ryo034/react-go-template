@@ -1,4 +1,4 @@
-import { Invitation, Inviter } from "~/domain"
+import type { Invitation, Inviter } from "~/domain"
 import { Entity } from "~/domain/shared"
 
 interface Props {

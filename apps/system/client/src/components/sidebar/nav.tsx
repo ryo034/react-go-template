@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom"
 import { Tooltip, TooltipContent, TooltipTrigger } from "shared-ui"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { isSettingsPage, routeMap } from "~/infrastructure/route/path"
-import { NavItem, SidebarListItem, SidebarListItemCollapsed } from "./listItem"
+import { type NavItem, SidebarListItem, SidebarListItemCollapsed } from "./listItem"
 
 interface Props {
   isCollapsed: boolean

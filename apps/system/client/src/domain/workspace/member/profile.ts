@@ -1,6 +1,6 @@
 import { Entity, Photo } from "@/domain/shared"
-import { MemberDisplayName, MemberId, MemberIdNumber } from "~/domain/workspace/member"
-import { MemberBio } from "./bio"
+import { type MemberDisplayName, MemberId, type MemberIdNumber } from "~/domain/workspace/member"
+import type { MemberBio } from "./bio"
 
 interface Props {
   displayName?: MemberDisplayName

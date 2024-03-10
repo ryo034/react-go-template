@@ -1,10 +1,13 @@
-import { Invitations, Member, Members } from "~/domain"
-import { InvitationsStoreType } from "~/store/invitations/store"
-import { WorkspaceStoreType } from "~/store/workspace/store"
-import { WorkspaceUseCaseOutput } from "~/usecase"
+import { Invitations, type Member, Members } from "~/domain"
+import type { InvitationsStoreType } from "~/store/invitations/store"
+import type { WorkspaceStoreType } from "~/store/workspace/store"
+import type { WorkspaceUseCaseOutput } from "~/usecase"
 
 export class WorkspacePresenter implements WorkspaceUseCaseOutput {
-  constructor(private readonly store: WorkspaceStoreType, private readonly invitationsStore: InvitationsStoreType) {}
+  constructor(
+    private readonly store: WorkspaceStoreType,
+    private readonly invitationsStore: InvitationsStoreType
+  ) {}
 
   setMembers(vs: Members) {
     this.store.getState().setMembers(vs)

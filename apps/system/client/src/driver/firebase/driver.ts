@@ -1,5 +1,5 @@
 import {
-  Auth,
+  type Auth,
   GoogleAuthProvider,
   getRedirectResult,
   reload,
@@ -7,12 +7,12 @@ import {
   signInWithRedirect,
   signOut
 } from "firebase/auth"
-import { ApiErrorHandler } from "shared-network"
+import type { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
 import { AccountId } from "~/domain"
-import { CustomToken } from "~/domain/auth"
+import type { CustomToken } from "~/domain/auth"
 import { AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
-import { PromiseResult } from "~/infrastructure/shared"
+import type { PromiseResult } from "~/infrastructure/shared"
 
 export interface AuthProviderUser {
   readonly uid: string
@@ -36,7 +36,10 @@ export interface AuthProviderDriver {
 }
 
 export class FirebaseDriver implements AuthProviderDriver {
-  constructor(private readonly client: Auth, private readonly errorHandler: ApiErrorHandler) {}
+  constructor(
+    private readonly client: Auth,
+    private readonly errorHandler: ApiErrorHandler
+  ) {}
 
   get currentUser(): AuthProviderUser | null {
     if (this.client.currentUser === null) {

@@ -1,5 +1,5 @@
-import { ThemeStoreType, ThemeType } from "~/store/theme/store"
-import { ThemeUseCaseOutput } from "~/usecase"
+import type { ThemeStoreType, ThemeType } from "~/store/theme/store"
+import type { ThemeUseCaseOutput } from "~/usecase"
 
 export class ThemePresenter implements ThemeUseCaseOutput {
   constructor(private readonly themeStore: ThemeStoreType) {}

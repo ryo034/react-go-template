@@ -1,5 +1,11 @@
 import { Entity } from "~/domain/shared"
-import { AddressCity, AddressCountry, AddressPrefecture, AddressStreet, AddressZipCode } from "~/domain/shared/address"
+import type {
+  AddressCity,
+  AddressCountry,
+  AddressPrefecture,
+  AddressStreet,
+  AddressZipCode
+} from "~/domain/shared/address"
 
 interface AddressProps {
   zipCode: AddressZipCode

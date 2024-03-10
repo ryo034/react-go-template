@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 import { di } from "~/infrastructure/injector"
 import { ContainerContext } from "~/infrastructure/injector/context"
 

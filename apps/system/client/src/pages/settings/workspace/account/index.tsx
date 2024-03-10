@@ -1,7 +1,7 @@
 import { useContext, useState } from "react"
 import { Separator, useToast } from "shared-ui"
 import { ContainerContext } from "~/infrastructure/injector/context"
-import { SettingsAccountForm, SettingsAccountFormValues } from "./form"
+import { SettingsAccountForm, type SettingsAccountFormValues } from "./form"
 
 export const settingsWorkspaceAccountPageRoute = "/settings/workspace/account"
 

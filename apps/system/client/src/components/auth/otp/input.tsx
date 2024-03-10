@@ -1,5 +1,5 @@
 import { forwardRef } from "react"
-import { Input, InputProps } from "shared-ui"
+import { Input, type InputProps } from "shared-ui"
 
 type OptDigitInputProps = InputProps
 

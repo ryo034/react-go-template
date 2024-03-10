@@ -1,9 +1,9 @@
 import { Result } from "true-myth"
-import { AccountFullName, InvitationId, Me, MeRepository, MemberProfile, User } from "~/domain"
-import { AuthProviderDriver, MeDriver } from "~/driver"
+import { type AccountFullName, type InvitationId, type Me, type MeRepository, type MemberProfile, User } from "~/domain"
+import type { AuthProviderDriver, MeDriver } from "~/driver"
 import { AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
-import { PromiseResult } from "~/infrastructure/shared/result"
-import { MeGatewayAdapter } from "~/interface/gateway/me/adapter"
+import type { PromiseResult } from "~/infrastructure/shared/result"
+import type { MeGatewayAdapter } from "~/interface/gateway/me/adapter"
 
 export class MeGateway implements MeRepository {
   constructor(

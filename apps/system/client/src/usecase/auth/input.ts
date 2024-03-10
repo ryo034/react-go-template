@@ -1,5 +1,5 @@
-import { Otp } from "~/domain/auth"
-import { Email } from "~/domain/shared"
+import type { Otp } from "~/domain/auth"
+import type { Email } from "~/domain/shared"
 
 export type StartWithEmailInput = {
   email: Email

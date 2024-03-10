@@ -1,5 +1,5 @@
-import { ReactNode } from "react"
-import { Input, InputProps, Label } from "shared-ui"
+import type { ReactNode } from "react"
+import { Input, type InputProps, Label } from "shared-ui"
 import { FormErrorMessage } from "~/components/common/form/errorMessage"
 
 interface Props extends InputProps {

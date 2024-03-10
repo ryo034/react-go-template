@@ -1,4 +1,4 @@
-import { Me } from "~/domain"
+import type { Me } from "~/domain"
 
 export interface MeUseCaseOutput {
   set: (v: Me) => void

@@ -3,7 +3,7 @@ import { AccountFullName, AccountId } from "~/domain/account"
 import { Email } from "~/domain/shared"
 import { Photo } from "~/domain/shared/photo"
 import { User } from "~/domain/user"
-import { components } from "~/generated/schema/openapi/systemApi"
+import type { components } from "~/generated/schema/openapi/systemApi"
 import { AdapterError } from "~/infrastructure/error"
 
 export class UserGatewayAdapter {

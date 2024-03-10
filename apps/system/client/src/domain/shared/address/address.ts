@@ -1,5 +1,5 @@
 import { Entity } from "~/domain/shared"
-import {
+import type {
   AddressBuilding,
   AddressCity,
   AddressCountry,

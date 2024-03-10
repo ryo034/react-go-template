@@ -1,13 +1,16 @@
-import { ApiErrorHandler } from "shared-network"
+import type { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
-import { Otp } from "~/domain/auth"
-import { Email } from "~/domain/shared"
-import { components } from "~/generated/schema/openapi/systemApi"
-import { SystemAPIClient } from "~/infrastructure/openapi/client"
-import { PromiseResult } from "~/infrastructure/shared"
+import type { Otp } from "~/domain/auth"
+import type { Email } from "~/domain/shared"
+import type { components } from "~/generated/schema/openapi/systemApi"
+import type { SystemAPIClient } from "~/infrastructure/openapi/client"
+import type { PromiseResult } from "~/infrastructure/shared"
 
 export class AuthDriver {
-  constructor(private readonly client: SystemAPIClient, private readonly errorHandler: ApiErrorHandler) {}
+  constructor(
+    private readonly client: SystemAPIClient,
+    private readonly errorHandler: ApiErrorHandler
+  ) {}
 
   async startWithEmail(email: Email): PromiseResult<null, Error> {
     try {

@@ -1,14 +1,14 @@
 import { Result } from "true-myth"
 import { Me, ReceivedInvitation, ReceivedInvitations } from "~/domain/me"
-import { Workspace } from "~/domain/workspace"
-import { Member } from "~/domain/workspace/member"
-import { components } from "~/generated/schema/openapi/systemApi"
+import type { Workspace } from "~/domain/workspace"
+import type { Member } from "~/domain/workspace/member"
+import type { components } from "~/generated/schema/openapi/systemApi"
 import { AdapterError, AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
-import { UserGatewayAdapter } from "~/interface/gateway/user"
-import { WorkspaceGatewayAdapter } from "~/interface/gateway/workspace"
-import { MemberGatewayAdapter } from "~/interface/gateway/workspace/member"
-import { AuthGatewayAdapter } from "../auth"
-import { InvitationGatewayAdapter } from "../workspace/invitation"
+import type { UserGatewayAdapter } from "~/interface/gateway/user"
+import type { WorkspaceGatewayAdapter } from "~/interface/gateway/workspace"
+import type { MemberGatewayAdapter } from "~/interface/gateway/workspace/member"
+import type { AuthGatewayAdapter } from "../auth"
+import type { InvitationGatewayAdapter } from "../workspace/invitation"
 
 export class MeGatewayAdapter {
   constructor(

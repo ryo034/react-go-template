@@ -1,7 +1,7 @@
 import { useContext } from "react"
 import { Separator } from "shared-ui"
 import { ContainerContext } from "~/infrastructure/injector/context"
-import { AppearanceFormValues, SettingsAppearanceForm } from "./form"
+import { type AppearanceFormValues, SettingsAppearanceForm } from "./form"
 
 export const settingsAppearancePageRoute = "/settings/appearance"
 

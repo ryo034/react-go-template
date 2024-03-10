@@ -17,7 +17,7 @@ import {
   InvalidAddressError,
   InvalidEmailUseError
 } from "~/infrastructure/error/network"
-import { ReactI18nextProvider, i18nKeys } from "~/infrastructure/i18n"
+import { type ReactI18nextProvider, i18nKeys } from "~/infrastructure/i18n"
 
 const adaptNetworkError = (err: Error): string | null => {
   if (err instanceof EmailAlreadyInUseError) {

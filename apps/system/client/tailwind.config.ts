@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss"
 import ta from "tailwindcss-animate"
 const baseConfig: Config = require("../../../packages/typescript/config/tailwind/tailwind.config.js")
 
-export default ({
+export default {
   ...baseConfig,
   mode: "jit",
   darkMode: ["class"],
@@ -12,4 +12,4 @@ export default ({
     "../../../packages/typescript/ui/src/components/**/*.{js,jsx,ts,tsx}"
   ],
   plugins: [ta]
-} satisfies Config)
+} satisfies Config

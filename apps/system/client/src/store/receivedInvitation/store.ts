@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { immer } from "zustand/middleware/immer"
-import { ReceivedInvitation } from "~/domain"
+import type { ReceivedInvitation } from "~/domain"
 
 type State = {
   invitation: ReceivedInvitation | null

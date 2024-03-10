@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect } from "react"
-import { SubmitHandler, useForm } from "react-hook-form"
+import { type SubmitHandler, useForm } from "react-hook-form"
 import { Button, FormResultErrorMessage } from "shared-ui"
 import { useVerifyOtpPageFormMessage } from "~/components/auth/otp/message"
 import { OptDigitInput } from "./input"

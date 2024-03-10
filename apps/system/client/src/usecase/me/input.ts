@@ -1,5 +1,5 @@
-import { AccountFullName, InvitationId, MemberDisplayName, MemberIdNumber } from "~/domain"
-import { MemberBio } from "~/domain/workspace/member/bio"
+import type { AccountFullName, InvitationId, MemberDisplayName, MemberIdNumber } from "~/domain"
+import type { MemberBio } from "~/domain/workspace/member/bio"
 
 export type UpdateProfileInput = {
   name: AccountFullName

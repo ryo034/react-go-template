@@ -1,5 +1,5 @@
 import { Result } from "true-myth"
-import { DomainError, Entity, PhotoFormat, domainKeys } from "~/domain/shared"
+import { DomainError, Entity, type PhotoFormat, domainKeys } from "~/domain/shared"
 
 interface Props {
   url: string

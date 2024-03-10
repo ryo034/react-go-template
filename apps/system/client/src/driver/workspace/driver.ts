@@ -1,6 +1,6 @@
-import { ApiErrorHandler } from "shared-network"
+import type { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
-import {
+import type {
   Invitation,
   Invitees,
   MemberId,
@@ -10,10 +10,10 @@ import {
   WorkspaceName,
   WorkspaceSubdomain
 } from "~/domain"
-import { components } from "~/generated/schema/openapi/systemApi"
-import { SystemAPIClient } from "~/infrastructure/openapi/client"
-import { PromiseResult } from "~/infrastructure/shared/result"
-import { FirebaseDriver } from "../firebase/driver"
+import type { components } from "~/generated/schema/openapi/systemApi"
+import type { SystemAPIClient } from "~/infrastructure/openapi/client"
+import type { PromiseResult } from "~/infrastructure/shared/result"
+import type { FirebaseDriver } from "../firebase/driver"
 
 export class WorkspaceDriver {
   constructor(

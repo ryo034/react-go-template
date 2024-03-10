@@ -1,5 +1,5 @@
 import { Entity } from "@/domain/shared"
-import { MemberId, MemberProfile, MemberRole, User } from "~/domain"
+import type { MemberId, MemberProfile, MemberRole, User } from "~/domain"
 
 interface Props {
   id: MemberId

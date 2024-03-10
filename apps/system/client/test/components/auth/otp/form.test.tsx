@@ -1,9 +1,9 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { SubmitHandler } from "react-hook-form"
+import type { SubmitHandler } from "react-hook-form"
 import { afterEach, beforeEach, it } from "vitest"
 import { describe, expect, vi } from "vitest"
-import { OtpFormValues, VerifyOTPPageForm, verifyOtpFormId } from "~/components/auth/otp/form"
+import { type OtpFormValues, VerifyOTPPageForm, verifyOtpFormId } from "~/components/auth/otp/form"
 
 describe("VerifyOTPPageForm", () => {
   let mockOnSubmit: SubmitHandler<OtpFormValues>

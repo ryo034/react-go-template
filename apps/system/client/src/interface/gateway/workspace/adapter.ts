@@ -1,8 +1,8 @@
 import { Result } from "true-myth"
 import { Inviter, Workspace, WorkspaceId, WorkspaceName, WorkspaceSubdomain, Workspaces } from "~/domain"
-import { components } from "~/generated/schema/openapi/systemApi"
+import type { components } from "~/generated/schema/openapi/systemApi"
 import { AdapterError } from "~/infrastructure/error"
-import { MemberGatewayAdapter } from "./member"
+import type { MemberGatewayAdapter } from "./member"
 
 export class WorkspaceGatewayAdapter {
   constructor(private readonly memberAdapter: MemberGatewayAdapter) {}

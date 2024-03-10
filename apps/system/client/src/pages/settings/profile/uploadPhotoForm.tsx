@@ -2,11 +2,11 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { X } from "lucide-react"
-import { SubmitHandler, useForm } from "react-hook-form"
+import { type SubmitHandler, useForm } from "react-hook-form"
 import { Button, Input, Label, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "shared-ui"
 import { z } from "zod"
 import { AccountAvatar } from "~/components/account/avatar"
-import { Me } from "~/domain"
+import type { Me } from "~/domain"
 
 export type SettingsProfileUploadPhotoFormValues = {
   photo: File

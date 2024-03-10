@@ -1,5 +1,5 @@
-import { LucideIcon } from "lucide-react"
-import { HTMLAttributes } from "react"
+import type { LucideIcon } from "lucide-react"
+import type { HTMLAttributes } from "react"
 import { Link } from "react-router-dom"
 import { buttonVariants } from "shared-ui"
 import { cn } from "~/infrastructure/tailwindcss"

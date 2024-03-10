@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { immer } from "zustand/middleware/immer"
-import { Me } from "~/domain"
+import type { Me } from "~/domain"
 
 type State = {
   me: Me | null

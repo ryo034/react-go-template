@@ -1,7 +1,7 @@
 import { useContext, useMemo, useState } from "react"
 import { Separator, useToast } from "shared-ui"
 import { ContainerContext } from "~/infrastructure/injector/context"
-import { SettingsWorkspaceSettingForm, SettingsWorkspaceSettingFormValues } from "./form"
+import { SettingsWorkspaceSettingForm, type SettingsWorkspaceSettingFormValues } from "./form"
 
 export const settingsWorkspaceSettingPageRoute = "/settings/workspace/setting"
 

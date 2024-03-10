@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { SubmitHandler, useForm } from "react-hook-form"
+import { type SubmitHandler, useForm } from "react-hook-form"
 import { Button, FormResultErrorMessage, LoadingButton } from "shared-ui"
 import { FormInputSection } from "~/components/common/form/inputSection"
 import { AccountFullName } from "~/domain"

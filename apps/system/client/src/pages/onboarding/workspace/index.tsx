@@ -1,11 +1,11 @@
 import { useContext, useState } from "react"
-import { SubmitHandler } from "react-hook-form"
+import type { SubmitHandler } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { AlreadyExistError } from "shared-network"
 import { useToast } from "shared-ui"
 import {
   OnboardingSettingWorkspacePageForm,
-  OnboardingSettingWorkspacePageFormValues
+  type OnboardingSettingWorkspacePageFormValues
 } from "~/components/onboarding/workspace/form"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { routeMap } from "~/infrastructure/route/path"

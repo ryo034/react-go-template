@@ -1,6 +1,6 @@
-import { AccountFullName, InvitationId, MemberDisplayName, MemberIdNumber } from "~/domain"
+import { AccountFullName, type InvitationId, MemberDisplayName, MemberIdNumber } from "~/domain"
 import { MemberBio } from "~/domain/workspace/member/bio"
-import { MeUseCase } from "~/usecase"
+import type { MeUseCase } from "~/usecase"
 
 interface AcceptInvitationInput {
   invitationId: InvitationId

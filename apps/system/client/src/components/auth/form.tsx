@@ -1,5 +1,5 @@
-import { MouseEventHandler, useEffect } from "react"
-import { SubmitHandler, useForm } from "react-hook-form"
+import { type MouseEventHandler, useEffect } from "react"
+import { type SubmitHandler, useForm } from "react-hook-form"
 import { Button, FormResultErrorMessage, LoadingButton, SeparatorWithTitle } from "shared-ui"
 import { useAuthPageFormMessage } from "~/components/auth/message"
 import { FormInputSection } from "~/components/common/form/inputSection"

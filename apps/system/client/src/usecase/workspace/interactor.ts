@@ -1,5 +1,5 @@
-import { Invitation, MemberId, SelectableRole, WorkspaceRepository } from "~/domain"
-import {
+import type { Invitation, MemberId, SelectableRole, WorkspaceRepository } from "~/domain"
+import type {
   CreateWorkspaceInput,
   InviteMembersInput,
   MeUseCase,

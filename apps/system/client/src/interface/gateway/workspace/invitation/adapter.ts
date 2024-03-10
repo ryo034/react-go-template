@@ -1,9 +1,9 @@
 import { Result } from "true-myth"
 import { Invitation, InvitationId, Invitations, MemberDisplayName } from "~/domain"
 import { AppDateTime, Email } from "~/domain/shared"
-import { components } from "~/generated/schema/openapi/systemApi"
+import type { components } from "~/generated/schema/openapi/systemApi"
 import { AdapterError } from "~/infrastructure/error"
-import { MemberGatewayAdapter } from "../member"
+import type { MemberGatewayAdapter } from "../member"
 
 export class InvitationGatewayAdapter {
   constructor(private readonly memberAdapter: MemberGatewayAdapter) {}

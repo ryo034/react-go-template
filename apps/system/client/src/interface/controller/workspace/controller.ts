@@ -1,16 +1,16 @@
 import {
-  Invitation,
+  type Invitation,
   Invitee,
   Invitees,
   MemberDisplayName,
-  MemberId,
-  SelectableRole,
-  WorkspaceId,
+  type MemberId,
+  type SelectableRole,
+  type WorkspaceId,
   WorkspaceName,
   WorkspaceSubdomain
 } from "~/domain"
 import { Email } from "~/domain/shared"
-import { WorkspaceUseCase } from "~/usecase/workspace"
+import type { WorkspaceUseCase } from "~/usecase/workspace"
 
 export interface CreateWorkspaceInput {
   subdomain: string

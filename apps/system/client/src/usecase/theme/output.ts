@@ -1,4 +1,4 @@
-import { ThemeType } from "~/store"
+import type { ThemeType } from "~/store"
 
 export interface ThemeUseCaseOutput {
   set: (v: ThemeType) => void

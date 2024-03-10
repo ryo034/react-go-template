@@ -1,5 +1,5 @@
-import { AuthRepository } from "~/domain/auth"
-import {
+import type { AuthRepository } from "~/domain/auth"
+import type {
   AuthUseCaseOutput,
   FindInvitationByTokenInput,
   ProceedInvitationByEmailInput,
@@ -7,7 +7,7 @@ import {
   StartWithEmailInput,
   VerifyOtpInput
 } from "~/usecase/auth"
-import { MeUseCase, MeUseCaseOutput } from "~/usecase/me"
+import type { MeUseCase, MeUseCaseOutput } from "~/usecase/me"
 
 export interface AuthUseCase {
   startWithEmail(i: StartWithEmailInput): Promise<Error | null>

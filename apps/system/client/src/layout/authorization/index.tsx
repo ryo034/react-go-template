@@ -1,6 +1,6 @@
-import { ReactNode, useContext } from "react"
+import { type ReactNode, useContext } from "react"
 import { Outlet } from "react-router-dom"
-import { MemberRole } from "~/domain"
+import type { MemberRole } from "~/domain"
 import { ContainerContext } from "~/infrastructure/injector/context"
 
 interface Props {

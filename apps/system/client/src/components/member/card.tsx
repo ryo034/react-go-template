@@ -1,4 +1,4 @@
-import { Member } from "~/domain/workspace/member"
+import type { Member } from "~/domain/workspace/member"
 import { useRole } from "~/infrastructure/hooks/role"
 import { AccountAvatar } from "../account/avatar"
 

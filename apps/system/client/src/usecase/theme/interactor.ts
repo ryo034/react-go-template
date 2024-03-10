@@ -1,6 +1,6 @@
-import { ThemeDriver } from "~/driver"
-import { ThemeType } from "~/store"
-import { ThemeUseCaseOutput, ToggleInput } from "~/usecase"
+import type { ThemeDriver } from "~/driver"
+import type { ThemeType } from "~/store"
+import { type ThemeUseCaseOutput, ToggleInput } from "~/usecase"
 
 export interface ThemeUseCase {
   toggle(theme: ThemeType): void
@@ -8,7 +8,10 @@ export interface ThemeUseCase {
 }
 
 export class ThemeInteractor implements ThemeUseCase {
-  constructor(private readonly driver: ThemeDriver, private readonly presenter: ThemeUseCaseOutput) {}
+  constructor(
+    private readonly driver: ThemeDriver,
+    private readonly presenter: ThemeUseCaseOutput
+  ) {}
 
   toggle(theme: ThemeType): void {
     this.driver.set(theme)

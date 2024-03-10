@@ -5,14 +5,14 @@ import {
   MemberId,
   MemberIdNumber,
   MemberProfile,
-  MemberRole,
+  type MemberRole,
   MemberRoleList,
   Members
 } from "~/domain/workspace/member"
 import { MemberBio } from "~/domain/workspace/member/bio"
-import { components } from "~/generated/schema/openapi/systemApi"
+import type { components } from "~/generated/schema/openapi/systemApi"
 import { AdapterError } from "~/infrastructure/error"
-import { UserGatewayAdapter } from "~/interface/gateway/user"
+import type { UserGatewayAdapter } from "~/interface/gateway/user"
 
 export class MemberGatewayAdapter {
   constructor(private readonly userAdapter: UserGatewayAdapter) {}

@@ -1,10 +1,10 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { MouseEventHandler } from "react"
-import { SubmitHandler } from "react-hook-form"
+import type { MouseEventHandler } from "react"
+import type { SubmitHandler } from "react-hook-form"
 import { afterEach } from "vitest"
 import { beforeEach, describe, expect, test, vi } from "vitest"
-import { AuthPageForm, LoginFormValues } from "~/components/auth/form"
+import { AuthPageForm, type LoginFormValues } from "~/components/auth/form"
 
 const emailRequiredErrorMessage = "メールアドレスは必須です"
 const emailRegexErrorMessage = "正しいメールアドレスを入力して下さい"

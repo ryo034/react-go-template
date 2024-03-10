@@ -1,13 +1,13 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { SubmitHandler } from "react-hook-form"
+import type { SubmitHandler } from "react-hook-form"
 import { afterEach, beforeEach, it } from "vitest"
 import { describe, expect, vi } from "vitest"
 import {
   OnboardingSettingWorkspacePageForm,
-  OnboardingSettingWorkspacePageFormValues
+  type OnboardingSettingWorkspacePageFormValues
 } from "~/components/onboarding/workspace/form"
-import { OnboardingSettingWorkspacePageFormMessage } from "~/components/onboarding/workspace/message"
+import type { OnboardingSettingWorkspacePageFormMessage } from "~/components/onboarding/workspace/message"
 import { WorkspaceSubdomain } from "~/domain"
 
 describe("OnboardingSettingWorkspacePageForm", () => {

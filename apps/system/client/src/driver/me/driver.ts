@@ -1,12 +1,15 @@
-import { ApiErrorHandler } from "shared-network"
+import type { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
-import { AccountFullName, InvitationId, MemberProfile, User } from "~/domain"
-import { components } from "~/generated/schema/openapi/systemApi"
-import { SystemAPIClient, openapiFetchClient } from "~/infrastructure/openapi/client"
-import { PromiseResult } from "~/infrastructure/shared/result"
+import { type AccountFullName, type InvitationId, type MemberProfile, User } from "~/domain"
+import type { components } from "~/generated/schema/openapi/systemApi"
+import { type SystemAPIClient, openapiFetchClient } from "~/infrastructure/openapi/client"
+import type { PromiseResult } from "~/infrastructure/shared/result"
 
 export class MeDriver {
-  constructor(private readonly client: SystemAPIClient, private readonly errorHandler: ApiErrorHandler) {}
+  constructor(
+    private readonly client: SystemAPIClient,
+    private readonly errorHandler: ApiErrorHandler
+  ) {}
 
   async find(): PromiseResult<components["schemas"]["Me"], Error> {
     try {

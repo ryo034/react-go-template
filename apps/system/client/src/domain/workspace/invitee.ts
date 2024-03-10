@@ -1,5 +1,5 @@
-import { MemberDisplayName } from "~/domain"
-import { Email, Entity } from "~/domain/shared"
+import type { MemberDisplayName } from "~/domain"
+import { type Email, Entity } from "~/domain/shared"
 
 interface Props {
   email: Email

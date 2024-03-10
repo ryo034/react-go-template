@@ -1,7 +1,9 @@
 import { useContext, useEffect } from "react"
+import { useAuthState } from "react-firebase-hooks/auth"
 import { useNavigate } from "react-router-dom"
 import { Button, Card, Separator, useToast } from "shared-ui"
-import { InvitationId } from "~/domain"
+import type { InvitationId } from "~/domain"
+import { firebaseAuth } from "~/infrastructure/firebase"
 import { useErrorHandler, useErrorMessageHandler } from "~/infrastructure/hooks/error"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { routeMap } from "~/infrastructure/route/path"
@@ -10,11 +12,12 @@ import { useReceivedInvitationsPageMessage } from "./message"
 export const receivedInvitationsPageRoute = "/received-invitations"
 
 export const ReceivedInvitationsPage = () => {
-  const { store, controller } = useContext(ContainerContext)
+  const { store, controller, driver } = useContext(ContainerContext)
   const me = store.me((state) => state.me)
   const { toast } = useToast()
   const { handleError } = useErrorHandler()
   const { handleErrorMessage } = useErrorMessageHandler()
+  const [_, loading] = useAuthState(driver.firebase.getClient)
 
   const meIsLoading = store.me((state) => state.isLoading)
   const navigate = useNavigate()
@@ -28,6 +31,20 @@ export const ReceivedInvitationsPage = () => {
       return
     }
   }, [me, meIsLoading])
+
+  useEffect(() => {
+    const unsubscribed = firebaseAuth.onAuthStateChanged(async (user) => {
+      if (loading) {
+        return
+      }
+      if (!user) {
+        navigate(routeMap.auth)
+        return
+      }
+      await controller.me.find()
+    })
+    return () => unsubscribed()
+  }, [loading, navigate])
 
   const onClickJoinButton = async (invitationId: InvitationId) => {
     const err = await controller.me.acceptInvitation({ invitationId })

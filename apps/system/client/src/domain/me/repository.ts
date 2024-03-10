@@ -1,5 +1,5 @@
-import { AccountFullName, InvitationId, Me, MemberProfile } from "~/domain"
-import { PromiseResult } from "~/infrastructure/shared"
+import type { AccountFullName, InvitationId, Me, MemberProfile } from "~/domain"
+import type { PromiseResult } from "~/infrastructure/shared"
 
 export interface MeRepository {
   signOut(): PromiseResult<null, Error>

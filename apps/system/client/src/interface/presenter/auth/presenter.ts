@@ -1,7 +1,7 @@
-import { ReceivedInvitation } from "~/domain"
-import { Email } from "~/domain/shared"
-import { AuthStoreType, ReceivedInvitationStoreType } from "~/store"
-import { AuthUseCaseOutput } from "~/usecase/auth"
+import type { ReceivedInvitation } from "~/domain"
+import type { Email } from "~/domain/shared"
+import type { AuthStoreType, ReceivedInvitationStoreType } from "~/store"
+import type { AuthUseCaseOutput } from "~/usecase/auth"
 
 export class AuthPresenter implements AuthUseCaseOutput {
   constructor(

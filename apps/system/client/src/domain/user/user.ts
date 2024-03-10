@@ -1,5 +1,5 @@
-import { AccountFullName, AccountId } from "~/domain/account"
-import { Email, Entity, Photo } from "~/domain/shared"
+import type { AccountFullName, AccountId } from "~/domain/account"
+import { type Email, Entity, type Photo } from "~/domain/shared"
 
 interface Props {
   id: AccountId

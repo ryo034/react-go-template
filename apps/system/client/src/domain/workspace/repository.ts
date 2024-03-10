@@ -1,4 +1,4 @@
-import {
+import type {
   Invitation,
   Invitations,
   Invitees,
@@ -11,7 +11,7 @@ import {
   WorkspaceName,
   WorkspaceSubdomain
 } from "~/domain"
-import { PromiseResult } from "~/infrastructure/shared"
+import type { PromiseResult } from "~/infrastructure/shared"
 
 export interface WorkspaceCreateInput {
   subdomain: WorkspaceSubdomain

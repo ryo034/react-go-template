@@ -48,7 +48,6 @@ tags: stateful
 * 所属中の表示名が"Invite TestTwo"である
 * 選択中のワークスペース名が"InviteTest 2"である
 * トークン"018d9fb5-7e56-75ed-952f-ae8aa4fed8c6"の招待画面を開く
-* 招待画面で"invite_test_already_joined_any_workspace@example.com"としてログインしていることがわかる
 * "メールアドレスで始める"ボタンをクリック
 * メールアドレス"invite_test_already_joined_any_workspace@example.com"に送信されたワンタイムパスワードを取得
 * ワンタイムパスワード確認画面にワンタイムパスワードを入力する

@@ -1,4 +1,4 @@
-import { Member, Workspace } from "~/domain"
+import type { Member, Workspace } from "~/domain"
 import { Entity } from "~/domain/shared"
 
 interface Props {

@@ -1,4 +1,4 @@
-import { Invitations, Member, Members } from "~/domain"
+import type { Invitations, Member, Members } from "~/domain"
 
 export interface WorkspaceUseCaseOutput {
   setMembers: (vs: Members) => void

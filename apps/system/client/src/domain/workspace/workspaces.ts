@@ -1,4 +1,4 @@
-import { Workspace } from "~/domain"
+import type { Workspace } from "~/domain"
 import { Entities } from "~/domain/shared"
 
 export class Workspaces extends Entities<Workspace> {

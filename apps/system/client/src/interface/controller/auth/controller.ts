@@ -1,6 +1,6 @@
 import { Otp } from "~/domain/auth"
 import { Email } from "~/domain/shared"
-import { AuthUseCase, StartWithEmailInput, VerifyOtpInput } from "~/usecase"
+import type { AuthUseCase, StartWithEmailInput, VerifyOtpInput } from "~/usecase"
 
 export class AuthController {
   constructor(private readonly useCase: AuthUseCase) {}

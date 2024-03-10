@@ -1,5 +1,5 @@
-import { MeRepository, MemberProfile } from "~/domain"
-import {
+import { type MeRepository, MemberProfile } from "~/domain"
+import type {
   AcceptInvitationInput,
   MeUseCaseOutput,
   UpdateMemberProfileInput,
@@ -19,7 +19,10 @@ export interface MeUseCase {
 }
 
 export class MeInteractor implements MeUseCase {
-  constructor(private readonly repository: MeRepository, private readonly presenter: MeUseCaseOutput) {}
+  constructor(
+    private readonly repository: MeRepository,
+    private readonly presenter: MeUseCaseOutput
+  ) {}
 
   async signOut(): Promise<Error | null> {
     const res = await this.repository.signOut()

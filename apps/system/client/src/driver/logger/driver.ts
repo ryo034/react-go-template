@@ -1,10 +1,13 @@
-import { ApiErrorHandler } from "shared-network"
+import type { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
-import { Me } from "~/domain"
-import { MyCustomGA } from "~/infrastructure/logger/ga4"
+import type { Me } from "~/domain"
+import type { MyCustomGA } from "~/infrastructure/logger/ga4"
 
 export class LoggerDriver {
-  constructor(private readonly gaClient: MyCustomGA, private readonly errorHandler: ApiErrorHandler) {}
+  constructor(
+    private readonly gaClient: MyCustomGA,
+    private readonly errorHandler: ApiErrorHandler
+  ) {}
 
   initialize(): void {
     this.gaClient.initialize(import.meta.env.VITE_GA_MEASUREMENT_ID)

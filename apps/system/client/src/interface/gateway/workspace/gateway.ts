@@ -1,5 +1,5 @@
 import { Result } from "true-myth"
-import {
+import type {
   Invitation,
   Invitations,
   Invitees,
@@ -14,11 +14,11 @@ import {
   WorkspaceRepository,
   WorkspaceSubdomain
 } from "~/domain"
-import { WorkspaceDriver } from "~/driver/workspace/driver"
-import { PromiseResult } from "~/infrastructure/shared/result"
-import { WorkspaceGatewayAdapter } from "./adapter"
-import { InvitationGatewayAdapter } from "./invitation"
-import { MemberGatewayAdapter } from "./member"
+import type { WorkspaceDriver } from "~/driver/workspace/driver"
+import type { PromiseResult } from "~/infrastructure/shared/result"
+import type { WorkspaceGatewayAdapter } from "./adapter"
+import type { InvitationGatewayAdapter } from "./invitation"
+import type { MemberGatewayAdapter } from "./member"
 
 export class WorkspaceGateway implements WorkspaceRepository {
   constructor(

@@ -1,4 +1,4 @@
-import { HTMLAttributes } from "react"
+import type { HTMLAttributes } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "shared-ui"
 
 const AccountAvatarSizeType = {

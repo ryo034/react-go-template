@@ -19,7 +19,7 @@ import {
   useToast
 } from "shared-ui"
 import { AccountAvatar } from "~/components/account/avatar"
-import { Member, SelectableRole, SelectableRoleList } from "~/domain"
+import { type Member, type SelectableRole, SelectableRoleList } from "~/domain"
 import { useRole } from "~/infrastructure/hooks/role"
 import { ContainerContext } from "~/infrastructure/injector/context"
 

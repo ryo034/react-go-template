@@ -2,7 +2,7 @@
 
 import { CaretSortIcon } from "@radix-ui/react-icons"
 import { CheckIcon } from "lucide-react"
-import { ComponentPropsWithoutRef, useContext, useState } from "react"
+import { type ComponentPropsWithoutRef, useContext, useState } from "react"
 import {
   Avatar,
   AvatarFallback,

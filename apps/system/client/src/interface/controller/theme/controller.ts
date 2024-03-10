@@ -1,5 +1,5 @@
-import { ThemeType } from "~/store"
-import { ThemeInteractor, ToggleInput } from "~/usecase"
+import type { ThemeType } from "~/store"
+import { type ThemeInteractor, ToggleInput } from "~/usecase"
 
 export class ThemeController {
   constructor(private readonly useCase: ThemeInteractor) {}

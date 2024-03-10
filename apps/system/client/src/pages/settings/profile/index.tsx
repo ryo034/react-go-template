@@ -1,8 +1,8 @@
 import { useContext, useState } from "react"
 import { Separator, useToast } from "shared-ui"
 import { ContainerContext } from "~/infrastructure/injector/context"
-import { SettingsProfileForm, SettingsProfileFormValues } from "./form"
-import { SettingsProfileUploadPhotoForm, SettingsProfileUploadPhotoFormValues } from "./uploadPhotoForm"
+import { SettingsProfileForm, type SettingsProfileFormValues } from "./form"
+import { SettingsProfileUploadPhotoForm, type SettingsProfileUploadPhotoFormValues } from "./uploadPhotoForm"
 
 export const settingsProfilePageRoute = "/settings/profile"
 

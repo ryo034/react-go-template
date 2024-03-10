@@ -1,5 +1,5 @@
-import { InvitationId, Member, MemberDisplayName } from "~/domain"
-import { AppDateTime, Email, Entity } from "~/domain/shared"
+import type { InvitationId, Member, MemberDisplayName } from "~/domain"
+import { type AppDateTime, type Email, Entity } from "~/domain/shared"
 
 interface Props {
   id: InvitationId

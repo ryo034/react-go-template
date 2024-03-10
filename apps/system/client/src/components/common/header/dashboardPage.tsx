@@ -1,5 +1,5 @@
 import { cva } from "class-variance-authority"
-import { HTMLAttributes } from "react"
+import type { HTMLAttributes } from "react"
 import { cn } from "~/infrastructure/tailwindcss"
 
 export interface Props extends HTMLAttributes<HTMLElement> {

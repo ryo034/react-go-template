@@ -1,6 +1,6 @@
-import { CustomToken, Me, Otp, ReceivedInvitation } from "~/domain"
-import { Email } from "~/domain/shared"
-import { PromiseResult } from "~/infrastructure/shared"
+import type { CustomToken, Me, Otp, ReceivedInvitation } from "~/domain"
+import type { Email } from "~/domain/shared"
+import type { PromiseResult } from "~/infrastructure/shared"
 
 export interface AuthRepository {
   startWithEmail(email: Email): PromiseResult<null, Error>

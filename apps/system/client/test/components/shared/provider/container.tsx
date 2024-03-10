@@ -1,5 +1,5 @@
 // import { DI } from "~/infrastructure/injector";
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 import { ContainerContext } from "~/infrastructure/injector/context"
 
 interface Props {

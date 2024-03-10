@@ -1,7 +1,10 @@
 import { useContext, useState } from "react"
-import { SubmitHandler } from "react-hook-form"
+import type { SubmitHandler } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
-import { OnboardingSettingNamePageForm, OnboardingSettingNamePageFormValues } from "~/components/onboarding/name/form"
+import {
+  OnboardingSettingNamePageForm,
+  type OnboardingSettingNamePageFormValues
+} from "~/components/onboarding/name/form"
 import { AuthProviderUserNotFoundError } from "~/infrastructure/error"
 import { useErrorMessageHandler } from "~/infrastructure/hooks/error"
 import { ContainerContext } from "~/infrastructure/injector/context"

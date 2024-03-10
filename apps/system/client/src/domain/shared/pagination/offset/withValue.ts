@@ -1,5 +1,5 @@
 import { Entity } from "~/domain/shared"
-import { OffsetPagination } from "~/domain/shared/pagination"
+import type { OffsetPagination } from "~/domain/shared/pagination"
 
 interface Props<T> {
   values: T

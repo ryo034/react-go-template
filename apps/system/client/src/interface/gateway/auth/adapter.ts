@@ -1,6 +1,6 @@
 import { Result } from "true-myth"
-import { AuthProvider, AuthProviders, CustomToken } from "~/domain"
-import { components } from "~/generated/schema/openapi/systemApi"
+import { type AuthProvider, AuthProviders, CustomToken } from "~/domain"
+import type { components } from "~/generated/schema/openapi/systemApi"
 
 export class AuthGatewayAdapter {
   adaptJwt(customToken: components["schemas"]["JwtToken"]): Result<CustomToken, Error> {

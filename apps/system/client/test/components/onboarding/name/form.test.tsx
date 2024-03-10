@@ -1,9 +1,12 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { SubmitHandler } from "react-hook-form"
+import type { SubmitHandler } from "react-hook-form"
 import { afterEach, beforeEach, describe, expect, it, test, vi } from "vitest"
-import { OnboardingSettingNamePageForm, OnboardingSettingNamePageFormValues } from "~/components/onboarding/name/form"
-import { OnboardingSettingNamePageFormMessage } from "~/components/onboarding/name/message"
+import {
+  OnboardingSettingNamePageForm,
+  type OnboardingSettingNamePageFormValues
+} from "~/components/onboarding/name/form"
+import type { OnboardingSettingNamePageFormMessage } from "~/components/onboarding/name/message"
 
 const nameErrorPatterns = [
   ["", "アカウント名は必須です"],
