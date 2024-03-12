@@ -136,7 +136,7 @@ func Test_driver_AddMember_OK(t *testing.T) {
 				WorkspaceDetailID: wdID,
 				WorkspaceID:       wID.Value(),
 				Name:              "Example",
-				Subdomain:         "example",
+				Subdomain:         "driver-example",
 				CreatedAt:         defaultTime,
 			},
 		},
@@ -164,9 +164,14 @@ func Test_driver_AddMember_OK(t *testing.T) {
 	ctx := context.Background()
 	t.Run("AddMember", func(t *testing.T) {
 		db := bun.NewDB(test.SetupTestDB(t, ctx).DB, pgdialect.New())
-		pr := core.NewDatabaseProvider(db, db)
-		ws, _ = NewDriver().Create(ctx, pr.GetExecutor(ctx, false), w)
-		got, err := NewDriver().AddMember(ctx, pr.GetExecutor(ctx, false), w, m)
+		prov := core.NewDatabaseProvider(db, db)
+		exec := prov.GetExecutor(ctx, false)
+		_, err := NewDriver().Create(ctx, exec, w)
+		if err != nil {
+			t.Errorf("Create() error = %v", err)
+			return
+		}
+		got, err := NewDriver().AddMember(ctx, exec, w, m)
 		if (err != nil) != wantErr {
 			t.Errorf("AddMember() error = %v, wantErr %v", err, wantErr)
 			return
