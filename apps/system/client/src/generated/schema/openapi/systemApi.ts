@@ -328,6 +328,8 @@ export interface components {
       profile: components["schemas"]["MemberProfile"];
       user: components["schemas"]["User"];
       role: components["schemas"]["MemberRole"];
+      /** @enum {string} */
+      membershipStatus: "ACTIVE" | "LEFT";
     };
     /**
      * @description Role of the member

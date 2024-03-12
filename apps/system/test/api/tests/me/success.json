@@ -14,6 +14,7 @@
     ],
     "member": {
       "id": "377eba35-5560-4f48-a99d-19cbd6a82b0d",
+      "membershipStatus": "ACTIVE",
       "role": "OWNER",
       "profile": {
         "bio": "bio",

@@ -55,10 +55,16 @@ func (a *adapter) Adapt(m *member.Member) openapi.Member {
 		memBio.Value = p.Bio().ToString()
 	}
 
+	var memStatus = openapi.MemberMembershipStatusLEFT
+	if m.MembershipStatus().IsActive() {
+		memStatus = openapi.MemberMembershipStatusACTIVE
+	}
+
 	return openapi.Member{
-		ID:   m.ID().Value(),
-		User: a.ua.Adapt(m.User()),
-		Role: a.adaptRole(m.Role()),
+		ID:               m.ID().Value(),
+		User:             a.ua.Adapt(m.User()),
+		Role:             a.adaptRole(m.Role()),
+		MembershipStatus: memStatus,
 		Profile: openapi.MemberProfile{
 			DisplayName: dn,
 			Bio:         memBio,

@@ -53,6 +53,8 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, id invitation.ID) (*mod
 		Relation("InvitationUnit.Member.Profile.MemberProfile").
 		Relation("InvitationUnit.Member.Role").
 		Relation("InvitationUnit.Member.Role.MemberRole").
+		Relation("InvitationUnit.Member.MembershipEvent").
+		Relation("InvitationUnit.Member.MembershipEvent.MembershipEvent").
 		Relation("InvitationUnit.Member.Account").
 		Relation("InvitationUnit.Member.Account.AuthProviders").
 		Relation("InvitationUnit.Member.Account.Name").
@@ -124,6 +126,8 @@ func (d *driver) FindActiveByEmail(ctx context.Context, exec bun.IDB, email acco
 		Relation("InvitationUnit.Member.Profile.MemberProfile").
 		Relation("InvitationUnit.Member.Role").
 		Relation("InvitationUnit.Member.Role.MemberRole").
+		Relation("InvitationUnit.Member.MembershipEvent").
+		Relation("InvitationUnit.Member.MembershipEvent.MembershipEvent").
 		Relation("InvitationUnit.Member.Account").
 		Relation("InvitationUnit.Member.Account.AuthProviders").
 		Relation("InvitationUnit.Member.Account.Name").
@@ -261,6 +265,8 @@ func (d *driver) FindAllReceivedByEmail(ctx context.Context, exec bun.IDB, email
 		Relation("InvitationUnit.Member.Profile.MemberProfile").
 		Relation("InvitationUnit.Member.Role").
 		Relation("InvitationUnit.Member.Role.MemberRole").
+		Relation("InvitationUnit.Member.MembershipEvent").
+		Relation("InvitationUnit.Member.MembershipEvent.MembershipEvent").
 		Relation("InvitationUnit.Member.Account").
 		Relation("InvitationUnit.Member.Account.AuthProviders").
 		Relation("InvitationUnit.Member.Account.Name").
@@ -342,6 +348,8 @@ func (d *driver) FindActiveByToken(ctx context.Context, exec bun.IDB, token invi
 		Relation("InvitationUnit.Member.Profile.MemberProfile").
 		Relation("InvitationUnit.Member.Role").
 		Relation("InvitationUnit.Member.Role.MemberRole").
+		Relation("InvitationUnit.Member.MembershipEvent").
+		Relation("InvitationUnit.Member.MembershipEvent.MembershipEvent").
 		Relation("InvitationUnit.Member.Account").
 		Relation("InvitationUnit.Member.Account.AuthProviders").
 		Relation("InvitationUnit.Member.Account.Name").
@@ -385,6 +393,8 @@ func (d *driver) FindAllByWorkspace(ctx context.Context, exec bun.IDB, wID works
 		Relation("InvitationUnit.Member.Profile.MemberProfile").
 		Relation("InvitationUnit.Member.Role").
 		Relation("InvitationUnit.Member.Role.MemberRole").
+		Relation("InvitationUnit.Member.MembershipEvent").
+		Relation("InvitationUnit.Member.MembershipEvent.MembershipEvent").
 		Relation("InvitationUnit.Member.Account").
 		Relation("InvitationUnit.Member.Account.AuthProviders").
 		Relation("InvitationUnit.Member.Account.Name").

@@ -1006,10 +1006,11 @@ func (*MeResponse) aPIV1MeGetRes() {}
 
 // Ref: #/components/schemas/Member
 type Member struct {
-	ID      uuid.UUID     `json:"id"`
-	Profile MemberProfile `json:"profile"`
-	User    User          `json:"user"`
-	Role    MemberRole    `json:"role"`
+	ID               uuid.UUID              `json:"id"`
+	Profile          MemberProfile          `json:"profile"`
+	User             User                   `json:"user"`
+	Role             MemberRole             `json:"role"`
+	MembershipStatus MemberMembershipStatus `json:"membershipStatus"`
 }
 
 // GetID returns the value of ID.
@@ -1032,6 +1033,11 @@ func (s *Member) GetRole() MemberRole {
 	return s.Role
 }
 
+// GetMembershipStatus returns the value of MembershipStatus.
+func (s *Member) GetMembershipStatus() MemberMembershipStatus {
+	return s.MembershipStatus
+}
+
 // SetID sets the value of ID.
 func (s *Member) SetID(val uuid.UUID) {
 	s.ID = val
@@ -1050,6 +1056,52 @@ func (s *Member) SetUser(val User) {
 // SetRole sets the value of Role.
 func (s *Member) SetRole(val MemberRole) {
 	s.Role = val
+}
+
+// SetMembershipStatus sets the value of MembershipStatus.
+func (s *Member) SetMembershipStatus(val MemberMembershipStatus) {
+	s.MembershipStatus = val
+}
+
+type MemberMembershipStatus string
+
+const (
+	MemberMembershipStatusACTIVE MemberMembershipStatus = "ACTIVE"
+	MemberMembershipStatusLEFT   MemberMembershipStatus = "LEFT"
+)
+
+// AllValues returns all MemberMembershipStatus values.
+func (MemberMembershipStatus) AllValues() []MemberMembershipStatus {
+	return []MemberMembershipStatus{
+		MemberMembershipStatusACTIVE,
+		MemberMembershipStatusLEFT,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s MemberMembershipStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case MemberMembershipStatusACTIVE:
+		return []byte(s), nil
+	case MemberMembershipStatusLEFT:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *MemberMembershipStatus) UnmarshalText(data []byte) error {
+	switch MemberMembershipStatus(data) {
+	case MemberMembershipStatusACTIVE:
+		*s = MemberMembershipStatusACTIVE
+		return nil
+	case MemberMembershipStatusLEFT:
+		*s = MemberMembershipStatusLEFT
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 // Ref: #/components/schemas/MemberProfile

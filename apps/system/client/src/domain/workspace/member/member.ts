@@ -1,11 +1,12 @@
 import { Entity } from "@/domain/shared"
-import type { MemberId, MemberProfile, MemberRole, User } from "~/domain"
+import type { MemberId, MemberProfile, MemberRole, MembershipStatus, User } from "~/domain"
 
 interface Props {
   id: MemberId
   user: User
   profile: MemberProfile
   role: MemberRole
+  membershipStatus: MembershipStatus
 }
 
 export class Member extends Entity<Props> {
@@ -27,6 +28,10 @@ export class Member extends Entity<Props> {
 
   get role(): MemberRole {
     return this.value.role
+  }
+
+  get membershipStatus(): MembershipStatus {
+    return this.value.membershipStatus
   }
 
   get isOwner(): boolean {

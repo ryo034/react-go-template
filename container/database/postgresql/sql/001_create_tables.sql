@@ -215,6 +215,26 @@ CREATE TABLE member_addresses (
   CONSTRAINT fk_member_addresses_country_component_id FOREIGN KEY (country_component_id) REFERENCES address_components(component_id)
 );
 
+CREATE TYPE membership_event_types AS ENUM ('join', 'leave');
+CREATE TABLE membership_events (
+  membership_event_id uuid NOT NULL,
+  member_id uuid NOT NULL,
+  event_type membership_event_types NOT NULL,
+  created_by uuid NOT NULL,
+  event_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (membership_event_id),
+  CONSTRAINT fk_membership_events_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id),
+  CONSTRAINT fk_membership_events_members_created_by FOREIGN KEY (created_by) REFERENCES members(member_id)
+);
+
+CREATE TABLE latest_membership_events (
+  membership_event_id uuid NOT NULL,
+  member_id uuid NOT NULL UNIQUE,
+  PRIMARY KEY (membership_event_id),
+  CONSTRAINT fk_latest_membership_events_membership_events_membership_event_id FOREIGN KEY (membership_event_id) REFERENCES membership_events(membership_event_id),
+  CONSTRAINT fk_latest_membership_events_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id)
+);
+
 -- CREATE TABLE membership_periods (
 --   member_id uuid NOT NULL,
 --   start_date DATE NOT NULL,

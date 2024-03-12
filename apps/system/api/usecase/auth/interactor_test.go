@@ -95,7 +95,7 @@ func Test_useCase_AuthByOAuth_OK(t *testing.T) {
 				wd := workspace.NewDetail(wName, wSubdomain)
 				mockWorkspace := workspace.NewWorkspace(wID, wd)
 				mID := member.NewIDFromUUID(uuid.MustParse("018e0624-2e0f-71e9-8296-2ba7f19063ef"))
-				mockMember := member.NewMember(mID, usr, member.NewEmptyProfile(), member.RoleOwner)
+				mockMember := member.NewMember(mID, usr, member.NewEmptyProfile(), member.RoleOwner, member.MembershipStatusActive)
 				mockJoinedWorkspaces := workspace.NewWorkspaces([]*workspace.Workspace{mockWorkspace})
 				mockLastLogin := me.NewMe(usr, mockWorkspace, mockMember, mockJoinedWorkspaces, nil, provider.NewProviders([]*provider.Provider{prv}))
 

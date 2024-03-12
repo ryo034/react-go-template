@@ -14,6 +14,7 @@ Member:
     - user
     - profile
     - role
+    - membershipStatus
   properties:
     id:
       type: string
@@ -24,6 +25,11 @@ Member:
       $ref: "#/components/schemas/User"
     role:
       $ref: "#/components/schemas/MemberRole"
+    membershipStatus:
+      type: string
+      enum:
+        - ACTIVE
+        - LEFT
 
 MemberProfile:
   type: object

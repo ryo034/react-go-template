@@ -8,17 +8,14 @@
       "displayName": "",
       "inviter": {
         "id": "377eba35-5560-4f48-a99d-19cbd6a82b0d",
-        "profile": {
-          "displayName": "John Doe",
-          "idNumber": "DEV-12345",
-          "bio": "bio"
-        },
+        "profile": { "displayName": "John Doe", "idNumber": "DEV-12345", "bio": "bio" },
         "user": {
           "userId": "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
           "email": "account@example.com",
           "name": "John Doe"
         },
-        "role": "OWNER"
+        "role": "OWNER",
+        "membershipStatus": "ACTIVE"
       }
     },
     {
@@ -29,17 +26,14 @@
       "displayName": "",
       "inviter": {
         "id": "377eba35-5560-4f48-a99d-19cbd6a82b0d",
-        "profile": {
-          "displayName": "John Doe",
-          "idNumber": "DEV-12345",
-          "bio": "bio"
-        },
+        "profile": { "displayName": "John Doe", "idNumber": "DEV-12345", "bio": "bio" },
         "user": {
           "userId": "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
           "email": "account@example.com",
           "name": "John Doe"
         },
-        "role": "OWNER"
+        "role": "OWNER",
+        "membershipStatus": "ACTIVE"
       }
     },
     {
@@ -56,7 +50,8 @@
           "email": "invite_test_1@example.com",
           "name": "Invite TestOne"
         },
-        "role": "OWNER"
+        "role": "OWNER",
+        "membershipStatus": "ACTIVE"
       }
     },
     {
@@ -73,7 +68,8 @@
           "email": "invite_test_1@example.com",
           "name": "Invite TestOne"
         },
-        "role": "OWNER"
+        "role": "OWNER",
+        "membershipStatus": "ACTIVE"
       }
     },
     {
@@ -90,7 +86,8 @@
           "email": "invite_test_1@example.com",
           "name": "Invite TestOne"
         },
-        "role": "OWNER"
+        "role": "OWNER",
+        "membershipStatus": "ACTIVE"
       }
     },
     {
@@ -107,7 +104,8 @@
           "email": "invite_test_1@example.com",
           "name": "Invite TestOne"
         },
-        "role": "OWNER"
+        "role": "OWNER",
+        "membershipStatus": "ACTIVE"
       }
     },
     {
@@ -124,7 +122,8 @@
           "email": "invite_test_1@example.com",
           "name": "Invite TestOne"
         },
-        "role": "OWNER"
+        "role": "OWNER",
+        "membershipStatus": "ACTIVE"
       }
     },
     {
@@ -141,7 +140,8 @@
           "email": "invite_test_1@example.com",
           "name": "Invite TestOne"
         },
-        "role": "OWNER"
+        "role": "OWNER",
+        "membershipStatus": "ACTIVE"
       }
     },
     {
@@ -158,7 +158,8 @@
           "email": "invite_test_1@example.com",
           "name": "Invite TestOne"
         },
-        "role": "OWNER"
+        "role": "OWNER",
+        "membershipStatus": "ACTIVE"
       }
     },
     {
@@ -175,7 +176,8 @@
           "email": "invite_test_1@example.com",
           "name": "Invite TestOne"
         },
-        "role": "OWNER"
+        "role": "OWNER",
+        "membershipStatus": "ACTIVE"
       }
     },
     {
@@ -192,7 +194,8 @@
           "email": "invite_test_1@example.com",
           "name": "Invite TestOne"
         },
-        "role": "OWNER"
+        "role": "OWNER",
+        "membershipStatus": "ACTIVE"
       }
     }
   ]

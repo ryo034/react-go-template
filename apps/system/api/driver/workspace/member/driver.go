@@ -28,6 +28,8 @@ func (p *driver) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*models
 		Relation("Profile.MemberProfile").
 		Relation("Role").
 		Relation("Role.MemberRole").
+		Relation("MembershipEvent").
+		Relation("MembershipEvent.MembershipEvent").
 		Relation("Account").
 		Relation("Account.AuthProviders").
 		Relation("Account.Name").

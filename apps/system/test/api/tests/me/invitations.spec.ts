@@ -34,6 +34,7 @@ systemTest.describe("Me Invitations", () => {
             accepted: false,
             inviter: {
               id: "377eba35-5560-4f48-a99d-19cbd6a82b0d",
+              membershipStatus: "ACTIVE",
               profile: {
                 bio: "bio",
                 displayName: "John Doe",
@@ -50,6 +51,7 @@ systemTest.describe("Me Invitations", () => {
           inviter: {
             member: {
               id: "377eba35-5560-4f48-a99d-19cbd6a82b0d",
+              membershipStatus: "ACTIVE",
               profile: {
                 displayName: "John Doe",
                 idNumber: "DEV-12345",

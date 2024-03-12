@@ -15,10 +15,11 @@ type Member struct {
 	AccountID   uuid.UUID `bun:"account_id,notnull"`
 	CreatedAt   time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	Account   *Account             `bun:"sa,rel:belongs-to"`
-	Profile   *MemberLatestProfile `bun:"mlp,rel:has-one"`
-	Workspace *Workspace           `bun:"ws,rel:belongs-to"`
-	Role      *MemberLatestRole    `bun:"mlr,rel:has-one"`
+	Account         *Account               `bun:"sa,rel:belongs-to"`
+	Profile         *MemberLatestProfile   `bun:"mlp,rel:has-one"`
+	Workspace       *Workspace             `bun:"ws,rel:belongs-to"`
+	Role            *MemberLatestRole      `bun:"mlr,rel:has-one"`
+	MembershipEvent *LatestMembershipEvent `bun:"lmshi,rel:has-one"`
 }
 
 type Members []*Member
@@ -33,8 +34,8 @@ type MemberProfile struct {
 	Bio             string    `bun:"bio,notnull"`
 	CreatedAt       time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	Member        *Member              `bun:"rel:belongs-to"`
-	MemberProfile *MemberLatestProfile `bun:"rel:has-one"`
+	Member        *Member              `bun:"ms,rel:belongs-to"`
+	MemberProfile *MemberLatestProfile `bun:"mlp,rel:has-one"`
 }
 
 type MemberLatestProfile struct {
@@ -43,8 +44,8 @@ type MemberLatestProfile struct {
 	MemberProfileID uuid.UUID `bun:"member_profile_id,pk"`
 	MemberID        uuid.UUID `bun:"member_id,notnull"`
 
-	MemberProfile *MemberProfile `bun:"rel:has-one"`
-	Member        *Member        `bun:"rel:belongs-to"`
+	MemberProfile *MemberProfile `bun:"mp,rel:has-one"`
+	Member        *Member        `bun:"ms,rel:belongs-to"`
 }
 
 type MemberRole struct {
@@ -56,9 +57,9 @@ type MemberRole struct {
 	AssignedAt   time.Time `bun:"assigned_at,notnull,default:current_timestamp"`
 	AssignedBy   uuid.UUID `bun:"assigned_by,notnull"`
 
-	Member           *Member           `bun:"rel:belongs-to"`
-	MemberLatestRole *MemberLatestRole `bun:"rel:has-one"`
-	Assignor         *Member           `bun:"rel:belongs-to,join:assigned_by=member_id"`
+	Member           *Member           `bun:"ms,rel:belongs-to"`
+	MemberLatestRole *MemberLatestRole `bun:"mlr,rel:has-one"`
+	Assignor         *Member           `bun:"ms,rel:belongs-to,join:assigned_by=member_id"`
 }
 
 type MemberLatestRole struct {
@@ -67,8 +68,8 @@ type MemberLatestRole struct {
 	MemberRoleID uuid.UUID `bun:"member_role_id,pk"`
 	MemberID     uuid.UUID `bun:"member_id,notnull"`
 
-	MemberRole *MemberRole `bun:"rel:has-one"`
-	Member     *Member     `bun:"rel:belongs-to"`
+	MemberRole *MemberRole `bun:"mr,rel:has-one"`
+	Member     *Member     `bun:"ms,rel:belongs-to"`
 }
 
 type MemberLoginHistory struct {
@@ -78,8 +79,8 @@ type MemberLoginHistory struct {
 	MemberID             uuid.UUID `bun:"member_id,notnull"`
 	LoginAt              time.Time `bun:"login_at,notnull,default:current_timestamp"`
 
-	Member          *Member                   `bun:"rel:belongs-to"`
-	MemberLastLogin *MemberLatestLoginHistory `bun:"rel:has-one"`
+	Member          *Member                   `bun:"ms,rel:belongs-to"`
+	MemberLastLogin *MemberLatestLoginHistory `bun:"mllhs,rel:has-one"`
 }
 
 type MemberLatestLoginHistory struct {
@@ -88,8 +89,8 @@ type MemberLatestLoginHistory struct {
 	MemberLoginHistoryID uuid.UUID `bun:"member_login_history_id,pk"`
 	MemberID             uuid.UUID `bun:"member_id,notnull"`
 
-	Member             *Member             `bun:"rel:belongs-to"`
-	MemberLoginHistory *MemberLoginHistory `bun:"rel:belongs-to"`
+	Member             *Member             `bun:"ms,rel:belongs-to"`
+	MemberLoginHistory *MemberLoginHistory `bun:"mllhs,rel:belongs-to"`
 }
 
 type MemberAddress struct {
@@ -110,4 +111,28 @@ type MemberAddress struct {
 	City     *AddressComponent `bun:"rel:belongs-to,join:city_component_id=component_id"`
 	Street   *AddressComponent `bun:"rel:belongs-to,join:street_address_component_id=component_id"`
 	Building *AddressComponent `bun:"rel:belongs-to,join:building_component_id=component_id"`
+}
+
+type MembershipEvent struct {
+	bun.BaseModel `bun:"table:membership_events,alias:mshi"`
+
+	MembershipEventID uuid.UUID `bun:"membership_event_id,pk"`
+	MemberID          uuid.UUID `bun:"member_id,notnull"`
+	EventType         string    `bun:"event_type,notnull"`
+	CreatedBy         uuid.UUID `bun:"created_by,notnull"`
+	EventAt           time.Time `bun:"event_at,notnull,default:current_timestamp"`
+
+	Member          *Member                `bun:"ms,rel:belongs-to"`
+	Creator         *Member                `bun:"ms,rel:belongs-to,join:created_by=member_id"`
+	MembershipEvent *LatestMembershipEvent `bun:"lmshi,rel:has-one"`
+}
+
+type LatestMembershipEvent struct {
+	bun.BaseModel `bun:"table:latest_membership_events,alias:lmshi"`
+
+	MembershipEventID uuid.UUID `bun:"membership_event_id,pk"`
+	MemberID          uuid.UUID `bun:"member_id,notnull"`
+
+	MembershipEvent *MembershipEvent `bun:"mshi,rel:has-one"`
+	Member          *Member          `bun:"ms,rel:belongs-to"`
 }

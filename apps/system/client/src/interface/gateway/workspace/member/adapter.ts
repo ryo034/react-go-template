@@ -7,7 +7,9 @@ import {
   MemberProfile,
   type MemberRole,
   MemberRoleList,
-  Members
+  Members,
+  type MembershipStatus,
+  MembershipStatusList
 } from "~/domain/workspace/member"
 import { MemberBio } from "~/domain/workspace/member/bio"
 import type { components } from "~/generated/schema/openapi/systemApi"
@@ -79,7 +81,14 @@ export class MemberGatewayAdapter {
       return Result.err(role.error)
     }
 
-    return Result.ok(Member.create({ id: id.value, user: user.value, profile, role: role.value }))
+    let membershipStatus: MembershipStatus = MembershipStatusList.Left
+    switch (member.membershipStatus) {
+      case "ACTIVE":
+        membershipStatus = MembershipStatusList.Active
+        break
+    }
+
+    return Result.ok(Member.create({ id: id.value, user: user.value, profile, role: role.value, membershipStatus }))
   }
 
   adaptAll(members: components["schemas"]["Members"]): Result<Members, Error> {

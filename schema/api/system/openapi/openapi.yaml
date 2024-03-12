@@ -553,6 +553,7 @@ components:
         - user
         - profile
         - role
+        - membershipStatus
       properties:
         id:
           type: string
@@ -563,6 +564,11 @@ components:
           $ref: '#/components/schemas/User'
         role:
           $ref: '#/components/schemas/MemberRole'
+        membershipStatus:
+          type: string
+          enum:
+            - ACTIVE
+            - LEFT
     MemberRole:
       type: string
       description: Role of the member

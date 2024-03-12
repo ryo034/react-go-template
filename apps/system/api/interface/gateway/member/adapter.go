@@ -60,7 +60,13 @@ func (a *adapter) Adapt(m *models.Member) (*member.Member, error) {
 	if err != nil {
 		return nil, err
 	}
-	return member.NewMember(id, u, pro, ar), nil
+
+	membershipEventType := member.MembershipStatusActive
+	if m.MembershipEvent.MembershipEvent.EventType == "leave" {
+		membershipEventType = member.MembershipStatusLeave
+	}
+
+	return member.NewMember(id, u, pro, ar, membershipEventType), nil
 }
 
 func (a *adapter) AdaptAll(ms models.Members) (member.Members, error) {

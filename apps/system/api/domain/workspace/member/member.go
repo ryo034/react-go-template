@@ -6,19 +6,20 @@ import (
 )
 
 type Member struct {
-	id      ID
-	u       *user.User
-	profile Profile
-	role    Role
+	id               ID
+	u                *user.User
+	profile          Profile
+	role             Role
+	membershipStatus MembershipStatus
 }
 
-func NewMember(id ID, u *user.User, profile Profile, role Role) *Member {
+func NewMember(id ID, u *user.User, profile Profile, role Role, participationStatus MembershipStatus) *Member {
 	dn := profile.DisplayName()
 	if profile.DisplayName() == nil {
 		dn = NewDisplayName(u.Name().ToString())
 	}
 	profile.displayName = dn
-	return &Member{id, u, profile, role}
+	return &Member{id, u, profile, role, participationStatus}
 }
 
 func GenerateMember(u *user.User) (*Member, error) {
@@ -26,7 +27,7 @@ func GenerateMember(u *user.User) (*Member, error) {
 	if err != nil {
 		return nil, err
 	}
-	return NewMember(id, u, NewEmptyProfile(), RoleMember), nil
+	return NewMember(id, u, NewEmptyProfile(), RoleMember, MembershipStatusActive), nil
 }
 
 func GenerateAsWorkspaceOwner(u *user.User, dn *DisplayName) (*Member, error) {
@@ -34,7 +35,7 @@ func GenerateAsWorkspaceOwner(u *user.User, dn *DisplayName) (*Member, error) {
 	if err != nil {
 		return nil, err
 	}
-	return NewMember(id, u, NewProfile(dn, nil, NewAsEmptyBio()), RoleOwner), nil
+	return NewMember(id, u, NewProfile(dn, nil, NewAsEmptyBio()), RoleOwner, MembershipStatusActive), nil
 }
 
 func (w *Member) ID() ID {
@@ -51,6 +52,10 @@ func (w *Member) Profile() Profile {
 
 func (w *Member) Role() Role {
 	return w.role
+}
+
+func (w *Member) MembershipStatus() MembershipStatus {
+	return w.membershipStatus
 }
 
 // UpdateProfile updates the profile of the member

@@ -8,6 +8,7 @@
       "inviteeEmail": "invite_test_already_joined_any_workspace@example.com",
       "inviter": {
         "id": "018d96b9-f674-7ff6-83eb-506eca6452be",
+        "membershipStatus": "ACTIVE",
         "profile": {
           "bio": "bio",
           "displayName": "Invite TestOne",
@@ -24,6 +25,7 @@
     "inviter": {
       "member": {
         "id": "018d96b9-f674-7ff6-83eb-506eca6452be",
+        "membershipStatus": "ACTIVE",
         "profile": {
           "bio": "bio",
           "displayName": "Invite TestOne",

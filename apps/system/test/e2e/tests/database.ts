@@ -47,6 +47,8 @@ export const targetTables = [
   "member_latest_login_histories",
   "member_profiles",
   "member_latest_profiles",
+  "membership_events",
+  "latest_membership_events",
   "member_addresses",
   "invitation_units",
   "invitations",

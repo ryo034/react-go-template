@@ -37,6 +37,8 @@ func Test_driver_FindByToken_OK(t *testing.T) {
 	mrID := uuid.MustParse("018df76b-260d-759f-9b47-fb5f611f5da6")
 	wdID := uuid.MustParse("018e200b-9d01-70ed-8c5a-5a5df2a98f11")
 
+	msheID := uuid.MustParse("018e2ff9-c432-7093-b091-943915c59284")
+
 	invitedBy := &models.Member{
 		MemberID:    mID,
 		WorkspaceID: wID,
@@ -97,6 +99,17 @@ func Test_driver_FindByToken_OK(t *testing.T) {
 				DisplayName:     "John Doe",
 				Bio:             "bio",
 				CreatedAt:       defaultTime,
+			},
+		},
+		MembershipEvent: &models.LatestMembershipEvent{
+			MembershipEventID: msheID,
+			MemberID:          mID,
+			MembershipEvent: &models.MembershipEvent{
+				MembershipEventID: msheID,
+				MemberID:          mID,
+				EventType:         "join",
+				CreatedBy:         mID,
+				EventAt:           defaultTime,
 			},
 		},
 		Workspace: nil,

@@ -7,6 +7,7 @@
     },
     "member": {
       "id": "018da0dc-dad2-7ac8-95cc-9c3afdd0dbd5",
+      "membershipStatus": "ACTIVE",
       "profile": {
         "bio": "bio",
         "displayName": "Invite TestThree",
@@ -41,6 +42,7 @@
           "accepted": false,
           "inviter": {
             "id": "018d96b9-f674-7ff6-83eb-506eca6452be",
+            "membershipStatus": "ACTIVE",
             "profile": {
               "bio": "bio",
               "displayName": "Invite TestOne",
@@ -57,6 +59,7 @@
         "inviter": {
           "member": {
             "id": "018d96b9-f674-7ff6-83eb-506eca6452be",
+            "membershipStatus": "ACTIVE",
             "profile": {
               "bio": "bio",
               "displayName": "Invite TestOne",

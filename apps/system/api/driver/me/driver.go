@@ -46,6 +46,8 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*models
 		Relation("Profile.MemberProfile").
 		Relation("Role").
 		Relation("Role.MemberRole").
+		Relation("MembershipEvent").
+		Relation("MembershipEvent.MembershipEvent").
 		Relation("Workspace").
 		Relation("Workspace.Detail").
 		Relation("Workspace.Detail.WorkspaceDetail").
@@ -92,7 +94,7 @@ func (d *driver) FindLastLogin(ctx context.Context, exec bun.IDB, aID account.ID
 		NewSelect().
 		Model(m).
 		Relation("Member").
-		Where("member.account_id = ?", aID.ToString()).
+		Where("ms.account_id = ?", aID.ToString()).
 		Order("login_at DESC").
 		Limit(1).
 		Scan(ctx)

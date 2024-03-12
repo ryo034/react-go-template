@@ -121,6 +121,9 @@ func (u *useCase) setupProvider(ctx context.Context, p bun.IDB, usr *user.User) 
 		}
 		return ctx, nil, err
 	}
+	if meRes == nil {
+		return ctx, nil, domainErr.NewUnauthenticated(fmt.Sprintf("User not found: %s", usr.Email().ToString()))
+	}
 	ap := meRes.Providers().FindByKind(provider.Google)
 	if ap == nil {
 		ap = meRes.Providers().FindByKind(provider.Email)
@@ -153,6 +156,9 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 		ctx, ap, err = u.createAndSetupProvider(ctx, newAccountID)
 	} else {
 		ctx, meRes, err = u.setupProvider(ctx, exec, usr)
+	}
+	if err != nil {
+		return nil, err
 	}
 
 	pr, err := u.txp.Provide(ctx)

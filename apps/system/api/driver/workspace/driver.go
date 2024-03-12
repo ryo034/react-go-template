@@ -176,8 +176,29 @@ func (d *driver) AddMember(ctx context.Context, exec bun.IDB, w *workspace.Works
 	if _, err := exec.NewInsert().Model(mlr).Exec(ctx); err != nil {
 		return nil, err
 	}
+
+	mshieID, _ := uuid.NewV7()
+	mshie := &models.MembershipEvent{
+		MembershipEventID: mshieID,
+		MemberID:          m.ID().Value(),
+		EventType:         "join",
+		CreatedBy:         m.ID().Value(),
+	}
+	if _, err := exec.NewInsert().Model(mshie).Exec(ctx); err != nil {
+		return nil, err
+	}
+	lmshie := &models.LatestMembershipEvent{
+		MembershipEventID: mshieID,
+		MemberID:          m.ID().Value(),
+	}
+	if _, err := exec.NewInsert().Model(lmshie).Exec(ctx); err != nil {
+		return nil, err
+	}
+	lmshie.MembershipEvent = mshie
+
 	mlr.MemberRole = mr
 	mm.Role = mlr
+	mm.MembershipEvent = lmshie
 	return mm, nil
 }
 
@@ -218,6 +239,8 @@ func (d *driver) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, w
 		Relation("Profile.MemberProfile").
 		Relation("Role").
 		Relation("Role.MemberRole").
+		Relation("MembershipEvent").
+		Relation("MembershipEvent.MembershipEvent").
 		Relation("Account").
 		Relation("Account.AuthProviders").
 		Relation("Account.Name").
@@ -248,6 +271,8 @@ func (d *driver) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace
 		Relation("Profile.MemberProfile").
 		Relation("Role").
 		Relation("Role.MemberRole").
+		Relation("MembershipEvent").
+		Relation("MembershipEvent.MembershipEvent").
 		Relation("Account").
 		Relation("Account.AuthProviders").
 		Relation("Account.Name").
