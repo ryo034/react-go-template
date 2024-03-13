@@ -169,6 +169,7 @@ CREATE TABLE member_login_histories (
   PRIMARY KEY (member_login_history_id),
   CONSTRAINT fk_member_login_histories_members_member_id FOREIGN KEY (member_id) REFERENCES members(member_id)
 );
+CREATE INDEX member_login_histories_login_at_index ON member_login_histories(login_at);
 
 CREATE TABLE member_latest_login_histories (
   member_login_history_id uuid NOT NULL,

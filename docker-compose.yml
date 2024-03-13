@@ -85,7 +85,15 @@ services:
       - ./container/database/postgresql/primary/pg_hba.conf:/etc/postgresql/pg_hba.conf:Z
       - ./container/database/postgresql/primary/init.sh:/docker-entrypoint-initdb.d/init.sh:Z
       - ./container/database/postgresql/sql/001_create_tables.sql:/docker-entrypoint-initdb.d/001_create_tables.sql:Z
-      - ./container/database/postgresql/sql/099_initialize_data.sql:/docker-entrypoint-initdb.d/099_initialize_data.sql:Z
+      - ./container/database/postgresql/sql/099_setup_base_data.sql:/docker-entrypoint-initdb.d/099_setup_base_data.sql:Z
+      - ./container/database/postgresql/sql/100_setup_update_workspace_detail.sql:/docker-entrypoint-initdb.d/100_setup_update_workspace_detail.sql:Z
+      - ./container/database/postgresql/sql/101_setup_update_role.sql:/docker-entrypoint-initdb.d/101_setup_update_role.sql:Z
+      - ./container/database/postgresql/sql/102_setup_update_account_profile.sql:/docker-entrypoint-initdb.d/102_setup_update_account_profile.sql:Z
+      - ./container/database/postgresql/sql/103_setup_update_account_photo.sql:/docker-entrypoint-initdb.d/103_setup_update_account_photo.sql:Z
+      - ./container/database/postgresql/sql/104_setup_onboarding.sql:/docker-entrypoint-initdb.d/104_setup_onboarding.sql:Z
+      - ./container/database/postgresql/sql/105_setup_google_auth_name.sql:/docker-entrypoint-initdb.d/105_setup_google_auth_name.sql:Z
+      - ./container/database/postgresql/sql/108_setup_leave_workspace.sql:/docker-entrypoint-initdb.d/108_setup_leave_workspace.sql:Z
+
     healthcheck:
       test: pg_isready -d main
       interval: 1s
