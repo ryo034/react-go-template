@@ -41,6 +41,7 @@ type Driver interface {
 
 	SetMeToCustomClaim(ctx context.Context, me *me.Me) error
 	SetAccountIDToCustomClaim(ctx context.Context, aID account.ID) error
+	ClearCustomClaim(ctx context.Context) error
 
 	UpdateProfile(ctx context.Context, usr *user.User) error
 	UpdateEmail(ctx context.Context, em account.Email) error
@@ -288,11 +289,29 @@ func (d *driver) SetMeToCustomClaim(ctx context.Context, me *me.Me) error {
 		cms = map[string]interface{}{}
 	}
 	cms[CustomClaimAccountIDKey] = me.Self().AccountID().Value().String()
-
 	if me.IsJoined() {
 		cms[CustomClaimCurrentWorkspaceIDKey] = me.Workspace().ID().Value().String()
 		cms[CustomClaimRoleKey] = me.Member().Role().ToString()
 	}
+	return d.f.Auth.SetCustomUserClaims(ctx, apUID.ToString(), cms)
+}
+
+func (d *driver) ClearCustomClaim(ctx context.Context) error {
+	apUID, err := d.co.GetAuthProviderUID(ctx)
+	if err != nil {
+		return err
+	}
+	u, err := d.f.Auth.GetUser(ctx, apUID.ToString())
+	if err != nil {
+		return err
+	}
+	cms := u.CustomClaims
+	if cms == nil {
+		return nil
+	}
+	delete(cms, CustomClaimCurrentWorkspaceIDKey)
+	delete(cms, CustomClaimAccountIDKey)
+	delete(cms, CustomClaimRoleKey)
 	return d.f.Auth.SetCustomUserClaims(ctx, apUID.ToString(), cms)
 }
 

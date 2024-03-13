@@ -12,4 +12,5 @@ type OutputPort interface {
 	UpdateMemberProfile(m *me.Me) (openapi.APIV1MeMemberProfilePutRes, error)
 	UpdateProfilePhoto(m *me.Me) (openapi.APIV1MeProfilePhotoPutRes, error)
 	RemoveProfilePhoto(m *me.Me) (openapi.APIV1MeProfilePhotoDeleteRes, error)
+	LeaveWorkspace() (openapi.APIV1MeWorkspaceLeavePostRes, error)
 }

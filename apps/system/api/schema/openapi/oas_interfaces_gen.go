@@ -37,8 +37,16 @@ type APIV1MeProfilePutRes interface {
 	aPIV1MeProfilePutRes()
 }
 
+type APIV1MeWorkspaceLeavePostRes interface {
+	aPIV1MeWorkspaceLeavePostRes()
+}
+
 type APIV1MembersGetRes interface {
 	aPIV1MembersGetRes()
+}
+
+type APIV1MembersMemberIdDeleteRes interface {
+	aPIV1MembersMemberIdDeleteRes()
 }
 
 type APIV1MembersMemberIdRolePutRes interface {

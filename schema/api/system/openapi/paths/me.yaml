@@ -118,3 +118,25 @@ memberProfile:
         $ref: "#/components/responses/UnauthorizedError"
       "500":
         $ref: "#/components/responses/InternalServerError"
+
+leaveWorkspace:
+  post:
+    summary: Leave Workspace
+    description: Leaves the workspace
+    tags:
+      - Workspaces
+    security:
+      - bearer: []
+    responses:
+      "204":
+        description: Workspace left
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
+      "404":
+        $ref: "#/components/responses/NotFoundError"
+      "403":
+        $ref: "#/components/responses/ForbiddenError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"

@@ -21,6 +21,7 @@ type Repository interface {
 	RecordLogin(ctx context.Context, exec bun.IDB, m *Me) error
 	SetCurrentProvider(ctx context.Context, p *provider.Provider) context.Context
 	SetMe(ctx context.Context, m *Me) error
+	ClearMe(ctx context.Context) error
 	FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*Me, error)
 	FindByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*Me, error)
 	UpdateName(ctx context.Context, exec bun.IDB, usr *user.User) error

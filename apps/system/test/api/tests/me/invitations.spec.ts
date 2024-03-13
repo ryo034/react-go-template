@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test"
-import { components } from "schema/openapi/systemApi"
+import type { components } from "schema/openapi/systemApi"
 import { authHeaders, defaultPostHeaders } from "../../config/config"
 import { genAPIClient, getAuthInfo, getInvitationIdByToken, getInviteToken, systemTest } from "../../scripts"
 const client = genAPIClient()

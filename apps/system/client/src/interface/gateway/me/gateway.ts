@@ -1,5 +1,5 @@
 import { Result } from "true-myth"
-import { type AccountFullName, type InvitationId, type Me, type MeRepository, type MemberProfile, User } from "~/domain"
+import type { AccountFullName, InvitationId, Me, MeRepository, MemberProfile } from "~/domain"
 import type { AuthProviderDriver, MeDriver } from "~/driver"
 import { AuthProviderCurrentUserNotFoundError } from "~/infrastructure/error"
 import type { PromiseResult } from "~/infrastructure/shared/result"
@@ -65,5 +65,9 @@ export class MeGateway implements MeRepository {
       return Result.err(res.error)
     }
     return this.adapter.adapt(res.value)
+  }
+
+  async leaveWorkspace(): PromiseResult<null, Error> {
+    return this.driver.leaveWorkspace()
   }
 }

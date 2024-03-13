@@ -16,10 +16,11 @@ type Repository interface {
 	Update(ctx context.Context, exec bun.IDB, w *Workspace) error
 	AddMember(ctx context.Context, exec bun.IDB, w *Workspace, m *member.Member) (*member.Member, error)
 	UpdateMemberRole(ctx context.Context, exec bun.IDB, assignor *member.Member, m *member.Member) (*member.Member, error)
-	FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID ID) (*member.Member, error)
+	FindMember(ctx context.Context, exec bun.IDB, memID member.ID) (*member.Member, error)
 	FindAllMembers(ctx context.Context, exec bun.IDB, wID ID) (member.Members, error)
 	InviteMembers(ctx context.Context, exec bun.IDB, inviter Inviter, is invitation.Invitations) error
 	FindInviterFromToken(ctx context.Context, exec bun.IDB, token invitation.Token) (Inviter, error)
 	FindActiveInvitation(ctx context.Context, exec bun.IDB, id invitation.ID) (*invitation.Invitation, *Workspace, error)
 	FindAllInvitations(ctx context.Context, exec bun.IDB, wID ID) (invitation.Invitations, error)
+	Leave(ctx context.Context, exec bun.IDB, executorID member.ID, mID member.ID) error
 }

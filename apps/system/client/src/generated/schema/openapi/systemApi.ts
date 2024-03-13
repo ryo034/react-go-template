@@ -154,6 +154,25 @@ export interface paths {
       };
     };
   };
+  "/api/v1/me/workspace/leave": {
+    /**
+     * Leave Workspace
+     * @description Leaves the workspace
+     */
+    post: {
+      responses: {
+        /** @description Workspace left */
+        204: {
+          content: never;
+        };
+        400: components["responses"]["BadRequestError"];
+        401: components["responses"]["UnauthorizedError"];
+        403: components["responses"]["ForbiddenError"];
+        404: components["responses"]["NotFoundError"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+  };
   "/api/v1/workspaces": {
     /**
      * Get Joined Workspaces
@@ -214,6 +233,32 @@ export interface paths {
       responses: {
         200: components["responses"]["MembersResponse"];
         401: components["responses"]["UnauthorizedError"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+  };
+  "/api/v1/members/{memberId}": {
+    /**
+     * Remove Member
+     * @description Removes a member from the workspace
+     */
+    delete: {
+      parameters: {
+        path: {
+          /** @description Member id */
+          memberId: string;
+        };
+      };
+      responses: {
+        /** @description Member removed */
+        204: {
+          content: never;
+        };
+        400: components["responses"]["BadRequestError"];
+        401: components["responses"]["UnauthorizedError"];
+        403: components["responses"]["ForbiddenError"];
+        404: components["responses"]["NotFoundError"];
+        409: components["responses"]["ConflictError"];
         500: components["responses"]["InternalServerError"];
       };
     };

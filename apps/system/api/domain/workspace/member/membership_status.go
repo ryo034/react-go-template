@@ -37,6 +37,6 @@ func (ms MembershipStatus) IsActive() bool {
 	return ms == MembershipStatusActive
 }
 
-func (ms MembershipStatus) IsLeave() bool {
+func (ms MembershipStatus) IsLeft() bool {
 	return ms == MembershipStatusLeave
 }

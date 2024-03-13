@@ -41,3 +41,7 @@ type UpdateProfilePhotoInput struct {
 type RemoveProfilePhotoInput struct {
 	AccountID account.ID
 }
+
+type LeaveWorkspaceInput struct {
+	AccountID account.ID
+}

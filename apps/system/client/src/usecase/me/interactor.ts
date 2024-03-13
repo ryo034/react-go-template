@@ -16,6 +16,7 @@ export interface MeUseCase {
   updatePhoto(i: UpdatePhotoInput): Promise<Error | null>
   updateMemberProfile(i: UpdateMemberProfileInput): Promise<Error | null>
   removePhoto(): Promise<Error | null>
+  leaveWorkspace(): Promise<Error | null>
 }
 
 export class MeInteractor implements MeUseCase {
@@ -96,6 +97,15 @@ export class MeInteractor implements MeUseCase {
       return res.error
     }
     this.presenter.set(res.value)
+    return null
+  }
+
+  async leaveWorkspace(): Promise<Error | null> {
+    const res = await this.repository.leaveWorkspace()
+    if (res.isErr) {
+      return res.error
+    }
+    this.presenter.clear()
     return null
   }
 }

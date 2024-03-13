@@ -62,12 +62,24 @@ type Handler interface {
 	//
 	// PUT /api/v1/me/profile
 	APIV1MeProfilePut(ctx context.Context, req *APIV1MeProfilePutReq) (APIV1MeProfilePutRes, error)
+	// APIV1MeWorkspaceLeavePost implements POST /api/v1/me/workspace/leave operation.
+	//
+	// Leaves the workspace.
+	//
+	// POST /api/v1/me/workspace/leave
+	APIV1MeWorkspaceLeavePost(ctx context.Context) (APIV1MeWorkspaceLeavePostRes, error)
 	// APIV1MembersGet implements GET /api/v1/members operation.
 	//
 	// Returns the members of the workspace.
 	//
 	// GET /api/v1/members
 	APIV1MembersGet(ctx context.Context) (APIV1MembersGetRes, error)
+	// APIV1MembersMemberIdDelete implements DELETE /api/v1/members/{memberId} operation.
+	//
+	// Removes a member from the workspace.
+	//
+	// DELETE /api/v1/members/{memberId}
+	APIV1MembersMemberIdDelete(ctx context.Context, params APIV1MembersMemberIdDeleteParams) (APIV1MembersMemberIdDeleteRes, error)
 	// APIV1MembersMemberIdRolePut implements PUT /api/v1/members/{memberId}/role operation.
 	//
 	// Updates the role of a member.

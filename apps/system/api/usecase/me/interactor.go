@@ -27,6 +27,7 @@ type UseCase interface {
 	UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1MeMemberProfilePutRes, error)
 	UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoInput) (openapi.APIV1MeProfilePhotoPutRes, error)
 	RemoveProfilePhoto(ctx context.Context, i RemoveProfilePhotoInput) (openapi.APIV1MeProfilePhotoDeleteRes, error)
+	LeaveWorkspace(ctx context.Context, i LeaveWorkspaceInput) (openapi.APIV1MeWorkspaceLeavePostRes, error)
 }
 
 type useCase struct {
@@ -203,4 +204,32 @@ func (u *useCase) RemoveProfilePhoto(ctx context.Context, i RemoveProfilePhotoIn
 		return nil, err
 	}
 	return u.op.RemoveProfilePhoto(result.Value(0).(*me.Me))
+}
+
+func (u *useCase) LeaveWorkspace(ctx context.Context, i LeaveWorkspaceInput) (openapi.APIV1MeWorkspaceLeavePostRes, error) {
+	exec := u.dbp.GetExecutor(ctx, true)
+	m, err := u.repo.FindLastLogin(ctx, exec, i.AccountID)
+	if err != nil {
+		return nil, err
+	}
+	if err = m.ValidateCanLeave(); err != nil {
+		return nil, err
+	}
+
+	pr, err := u.txp.Provide(ctx)
+	if err != nil {
+		return nil, err
+	}
+	exec = u.dbp.GetExecutor(pr, false)
+	fn := func() error {
+		if err = u.wRepo.Leave(pr, exec, m.Member().ID(), m.Member().ID()); err != nil {
+			return err
+		}
+		return u.repo.ClearMe(pr)
+	}
+	result := pr.Transactional(fn)()
+	if err = result.Error(); err != nil {
+		return nil, err
+	}
+	return u.op.LeaveWorkspace()
 }

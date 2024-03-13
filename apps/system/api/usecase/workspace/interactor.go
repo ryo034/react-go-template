@@ -22,6 +22,7 @@ type UseCase interface {
 	FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error)
 	UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput) (openapi.APIV1MembersMemberIdRolePutRes, error)
 	UpdateWorkspace(ctx context.Context, i UpdateWorkspaceInput) (openapi.APIV1WorkspacesWorkspaceIdPutRes, error)
+	Leave(ctx context.Context, i LeaveInput) (openapi.APIV1MembersMemberIdDeleteRes, error)
 }
 
 type useCase struct {
@@ -294,4 +295,34 @@ func (u *useCase) UpdateWorkspace(ctx context.Context, i UpdateWorkspaceInput) (
 	}
 	res := result.Value(0).(*workspace.Workspace)
 	return u.op.UpdateWorkspace(res)
+}
+
+func (u *useCase) Leave(ctx context.Context, i LeaveInput) (openapi.APIV1MembersMemberIdDeleteRes, error) {
+	exec := u.dbp.GetExecutor(ctx, true)
+	meRes, err := u.meRepo.FindLastLogin(ctx, exec, i.ExecutorID)
+	if err != nil {
+		return nil, err
+	}
+
+	memRes, err := u.repo.FindMember(ctx, exec, i.MemberID)
+	if err != nil {
+		return nil, err
+	}
+	if err = memRes.ValidateCanLeave(); err != nil {
+		return nil, err
+	}
+
+	pr, err := u.txp.Provide(ctx)
+	if err != nil {
+		return nil, err
+	}
+	exec = u.dbp.GetExecutor(pr, false)
+	fn := func() error {
+		return u.repo.Leave(pr, exec, meRes.Member().ID(), memRes.ID())
+	}
+	result := pr.Transactional(fn)()
+	if err = result.Error(); err != nil {
+		return nil, err
+	}
+	return u.op.Leave()
 }

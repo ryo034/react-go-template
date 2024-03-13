@@ -78,12 +78,24 @@ type Invoker interface {
 	//
 	// PUT /api/v1/me/profile
 	APIV1MeProfilePut(ctx context.Context, request *APIV1MeProfilePutReq) (APIV1MeProfilePutRes, error)
+	// APIV1MeWorkspaceLeavePost invokes POST /api/v1/me/workspace/leave operation.
+	//
+	// Leaves the workspace.
+	//
+	// POST /api/v1/me/workspace/leave
+	APIV1MeWorkspaceLeavePost(ctx context.Context) (APIV1MeWorkspaceLeavePostRes, error)
 	// APIV1MembersGet invokes GET /api/v1/members operation.
 	//
 	// Returns the members of the workspace.
 	//
 	// GET /api/v1/members
 	APIV1MembersGet(ctx context.Context) (APIV1MembersGetRes, error)
+	// APIV1MembersMemberIdDelete invokes DELETE /api/v1/members/{memberId} operation.
+	//
+	// Removes a member from the workspace.
+	//
+	// DELETE /api/v1/members/{memberId}
+	APIV1MembersMemberIdDelete(ctx context.Context, params APIV1MembersMemberIdDeleteParams) (APIV1MembersMemberIdDeleteRes, error)
 	// APIV1MembersMemberIdRolePut invokes PUT /api/v1/members/{memberId}/role operation.
 	//
 	// Updates the role of a member.
@@ -1114,6 +1126,110 @@ func (c *Client) sendAPIV1MeProfilePut(ctx context.Context, request *APIV1MeProf
 	return result, nil
 }
 
+// APIV1MeWorkspaceLeavePost invokes POST /api/v1/me/workspace/leave operation.
+//
+// Leaves the workspace.
+//
+// POST /api/v1/me/workspace/leave
+func (c *Client) APIV1MeWorkspaceLeavePost(ctx context.Context) (APIV1MeWorkspaceLeavePostRes, error) {
+	res, err := c.sendAPIV1MeWorkspaceLeavePost(ctx)
+	return res, err
+}
+
+func (c *Client) sendAPIV1MeWorkspaceLeavePost(ctx context.Context) (res APIV1MeWorkspaceLeavePostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/v1/me/workspace/leave"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1MeWorkspaceLeavePost",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/me/workspace/leave"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1MeWorkspaceLeavePost", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1MeWorkspaceLeavePostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // APIV1MembersGet invokes GET /api/v1/members operation.
 //
 // Returns the members of the workspace.
@@ -1211,6 +1327,128 @@ func (c *Client) sendAPIV1MembersGet(ctx context.Context) (res APIV1MembersGetRe
 
 	stage = "DecodeResponse"
 	result, err := decodeAPIV1MembersGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1MembersMemberIdDelete invokes DELETE /api/v1/members/{memberId} operation.
+//
+// Removes a member from the workspace.
+//
+// DELETE /api/v1/members/{memberId}
+func (c *Client) APIV1MembersMemberIdDelete(ctx context.Context, params APIV1MembersMemberIdDeleteParams) (APIV1MembersMemberIdDeleteRes, error) {
+	res, err := c.sendAPIV1MembersMemberIdDelete(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendAPIV1MembersMemberIdDelete(ctx context.Context, params APIV1MembersMemberIdDeleteParams) (res APIV1MembersMemberIdDeleteRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/api/v1/members/{memberId}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1MembersMemberIdDelete",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/api/v1/members/"
+	{
+		// Encode "memberId" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "memberId",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.MemberId))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "DELETE", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1MembersMemberIdDelete", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1MembersMemberIdDeleteResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

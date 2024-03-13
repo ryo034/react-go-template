@@ -14,6 +14,38 @@ members:
       "500":
         $ref: "#/components/responses/InternalServerError"
 
+member:
+  delete:
+    summary: Remove Member
+    description: Removes a member from the workspace
+    tags:
+      - Member
+    security:
+      - bearer: []
+    parameters:
+      - name: memberId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Member id
+    responses:
+      "204":
+        description: Member removed
+      "400":
+        $ref: "#/components/responses/BadRequestError"
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
+      "403":
+        $ref: "#/components/responses/ForbiddenError"
+      "404":
+        $ref: "#/components/responses/NotFoundError"
+      "409":
+        $ref: "#/components/responses/ConflictError"
+      "500":
+        $ref: "#/components/responses/InternalServerError"
+
 memberRole:
   put:
     summary: Update Member Role

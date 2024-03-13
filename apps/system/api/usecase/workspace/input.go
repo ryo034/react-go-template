@@ -82,3 +82,8 @@ type UpdateWorkspaceInput struct {
 	Name        workspace.Name
 	Subdomain   workspace.Subdomain
 }
+
+type LeaveInput struct {
+	ExecutorID account.ID
+	MemberID   member.ID
+}

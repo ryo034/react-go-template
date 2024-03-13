@@ -1,8 +1,6 @@
 package me
 
 import (
-	"slices"
-
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
@@ -64,18 +62,6 @@ func (m *Me) UpdateReceivedInvitations(ris ReceivedInvitations) *Me {
 	return m
 }
 
-func (m *Me) CheckJoined(wID workspace.ID) bool {
-	ids := make([]workspace.ID, m.joinedWorkspaces.Size())
-	for i, w := range m.joinedWorkspaces.AsSlice() {
-		ids[i] = w.ID()
-	}
-	return slices.Contains(ids, wID)
-}
-
-func (m *Me) CheckNotJoined(wID workspace.ID) bool {
-	return !m.CheckJoined(wID)
-}
-
 func (m *Me) UpdateSelf(u *user.User) *Me {
 	m.self = u
 	return m
@@ -113,6 +99,19 @@ func (m *Me) ValidateCanUpdateWorkspace(wID workspace.ID) error {
 	ok := m.Member().Role().IsOwner() || m.Member().Role().IsAdmin()
 	if !ok {
 		return domainErr.NewForbidden("Can update only owner or admin")
+	}
+	return nil
+}
+
+func (m *Me) ValidateCanLeave() error {
+	if m.NotJoined() {
+		return domainErr.NewUnauthenticated("Not joined")
+	}
+	if m.Member().Role().IsOwner() {
+		return domainErr.NewForbidden("Cannot leave owner")
+	}
+	if err := m.member.ValidateCanLeave(); err != nil {
+		return err
 	}
 	return nil
 }

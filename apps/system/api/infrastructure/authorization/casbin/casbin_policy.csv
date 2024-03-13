@@ -2,6 +2,7 @@ p,owner,*,*,allow
 p,*,/api/v1/me,GET,allow
 p,*,/api/v1/me/profile,PUT,allow
 p,*,/api/v1/me/member/profile,PUT,allow
+p,*,/api/v1/me/workspace/leave,POST,allow
 p,*,/api/v1/workspaces,*,allow
 p,*,/api/v1/members,GET,allow
 p,*,/api/v1/invitations,GET,allow

@@ -94,12 +94,30 @@ func (UnimplementedHandler) APIV1MeProfilePut(ctx context.Context, req *APIV1MeP
 	return r, ht.ErrNotImplemented
 }
 
+// APIV1MeWorkspaceLeavePost implements POST /api/v1/me/workspace/leave operation.
+//
+// Leaves the workspace.
+//
+// POST /api/v1/me/workspace/leave
+func (UnimplementedHandler) APIV1MeWorkspaceLeavePost(ctx context.Context) (r APIV1MeWorkspaceLeavePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // APIV1MembersGet implements GET /api/v1/members operation.
 //
 // Returns the members of the workspace.
 //
 // GET /api/v1/members
 func (UnimplementedHandler) APIV1MembersGet(ctx context.Context) (r APIV1MembersGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1MembersMemberIdDelete implements DELETE /api/v1/members/{memberId} operation.
+//
+// Removes a member from the workspace.
+//
+// DELETE /api/v1/members/{memberId}
+func (UnimplementedHandler) APIV1MembersMemberIdDelete(ctx context.Context, params APIV1MembersMemberIdDeleteParams) (r APIV1MembersMemberIdDeleteRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

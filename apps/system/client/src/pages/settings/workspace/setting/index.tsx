@@ -1,9 +1,60 @@
+import { AlertCircle } from "lucide-react"
 import { useContext, useMemo, useState } from "react"
-import { Separator, useToast } from "shared-ui"
+import {
+  Alert,
+  AlertDescription,
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogDestructiveAction,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  AlertTitle,
+  Button,
+  Separator,
+  useToast
+} from "shared-ui"
 import { ContainerContext } from "~/infrastructure/injector/context"
 import { SettingsWorkspaceSettingForm, type SettingsWorkspaceSettingFormValues } from "./form"
 
 export const settingsWorkspaceSettingPageRoute = "/settings/workspace/setting"
+
+const LeaveWorkspaceAlertDialog = () => {
+  const { controller } = useContext(ContainerContext)
+  const { toast } = useToast()
+
+  const onClickLeaveWorkspaceButton = async () => {
+    const err = await controller.me.leaveWorkspace()
+    if (err) {
+      toast({ title: "Failed to leave workspace" })
+      return
+    }
+    toast({ title: "Left workspace" })
+  }
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="outline">ワークスペースから退出</Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>このワークスペースを退出してもよろしいですか？</AlertDialogTitle>
+          <AlertDialogDescription>退出後、一度ログアウトされます。</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>キャンセル</AlertDialogCancel>
+          <AlertDialogDestructiveAction onClick={onClickLeaveWorkspaceButton} data-testid="leaveWorkspaceExecButton">
+            退出
+          </AlertDialogDestructiveAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}
 
 export const SettingsWorkspaceSettingPage = () => {
   const { store, controller } = useContext(ContainerContext)
@@ -47,6 +98,18 @@ export const SettingsWorkspaceSettingPage = () => {
       </div>
       <Separator />
       <SettingsWorkspaceSettingForm isUpdating={isUpdating} onSubmit={onSubmit} defaultValues={defaultValues} />
+      <Separator />
+      <Alert variant="warning">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>注意</AlertTitle>
+        <AlertDescription>
+          オーナーはワークスペースに所属しているのがオーナー1人の場合のみ退出できます。オーナーを退出させる場合は、他のメンバーに権限を委譲後に退出するようにしてください。
+          ワークスペースに再参加するには、メンバーに招待してもらう必要があります。
+          所属していた際に作成されたデータは削除されません。
+        </AlertDescription>
+      </Alert>
+
+      <LeaveWorkspaceAlertDialog />
     </div>
   )
 }

@@ -64,8 +64,8 @@ func (g *gateway) UpdateMemberRole(ctx context.Context, exec bun.IDB, assignor *
 	return m, g.d.UpdateMemberRole(ctx, exec, assignor, m)
 }
 
-func (g *gateway) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*member.Member, error) {
-	res, err := g.d.FindMember(ctx, exec, aID, wID)
+func (g *gateway) FindMember(ctx context.Context, exec bun.IDB, memID member.ID) (*member.Member, error) {
+	res, err := g.d.FindMember(ctx, exec, memID)
 	if err != nil {
 		return nil, err
 	}
@@ -114,4 +114,8 @@ func (g *gateway) FindAllInvitations(ctx context.Context, exec bun.IDB, wID work
 		return nil, err
 	}
 	return g.ia.AdaptAll(res)
+}
+
+func (g *gateway) Leave(ctx context.Context, exec bun.IDB, executorID member.ID, mID member.ID) error {
+	return g.d.Leave(ctx, exec, executorID, mID)
 }

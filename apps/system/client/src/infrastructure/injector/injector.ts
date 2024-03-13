@@ -51,7 +51,7 @@ const setupDriver = () => {
     firebase,
     logger: new LoggerDriver(ga4, apiErrorHandler),
     theme: new ThemeDriver(ls),
-    me: new MeDriver(openapiFetchClient, apiErrorHandler),
+    me: new MeDriver(openapiFetchClient, firebase, apiErrorHandler),
     auth: new AuthDriver(openapiFetchClient, apiErrorHandler),
     workspace: new WorkspaceDriver(openapiFetchClient, apiErrorHandler, firebase)
   }

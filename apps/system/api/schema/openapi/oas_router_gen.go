@@ -352,6 +352,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						elem = origElem
+					case 'w': // Prefix: "workspace/leave"
+						origElem := elem
+						if l := len("workspace/leave"); len(elem) >= l && elem[0:l] == "workspace/leave" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleAPIV1MeWorkspaceLeavePostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
@@ -546,7 +567,16 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						elem = elem[idx:]
 
 						if len(elem) == 0 {
-							break
+							switch r.Method {
+							case "DELETE":
+								s.handleAPIV1MembersMemberIdDeleteRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "DELETE")
+							}
+
+							return
 						}
 						switch elem[0] {
 						case '/': // Prefix: "/role"
@@ -1091,6 +1121,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 
 						elem = origElem
+					case 'w': // Prefix: "workspace/leave"
+						origElem := elem
+						if l := len("workspace/leave"); len(elem) >= l && elem[0:l] == "workspace/leave" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch method {
+							case "POST":
+								// Leaf: APIV1MeWorkspaceLeavePost
+								r.name = "APIV1MeWorkspaceLeavePost"
+								r.summary = "Leave Workspace"
+								r.operationID = ""
+								r.pathPattern = "/api/v1/me/workspace/leave"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
@@ -1299,7 +1354,18 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						elem = elem[idx:]
 
 						if len(elem) == 0 {
-							break
+							switch method {
+							case "DELETE":
+								r.name = "APIV1MembersMemberIdDelete"
+								r.summary = "Remove Member"
+								r.operationID = ""
+								r.pathPattern = "/api/v1/members/{memberId}"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
 						}
 						switch elem[0] {
 						case '/': // Prefix: "/role"

@@ -95,4 +95,12 @@ export class WorkspaceGateway implements WorkspaceRepository {
     }
     return this.adapter.adapt(res.value)
   }
+
+  async leaveWorkspace(memberId: MemberId): PromiseResult<null, Error> {
+    const res = await this.driver.leaveWorkspace(memberId)
+    if (res.isErr) {
+      return Result.err(res.error)
+    }
+    return Result.ok(null)
+  }
 }

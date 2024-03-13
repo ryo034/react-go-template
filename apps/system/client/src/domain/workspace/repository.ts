@@ -30,4 +30,5 @@ export interface WorkspaceRepository {
     name: WorkspaceName,
     subdomain: WorkspaceSubdomain
   ): PromiseResult<Workspace, Error>
+  leaveWorkspace(memberId: MemberId): PromiseResult<null, Error>
 }

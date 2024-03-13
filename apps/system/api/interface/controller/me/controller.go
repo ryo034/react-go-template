@@ -31,6 +31,7 @@ type Controller interface {
 	UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1MeMemberProfilePutRes, error)
 	UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoInput) (openapi.APIV1MeProfilePhotoPutRes, error)
 	RemoveProfilePhoto(ctx context.Context) (openapi.APIV1MeProfilePhotoDeleteRes, error)
+	LeaveWorkspace(ctx context.Context) (openapi.APIV1MeWorkspaceLeavePostRes, error)
 }
 
 type controller struct {
@@ -206,6 +207,19 @@ func (c *controller) RemoveProfilePhoto(ctx context.Context) (openapi.APIV1MePro
 	res, err := c.uc.RemoveProfilePhoto(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePhotoDeleteRes), nil
+	}
+	return res, nil
+}
+
+func (c *controller) LeaveWorkspace(ctx context.Context) (openapi.APIV1MeWorkspaceLeavePostRes, error) {
+	aID, err := c.co.GetUID(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MeWorkspaceLeavePostRes), nil
+	}
+	in := meUc.LeaveWorkspaceInput{AccountID: aID}
+	res, err := c.uc.LeaveWorkspace(ctx, in)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MeWorkspaceLeavePostRes), nil
 	}
 	return res, nil
 }

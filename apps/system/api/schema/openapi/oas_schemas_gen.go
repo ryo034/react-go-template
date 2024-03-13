@@ -146,6 +146,16 @@ func (s *APIV1MeProfilePutReqProfile) SetName(val OptString) {
 	s.Name = val
 }
 
+// APIV1MeWorkspaceLeavePostNoContent is response for APIV1MeWorkspaceLeavePost operation.
+type APIV1MeWorkspaceLeavePostNoContent struct{}
+
+func (*APIV1MeWorkspaceLeavePostNoContent) aPIV1MeWorkspaceLeavePostRes() {}
+
+// APIV1MembersMemberIdDeleteNoContent is response for APIV1MembersMemberIdDelete operation.
+type APIV1MembersMemberIdDeleteNoContent struct{}
+
+func (*APIV1MembersMemberIdDeleteNoContent) aPIV1MembersMemberIdDeleteRes() {}
+
 type APIV1MembersMemberIdRolePutReq struct {
 	Role APIV1MembersMemberIdRolePutReqRole `json:"role"`
 }
@@ -367,6 +377,8 @@ func (*BadRequestError) aPIV1AuthOtpVerifyPostRes()         {}
 func (*BadRequestError) aPIV1MeMemberProfilePutRes()        {}
 func (*BadRequestError) aPIV1MeProfilePhotoPutRes()         {}
 func (*BadRequestError) aPIV1MeProfilePutRes()              {}
+func (*BadRequestError) aPIV1MeWorkspaceLeavePostRes()      {}
+func (*BadRequestError) aPIV1MembersMemberIdDeleteRes()     {}
 func (*BadRequestError) aPIV1MembersMemberIdRolePutRes()    {}
 func (*BadRequestError) aPIV1WorkspacesPostRes()            {}
 func (*BadRequestError) aPIV1WorkspacesWorkspaceIdPutRes()  {}
@@ -443,6 +455,7 @@ func (s *ConflictError) SetCode(val OptString) {
 	s.Code = val
 }
 
+func (*ConflictError) aPIV1MembersMemberIdDeleteRes()    {}
 func (*ConflictError) aPIV1WorkspacesPostRes()           {}
 func (*ConflictError) aPIV1WorkspacesWorkspaceIdPutRes() {}
 func (*ConflictError) acceptInvitationRes()              {}
@@ -517,6 +530,8 @@ func (s *ForbiddenError) SetCode(val OptString) {
 }
 
 func (*ForbiddenError) aPIV1MeProfilePutRes()             {}
+func (*ForbiddenError) aPIV1MeWorkspaceLeavePostRes()     {}
+func (*ForbiddenError) aPIV1MembersMemberIdDeleteRes()    {}
 func (*ForbiddenError) aPIV1MembersMemberIdRolePutRes()   {}
 func (*ForbiddenError) aPIV1WorkspacesWorkspaceIdPutRes() {}
 func (*ForbiddenError) resendInvitationRes()              {}
@@ -654,7 +669,9 @@ func (*InternalServerError) aPIV1MeMemberProfilePutRes()        {}
 func (*InternalServerError) aPIV1MeProfilePhotoDeleteRes()      {}
 func (*InternalServerError) aPIV1MeProfilePhotoPutRes()         {}
 func (*InternalServerError) aPIV1MeProfilePutRes()              {}
+func (*InternalServerError) aPIV1MeWorkspaceLeavePostRes()      {}
 func (*InternalServerError) aPIV1MembersGetRes()                {}
+func (*InternalServerError) aPIV1MembersMemberIdDeleteRes()     {}
 func (*InternalServerError) aPIV1MembersMemberIdRolePutRes()    {}
 func (*InternalServerError) aPIV1PingGetRes()                   {}
 func (*InternalServerError) aPIV1WorkspacesGetRes()             {}
@@ -1267,6 +1284,8 @@ func (s *NotFoundError) SetCode(val OptString) {
 	s.Code = val
 }
 
+func (*NotFoundError) aPIV1MeWorkspaceLeavePostRes()     {}
+func (*NotFoundError) aPIV1MembersMemberIdDeleteRes()    {}
 func (*NotFoundError) aPIV1MembersMemberIdRolePutRes()   {}
 func (*NotFoundError) aPIV1WorkspacesWorkspaceIdPutRes() {}
 func (*NotFoundError) resendInvitationRes()              {}
@@ -1752,7 +1771,9 @@ func (*UnauthorizedError) aPIV1MeMemberProfilePutRes()        {}
 func (*UnauthorizedError) aPIV1MeProfilePhotoDeleteRes()      {}
 func (*UnauthorizedError) aPIV1MeProfilePhotoPutRes()         {}
 func (*UnauthorizedError) aPIV1MeProfilePutRes()              {}
+func (*UnauthorizedError) aPIV1MeWorkspaceLeavePostRes()      {}
 func (*UnauthorizedError) aPIV1MembersGetRes()                {}
+func (*UnauthorizedError) aPIV1MembersMemberIdDeleteRes()     {}
 func (*UnauthorizedError) aPIV1MembersMemberIdRolePutRes()    {}
 func (*UnauthorizedError) aPIV1WorkspacesGetRes()             {}
 func (*UnauthorizedError) aPIV1WorkspacesPostRes()            {}

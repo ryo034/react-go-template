@@ -1,4 +1,4 @@
-import { AccountFullName, type InvitationId, MemberDisplayName, MemberIdNumber } from "~/domain"
+import { AccountFullName, type InvitationId, type Me, MemberDisplayName, MemberIdNumber } from "~/domain"
 import { MemberBio } from "~/domain/workspace/member/bio"
 import type { MeUseCase } from "~/usecase"
 
@@ -76,5 +76,14 @@ export class MeController {
       displayName,
       idNumber
     })
+  }
+
+  async leaveWorkspace(): Promise<null | Error> {
+    const err = await this.useCase.leaveWorkspace()
+    if (err) {
+      return err
+    }
+    await this.useCase.signOut()
+    return null
   }
 }

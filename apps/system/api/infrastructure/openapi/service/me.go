@@ -46,3 +46,7 @@ func (s *service) APIV1MeProfilePhotoPut(ctx context.Context, req *openapi.APIV1
 func (s *service) APIV1MeProfilePhotoDelete(ctx context.Context) (openapi.APIV1MeProfilePhotoDeleteRes, error) {
 	return s.ctrl.Me.RemoveProfilePhoto(ctx)
 }
+
+func (s *service) APIV1MeWorkspaceLeavePost(ctx context.Context) (openapi.APIV1MeWorkspaceLeavePostRes, error) {
+	return s.ctrl.Me.LeaveWorkspace(ctx)
+}

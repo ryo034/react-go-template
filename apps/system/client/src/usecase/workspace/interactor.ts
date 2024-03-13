@@ -2,6 +2,7 @@ import type { Invitation, MemberId, SelectableRole, WorkspaceRepository } from "
 import type {
   CreateWorkspaceInput,
   InviteMembersInput,
+  LeaveWorkspaceInput,
   MeUseCase,
   UpdateWorkspaceInput,
   WorkspaceUseCaseOutput
@@ -16,6 +17,7 @@ export interface WorkspaceUseCase {
   revokeInvitation(i: Invitation): Promise<Error | null>
   updateMemberRole(memberId: MemberId, role: SelectableRole): Promise<Error | null>
   updateWorkspace(i: UpdateWorkspaceInput): Promise<Error | null>
+  leaveWorkspace(i: LeaveWorkspaceInput): Promise<Error | null>
 }
 
 export class WorkspaceInteractor implements WorkspaceUseCase {
@@ -104,6 +106,14 @@ export class WorkspaceInteractor implements WorkspaceUseCase {
     const meErr = await this.meUseCase.refetch()
     if (meErr) {
       return meErr
+    }
+    return null
+  }
+
+  async leaveWorkspace(i: LeaveWorkspaceInput): Promise<Error | null> {
+    const res = await this.repository.leaveWorkspace(i.memberId)
+    if (res.isErr) {
+      return res.error
     }
     return null
   }

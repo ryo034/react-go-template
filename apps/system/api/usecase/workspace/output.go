@@ -16,4 +16,5 @@ type OutputPort interface {
 	FindAllInvitation(is invitation.Invitations) (openapi.APIV1InvitationsGetRes, error)
 	UpdateMemberRole(m *member.Member) (openapi.APIV1MembersMemberIdRolePutRes, error)
 	UpdateWorkspace(w *workspace.Workspace) (openapi.APIV1WorkspacesWorkspaceIdPutRes, error)
+	Leave() (openapi.APIV1MembersMemberIdDeleteRes, error)
 }

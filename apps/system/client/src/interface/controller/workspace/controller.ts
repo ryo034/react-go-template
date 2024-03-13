@@ -29,6 +29,10 @@ interface UpdateWorkspaceInput {
   subdomain: string
 }
 
+interface LeaveWorkspaceInput {
+  memberId: MemberId
+}
+
 export class WorkspaceController {
   constructor(private readonly useCase: WorkspaceUseCase) {}
 
@@ -86,5 +90,9 @@ export class WorkspaceController {
       return s.error
     }
     return await this.useCase.updateWorkspace({ workspaceId: i.workspaceId, name: n.value, subdomain: s.value })
+  }
+
+  async leaveWorkspace(i: LeaveWorkspaceInput): Promise<null | Error> {
+    return await this.useCase.leaveWorkspace(i)
   }
 }

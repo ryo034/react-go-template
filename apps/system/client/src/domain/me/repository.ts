@@ -9,4 +9,5 @@ export interface MeRepository {
   updatePhoto(file: File): PromiseResult<Me, Error>
   removePhoto(): PromiseResult<Me, Error>
   updateMemberProfile(profile: MemberProfile): PromiseResult<Me, Error>
+  leaveWorkspace(): PromiseResult<null, Error>
 }

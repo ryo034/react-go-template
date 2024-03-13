@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"errors"
 
+	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
+
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/media"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/me/provider"
@@ -64,7 +66,8 @@ func (g *gateway) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*me.Me
 
 func (g *gateway) FindLastLogin(ctx context.Context, exec bun.IDB, aID account.ID) (*me.Me, error) {
 	res, err := g.md.FindLastLogin(ctx, exec, aID)
-	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+	var noSuchData *domainErr.NoSuchData
+	if err != nil && !errors.As(err, &noSuchData) {
 		return nil, err
 	}
 	if res == nil {
@@ -89,6 +92,10 @@ func (g *gateway) SetCurrentProvider(ctx context.Context, p *provider.Provider) 
 
 func (g *gateway) SetMe(ctx context.Context, m *me.Me) error {
 	return g.fd.SetMeToCustomClaim(ctx, m)
+}
+
+func (g *gateway) ClearMe(ctx context.Context) error {
+	return g.fd.ClearCustomClaim(ctx)
 }
 
 func (g *gateway) FindBeforeOnboard(ctx context.Context, exec bun.IDB, aID account.ID) (*me.Me, error) {

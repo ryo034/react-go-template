@@ -2,6 +2,13 @@ package me
 
 import (
 	"context"
+	"database/sql"
+
+	workspaceDr "github.com/ryo034/react-go-template/apps/system/api/driver/workspace"
+
+	"github.com/go-faster/errors"
+
+	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/media"
 
@@ -31,10 +38,11 @@ type Driver interface {
 
 type driver struct {
 	invd invitationDr.Driver
+	wd   workspaceDr.Driver
 }
 
-func NewDriver(invd invitationDr.Driver) Driver {
-	return &driver{invd}
+func NewDriver(invd invitationDr.Driver, wd workspaceDr.Driver) Driver {
+	return &driver{invd, wd}
 }
 
 func (d *driver) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*models.Member, error) {
@@ -89,16 +97,25 @@ func (d *driver) LastLogin(ctx context.Context, exec bun.IDB, mID member.ID) err
 }
 
 func (d *driver) FindLastLogin(ctx context.Context, exec bun.IDB, aID account.ID) (*models.MemberLoginHistory, error) {
+	// get all joined member ids related to the account
+	joinedMemberIDs, err := d.wd.FindAllJoinedMembers(ctx, exec, aID)
+	if err != nil {
+		return nil, err
+	}
+
 	m := &models.MemberLoginHistory{}
-	err := exec.
+	err = exec.
 		NewSelect().
 		Model(m).
 		Relation("Member").
-		Where("ms.account_id = ?", aID.ToString()).
-		Order("login_at DESC").
+		Where("mllhs.member_id IN (?)", bun.In(joinedMemberIDs)).
+		Order("mllhs.login_at DESC").
 		Limit(1).
 		Scan(ctx)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, domainErr.NewNoSuchData("No login history")
+		}
 		return nil, err
 	}
 	return m, nil

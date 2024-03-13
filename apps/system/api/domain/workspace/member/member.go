@@ -86,3 +86,10 @@ func (w *Member) UpdateRole(role Role) (*Member, error) {
 	w.role = role
 	return w, nil
 }
+
+func (w *Member) ValidateCanLeave() error {
+	if w.MembershipStatus().IsLeft() {
+		return domainErr.NewForbidden("already left")
+	}
+	return nil
+}

@@ -28,6 +28,8 @@ paths:
     $ref: "./paths/me.yaml#/profilePhoto"
   /api/v1/me/member/profile:
     $ref: "./paths/me.yaml#/memberProfile"
+  /api/v1/me/workspace/leave:
+    $ref: "./paths/me.yaml#/leaveWorkspace"
   # Workspaces
   /api/v1/workspaces:
     $ref: "./paths/workspace.yaml#/workspaces"
@@ -35,6 +37,8 @@ paths:
     $ref: "./paths/workspace.yaml#/workspace"
   /api/v1/members:
     $ref: "./paths/member.yaml#/members"
+  /api/v1/members/{memberId}:
+    $ref: "./paths/member.yaml#/member"
   /api/v1/members/{memberId}/role:
     $ref: "./paths/member.yaml#/memberRole"
   /api/v1/invitations:

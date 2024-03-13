@@ -84,3 +84,7 @@ func (p *presenter) UpdateWorkspace(w *workspace.Workspace) (openapi.APIV1Worksp
 	res := p.wa.Adapt(w)
 	return &openapi.UpdateWorkspaceResponse{Workspace: res}, nil
 }
+
+func (p *presenter) Leave() (openapi.APIV1MembersMemberIdDeleteRes, error) {
+	return &openapi.APIV1MembersMemberIdDeleteNoContent{}, nil
+}

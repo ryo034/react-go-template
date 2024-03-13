@@ -72,3 +72,9 @@ func (s *service) APIV1WorkspacesWorkspaceIdPut(ctx context.Context, req *openap
 		Subdomain:   su,
 	})
 }
+
+func (s *service) APIV1MembersMemberIdDelete(ctx context.Context, params openapi.APIV1MembersMemberIdDeleteParams) (openapi.APIV1MembersMemberIdDeleteRes, error) {
+	return s.ctrl.Workspace.Leave(ctx, workspace.LeaveInput{
+		MemberID: params.MemberId,
+	})
+}

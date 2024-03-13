@@ -122,4 +122,15 @@ export class WorkspaceDriver {
       return Result.err(this.errorHandler.adapt(e))
     }
   }
+
+  async leaveWorkspace(memberId: MemberId): PromiseResult<null, Error> {
+    try {
+      const res = await this.client.DELETE("/api/v1/members/{memberId}", {
+        params: { path: { memberId: memberId.value.asString } }
+      })
+      return res.data ? Result.ok(null) : Result.err(this.errorHandler.adapt(res))
+    } catch (e) {
+      return Result.err(this.errorHandler.adapt(e))
+    }
+  }
 }

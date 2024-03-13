@@ -2,6 +2,76 @@
   "kind": "identitytoolkit#DownloadAccountResponse",
   "users": [
     {
+      "localId": "018e3642-86c6-77f0-82ea-e29a22f67431",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "LeaveWorkspace MeOwner",
+      "validSince": "1709725349",
+      "email": "me_owner_leave_workspace@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "018e3642-86c6-7c6c-8b1a-59fa0d0613e6",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "LeaveWorkspace MeAdmin",
+      "validSince": "1709725349",
+      "email": "me_admin_leave_workspace@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "018e3642-86c6-73c3-bec3-96f1a69a0278",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "LeaveWorkspace MeMember",
+      "validSince": "1709725349",
+      "email": "me_member_leave_workspace@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "018e3642-86c6-7f29-8eb6-89f301628694",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "LeaveWorkspace MeGuest",
+      "validSince": "1709725349",
+      "email": "me_guest_leave_workspace@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "018e3642-86c6-7438-a439-e6f457a16d97",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "LeaveWorkspace MemberAdmin",
+      "validSince": "1709725349",
+      "email": "make_member_leave_admin@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "018e3642-86c6-78c2-9b95-78933a989d36",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "LeaveWorkspace MemberMember",
+      "validSince": "1709725349",
+      "email": "make_member_leave_member@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "018e3642-86c6-7131-b6a1-9b376c228111",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "LeaveWorkspace MemberGuest",
+      "validSince": "1709725349",
+      "email": "make_member_leave_guest@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
       "localId": "018e18ba-dc87-705a-9ba9-2db0f8ead09f",
       "createdAt": "1706825570522",
       "lastLoginAt": "1706825570547",

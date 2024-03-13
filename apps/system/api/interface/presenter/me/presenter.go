@@ -61,3 +61,7 @@ func (p *presenter) RemoveProfilePhoto(m *me.Me) (openapi.APIV1MeProfilePhotoDel
 	}
 	return &openapi.RemoveProfilePhotoResponse{Me: am}, nil
 }
+
+func (p *presenter) LeaveWorkspace() (openapi.APIV1MeWorkspaceLeavePostRes, error) {
+	return &openapi.APIV1MeWorkspaceLeavePostNoContent{}, nil
+}

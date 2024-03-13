@@ -28,6 +28,7 @@ type Controller interface {
 	FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error)
 	UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput) (openapi.APIV1MembersMemberIdRolePutRes, error)
 	UpdateWorkspace(ctx context.Context, i UpdateWorkspaceInput) (openapi.APIV1WorkspacesWorkspaceIdPutRes, error)
+	Leave(ctx context.Context, i LeaveInput) (openapi.APIV1MembersMemberIdDeleteRes, error)
 }
 
 type controller struct {
@@ -75,6 +76,10 @@ type UpdateWorkspaceInput struct {
 	WorkspaceID uuid.UUID
 	Name        string
 	Subdomain   string
+}
+
+type LeaveInput struct {
+	MemberID uuid.UUID
 }
 
 func (c *controller) Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error) {
@@ -249,6 +254,22 @@ func (c *controller) UpdateWorkspace(ctx context.Context, i UpdateWorkspaceInput
 	res, err := c.wuc.UpdateWorkspace(ctx, in)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1WorkspacesWorkspaceIdPutRes), nil
+	}
+	return res, nil
+}
+
+func (c *controller) Leave(ctx context.Context, i LeaveInput) (openapi.APIV1MembersMemberIdDeleteRes, error) {
+	aID, err := c.co.GetUID(ctx)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MembersMemberIdDeleteRes), nil
+	}
+	in := workspaceUc.LeaveInput{
+		ExecutorID: aID,
+		MemberID:   member.NewIDFromUUID(i.MemberID),
+	}
+	res, err := c.wuc.Leave(ctx, in)
+	if err != nil {
+		return c.resl.Error(ctx, err).(openapi.APIV1MembersMemberIdDeleteRes), nil
 	}
 	return res, nil
 }

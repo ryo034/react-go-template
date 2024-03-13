@@ -1,13 +1,15 @@
 import type { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
-import { type AccountFullName, type InvitationId, type MemberProfile, User } from "~/domain"
+import { type AccountFullName, type InvitationId, type MemberProfile, User, type WorkspaceId } from "~/domain"
 import type { components } from "~/generated/schema/openapi/systemApi"
-import { type SystemAPIClient, openapiFetchClient } from "~/infrastructure/openapi/client"
+import { type SystemAPIClient } from "~/infrastructure/openapi/client"
 import type { PromiseResult } from "~/infrastructure/shared/result"
+import { FirebaseDriver } from "../firebase/driver"
 
 export class MeDriver {
   constructor(
     private readonly client: SystemAPIClient,
+    private readonly fbDriver: FirebaseDriver,
     private readonly errorHandler: ApiErrorHandler
   ) {}
 
@@ -83,6 +85,16 @@ export class MeDriver {
         }
       })
       return res.data ? Result.ok(res.data.me) : Result.err(this.errorHandler.adapt(res))
+    } catch (e) {
+      return Result.err(this.errorHandler.adapt(e))
+    }
+  }
+
+  async leaveWorkspace(): PromiseResult<null, Error> {
+    try {
+      const res = await this.client.POST("/api/v1/me/workspace/leave")
+      await this.fbDriver.refreshToken()
+      return res.data ? Result.ok(null) : Result.err(this.errorHandler.adapt(res))
     } catch (e) {
       return Result.err(this.errorHandler.adapt(e))
     }

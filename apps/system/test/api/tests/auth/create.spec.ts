@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test"
+import { expect } from "@playwright/test"
 import { defaultPostHeaders } from "../../config/config"
 import { genAPIClient, getOtpCodeFromRedis, systemTest } from "../../scripts"
 

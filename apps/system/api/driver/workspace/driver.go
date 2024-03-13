@@ -15,14 +15,17 @@ import (
 )
 
 type Driver interface {
+	FindAllJoinedWorkspaces(ctx context.Context, exec bun.IDB, aID account.ID) ([]uuid.UUID, error)
+	FindAllJoinedMembers(ctx context.Context, exec bun.IDB, aID account.ID) ([]uuid.UUID, error)
 	FindAll(ctx context.Context, exec bun.IDB, aID account.ID) (models.Workspaces, error)
 	Create(ctx context.Context, exec bun.IDB, w *workspace.Workspace) (*models.Workspace, error)
 	Update(ctx context.Context, exec bun.IDB, w *workspace.Workspace) error
 	AddMember(ctx context.Context, exec bun.IDB, w *workspace.Workspace, m *member.Member) (*models.Member, error)
 	UpdateMemberRole(ctx context.Context, exec bun.IDB, assignor *member.Member, m *member.Member) error
-	FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error)
+	FindMember(ctx context.Context, exec bun.IDB, memID member.ID) (*models.Member, error)
 	FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace.ID) (models.Members, error)
 	InviteMembers(ctx context.Context, exec bun.IDB, inviter workspace.Inviter, is invitation.Invitations) error
+	Leave(ctx context.Context, exec bun.IDB, executorID member.ID, mID member.ID) error
 }
 
 type driver struct {
@@ -32,17 +35,64 @@ func NewDriver() Driver {
 	return &driver{}
 }
 
+func (d *driver) FindAllJoinedWorkspaces(ctx context.Context, exec bun.IDB, aID account.ID) ([]uuid.UUID, error) {
+	var members []*models.Member
+	if err := exec.
+		NewSelect().
+		Model(&members).
+		Relation("MembershipEvent").
+		Relation("MembershipEvent.MembershipEvent").
+		Where("ms.account_id = ?", aID.ToString()).
+		Where("lmshi__mshi.event_type = ?", "join").
+		Scan(ctx); err != nil {
+		return nil, err
+	}
+	var joinedWorkspaceIDs []uuid.UUID
+	for _, m := range members {
+		if m.MembershipEvent != nil && m.MembershipEvent.MembershipEvent != nil {
+			joinedWorkspaceIDs = append(joinedWorkspaceIDs, m.WorkspaceID)
+		}
+	}
+	return joinedWorkspaceIDs, nil
+}
+
+func (d *driver) FindAllJoinedMembers(ctx context.Context, exec bun.IDB, aID account.ID) ([]uuid.UUID, error) {
+	var members []*models.Member
+	if err := exec.
+		NewSelect().
+		Model(&members).
+		Relation("MembershipEvent").
+		Relation("MembershipEvent.MembershipEvent").
+		Where("ms.account_id = ?", aID.ToString()).
+		Where("lmshi__mshi.event_type = ?", "join").
+		Scan(ctx); err != nil {
+		return nil, err
+	}
+	var joinedMemberIDs []uuid.UUID
+	for _, m := range members {
+		if m.MembershipEvent != nil && m.MembershipEvent.MembershipEvent != nil {
+			joinedMemberIDs = append(joinedMemberIDs, m.MemberID)
+		}
+	}
+	return joinedMemberIDs, nil
+}
+
 func (d *driver) FindAll(ctx context.Context, exec bun.IDB, aID account.ID) (models.Workspaces, error) {
+	joinedWorkspaceIDs, err := d.FindAllJoinedWorkspaces(ctx, exec, aID)
+	if err != nil {
+		return nil, err
+	}
+
 	var ws models.Workspaces
-	err := exec.
+	if err = exec.
 		NewSelect().
 		Model(&ws).
 		Relation("Detail").
 		Relation("Detail.WorkspaceDetail").
 		Join("JOIN members ms ON ms.workspace_id = ws.workspace_id").
 		Where("ms.account_id = ?", aID.ToString()).
-		Scan(ctx)
-	if err != nil {
+		Where("ms.workspace_id IN (?)", bun.In(joinedWorkspaceIDs)).
+		Scan(ctx); err != nil {
 		return nil, err
 	}
 	return ws, nil
@@ -230,7 +280,7 @@ func (d *driver) UpdateMemberRole(ctx context.Context, exec bun.IDB, assignor *m
 	return nil
 }
 
-func (d *driver) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID workspace.ID) (*models.Member, error) {
+func (d *driver) FindMember(ctx context.Context, exec bun.IDB, memID member.ID) (*models.Member, error) {
 	m := &models.Member{}
 	err := exec.
 		NewSelect().
@@ -253,8 +303,7 @@ func (d *driver) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, w
 		Relation("Account.PhotoEvent.AccountPhotoEvent").
 		Relation("Account.PhotoEvent.AccountPhotoEvent.Photo").
 		Relation("Workspace").
-		Where("ms.account_id = ?", aID.ToString()).
-		Where("ms.workspace_id = ?", wID.Value()).
+		Where("ms.member_id = ?", memID.Value()).
 		Scan(ctx)
 	if err != nil {
 		return nil, err
@@ -347,6 +396,28 @@ func (d *driver) InviteMembers(ctx context.Context, exec bun.IDB, inviter worksp
 		}
 	}
 	if _, err = exec.NewInsert().Model(&invts).Exec(ctx); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (d *driver) Leave(ctx context.Context, exec bun.IDB, executorID member.ID, mID member.ID) error {
+	if _, err := exec.NewDelete().Model(&models.LatestMembershipEvent{}).Where("member_id = ?", mID.Value()).Exec(ctx); err != nil {
+		return err
+	}
+	mshieID, _ := uuid.NewV7()
+	if _, err := exec.NewInsert().Model(&models.MembershipEvent{
+		MembershipEventID: mshieID,
+		MemberID:          mID.Value(),
+		EventType:         "leave",
+		CreatedBy:         executorID.Value(),
+	}).Exec(ctx); err != nil {
+		return err
+	}
+	if _, err := exec.NewInsert().Model(&models.LatestMembershipEvent{
+		MembershipEventID: mshieID,
+		MemberID:          mID.Value(),
+	}).Exec(ctx); err != nil {
 		return err
 	}
 	return nil
