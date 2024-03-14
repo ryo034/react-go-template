@@ -37,8 +37,8 @@ tags: stateful
 * "メールアドレスで始める"ボタンをクリック
 * メールアドレス"invite_test_already_joined_any_workspace@example.com"に送信されたワンタイムパスワードを取得
 * ワンタイムパスワード確認画面にワンタイムパスワードを入力する
-* 招待受諾画面でワークスペース"Example"招待者"John Doe"の参加ボタンをクリック
-* 選択中のワークスペース名が"Example"である
+* 招待受諾画面でワークスペース"InviteTest 1"招待者"Invite TestOne"の参加ボタンをクリック
+* 選択中のワークスペース名が"InviteTest 1"である
 * 所属中の表示名が"Invite TestTwo"である
 
 ## 認証済みユーザーが招待を受諾した場合、表示中のワークスペースが受諾したワークスペースに切り替わる
@@ -52,8 +52,8 @@ tags: stateful
 * メールアドレス"invite_test_already_joined_any_workspace@example.com"に送信されたワンタイムパスワードを取得
 * ワンタイムパスワード確認画面にワンタイムパスワードを入力する
 * 招待受諾画面で"invite_test_already_joined_any_workspace@example.com"としてログインしていることがわかる
-* 招待受諾画面でワークスペース"Example"招待者"John Doe"の参加ボタンをクリック
-* 選択中のワークスペース名が"Example"である
+* 招待受諾画面でワークスペース"InviteTest 1"招待者"Invite TestOne"の参加ボタンをクリック
+* 選択中のワークスペース名が"InviteTest 1"である
 
 ## 招待時に表示名が設定されている場合、その表示名でユーザーが登録される
 tags: stateful
@@ -61,8 +61,8 @@ tags: stateful
 * "メールアドレスで始める"ボタンをクリック
 * メールアドレス"invite_test_already_joined_any_workspace_with_display_name_when_invite@example.com"に送信されたワンタイムパスワードを取得
 * ワンタイムパスワード確認画面にワンタイムパスワードを入力する
-* 招待受諾画面でワークスペース"Example"招待者"Invite TestOne"の参加ボタンをクリック
-* 選択中のワークスペース名が"Example"である
+* 招待受諾画面でワークスペース"InviteTest 1"招待者"Invite TestOne"の参加ボタンをクリック
+* 選択中のワークスペース名が"InviteTest 1"である
 
 ## ユーザーは招待中にログアウトすることができる
 * トークン"018d9fb5-7e56-75ed-952f-ae8aa4fed8c6"の招待画面を開く
