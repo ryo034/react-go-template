@@ -73,9 +73,9 @@
             }
           },
           "workspace": {
-            "name": "Example",
-            "subdomain": "example",
-            "workspaceId": "c1bd2603-b9cd-4f84-8b83-3548f6ae150b"
+            "name": "InviteTest 1",
+            "subdomain": "invite-test-1",
+            "workspaceId": "018d96b9-c920-7434-b5c3-02e5e920ae9d"
           }
         }
       }

@@ -1,9 +1,11 @@
 workspace_detail_id,workspace_id,name,subdomain,created_at
 018e200b-9d01-70ed-8c5a-5a5df2a98f11,c1bd2603-b9cd-4f84-8b83-3548f6ae150b,Example,example,2024-01-10 12:00:00.000000 +00:00
+018e201b-67d4-75a2-b8ef-176c25cf9fe0,018e201b-67d4-7265-a022-1b29793b2a91,UpdateWorkspaceDetail Workspace,update-workspace-detail,2024-01-10 12:00:00.000000 +00:00
+018e200b-9d01-7220-88b5-1ed32c7b4808,018e18ba-dc87-7658-9591-672daaddb95b,UpdateRole Workspace,update-role,2024-01-10 12:00:00.000000 +00:00
+018e200b-9d01-7eb7-bcb6-faa2b2a24521,018ddee6-6446-7f9d-b750-469a7c2dfac5,UpdateMemberMeProfile Workspace,update-me-member-profile,2024-01-10 12:00:00.000000 +00:00
+018e200b-9d01-74b6-baa6-0b9e39000bfe,018e0e5f-9c4b-7062-aaa7-3db3fde10354,UpdateAccountPhoto Workspace,update-me-account-profile,2024-01-10 12:00:00.000000 +00:00
+018e39d3-54bf-7fd4-bf39-019e496c07c5,018e39d3-54bf-72b7-a89d-4952010c627b,LongBio Workspace,long-bio,2024-01-10 12:00:00.000000 +00:00
 018e200b-9d01-7a70-a8ee-5b7bd09d5cf1,018d91d5-2ed0-7211-b2e6-cf26182ac4f9,LoginLogoutRetry,login-logout-retry,2024-01-10 12:00:00.000000 +00:00
 018e200b-9d01-7efb-b0e7-51fb5333300e,018d96b9-c920-7434-b5c3-02e5e920ae9d,InviteTest 1,invite-test-1,2024-01-10 12:00:00.000000 +00:00
 018e200b-9d01-7f75-a427-59b82d6acc97,018d9b4d-e340-74f7-914c-2476eff949bb,InviteTest 2,invite-test-2,2024-01-10 12:00:00.000000 +00:00
-018e200b-9d01-7eb7-bcb6-faa2b2a24521,018ddee6-6446-7f9d-b750-469a7c2dfac5,UpdateMemberMeProfile Workspace,update-me-member-profile,2024-01-10 12:00:00.000000 +00:00
-018e200b-9d01-74b6-baa6-0b9e39000bfe,018e0e5f-9c4b-7062-aaa7-3db3fde10354,UpdateAccountPhoto Workspace,update-me-account-profile,2024-01-10 12:00:00.000000 +00:00
-018e200b-9d01-7220-88b5-1ed32c7b4808,018e18ba-dc87-7658-9591-672daaddb95b,UpdateRole Workspace,update-role,2024-01-10 12:00:00.000000 +00:00
-018e201b-67d4-75a2-b8ef-176c25cf9fe0,018e201b-67d4-7265-a022-1b29793b2a91,UpdateWorkspaceDetail Workspace,update-workspace-detail,2024-01-10 12:00:00.000000 +00:00
+018e3642-86c6-7776-978e-027dd444016a,018e3642-86c6-7e74-b874-9c2835b2ce50,Leave Workspace,leave-workspace,2024-01-10 12:00:00.000000 +00:00

@@ -32,7 +32,7 @@ VALUES
 
 INSERT INTO workspace_latest_details (workspace_detail_id, workspace_id)
 VALUES
-('018e39d3-54bf-7359-909b-64a40d681ecd', '018e39d3-54bf-72b7-a89d-4952010c627b');
+('018e39d3-54bf-7fd4-bf39-019e496c07c5', '018e39d3-54bf-72b7-a89d-4952010c627b');
 
 INSERT INTO members (member_id, account_id, workspace_id, created_at)
 VALUES

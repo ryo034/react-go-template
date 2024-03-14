@@ -92,7 +92,10 @@ services:
       - ./container/database/postgresql/sql/103_setup_update_account_photo.sql:/docker-entrypoint-initdb.d/103_setup_update_account_photo.sql:Z
       - ./container/database/postgresql/sql/104_setup_onboarding.sql:/docker-entrypoint-initdb.d/104_setup_onboarding.sql:Z
       - ./container/database/postgresql/sql/105_setup_google_auth_name.sql:/docker-entrypoint-initdb.d/105_setup_google_auth_name.sql:Z
-      - ./container/database/postgresql/sql/108_setup_leave_workspace.sql:/docker-entrypoint-initdb.d/108_setup_leave_workspace.sql:Z
+      - ./container/database/postgresql/sql/106_setup_long_bio.sql:/docker-entrypoint-initdb.d/106_setup_long_bio.sql:Z
+      - ./container/database/postgresql/sql/107_setup_login_logout_retry.sql:/docker-entrypoint-initdb.d/107_setup_login_logout_retry.sql:Z
+      - ./container/database/postgresql/sql/108_setup_invite.sql:/docker-entrypoint-initdb.d/108_setup_invite.sql:Z
+      - ./container/database/postgresql/sql/109_setup_leave_workspace.sql:/docker-entrypoint-initdb.d/109_setup_leave_workspace.sql:Z
 
     healthcheck:
       test: pg_isready -d main

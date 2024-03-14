@@ -40,7 +40,7 @@ VALUES
 
 INSERT INTO member_roles (member_role_id, member_id, assigned_by, role, assigned_at)
 VALUES
-('018df76b-3cbe-7e58-81cf-431eeef1bffe', '018d91d5-c061-78ba-9263-d6ef9e7e6783', '018d91d5-c061-78ba-9263-d6ef9e7e6783', 'owner', '2024-01-10 12:00:00'),
+('018df76b-3cbe-7e58-81cf-431eeef1bffe', '018d91d5-c061-78ba-9263-d6ef9e7e6783', '018d91d5-c061-78ba-9263-d6ef9e7e6783', 'owner', '2024-01-10 12:00:00');
 
 INSERT INTO member_latest_roles (member_role_id, member_id)
 VALUES

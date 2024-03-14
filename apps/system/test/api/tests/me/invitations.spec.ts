@@ -127,14 +127,15 @@ systemTest.describe("Me Invitations", () => {
       if (acceptInvitationRes.data === undefined) {
         throw new Error("acceptInvitationRes.data is undefined")
       }
+
       expect(
         acceptInvitationRes.data.me.joinedWorkspaces.find(
-          (w) => w.workspaceId === "c1bd2603-b9cd-4f84-8b83-3548f6ae150b"
+          (w) => w.workspaceId === "018d96b9-c920-7434-b5c3-02e5e920ae9d"
         )
       ).toEqual({
-        workspaceId: "c1bd2603-b9cd-4f84-8b83-3548f6ae150b",
-        name: "Example",
-        subdomain: "example"
+        workspaceId: "018d96b9-c920-7434-b5c3-02e5e920ae9d",
+        name: "InviteTest 1",
+        subdomain: "invite-test-1"
       })
       expect(
         acceptInvitationRes.data.me.joinedWorkspaces.find(
@@ -145,7 +146,7 @@ systemTest.describe("Me Invitations", () => {
         subdomain: "invite-test-2",
         workspaceId: "018d9b4d-e340-74f7-914c-2476eff949bb"
       })
-      expect(acceptInvitationRes.data.me.currentWorkspace?.workspaceId).toBe("c1bd2603-b9cd-4f84-8b83-3548f6ae150b")
+      expect(acceptInvitationRes.data.me.currentWorkspace?.workspaceId).toBe("018d96b9-c920-7434-b5c3-02e5e920ae9d")
       expect(acceptInvitationRes.data.me.receivedInvitations).toBeUndefined()
     }
   )
