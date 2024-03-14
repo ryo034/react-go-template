@@ -88,32 +88,32 @@ tags: stateful
 * Googleアカウント選択画面でメールアドレス"invite_test_no_name_google_auth_with_display_name_when_invite@example.com"を選択する
 * 入力欄"名前"に"NoNameGoogleAuth HasDisplayName"と入力する
 * "送信"ボタンをクリック
-* 招待受諾画面でワークスペース"Example"招待者"Invite TestOne"の参加ボタンをクリック
-* 選択中のワークスペース名が"Example"である
+* 招待受諾画面でワークスペース"InviteTest 1"招待者"Invite TestOne"の参加ボタンをクリック
+* 選択中のワークスペース名が"InviteTest 1"である
 * 所属中の表示名が"NoNameGoogleAuth HasDisplayName"である
 
 ## 招待を受けた未登録ユーザーは名前の設定されているgoogleアカウントで招待を受諾することができる
 * トークン"018df2fa-2dc2-79ea-8913-e45e39379c9c"の招待画面を開く
 * "Googleで始める"ボタンをクリック
 * Googleアカウント選択画面でメールアドレス"invite_test_has_name_google_auth_no_name_when_invite@example.com"を選択する
-* 招待受諾画面でワークスペース"Example"招待者"Invite TestOne"の参加ボタンをクリック
-* 選択中のワークスペース名が"Example"である
+* 招待受諾画面でワークスペース"InviteTest 1"招待者"Invite TestOne"の参加ボタンをクリック
+* 選択中のワークスペース名が"InviteTest 1"である
 * 所属中の表示名が"InviteGoogleAuthTest NoNameTest"である
 
 ## 招待を受けたユーザー（メールアドレスでアカウント作成済）はgoogleアカウントで招待を受諾することができる
 * トークン"018df53b-82a2-7324-9b26-f17496bfcdf8"の招待画面を開く
 * "Googleで始める"ボタンをクリック
 * Googleアカウント選択画面でメールアドレス"invite_test_already_joined_any_workspace_by_email@example.com"を選択する
-* 招待受諾画面でワークスペース"Example"招待者"Invite TestOne"の参加ボタンをクリック
-* 選択中のワークスペース名が"Example"である
+* 招待受諾画面でワークスペース"InviteTest 1"招待者"Invite TestOne"の参加ボタンをクリック
+* 選択中のワークスペース名が"InviteTest 1"である
 * 所属中の表示名が"InviteGoogleAuthTest AlreadyJoined"である
 
 ## 招待を受けたユーザー（googleアカウントでアカウント作成済）はgoogleアカウントで招待を受諾することができる
 * トークン"018df54f-e057-7818-8c72-80d6393e39e6"の招待画面を開く
 * "Googleで始める"ボタンをクリック
 * Googleアカウント選択画面でメールアドレス"invite_test_already_joined_any_workspace_by_google@example.com"を選択する
-* 招待受諾画面でワークスペース"Example"招待者"Invite TestOne"の参加ボタンをクリック
-* 選択中のワークスペース名が"Example"である
+* 招待受諾画面でワークスペース"InviteTest 1"招待者"Invite TestOne"の参加ボタンをクリック
+* 選択中のワークスペース名が"InviteTest 1"である
 * 所属中の表示名が"InviteGoogleAuthTest AlreadyJoinedGoogle"である
 
 ## 招待を受けたユーザー（プロフィール写真の設定されているgoogleアカウントでアカウント作成済）はメールアドレスで招待を受諾した場合、元のプロフィール画像が保持される
