@@ -69,7 +69,7 @@ func Test_useCase_AuthByOAuth_OK(t *testing.T) {
 				mockAuthRepo.EXPECT().Create(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(usr, nil)
 				mockMeRepo.EXPECT().UpdateName(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 				mockMeRepo.EXPECT().FindBeforeOnboard(gomock.Any(), gomock.Any(), gomock.Any()).Return(mockMe, nil)
-				mockOutputPort.EXPECT().AuthByAuth(gomock.Any())
+				mockOutputPort.EXPECT().AuthByOAuth(gomock.Any())
 			},
 			false,
 		},
@@ -81,7 +81,7 @@ func Test_useCase_AuthByOAuth_OK(t *testing.T) {
 
 				mockDbProvider.EXPECT().GetExecutor(gomock.Any(), gomock.Any()).Return(nil)
 				mockMeRepo.EXPECT().FindLastLogin(gomock.Any(), gomock.Any(), gomock.Any()).Return(mockLastLogin, nil)
-				mockOutputPort.EXPECT().AuthByAuth(gomock.Any())
+				mockOutputPort.EXPECT().AuthByOAuth(gomock.Any())
 			},
 			false,
 		},
@@ -103,7 +103,7 @@ func Test_useCase_AuthByOAuth_OK(t *testing.T) {
 				mockMeRepo.EXPECT().FindLastLogin(gomock.Any(), gomock.Any(), gomock.Any()).Return(mockLastLogin, nil)
 				mockMeRepo.EXPECT().SetMe(gomock.Any(), gomock.Any()).Return(nil)
 				mockMeRepo.EXPECT().RecordLogin(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
-				mockOutputPort.EXPECT().AuthByAuth(gomock.Any())
+				mockOutputPort.EXPECT().AuthByOAuth(gomock.Any())
 			},
 			false,
 		},
