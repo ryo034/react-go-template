@@ -36,7 +36,7 @@
     "pnpm": "8.15.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.6.0",
+    "@biomejs/biome": "1.6.1",
     "remark-cli": "^12.0.0",
     "turbo": "^1.12.5"
   }
