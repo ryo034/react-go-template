@@ -1,5 +1,5 @@
-import { Root } from "@radix-ui/react-checkbox"
-import { ComponentPropsWithoutRef, ElementRef, forwardRef } from "react"
+import type { Root } from "@radix-ui/react-checkbox"
+import { type ComponentPropsWithoutRef, type ElementRef, forwardRef } from "react"
 import { Checkbox } from "~/components/ui/checkbox"
 
 interface CheckboxWithLabelProps extends ComponentPropsWithoutRef<typeof Root> {

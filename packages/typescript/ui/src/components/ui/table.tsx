@@ -1,4 +1,4 @@
-import { HTMLAttributes, TdHTMLAttributes, ThHTMLAttributes, forwardRef } from "react"
+import { type HTMLAttributes, type TdHTMLAttributes, type ThHTMLAttributes, forwardRef } from "react"
 
 import { cn } from "~/infrastructure/tailwindcss"
 

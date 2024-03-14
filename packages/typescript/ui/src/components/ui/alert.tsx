@@ -1,5 +1,5 @@
 import { type VariantProps, cva } from "class-variance-authority"
-import { HTMLAttributes, ReactNode, forwardRef } from "react"
+import { type HTMLAttributes, type ReactNode, forwardRef } from "react"
 import { HiExclamationCircle, HiExclamationTriangle, HiInformationCircle } from "react-icons/hi2"
 import { cn } from "~/infrastructure/tailwindcss"
 

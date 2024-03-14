@@ -1,4 +1,4 @@
-import { HTMLAttributes, forwardRef } from "react"
+import { type HTMLAttributes, forwardRef } from "react"
 import { cn } from "~/infrastructure/tailwindcss"
 
 const Card = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (

@@ -1,6 +1,6 @@
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import { Check, ChevronRight, Circle } from "lucide-react"
-import { ComponentPropsWithoutRef, ElementRef, HTMLAttributes, forwardRef } from "react"
+import { type ComponentPropsWithoutRef, type ElementRef, type HTMLAttributes, forwardRef } from "react"
 
 import { cn } from "~/infrastructure/tailwindcss"
 

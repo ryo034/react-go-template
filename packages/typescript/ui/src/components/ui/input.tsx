@@ -1,5 +1,5 @@
-import { InputHTMLAttributes, forwardRef } from "react"
-import { UseFormRegisterReturn } from "react-hook-form"
+import { type InputHTMLAttributes, forwardRef } from "react"
+import type { UseFormRegisterReturn } from "react-hook-form"
 import { cn } from "~/infrastructure/tailwindcss"
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {

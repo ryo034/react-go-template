@@ -1,5 +1,5 @@
 import * as AvatarPrimitive from "@radix-ui/react-avatar"
-import { ComponentPropsWithoutRef, ElementRef, forwardRef } from "react"
+import { type ComponentPropsWithoutRef, type ElementRef, forwardRef } from "react"
 
 import { cn } from "~/infrastructure/tailwindcss"
 

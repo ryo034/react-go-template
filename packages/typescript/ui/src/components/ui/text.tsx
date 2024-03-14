@@ -1,6 +1,6 @@
 import { Slot } from "@radix-ui/react-slot"
 import { type VariantProps, cva } from "class-variance-authority"
-import { HTMLAttributes, forwardRef } from "react"
+import { type HTMLAttributes, forwardRef } from "react"
 import { cn } from "~/infrastructure/tailwindcss"
 
 export const textBaseClass = "text-sm font-light text-gray-500 dark:text-gray-400"

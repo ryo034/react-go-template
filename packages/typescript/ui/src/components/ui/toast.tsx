@@ -1,7 +1,7 @@
 import { Action, Close, Description, Provider, Root, Title, Viewport } from "@radix-ui/react-toast"
 import { type VariantProps, cva } from "class-variance-authority"
 import { X } from "lucide-react"
-import { ComponentPropsWithoutRef, ElementRef, ReactElement, forwardRef } from "react"
+import { type ComponentPropsWithoutRef, type ElementRef, type ReactElement, forwardRef } from "react"
 import { cn } from "~/infrastructure/tailwindcss"
 
 const ToastProvider = Provider

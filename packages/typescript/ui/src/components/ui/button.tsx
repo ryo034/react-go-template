@@ -1,7 +1,7 @@
 import { Slot } from "@radix-ui/react-slot"
 import { type VariantProps, cva } from "class-variance-authority"
 import { Loader2 } from "lucide-react"
-import { ButtonHTMLAttributes, forwardRef } from "react"
+import { type ButtonHTMLAttributes, forwardRef } from "react"
 import { cn } from "~/infrastructure/tailwindcss"
 
 export const buttonBaseClass =
