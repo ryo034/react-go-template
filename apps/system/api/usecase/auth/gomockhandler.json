@@ -1,8 +1,8 @@
 {
 	"mocks": {
 		"mock_output.go": {
-			"checksum": "2/jmOjhrxa/XjOb6m42q6g==",
-			"source_checksum": "yrJ+egQ6QvMGxH4L2vkY1Q==",
+			"checksum": "VTVD6rB9inSvgsbUJlenbA==",
+			"source_checksum": "cpFxG0GH9FM+ju2FPF5lNw==",
 			"mode": "SOURCE_MODE",
 			"source_mode_runner": {
 				"source": "output.go",

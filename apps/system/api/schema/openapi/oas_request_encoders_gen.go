@@ -15,8 +15,8 @@ import (
 	"github.com/ogen-go/ogen/uri"
 )
 
-func encodeAPIV1AuthOtpPostRequest(
-	req *APIV1AuthOtpPostReq,
+func encodeAPIV1AuthByOtpRequest(
+	req *APIV1AuthByOtpReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -29,8 +29,8 @@ func encodeAPIV1AuthOtpPostRequest(
 	return nil
 }
 
-func encodeAPIV1AuthOtpVerifyPostRequest(
-	req *APIV1AuthOtpVerifyPostReq,
+func encodeAPIV1CreateWorkspaceRequest(
+	req *APIV1CreateWorkspaceReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -43,8 +43,8 @@ func encodeAPIV1AuthOtpVerifyPostRequest(
 	return nil
 }
 
-func encodeAPIV1MeMemberProfilePutRequest(
-	req *APIV1MeMemberProfilePutReq,
+func encodeAPIV1InviteMultipleUsersRequest(
+	req *APIV1InviteMultipleUsersReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -57,8 +57,78 @@ func encodeAPIV1MeMemberProfilePutRequest(
 	return nil
 }
 
-func encodeAPIV1MeProfilePhotoPutRequest(
-	req *APIV1MeProfilePhotoPutReq,
+func encodeAPIV1ProcessInvitationEmailRequest(
+	req *APIV1ProcessInvitationEmailReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIV1ProcessInvitationOAuthRequest(
+	req *APIV1ProcessInvitationOAuthReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIV1UpdateMeMemberProfileRequest(
+	req *APIV1UpdateMeMemberProfileReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIV1UpdateMemberRoleRequest(
+	req *APIV1UpdateMemberRoleReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIV1UpdateProfileRequest(
+	req *APIV1UpdateProfileReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeAPIV1UpdateProfilePhotoRequest(
+	req *APIV1UpdateProfilePhotoReq,
 	r *http.Request,
 ) error {
 	const contentType = "multipart/form-data"
@@ -78,8 +148,8 @@ func encodeAPIV1MeProfilePhotoPutRequest(
 	return nil
 }
 
-func encodeAPIV1MeProfilePutRequest(
-	req *APIV1MeProfilePutReq,
+func encodeAPIV1UpdateWorkspaceRequest(
+	req *APIV1UpdateWorkspaceReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -92,78 +162,8 @@ func encodeAPIV1MeProfilePutRequest(
 	return nil
 }
 
-func encodeAPIV1MembersMemberIdRolePutRequest(
-	req *APIV1MembersMemberIdRolePutReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeAPIV1WorkspacesPostRequest(
-	req *APIV1WorkspacesPostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeAPIV1WorkspacesWorkspaceIdPutRequest(
-	req *APIV1WorkspacesWorkspaceIdPutReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeInviteMultipleUsersToWorkspaceRequest(
-	req *InviteMultipleUsersToWorkspaceReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeProcessInvitationEmailRequest(
-	req *ProcessInvitationEmailReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeProcessInvitationOAuthRequest(
-	req *ProcessInvitationOAuthReq,
+func encodeAPIV1VerifyOTPRequest(
+	req *APIV1VerifyOTPReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

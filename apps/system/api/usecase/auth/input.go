@@ -26,12 +26,12 @@ type VerifyOTPInput struct {
 	Otp   string
 }
 
-type ProcessInvitationEmailInput struct {
+type APIV1ProcessInvitationEmailInput struct {
 	Token invitation.Token
 	Email account.Email
 }
 
-type ProcessInvitationOAuthInput struct {
+type APIV1ProcessInvitationOAuthInput struct {
 	Token      invitation.Token
 	Email      account.Email
 	CreateInfo *CreateInfo

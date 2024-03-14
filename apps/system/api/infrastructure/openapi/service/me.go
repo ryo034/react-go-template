@@ -7,19 +7,19 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 )
 
-func (s *service) APIV1MeGet(ctx context.Context) (openapi.APIV1MeGetRes, error) {
+func (s *service) APIV1GetMe(ctx context.Context) (openapi.APIV1GetMeRes, error) {
 	return s.ctrl.Me.Find(ctx)
 }
 
-func (s *service) APIV1MeProfilePut(ctx context.Context, req *openapi.APIV1MeProfilePutReq) (openapi.APIV1MeProfilePutRes, error) {
+func (s *service) APIV1UpdateProfile(ctx context.Context, req *openapi.APIV1UpdateProfileReq) (openapi.APIV1UpdateProfileRes, error) {
 	return s.ctrl.Me.UpdateName(ctx, me.UpdateProfileInput{Name: req.Profile.Name.Value})
 }
 
-func (s *service) AcceptInvitation(ctx context.Context, params openapi.AcceptInvitationParams) (openapi.AcceptInvitationRes, error) {
+func (s *service) APIV1AcceptInvitation(ctx context.Context, params openapi.APIV1AcceptInvitationParams) (openapi.APIV1AcceptInvitationRes, error) {
 	return s.ctrl.Me.AcceptInvitation(ctx, me.AcceptInvitationInput{InvitationID: params.InvitationId})
 }
 
-func (s *service) APIV1MeMemberProfilePut(ctx context.Context, req *openapi.APIV1MeMemberProfilePutReq) (openapi.APIV1MeMemberProfilePutRes, error) {
+func (s *service) APIV1UpdateMeMemberProfile(ctx context.Context, req *openapi.APIV1UpdateMeMemberProfileReq) (openapi.APIV1UpdateMeMemberProfileRes, error) {
 	idNum := ""
 	if req.MemberProfile.IdNumber.Set {
 		idNum = req.MemberProfile.IdNumber.Value
@@ -35,7 +35,7 @@ func (s *service) APIV1MeMemberProfilePut(ctx context.Context, req *openapi.APIV
 	})
 }
 
-func (s *service) APIV1MeProfilePhotoPut(ctx context.Context, req *openapi.APIV1MeProfilePhotoPutReq) (openapi.APIV1MeProfilePhotoPutRes, error) {
+func (s *service) APIV1UpdateProfilePhoto(ctx context.Context, req *openapi.APIV1UpdateProfilePhotoReq) (openapi.APIV1UpdateProfilePhotoRes, error) {
 	return s.ctrl.Me.UpdateProfilePhoto(ctx, me.UpdateProfilePhotoInput{
 		File:   req.GetPhoto().File,
 		Name:   req.GetPhoto().Name,
@@ -43,10 +43,10 @@ func (s *service) APIV1MeProfilePhotoPut(ctx context.Context, req *openapi.APIV1
 	})
 }
 
-func (s *service) APIV1MeProfilePhotoDelete(ctx context.Context) (openapi.APIV1MeProfilePhotoDeleteRes, error) {
+func (s *service) APIV1RemoveProfilePhoto(ctx context.Context) (openapi.APIV1RemoveProfilePhotoRes, error) {
 	return s.ctrl.Me.RemoveProfilePhoto(ctx)
 }
 
-func (s *service) APIV1MeWorkspaceLeavePost(ctx context.Context) (openapi.APIV1MeWorkspaceLeavePostRes, error) {
+func (s *service) APIV1LeaveWorkspace(ctx context.Context) (openapi.APIV1LeaveWorkspaceRes, error) {
 	return s.ctrl.Me.LeaveWorkspace(ctx)
 }

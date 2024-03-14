@@ -7,32 +7,32 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 )
 
-func (s *service) APIV1AuthOtpPost(ctx context.Context, req *openapi.APIV1AuthOtpPostReq) (openapi.APIV1AuthOtpPostRes, error) {
+func (s *service) APIV1AuthByOtp(ctx context.Context, req *openapi.APIV1AuthByOtpReq) (openapi.APIV1AuthByOtpRes, error) {
 	return s.ctrl.Auth.AuthByOTP(ctx, req)
 }
 
-func (s *service) APIV1AuthOtpVerifyPost(ctx context.Context, req *openapi.APIV1AuthOtpVerifyPostReq) (openapi.APIV1AuthOtpVerifyPostRes, error) {
+func (s *service) APIV1VerifyOTP(ctx context.Context, req *openapi.APIV1VerifyOTPReq) (openapi.APIV1VerifyOTPRes, error) {
 	return s.ctrl.Auth.VerifyOTP(ctx, req)
 }
 
-func (s *service) APIV1AuthOAuthPost(ctx context.Context) (openapi.APIV1AuthOAuthPostRes, error) {
+func (s *service) APIV1AuthByOAuth(ctx context.Context) (openapi.APIV1AuthByOAuthRes, error) {
 	return s.ctrl.Auth.AuthByOAuth(ctx)
 }
 
-func (s *service) ProcessInvitationEmail(ctx context.Context, req *openapi.ProcessInvitationEmailReq) (openapi.ProcessInvitationEmailRes, error) {
-	return s.ctrl.Auth.ProcessInvitationEmail(ctx, auth.ProcessInvitationInput{
+func (s *service) APIV1ProcessInvitationEmail(ctx context.Context, req *openapi.APIV1ProcessInvitationEmailReq) (openapi.APIV1ProcessInvitationEmailRes, error) {
+	return s.ctrl.Auth.APIV1ProcessInvitationEmail(ctx, auth.ProcessInvitationInput{
 		Token: req.Token,
 		Email: req.Email,
 	})
 }
 
-func (s *service) ProcessInvitationOAuth(ctx context.Context, req *openapi.ProcessInvitationOAuthReq) (openapi.ProcessInvitationOAuthRes, error) {
-	return s.ctrl.Auth.ProcessInvitationOAuth(ctx, auth.ProcessInvitationOAuth{
+func (s *service) APIV1ProcessInvitationOAuth(ctx context.Context, req *openapi.APIV1ProcessInvitationOAuthReq) (openapi.APIV1ProcessInvitationOAuthRes, error) {
+	return s.ctrl.Auth.APIV1ProcessInvitationOAuth(ctx, auth.APIV1ProcessInvitationOAuth{
 		Token: req.Token,
 	})
 }
 
-func (s *service) GetInvitationByToken(ctx context.Context, params openapi.GetInvitationByTokenParams) (openapi.GetInvitationByTokenRes, error) {
+func (s *service) APIV1GetInvitationByToken(ctx context.Context, params openapi.APIV1GetInvitationByTokenParams) (openapi.APIV1GetInvitationByTokenRes, error) {
 	return s.ctrl.Auth.InvitationByToken(ctx, auth.InvitationByTokenInput{
 		Token: params.Token,
 	})

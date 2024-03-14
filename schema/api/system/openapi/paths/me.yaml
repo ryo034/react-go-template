@@ -1,9 +1,10 @@
 me:
   get:
     summary: Get Admin User
+    operationId: APIV1GetMe
     description: Returns the admin user
     tags:
-      - Admin
+      - Me
     security:
       - bearer: []
     responses:
@@ -17,9 +18,9 @@ me:
 invitationsAccept:
   post:
     summary: Accept an invitation to join a workspace
-    operationId: acceptInvitation
+    operationId: APIV1AcceptInvitation
     tags:
-      - Members
+      - Me
     security:
       - bearer: []
     parameters:
@@ -45,9 +46,10 @@ invitationsAccept:
 profile:
   put:
     summary: Update Profile
+    operationId: APIV1UpdateProfile
     description: Updates the user profile
     tags:
-      - Profile
+      - Me
     security:
       - bearer: []
     requestBody:
@@ -67,9 +69,10 @@ profile:
 profilePhoto:
   put:
     summary: Update Profile Photo
+    operationId: APIV1UpdateProfilePhoto
     description: Updates the user profile photo
     tags:
-      - Profile
+      - Me
     security:
       - bearer: []
     requestBody:
@@ -86,9 +89,10 @@ profilePhoto:
 
   delete:
     summary: Delete Profile Photo
+    operationId: APIV1RemoveProfilePhoto
     description: Deletes the user profile photo
     tags:
-      - Profile
+      - Me
     security:
       - bearer: []
     responses:
@@ -102,9 +106,10 @@ profilePhoto:
 memberProfile:
   put:
     summary: Update Me Member Profile
+    operationId: APIV1UpdateMeMemberProfile
     description: Updates Me the member profile
     tags:
-      - Profile
+      - Me
     security:
       - bearer: []
     requestBody:
@@ -122,9 +127,10 @@ memberProfile:
 leaveWorkspace:
   post:
     summary: Leave Workspace
+    operationId: APIV1LeaveWorkspace
     description: Leaves the workspace
     tags:
-      - Workspaces
+      - Me
     security:
       - bearer: []
     responses:

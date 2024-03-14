@@ -84,7 +84,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					if len(elem) == 0 {
 						switch r.Method {
 						case "GET":
-							s.handleGetInvitationByTokenRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleAPIV1GetInvitationByTokenRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "GET")
 						}
@@ -116,7 +116,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								// Leaf node.
 								switch r.Method {
 								case "POST":
-									s.handleProcessInvitationEmailRequest([0]string{}, elemIsEscaped, w, r)
+									s.handleAPIV1ProcessInvitationEmailRequest([0]string{}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "POST")
 								}
@@ -137,7 +137,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								// Leaf node.
 								switch r.Method {
 								case "POST":
-									s.handleProcessInvitationOAuthRequest([0]string{}, elemIsEscaped, w, r)
+									s.handleAPIV1ProcessInvitationOAuthRequest([0]string{}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "POST")
 								}
@@ -176,7 +176,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							// Leaf node.
 							switch r.Method {
 							case "POST":
-								s.handleAPIV1AuthOAuthPostRequest([0]string{}, elemIsEscaped, w, r)
+								s.handleAPIV1AuthByOAuthRequest([0]string{}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, "POST")
 							}
@@ -196,7 +196,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						if len(elem) == 0 {
 							switch r.Method {
 							case "POST":
-								s.handleAPIV1AuthOtpPostRequest([0]string{}, elemIsEscaped, w, r)
+								s.handleAPIV1AuthByOtpRequest([0]string{}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, "POST")
 							}
@@ -216,7 +216,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								// Leaf node.
 								switch r.Method {
 								case "POST":
-									s.handleAPIV1AuthOtpVerifyPostRequest([0]string{}, elemIsEscaped, w, r)
+									s.handleAPIV1VerifyOTPRequest([0]string{}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "POST")
 								}
@@ -246,7 +246,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					// Leaf node.
 					switch r.Method {
 					case "GET":
-						s.handleAPIV1InvitationsGetRequest([0]string{}, elemIsEscaped, w, r)
+						s.handleAPIV1GetInvitationsRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET")
 					}
@@ -266,7 +266,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				if len(elem) == 0 {
 					switch r.Method {
 					case "GET":
-						s.handleAPIV1MeGetRequest([0]string{}, elemIsEscaped, w, r)
+						s.handleAPIV1GetMeRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET")
 					}
@@ -298,7 +298,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							// Leaf node.
 							switch r.Method {
 							case "PUT":
-								s.handleAPIV1MeMemberProfilePutRequest([0]string{}, elemIsEscaped, w, r)
+								s.handleAPIV1UpdateMeMemberProfileRequest([0]string{}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, "PUT")
 							}
@@ -318,7 +318,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						if len(elem) == 0 {
 							switch r.Method {
 							case "PUT":
-								s.handleAPIV1MeProfilePutRequest([0]string{}, elemIsEscaped, w, r)
+								s.handleAPIV1UpdateProfileRequest([0]string{}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, "PUT")
 							}
@@ -338,9 +338,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								// Leaf node.
 								switch r.Method {
 								case "DELETE":
-									s.handleAPIV1MeProfilePhotoDeleteRequest([0]string{}, elemIsEscaped, w, r)
+									s.handleAPIV1RemoveProfilePhotoRequest([0]string{}, elemIsEscaped, w, r)
 								case "PUT":
-									s.handleAPIV1MeProfilePhotoPutRequest([0]string{}, elemIsEscaped, w, r)
+									s.handleAPIV1UpdateProfilePhotoRequest([0]string{}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "DELETE,PUT")
 								}
@@ -364,7 +364,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							// Leaf node.
 							switch r.Method {
 							case "POST":
-								s.handleAPIV1MeWorkspaceLeavePostRequest([0]string{}, elemIsEscaped, w, r)
+								s.handleAPIV1LeaveWorkspaceRequest([0]string{}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, "POST")
 							}
@@ -387,7 +387,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					if len(elem) == 0 {
 						switch r.Method {
 						case "GET":
-							s.handleAPIV1MembersGetRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleAPIV1GetMembersRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "GET")
 						}
@@ -431,7 +431,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 									// Leaf node.
 									switch r.Method {
 									case "POST":
-										s.handleInviteMultipleUsersToWorkspaceRequest([0]string{}, elemIsEscaped, w, r)
+										s.handleAPIV1InviteMultipleUsersRequest([0]string{}, elemIsEscaped, w, r)
 									default:
 										s.notAllowed(w, r, "POST")
 									}
@@ -478,7 +478,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 										// Leaf node.
 										switch r.Method {
 										case "POST":
-											s.handleAcceptInvitationRequest([1]string{
+											s.handleAPIV1AcceptInvitationRequest([1]string{
 												args[0],
 											}, elemIsEscaped, w, r)
 										default:
@@ -513,7 +513,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 											// Leaf node.
 											switch r.Method {
 											case "POST":
-												s.handleResendInvitationRequest([1]string{
+												s.handleAPIV1ResendInvitationRequest([1]string{
 													args[0],
 												}, elemIsEscaped, w, r)
 											default:
@@ -536,7 +536,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 											// Leaf node.
 											switch r.Method {
 											case "POST":
-												s.handleRevokeInvitationRequest([1]string{
+												s.handleAPIV1RevokeInvitationRequest([1]string{
 													args[0],
 												}, elemIsEscaped, w, r)
 											default:
@@ -569,7 +569,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						if len(elem) == 0 {
 							switch r.Method {
 							case "DELETE":
-								s.handleAPIV1MembersMemberIdDeleteRequest([1]string{
+								s.handleAPIV1RemoveMemberRequest([1]string{
 									args[0],
 								}, elemIsEscaped, w, r)
 							default:
@@ -591,7 +591,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								// Leaf node.
 								switch r.Method {
 								case "PUT":
-									s.handleAPIV1MembersMemberIdRolePutRequest([1]string{
+									s.handleAPIV1UpdateMemberRoleRequest([1]string{
 										args[0],
 									}, elemIsEscaped, w, r)
 								default:
@@ -623,7 +623,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					// Leaf node.
 					switch r.Method {
 					case "GET":
-						s.handleAPIV1PingGetRequest([0]string{}, elemIsEscaped, w, r)
+						s.handlePingRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET")
 					}
@@ -643,9 +643,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				if len(elem) == 0 {
 					switch r.Method {
 					case "GET":
-						s.handleAPIV1WorkspacesGetRequest([0]string{}, elemIsEscaped, w, r)
+						s.handleAPIV1GetWorkspacesRequest([0]string{}, elemIsEscaped, w, r)
 					case "POST":
-						s.handleAPIV1WorkspacesPostRequest([0]string{}, elemIsEscaped, w, r)
+						s.handleAPIV1CreateWorkspaceRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET,POST")
 					}
@@ -670,7 +670,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						// Leaf node.
 						switch r.Method {
 						case "PUT":
-							s.handleAPIV1WorkspacesWorkspaceIdPutRequest([1]string{
+							s.handleAPIV1UpdateWorkspaceRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
 						default:
@@ -802,9 +802,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "GET":
-							r.name = "GetInvitationByToken"
+							r.name = "APIV1GetInvitationByToken"
 							r.summary = "Get Invitation by token"
-							r.operationID = "getInvitationByToken"
+							r.operationID = "APIV1GetInvitationByToken"
 							r.pathPattern = "/api/v1/auth/invitations"
 							r.args = args
 							r.count = 0
@@ -837,10 +837,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							if len(elem) == 0 {
 								switch method {
 								case "POST":
-									// Leaf: ProcessInvitationEmail
-									r.name = "ProcessInvitationEmail"
+									// Leaf: APIV1ProcessInvitationEmail
+									r.name = "APIV1ProcessInvitationEmail"
 									r.summary = "Process an invitation by verifying token and email"
-									r.operationID = "processInvitationEmail"
+									r.operationID = "APIV1ProcessInvitationEmail"
 									r.pathPattern = "/api/v1/auth/invitations/process/email"
 									r.args = args
 									r.count = 0
@@ -862,10 +862,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							if len(elem) == 0 {
 								switch method {
 								case "POST":
-									// Leaf: ProcessInvitationOAuth
-									r.name = "ProcessInvitationOAuth"
+									// Leaf: APIV1ProcessInvitationOAuth
+									r.name = "APIV1ProcessInvitationOAuth"
 									r.summary = "Process an invitation by verifying token and OAuth, and register or add user to workspace."
-									r.operationID = "processInvitationOAuth"
+									r.operationID = "APIV1ProcessInvitationOAuth"
 									r.pathPattern = "/api/v1/auth/invitations/process/oauth"
 									r.args = args
 									r.count = 0
@@ -905,10 +905,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						if len(elem) == 0 {
 							switch method {
 							case "POST":
-								// Leaf: APIV1AuthOAuthPost
-								r.name = "APIV1AuthOAuthPost"
+								// Leaf: APIV1AuthByOAuth
+								r.name = "APIV1AuthByOAuth"
 								r.summary = "Auth by OAuth"
-								r.operationID = ""
+								r.operationID = "APIV1AuthByOAuth"
 								r.pathPattern = "/api/v1/auth/oauth"
 								r.args = args
 								r.count = 0
@@ -930,9 +930,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						if len(elem) == 0 {
 							switch method {
 							case "POST":
-								r.name = "APIV1AuthOtpPost"
+								r.name = "APIV1AuthByOtp"
 								r.summary = "Send OTP"
-								r.operationID = ""
+								r.operationID = "APIV1AuthByOtp"
 								r.pathPattern = "/api/v1/auth/otp"
 								r.args = args
 								r.count = 0
@@ -953,10 +953,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							if len(elem) == 0 {
 								switch method {
 								case "POST":
-									// Leaf: APIV1AuthOtpVerifyPost
-									r.name = "APIV1AuthOtpVerifyPost"
+									// Leaf: APIV1VerifyOTP
+									r.name = "APIV1VerifyOTP"
 									r.summary = "Verify OTP"
-									r.operationID = ""
+									r.operationID = "APIV1VerifyOTP"
 									r.pathPattern = "/api/v1/auth/otp/verify"
 									r.args = args
 									r.count = 0
@@ -987,10 +987,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						// Leaf: APIV1InvitationsGet
-						r.name = "APIV1InvitationsGet"
+						// Leaf: APIV1GetInvitations
+						r.name = "APIV1GetInvitations"
 						r.summary = "Get pending invitations"
-						r.operationID = ""
+						r.operationID = "APIV1GetInvitations"
 						r.pathPattern = "/api/v1/invitations"
 						r.args = args
 						r.count = 0
@@ -1012,9 +1012,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						r.name = "APIV1MeGet"
+						r.name = "APIV1GetMe"
 						r.summary = "Get Admin User"
-						r.operationID = ""
+						r.operationID = "APIV1GetMe"
 						r.pathPattern = "/api/v1/me"
 						r.args = args
 						r.count = 0
@@ -1047,10 +1047,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						if len(elem) == 0 {
 							switch method {
 							case "PUT":
-								// Leaf: APIV1MeMemberProfilePut
-								r.name = "APIV1MeMemberProfilePut"
+								// Leaf: APIV1UpdateMeMemberProfile
+								r.name = "APIV1UpdateMeMemberProfile"
 								r.summary = "Update Me Member Profile"
-								r.operationID = ""
+								r.operationID = "APIV1UpdateMeMemberProfile"
 								r.pathPattern = "/api/v1/me/member/profile"
 								r.args = args
 								r.count = 0
@@ -1072,9 +1072,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						if len(elem) == 0 {
 							switch method {
 							case "PUT":
-								r.name = "APIV1MeProfilePut"
+								r.name = "APIV1UpdateProfile"
 								r.summary = "Update Profile"
-								r.operationID = ""
+								r.operationID = "APIV1UpdateProfile"
 								r.pathPattern = "/api/v1/me/profile"
 								r.args = args
 								r.count = 0
@@ -1095,19 +1095,19 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							if len(elem) == 0 {
 								switch method {
 								case "DELETE":
-									// Leaf: APIV1MeProfilePhotoDelete
-									r.name = "APIV1MeProfilePhotoDelete"
+									// Leaf: APIV1RemoveProfilePhoto
+									r.name = "APIV1RemoveProfilePhoto"
 									r.summary = "Delete Profile Photo"
-									r.operationID = ""
+									r.operationID = "APIV1RemoveProfilePhoto"
 									r.pathPattern = "/api/v1/me/profile/photo"
 									r.args = args
 									r.count = 0
 									return r, true
 								case "PUT":
-									// Leaf: APIV1MeProfilePhotoPut
-									r.name = "APIV1MeProfilePhotoPut"
+									// Leaf: APIV1UpdateProfilePhoto
+									r.name = "APIV1UpdateProfilePhoto"
 									r.summary = "Update Profile Photo"
-									r.operationID = ""
+									r.operationID = "APIV1UpdateProfilePhoto"
 									r.pathPattern = "/api/v1/me/profile/photo"
 									r.args = args
 									r.count = 0
@@ -1132,10 +1132,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						if len(elem) == 0 {
 							switch method {
 							case "POST":
-								// Leaf: APIV1MeWorkspaceLeavePost
-								r.name = "APIV1MeWorkspaceLeavePost"
+								// Leaf: APIV1LeaveWorkspace
+								r.name = "APIV1LeaveWorkspace"
 								r.summary = "Leave Workspace"
-								r.operationID = ""
+								r.operationID = "APIV1LeaveWorkspace"
 								r.pathPattern = "/api/v1/me/workspace/leave"
 								r.args = args
 								r.count = 0
@@ -1160,9 +1160,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "GET":
-							r.name = "APIV1MembersGet"
+							r.name = "APIV1GetMembers"
 							r.summary = "Get Members"
-							r.operationID = ""
+							r.operationID = "APIV1GetMembers"
 							r.pathPattern = "/api/v1/members"
 							r.args = args
 							r.count = 0
@@ -1207,10 +1207,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								if len(elem) == 0 {
 									switch method {
 									case "POST":
-										// Leaf: InviteMultipleUsersToWorkspace
-										r.name = "InviteMultipleUsersToWorkspace"
+										// Leaf: APIV1InviteMultipleUsers
+										r.name = "APIV1InviteMultipleUsers"
 										r.summary = "Invite multiple users to the workspace by email"
-										r.operationID = "inviteMultipleUsersToWorkspace"
+										r.operationID = "APIV1InviteMultipleUsers"
 										r.pathPattern = "/api/v1/members/invitations/bulk"
 										r.args = args
 										r.count = 0
@@ -1258,10 +1258,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									if len(elem) == 0 {
 										switch method {
 										case "POST":
-											// Leaf: AcceptInvitation
-											r.name = "AcceptInvitation"
+											// Leaf: APIV1AcceptInvitation
+											r.name = "APIV1AcceptInvitation"
 											r.summary = "Accept an invitation to join a workspace"
-											r.operationID = "acceptInvitation"
+											r.operationID = "APIV1AcceptInvitation"
 											r.pathPattern = "/api/v1/members/invitations/{invitationId}/accept"
 											r.args = args
 											r.count = 1
@@ -1295,10 +1295,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										if len(elem) == 0 {
 											switch method {
 											case "POST":
-												// Leaf: ResendInvitation
-												r.name = "ResendInvitation"
+												// Leaf: APIV1ResendInvitation
+												r.name = "APIV1ResendInvitation"
 												r.summary = "Resend invitation"
-												r.operationID = "resendInvitation"
+												r.operationID = "APIV1ResendInvitation"
 												r.pathPattern = "/api/v1/members/invitations/{invitationId}/resend"
 												r.args = args
 												r.count = 1
@@ -1320,10 +1320,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										if len(elem) == 0 {
 											switch method {
 											case "POST":
-												// Leaf: RevokeInvitation
-												r.name = "RevokeInvitation"
+												// Leaf: APIV1RevokeInvitation
+												r.name = "APIV1RevokeInvitation"
 												r.summary = "Revoke invitation"
-												r.operationID = "revokeInvitation"
+												r.operationID = "APIV1RevokeInvitation"
 												r.pathPattern = "/api/v1/members/invitations/{invitationId}/revoke"
 												r.args = args
 												r.count = 1
@@ -1356,9 +1356,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						if len(elem) == 0 {
 							switch method {
 							case "DELETE":
-								r.name = "APIV1MembersMemberIdDelete"
+								r.name = "APIV1RemoveMember"
 								r.summary = "Remove Member"
-								r.operationID = ""
+								r.operationID = "APIV1RemoveMember"
 								r.pathPattern = "/api/v1/members/{memberId}"
 								r.args = args
 								r.count = 1
@@ -1379,10 +1379,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							if len(elem) == 0 {
 								switch method {
 								case "PUT":
-									// Leaf: APIV1MembersMemberIdRolePut
-									r.name = "APIV1MembersMemberIdRolePut"
+									// Leaf: APIV1UpdateMemberRole
+									r.name = "APIV1UpdateMemberRole"
 									r.summary = "Update Member Role"
-									r.operationID = ""
+									r.operationID = "APIV1UpdateMemberRole"
 									r.pathPattern = "/api/v1/members/{memberId}/role"
 									r.args = args
 									r.count = 1
@@ -1413,10 +1413,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						// Leaf: APIV1PingGet
-						r.name = "APIV1PingGet"
+						// Leaf: Ping
+						r.name = "Ping"
 						r.summary = "Checks if the server is running"
-						r.operationID = ""
+						r.operationID = "Ping"
 						r.pathPattern = "/api/v1/ping"
 						r.args = args
 						r.count = 0
@@ -1438,17 +1438,17 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						r.name = "APIV1WorkspacesGet"
+						r.name = "APIV1GetWorkspaces"
 						r.summary = "Get Joined Workspaces"
-						r.operationID = ""
+						r.operationID = "APIV1GetWorkspaces"
 						r.pathPattern = "/api/v1/workspaces"
 						r.args = args
 						r.count = 0
 						return r, true
 					case "POST":
-						r.name = "APIV1WorkspacesPost"
+						r.name = "APIV1CreateWorkspace"
 						r.summary = "Create Workspace"
-						r.operationID = ""
+						r.operationID = "APIV1CreateWorkspace"
 						r.pathPattern = "/api/v1/workspaces"
 						r.args = args
 						r.count = 0
@@ -1474,10 +1474,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "PUT":
-							// Leaf: APIV1WorkspacesWorkspaceIdPut
-							r.name = "APIV1WorkspacesWorkspaceIdPut"
+							// Leaf: APIV1UpdateWorkspace
+							r.name = "APIV1UpdateWorkspace"
 							r.summary = "Update Workspace"
-							r.operationID = ""
+							r.operationID = "APIV1UpdateWorkspace"
 							r.pathPattern = "/api/v1/workspaces/{workspaceId}"
 							r.args = args
 							r.count = 1

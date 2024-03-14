@@ -1,6 +1,7 @@
 members:
   get:
     summary: Get Members
+    operationId: APIV1GetMembers
     description: Returns the members of the workspace
     tags:
       - Member
@@ -17,6 +18,7 @@ members:
 member:
   delete:
     summary: Remove Member
+    operationId: APIV1RemoveMember
     description: Removes a member from the workspace
     tags:
       - Member
@@ -49,6 +51,7 @@ member:
 memberRole:
   put:
     summary: Update Member Role
+    operationId: APIV1UpdateMemberRole
     description: Updates the role of a member
     tags:
       - Member
@@ -81,9 +84,10 @@ memberRole:
 invitations:
   get:
     summary: Get pending invitations
+    operationId: APIV1GetInvitations
     description: Returns the pending invitations (not used yet)
     tags:
-      - Invitations
+      - Invitation
     security:
       - bearer: []
     parameters:
@@ -105,9 +109,9 @@ invitations:
 invitationsBulk:
   post:
     summary: Invite multiple users to the workspace by email
-    operationId: inviteMultipleUsersToWorkspace
+    operationId: APIV1InviteMultipleUsers
     tags:
-      - Invitations
+      - Invitation
     security:
       - bearer: []
     requestBody:
@@ -125,9 +129,9 @@ invitationsBulk:
 invitationsRevoke:
   post:
     summary: Revoke invitation
-    operationId: revokeInvitation
+    operationId: APIV1RevokeInvitation
     tags:
-      - Invitations
+      - Invitation
     security:
       - bearer: []
     parameters:
@@ -152,12 +156,12 @@ invitationsRevoke:
       "500":
         $ref: "#/components/responses/InternalServerError"
 
-invitationsResend:
+resendInvitations:
   post:
     summary: Resend invitation
-    operationId: resendInvitation
+    operationId: APIV1ResendInvitation
     tags:
-      - Invitations
+      - Invitation
     security:
       - bearer: []
     parameters:

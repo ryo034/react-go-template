@@ -40,26 +40,41 @@ func (m *MockOutputPort) EXPECT() *MockOutputPortMockRecorder {
 	return m.recorder
 }
 
-// AuthByAuth mocks base method.
-func (m *MockOutputPort) AuthByAuth(me *me.Me) (openapi.APIV1AuthOAuthPostRes, error) {
+// APIV1ProcessInvitationOAuth mocks base method.
+func (m *MockOutputPort) APIV1ProcessInvitationOAuth(me *me.Me) (openapi.APIV1ProcessInvitationOAuthRes, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AuthByAuth", me)
-	ret0, _ := ret[0].(openapi.APIV1AuthOAuthPostRes)
+	ret := m.ctrl.Call(m, "APIV1ProcessInvitationOAuth", me)
+	ret0, _ := ret[0].(openapi.APIV1ProcessInvitationOAuthRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// AuthByAuth indicates an expected call of AuthByAuth.
-func (mr *MockOutputPortMockRecorder) AuthByAuth(me any) *gomock.Call {
+// APIV1ProcessInvitationOAuth indicates an expected call of APIV1ProcessInvitationOAuth.
+func (mr *MockOutputPortMockRecorder) APIV1ProcessInvitationOAuth(me any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AuthByAuth", reflect.TypeOf((*MockOutputPort)(nil).AuthByAuth), me)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "APIV1ProcessInvitationOAuth", reflect.TypeOf((*MockOutputPort)(nil).APIV1ProcessInvitationOAuth), me)
+}
+
+// AuthByOAuth mocks base method.
+func (m *MockOutputPort) AuthByOAuth(me *me.Me) (openapi.APIV1AuthByOAuthRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AuthByOAuth", me)
+	ret0, _ := ret[0].(openapi.APIV1AuthByOAuthRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// AuthByOAuth indicates an expected call of AuthByOAuth.
+func (mr *MockOutputPortMockRecorder) AuthByOAuth(me any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AuthByOAuth", reflect.TypeOf((*MockOutputPort)(nil).AuthByOAuth), me)
 }
 
 // InvitationByToken mocks base method.
-func (m *MockOutputPort) InvitationByToken(ri me.ReceivedInvitation) (openapi.GetInvitationByTokenRes, error) {
+func (m *MockOutputPort) InvitationByToken(ri me.ReceivedInvitation) (openapi.APIV1GetInvitationByTokenRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "InvitationByToken", ri)
-	ret0, _ := ret[0].(openapi.GetInvitationByTokenRes)
+	ret0, _ := ret[0].(openapi.APIV1GetInvitationByTokenRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -82,19 +97,4 @@ func (m *MockOutputPort) JwtToken(token string) *openapi.JwtToken {
 func (mr *MockOutputPortMockRecorder) JwtToken(token any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "JwtToken", reflect.TypeOf((*MockOutputPort)(nil).JwtToken), token)
-}
-
-// ProcessInvitationOAuth mocks base method.
-func (m *MockOutputPort) ProcessInvitationOAuth(me *me.Me) (openapi.ProcessInvitationOAuthRes, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ProcessInvitationOAuth", me)
-	ret0, _ := ret[0].(openapi.ProcessInvitationOAuthRes)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ProcessInvitationOAuth indicates an expected call of ProcessInvitationOAuth.
-func (mr *MockOutputPortMockRecorder) ProcessInvitationOAuth(me any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ProcessInvitationOAuth", reflect.TypeOf((*MockOutputPort)(nil).ProcessInvitationOAuth), me)
 }

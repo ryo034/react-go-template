@@ -14,15 +14,15 @@ import (
 )
 
 type UseCase interface {
-	Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error)
-	FindAllMembers(ctx context.Context, i FindAllMembersInput) (openapi.APIV1MembersGetRes, error)
-	InviteMembers(ctx context.Context, i InviteMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error)
-	RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error)
-	ResendInvitation(ctx context.Context, i ResendInvitationInput) (openapi.ResendInvitationRes, error)
-	FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error)
-	UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput) (openapi.APIV1MembersMemberIdRolePutRes, error)
-	UpdateWorkspace(ctx context.Context, i UpdateWorkspaceInput) (openapi.APIV1WorkspacesWorkspaceIdPutRes, error)
-	Leave(ctx context.Context, i LeaveInput) (openapi.APIV1MembersMemberIdDeleteRes, error)
+	Create(ctx context.Context, i CreateInput) (openapi.APIV1CreateWorkspaceRes, error)
+	FindAllMembers(ctx context.Context, i FindAllMembersInput) (openapi.APIV1GetMembersRes, error)
+	InviteMembers(ctx context.Context, i InviteMembersInput) (openapi.APIV1InviteMultipleUsersRes, error)
+	APIV1RevokeInvitation(ctx context.Context, i APIV1RevokeInvitationInput) (openapi.APIV1RevokeInvitationRes, error)
+	APIV1ResendInvitation(ctx context.Context, i APIV1ResendInvitationInput) (openapi.APIV1ResendInvitationRes, error)
+	FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1GetInvitationsRes, error)
+	UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput) (openapi.APIV1UpdateMemberRoleRes, error)
+	UpdateWorkspace(ctx context.Context, i UpdateWorkspaceInput) (openapi.APIV1UpdateWorkspaceRes, error)
+	Leave(ctx context.Context, i LeaveInput) (openapi.APIV1RemoveMemberRes, error)
 }
 
 type useCase struct {
@@ -39,7 +39,7 @@ func NewUseCase(txp core.TransactionProvider, dbp core.Provider, repo workspace.
 	return &useCase{txp, dbp, repo, meRepo, invRepo, notificationRepo, op}
 }
 
-func (u *useCase) Create(ctx context.Context, i CreateInput) (openapi.APIV1WorkspacesPostRes, error) {
+func (u *useCase) Create(ctx context.Context, i CreateInput) (openapi.APIV1CreateWorkspaceRes, error) {
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
 		return nil, err
@@ -80,7 +80,7 @@ func (u *useCase) Create(ctx context.Context, i CreateInput) (openapi.APIV1Works
 	return u.op.Create(res)
 }
 
-func (u *useCase) FindAllMembers(ctx context.Context, i FindAllMembersInput) (openapi.APIV1MembersGetRes, error) {
+func (u *useCase) FindAllMembers(ctx context.Context, i FindAllMembersInput) (openapi.APIV1GetMembersRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
 	ms, err := u.repo.FindAllMembers(ctx, exec, i.CurrentWorkspaceID)
 	if err != nil {
@@ -89,7 +89,7 @@ func (u *useCase) FindAllMembers(ctx context.Context, i FindAllMembersInput) (op
 	return u.op.FindAllMembers(ms)
 }
 
-func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (openapi.InviteMultipleUsersToWorkspaceRes, error) {
+func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (openapi.APIV1InviteMultipleUsersRes, error) {
 	if len(i.Invitations) == 0 {
 		return nil, nil
 	}
@@ -140,7 +140,7 @@ func (u *useCase) InviteMembers(ctx context.Context, i InviteMembersInput) (open
 	)
 }
 
-func (u *useCase) RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.RevokeInvitationRes, error) {
+func (u *useCase) APIV1RevokeInvitation(ctx context.Context, i APIV1RevokeInvitationInput) (openapi.APIV1RevokeInvitationRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
 	inv, err := u.invRepo.Find(ctx, exec, i.InvitationID)
 	if err != nil {
@@ -169,7 +169,7 @@ func (u *useCase) RevokeInvitation(ctx context.Context, i RevokeInvitationInput)
 	return u.op.RevokeInvitation(res.ExcludeRevoked().ExcludeVerified().ExcludeAccepted().Sort())
 }
 
-func (u *useCase) ResendInvitation(ctx context.Context, i ResendInvitationInput) (openapi.ResendInvitationRes, error) {
+func (u *useCase) APIV1ResendInvitation(ctx context.Context, i APIV1ResendInvitationInput) (openapi.APIV1ResendInvitationRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
 	inv, err := u.invRepo.Find(ctx, exec, i.InvitationID)
 	if err != nil {
@@ -208,7 +208,7 @@ func (u *useCase) ResendInvitation(ctx context.Context, i ResendInvitationInput)
 	return u.op.ResendInvitation(res)
 }
 
-func (u *useCase) FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1InvitationsGetRes, error) {
+func (u *useCase) FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1GetInvitationsRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
 	res, err := u.repo.FindAllInvitations(ctx, exec, i.CurrentWorkspaceID)
 	if err != nil {
@@ -224,7 +224,7 @@ func (u *useCase) FindAllInvitation(ctx context.Context, i FindAllInvitationInpu
 	return u.op.FindAllInvitation(res.ExcludeRevoked().ExcludeVerified().ExcludeAccepted().Sort())
 }
 
-func (u *useCase) UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput) (openapi.APIV1MembersMemberIdRolePutRes, error) {
+func (u *useCase) UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput) (openapi.APIV1UpdateMemberRoleRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
 	meRes, err := u.meRepo.FindLastLogin(ctx, exec, i.AccountID)
 	if err != nil {
@@ -265,7 +265,7 @@ func (u *useCase) UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput)
 	return u.op.UpdateMemberRole(res)
 }
 
-func (u *useCase) UpdateWorkspace(ctx context.Context, i UpdateWorkspaceInput) (openapi.APIV1WorkspacesWorkspaceIdPutRes, error) {
+func (u *useCase) UpdateWorkspace(ctx context.Context, i UpdateWorkspaceInput) (openapi.APIV1UpdateWorkspaceRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
 	meRes, err := u.meRepo.FindLastLogin(ctx, exec, i.AccountID)
 	if err != nil {
@@ -297,7 +297,7 @@ func (u *useCase) UpdateWorkspace(ctx context.Context, i UpdateWorkspaceInput) (
 	return u.op.UpdateWorkspace(res)
 }
 
-func (u *useCase) Leave(ctx context.Context, i LeaveInput) (openapi.APIV1MembersMemberIdDeleteRes, error) {
+func (u *useCase) Leave(ctx context.Context, i LeaveInput) (openapi.APIV1RemoveMemberRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
 	meRes, err := u.meRepo.FindLastLogin(ctx, exec, i.ExecutorID)
 	if err != nil {

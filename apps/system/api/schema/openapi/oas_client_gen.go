@@ -24,150 +24,150 @@ import (
 
 // Invoker invokes operations described by OpenAPI v3 specification.
 type Invoker interface {
-	// APIV1AuthOAuthPost invokes POST /api/v1/auth/oauth operation.
-	//
-	// Auth by OAuth.
-	//
-	// POST /api/v1/auth/oauth
-	APIV1AuthOAuthPost(ctx context.Context) (APIV1AuthOAuthPostRes, error)
-	// APIV1AuthOtpPost invokes POST /api/v1/auth/otp operation.
-	//
-	// One Time Password (OTP) to user.
-	//
-	// POST /api/v1/auth/otp
-	APIV1AuthOtpPost(ctx context.Context, request *APIV1AuthOtpPostReq) (APIV1AuthOtpPostRes, error)
-	// APIV1AuthOtpVerifyPost invokes POST /api/v1/auth/otp/verify operation.
-	//
-	// Verify OTP sent by user.
-	//
-	// POST /api/v1/auth/otp/verify
-	APIV1AuthOtpVerifyPost(ctx context.Context, request *APIV1AuthOtpVerifyPostReq) (APIV1AuthOtpVerifyPostRes, error)
-	// APIV1InvitationsGet invokes GET /api/v1/invitations operation.
-	//
-	// Returns the pending invitations (not used yet).
-	//
-	// GET /api/v1/invitations
-	APIV1InvitationsGet(ctx context.Context, params APIV1InvitationsGetParams) (APIV1InvitationsGetRes, error)
-	// APIV1MeGet invokes GET /api/v1/me operation.
-	//
-	// Returns the admin user.
-	//
-	// GET /api/v1/me
-	APIV1MeGet(ctx context.Context) (APIV1MeGetRes, error)
-	// APIV1MeMemberProfilePut invokes PUT /api/v1/me/member/profile operation.
-	//
-	// Updates Me the member profile.
-	//
-	// PUT /api/v1/me/member/profile
-	APIV1MeMemberProfilePut(ctx context.Context, request *APIV1MeMemberProfilePutReq) (APIV1MeMemberProfilePutRes, error)
-	// APIV1MeProfilePhotoDelete invokes DELETE /api/v1/me/profile/photo operation.
-	//
-	// Deletes the user profile photo.
-	//
-	// DELETE /api/v1/me/profile/photo
-	APIV1MeProfilePhotoDelete(ctx context.Context) (APIV1MeProfilePhotoDeleteRes, error)
-	// APIV1MeProfilePhotoPut invokes PUT /api/v1/me/profile/photo operation.
-	//
-	// Updates the user profile photo.
-	//
-	// PUT /api/v1/me/profile/photo
-	APIV1MeProfilePhotoPut(ctx context.Context, request *APIV1MeProfilePhotoPutReq) (APIV1MeProfilePhotoPutRes, error)
-	// APIV1MeProfilePut invokes PUT /api/v1/me/profile operation.
-	//
-	// Updates the user profile.
-	//
-	// PUT /api/v1/me/profile
-	APIV1MeProfilePut(ctx context.Context, request *APIV1MeProfilePutReq) (APIV1MeProfilePutRes, error)
-	// APIV1MeWorkspaceLeavePost invokes POST /api/v1/me/workspace/leave operation.
-	//
-	// Leaves the workspace.
-	//
-	// POST /api/v1/me/workspace/leave
-	APIV1MeWorkspaceLeavePost(ctx context.Context) (APIV1MeWorkspaceLeavePostRes, error)
-	// APIV1MembersGet invokes GET /api/v1/members operation.
-	//
-	// Returns the members of the workspace.
-	//
-	// GET /api/v1/members
-	APIV1MembersGet(ctx context.Context) (APIV1MembersGetRes, error)
-	// APIV1MembersMemberIdDelete invokes DELETE /api/v1/members/{memberId} operation.
-	//
-	// Removes a member from the workspace.
-	//
-	// DELETE /api/v1/members/{memberId}
-	APIV1MembersMemberIdDelete(ctx context.Context, params APIV1MembersMemberIdDeleteParams) (APIV1MembersMemberIdDeleteRes, error)
-	// APIV1MembersMemberIdRolePut invokes PUT /api/v1/members/{memberId}/role operation.
-	//
-	// Updates the role of a member.
-	//
-	// PUT /api/v1/members/{memberId}/role
-	APIV1MembersMemberIdRolePut(ctx context.Context, request *APIV1MembersMemberIdRolePutReq, params APIV1MembersMemberIdRolePutParams) (APIV1MembersMemberIdRolePutRes, error)
-	// APIV1PingGet invokes GET /api/v1/ping operation.
-	//
-	// Checks if the server is running.
-	//
-	// GET /api/v1/ping
-	APIV1PingGet(ctx context.Context) (APIV1PingGetRes, error)
-	// APIV1WorkspacesGet invokes GET /api/v1/workspaces operation.
-	//
-	// Returns the workspaces the user is a member of.
-	//
-	// GET /api/v1/workspaces
-	APIV1WorkspacesGet(ctx context.Context) (APIV1WorkspacesGetRes, error)
-	// APIV1WorkspacesPost invokes POST /api/v1/workspaces operation.
-	//
-	// Creates a new workspace.
-	//
-	// POST /api/v1/workspaces
-	APIV1WorkspacesPost(ctx context.Context, request *APIV1WorkspacesPostReq) (APIV1WorkspacesPostRes, error)
-	// APIV1WorkspacesWorkspaceIdPut invokes PUT /api/v1/workspaces/{workspaceId} operation.
-	//
-	// Updates the workspace.
-	//
-	// PUT /api/v1/workspaces/{workspaceId}
-	APIV1WorkspacesWorkspaceIdPut(ctx context.Context, request *APIV1WorkspacesWorkspaceIdPutReq, params APIV1WorkspacesWorkspaceIdPutParams) (APIV1WorkspacesWorkspaceIdPutRes, error)
-	// AcceptInvitation invokes acceptInvitation operation.
+	// APIV1AcceptInvitation invokes APIV1AcceptInvitation operation.
 	//
 	// Accept an invitation to join a workspace.
 	//
 	// POST /api/v1/members/invitations/{invitationId}/accept
-	AcceptInvitation(ctx context.Context, params AcceptInvitationParams) (AcceptInvitationRes, error)
-	// GetInvitationByToken invokes getInvitationByToken operation.
+	APIV1AcceptInvitation(ctx context.Context, params APIV1AcceptInvitationParams) (APIV1AcceptInvitationRes, error)
+	// APIV1AuthByOAuth invokes APIV1AuthByOAuth operation.
+	//
+	// Auth by OAuth.
+	//
+	// POST /api/v1/auth/oauth
+	APIV1AuthByOAuth(ctx context.Context) (APIV1AuthByOAuthRes, error)
+	// APIV1AuthByOtp invokes APIV1AuthByOtp operation.
+	//
+	// One Time Password (OTP) to user.
+	//
+	// POST /api/v1/auth/otp
+	APIV1AuthByOtp(ctx context.Context, request *APIV1AuthByOtpReq) (APIV1AuthByOtpRes, error)
+	// APIV1CreateWorkspace invokes APIV1CreateWorkspace operation.
+	//
+	// Creates a new workspace.
+	//
+	// POST /api/v1/workspaces
+	APIV1CreateWorkspace(ctx context.Context, request *APIV1CreateWorkspaceReq) (APIV1CreateWorkspaceRes, error)
+	// APIV1GetInvitationByToken invokes APIV1GetInvitationByToken operation.
 	//
 	// Get Invitation by token.
 	//
 	// GET /api/v1/auth/invitations
-	GetInvitationByToken(ctx context.Context, params GetInvitationByTokenParams) (GetInvitationByTokenRes, error)
-	// InviteMultipleUsersToWorkspace invokes inviteMultipleUsersToWorkspace operation.
+	APIV1GetInvitationByToken(ctx context.Context, params APIV1GetInvitationByTokenParams) (APIV1GetInvitationByTokenRes, error)
+	// APIV1GetInvitations invokes APIV1GetInvitations operation.
+	//
+	// Returns the pending invitations (not used yet).
+	//
+	// GET /api/v1/invitations
+	APIV1GetInvitations(ctx context.Context, params APIV1GetInvitationsParams) (APIV1GetInvitationsRes, error)
+	// APIV1GetMe invokes APIV1GetMe operation.
+	//
+	// Returns the admin user.
+	//
+	// GET /api/v1/me
+	APIV1GetMe(ctx context.Context) (APIV1GetMeRes, error)
+	// APIV1GetMembers invokes APIV1GetMembers operation.
+	//
+	// Returns the members of the workspace.
+	//
+	// GET /api/v1/members
+	APIV1GetMembers(ctx context.Context) (APIV1GetMembersRes, error)
+	// APIV1GetWorkspaces invokes APIV1GetWorkspaces operation.
+	//
+	// Returns the workspaces the user is a member of.
+	//
+	// GET /api/v1/workspaces
+	APIV1GetWorkspaces(ctx context.Context) (APIV1GetWorkspacesRes, error)
+	// APIV1InviteMultipleUsers invokes APIV1InviteMultipleUsers operation.
 	//
 	// Invite multiple users to the workspace by email.
 	//
 	// POST /api/v1/members/invitations/bulk
-	InviteMultipleUsersToWorkspace(ctx context.Context, request *InviteMultipleUsersToWorkspaceReq) (InviteMultipleUsersToWorkspaceRes, error)
-	// ProcessInvitationEmail invokes processInvitationEmail operation.
+	APIV1InviteMultipleUsers(ctx context.Context, request *APIV1InviteMultipleUsersReq) (APIV1InviteMultipleUsersRes, error)
+	// APIV1LeaveWorkspace invokes APIV1LeaveWorkspace operation.
+	//
+	// Leaves the workspace.
+	//
+	// POST /api/v1/me/workspace/leave
+	APIV1LeaveWorkspace(ctx context.Context) (APIV1LeaveWorkspaceRes, error)
+	// APIV1ProcessInvitationEmail invokes APIV1ProcessInvitationEmail operation.
 	//
 	// Process an invitation by verifying token and email.
 	//
 	// POST /api/v1/auth/invitations/process/email
-	ProcessInvitationEmail(ctx context.Context, request *ProcessInvitationEmailReq) (ProcessInvitationEmailRes, error)
-	// ProcessInvitationOAuth invokes processInvitationOAuth operation.
+	APIV1ProcessInvitationEmail(ctx context.Context, request *APIV1ProcessInvitationEmailReq) (APIV1ProcessInvitationEmailRes, error)
+	// APIV1ProcessInvitationOAuth invokes APIV1ProcessInvitationOAuth operation.
 	//
 	// Process an invitation by verifying token and OAuth, and register or add user to workspace.
 	//
 	// POST /api/v1/auth/invitations/process/oauth
-	ProcessInvitationOAuth(ctx context.Context, request *ProcessInvitationOAuthReq) (ProcessInvitationOAuthRes, error)
-	// ResendInvitation invokes resendInvitation operation.
+	APIV1ProcessInvitationOAuth(ctx context.Context, request *APIV1ProcessInvitationOAuthReq) (APIV1ProcessInvitationOAuthRes, error)
+	// APIV1RemoveMember invokes APIV1RemoveMember operation.
+	//
+	// Removes a member from the workspace.
+	//
+	// DELETE /api/v1/members/{memberId}
+	APIV1RemoveMember(ctx context.Context, params APIV1RemoveMemberParams) (APIV1RemoveMemberRes, error)
+	// APIV1RemoveProfilePhoto invokes APIV1RemoveProfilePhoto operation.
+	//
+	// Deletes the user profile photo.
+	//
+	// DELETE /api/v1/me/profile/photo
+	APIV1RemoveProfilePhoto(ctx context.Context) (APIV1RemoveProfilePhotoRes, error)
+	// APIV1ResendInvitation invokes APIV1ResendInvitation operation.
 	//
 	// Resend invitation.
 	//
 	// POST /api/v1/members/invitations/{invitationId}/resend
-	ResendInvitation(ctx context.Context, params ResendInvitationParams) (ResendInvitationRes, error)
-	// RevokeInvitation invokes revokeInvitation operation.
+	APIV1ResendInvitation(ctx context.Context, params APIV1ResendInvitationParams) (APIV1ResendInvitationRes, error)
+	// APIV1RevokeInvitation invokes APIV1RevokeInvitation operation.
 	//
 	// Revoke invitation.
 	//
 	// POST /api/v1/members/invitations/{invitationId}/revoke
-	RevokeInvitation(ctx context.Context, params RevokeInvitationParams) (RevokeInvitationRes, error)
+	APIV1RevokeInvitation(ctx context.Context, params APIV1RevokeInvitationParams) (APIV1RevokeInvitationRes, error)
+	// APIV1UpdateMeMemberProfile invokes APIV1UpdateMeMemberProfile operation.
+	//
+	// Updates Me the member profile.
+	//
+	// PUT /api/v1/me/member/profile
+	APIV1UpdateMeMemberProfile(ctx context.Context, request *APIV1UpdateMeMemberProfileReq) (APIV1UpdateMeMemberProfileRes, error)
+	// APIV1UpdateMemberRole invokes APIV1UpdateMemberRole operation.
+	//
+	// Updates the role of a member.
+	//
+	// PUT /api/v1/members/{memberId}/role
+	APIV1UpdateMemberRole(ctx context.Context, request *APIV1UpdateMemberRoleReq, params APIV1UpdateMemberRoleParams) (APIV1UpdateMemberRoleRes, error)
+	// APIV1UpdateProfile invokes APIV1UpdateProfile operation.
+	//
+	// Updates the user profile.
+	//
+	// PUT /api/v1/me/profile
+	APIV1UpdateProfile(ctx context.Context, request *APIV1UpdateProfileReq) (APIV1UpdateProfileRes, error)
+	// APIV1UpdateProfilePhoto invokes APIV1UpdateProfilePhoto operation.
+	//
+	// Updates the user profile photo.
+	//
+	// PUT /api/v1/me/profile/photo
+	APIV1UpdateProfilePhoto(ctx context.Context, request *APIV1UpdateProfilePhotoReq) (APIV1UpdateProfilePhotoRes, error)
+	// APIV1UpdateWorkspace invokes APIV1UpdateWorkspace operation.
+	//
+	// Updates the workspace.
+	//
+	// PUT /api/v1/workspaces/{workspaceId}
+	APIV1UpdateWorkspace(ctx context.Context, request *APIV1UpdateWorkspaceReq, params APIV1UpdateWorkspaceParams) (APIV1UpdateWorkspaceRes, error)
+	// APIV1VerifyOTP invokes APIV1VerifyOTP operation.
+	//
+	// Verify OTP sent by user.
+	//
+	// POST /api/v1/auth/otp/verify
+	APIV1VerifyOTP(ctx context.Context, request *APIV1VerifyOTPReq) (APIV1VerifyOTPRes, error)
+	// Ping invokes Ping operation.
+	//
+	// Checks if the server is running.
+	//
+	// GET /api/v1/ping
+	Ping(ctx context.Context) (PingRes, error)
 }
 
 // Client implements OAS client.
@@ -220,1788 +220,19 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 	return u
 }
 
-// APIV1AuthOAuthPost invokes POST /api/v1/auth/oauth operation.
-//
-// Auth by OAuth.
-//
-// POST /api/v1/auth/oauth
-func (c *Client) APIV1AuthOAuthPost(ctx context.Context) (APIV1AuthOAuthPostRes, error) {
-	res, err := c.sendAPIV1AuthOAuthPost(ctx)
-	return res, err
-}
-
-func (c *Client) sendAPIV1AuthOAuthPost(ctx context.Context) (res APIV1AuthOAuthPostRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/v1/auth/oauth"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1AuthOAuthPost",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/auth/oauth"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "APIV1AuthOAuthPost", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Bearer\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1AuthOAuthPostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1AuthOtpPost invokes POST /api/v1/auth/otp operation.
-//
-// One Time Password (OTP) to user.
-//
-// POST /api/v1/auth/otp
-func (c *Client) APIV1AuthOtpPost(ctx context.Context, request *APIV1AuthOtpPostReq) (APIV1AuthOtpPostRes, error) {
-	res, err := c.sendAPIV1AuthOtpPost(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendAPIV1AuthOtpPost(ctx context.Context, request *APIV1AuthOtpPostReq) (res APIV1AuthOtpPostRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/v1/auth/otp"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1AuthOtpPost",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/auth/otp"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeAPIV1AuthOtpPostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1AuthOtpPostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1AuthOtpVerifyPost invokes POST /api/v1/auth/otp/verify operation.
-//
-// Verify OTP sent by user.
-//
-// POST /api/v1/auth/otp/verify
-func (c *Client) APIV1AuthOtpVerifyPost(ctx context.Context, request *APIV1AuthOtpVerifyPostReq) (APIV1AuthOtpVerifyPostRes, error) {
-	res, err := c.sendAPIV1AuthOtpVerifyPost(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendAPIV1AuthOtpVerifyPost(ctx context.Context, request *APIV1AuthOtpVerifyPostReq) (res APIV1AuthOtpVerifyPostRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/v1/auth/otp/verify"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1AuthOtpVerifyPost",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/auth/otp/verify"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeAPIV1AuthOtpVerifyPostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1AuthOtpVerifyPostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1InvitationsGet invokes GET /api/v1/invitations operation.
-//
-// Returns the pending invitations (not used yet).
-//
-// GET /api/v1/invitations
-func (c *Client) APIV1InvitationsGet(ctx context.Context, params APIV1InvitationsGetParams) (APIV1InvitationsGetRes, error) {
-	res, err := c.sendAPIV1InvitationsGet(ctx, params)
-	return res, err
-}
-
-func (c *Client) sendAPIV1InvitationsGet(ctx context.Context, params APIV1InvitationsGetParams) (res APIV1InvitationsGetRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/v1/invitations"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1InvitationsGet",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/invitations"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeQueryParams"
-	q := uri.NewQueryEncoder()
-	{
-		// Encode "status" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "status",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Status.Get(); ok {
-				return e.EncodeValue(conv.StringToString(string(val)))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	u.RawQuery = q.Values().Encode()
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "APIV1InvitationsGet", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Bearer\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1InvitationsGetResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1MeGet invokes GET /api/v1/me operation.
-//
-// Returns the admin user.
-//
-// GET /api/v1/me
-func (c *Client) APIV1MeGet(ctx context.Context) (APIV1MeGetRes, error) {
-	res, err := c.sendAPIV1MeGet(ctx)
-	return res, err
-}
-
-func (c *Client) sendAPIV1MeGet(ctx context.Context) (res APIV1MeGetRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/v1/me"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1MeGet",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/me"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "APIV1MeGet", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Bearer\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1MeGetResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1MeMemberProfilePut invokes PUT /api/v1/me/member/profile operation.
-//
-// Updates Me the member profile.
-//
-// PUT /api/v1/me/member/profile
-func (c *Client) APIV1MeMemberProfilePut(ctx context.Context, request *APIV1MeMemberProfilePutReq) (APIV1MeMemberProfilePutRes, error) {
-	res, err := c.sendAPIV1MeMemberProfilePut(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendAPIV1MeMemberProfilePut(ctx context.Context, request *APIV1MeMemberProfilePutReq) (res APIV1MeMemberProfilePutRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("PUT"),
-		semconv.HTTPRouteKey.String("/api/v1/me/member/profile"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1MeMemberProfilePut",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/me/member/profile"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PUT", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeAPIV1MeMemberProfilePutRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "APIV1MeMemberProfilePut", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Bearer\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1MeMemberProfilePutResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1MeProfilePhotoDelete invokes DELETE /api/v1/me/profile/photo operation.
-//
-// Deletes the user profile photo.
-//
-// DELETE /api/v1/me/profile/photo
-func (c *Client) APIV1MeProfilePhotoDelete(ctx context.Context) (APIV1MeProfilePhotoDeleteRes, error) {
-	res, err := c.sendAPIV1MeProfilePhotoDelete(ctx)
-	return res, err
-}
-
-func (c *Client) sendAPIV1MeProfilePhotoDelete(ctx context.Context) (res APIV1MeProfilePhotoDeleteRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("DELETE"),
-		semconv.HTTPRouteKey.String("/api/v1/me/profile/photo"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1MeProfilePhotoDelete",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/me/profile/photo"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "DELETE", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "APIV1MeProfilePhotoDelete", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Bearer\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1MeProfilePhotoDeleteResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1MeProfilePhotoPut invokes PUT /api/v1/me/profile/photo operation.
-//
-// Updates the user profile photo.
-//
-// PUT /api/v1/me/profile/photo
-func (c *Client) APIV1MeProfilePhotoPut(ctx context.Context, request *APIV1MeProfilePhotoPutReq) (APIV1MeProfilePhotoPutRes, error) {
-	res, err := c.sendAPIV1MeProfilePhotoPut(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendAPIV1MeProfilePhotoPut(ctx context.Context, request *APIV1MeProfilePhotoPutReq) (res APIV1MeProfilePhotoPutRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("PUT"),
-		semconv.HTTPRouteKey.String("/api/v1/me/profile/photo"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1MeProfilePhotoPut",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/me/profile/photo"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PUT", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeAPIV1MeProfilePhotoPutRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "APIV1MeProfilePhotoPut", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Bearer\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1MeProfilePhotoPutResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1MeProfilePut invokes PUT /api/v1/me/profile operation.
-//
-// Updates the user profile.
-//
-// PUT /api/v1/me/profile
-func (c *Client) APIV1MeProfilePut(ctx context.Context, request *APIV1MeProfilePutReq) (APIV1MeProfilePutRes, error) {
-	res, err := c.sendAPIV1MeProfilePut(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendAPIV1MeProfilePut(ctx context.Context, request *APIV1MeProfilePutReq) (res APIV1MeProfilePutRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("PUT"),
-		semconv.HTTPRouteKey.String("/api/v1/me/profile"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1MeProfilePut",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/me/profile"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PUT", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeAPIV1MeProfilePutRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "APIV1MeProfilePut", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Bearer\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1MeProfilePutResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1MeWorkspaceLeavePost invokes POST /api/v1/me/workspace/leave operation.
-//
-// Leaves the workspace.
-//
-// POST /api/v1/me/workspace/leave
-func (c *Client) APIV1MeWorkspaceLeavePost(ctx context.Context) (APIV1MeWorkspaceLeavePostRes, error) {
-	res, err := c.sendAPIV1MeWorkspaceLeavePost(ctx)
-	return res, err
-}
-
-func (c *Client) sendAPIV1MeWorkspaceLeavePost(ctx context.Context) (res APIV1MeWorkspaceLeavePostRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/v1/me/workspace/leave"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1MeWorkspaceLeavePost",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/me/workspace/leave"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "APIV1MeWorkspaceLeavePost", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Bearer\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1MeWorkspaceLeavePostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1MembersGet invokes GET /api/v1/members operation.
-//
-// Returns the members of the workspace.
-//
-// GET /api/v1/members
-func (c *Client) APIV1MembersGet(ctx context.Context) (APIV1MembersGetRes, error) {
-	res, err := c.sendAPIV1MembersGet(ctx)
-	return res, err
-}
-
-func (c *Client) sendAPIV1MembersGet(ctx context.Context) (res APIV1MembersGetRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/v1/members"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1MembersGet",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/members"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "APIV1MembersGet", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Bearer\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1MembersGetResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1MembersMemberIdDelete invokes DELETE /api/v1/members/{memberId} operation.
-//
-// Removes a member from the workspace.
-//
-// DELETE /api/v1/members/{memberId}
-func (c *Client) APIV1MembersMemberIdDelete(ctx context.Context, params APIV1MembersMemberIdDeleteParams) (APIV1MembersMemberIdDeleteRes, error) {
-	res, err := c.sendAPIV1MembersMemberIdDelete(ctx, params)
-	return res, err
-}
-
-func (c *Client) sendAPIV1MembersMemberIdDelete(ctx context.Context, params APIV1MembersMemberIdDeleteParams) (res APIV1MembersMemberIdDeleteRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("DELETE"),
-		semconv.HTTPRouteKey.String("/api/v1/members/{memberId}"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1MembersMemberIdDelete",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [2]string
-	pathParts[0] = "/api/v1/members/"
-	{
-		// Encode "memberId" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "memberId",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.UUIDToString(params.MemberId))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[1] = encoded
-	}
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "DELETE", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "APIV1MembersMemberIdDelete", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Bearer\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1MembersMemberIdDeleteResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1MembersMemberIdRolePut invokes PUT /api/v1/members/{memberId}/role operation.
-//
-// Updates the role of a member.
-//
-// PUT /api/v1/members/{memberId}/role
-func (c *Client) APIV1MembersMemberIdRolePut(ctx context.Context, request *APIV1MembersMemberIdRolePutReq, params APIV1MembersMemberIdRolePutParams) (APIV1MembersMemberIdRolePutRes, error) {
-	res, err := c.sendAPIV1MembersMemberIdRolePut(ctx, request, params)
-	return res, err
-}
-
-func (c *Client) sendAPIV1MembersMemberIdRolePut(ctx context.Context, request *APIV1MembersMemberIdRolePutReq, params APIV1MembersMemberIdRolePutParams) (res APIV1MembersMemberIdRolePutRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("PUT"),
-		semconv.HTTPRouteKey.String("/api/v1/members/{memberId}/role"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1MembersMemberIdRolePut",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [3]string
-	pathParts[0] = "/api/v1/members/"
-	{
-		// Encode "memberId" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "memberId",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.UUIDToString(params.MemberId))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[1] = encoded
-	}
-	pathParts[2] = "/role"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PUT", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeAPIV1MembersMemberIdRolePutRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "APIV1MembersMemberIdRolePut", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Bearer\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1MembersMemberIdRolePutResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1PingGet invokes GET /api/v1/ping operation.
-//
-// Checks if the server is running.
-//
-// GET /api/v1/ping
-func (c *Client) APIV1PingGet(ctx context.Context) (APIV1PingGetRes, error) {
-	res, err := c.sendAPIV1PingGet(ctx)
-	return res, err
-}
-
-func (c *Client) sendAPIV1PingGet(ctx context.Context) (res APIV1PingGetRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/v1/ping"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1PingGet",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/ping"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1PingGetResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1WorkspacesGet invokes GET /api/v1/workspaces operation.
-//
-// Returns the workspaces the user is a member of.
-//
-// GET /api/v1/workspaces
-func (c *Client) APIV1WorkspacesGet(ctx context.Context) (APIV1WorkspacesGetRes, error) {
-	res, err := c.sendAPIV1WorkspacesGet(ctx)
-	return res, err
-}
-
-func (c *Client) sendAPIV1WorkspacesGet(ctx context.Context) (res APIV1WorkspacesGetRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/v1/workspaces"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1WorkspacesGet",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/workspaces"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "APIV1WorkspacesGet", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Bearer\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1WorkspacesGetResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1WorkspacesPost invokes POST /api/v1/workspaces operation.
-//
-// Creates a new workspace.
-//
-// POST /api/v1/workspaces
-func (c *Client) APIV1WorkspacesPost(ctx context.Context, request *APIV1WorkspacesPostReq) (APIV1WorkspacesPostRes, error) {
-	res, err := c.sendAPIV1WorkspacesPost(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendAPIV1WorkspacesPost(ctx context.Context, request *APIV1WorkspacesPostReq) (res APIV1WorkspacesPostRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/api/v1/workspaces"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1WorkspacesPost",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/api/v1/workspaces"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeAPIV1WorkspacesPostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "APIV1WorkspacesPost", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Bearer\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1WorkspacesPostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// APIV1WorkspacesWorkspaceIdPut invokes PUT /api/v1/workspaces/{workspaceId} operation.
-//
-// Updates the workspace.
-//
-// PUT /api/v1/workspaces/{workspaceId}
-func (c *Client) APIV1WorkspacesWorkspaceIdPut(ctx context.Context, request *APIV1WorkspacesWorkspaceIdPutReq, params APIV1WorkspacesWorkspaceIdPutParams) (APIV1WorkspacesWorkspaceIdPutRes, error) {
-	res, err := c.sendAPIV1WorkspacesWorkspaceIdPut(ctx, request, params)
-	return res, err
-}
-
-func (c *Client) sendAPIV1WorkspacesWorkspaceIdPut(ctx context.Context, request *APIV1WorkspacesWorkspaceIdPutReq, params APIV1WorkspacesWorkspaceIdPutParams) (res APIV1WorkspacesWorkspaceIdPutRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPMethodKey.String("PUT"),
-		semconv.HTTPRouteKey.String("/api/v1/workspaces/{workspaceId}"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1WorkspacesWorkspaceIdPut",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [2]string
-	pathParts[0] = "/api/v1/workspaces/"
-	{
-		// Encode "workspaceId" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "workspaceId",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.UUIDToString(params.WorkspaceId))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[1] = encoded
-	}
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PUT", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeAPIV1WorkspacesWorkspaceIdPutRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "APIV1WorkspacesWorkspaceIdPut", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"Bearer\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeAPIV1WorkspacesWorkspaceIdPutResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// AcceptInvitation invokes acceptInvitation operation.
+// APIV1AcceptInvitation invokes APIV1AcceptInvitation operation.
 //
 // Accept an invitation to join a workspace.
 //
 // POST /api/v1/members/invitations/{invitationId}/accept
-func (c *Client) AcceptInvitation(ctx context.Context, params AcceptInvitationParams) (AcceptInvitationRes, error) {
-	res, err := c.sendAcceptInvitation(ctx, params)
+func (c *Client) APIV1AcceptInvitation(ctx context.Context, params APIV1AcceptInvitationParams) (APIV1AcceptInvitationRes, error) {
+	res, err := c.sendAPIV1AcceptInvitation(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendAcceptInvitation(ctx context.Context, params AcceptInvitationParams) (res AcceptInvitationRes, err error) {
+func (c *Client) sendAPIV1AcceptInvitation(ctx context.Context, params APIV1AcceptInvitationParams) (res APIV1AcceptInvitationRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("acceptInvitation"),
+		otelogen.OperationID("APIV1AcceptInvitation"),
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/v1/members/invitations/{invitationId}/accept"),
 	}
@@ -2018,7 +249,7 @@ func (c *Client) sendAcceptInvitation(ctx context.Context, params AcceptInvitati
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "AcceptInvitation",
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1AcceptInvitation",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2069,7 +300,7 @@ func (c *Client) sendAcceptInvitation(ctx context.Context, params AcceptInvitati
 		var satisfied bitset
 		{
 			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "AcceptInvitation", r); {
+			switch err := c.securityBearer(ctx, "APIV1AcceptInvitation", r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -2105,7 +336,7 @@ func (c *Client) sendAcceptInvitation(ctx context.Context, params AcceptInvitati
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeAcceptInvitationResponse(resp)
+	result, err := decodeAPIV1AcceptInvitationResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -2113,19 +344,307 @@ func (c *Client) sendAcceptInvitation(ctx context.Context, params AcceptInvitati
 	return result, nil
 }
 
-// GetInvitationByToken invokes getInvitationByToken operation.
+// APIV1AuthByOAuth invokes APIV1AuthByOAuth operation.
+//
+// Auth by OAuth.
+//
+// POST /api/v1/auth/oauth
+func (c *Client) APIV1AuthByOAuth(ctx context.Context) (APIV1AuthByOAuthRes, error) {
+	res, err := c.sendAPIV1AuthByOAuth(ctx)
+	return res, err
+}
+
+func (c *Client) sendAPIV1AuthByOAuth(ctx context.Context) (res APIV1AuthByOAuthRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("APIV1AuthByOAuth"),
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/v1/auth/oauth"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1AuthByOAuth",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/auth/oauth"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1AuthByOAuth", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1AuthByOAuthResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1AuthByOtp invokes APIV1AuthByOtp operation.
+//
+// One Time Password (OTP) to user.
+//
+// POST /api/v1/auth/otp
+func (c *Client) APIV1AuthByOtp(ctx context.Context, request *APIV1AuthByOtpReq) (APIV1AuthByOtpRes, error) {
+	res, err := c.sendAPIV1AuthByOtp(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIV1AuthByOtp(ctx context.Context, request *APIV1AuthByOtpReq) (res APIV1AuthByOtpRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("APIV1AuthByOtp"),
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/v1/auth/otp"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1AuthByOtp",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/auth/otp"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIV1AuthByOtpRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1AuthByOtpResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1CreateWorkspace invokes APIV1CreateWorkspace operation.
+//
+// Creates a new workspace.
+//
+// POST /api/v1/workspaces
+func (c *Client) APIV1CreateWorkspace(ctx context.Context, request *APIV1CreateWorkspaceReq) (APIV1CreateWorkspaceRes, error) {
+	res, err := c.sendAPIV1CreateWorkspace(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIV1CreateWorkspace(ctx context.Context, request *APIV1CreateWorkspaceReq) (res APIV1CreateWorkspaceRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("APIV1CreateWorkspace"),
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/v1/workspaces"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1CreateWorkspace",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/workspaces"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIV1CreateWorkspaceRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1CreateWorkspace", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1CreateWorkspaceResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1GetInvitationByToken invokes APIV1GetInvitationByToken operation.
 //
 // Get Invitation by token.
 //
 // GET /api/v1/auth/invitations
-func (c *Client) GetInvitationByToken(ctx context.Context, params GetInvitationByTokenParams) (GetInvitationByTokenRes, error) {
-	res, err := c.sendGetInvitationByToken(ctx, params)
+func (c *Client) APIV1GetInvitationByToken(ctx context.Context, params APIV1GetInvitationByTokenParams) (APIV1GetInvitationByTokenRes, error) {
+	res, err := c.sendAPIV1GetInvitationByToken(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendGetInvitationByToken(ctx context.Context, params GetInvitationByTokenParams) (res GetInvitationByTokenRes, err error) {
+func (c *Client) sendAPIV1GetInvitationByToken(ctx context.Context, params APIV1GetInvitationByTokenParams) (res APIV1GetInvitationByTokenRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("getInvitationByToken"),
+		otelogen.OperationID("APIV1GetInvitationByToken"),
 		semconv.HTTPMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/api/v1/auth/invitations"),
 	}
@@ -2142,7 +661,7 @@ func (c *Client) sendGetInvitationByToken(ctx context.Context, params GetInvitat
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "GetInvitationByToken",
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1GetInvitationByToken",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2195,7 +714,7 @@ func (c *Client) sendGetInvitationByToken(ctx context.Context, params GetInvitat
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeGetInvitationByTokenResponse(resp)
+	result, err := decodeAPIV1GetInvitationByTokenResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -2203,19 +722,460 @@ func (c *Client) sendGetInvitationByToken(ctx context.Context, params GetInvitat
 	return result, nil
 }
 
-// InviteMultipleUsersToWorkspace invokes inviteMultipleUsersToWorkspace operation.
+// APIV1GetInvitations invokes APIV1GetInvitations operation.
+//
+// Returns the pending invitations (not used yet).
+//
+// GET /api/v1/invitations
+func (c *Client) APIV1GetInvitations(ctx context.Context, params APIV1GetInvitationsParams) (APIV1GetInvitationsRes, error) {
+	res, err := c.sendAPIV1GetInvitations(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendAPIV1GetInvitations(ctx context.Context, params APIV1GetInvitationsParams) (res APIV1GetInvitationsRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("APIV1GetInvitations"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/api/v1/invitations"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1GetInvitations",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/invitations"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "status" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "status",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.Status.Get(); ok {
+				return e.EncodeValue(conv.StringToString(string(val)))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1GetInvitations", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1GetInvitationsResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1GetMe invokes APIV1GetMe operation.
+//
+// Returns the admin user.
+//
+// GET /api/v1/me
+func (c *Client) APIV1GetMe(ctx context.Context) (APIV1GetMeRes, error) {
+	res, err := c.sendAPIV1GetMe(ctx)
+	return res, err
+}
+
+func (c *Client) sendAPIV1GetMe(ctx context.Context) (res APIV1GetMeRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("APIV1GetMe"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/api/v1/me"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1GetMe",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/me"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1GetMe", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1GetMeResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1GetMembers invokes APIV1GetMembers operation.
+//
+// Returns the members of the workspace.
+//
+// GET /api/v1/members
+func (c *Client) APIV1GetMembers(ctx context.Context) (APIV1GetMembersRes, error) {
+	res, err := c.sendAPIV1GetMembers(ctx)
+	return res, err
+}
+
+func (c *Client) sendAPIV1GetMembers(ctx context.Context) (res APIV1GetMembersRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("APIV1GetMembers"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/api/v1/members"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1GetMembers",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/members"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1GetMembers", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1GetMembersResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1GetWorkspaces invokes APIV1GetWorkspaces operation.
+//
+// Returns the workspaces the user is a member of.
+//
+// GET /api/v1/workspaces
+func (c *Client) APIV1GetWorkspaces(ctx context.Context) (APIV1GetWorkspacesRes, error) {
+	res, err := c.sendAPIV1GetWorkspaces(ctx)
+	return res, err
+}
+
+func (c *Client) sendAPIV1GetWorkspaces(ctx context.Context) (res APIV1GetWorkspacesRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("APIV1GetWorkspaces"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/api/v1/workspaces"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1GetWorkspaces",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/workspaces"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1GetWorkspaces", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1GetWorkspacesResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1InviteMultipleUsers invokes APIV1InviteMultipleUsers operation.
 //
 // Invite multiple users to the workspace by email.
 //
 // POST /api/v1/members/invitations/bulk
-func (c *Client) InviteMultipleUsersToWorkspace(ctx context.Context, request *InviteMultipleUsersToWorkspaceReq) (InviteMultipleUsersToWorkspaceRes, error) {
-	res, err := c.sendInviteMultipleUsersToWorkspace(ctx, request)
+func (c *Client) APIV1InviteMultipleUsers(ctx context.Context, request *APIV1InviteMultipleUsersReq) (APIV1InviteMultipleUsersRes, error) {
+	res, err := c.sendAPIV1InviteMultipleUsers(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendInviteMultipleUsersToWorkspace(ctx context.Context, request *InviteMultipleUsersToWorkspaceReq) (res InviteMultipleUsersToWorkspaceRes, err error) {
+func (c *Client) sendAPIV1InviteMultipleUsers(ctx context.Context, request *APIV1InviteMultipleUsersReq) (res APIV1InviteMultipleUsersRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("inviteMultipleUsersToWorkspace"),
+		otelogen.OperationID("APIV1InviteMultipleUsers"),
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/v1/members/invitations/bulk"),
 	}
@@ -2232,7 +1192,7 @@ func (c *Client) sendInviteMultipleUsersToWorkspace(ctx context.Context, request
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "InviteMultipleUsersToWorkspace",
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1InviteMultipleUsers",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2258,7 +1218,7 @@ func (c *Client) sendInviteMultipleUsersToWorkspace(ctx context.Context, request
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
-	if err := encodeInviteMultipleUsersToWorkspaceRequest(request, r); err != nil {
+	if err := encodeAPIV1InviteMultipleUsersRequest(request, r); err != nil {
 		return res, errors.Wrap(err, "encode request")
 	}
 
@@ -2267,7 +1227,7 @@ func (c *Client) sendInviteMultipleUsersToWorkspace(ctx context.Context, request
 		var satisfied bitset
 		{
 			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "InviteMultipleUsersToWorkspace", r); {
+			switch err := c.securityBearer(ctx, "APIV1InviteMultipleUsers", r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -2303,7 +1263,7 @@ func (c *Client) sendInviteMultipleUsersToWorkspace(ctx context.Context, request
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeInviteMultipleUsersToWorkspaceResponse(resp)
+	result, err := decodeAPIV1InviteMultipleUsersResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -2311,19 +1271,124 @@ func (c *Client) sendInviteMultipleUsersToWorkspace(ctx context.Context, request
 	return result, nil
 }
 
-// ProcessInvitationEmail invokes processInvitationEmail operation.
+// APIV1LeaveWorkspace invokes APIV1LeaveWorkspace operation.
+//
+// Leaves the workspace.
+//
+// POST /api/v1/me/workspace/leave
+func (c *Client) APIV1LeaveWorkspace(ctx context.Context) (APIV1LeaveWorkspaceRes, error) {
+	res, err := c.sendAPIV1LeaveWorkspace(ctx)
+	return res, err
+}
+
+func (c *Client) sendAPIV1LeaveWorkspace(ctx context.Context) (res APIV1LeaveWorkspaceRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("APIV1LeaveWorkspace"),
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/v1/me/workspace/leave"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1LeaveWorkspace",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/me/workspace/leave"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1LeaveWorkspace", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1LeaveWorkspaceResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1ProcessInvitationEmail invokes APIV1ProcessInvitationEmail operation.
 //
 // Process an invitation by verifying token and email.
 //
 // POST /api/v1/auth/invitations/process/email
-func (c *Client) ProcessInvitationEmail(ctx context.Context, request *ProcessInvitationEmailReq) (ProcessInvitationEmailRes, error) {
-	res, err := c.sendProcessInvitationEmail(ctx, request)
+func (c *Client) APIV1ProcessInvitationEmail(ctx context.Context, request *APIV1ProcessInvitationEmailReq) (APIV1ProcessInvitationEmailRes, error) {
+	res, err := c.sendAPIV1ProcessInvitationEmail(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendProcessInvitationEmail(ctx context.Context, request *ProcessInvitationEmailReq) (res ProcessInvitationEmailRes, err error) {
+func (c *Client) sendAPIV1ProcessInvitationEmail(ctx context.Context, request *APIV1ProcessInvitationEmailReq) (res APIV1ProcessInvitationEmailRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("processInvitationEmail"),
+		otelogen.OperationID("APIV1ProcessInvitationEmail"),
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/v1/auth/invitations/process/email"),
 	}
@@ -2340,7 +1405,7 @@ func (c *Client) sendProcessInvitationEmail(ctx context.Context, request *Proces
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ProcessInvitationEmail",
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1ProcessInvitationEmail",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2366,7 +1431,7 @@ func (c *Client) sendProcessInvitationEmail(ctx context.Context, request *Proces
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
-	if err := encodeProcessInvitationEmailRequest(request, r); err != nil {
+	if err := encodeAPIV1ProcessInvitationEmailRequest(request, r); err != nil {
 		return res, errors.Wrap(err, "encode request")
 	}
 
@@ -2378,7 +1443,7 @@ func (c *Client) sendProcessInvitationEmail(ctx context.Context, request *Proces
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeProcessInvitationEmailResponse(resp)
+	result, err := decodeAPIV1ProcessInvitationEmailResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -2386,19 +1451,19 @@ func (c *Client) sendProcessInvitationEmail(ctx context.Context, request *Proces
 	return result, nil
 }
 
-// ProcessInvitationOAuth invokes processInvitationOAuth operation.
+// APIV1ProcessInvitationOAuth invokes APIV1ProcessInvitationOAuth operation.
 //
 // Process an invitation by verifying token and OAuth, and register or add user to workspace.
 //
 // POST /api/v1/auth/invitations/process/oauth
-func (c *Client) ProcessInvitationOAuth(ctx context.Context, request *ProcessInvitationOAuthReq) (ProcessInvitationOAuthRes, error) {
-	res, err := c.sendProcessInvitationOAuth(ctx, request)
+func (c *Client) APIV1ProcessInvitationOAuth(ctx context.Context, request *APIV1ProcessInvitationOAuthReq) (APIV1ProcessInvitationOAuthRes, error) {
+	res, err := c.sendAPIV1ProcessInvitationOAuth(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendProcessInvitationOAuth(ctx context.Context, request *ProcessInvitationOAuthReq) (res ProcessInvitationOAuthRes, err error) {
+func (c *Client) sendAPIV1ProcessInvitationOAuth(ctx context.Context, request *APIV1ProcessInvitationOAuthReq) (res APIV1ProcessInvitationOAuthRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("processInvitationOAuth"),
+		otelogen.OperationID("APIV1ProcessInvitationOAuth"),
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/v1/auth/invitations/process/oauth"),
 	}
@@ -2415,7 +1480,7 @@ func (c *Client) sendProcessInvitationOAuth(ctx context.Context, request *Proces
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ProcessInvitationOAuth",
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1ProcessInvitationOAuth",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2441,7 +1506,7 @@ func (c *Client) sendProcessInvitationOAuth(ctx context.Context, request *Proces
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
-	if err := encodeProcessInvitationOAuthRequest(request, r); err != nil {
+	if err := encodeAPIV1ProcessInvitationOAuthRequest(request, r); err != nil {
 		return res, errors.Wrap(err, "encode request")
 	}
 
@@ -2450,7 +1515,7 @@ func (c *Client) sendProcessInvitationOAuth(ctx context.Context, request *Proces
 		var satisfied bitset
 		{
 			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "ProcessInvitationOAuth", r); {
+			switch err := c.securityBearer(ctx, "APIV1ProcessInvitationOAuth", r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -2486,7 +1551,7 @@ func (c *Client) sendProcessInvitationOAuth(ctx context.Context, request *Proces
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeProcessInvitationOAuthResponse(resp)
+	result, err := decodeAPIV1ProcessInvitationOAuthResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -2494,19 +1559,247 @@ func (c *Client) sendProcessInvitationOAuth(ctx context.Context, request *Proces
 	return result, nil
 }
 
-// ResendInvitation invokes resendInvitation operation.
+// APIV1RemoveMember invokes APIV1RemoveMember operation.
+//
+// Removes a member from the workspace.
+//
+// DELETE /api/v1/members/{memberId}
+func (c *Client) APIV1RemoveMember(ctx context.Context, params APIV1RemoveMemberParams) (APIV1RemoveMemberRes, error) {
+	res, err := c.sendAPIV1RemoveMember(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendAPIV1RemoveMember(ctx context.Context, params APIV1RemoveMemberParams) (res APIV1RemoveMemberRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("APIV1RemoveMember"),
+		semconv.HTTPMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/api/v1/members/{memberId}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1RemoveMember",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/api/v1/members/"
+	{
+		// Encode "memberId" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "memberId",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.MemberId))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "DELETE", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1RemoveMember", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1RemoveMemberResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1RemoveProfilePhoto invokes APIV1RemoveProfilePhoto operation.
+//
+// Deletes the user profile photo.
+//
+// DELETE /api/v1/me/profile/photo
+func (c *Client) APIV1RemoveProfilePhoto(ctx context.Context) (APIV1RemoveProfilePhotoRes, error) {
+	res, err := c.sendAPIV1RemoveProfilePhoto(ctx)
+	return res, err
+}
+
+func (c *Client) sendAPIV1RemoveProfilePhoto(ctx context.Context) (res APIV1RemoveProfilePhotoRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("APIV1RemoveProfilePhoto"),
+		semconv.HTTPMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/api/v1/me/profile/photo"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1RemoveProfilePhoto",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/me/profile/photo"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "DELETE", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1RemoveProfilePhoto", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1RemoveProfilePhotoResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1ResendInvitation invokes APIV1ResendInvitation operation.
 //
 // Resend invitation.
 //
 // POST /api/v1/members/invitations/{invitationId}/resend
-func (c *Client) ResendInvitation(ctx context.Context, params ResendInvitationParams) (ResendInvitationRes, error) {
-	res, err := c.sendResendInvitation(ctx, params)
+func (c *Client) APIV1ResendInvitation(ctx context.Context, params APIV1ResendInvitationParams) (APIV1ResendInvitationRes, error) {
+	res, err := c.sendAPIV1ResendInvitation(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendResendInvitation(ctx context.Context, params ResendInvitationParams) (res ResendInvitationRes, err error) {
+func (c *Client) sendAPIV1ResendInvitation(ctx context.Context, params APIV1ResendInvitationParams) (res APIV1ResendInvitationRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("resendInvitation"),
+		otelogen.OperationID("APIV1ResendInvitation"),
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/v1/members/invitations/{invitationId}/resend"),
 	}
@@ -2523,7 +1816,7 @@ func (c *Client) sendResendInvitation(ctx context.Context, params ResendInvitati
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ResendInvitation",
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1ResendInvitation",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2574,7 +1867,7 @@ func (c *Client) sendResendInvitation(ctx context.Context, params ResendInvitati
 		var satisfied bitset
 		{
 			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "ResendInvitation", r); {
+			switch err := c.securityBearer(ctx, "APIV1ResendInvitation", r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -2610,7 +1903,7 @@ func (c *Client) sendResendInvitation(ctx context.Context, params ResendInvitati
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeResendInvitationResponse(resp)
+	result, err := decodeAPIV1ResendInvitationResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -2618,19 +1911,19 @@ func (c *Client) sendResendInvitation(ctx context.Context, params ResendInvitati
 	return result, nil
 }
 
-// RevokeInvitation invokes revokeInvitation operation.
+// APIV1RevokeInvitation invokes APIV1RevokeInvitation operation.
 //
 // Revoke invitation.
 //
 // POST /api/v1/members/invitations/{invitationId}/revoke
-func (c *Client) RevokeInvitation(ctx context.Context, params RevokeInvitationParams) (RevokeInvitationRes, error) {
-	res, err := c.sendRevokeInvitation(ctx, params)
+func (c *Client) APIV1RevokeInvitation(ctx context.Context, params APIV1RevokeInvitationParams) (APIV1RevokeInvitationRes, error) {
+	res, err := c.sendAPIV1RevokeInvitation(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendRevokeInvitation(ctx context.Context, params RevokeInvitationParams) (res RevokeInvitationRes, err error) {
+func (c *Client) sendAPIV1RevokeInvitation(ctx context.Context, params APIV1RevokeInvitationParams) (res APIV1RevokeInvitationRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("revokeInvitation"),
+		otelogen.OperationID("APIV1RevokeInvitation"),
 		semconv.HTTPMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/api/v1/members/invitations/{invitationId}/revoke"),
 	}
@@ -2647,7 +1940,7 @@ func (c *Client) sendRevokeInvitation(ctx context.Context, params RevokeInvitati
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "RevokeInvitation",
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1RevokeInvitation",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2698,7 +1991,7 @@ func (c *Client) sendRevokeInvitation(ctx context.Context, params RevokeInvitati
 		var satisfied bitset
 		{
 			stage = "Security:Bearer"
-			switch err := c.securityBearer(ctx, "RevokeInvitation", r); {
+			switch err := c.securityBearer(ctx, "APIV1RevokeInvitation", r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -2734,7 +2027,731 @@ func (c *Client) sendRevokeInvitation(ctx context.Context, params RevokeInvitati
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeRevokeInvitationResponse(resp)
+	result, err := decodeAPIV1RevokeInvitationResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1UpdateMeMemberProfile invokes APIV1UpdateMeMemberProfile operation.
+//
+// Updates Me the member profile.
+//
+// PUT /api/v1/me/member/profile
+func (c *Client) APIV1UpdateMeMemberProfile(ctx context.Context, request *APIV1UpdateMeMemberProfileReq) (APIV1UpdateMeMemberProfileRes, error) {
+	res, err := c.sendAPIV1UpdateMeMemberProfile(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIV1UpdateMeMemberProfile(ctx context.Context, request *APIV1UpdateMeMemberProfileReq) (res APIV1UpdateMeMemberProfileRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("APIV1UpdateMeMemberProfile"),
+		semconv.HTTPMethodKey.String("PUT"),
+		semconv.HTTPRouteKey.String("/api/v1/me/member/profile"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1UpdateMeMemberProfile",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/me/member/profile"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "PUT", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIV1UpdateMeMemberProfileRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1UpdateMeMemberProfile", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1UpdateMeMemberProfileResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1UpdateMemberRole invokes APIV1UpdateMemberRole operation.
+//
+// Updates the role of a member.
+//
+// PUT /api/v1/members/{memberId}/role
+func (c *Client) APIV1UpdateMemberRole(ctx context.Context, request *APIV1UpdateMemberRoleReq, params APIV1UpdateMemberRoleParams) (APIV1UpdateMemberRoleRes, error) {
+	res, err := c.sendAPIV1UpdateMemberRole(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendAPIV1UpdateMemberRole(ctx context.Context, request *APIV1UpdateMemberRoleReq, params APIV1UpdateMemberRoleParams) (res APIV1UpdateMemberRoleRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("APIV1UpdateMemberRole"),
+		semconv.HTTPMethodKey.String("PUT"),
+		semconv.HTTPRouteKey.String("/api/v1/members/{memberId}/role"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1UpdateMemberRole",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [3]string
+	pathParts[0] = "/api/v1/members/"
+	{
+		// Encode "memberId" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "memberId",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.MemberId))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/role"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "PUT", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIV1UpdateMemberRoleRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1UpdateMemberRole", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1UpdateMemberRoleResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1UpdateProfile invokes APIV1UpdateProfile operation.
+//
+// Updates the user profile.
+//
+// PUT /api/v1/me/profile
+func (c *Client) APIV1UpdateProfile(ctx context.Context, request *APIV1UpdateProfileReq) (APIV1UpdateProfileRes, error) {
+	res, err := c.sendAPIV1UpdateProfile(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIV1UpdateProfile(ctx context.Context, request *APIV1UpdateProfileReq) (res APIV1UpdateProfileRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("APIV1UpdateProfile"),
+		semconv.HTTPMethodKey.String("PUT"),
+		semconv.HTTPRouteKey.String("/api/v1/me/profile"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1UpdateProfile",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/me/profile"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "PUT", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIV1UpdateProfileRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1UpdateProfile", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1UpdateProfileResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1UpdateProfilePhoto invokes APIV1UpdateProfilePhoto operation.
+//
+// Updates the user profile photo.
+//
+// PUT /api/v1/me/profile/photo
+func (c *Client) APIV1UpdateProfilePhoto(ctx context.Context, request *APIV1UpdateProfilePhotoReq) (APIV1UpdateProfilePhotoRes, error) {
+	res, err := c.sendAPIV1UpdateProfilePhoto(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIV1UpdateProfilePhoto(ctx context.Context, request *APIV1UpdateProfilePhotoReq) (res APIV1UpdateProfilePhotoRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("APIV1UpdateProfilePhoto"),
+		semconv.HTTPMethodKey.String("PUT"),
+		semconv.HTTPRouteKey.String("/api/v1/me/profile/photo"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1UpdateProfilePhoto",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/me/profile/photo"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "PUT", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIV1UpdateProfilePhotoRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1UpdateProfilePhoto", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1UpdateProfilePhotoResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1UpdateWorkspace invokes APIV1UpdateWorkspace operation.
+//
+// Updates the workspace.
+//
+// PUT /api/v1/workspaces/{workspaceId}
+func (c *Client) APIV1UpdateWorkspace(ctx context.Context, request *APIV1UpdateWorkspaceReq, params APIV1UpdateWorkspaceParams) (APIV1UpdateWorkspaceRes, error) {
+	res, err := c.sendAPIV1UpdateWorkspace(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendAPIV1UpdateWorkspace(ctx context.Context, request *APIV1UpdateWorkspaceReq, params APIV1UpdateWorkspaceParams) (res APIV1UpdateWorkspaceRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("APIV1UpdateWorkspace"),
+		semconv.HTTPMethodKey.String("PUT"),
+		semconv.HTTPRouteKey.String("/api/v1/workspaces/{workspaceId}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1UpdateWorkspace",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/api/v1/workspaces/"
+	{
+		// Encode "workspaceId" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "workspaceId",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.WorkspaceId))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "PUT", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIV1UpdateWorkspaceRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:Bearer"
+			switch err := c.securityBearer(ctx, "APIV1UpdateWorkspace", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"Bearer\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1UpdateWorkspaceResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// APIV1VerifyOTP invokes APIV1VerifyOTP operation.
+//
+// Verify OTP sent by user.
+//
+// POST /api/v1/auth/otp/verify
+func (c *Client) APIV1VerifyOTP(ctx context.Context, request *APIV1VerifyOTPReq) (APIV1VerifyOTPRes, error) {
+	res, err := c.sendAPIV1VerifyOTP(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendAPIV1VerifyOTP(ctx context.Context, request *APIV1VerifyOTPReq) (res APIV1VerifyOTPRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("APIV1VerifyOTP"),
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/api/v1/auth/otp/verify"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "APIV1VerifyOTP",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/auth/otp/verify"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeAPIV1VerifyOTPRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeAPIV1VerifyOTPResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// Ping invokes Ping operation.
+//
+// Checks if the server is running.
+//
+// GET /api/v1/ping
+func (c *Client) Ping(ctx context.Context) (PingRes, error) {
+	res, err := c.sendPing(ctx)
+	return res, err
+}
+
+func (c *Client) sendPing(ctx context.Context) (res PingRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("Ping"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/api/v1/ping"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "Ping",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/api/v1/ping"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodePingResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

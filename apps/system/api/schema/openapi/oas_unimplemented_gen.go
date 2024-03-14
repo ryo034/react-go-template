@@ -13,218 +13,218 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// APIV1AuthOAuthPost implements POST /api/v1/auth/oauth operation.
-//
-// Auth by OAuth.
-//
-// POST /api/v1/auth/oauth
-func (UnimplementedHandler) APIV1AuthOAuthPost(ctx context.Context) (r APIV1AuthOAuthPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1AuthOtpPost implements POST /api/v1/auth/otp operation.
-//
-// One Time Password (OTP) to user.
-//
-// POST /api/v1/auth/otp
-func (UnimplementedHandler) APIV1AuthOtpPost(ctx context.Context, req *APIV1AuthOtpPostReq) (r APIV1AuthOtpPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1AuthOtpVerifyPost implements POST /api/v1/auth/otp/verify operation.
-//
-// Verify OTP sent by user.
-//
-// POST /api/v1/auth/otp/verify
-func (UnimplementedHandler) APIV1AuthOtpVerifyPost(ctx context.Context, req *APIV1AuthOtpVerifyPostReq) (r APIV1AuthOtpVerifyPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1InvitationsGet implements GET /api/v1/invitations operation.
-//
-// Returns the pending invitations (not used yet).
-//
-// GET /api/v1/invitations
-func (UnimplementedHandler) APIV1InvitationsGet(ctx context.Context, params APIV1InvitationsGetParams) (r APIV1InvitationsGetRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1MeGet implements GET /api/v1/me operation.
-//
-// Returns the admin user.
-//
-// GET /api/v1/me
-func (UnimplementedHandler) APIV1MeGet(ctx context.Context) (r APIV1MeGetRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1MeMemberProfilePut implements PUT /api/v1/me/member/profile operation.
-//
-// Updates Me the member profile.
-//
-// PUT /api/v1/me/member/profile
-func (UnimplementedHandler) APIV1MeMemberProfilePut(ctx context.Context, req *APIV1MeMemberProfilePutReq) (r APIV1MeMemberProfilePutRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1MeProfilePhotoDelete implements DELETE /api/v1/me/profile/photo operation.
-//
-// Deletes the user profile photo.
-//
-// DELETE /api/v1/me/profile/photo
-func (UnimplementedHandler) APIV1MeProfilePhotoDelete(ctx context.Context) (r APIV1MeProfilePhotoDeleteRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1MeProfilePhotoPut implements PUT /api/v1/me/profile/photo operation.
-//
-// Updates the user profile photo.
-//
-// PUT /api/v1/me/profile/photo
-func (UnimplementedHandler) APIV1MeProfilePhotoPut(ctx context.Context, req *APIV1MeProfilePhotoPutReq) (r APIV1MeProfilePhotoPutRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1MeProfilePut implements PUT /api/v1/me/profile operation.
-//
-// Updates the user profile.
-//
-// PUT /api/v1/me/profile
-func (UnimplementedHandler) APIV1MeProfilePut(ctx context.Context, req *APIV1MeProfilePutReq) (r APIV1MeProfilePutRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1MeWorkspaceLeavePost implements POST /api/v1/me/workspace/leave operation.
-//
-// Leaves the workspace.
-//
-// POST /api/v1/me/workspace/leave
-func (UnimplementedHandler) APIV1MeWorkspaceLeavePost(ctx context.Context) (r APIV1MeWorkspaceLeavePostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1MembersGet implements GET /api/v1/members operation.
-//
-// Returns the members of the workspace.
-//
-// GET /api/v1/members
-func (UnimplementedHandler) APIV1MembersGet(ctx context.Context) (r APIV1MembersGetRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1MembersMemberIdDelete implements DELETE /api/v1/members/{memberId} operation.
-//
-// Removes a member from the workspace.
-//
-// DELETE /api/v1/members/{memberId}
-func (UnimplementedHandler) APIV1MembersMemberIdDelete(ctx context.Context, params APIV1MembersMemberIdDeleteParams) (r APIV1MembersMemberIdDeleteRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1MembersMemberIdRolePut implements PUT /api/v1/members/{memberId}/role operation.
-//
-// Updates the role of a member.
-//
-// PUT /api/v1/members/{memberId}/role
-func (UnimplementedHandler) APIV1MembersMemberIdRolePut(ctx context.Context, req *APIV1MembersMemberIdRolePutReq, params APIV1MembersMemberIdRolePutParams) (r APIV1MembersMemberIdRolePutRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1PingGet implements GET /api/v1/ping operation.
-//
-// Checks if the server is running.
-//
-// GET /api/v1/ping
-func (UnimplementedHandler) APIV1PingGet(ctx context.Context) (r APIV1PingGetRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1WorkspacesGet implements GET /api/v1/workspaces operation.
-//
-// Returns the workspaces the user is a member of.
-//
-// GET /api/v1/workspaces
-func (UnimplementedHandler) APIV1WorkspacesGet(ctx context.Context) (r APIV1WorkspacesGetRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1WorkspacesPost implements POST /api/v1/workspaces operation.
-//
-// Creates a new workspace.
-//
-// POST /api/v1/workspaces
-func (UnimplementedHandler) APIV1WorkspacesPost(ctx context.Context, req *APIV1WorkspacesPostReq) (r APIV1WorkspacesPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// APIV1WorkspacesWorkspaceIdPut implements PUT /api/v1/workspaces/{workspaceId} operation.
-//
-// Updates the workspace.
-//
-// PUT /api/v1/workspaces/{workspaceId}
-func (UnimplementedHandler) APIV1WorkspacesWorkspaceIdPut(ctx context.Context, req *APIV1WorkspacesWorkspaceIdPutReq, params APIV1WorkspacesWorkspaceIdPutParams) (r APIV1WorkspacesWorkspaceIdPutRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// AcceptInvitation implements acceptInvitation operation.
+// APIV1AcceptInvitation implements APIV1AcceptInvitation operation.
 //
 // Accept an invitation to join a workspace.
 //
 // POST /api/v1/members/invitations/{invitationId}/accept
-func (UnimplementedHandler) AcceptInvitation(ctx context.Context, params AcceptInvitationParams) (r AcceptInvitationRes, _ error) {
+func (UnimplementedHandler) APIV1AcceptInvitation(ctx context.Context, params APIV1AcceptInvitationParams) (r APIV1AcceptInvitationRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// GetInvitationByToken implements getInvitationByToken operation.
+// APIV1AuthByOAuth implements APIV1AuthByOAuth operation.
+//
+// Auth by OAuth.
+//
+// POST /api/v1/auth/oauth
+func (UnimplementedHandler) APIV1AuthByOAuth(ctx context.Context) (r APIV1AuthByOAuthRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1AuthByOtp implements APIV1AuthByOtp operation.
+//
+// One Time Password (OTP) to user.
+//
+// POST /api/v1/auth/otp
+func (UnimplementedHandler) APIV1AuthByOtp(ctx context.Context, req *APIV1AuthByOtpReq) (r APIV1AuthByOtpRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1CreateWorkspace implements APIV1CreateWorkspace operation.
+//
+// Creates a new workspace.
+//
+// POST /api/v1/workspaces
+func (UnimplementedHandler) APIV1CreateWorkspace(ctx context.Context, req *APIV1CreateWorkspaceReq) (r APIV1CreateWorkspaceRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1GetInvitationByToken implements APIV1GetInvitationByToken operation.
 //
 // Get Invitation by token.
 //
 // GET /api/v1/auth/invitations
-func (UnimplementedHandler) GetInvitationByToken(ctx context.Context, params GetInvitationByTokenParams) (r GetInvitationByTokenRes, _ error) {
+func (UnimplementedHandler) APIV1GetInvitationByToken(ctx context.Context, params APIV1GetInvitationByTokenParams) (r APIV1GetInvitationByTokenRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// InviteMultipleUsersToWorkspace implements inviteMultipleUsersToWorkspace operation.
+// APIV1GetInvitations implements APIV1GetInvitations operation.
+//
+// Returns the pending invitations (not used yet).
+//
+// GET /api/v1/invitations
+func (UnimplementedHandler) APIV1GetInvitations(ctx context.Context, params APIV1GetInvitationsParams) (r APIV1GetInvitationsRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1GetMe implements APIV1GetMe operation.
+//
+// Returns the admin user.
+//
+// GET /api/v1/me
+func (UnimplementedHandler) APIV1GetMe(ctx context.Context) (r APIV1GetMeRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1GetMembers implements APIV1GetMembers operation.
+//
+// Returns the members of the workspace.
+//
+// GET /api/v1/members
+func (UnimplementedHandler) APIV1GetMembers(ctx context.Context) (r APIV1GetMembersRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1GetWorkspaces implements APIV1GetWorkspaces operation.
+//
+// Returns the workspaces the user is a member of.
+//
+// GET /api/v1/workspaces
+func (UnimplementedHandler) APIV1GetWorkspaces(ctx context.Context) (r APIV1GetWorkspacesRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1InviteMultipleUsers implements APIV1InviteMultipleUsers operation.
 //
 // Invite multiple users to the workspace by email.
 //
 // POST /api/v1/members/invitations/bulk
-func (UnimplementedHandler) InviteMultipleUsersToWorkspace(ctx context.Context, req *InviteMultipleUsersToWorkspaceReq) (r InviteMultipleUsersToWorkspaceRes, _ error) {
+func (UnimplementedHandler) APIV1InviteMultipleUsers(ctx context.Context, req *APIV1InviteMultipleUsersReq) (r APIV1InviteMultipleUsersRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// ProcessInvitationEmail implements processInvitationEmail operation.
+// APIV1LeaveWorkspace implements APIV1LeaveWorkspace operation.
+//
+// Leaves the workspace.
+//
+// POST /api/v1/me/workspace/leave
+func (UnimplementedHandler) APIV1LeaveWorkspace(ctx context.Context) (r APIV1LeaveWorkspaceRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1ProcessInvitationEmail implements APIV1ProcessInvitationEmail operation.
 //
 // Process an invitation by verifying token and email.
 //
 // POST /api/v1/auth/invitations/process/email
-func (UnimplementedHandler) ProcessInvitationEmail(ctx context.Context, req *ProcessInvitationEmailReq) (r ProcessInvitationEmailRes, _ error) {
+func (UnimplementedHandler) APIV1ProcessInvitationEmail(ctx context.Context, req *APIV1ProcessInvitationEmailReq) (r APIV1ProcessInvitationEmailRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// ProcessInvitationOAuth implements processInvitationOAuth operation.
+// APIV1ProcessInvitationOAuth implements APIV1ProcessInvitationOAuth operation.
 //
 // Process an invitation by verifying token and OAuth, and register or add user to workspace.
 //
 // POST /api/v1/auth/invitations/process/oauth
-func (UnimplementedHandler) ProcessInvitationOAuth(ctx context.Context, req *ProcessInvitationOAuthReq) (r ProcessInvitationOAuthRes, _ error) {
+func (UnimplementedHandler) APIV1ProcessInvitationOAuth(ctx context.Context, req *APIV1ProcessInvitationOAuthReq) (r APIV1ProcessInvitationOAuthRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// ResendInvitation implements resendInvitation operation.
+// APIV1RemoveMember implements APIV1RemoveMember operation.
+//
+// Removes a member from the workspace.
+//
+// DELETE /api/v1/members/{memberId}
+func (UnimplementedHandler) APIV1RemoveMember(ctx context.Context, params APIV1RemoveMemberParams) (r APIV1RemoveMemberRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1RemoveProfilePhoto implements APIV1RemoveProfilePhoto operation.
+//
+// Deletes the user profile photo.
+//
+// DELETE /api/v1/me/profile/photo
+func (UnimplementedHandler) APIV1RemoveProfilePhoto(ctx context.Context) (r APIV1RemoveProfilePhotoRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1ResendInvitation implements APIV1ResendInvitation operation.
 //
 // Resend invitation.
 //
 // POST /api/v1/members/invitations/{invitationId}/resend
-func (UnimplementedHandler) ResendInvitation(ctx context.Context, params ResendInvitationParams) (r ResendInvitationRes, _ error) {
+func (UnimplementedHandler) APIV1ResendInvitation(ctx context.Context, params APIV1ResendInvitationParams) (r APIV1ResendInvitationRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// RevokeInvitation implements revokeInvitation operation.
+// APIV1RevokeInvitation implements APIV1RevokeInvitation operation.
 //
 // Revoke invitation.
 //
 // POST /api/v1/members/invitations/{invitationId}/revoke
-func (UnimplementedHandler) RevokeInvitation(ctx context.Context, params RevokeInvitationParams) (r RevokeInvitationRes, _ error) {
+func (UnimplementedHandler) APIV1RevokeInvitation(ctx context.Context, params APIV1RevokeInvitationParams) (r APIV1RevokeInvitationRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1UpdateMeMemberProfile implements APIV1UpdateMeMemberProfile operation.
+//
+// Updates Me the member profile.
+//
+// PUT /api/v1/me/member/profile
+func (UnimplementedHandler) APIV1UpdateMeMemberProfile(ctx context.Context, req *APIV1UpdateMeMemberProfileReq) (r APIV1UpdateMeMemberProfileRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1UpdateMemberRole implements APIV1UpdateMemberRole operation.
+//
+// Updates the role of a member.
+//
+// PUT /api/v1/members/{memberId}/role
+func (UnimplementedHandler) APIV1UpdateMemberRole(ctx context.Context, req *APIV1UpdateMemberRoleReq, params APIV1UpdateMemberRoleParams) (r APIV1UpdateMemberRoleRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1UpdateProfile implements APIV1UpdateProfile operation.
+//
+// Updates the user profile.
+//
+// PUT /api/v1/me/profile
+func (UnimplementedHandler) APIV1UpdateProfile(ctx context.Context, req *APIV1UpdateProfileReq) (r APIV1UpdateProfileRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1UpdateProfilePhoto implements APIV1UpdateProfilePhoto operation.
+//
+// Updates the user profile photo.
+//
+// PUT /api/v1/me/profile/photo
+func (UnimplementedHandler) APIV1UpdateProfilePhoto(ctx context.Context, req *APIV1UpdateProfilePhotoReq) (r APIV1UpdateProfilePhotoRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1UpdateWorkspace implements APIV1UpdateWorkspace operation.
+//
+// Updates the workspace.
+//
+// PUT /api/v1/workspaces/{workspaceId}
+func (UnimplementedHandler) APIV1UpdateWorkspace(ctx context.Context, req *APIV1UpdateWorkspaceReq, params APIV1UpdateWorkspaceParams) (r APIV1UpdateWorkspaceRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// APIV1VerifyOTP implements APIV1VerifyOTP operation.
+//
+// Verify OTP sent by user.
+//
+// POST /api/v1/auth/otp/verify
+func (UnimplementedHandler) APIV1VerifyOTP(ctx context.Context, req *APIV1VerifyOTPReq) (r APIV1VerifyOTPRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// Ping implements Ping operation.
+//
+// Checks if the server is running.
+//
+// GET /api/v1/ping
+func (UnimplementedHandler) Ping(ctx context.Context) (r PingRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

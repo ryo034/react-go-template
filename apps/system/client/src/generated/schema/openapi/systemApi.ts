@@ -7,319 +7,143 @@
 export interface paths {
   "/api/v1/ping": {
     /** Checks if the server is running */
-    get: {
-      responses: {
-        /** @description Ping response */
-        200: {
-          content: {
-            "application/json": {
-              /**
-               * @description Ping response message
-               * @example pong
-               */
-              message?: string;
-            };
-          };
-        };
-        500: components["responses"]["InternalServerError"];
-      };
-    };
+    get: operations["Ping"];
   };
   "/api/v1/auth/otp": {
     /**
      * Send OTP
      * @description One Time Password (OTP) to user.
      */
-    post: {
-      requestBody: components["requestBodies"]["AuthByOtpPost"];
-      responses: {
-        /** @description OTP has been sent successfully. */
-        200: {
-          content: never;
-        };
-        400: components["responses"]["BadRequestError"];
-        429: components["responses"]["TooManyRequestsError"];
-        500: components["responses"]["InternalServerError"];
-      };
-    };
+    post: operations["APIV1AuthByOtp"];
   };
   "/api/v1/auth/otp/verify": {
     /**
      * Verify OTP
      * @description Verify OTP sent by user.
      */
-    post: {
-      requestBody: components["requestBodies"]["AuthVerifyPost"];
-      responses: {
-        200: components["responses"]["AuthVerifyOTPResponse"];
-        400: components["responses"]["BadRequestError"];
-        401: components["responses"]["UnauthorizedError"];
-        429: components["responses"]["TooManyRequestsError"];
-        500: components["responses"]["InternalServerError"];
-      };
-    };
+    post: operations["APIV1VerifyOTP"];
   };
   "/api/v1/auth/invitations/process/email": {
     /** Process an invitation by verifying token and email */
-    post: operations["processInvitationEmail"];
+    post: operations["APIV1ProcessInvitationEmail"];
   };
   "/api/v1/auth/invitations/process/oauth": {
     /** Process an invitation by verifying token and OAuth, and register or add user to workspace. */
-    post: operations["processInvitationOAuth"];
+    post: operations["APIV1ProcessInvitationOAuth"];
   };
   "/api/v1/auth/invitations": {
     /** Get Invitation by token */
-    get: operations["getInvitationByToken"];
+    get: operations["APIV1GetInvitationByToken"];
   };
   "/api/v1/auth/oauth": {
     /**
      * Auth by OAuth
      * @description Auth by OAuth.
      */
-    post: {
-      responses: {
-        200: components["responses"]["AuthByOAuthResponse"];
-        401: components["responses"]["UnauthorizedError"];
-        500: components["responses"]["InternalServerError"];
-      };
-    };
+    post: operations["APIV1AuthByOAuth"];
   };
   "/api/v1/me": {
     /**
      * Get Admin User
      * @description Returns the admin user
      */
-    get: {
-      responses: {
-        200: components["responses"]["MeResponse"];
-        401: components["responses"]["UnauthorizedError"];
-        500: components["responses"]["InternalServerError"];
-      };
-    };
+    get: operations["APIV1GetMe"];
   };
   "/api/v1/me/profile": {
     /**
      * Update Profile
      * @description Updates the user profile
      */
-    put: {
-      requestBody: components["requestBodies"]["UpdateMeProfile"];
-      responses: {
-        200: components["responses"]["UpdateProfileResponse"];
-        400: components["responses"]["BadRequestError"];
-        401: components["responses"]["UnauthorizedError"];
-        403: components["responses"]["ForbiddenError"];
-        500: components["responses"]["InternalServerError"];
-      };
-    };
+    put: operations["APIV1UpdateProfile"];
   };
   "/api/v1/me/profile/photo": {
     /**
      * Update Profile Photo
      * @description Updates the user profile photo
      */
-    put: {
-      requestBody: components["requestBodies"]["UpdateMeProfilePhoto"];
-      responses: {
-        200: components["responses"]["UpdateProfilePhotoResponse"];
-        400: components["responses"]["BadRequestError"];
-        401: components["responses"]["UnauthorizedError"];
-        500: components["responses"]["InternalServerError"];
-      };
-    };
+    put: operations["APIV1UpdateProfilePhoto"];
     /**
      * Delete Profile Photo
      * @description Deletes the user profile photo
      */
-    delete: {
-      responses: {
-        200: components["responses"]["RemoveProfilePhotoResponse"];
-        401: components["responses"]["UnauthorizedError"];
-        500: components["responses"]["InternalServerError"];
-      };
-    };
+    delete: operations["APIV1RemoveProfilePhoto"];
   };
   "/api/v1/me/member/profile": {
     /**
      * Update Me Member Profile
      * @description Updates Me the member profile
      */
-    put: {
-      requestBody: components["requestBodies"]["UpdateMeMemberProfile"];
-      responses: {
-        200: components["responses"]["UpdateMeMemberProfileResponse"];
-        400: components["responses"]["BadRequestError"];
-        401: components["responses"]["UnauthorizedError"];
-        500: components["responses"]["InternalServerError"];
-      };
-    };
+    put: operations["APIV1UpdateMeMemberProfile"];
   };
   "/api/v1/me/workspace/leave": {
     /**
      * Leave Workspace
      * @description Leaves the workspace
      */
-    post: {
-      responses: {
-        /** @description Workspace left */
-        204: {
-          content: never;
-        };
-        400: components["responses"]["BadRequestError"];
-        401: components["responses"]["UnauthorizedError"];
-        403: components["responses"]["ForbiddenError"];
-        404: components["responses"]["NotFoundError"];
-        500: components["responses"]["InternalServerError"];
-      };
-    };
+    post: operations["APIV1LeaveWorkspace"];
   };
   "/api/v1/workspaces": {
     /**
      * Get Joined Workspaces
      * @description Returns the workspaces the user is a member of
      */
-    get: {
-      responses: {
-        200: components["responses"]["WorkspacesResponse"];
-        401: components["responses"]["UnauthorizedError"];
-        500: components["responses"]["InternalServerError"];
-      };
-    };
+    get: operations["APIV1GetWorkspaces"];
     /**
      * Create Workspace
      * @description Creates a new workspace
      */
-    post: {
-      requestBody: components["requestBodies"]["CreateWorkspace"];
-      responses: {
-        201: components["responses"]["CreateWorkspaceResponse"];
-        400: components["responses"]["BadRequestError"];
-        401: components["responses"]["UnauthorizedError"];
-        409: components["responses"]["ConflictError"];
-        500: components["responses"]["InternalServerError"];
-      };
-    };
+    post: operations["APIV1CreateWorkspace"];
   };
   "/api/v1/workspaces/{workspaceId}": {
     /**
      * Update Workspace
      * @description Updates the workspace
      */
-    put: {
-      parameters: {
-        path: {
-          /** @description Workspace id */
-          workspaceId: string;
-        };
-      };
-      requestBody: components["requestBodies"]["UpdateWorkspace"];
-      responses: {
-        200: components["responses"]["UpdateWorkspaceResponse"];
-        400: components["responses"]["BadRequestError"];
-        401: components["responses"]["UnauthorizedError"];
-        403: components["responses"]["ForbiddenError"];
-        404: components["responses"]["NotFoundError"];
-        409: components["responses"]["ConflictError"];
-        500: components["responses"]["InternalServerError"];
-      };
-    };
+    put: operations["APIV1UpdateWorkspace"];
   };
   "/api/v1/members": {
     /**
      * Get Members
      * @description Returns the members of the workspace
      */
-    get: {
-      responses: {
-        200: components["responses"]["MembersResponse"];
-        401: components["responses"]["UnauthorizedError"];
-        500: components["responses"]["InternalServerError"];
-      };
-    };
+    get: operations["APIV1GetMembers"];
   };
   "/api/v1/members/{memberId}": {
     /**
      * Remove Member
      * @description Removes a member from the workspace
      */
-    delete: {
-      parameters: {
-        path: {
-          /** @description Member id */
-          memberId: string;
-        };
-      };
-      responses: {
-        /** @description Member removed */
-        204: {
-          content: never;
-        };
-        400: components["responses"]["BadRequestError"];
-        401: components["responses"]["UnauthorizedError"];
-        403: components["responses"]["ForbiddenError"];
-        404: components["responses"]["NotFoundError"];
-        409: components["responses"]["ConflictError"];
-        500: components["responses"]["InternalServerError"];
-      };
-    };
+    delete: operations["APIV1RemoveMember"];
   };
   "/api/v1/members/{memberId}/role": {
     /**
      * Update Member Role
      * @description Updates the role of a member
      */
-    put: {
-      parameters: {
-        path: {
-          /** @description Member id */
-          memberId: string;
-        };
-      };
-      requestBody: components["requestBodies"]["UpdateMemberRole"];
-      responses: {
-        200: components["responses"]["UpdateMemberRoleResponse"];
-        400: components["responses"]["BadRequestError"];
-        401: components["responses"]["UnauthorizedError"];
-        403: components["responses"]["ForbiddenError"];
-        404: components["responses"]["NotFoundError"];
-        500: components["responses"]["InternalServerError"];
-      };
-    };
+    put: operations["APIV1UpdateMemberRole"];
   };
   "/api/v1/invitations": {
     /**
      * Get pending invitations
      * @description Returns the pending invitations (not used yet)
      */
-    get: {
-      parameters: {
-        query?: {
-          /** @description Invitation status */
-          status?: "accepted";
-        };
-      };
-      responses: {
-        200: components["responses"]["InvitationsResponse"];
-        401: components["responses"]["UnauthorizedError"];
-        500: components["responses"]["InternalServerError"];
-      };
-    };
+    get: operations["APIV1GetInvitations"];
   };
   "/api/v1/members/invitations/bulk": {
     /** Invite multiple users to the workspace by email */
-    post: operations["inviteMultipleUsersToWorkspace"];
+    post: operations["APIV1InviteMultipleUsers"];
   };
   "/api/v1/members/invitations/{invitationId}/accept": {
     /** Accept an invitation to join a workspace */
-    post: operations["acceptInvitation"];
+    post: operations["APIV1AcceptInvitation"];
   };
   "/api/v1/members/invitations/{invitationId}/revoke": {
     /** Revoke invitation */
-    post: operations["revokeInvitation"];
+    post: operations["APIV1RevokeInvitation"];
   };
   "/api/v1/members/invitations/{invitationId}/resend": {
     /** Resend invitation */
-    post: operations["resendInvitation"];
+    post: operations["APIV1ResendInvitation"];
   };
 }
 
@@ -904,8 +728,56 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /** Checks if the server is running */
+  Ping: {
+    responses: {
+      /** @description Ping response */
+      200: {
+        content: {
+          "application/json": {
+            /**
+             * @description Ping response message
+             * @example pong
+             */
+            message?: string;
+          };
+        };
+      };
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /**
+   * Send OTP
+   * @description One Time Password (OTP) to user.
+   */
+  APIV1AuthByOtp: {
+    requestBody: components["requestBodies"]["AuthByOtpPost"];
+    responses: {
+      /** @description OTP has been sent successfully. */
+      200: {
+        content: never;
+      };
+      400: components["responses"]["BadRequestError"];
+      429: components["responses"]["TooManyRequestsError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /**
+   * Verify OTP
+   * @description Verify OTP sent by user.
+   */
+  APIV1VerifyOTP: {
+    requestBody: components["requestBodies"]["AuthVerifyPost"];
+    responses: {
+      200: components["responses"]["AuthVerifyOTPResponse"];
+      400: components["responses"]["BadRequestError"];
+      401: components["responses"]["UnauthorizedError"];
+      429: components["responses"]["TooManyRequestsError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
   /** Process an invitation by verifying token and email */
-  processInvitationEmail: {
+  APIV1ProcessInvitationEmail: {
     requestBody: components["requestBodies"]["InvitationProcessEmail"];
     responses: {
       /** @description OTP has been sent successfully. */
@@ -917,7 +789,7 @@ export interface operations {
     };
   };
   /** Process an invitation by verifying token and OAuth, and register or add user to workspace. */
-  processInvitationOAuth: {
+  APIV1ProcessInvitationOAuth: {
     requestBody: components["requestBodies"]["InvitationProcessOAuth"];
     responses: {
       200: components["responses"]["InvitationProcessOAuthResponse"];
@@ -926,7 +798,7 @@ export interface operations {
     };
   };
   /** Get Invitation by token */
-  getInvitationByToken: {
+  APIV1GetInvitationByToken: {
     parameters: {
       query: {
         /** @description Invitation token */
@@ -941,8 +813,218 @@ export interface operations {
       500: components["responses"]["InternalServerError"];
     };
   };
+  /**
+   * Auth by OAuth
+   * @description Auth by OAuth.
+   */
+  APIV1AuthByOAuth: {
+    responses: {
+      200: components["responses"]["AuthByOAuthResponse"];
+      401: components["responses"]["UnauthorizedError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /**
+   * Get Admin User
+   * @description Returns the admin user
+   */
+  APIV1GetMe: {
+    responses: {
+      200: components["responses"]["MeResponse"];
+      401: components["responses"]["UnauthorizedError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /**
+   * Update Profile
+   * @description Updates the user profile
+   */
+  APIV1UpdateProfile: {
+    requestBody: components["requestBodies"]["UpdateMeProfile"];
+    responses: {
+      200: components["responses"]["UpdateProfileResponse"];
+      400: components["responses"]["BadRequestError"];
+      401: components["responses"]["UnauthorizedError"];
+      403: components["responses"]["ForbiddenError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /**
+   * Update Profile Photo
+   * @description Updates the user profile photo
+   */
+  APIV1UpdateProfilePhoto: {
+    requestBody: components["requestBodies"]["UpdateMeProfilePhoto"];
+    responses: {
+      200: components["responses"]["UpdateProfilePhotoResponse"];
+      400: components["responses"]["BadRequestError"];
+      401: components["responses"]["UnauthorizedError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /**
+   * Delete Profile Photo
+   * @description Deletes the user profile photo
+   */
+  APIV1RemoveProfilePhoto: {
+    responses: {
+      200: components["responses"]["RemoveProfilePhotoResponse"];
+      401: components["responses"]["UnauthorizedError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /**
+   * Update Me Member Profile
+   * @description Updates Me the member profile
+   */
+  APIV1UpdateMeMemberProfile: {
+    requestBody: components["requestBodies"]["UpdateMeMemberProfile"];
+    responses: {
+      200: components["responses"]["UpdateMeMemberProfileResponse"];
+      400: components["responses"]["BadRequestError"];
+      401: components["responses"]["UnauthorizedError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /**
+   * Leave Workspace
+   * @description Leaves the workspace
+   */
+  APIV1LeaveWorkspace: {
+    responses: {
+      /** @description Workspace left */
+      204: {
+        content: never;
+      };
+      400: components["responses"]["BadRequestError"];
+      401: components["responses"]["UnauthorizedError"];
+      403: components["responses"]["ForbiddenError"];
+      404: components["responses"]["NotFoundError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /**
+   * Get Joined Workspaces
+   * @description Returns the workspaces the user is a member of
+   */
+  APIV1GetWorkspaces: {
+    responses: {
+      200: components["responses"]["WorkspacesResponse"];
+      401: components["responses"]["UnauthorizedError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /**
+   * Create Workspace
+   * @description Creates a new workspace
+   */
+  APIV1CreateWorkspace: {
+    requestBody: components["requestBodies"]["CreateWorkspace"];
+    responses: {
+      201: components["responses"]["CreateWorkspaceResponse"];
+      400: components["responses"]["BadRequestError"];
+      401: components["responses"]["UnauthorizedError"];
+      409: components["responses"]["ConflictError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /**
+   * Update Workspace
+   * @description Updates the workspace
+   */
+  APIV1UpdateWorkspace: {
+    parameters: {
+      path: {
+        /** @description Workspace id */
+        workspaceId: string;
+      };
+    };
+    requestBody: components["requestBodies"]["UpdateWorkspace"];
+    responses: {
+      200: components["responses"]["UpdateWorkspaceResponse"];
+      400: components["responses"]["BadRequestError"];
+      401: components["responses"]["UnauthorizedError"];
+      403: components["responses"]["ForbiddenError"];
+      404: components["responses"]["NotFoundError"];
+      409: components["responses"]["ConflictError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /**
+   * Get Members
+   * @description Returns the members of the workspace
+   */
+  APIV1GetMembers: {
+    responses: {
+      200: components["responses"]["MembersResponse"];
+      401: components["responses"]["UnauthorizedError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /**
+   * Remove Member
+   * @description Removes a member from the workspace
+   */
+  APIV1RemoveMember: {
+    parameters: {
+      path: {
+        /** @description Member id */
+        memberId: string;
+      };
+    };
+    responses: {
+      /** @description Member removed */
+      204: {
+        content: never;
+      };
+      400: components["responses"]["BadRequestError"];
+      401: components["responses"]["UnauthorizedError"];
+      403: components["responses"]["ForbiddenError"];
+      404: components["responses"]["NotFoundError"];
+      409: components["responses"]["ConflictError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /**
+   * Update Member Role
+   * @description Updates the role of a member
+   */
+  APIV1UpdateMemberRole: {
+    parameters: {
+      path: {
+        /** @description Member id */
+        memberId: string;
+      };
+    };
+    requestBody: components["requestBodies"]["UpdateMemberRole"];
+    responses: {
+      200: components["responses"]["UpdateMemberRoleResponse"];
+      400: components["responses"]["BadRequestError"];
+      401: components["responses"]["UnauthorizedError"];
+      403: components["responses"]["ForbiddenError"];
+      404: components["responses"]["NotFoundError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
+  /**
+   * Get pending invitations
+   * @description Returns the pending invitations (not used yet)
+   */
+  APIV1GetInvitations: {
+    parameters: {
+      query?: {
+        /** @description Invitation status */
+        status?: "accepted";
+      };
+    };
+    responses: {
+      200: components["responses"]["InvitationsResponse"];
+      401: components["responses"]["UnauthorizedError"];
+      500: components["responses"]["InternalServerError"];
+    };
+  };
   /** Invite multiple users to the workspace by email */
-  inviteMultipleUsersToWorkspace: {
+  APIV1InviteMultipleUsers: {
     requestBody: components["requestBodies"]["InvitationsBulk"];
     responses: {
       200: components["responses"]["InvitationsBulkResponse"];
@@ -952,7 +1034,7 @@ export interface operations {
     };
   };
   /** Accept an invitation to join a workspace */
-  acceptInvitation: {
+  APIV1AcceptInvitation: {
     parameters: {
       path: {
         /** @description Invitation token */
@@ -968,7 +1050,7 @@ export interface operations {
     };
   };
   /** Revoke invitation */
-  revokeInvitation: {
+  APIV1RevokeInvitation: {
     parameters: {
       path: {
         /** @description Invitation id */
@@ -985,7 +1067,7 @@ export interface operations {
     };
   };
   /** Resend invitation */
-  resendInvitation: {
+  APIV1ResendInvitation: {
     parameters: {
       path: {
         /** @description Invitation id */

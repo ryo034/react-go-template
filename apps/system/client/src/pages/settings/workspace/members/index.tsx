@@ -117,6 +117,7 @@ export const SettingsWorkspaceMembersPage = () => {
                           <CommandGroup>
                             {SelectableRoleList.map((role) => {
                               return (
+                                // TODO: disabledになっているので修正する
                                 <CommandItem
                                   className="px-4 py-2 cursor-pointer"
                                   onSelect={(v) => onSelectRole(m, role)}

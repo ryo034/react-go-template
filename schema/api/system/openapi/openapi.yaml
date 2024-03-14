@@ -7,8 +7,9 @@ paths:
   /api/v1/ping:
     get:
       summary: Checks if the server is running
+      operationId: Ping
       tags:
-        - Health
+        - HealthCheck
       responses:
         '200':
           description: Ping response
@@ -26,8 +27,9 @@ paths:
   /api/v1/auth/otp:
     post:
       summary: Send OTP
+      operationId: APIV1AuthByOtp
       tags:
-        - OTP
+        - Auth
       description: One Time Password (OTP) to user.
       requestBody:
         $ref: '#/components/requestBodies/AuthByOtpPost'
@@ -43,8 +45,9 @@ paths:
   /api/v1/auth/otp/verify:
     post:
       summary: Verify OTP
+      operationId: APIV1VerifyOTP
       tags:
-        - OTP
+        - Auth
       description: Verify OTP sent by user.
       requestBody:
         $ref: '#/components/requestBodies/AuthVerifyPost'
@@ -62,9 +65,9 @@ paths:
   /api/v1/auth/invitations/process/email:
     post:
       summary: Process an invitation by verifying token and email
-      operationId: processInvitationEmail
+      operationId: APIV1ProcessInvitationEmail
       tags:
-        - Invitations
+        - ProcessInvitation
       requestBody:
         $ref: '#/components/requestBodies/InvitationProcessEmail'
       responses:
@@ -79,9 +82,9 @@ paths:
       summary: >-
         Process an invitation by verifying token and OAuth, and register or add
         user to workspace.
-      operationId: processInvitationOAuth
+      operationId: APIV1ProcessInvitationOAuth
       tags:
-        - Invitations
+        - ProcessInvitation
       security:
         - bearer: []
       requestBody:
@@ -96,7 +99,9 @@ paths:
   /api/v1/auth/invitations:
     get:
       summary: Get Invitation by token
-      operationId: getInvitationByToken
+      operationId: APIV1GetInvitationByToken
+      tags:
+        - ProcessInvitation
       parameters:
         - name: token
           in: query
@@ -119,8 +124,9 @@ paths:
   /api/v1/auth/oauth:
     post:
       summary: Auth by OAuth
+      operationId: APIV1AuthByOAuth
       tags:
-        - OAuth
+        - Auth
       description: Auth by OAuth.
       security:
         - bearer: []
@@ -134,9 +140,10 @@ paths:
   /api/v1/me:
     get:
       summary: Get Admin User
+      operationId: APIV1GetMe
       description: Returns the admin user
       tags:
-        - Admin
+        - Me
       security:
         - bearer: []
       responses:
@@ -149,9 +156,10 @@ paths:
   /api/v1/me/profile:
     put:
       summary: Update Profile
+      operationId: APIV1UpdateProfile
       description: Updates the user profile
       tags:
-        - Profile
+        - Me
       security:
         - bearer: []
       requestBody:
@@ -170,9 +178,10 @@ paths:
   /api/v1/me/profile/photo:
     put:
       summary: Update Profile Photo
+      operationId: APIV1UpdateProfilePhoto
       description: Updates the user profile photo
       tags:
-        - Profile
+        - Me
       security:
         - bearer: []
       requestBody:
@@ -188,9 +197,10 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     delete:
       summary: Delete Profile Photo
+      operationId: APIV1RemoveProfilePhoto
       description: Deletes the user profile photo
       tags:
-        - Profile
+        - Me
       security:
         - bearer: []
       responses:
@@ -203,9 +213,10 @@ paths:
   /api/v1/me/member/profile:
     put:
       summary: Update Me Member Profile
+      operationId: APIV1UpdateMeMemberProfile
       description: Updates Me the member profile
       tags:
-        - Profile
+        - Me
       security:
         - bearer: []
       requestBody:
@@ -222,9 +233,10 @@ paths:
   /api/v1/me/workspace/leave:
     post:
       summary: Leave Workspace
+      operationId: APIV1LeaveWorkspace
       description: Leaves the workspace
       tags:
-        - Workspaces
+        - Me
       security:
         - bearer: []
       responses:
@@ -243,10 +255,10 @@ paths:
   /api/v1/workspaces:
     get:
       summary: Get Joined Workspaces
+      operationId: APIV1GetWorkspaces
       description: Returns the workspaces the user is a member of
       tags:
-        - Admin
-        - Workspaces
+        - Workspace
       security:
         - bearer: []
       responses:
@@ -258,10 +270,10 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     post:
       summary: Create Workspace
+      operationId: APIV1CreateWorkspace
       description: Creates a new workspace
       tags:
-        - Admin
-        - Workspaces
+        - Workspace
       security:
         - bearer: []
       requestBody:
@@ -280,10 +292,10 @@ paths:
   /api/v1/workspaces/{workspaceId}:
     put:
       summary: Update Workspace
+      operationId: APIV1UpdateWorkspace
       description: Updates the workspace
       tags:
-        - Admin
-        - Workspaces
+        - Workspace
       security:
         - bearer: []
       parameters:
@@ -314,6 +326,7 @@ paths:
   /api/v1/members:
     get:
       summary: Get Members
+      operationId: APIV1GetMembers
       description: Returns the members of the workspace
       tags:
         - Member
@@ -329,6 +342,7 @@ paths:
   /api/v1/members/{memberId}:
     delete:
       summary: Remove Member
+      operationId: APIV1RemoveMember
       description: Removes a member from the workspace
       tags:
         - Member
@@ -360,6 +374,7 @@ paths:
   /api/v1/members/{memberId}/role:
     put:
       summary: Update Member Role
+      operationId: APIV1UpdateMemberRole
       description: Updates the role of a member
       tags:
         - Member
@@ -391,9 +406,10 @@ paths:
   /api/v1/invitations:
     get:
       summary: Get pending invitations
+      operationId: APIV1GetInvitations
       description: Returns the pending invitations (not used yet)
       tags:
-        - Invitations
+        - Invitation
       security:
         - bearer: []
       parameters:
@@ -414,9 +430,9 @@ paths:
   /api/v1/members/invitations/bulk:
     post:
       summary: Invite multiple users to the workspace by email
-      operationId: inviteMultipleUsersToWorkspace
+      operationId: APIV1InviteMultipleUsers
       tags:
-        - Invitations
+        - Invitation
       security:
         - bearer: []
       requestBody:
@@ -433,9 +449,9 @@ paths:
   /api/v1/members/invitations/{invitationId}/accept:
     post:
       summary: Accept an invitation to join a workspace
-      operationId: acceptInvitation
+      operationId: APIV1AcceptInvitation
       tags:
-        - Members
+        - Me
       security:
         - bearer: []
       parameters:
@@ -460,9 +476,9 @@ paths:
   /api/v1/members/invitations/{invitationId}/revoke:
     post:
       summary: Revoke invitation
-      operationId: revokeInvitation
+      operationId: APIV1RevokeInvitation
       tags:
-        - Invitations
+        - Invitation
       security:
         - bearer: []
       parameters:
@@ -489,9 +505,9 @@ paths:
   /api/v1/members/invitations/{invitationId}/resend:
     post:
       summary: Resend invitation
-      operationId: resendInvitation
+      operationId: APIV1ResendInvitation
       tags:
-        - Invitations
+        - Invitation
       security:
         - bearer: []
       parameters:

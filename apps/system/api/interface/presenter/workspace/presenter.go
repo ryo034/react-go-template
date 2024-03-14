@@ -20,7 +20,7 @@ type presenter struct {
 	ma   memberPresenter.Adapter
 }
 
-func (p *presenter) Create(w *workspace.Workspace) (openapi.APIV1WorkspacesPostRes, error) {
+func (p *presenter) Create(w *workspace.Workspace) (openapi.APIV1CreateWorkspaceRes, error) {
 	res := p.wa.Adapt(w)
 	return &openapi.CreateWorkspaceResponse{Workspace: res}, nil
 }
@@ -46,12 +46,12 @@ func (p *presenter) InviteMembers(ms invitation.Invitations, registeredList invi
 	}, nil
 }
 
-func (p *presenter) FindAllMembers(ms member.Members) (openapi.APIV1MembersGetRes, error) {
+func (p *presenter) FindAllMembers(ms member.Members) (openapi.APIV1GetMembersRes, error) {
 	res := p.ma.AdaptAll(ms)
 	return &openapi.MembersResponse{Members: res}, nil
 }
 
-func (p *presenter) RevokeInvitation(is invitation.Invitations) (openapi.RevokeInvitationRes, error) {
+func (p *presenter) RevokeInvitation(is invitation.Invitations) (openapi.APIV1RevokeInvitationRes, error) {
 	rs, err := p.inva.AdaptAll(is)
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func (p *presenter) RevokeInvitation(is invitation.Invitations) (openapi.RevokeI
 	return &rs, err
 }
 
-func (p *presenter) ResendInvitation(i *invitation.Invitation) (openapi.ResendInvitationRes, error) {
+func (p *presenter) ResendInvitation(i *invitation.Invitation) (openapi.APIV1ResendInvitationRes, error) {
 	rs, err := p.inva.Adapt(i)
 	if err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ func (p *presenter) ResendInvitation(i *invitation.Invitation) (openapi.ResendIn
 	return &rs, err
 }
 
-func (p *presenter) FindAllInvitation(is invitation.Invitations) (openapi.APIV1InvitationsGetRes, error) {
+func (p *presenter) FindAllInvitation(is invitation.Invitations) (openapi.APIV1GetInvitationsRes, error) {
 	rs, err := p.inva.AdaptAll(is)
 	if err != nil {
 		return nil, err
@@ -75,16 +75,16 @@ func (p *presenter) FindAllInvitation(is invitation.Invitations) (openapi.APIV1I
 	return &openapi.InvitationsResponse{Invitations: rs}, err
 }
 
-func (p *presenter) UpdateMemberRole(m *member.Member) (openapi.APIV1MembersMemberIdRolePutRes, error) {
+func (p *presenter) UpdateMemberRole(m *member.Member) (openapi.APIV1UpdateMemberRoleRes, error) {
 	res := p.ma.Adapt(m)
 	return &openapi.UpdateMemberRoleResponse{Member: res}, nil
 }
 
-func (p *presenter) UpdateWorkspace(w *workspace.Workspace) (openapi.APIV1WorkspacesWorkspaceIdPutRes, error) {
+func (p *presenter) UpdateWorkspace(w *workspace.Workspace) (openapi.APIV1UpdateWorkspaceRes, error) {
 	res := p.wa.Adapt(w)
 	return &openapi.UpdateWorkspaceResponse{Workspace: res}, nil
 }
 
-func (p *presenter) Leave() (openapi.APIV1MembersMemberIdDeleteRes, error) {
-	return &openapi.APIV1MembersMemberIdDeleteNoContent{}, nil
+func (p *presenter) Leave() (openapi.APIV1RemoveMemberRes, error) {
+	return &openapi.APIV1RemoveMemberNoContent{}, nil
 }

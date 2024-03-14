@@ -1,10 +1,10 @@
 workspaces:
   get:
     summary: Get Joined Workspaces
+    operationId: APIV1GetWorkspaces
     description: Returns the workspaces the user is a member of
     tags:
-      - Admin
-      - Workspaces
+      - Workspace
     security:
       - bearer: []
     responses:
@@ -16,10 +16,10 @@ workspaces:
         $ref: "#/components/responses/InternalServerError"
   post:
     summary: Create Workspace
+    operationId: APIV1CreateWorkspace
     description: Creates a new workspace
     tags:
-      - Admin
-      - Workspaces
+      - Workspace
     security:
       - bearer: []
     requestBody:
@@ -39,10 +39,10 @@ workspaces:
 workspace:
   put:
     summary: Update Workspace
+    operationId: APIV1UpdateWorkspace
     description: Updates the workspace
     tags:
-      - Admin
-      - Workspaces
+      - Workspace
     security:
       - bearer: []
     parameters:

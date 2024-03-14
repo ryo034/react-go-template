@@ -7,21 +7,21 @@ import (
 	"github.com/ryo034/react-go-template/apps/system/api/schema/openapi"
 )
 
-func (s *service) APIV1WorkspacesGet(ctx context.Context) (openapi.APIV1WorkspacesGetRes, error) {
+func (s *service) APIV1GetWorkspaces(ctx context.Context) (openapi.APIV1GetWorkspacesRes, error) {
 	return nil, nil
 }
 
-func (s *service) APIV1WorkspacesPost(ctx context.Context, req *openapi.APIV1WorkspacesPostReq) (openapi.APIV1WorkspacesPostRes, error) {
+func (s *service) APIV1CreateWorkspace(ctx context.Context, req *openapi.APIV1CreateWorkspaceReq) (openapi.APIV1CreateWorkspaceRes, error) {
 	return s.ctrl.Workspace.Create(ctx, workspace.CreateInput{
 		WorkspaceSubdomain: req.Subdomain,
 	})
 }
 
-func (s *service) APIV1MembersGet(ctx context.Context) (openapi.APIV1MembersGetRes, error) {
+func (s *service) APIV1GetMembers(ctx context.Context) (openapi.APIV1GetMembersRes, error) {
 	return s.ctrl.Workspace.FindAllMembers(ctx)
 }
 
-func (s *service) InviteMultipleUsersToWorkspace(ctx context.Context, req *openapi.InviteMultipleUsersToWorkspaceReq) (openapi.InviteMultipleUsersToWorkspaceRes, error) {
+func (s *service) APIV1InviteMultipleUsers(ctx context.Context, req *openapi.APIV1InviteMultipleUsersReq) (openapi.APIV1InviteMultipleUsersRes, error) {
 	ims := make([]workspace.Invitee, 0, len(req.Invitees))
 	for _, m := range req.Invitees {
 		ims = append(ims, workspace.Invitee{Email: m.Email, DisplayName: m.Name})
@@ -29,19 +29,19 @@ func (s *service) InviteMultipleUsersToWorkspace(ctx context.Context, req *opena
 	return s.ctrl.Workspace.InviteMembers(ctx, workspace.InviteesInput{InvitedMembers: ims})
 }
 
-func (s *service) RevokeInvitation(ctx context.Context, params openapi.RevokeInvitationParams) (openapi.RevokeInvitationRes, error) {
-	return s.ctrl.Workspace.RevokeInvitation(ctx, workspace.RevokeInvitationInput{
+func (s *service) APIV1RevokeInvitation(ctx context.Context, params openapi.APIV1RevokeInvitationParams) (openapi.APIV1RevokeInvitationRes, error) {
+	return s.ctrl.Workspace.APIV1RevokeInvitation(ctx, workspace.APIV1RevokeInvitationInput{
 		InvitationID: params.InvitationId,
 	})
 }
 
-func (s *service) ResendInvitation(ctx context.Context, params openapi.ResendInvitationParams) (openapi.ResendInvitationRes, error) {
-	return s.ctrl.Workspace.ResendInvitation(ctx, workspace.ResendInvitationInput{
+func (s *service) APIV1ResendInvitation(ctx context.Context, params openapi.APIV1ResendInvitationParams) (openapi.APIV1ResendInvitationRes, error) {
+	return s.ctrl.Workspace.APIV1ResendInvitation(ctx, workspace.APIV1ResendInvitationInput{
 		InvitationID: params.InvitationId,
 	})
 }
 
-func (s *service) APIV1InvitationsGet(ctx context.Context, params openapi.APIV1InvitationsGetParams) (openapi.APIV1InvitationsGetRes, error) {
+func (s *service) APIV1GetInvitations(ctx context.Context, params openapi.APIV1GetInvitationsParams) (openapi.APIV1GetInvitationsRes, error) {
 	status := ""
 	if params.Status.IsSet() {
 		//v, _ := params.Status.Get()
@@ -50,14 +50,14 @@ func (s *service) APIV1InvitationsGet(ctx context.Context, params openapi.APIV1I
 	return s.ctrl.Workspace.FindAllInvitation(ctx, workspace.FindAllInvitationInput{Status: status})
 }
 
-func (s *service) APIV1MembersMemberIdRolePut(ctx context.Context, req *openapi.APIV1MembersMemberIdRolePutReq, params openapi.APIV1MembersMemberIdRolePutParams) (openapi.APIV1MembersMemberIdRolePutRes, error) {
+func (s *service) APIV1UpdateMemberRole(ctx context.Context, req *openapi.APIV1UpdateMemberRoleReq, params openapi.APIV1UpdateMemberRoleParams) (openapi.APIV1UpdateMemberRoleRes, error) {
 	return s.ctrl.Workspace.UpdateMemberRole(ctx, workspace.UpdateMemberRoleInput{
 		MemberID: params.MemberId,
 		Role:     string(req.GetRole()),
 	})
 }
 
-func (s *service) APIV1WorkspacesWorkspaceIdPut(ctx context.Context, req *openapi.APIV1WorkspacesWorkspaceIdPutReq, params openapi.APIV1WorkspacesWorkspaceIdPutParams) (openapi.APIV1WorkspacesWorkspaceIdPutRes, error) {
+func (s *service) APIV1UpdateWorkspace(ctx context.Context, req *openapi.APIV1UpdateWorkspaceReq, params openapi.APIV1UpdateWorkspaceParams) (openapi.APIV1UpdateWorkspaceRes, error) {
 	n, ok := req.Name.Get()
 	if !ok {
 		n = ""
@@ -73,7 +73,7 @@ func (s *service) APIV1WorkspacesWorkspaceIdPut(ctx context.Context, req *openap
 	})
 }
 
-func (s *service) APIV1MembersMemberIdDelete(ctx context.Context, params openapi.APIV1MembersMemberIdDeleteParams) (openapi.APIV1MembersMemberIdDeleteRes, error) {
+func (s *service) APIV1RemoveMember(ctx context.Context, params openapi.APIV1RemoveMemberParams) (openapi.APIV1RemoveMemberRes, error) {
 	return s.ctrl.Workspace.Leave(ctx, workspace.LeaveInput{
 		MemberID: params.MemberId,
 	})

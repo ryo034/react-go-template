@@ -8,150 +8,150 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// APIV1AuthOAuthPost implements POST /api/v1/auth/oauth operation.
-	//
-	// Auth by OAuth.
-	//
-	// POST /api/v1/auth/oauth
-	APIV1AuthOAuthPost(ctx context.Context) (APIV1AuthOAuthPostRes, error)
-	// APIV1AuthOtpPost implements POST /api/v1/auth/otp operation.
-	//
-	// One Time Password (OTP) to user.
-	//
-	// POST /api/v1/auth/otp
-	APIV1AuthOtpPost(ctx context.Context, req *APIV1AuthOtpPostReq) (APIV1AuthOtpPostRes, error)
-	// APIV1AuthOtpVerifyPost implements POST /api/v1/auth/otp/verify operation.
-	//
-	// Verify OTP sent by user.
-	//
-	// POST /api/v1/auth/otp/verify
-	APIV1AuthOtpVerifyPost(ctx context.Context, req *APIV1AuthOtpVerifyPostReq) (APIV1AuthOtpVerifyPostRes, error)
-	// APIV1InvitationsGet implements GET /api/v1/invitations operation.
-	//
-	// Returns the pending invitations (not used yet).
-	//
-	// GET /api/v1/invitations
-	APIV1InvitationsGet(ctx context.Context, params APIV1InvitationsGetParams) (APIV1InvitationsGetRes, error)
-	// APIV1MeGet implements GET /api/v1/me operation.
-	//
-	// Returns the admin user.
-	//
-	// GET /api/v1/me
-	APIV1MeGet(ctx context.Context) (APIV1MeGetRes, error)
-	// APIV1MeMemberProfilePut implements PUT /api/v1/me/member/profile operation.
-	//
-	// Updates Me the member profile.
-	//
-	// PUT /api/v1/me/member/profile
-	APIV1MeMemberProfilePut(ctx context.Context, req *APIV1MeMemberProfilePutReq) (APIV1MeMemberProfilePutRes, error)
-	// APIV1MeProfilePhotoDelete implements DELETE /api/v1/me/profile/photo operation.
-	//
-	// Deletes the user profile photo.
-	//
-	// DELETE /api/v1/me/profile/photo
-	APIV1MeProfilePhotoDelete(ctx context.Context) (APIV1MeProfilePhotoDeleteRes, error)
-	// APIV1MeProfilePhotoPut implements PUT /api/v1/me/profile/photo operation.
-	//
-	// Updates the user profile photo.
-	//
-	// PUT /api/v1/me/profile/photo
-	APIV1MeProfilePhotoPut(ctx context.Context, req *APIV1MeProfilePhotoPutReq) (APIV1MeProfilePhotoPutRes, error)
-	// APIV1MeProfilePut implements PUT /api/v1/me/profile operation.
-	//
-	// Updates the user profile.
-	//
-	// PUT /api/v1/me/profile
-	APIV1MeProfilePut(ctx context.Context, req *APIV1MeProfilePutReq) (APIV1MeProfilePutRes, error)
-	// APIV1MeWorkspaceLeavePost implements POST /api/v1/me/workspace/leave operation.
-	//
-	// Leaves the workspace.
-	//
-	// POST /api/v1/me/workspace/leave
-	APIV1MeWorkspaceLeavePost(ctx context.Context) (APIV1MeWorkspaceLeavePostRes, error)
-	// APIV1MembersGet implements GET /api/v1/members operation.
-	//
-	// Returns the members of the workspace.
-	//
-	// GET /api/v1/members
-	APIV1MembersGet(ctx context.Context) (APIV1MembersGetRes, error)
-	// APIV1MembersMemberIdDelete implements DELETE /api/v1/members/{memberId} operation.
-	//
-	// Removes a member from the workspace.
-	//
-	// DELETE /api/v1/members/{memberId}
-	APIV1MembersMemberIdDelete(ctx context.Context, params APIV1MembersMemberIdDeleteParams) (APIV1MembersMemberIdDeleteRes, error)
-	// APIV1MembersMemberIdRolePut implements PUT /api/v1/members/{memberId}/role operation.
-	//
-	// Updates the role of a member.
-	//
-	// PUT /api/v1/members/{memberId}/role
-	APIV1MembersMemberIdRolePut(ctx context.Context, req *APIV1MembersMemberIdRolePutReq, params APIV1MembersMemberIdRolePutParams) (APIV1MembersMemberIdRolePutRes, error)
-	// APIV1PingGet implements GET /api/v1/ping operation.
-	//
-	// Checks if the server is running.
-	//
-	// GET /api/v1/ping
-	APIV1PingGet(ctx context.Context) (APIV1PingGetRes, error)
-	// APIV1WorkspacesGet implements GET /api/v1/workspaces operation.
-	//
-	// Returns the workspaces the user is a member of.
-	//
-	// GET /api/v1/workspaces
-	APIV1WorkspacesGet(ctx context.Context) (APIV1WorkspacesGetRes, error)
-	// APIV1WorkspacesPost implements POST /api/v1/workspaces operation.
-	//
-	// Creates a new workspace.
-	//
-	// POST /api/v1/workspaces
-	APIV1WorkspacesPost(ctx context.Context, req *APIV1WorkspacesPostReq) (APIV1WorkspacesPostRes, error)
-	// APIV1WorkspacesWorkspaceIdPut implements PUT /api/v1/workspaces/{workspaceId} operation.
-	//
-	// Updates the workspace.
-	//
-	// PUT /api/v1/workspaces/{workspaceId}
-	APIV1WorkspacesWorkspaceIdPut(ctx context.Context, req *APIV1WorkspacesWorkspaceIdPutReq, params APIV1WorkspacesWorkspaceIdPutParams) (APIV1WorkspacesWorkspaceIdPutRes, error)
-	// AcceptInvitation implements acceptInvitation operation.
+	// APIV1AcceptInvitation implements APIV1AcceptInvitation operation.
 	//
 	// Accept an invitation to join a workspace.
 	//
 	// POST /api/v1/members/invitations/{invitationId}/accept
-	AcceptInvitation(ctx context.Context, params AcceptInvitationParams) (AcceptInvitationRes, error)
-	// GetInvitationByToken implements getInvitationByToken operation.
+	APIV1AcceptInvitation(ctx context.Context, params APIV1AcceptInvitationParams) (APIV1AcceptInvitationRes, error)
+	// APIV1AuthByOAuth implements APIV1AuthByOAuth operation.
+	//
+	// Auth by OAuth.
+	//
+	// POST /api/v1/auth/oauth
+	APIV1AuthByOAuth(ctx context.Context) (APIV1AuthByOAuthRes, error)
+	// APIV1AuthByOtp implements APIV1AuthByOtp operation.
+	//
+	// One Time Password (OTP) to user.
+	//
+	// POST /api/v1/auth/otp
+	APIV1AuthByOtp(ctx context.Context, req *APIV1AuthByOtpReq) (APIV1AuthByOtpRes, error)
+	// APIV1CreateWorkspace implements APIV1CreateWorkspace operation.
+	//
+	// Creates a new workspace.
+	//
+	// POST /api/v1/workspaces
+	APIV1CreateWorkspace(ctx context.Context, req *APIV1CreateWorkspaceReq) (APIV1CreateWorkspaceRes, error)
+	// APIV1GetInvitationByToken implements APIV1GetInvitationByToken operation.
 	//
 	// Get Invitation by token.
 	//
 	// GET /api/v1/auth/invitations
-	GetInvitationByToken(ctx context.Context, params GetInvitationByTokenParams) (GetInvitationByTokenRes, error)
-	// InviteMultipleUsersToWorkspace implements inviteMultipleUsersToWorkspace operation.
+	APIV1GetInvitationByToken(ctx context.Context, params APIV1GetInvitationByTokenParams) (APIV1GetInvitationByTokenRes, error)
+	// APIV1GetInvitations implements APIV1GetInvitations operation.
+	//
+	// Returns the pending invitations (not used yet).
+	//
+	// GET /api/v1/invitations
+	APIV1GetInvitations(ctx context.Context, params APIV1GetInvitationsParams) (APIV1GetInvitationsRes, error)
+	// APIV1GetMe implements APIV1GetMe operation.
+	//
+	// Returns the admin user.
+	//
+	// GET /api/v1/me
+	APIV1GetMe(ctx context.Context) (APIV1GetMeRes, error)
+	// APIV1GetMembers implements APIV1GetMembers operation.
+	//
+	// Returns the members of the workspace.
+	//
+	// GET /api/v1/members
+	APIV1GetMembers(ctx context.Context) (APIV1GetMembersRes, error)
+	// APIV1GetWorkspaces implements APIV1GetWorkspaces operation.
+	//
+	// Returns the workspaces the user is a member of.
+	//
+	// GET /api/v1/workspaces
+	APIV1GetWorkspaces(ctx context.Context) (APIV1GetWorkspacesRes, error)
+	// APIV1InviteMultipleUsers implements APIV1InviteMultipleUsers operation.
 	//
 	// Invite multiple users to the workspace by email.
 	//
 	// POST /api/v1/members/invitations/bulk
-	InviteMultipleUsersToWorkspace(ctx context.Context, req *InviteMultipleUsersToWorkspaceReq) (InviteMultipleUsersToWorkspaceRes, error)
-	// ProcessInvitationEmail implements processInvitationEmail operation.
+	APIV1InviteMultipleUsers(ctx context.Context, req *APIV1InviteMultipleUsersReq) (APIV1InviteMultipleUsersRes, error)
+	// APIV1LeaveWorkspace implements APIV1LeaveWorkspace operation.
+	//
+	// Leaves the workspace.
+	//
+	// POST /api/v1/me/workspace/leave
+	APIV1LeaveWorkspace(ctx context.Context) (APIV1LeaveWorkspaceRes, error)
+	// APIV1ProcessInvitationEmail implements APIV1ProcessInvitationEmail operation.
 	//
 	// Process an invitation by verifying token and email.
 	//
 	// POST /api/v1/auth/invitations/process/email
-	ProcessInvitationEmail(ctx context.Context, req *ProcessInvitationEmailReq) (ProcessInvitationEmailRes, error)
-	// ProcessInvitationOAuth implements processInvitationOAuth operation.
+	APIV1ProcessInvitationEmail(ctx context.Context, req *APIV1ProcessInvitationEmailReq) (APIV1ProcessInvitationEmailRes, error)
+	// APIV1ProcessInvitationOAuth implements APIV1ProcessInvitationOAuth operation.
 	//
 	// Process an invitation by verifying token and OAuth, and register or add user to workspace.
 	//
 	// POST /api/v1/auth/invitations/process/oauth
-	ProcessInvitationOAuth(ctx context.Context, req *ProcessInvitationOAuthReq) (ProcessInvitationOAuthRes, error)
-	// ResendInvitation implements resendInvitation operation.
+	APIV1ProcessInvitationOAuth(ctx context.Context, req *APIV1ProcessInvitationOAuthReq) (APIV1ProcessInvitationOAuthRes, error)
+	// APIV1RemoveMember implements APIV1RemoveMember operation.
+	//
+	// Removes a member from the workspace.
+	//
+	// DELETE /api/v1/members/{memberId}
+	APIV1RemoveMember(ctx context.Context, params APIV1RemoveMemberParams) (APIV1RemoveMemberRes, error)
+	// APIV1RemoveProfilePhoto implements APIV1RemoveProfilePhoto operation.
+	//
+	// Deletes the user profile photo.
+	//
+	// DELETE /api/v1/me/profile/photo
+	APIV1RemoveProfilePhoto(ctx context.Context) (APIV1RemoveProfilePhotoRes, error)
+	// APIV1ResendInvitation implements APIV1ResendInvitation operation.
 	//
 	// Resend invitation.
 	//
 	// POST /api/v1/members/invitations/{invitationId}/resend
-	ResendInvitation(ctx context.Context, params ResendInvitationParams) (ResendInvitationRes, error)
-	// RevokeInvitation implements revokeInvitation operation.
+	APIV1ResendInvitation(ctx context.Context, params APIV1ResendInvitationParams) (APIV1ResendInvitationRes, error)
+	// APIV1RevokeInvitation implements APIV1RevokeInvitation operation.
 	//
 	// Revoke invitation.
 	//
 	// POST /api/v1/members/invitations/{invitationId}/revoke
-	RevokeInvitation(ctx context.Context, params RevokeInvitationParams) (RevokeInvitationRes, error)
+	APIV1RevokeInvitation(ctx context.Context, params APIV1RevokeInvitationParams) (APIV1RevokeInvitationRes, error)
+	// APIV1UpdateMeMemberProfile implements APIV1UpdateMeMemberProfile operation.
+	//
+	// Updates Me the member profile.
+	//
+	// PUT /api/v1/me/member/profile
+	APIV1UpdateMeMemberProfile(ctx context.Context, req *APIV1UpdateMeMemberProfileReq) (APIV1UpdateMeMemberProfileRes, error)
+	// APIV1UpdateMemberRole implements APIV1UpdateMemberRole operation.
+	//
+	// Updates the role of a member.
+	//
+	// PUT /api/v1/members/{memberId}/role
+	APIV1UpdateMemberRole(ctx context.Context, req *APIV1UpdateMemberRoleReq, params APIV1UpdateMemberRoleParams) (APIV1UpdateMemberRoleRes, error)
+	// APIV1UpdateProfile implements APIV1UpdateProfile operation.
+	//
+	// Updates the user profile.
+	//
+	// PUT /api/v1/me/profile
+	APIV1UpdateProfile(ctx context.Context, req *APIV1UpdateProfileReq) (APIV1UpdateProfileRes, error)
+	// APIV1UpdateProfilePhoto implements APIV1UpdateProfilePhoto operation.
+	//
+	// Updates the user profile photo.
+	//
+	// PUT /api/v1/me/profile/photo
+	APIV1UpdateProfilePhoto(ctx context.Context, req *APIV1UpdateProfilePhotoReq) (APIV1UpdateProfilePhotoRes, error)
+	// APIV1UpdateWorkspace implements APIV1UpdateWorkspace operation.
+	//
+	// Updates the workspace.
+	//
+	// PUT /api/v1/workspaces/{workspaceId}
+	APIV1UpdateWorkspace(ctx context.Context, req *APIV1UpdateWorkspaceReq, params APIV1UpdateWorkspaceParams) (APIV1UpdateWorkspaceRes, error)
+	// APIV1VerifyOTP implements APIV1VerifyOTP operation.
+	//
+	// Verify OTP sent by user.
+	//
+	// POST /api/v1/auth/otp/verify
+	APIV1VerifyOTP(ctx context.Context, req *APIV1VerifyOTPReq) (APIV1VerifyOTPRes, error)
+	// Ping implements Ping operation.
+	//
+	// Checks if the server is running.
+	//
+	// GET /api/v1/ping
+	Ping(ctx context.Context) (PingRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

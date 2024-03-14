@@ -34,6 +34,8 @@ export default class WorkspaceInfoStep {
 
   @Step("権限選択ポップアップの<role>をクリック")
   async clickRoleSelectButton(role: string) {
-    await page.getByTestId("selectMemberRole").getByText(role).click()
+    const popup = page.getByTestId("selectMemberRole")
+    await popup.waitFor()
+    await popup.getByText(role).click()
   }
 }

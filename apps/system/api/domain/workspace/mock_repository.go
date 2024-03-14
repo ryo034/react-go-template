@@ -150,18 +150,18 @@ func (mr *MockRepositoryMockRecorder) FindInviterFromToken(ctx, exec, token any)
 }
 
 // FindMember mocks base method.
-func (m *MockRepository) FindMember(ctx context.Context, exec bun.IDB, aID account.ID, wID ID) (*member.Member, error) {
+func (m *MockRepository) FindMember(ctx context.Context, exec bun.IDB, memID member.ID) (*member.Member, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindMember", ctx, exec, aID, wID)
+	ret := m.ctrl.Call(m, "FindMember", ctx, exec, memID)
 	ret0, _ := ret[0].(*member.Member)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindMember indicates an expected call of FindMember.
-func (mr *MockRepositoryMockRecorder) FindMember(ctx, exec, aID, wID any) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) FindMember(ctx, exec, memID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindMember", reflect.TypeOf((*MockRepository)(nil).FindMember), ctx, exec, aID, wID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindMember", reflect.TypeOf((*MockRepository)(nil).FindMember), ctx, exec, memID)
 }
 
 // InviteMembers mocks base method.
@@ -176,6 +176,20 @@ func (m *MockRepository) InviteMembers(ctx context.Context, exec bun.IDB, invite
 func (mr *MockRepositoryMockRecorder) InviteMembers(ctx, exec, inviter, is any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InviteMembers", reflect.TypeOf((*MockRepository)(nil).InviteMembers), ctx, exec, inviter, is)
+}
+
+// Leave mocks base method.
+func (m *MockRepository) Leave(ctx context.Context, exec bun.IDB, executorID, mID member.ID) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Leave", ctx, exec, executorID, mID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Leave indicates an expected call of Leave.
+func (mr *MockRepositoryMockRecorder) Leave(ctx, exec, executorID, mID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Leave", reflect.TypeOf((*MockRepository)(nil).Leave), ctx, exec, executorID, mID)
 }
 
 // Update mocks base method.

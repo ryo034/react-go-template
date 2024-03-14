@@ -16,26 +16,150 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-// APIV1InvitationsGetParams is parameters of GET /api/v1/invitations operation.
-type APIV1InvitationsGetParams struct {
-	// Invitation status.
-	Status OptAPIV1InvitationsGetStatus
+// APIV1AcceptInvitationParams is parameters of APIV1AcceptInvitation operation.
+type APIV1AcceptInvitationParams struct {
+	// Invitation token.
+	InvitationId uuid.UUID
 }
 
-func unpackAPIV1InvitationsGetParams(packed middleware.Parameters) (params APIV1InvitationsGetParams) {
+func unpackAPIV1AcceptInvitationParams(packed middleware.Parameters) (params APIV1AcceptInvitationParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "invitationId",
+			In:   "path",
+		}
+		params.InvitationId = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeAPIV1AcceptInvitationParams(args [1]string, argsEscaped bool, r *http.Request) (params APIV1AcceptInvitationParams, _ error) {
+	// Decode path: invitationId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "invitationId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.InvitationId = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "invitationId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// APIV1GetInvitationByTokenParams is parameters of APIV1GetInvitationByToken operation.
+type APIV1GetInvitationByTokenParams struct {
+	// Invitation token.
+	Token uuid.UUID
+}
+
+func unpackAPIV1GetInvitationByTokenParams(packed middleware.Parameters) (params APIV1GetInvitationByTokenParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "token",
+			In:   "query",
+		}
+		params.Token = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeAPIV1GetInvitationByTokenParams(args [0]string, argsEscaped bool, r *http.Request) (params APIV1GetInvitationByTokenParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: token.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "token",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.Token = c
+				return nil
+			}); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "token",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// APIV1GetInvitationsParams is parameters of APIV1GetInvitations operation.
+type APIV1GetInvitationsParams struct {
+	// Invitation status.
+	Status OptAPIV1GetInvitationsStatus
+}
+
+func unpackAPIV1GetInvitationsParams(packed middleware.Parameters) (params APIV1GetInvitationsParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "status",
 			In:   "query",
 		}
 		if v, ok := packed[key]; ok {
-			params.Status = v.(OptAPIV1InvitationsGetStatus)
+			params.Status = v.(OptAPIV1GetInvitationsStatus)
 		}
 	}
 	return params
 }
 
-func decodeAPIV1InvitationsGetParams(args [0]string, argsEscaped bool, r *http.Request) (params APIV1InvitationsGetParams, _ error) {
+func decodeAPIV1GetInvitationsParams(args [0]string, argsEscaped bool, r *http.Request) (params APIV1GetInvitationsParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode query: status.
 	if err := func() error {
@@ -47,7 +171,7 @@ func decodeAPIV1InvitationsGetParams(args [0]string, argsEscaped bool, r *http.R
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotStatusVal APIV1InvitationsGetStatus
+				var paramsDotStatusVal APIV1GetInvitationsStatus
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
@@ -59,7 +183,7 @@ func decodeAPIV1InvitationsGetParams(args [0]string, argsEscaped bool, r *http.R
 						return err
 					}
 
-					paramsDotStatusVal = APIV1InvitationsGetStatus(c)
+					paramsDotStatusVal = APIV1GetInvitationsStatus(c)
 					return nil
 				}(); err != nil {
 					return err
@@ -96,13 +220,13 @@ func decodeAPIV1InvitationsGetParams(args [0]string, argsEscaped bool, r *http.R
 	return params, nil
 }
 
-// APIV1MembersMemberIdDeleteParams is parameters of DELETE /api/v1/members/{memberId} operation.
-type APIV1MembersMemberIdDeleteParams struct {
+// APIV1RemoveMemberParams is parameters of APIV1RemoveMember operation.
+type APIV1RemoveMemberParams struct {
 	// Member id.
 	MemberId uuid.UUID
 }
 
-func unpackAPIV1MembersMemberIdDeleteParams(packed middleware.Parameters) (params APIV1MembersMemberIdDeleteParams) {
+func unpackAPIV1RemoveMemberParams(packed middleware.Parameters) (params APIV1RemoveMemberParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "memberId",
@@ -113,7 +237,7 @@ func unpackAPIV1MembersMemberIdDeleteParams(packed middleware.Parameters) (param
 	return params
 }
 
-func decodeAPIV1MembersMemberIdDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params APIV1MembersMemberIdDeleteParams, _ error) {
+func decodeAPIV1RemoveMemberParams(args [1]string, argsEscaped bool, r *http.Request) (params APIV1RemoveMemberParams, _ error) {
 	// Decode path: memberId.
 	if err := func() error {
 		param := args[0]
@@ -162,13 +286,145 @@ func decodeAPIV1MembersMemberIdDeleteParams(args [1]string, argsEscaped bool, r 
 	return params, nil
 }
 
-// APIV1MembersMemberIdRolePutParams is parameters of PUT /api/v1/members/{memberId}/role operation.
-type APIV1MembersMemberIdRolePutParams struct {
+// APIV1ResendInvitationParams is parameters of APIV1ResendInvitation operation.
+type APIV1ResendInvitationParams struct {
+	// Invitation id.
+	InvitationId uuid.UUID
+}
+
+func unpackAPIV1ResendInvitationParams(packed middleware.Parameters) (params APIV1ResendInvitationParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "invitationId",
+			In:   "path",
+		}
+		params.InvitationId = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeAPIV1ResendInvitationParams(args [1]string, argsEscaped bool, r *http.Request) (params APIV1ResendInvitationParams, _ error) {
+	// Decode path: invitationId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "invitationId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.InvitationId = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "invitationId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// APIV1RevokeInvitationParams is parameters of APIV1RevokeInvitation operation.
+type APIV1RevokeInvitationParams struct {
+	// Invitation id.
+	InvitationId uuid.UUID
+}
+
+func unpackAPIV1RevokeInvitationParams(packed middleware.Parameters) (params APIV1RevokeInvitationParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "invitationId",
+			In:   "path",
+		}
+		params.InvitationId = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeAPIV1RevokeInvitationParams(args [1]string, argsEscaped bool, r *http.Request) (params APIV1RevokeInvitationParams, _ error) {
+	// Decode path: invitationId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "invitationId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.InvitationId = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "invitationId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// APIV1UpdateMemberRoleParams is parameters of APIV1UpdateMemberRole operation.
+type APIV1UpdateMemberRoleParams struct {
 	// Member id.
 	MemberId uuid.UUID
 }
 
-func unpackAPIV1MembersMemberIdRolePutParams(packed middleware.Parameters) (params APIV1MembersMemberIdRolePutParams) {
+func unpackAPIV1UpdateMemberRoleParams(packed middleware.Parameters) (params APIV1UpdateMemberRoleParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "memberId",
@@ -179,7 +435,7 @@ func unpackAPIV1MembersMemberIdRolePutParams(packed middleware.Parameters) (para
 	return params
 }
 
-func decodeAPIV1MembersMemberIdRolePutParams(args [1]string, argsEscaped bool, r *http.Request) (params APIV1MembersMemberIdRolePutParams, _ error) {
+func decodeAPIV1UpdateMemberRoleParams(args [1]string, argsEscaped bool, r *http.Request) (params APIV1UpdateMemberRoleParams, _ error) {
 	// Decode path: memberId.
 	if err := func() error {
 		param := args[0]
@@ -228,13 +484,13 @@ func decodeAPIV1MembersMemberIdRolePutParams(args [1]string, argsEscaped bool, r
 	return params, nil
 }
 
-// APIV1WorkspacesWorkspaceIdPutParams is parameters of PUT /api/v1/workspaces/{workspaceId} operation.
-type APIV1WorkspacesWorkspaceIdPutParams struct {
+// APIV1UpdateWorkspaceParams is parameters of APIV1UpdateWorkspace operation.
+type APIV1UpdateWorkspaceParams struct {
 	// Workspace id.
 	WorkspaceId uuid.UUID
 }
 
-func unpackAPIV1WorkspacesWorkspaceIdPutParams(packed middleware.Parameters) (params APIV1WorkspacesWorkspaceIdPutParams) {
+func unpackAPIV1UpdateWorkspaceParams(packed middleware.Parameters) (params APIV1UpdateWorkspaceParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "workspaceId",
@@ -245,7 +501,7 @@ func unpackAPIV1WorkspacesWorkspaceIdPutParams(packed middleware.Parameters) (pa
 	return params
 }
 
-func decodeAPIV1WorkspacesWorkspaceIdPutParams(args [1]string, argsEscaped bool, r *http.Request) (params APIV1WorkspacesWorkspaceIdPutParams, _ error) {
+func decodeAPIV1UpdateWorkspaceParams(args [1]string, argsEscaped bool, r *http.Request) (params APIV1UpdateWorkspaceParams, _ error) {
 	// Decode path: workspaceId.
 	if err := func() error {
 		param := args[0]
@@ -287,262 +543,6 @@ func decodeAPIV1WorkspacesWorkspaceIdPutParams(args [1]string, argsEscaped bool,
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
 			Name: "workspaceId",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// AcceptInvitationParams is parameters of acceptInvitation operation.
-type AcceptInvitationParams struct {
-	// Invitation token.
-	InvitationId uuid.UUID
-}
-
-func unpackAcceptInvitationParams(packed middleware.Parameters) (params AcceptInvitationParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "invitationId",
-			In:   "path",
-		}
-		params.InvitationId = packed[key].(uuid.UUID)
-	}
-	return params
-}
-
-func decodeAcceptInvitationParams(args [1]string, argsEscaped bool, r *http.Request) (params AcceptInvitationParams, _ error) {
-	// Decode path: invitationId.
-	if err := func() error {
-		param := args[0]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "invitationId",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToUUID(val)
-				if err != nil {
-					return err
-				}
-
-				params.InvitationId = c
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "invitationId",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// GetInvitationByTokenParams is parameters of getInvitationByToken operation.
-type GetInvitationByTokenParams struct {
-	// Invitation token.
-	Token uuid.UUID
-}
-
-func unpackGetInvitationByTokenParams(packed middleware.Parameters) (params GetInvitationByTokenParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "token",
-			In:   "query",
-		}
-		params.Token = packed[key].(uuid.UUID)
-	}
-	return params
-}
-
-func decodeGetInvitationByTokenParams(args [0]string, argsEscaped bool, r *http.Request) (params GetInvitationByTokenParams, _ error) {
-	q := uri.NewQueryDecoder(r.URL.Query())
-	// Decode query: token.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "token",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToUUID(val)
-				if err != nil {
-					return err
-				}
-
-				params.Token = c
-				return nil
-			}); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "token",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// ResendInvitationParams is parameters of resendInvitation operation.
-type ResendInvitationParams struct {
-	// Invitation id.
-	InvitationId uuid.UUID
-}
-
-func unpackResendInvitationParams(packed middleware.Parameters) (params ResendInvitationParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "invitationId",
-			In:   "path",
-		}
-		params.InvitationId = packed[key].(uuid.UUID)
-	}
-	return params
-}
-
-func decodeResendInvitationParams(args [1]string, argsEscaped bool, r *http.Request) (params ResendInvitationParams, _ error) {
-	// Decode path: invitationId.
-	if err := func() error {
-		param := args[0]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "invitationId",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToUUID(val)
-				if err != nil {
-					return err
-				}
-
-				params.InvitationId = c
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "invitationId",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// RevokeInvitationParams is parameters of revokeInvitation operation.
-type RevokeInvitationParams struct {
-	// Invitation id.
-	InvitationId uuid.UUID
-}
-
-func unpackRevokeInvitationParams(packed middleware.Parameters) (params RevokeInvitationParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "invitationId",
-			In:   "path",
-		}
-		params.InvitationId = packed[key].(uuid.UUID)
-	}
-	return params
-}
-
-func decodeRevokeInvitationParams(args [1]string, argsEscaped bool, r *http.Request) (params RevokeInvitationParams, _ error) {
-	// Decode path: invitationId.
-	if err := func() error {
-		param := args[0]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "invitationId",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToUUID(val)
-				if err != nil {
-					return err
-				}
-
-				params.InvitationId = c
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "invitationId",
 			In:   "path",
 			Err:  err,
 		}

@@ -1,8 +1,9 @@
 ping:
   get:
     summary: Checks if the server is running
+    operationId: Ping
     tags:
-      - Health
+      - HealthCheck
     responses:
       "200":
         description: Ping response

@@ -25,13 +25,13 @@ import (
 )
 
 type Controller interface {
-	Find(ctx context.Context) (openapi.APIV1MeGetRes, error)
-	AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error)
-	UpdateName(ctx context.Context, i UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error)
-	UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1MeMemberProfilePutRes, error)
-	UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoInput) (openapi.APIV1MeProfilePhotoPutRes, error)
-	RemoveProfilePhoto(ctx context.Context) (openapi.APIV1MeProfilePhotoDeleteRes, error)
-	LeaveWorkspace(ctx context.Context) (openapi.APIV1MeWorkspaceLeavePostRes, error)
+	Find(ctx context.Context) (openapi.APIV1GetMeRes, error)
+	AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.APIV1AcceptInvitationRes, error)
+	UpdateName(ctx context.Context, i UpdateProfileInput) (openapi.APIV1UpdateProfileRes, error)
+	UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1UpdateMeMemberProfileRes, error)
+	UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoInput) (openapi.APIV1UpdateProfilePhotoRes, error)
+	RemoveProfilePhoto(ctx context.Context) (openapi.APIV1RemoveProfilePhotoRes, error)
+	LeaveWorkspace(ctx context.Context) (openapi.APIV1LeaveWorkspaceRes, error)
 }
 
 type controller struct {
@@ -64,27 +64,27 @@ func NewController(uc meUc.UseCase, resl shared.Resolver, co infraShared.Context
 	return &controller{uc, resl, co}
 }
 
-func (c *controller) Find(ctx context.Context) (openapi.APIV1MeGetRes, error) {
+func (c *controller) Find(ctx context.Context) (openapi.APIV1GetMeRes, error) {
 	aID, err := c.co.GetUID(ctx)
 	if err != nil {
 		return nil, err
 	}
 	res, err := c.uc.Find(ctx, aID)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1MeGetRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1GetMeRes), nil
 	}
 	return res, nil
 }
 
-func (c *controller) AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error) {
+func (c *controller) AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.APIV1AcceptInvitationRes, error) {
 	aID, err := c.co.GetUID(ctx)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.AcceptInvitationRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1AcceptInvitationRes), nil
 	}
 	in := meUc.AcceptInvitationInput{AccountID: aID, InvitationID: invitation.NewID(i.InvitationID)}
 	res, err := c.uc.AcceptInvitation(ctx, in)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.AcceptInvitationRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1AcceptInvitationRes), nil
 	}
 	return res, nil
 }
@@ -97,18 +97,18 @@ func NewUpdateNameInput(i UpdateProfileInput, aID account.ID) (meUc.UpdateNameIn
 	return meUc.UpdateNameInput{Name: na, AccountID: aID}, nil
 }
 
-func (c *controller) UpdateName(ctx context.Context, i UpdateProfileInput) (openapi.APIV1MeProfilePutRes, error) {
+func (c *controller) UpdateName(ctx context.Context, i UpdateProfileInput) (openapi.APIV1UpdateProfileRes, error) {
 	aID, err := c.co.GetUID(ctx)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePutRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1UpdateProfileRes), nil
 	}
 	in, err := NewUpdateNameInput(i, aID)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePutRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1UpdateProfileRes), nil
 	}
 	res, err := c.uc.UpdateName(ctx, in)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePutRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1UpdateProfileRes), nil
 	}
 	return res, nil
 }
@@ -138,31 +138,31 @@ func NewUpdateMemberProfileInput(i UpdateMemberProfileInput, aID account.ID) (me
 	return meUc.UpdateMemberProfileInput{AccountID: aID, Profile: pr}, nil
 }
 
-func (c *controller) UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1MeMemberProfilePutRes, error) {
+func (c *controller) UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1UpdateMeMemberProfileRes, error) {
 	aID, err := c.co.GetUID(ctx)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1MeMemberProfilePutRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1UpdateMeMemberProfileRes), nil
 	}
 	in, err := NewUpdateMemberProfileInput(i, aID)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1MeMemberProfilePutRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1UpdateMeMemberProfileRes), nil
 	}
 	res, err := c.uc.UpdateMemberProfile(ctx, in)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1MeMemberProfilePutRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1UpdateMeMemberProfileRes), nil
 	}
 	return res, nil
 }
 
-func (c *controller) UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoInput) (openapi.APIV1MeProfilePhotoPutRes, error) {
+func (c *controller) UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoInput) (openapi.APIV1UpdateProfilePhotoRes, error) {
 	aID, err := c.co.GetUID(ctx)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePhotoPutRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1UpdateProfilePhotoRes), nil
 	}
 
 	_, params, err := mime.ParseMediaType(i.Header.Get("Content-Disposition"))
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePhotoPutRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1UpdateProfilePhotoRes), nil
 	}
 	filename := params["filename"]
 	ext := filepath.Ext(filename)
@@ -181,7 +181,7 @@ func (c *controller) UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhot
 	}
 
 	if avatarExt == "" {
-		return c.resl.Error(ctx, domainErr.NewBadRequest(fmt.Sprintf("invalid file type: %s", ext))).(openapi.APIV1MeProfilePhotoPutRes), nil
+		return c.resl.Error(ctx, domainErr.NewBadRequest(fmt.Sprintf("invalid file type: %s", ext))).(openapi.APIV1UpdateProfilePhotoRes), nil
 	}
 
 	in := meUc.UpdateProfilePhotoInput{
@@ -193,33 +193,33 @@ func (c *controller) UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhot
 	}
 	res, err := c.uc.UpdateProfilePhoto(ctx, in)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePhotoPutRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1UpdateProfilePhotoRes), nil
 	}
 	return res, nil
 }
 
-func (c *controller) RemoveProfilePhoto(ctx context.Context) (openapi.APIV1MeProfilePhotoDeleteRes, error) {
+func (c *controller) RemoveProfilePhoto(ctx context.Context) (openapi.APIV1RemoveProfilePhotoRes, error) {
 	aID, err := c.co.GetUID(ctx)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePhotoDeleteRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1RemoveProfilePhotoRes), nil
 	}
 	in := meUc.RemoveProfilePhotoInput{AccountID: aID}
 	res, err := c.uc.RemoveProfilePhoto(ctx, in)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1MeProfilePhotoDeleteRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1RemoveProfilePhotoRes), nil
 	}
 	return res, nil
 }
 
-func (c *controller) LeaveWorkspace(ctx context.Context) (openapi.APIV1MeWorkspaceLeavePostRes, error) {
+func (c *controller) LeaveWorkspace(ctx context.Context) (openapi.APIV1LeaveWorkspaceRes, error) {
 	aID, err := c.co.GetUID(ctx)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1MeWorkspaceLeavePostRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1LeaveWorkspaceRes), nil
 	}
 	in := meUc.LeaveWorkspaceInput{AccountID: aID}
 	res, err := c.uc.LeaveWorkspace(ctx, in)
 	if err != nil {
-		return c.resl.Error(ctx, err).(openapi.APIV1MeWorkspaceLeavePostRes), nil
+		return c.resl.Error(ctx, err).(openapi.APIV1LeaveWorkspaceRes), nil
 	}
 	return res, nil
 }

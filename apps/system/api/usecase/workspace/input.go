@@ -53,13 +53,13 @@ type VerifyInvitationTokenInput struct {
 	Token invitation.Token
 }
 
-type RevokeInvitationInput struct {
+type APIV1RevokeInvitationInput struct {
 	AccountID          account.ID
 	CurrentWorkspaceID workspace.ID
 	InvitationID       invitation.ID
 }
 
-type ResendInvitationInput struct {
+type APIV1ResendInvitationInput struct {
 	AccountID          account.ID
 	CurrentWorkspaceID workspace.ID
 	InvitationID       invitation.ID

@@ -6,11 +6,11 @@ import (
 )
 
 type OutputPort interface {
-	Find(m *me.Me) (openapi.APIV1MeGetRes, error)
-	AcceptInvitation(m *me.Me) (openapi.AcceptInvitationRes, error)
-	UpdateProfile(m *me.Me) (openapi.APIV1MeProfilePutRes, error)
-	UpdateMemberProfile(m *me.Me) (openapi.APIV1MeMemberProfilePutRes, error)
-	UpdateProfilePhoto(m *me.Me) (openapi.APIV1MeProfilePhotoPutRes, error)
-	RemoveProfilePhoto(m *me.Me) (openapi.APIV1MeProfilePhotoDeleteRes, error)
-	LeaveWorkspace() (openapi.APIV1MeWorkspaceLeavePostRes, error)
+	Find(m *me.Me) (openapi.APIV1GetMeRes, error)
+	AcceptInvitation(m *me.Me) (openapi.APIV1AcceptInvitationRes, error)
+	UpdateProfile(m *me.Me) (openapi.APIV1UpdateProfileRes, error)
+	UpdateMemberProfile(m *me.Me) (openapi.APIV1UpdateMeMemberProfileRes, error)
+	UpdateProfilePhoto(m *me.Me) (openapi.APIV1UpdateProfilePhotoRes, error)
+	RemoveProfilePhoto(m *me.Me) (openapi.APIV1RemoveProfilePhotoRes, error)
+	LeaveWorkspace() (openapi.APIV1LeaveWorkspaceRes, error)
 }

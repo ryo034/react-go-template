@@ -12,245 +12,264 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-// APIV1AuthOtpPostOK is response for APIV1AuthOtpPost operation.
-type APIV1AuthOtpPostOK struct{}
+// APIV1AuthByOtpOK is response for APIV1AuthByOtp operation.
+type APIV1AuthByOtpOK struct{}
 
-func (*APIV1AuthOtpPostOK) aPIV1AuthOtpPostRes() {}
+func (*APIV1AuthByOtpOK) aPIV1AuthByOtpRes() {}
 
-type APIV1AuthOtpPostReq struct {
+type APIV1AuthByOtpReq struct {
 	Email string `json:"email"`
 }
 
 // GetEmail returns the value of Email.
-func (s *APIV1AuthOtpPostReq) GetEmail() string {
+func (s *APIV1AuthByOtpReq) GetEmail() string {
 	return s.Email
 }
 
 // SetEmail sets the value of Email.
-func (s *APIV1AuthOtpPostReq) SetEmail(val string) {
+func (s *APIV1AuthByOtpReq) SetEmail(val string) {
 	s.Email = val
 }
 
-type APIV1AuthOtpVerifyPostReq struct {
-	Email string `json:"email"`
-	Otp   string `json:"otp"`
-}
-
-// GetEmail returns the value of Email.
-func (s *APIV1AuthOtpVerifyPostReq) GetEmail() string {
-	return s.Email
-}
-
-// GetOtp returns the value of Otp.
-func (s *APIV1AuthOtpVerifyPostReq) GetOtp() string {
-	return s.Otp
-}
-
-// SetEmail sets the value of Email.
-func (s *APIV1AuthOtpVerifyPostReq) SetEmail(val string) {
-	s.Email = val
-}
-
-// SetOtp sets the value of Otp.
-func (s *APIV1AuthOtpVerifyPostReq) SetOtp(val string) {
-	s.Otp = val
-}
-
-type APIV1InvitationsGetStatus string
-
-const (
-	APIV1InvitationsGetStatusAccepted APIV1InvitationsGetStatus = "accepted"
-)
-
-// AllValues returns all APIV1InvitationsGetStatus values.
-func (APIV1InvitationsGetStatus) AllValues() []APIV1InvitationsGetStatus {
-	return []APIV1InvitationsGetStatus{
-		APIV1InvitationsGetStatusAccepted,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s APIV1InvitationsGetStatus) MarshalText() ([]byte, error) {
-	switch s {
-	case APIV1InvitationsGetStatusAccepted:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *APIV1InvitationsGetStatus) UnmarshalText(data []byte) error {
-	switch APIV1InvitationsGetStatus(data) {
-	case APIV1InvitationsGetStatusAccepted:
-		*s = APIV1InvitationsGetStatusAccepted
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
-type APIV1MeMemberProfilePutReq struct {
-	MemberProfile MemberProfile `json:"memberProfile"`
-}
-
-// GetMemberProfile returns the value of MemberProfile.
-func (s *APIV1MeMemberProfilePutReq) GetMemberProfile() MemberProfile {
-	return s.MemberProfile
-}
-
-// SetMemberProfile sets the value of MemberProfile.
-func (s *APIV1MeMemberProfilePutReq) SetMemberProfile(val MemberProfile) {
-	s.MemberProfile = val
-}
-
-type APIV1MeProfilePhotoPutReq struct {
-	Photo ht.MultipartFile `json:"photo"`
-}
-
-// GetPhoto returns the value of Photo.
-func (s *APIV1MeProfilePhotoPutReq) GetPhoto() ht.MultipartFile {
-	return s.Photo
-}
-
-// SetPhoto sets the value of Photo.
-func (s *APIV1MeProfilePhotoPutReq) SetPhoto(val ht.MultipartFile) {
-	s.Photo = val
-}
-
-type APIV1MeProfilePutReq struct {
-	Profile APIV1MeProfilePutReqProfile `json:"profile"`
-}
-
-// GetProfile returns the value of Profile.
-func (s *APIV1MeProfilePutReq) GetProfile() APIV1MeProfilePutReqProfile {
-	return s.Profile
-}
-
-// SetProfile sets the value of Profile.
-func (s *APIV1MeProfilePutReq) SetProfile(val APIV1MeProfilePutReqProfile) {
-	s.Profile = val
-}
-
-type APIV1MeProfilePutReqProfile struct {
-	Name OptString `json:"name"`
-}
-
-// GetName returns the value of Name.
-func (s *APIV1MeProfilePutReqProfile) GetName() OptString {
-	return s.Name
-}
-
-// SetName sets the value of Name.
-func (s *APIV1MeProfilePutReqProfile) SetName(val OptString) {
-	s.Name = val
-}
-
-// APIV1MeWorkspaceLeavePostNoContent is response for APIV1MeWorkspaceLeavePost operation.
-type APIV1MeWorkspaceLeavePostNoContent struct{}
-
-func (*APIV1MeWorkspaceLeavePostNoContent) aPIV1MeWorkspaceLeavePostRes() {}
-
-// APIV1MembersMemberIdDeleteNoContent is response for APIV1MembersMemberIdDelete operation.
-type APIV1MembersMemberIdDeleteNoContent struct{}
-
-func (*APIV1MembersMemberIdDeleteNoContent) aPIV1MembersMemberIdDeleteRes() {}
-
-type APIV1MembersMemberIdRolePutReq struct {
-	Role APIV1MembersMemberIdRolePutReqRole `json:"role"`
-}
-
-// GetRole returns the value of Role.
-func (s *APIV1MembersMemberIdRolePutReq) GetRole() APIV1MembersMemberIdRolePutReqRole {
-	return s.Role
-}
-
-// SetRole sets the value of Role.
-func (s *APIV1MembersMemberIdRolePutReq) SetRole(val APIV1MembersMemberIdRolePutReqRole) {
-	s.Role = val
-}
-
-type APIV1MembersMemberIdRolePutReqRole string
-
-const (
-	APIV1MembersMemberIdRolePutReqRoleAdmin  APIV1MembersMemberIdRolePutReqRole = "admin"
-	APIV1MembersMemberIdRolePutReqRoleMember APIV1MembersMemberIdRolePutReqRole = "member"
-	APIV1MembersMemberIdRolePutReqRoleGuest  APIV1MembersMemberIdRolePutReqRole = "guest"
-)
-
-// AllValues returns all APIV1MembersMemberIdRolePutReqRole values.
-func (APIV1MembersMemberIdRolePutReqRole) AllValues() []APIV1MembersMemberIdRolePutReqRole {
-	return []APIV1MembersMemberIdRolePutReqRole{
-		APIV1MembersMemberIdRolePutReqRoleAdmin,
-		APIV1MembersMemberIdRolePutReqRoleMember,
-		APIV1MembersMemberIdRolePutReqRoleGuest,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s APIV1MembersMemberIdRolePutReqRole) MarshalText() ([]byte, error) {
-	switch s {
-	case APIV1MembersMemberIdRolePutReqRoleAdmin:
-		return []byte(s), nil
-	case APIV1MembersMemberIdRolePutReqRoleMember:
-		return []byte(s), nil
-	case APIV1MembersMemberIdRolePutReqRoleGuest:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *APIV1MembersMemberIdRolePutReqRole) UnmarshalText(data []byte) error {
-	switch APIV1MembersMemberIdRolePutReqRole(data) {
-	case APIV1MembersMemberIdRolePutReqRoleAdmin:
-		*s = APIV1MembersMemberIdRolePutReqRoleAdmin
-		return nil
-	case APIV1MembersMemberIdRolePutReqRoleMember:
-		*s = APIV1MembersMemberIdRolePutReqRoleMember
-		return nil
-	case APIV1MembersMemberIdRolePutReqRoleGuest:
-		*s = APIV1MembersMemberIdRolePutReqRoleGuest
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
-type APIV1PingGetOK struct {
-	// Ping response message.
-	Message OptString `json:"message"`
-}
-
-// GetMessage returns the value of Message.
-func (s *APIV1PingGetOK) GetMessage() OptString {
-	return s.Message
-}
-
-// SetMessage sets the value of Message.
-func (s *APIV1PingGetOK) SetMessage(val OptString) {
-	s.Message = val
-}
-
-func (*APIV1PingGetOK) aPIV1PingGetRes() {}
-
-type APIV1WorkspacesPostReq struct {
+type APIV1CreateWorkspaceReq struct {
 	// Workspace subdomain (e.x. example-test).
 	Subdomain string `json:"subdomain"`
 }
 
 // GetSubdomain returns the value of Subdomain.
-func (s *APIV1WorkspacesPostReq) GetSubdomain() string {
+func (s *APIV1CreateWorkspaceReq) GetSubdomain() string {
 	return s.Subdomain
 }
 
 // SetSubdomain sets the value of Subdomain.
-func (s *APIV1WorkspacesPostReq) SetSubdomain(val string) {
+func (s *APIV1CreateWorkspaceReq) SetSubdomain(val string) {
 	s.Subdomain = val
 }
 
-type APIV1WorkspacesWorkspaceIdPutReq struct {
+type APIV1GetInvitationsStatus string
+
+const (
+	APIV1GetInvitationsStatusAccepted APIV1GetInvitationsStatus = "accepted"
+)
+
+// AllValues returns all APIV1GetInvitationsStatus values.
+func (APIV1GetInvitationsStatus) AllValues() []APIV1GetInvitationsStatus {
+	return []APIV1GetInvitationsStatus{
+		APIV1GetInvitationsStatusAccepted,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APIV1GetInvitationsStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case APIV1GetInvitationsStatusAccepted:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APIV1GetInvitationsStatus) UnmarshalText(data []byte) error {
+	switch APIV1GetInvitationsStatus(data) {
+	case APIV1GetInvitationsStatusAccepted:
+		*s = APIV1GetInvitationsStatusAccepted
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type APIV1InviteMultipleUsersReq struct {
+	Invitees []Invitee `json:"invitees"`
+}
+
+// GetInvitees returns the value of Invitees.
+func (s *APIV1InviteMultipleUsersReq) GetInvitees() []Invitee {
+	return s.Invitees
+}
+
+// SetInvitees sets the value of Invitees.
+func (s *APIV1InviteMultipleUsersReq) SetInvitees(val []Invitee) {
+	s.Invitees = val
+}
+
+// APIV1LeaveWorkspaceNoContent is response for APIV1LeaveWorkspace operation.
+type APIV1LeaveWorkspaceNoContent struct{}
+
+func (*APIV1LeaveWorkspaceNoContent) aPIV1LeaveWorkspaceRes() {}
+
+// APIV1ProcessInvitationEmailOK is response for APIV1ProcessInvitationEmail operation.
+type APIV1ProcessInvitationEmailOK struct{}
+
+func (*APIV1ProcessInvitationEmailOK) aPIV1ProcessInvitationEmailRes() {}
+
+type APIV1ProcessInvitationEmailReq struct {
+	// The invitation token.
+	Token uuid.UUID `json:"token"`
+	// The user's email address.
+	Email string `json:"email"`
+}
+
+// GetToken returns the value of Token.
+func (s *APIV1ProcessInvitationEmailReq) GetToken() uuid.UUID {
+	return s.Token
+}
+
+// GetEmail returns the value of Email.
+func (s *APIV1ProcessInvitationEmailReq) GetEmail() string {
+	return s.Email
+}
+
+// SetToken sets the value of Token.
+func (s *APIV1ProcessInvitationEmailReq) SetToken(val uuid.UUID) {
+	s.Token = val
+}
+
+// SetEmail sets the value of Email.
+func (s *APIV1ProcessInvitationEmailReq) SetEmail(val string) {
+	s.Email = val
+}
+
+type APIV1ProcessInvitationOAuthReq struct {
+	// The invitation token.
+	Token uuid.UUID `json:"token"`
+}
+
+// GetToken returns the value of Token.
+func (s *APIV1ProcessInvitationOAuthReq) GetToken() uuid.UUID {
+	return s.Token
+}
+
+// SetToken sets the value of Token.
+func (s *APIV1ProcessInvitationOAuthReq) SetToken(val uuid.UUID) {
+	s.Token = val
+}
+
+// APIV1RemoveMemberNoContent is response for APIV1RemoveMember operation.
+type APIV1RemoveMemberNoContent struct{}
+
+func (*APIV1RemoveMemberNoContent) aPIV1RemoveMemberRes() {}
+
+type APIV1UpdateMeMemberProfileReq struct {
+	MemberProfile MemberProfile `json:"memberProfile"`
+}
+
+// GetMemberProfile returns the value of MemberProfile.
+func (s *APIV1UpdateMeMemberProfileReq) GetMemberProfile() MemberProfile {
+	return s.MemberProfile
+}
+
+// SetMemberProfile sets the value of MemberProfile.
+func (s *APIV1UpdateMeMemberProfileReq) SetMemberProfile(val MemberProfile) {
+	s.MemberProfile = val
+}
+
+type APIV1UpdateMemberRoleReq struct {
+	Role APIV1UpdateMemberRoleReqRole `json:"role"`
+}
+
+// GetRole returns the value of Role.
+func (s *APIV1UpdateMemberRoleReq) GetRole() APIV1UpdateMemberRoleReqRole {
+	return s.Role
+}
+
+// SetRole sets the value of Role.
+func (s *APIV1UpdateMemberRoleReq) SetRole(val APIV1UpdateMemberRoleReqRole) {
+	s.Role = val
+}
+
+type APIV1UpdateMemberRoleReqRole string
+
+const (
+	APIV1UpdateMemberRoleReqRoleAdmin  APIV1UpdateMemberRoleReqRole = "admin"
+	APIV1UpdateMemberRoleReqRoleMember APIV1UpdateMemberRoleReqRole = "member"
+	APIV1UpdateMemberRoleReqRoleGuest  APIV1UpdateMemberRoleReqRole = "guest"
+)
+
+// AllValues returns all APIV1UpdateMemberRoleReqRole values.
+func (APIV1UpdateMemberRoleReqRole) AllValues() []APIV1UpdateMemberRoleReqRole {
+	return []APIV1UpdateMemberRoleReqRole{
+		APIV1UpdateMemberRoleReqRoleAdmin,
+		APIV1UpdateMemberRoleReqRoleMember,
+		APIV1UpdateMemberRoleReqRoleGuest,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s APIV1UpdateMemberRoleReqRole) MarshalText() ([]byte, error) {
+	switch s {
+	case APIV1UpdateMemberRoleReqRoleAdmin:
+		return []byte(s), nil
+	case APIV1UpdateMemberRoleReqRoleMember:
+		return []byte(s), nil
+	case APIV1UpdateMemberRoleReqRoleGuest:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *APIV1UpdateMemberRoleReqRole) UnmarshalText(data []byte) error {
+	switch APIV1UpdateMemberRoleReqRole(data) {
+	case APIV1UpdateMemberRoleReqRoleAdmin:
+		*s = APIV1UpdateMemberRoleReqRoleAdmin
+		return nil
+	case APIV1UpdateMemberRoleReqRoleMember:
+		*s = APIV1UpdateMemberRoleReqRoleMember
+		return nil
+	case APIV1UpdateMemberRoleReqRoleGuest:
+		*s = APIV1UpdateMemberRoleReqRoleGuest
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type APIV1UpdateProfilePhotoReq struct {
+	Photo ht.MultipartFile `json:"photo"`
+}
+
+// GetPhoto returns the value of Photo.
+func (s *APIV1UpdateProfilePhotoReq) GetPhoto() ht.MultipartFile {
+	return s.Photo
+}
+
+// SetPhoto sets the value of Photo.
+func (s *APIV1UpdateProfilePhotoReq) SetPhoto(val ht.MultipartFile) {
+	s.Photo = val
+}
+
+type APIV1UpdateProfileReq struct {
+	Profile APIV1UpdateProfileReqProfile `json:"profile"`
+}
+
+// GetProfile returns the value of Profile.
+func (s *APIV1UpdateProfileReq) GetProfile() APIV1UpdateProfileReqProfile {
+	return s.Profile
+}
+
+// SetProfile sets the value of Profile.
+func (s *APIV1UpdateProfileReq) SetProfile(val APIV1UpdateProfileReqProfile) {
+	s.Profile = val
+}
+
+type APIV1UpdateProfileReqProfile struct {
+	Name OptString `json:"name"`
+}
+
+// GetName returns the value of Name.
+func (s *APIV1UpdateProfileReqProfile) GetName() OptString {
+	return s.Name
+}
+
+// SetName sets the value of Name.
+func (s *APIV1UpdateProfileReqProfile) SetName(val OptString) {
+	s.Name = val
+}
+
+type APIV1UpdateWorkspaceReq struct {
 	// Workspace name.
 	Name OptString `json:"name"`
 	// Workspace subdomain.
@@ -258,23 +277,48 @@ type APIV1WorkspacesWorkspaceIdPutReq struct {
 }
 
 // GetName returns the value of Name.
-func (s *APIV1WorkspacesWorkspaceIdPutReq) GetName() OptString {
+func (s *APIV1UpdateWorkspaceReq) GetName() OptString {
 	return s.Name
 }
 
 // GetSubdomain returns the value of Subdomain.
-func (s *APIV1WorkspacesWorkspaceIdPutReq) GetSubdomain() OptString {
+func (s *APIV1UpdateWorkspaceReq) GetSubdomain() OptString {
 	return s.Subdomain
 }
 
 // SetName sets the value of Name.
-func (s *APIV1WorkspacesWorkspaceIdPutReq) SetName(val OptString) {
+func (s *APIV1UpdateWorkspaceReq) SetName(val OptString) {
 	s.Name = val
 }
 
 // SetSubdomain sets the value of Subdomain.
-func (s *APIV1WorkspacesWorkspaceIdPutReq) SetSubdomain(val OptString) {
+func (s *APIV1UpdateWorkspaceReq) SetSubdomain(val OptString) {
 	s.Subdomain = val
+}
+
+type APIV1VerifyOTPReq struct {
+	Email string `json:"email"`
+	Otp   string `json:"otp"`
+}
+
+// GetEmail returns the value of Email.
+func (s *APIV1VerifyOTPReq) GetEmail() string {
+	return s.Email
+}
+
+// GetOtp returns the value of Otp.
+func (s *APIV1VerifyOTPReq) GetOtp() string {
+	return s.Otp
+}
+
+// SetEmail sets the value of Email.
+func (s *APIV1VerifyOTPReq) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetOtp sets the value of Otp.
+func (s *APIV1VerifyOTPReq) SetOtp(val string) {
+	s.Otp = val
 }
 
 // Authentication provider.
@@ -372,22 +416,22 @@ func (s *BadRequestError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*BadRequestError) aPIV1AuthOtpPostRes()               {}
-func (*BadRequestError) aPIV1AuthOtpVerifyPostRes()         {}
-func (*BadRequestError) aPIV1MeMemberProfilePutRes()        {}
-func (*BadRequestError) aPIV1MeProfilePhotoPutRes()         {}
-func (*BadRequestError) aPIV1MeProfilePutRes()              {}
-func (*BadRequestError) aPIV1MeWorkspaceLeavePostRes()      {}
-func (*BadRequestError) aPIV1MembersMemberIdDeleteRes()     {}
-func (*BadRequestError) aPIV1MembersMemberIdRolePutRes()    {}
-func (*BadRequestError) aPIV1WorkspacesPostRes()            {}
-func (*BadRequestError) aPIV1WorkspacesWorkspaceIdPutRes()  {}
-func (*BadRequestError) getInvitationByTokenRes()           {}
-func (*BadRequestError) inviteMultipleUsersToWorkspaceRes() {}
-func (*BadRequestError) processInvitationEmailRes()         {}
-func (*BadRequestError) processInvitationOAuthRes()         {}
-func (*BadRequestError) resendInvitationRes()               {}
-func (*BadRequestError) revokeInvitationRes()               {}
+func (*BadRequestError) aPIV1AuthByOtpRes()              {}
+func (*BadRequestError) aPIV1CreateWorkspaceRes()        {}
+func (*BadRequestError) aPIV1GetInvitationByTokenRes()   {}
+func (*BadRequestError) aPIV1InviteMultipleUsersRes()    {}
+func (*BadRequestError) aPIV1LeaveWorkspaceRes()         {}
+func (*BadRequestError) aPIV1ProcessInvitationEmailRes() {}
+func (*BadRequestError) aPIV1ProcessInvitationOAuthRes() {}
+func (*BadRequestError) aPIV1RemoveMemberRes()           {}
+func (*BadRequestError) aPIV1ResendInvitationRes()       {}
+func (*BadRequestError) aPIV1RevokeInvitationRes()       {}
+func (*BadRequestError) aPIV1UpdateMeMemberProfileRes()  {}
+func (*BadRequestError) aPIV1UpdateMemberRoleRes()       {}
+func (*BadRequestError) aPIV1UpdateProfilePhotoRes()     {}
+func (*BadRequestError) aPIV1UpdateProfileRes()          {}
+func (*BadRequestError) aPIV1UpdateWorkspaceRes()        {}
+func (*BadRequestError) aPIV1VerifyOTPRes()              {}
 
 type Bearer struct {
 	Token string
@@ -455,11 +499,11 @@ func (s *ConflictError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*ConflictError) aPIV1MembersMemberIdDeleteRes()    {}
-func (*ConflictError) aPIV1WorkspacesPostRes()           {}
-func (*ConflictError) aPIV1WorkspacesWorkspaceIdPutRes() {}
-func (*ConflictError) acceptInvitationRes()              {}
-func (*ConflictError) getInvitationByTokenRes()          {}
+func (*ConflictError) aPIV1AcceptInvitationRes()     {}
+func (*ConflictError) aPIV1CreateWorkspaceRes()      {}
+func (*ConflictError) aPIV1GetInvitationByTokenRes() {}
+func (*ConflictError) aPIV1RemoveMemberRes()         {}
+func (*ConflictError) aPIV1UpdateWorkspaceRes()      {}
 
 type CreateWorkspaceResponse struct {
 	Workspace Workspace `json:"workspace"`
@@ -475,7 +519,7 @@ func (s *CreateWorkspaceResponse) SetWorkspace(val Workspace) {
 	s.Workspace = val
 }
 
-func (*CreateWorkspaceResponse) aPIV1WorkspacesPostRes() {}
+func (*CreateWorkspaceResponse) aPIV1CreateWorkspaceRes() {}
 
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type ForbiddenError struct {
@@ -529,13 +573,13 @@ func (s *ForbiddenError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*ForbiddenError) aPIV1MeProfilePutRes()             {}
-func (*ForbiddenError) aPIV1MeWorkspaceLeavePostRes()     {}
-func (*ForbiddenError) aPIV1MembersMemberIdDeleteRes()    {}
-func (*ForbiddenError) aPIV1MembersMemberIdRolePutRes()   {}
-func (*ForbiddenError) aPIV1WorkspacesWorkspaceIdPutRes() {}
-func (*ForbiddenError) resendInvitationRes()              {}
-func (*ForbiddenError) revokeInvitationRes()              {}
+func (*ForbiddenError) aPIV1LeaveWorkspaceRes()   {}
+func (*ForbiddenError) aPIV1RemoveMemberRes()     {}
+func (*ForbiddenError) aPIV1ResendInvitationRes() {}
+func (*ForbiddenError) aPIV1RevokeInvitationRes() {}
+func (*ForbiddenError) aPIV1UpdateMemberRoleRes() {}
+func (*ForbiddenError) aPIV1UpdateProfileRes()    {}
+func (*ForbiddenError) aPIV1UpdateWorkspaceRes()  {}
 
 type GetInvitationByTokenResponse struct {
 	ReceivedInvitation ReceivedInvitation `json:"receivedInvitation"`
@@ -551,7 +595,7 @@ func (s *GetInvitationByTokenResponse) SetReceivedInvitation(val ReceivedInvitat
 	s.ReceivedInvitation = val
 }
 
-func (*GetInvitationByTokenResponse) getInvitationByTokenRes() {}
+func (*GetInvitationByTokenResponse) aPIV1GetInvitationByTokenRes() {}
 
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type GoneError struct {
@@ -605,8 +649,8 @@ func (s *GoneError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*GoneError) acceptInvitationRes()     {}
-func (*GoneError) getInvitationByTokenRes() {}
+func (*GoneError) aPIV1AcceptInvitationRes()     {}
+func (*GoneError) aPIV1GetInvitationByTokenRes() {}
 
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type InternalServerError struct {
@@ -660,30 +704,30 @@ func (s *InternalServerError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*InternalServerError) aPIV1AuthOAuthPostRes()             {}
-func (*InternalServerError) aPIV1AuthOtpPostRes()               {}
-func (*InternalServerError) aPIV1AuthOtpVerifyPostRes()         {}
-func (*InternalServerError) aPIV1InvitationsGetRes()            {}
-func (*InternalServerError) aPIV1MeGetRes()                     {}
-func (*InternalServerError) aPIV1MeMemberProfilePutRes()        {}
-func (*InternalServerError) aPIV1MeProfilePhotoDeleteRes()      {}
-func (*InternalServerError) aPIV1MeProfilePhotoPutRes()         {}
-func (*InternalServerError) aPIV1MeProfilePutRes()              {}
-func (*InternalServerError) aPIV1MeWorkspaceLeavePostRes()      {}
-func (*InternalServerError) aPIV1MembersGetRes()                {}
-func (*InternalServerError) aPIV1MembersMemberIdDeleteRes()     {}
-func (*InternalServerError) aPIV1MembersMemberIdRolePutRes()    {}
-func (*InternalServerError) aPIV1PingGetRes()                   {}
-func (*InternalServerError) aPIV1WorkspacesGetRes()             {}
-func (*InternalServerError) aPIV1WorkspacesPostRes()            {}
-func (*InternalServerError) aPIV1WorkspacesWorkspaceIdPutRes()  {}
-func (*InternalServerError) acceptInvitationRes()               {}
-func (*InternalServerError) getInvitationByTokenRes()           {}
-func (*InternalServerError) inviteMultipleUsersToWorkspaceRes() {}
-func (*InternalServerError) processInvitationEmailRes()         {}
-func (*InternalServerError) processInvitationOAuthRes()         {}
-func (*InternalServerError) resendInvitationRes()               {}
-func (*InternalServerError) revokeInvitationRes()               {}
+func (*InternalServerError) aPIV1AcceptInvitationRes()       {}
+func (*InternalServerError) aPIV1AuthByOAuthRes()            {}
+func (*InternalServerError) aPIV1AuthByOtpRes()              {}
+func (*InternalServerError) aPIV1CreateWorkspaceRes()        {}
+func (*InternalServerError) aPIV1GetInvitationByTokenRes()   {}
+func (*InternalServerError) aPIV1GetInvitationsRes()         {}
+func (*InternalServerError) aPIV1GetMeRes()                  {}
+func (*InternalServerError) aPIV1GetMembersRes()             {}
+func (*InternalServerError) aPIV1GetWorkspacesRes()          {}
+func (*InternalServerError) aPIV1InviteMultipleUsersRes()    {}
+func (*InternalServerError) aPIV1LeaveWorkspaceRes()         {}
+func (*InternalServerError) aPIV1ProcessInvitationEmailRes() {}
+func (*InternalServerError) aPIV1ProcessInvitationOAuthRes() {}
+func (*InternalServerError) aPIV1RemoveMemberRes()           {}
+func (*InternalServerError) aPIV1RemoveProfilePhotoRes()     {}
+func (*InternalServerError) aPIV1ResendInvitationRes()       {}
+func (*InternalServerError) aPIV1RevokeInvitationRes()       {}
+func (*InternalServerError) aPIV1UpdateMeMemberProfileRes()  {}
+func (*InternalServerError) aPIV1UpdateMemberRoleRes()       {}
+func (*InternalServerError) aPIV1UpdateProfilePhotoRes()     {}
+func (*InternalServerError) aPIV1UpdateProfileRes()          {}
+func (*InternalServerError) aPIV1UpdateWorkspaceRes()        {}
+func (*InternalServerError) aPIV1VerifyOTPRes()              {}
+func (*InternalServerError) pingRes()                        {}
 
 // Ref: #/components/schemas/Invitation
 type Invitation struct {
@@ -758,11 +802,11 @@ func (s *Invitation) SetInviter(val Member) {
 	s.Inviter = val
 }
 
-func (*Invitation) resendInvitationRes() {}
+func (*Invitation) aPIV1ResendInvitationRes() {}
 
 type Invitations []Invitation
 
-func (*Invitations) revokeInvitationRes() {}
+func (*Invitations) aPIV1RevokeInvitationRes() {}
 
 type InvitationsAcceptResponse struct {
 	Me Me `json:"me"`
@@ -778,7 +822,7 @@ func (s *InvitationsAcceptResponse) SetMe(val Me) {
 	s.Me = val
 }
 
-func (*InvitationsAcceptResponse) acceptInvitationRes() {}
+func (*InvitationsAcceptResponse) aPIV1AcceptInvitationRes() {}
 
 type InvitationsBulkResponse struct {
 	// Total number of invitations.
@@ -828,7 +872,7 @@ func (s *InvitationsBulkResponse) SetRegisteredInvitations(val Invitations) {
 	s.RegisteredInvitations = val
 }
 
-func (*InvitationsBulkResponse) inviteMultipleUsersToWorkspaceRes() {}
+func (*InvitationsBulkResponse) aPIV1InviteMultipleUsersRes() {}
 
 type InvitationsResponse struct {
 	Invitations []Invitation `json:"invitations"`
@@ -844,21 +888,7 @@ func (s *InvitationsResponse) SetInvitations(val []Invitation) {
 	s.Invitations = val
 }
 
-func (*InvitationsResponse) aPIV1InvitationsGetRes() {}
-
-type InviteMultipleUsersToWorkspaceReq struct {
-	Invitees []Invitee `json:"invitees"`
-}
-
-// GetInvitees returns the value of Invitees.
-func (s *InviteMultipleUsersToWorkspaceReq) GetInvitees() []Invitee {
-	return s.Invitees
-}
-
-// SetInvitees sets the value of Invitees.
-func (s *InviteMultipleUsersToWorkspaceReq) SetInvitees(val []Invitee) {
-	s.Invitees = val
-}
+func (*InvitationsResponse) aPIV1GetInvitationsRes() {}
 
 // Ref: #/components/schemas/Invitee
 type Invitee struct {
@@ -930,7 +960,7 @@ func (s *JwtToken) SetToken(val string) {
 	s.Token = val
 }
 
-func (*JwtToken) aPIV1AuthOtpVerifyPostRes() {}
+func (*JwtToken) aPIV1VerifyOTPRes() {}
 
 // Ref: #/components/schemas/Me
 type Me struct {
@@ -1002,8 +1032,8 @@ func (s *Me) SetProviders(val []AuthProvider) {
 	s.Providers = val
 }
 
-func (*Me) aPIV1AuthOAuthPostRes()     {}
-func (*Me) processInvitationOAuthRes() {}
+func (*Me) aPIV1AuthByOAuthRes()            {}
+func (*Me) aPIV1ProcessInvitationOAuthRes() {}
 
 type MeResponse struct {
 	Me Me `json:"me"`
@@ -1019,7 +1049,7 @@ func (s *MeResponse) SetMe(val Me) {
 	s.Me = val
 }
 
-func (*MeResponse) aPIV1MeGetRes() {}
+func (*MeResponse) aPIV1GetMeRes() {}
 
 // Ref: #/components/schemas/Member
 type Member struct {
@@ -1230,7 +1260,7 @@ func (s *MembersResponse) SetMembers(val []Member) {
 	s.Members = val
 }
 
-func (*MembersResponse) aPIV1MembersGetRes() {}
+func (*MembersResponse) aPIV1GetMembersRes() {}
 
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type NotFoundError struct {
@@ -1284,45 +1314,45 @@ func (s *NotFoundError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*NotFoundError) aPIV1MeWorkspaceLeavePostRes()     {}
-func (*NotFoundError) aPIV1MembersMemberIdDeleteRes()    {}
-func (*NotFoundError) aPIV1MembersMemberIdRolePutRes()   {}
-func (*NotFoundError) aPIV1WorkspacesWorkspaceIdPutRes() {}
-func (*NotFoundError) resendInvitationRes()              {}
-func (*NotFoundError) revokeInvitationRes()              {}
+func (*NotFoundError) aPIV1LeaveWorkspaceRes()   {}
+func (*NotFoundError) aPIV1RemoveMemberRes()     {}
+func (*NotFoundError) aPIV1ResendInvitationRes() {}
+func (*NotFoundError) aPIV1RevokeInvitationRes() {}
+func (*NotFoundError) aPIV1UpdateMemberRoleRes() {}
+func (*NotFoundError) aPIV1UpdateWorkspaceRes()  {}
 
-// NewOptAPIV1InvitationsGetStatus returns new OptAPIV1InvitationsGetStatus with value set to v.
-func NewOptAPIV1InvitationsGetStatus(v APIV1InvitationsGetStatus) OptAPIV1InvitationsGetStatus {
-	return OptAPIV1InvitationsGetStatus{
+// NewOptAPIV1GetInvitationsStatus returns new OptAPIV1GetInvitationsStatus with value set to v.
+func NewOptAPIV1GetInvitationsStatus(v APIV1GetInvitationsStatus) OptAPIV1GetInvitationsStatus {
+	return OptAPIV1GetInvitationsStatus{
 		Value: v,
 		Set:   true,
 	}
 }
 
-// OptAPIV1InvitationsGetStatus is optional APIV1InvitationsGetStatus.
-type OptAPIV1InvitationsGetStatus struct {
-	Value APIV1InvitationsGetStatus
+// OptAPIV1GetInvitationsStatus is optional APIV1GetInvitationsStatus.
+type OptAPIV1GetInvitationsStatus struct {
+	Value APIV1GetInvitationsStatus
 	Set   bool
 }
 
-// IsSet returns true if OptAPIV1InvitationsGetStatus was set.
-func (o OptAPIV1InvitationsGetStatus) IsSet() bool { return o.Set }
+// IsSet returns true if OptAPIV1GetInvitationsStatus was set.
+func (o OptAPIV1GetInvitationsStatus) IsSet() bool { return o.Set }
 
 // Reset unsets value.
-func (o *OptAPIV1InvitationsGetStatus) Reset() {
-	var v APIV1InvitationsGetStatus
+func (o *OptAPIV1GetInvitationsStatus) Reset() {
+	var v APIV1GetInvitationsStatus
 	o.Value = v
 	o.Set = false
 }
 
 // SetTo sets value to v.
-func (o *OptAPIV1InvitationsGetStatus) SetTo(v APIV1InvitationsGetStatus) {
+func (o *OptAPIV1GetInvitationsStatus) SetTo(v APIV1GetInvitationsStatus) {
 	o.Set = true
 	o.Value = v
 }
 
 // Get returns value and boolean that denotes whether value was set.
-func (o OptAPIV1InvitationsGetStatus) Get() (v APIV1InvitationsGetStatus, ok bool) {
+func (o OptAPIV1GetInvitationsStatus) Get() (v APIV1GetInvitationsStatus, ok bool) {
 	if !o.Set {
 		return v, false
 	}
@@ -1330,7 +1360,7 @@ func (o OptAPIV1InvitationsGetStatus) Get() (v APIV1InvitationsGetStatus, ok boo
 }
 
 // Or returns value if set, or given parameter if does not.
-func (o OptAPIV1InvitationsGetStatus) Or(d APIV1InvitationsGetStatus) APIV1InvitationsGetStatus {
+func (o OptAPIV1GetInvitationsStatus) Or(d APIV1GetInvitationsStatus) APIV1GetInvitationsStatus {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -1567,52 +1597,22 @@ func (o OptWorkspace) Or(d Workspace) Workspace {
 	return d
 }
 
-// ProcessInvitationEmailOK is response for ProcessInvitationEmail operation.
-type ProcessInvitationEmailOK struct{}
-
-func (*ProcessInvitationEmailOK) processInvitationEmailRes() {}
-
-type ProcessInvitationEmailReq struct {
-	// The invitation token.
-	Token uuid.UUID `json:"token"`
-	// The user's email address.
-	Email string `json:"email"`
+type PingOK struct {
+	// Ping response message.
+	Message OptString `json:"message"`
 }
 
-// GetToken returns the value of Token.
-func (s *ProcessInvitationEmailReq) GetToken() uuid.UUID {
-	return s.Token
+// GetMessage returns the value of Message.
+func (s *PingOK) GetMessage() OptString {
+	return s.Message
 }
 
-// GetEmail returns the value of Email.
-func (s *ProcessInvitationEmailReq) GetEmail() string {
-	return s.Email
+// SetMessage sets the value of Message.
+func (s *PingOK) SetMessage(val OptString) {
+	s.Message = val
 }
 
-// SetToken sets the value of Token.
-func (s *ProcessInvitationEmailReq) SetToken(val uuid.UUID) {
-	s.Token = val
-}
-
-// SetEmail sets the value of Email.
-func (s *ProcessInvitationEmailReq) SetEmail(val string) {
-	s.Email = val
-}
-
-type ProcessInvitationOAuthReq struct {
-	// The invitation token.
-	Token uuid.UUID `json:"token"`
-}
-
-// GetToken returns the value of Token.
-func (s *ProcessInvitationOAuthReq) GetToken() uuid.UUID {
-	return s.Token
-}
-
-// SetToken sets the value of Token.
-func (s *ProcessInvitationOAuthReq) SetToken(val uuid.UUID) {
-	s.Token = val
-}
+func (*PingOK) pingRes() {}
 
 // Ref: #/components/schemas/ReceivedInvitation
 type ReceivedInvitation struct {
@@ -1654,7 +1654,7 @@ func (s *RemoveProfilePhotoResponse) SetMe(val Me) {
 	s.Me = val
 }
 
-func (*RemoveProfilePhotoResponse) aPIV1MeProfilePhotoDeleteRes() {}
+func (*RemoveProfilePhotoResponse) aPIV1RemoveProfilePhotoRes() {}
 
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type TooManyRequestsError struct {
@@ -1708,8 +1708,8 @@ func (s *TooManyRequestsError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*TooManyRequestsError) aPIV1AuthOtpPostRes()       {}
-func (*TooManyRequestsError) aPIV1AuthOtpVerifyPostRes() {}
+func (*TooManyRequestsError) aPIV1AuthByOtpRes() {}
+func (*TooManyRequestsError) aPIV1VerifyOTPRes() {}
 
 // RFC7807 - https://datatracker.ietf.org/doc/html/rfc7807.
 type UnauthorizedError struct {
@@ -1763,25 +1763,25 @@ func (s *UnauthorizedError) SetCode(val OptString) {
 	s.Code = val
 }
 
-func (*UnauthorizedError) aPIV1AuthOAuthPostRes()             {}
-func (*UnauthorizedError) aPIV1AuthOtpVerifyPostRes()         {}
-func (*UnauthorizedError) aPIV1InvitationsGetRes()            {}
-func (*UnauthorizedError) aPIV1MeGetRes()                     {}
-func (*UnauthorizedError) aPIV1MeMemberProfilePutRes()        {}
-func (*UnauthorizedError) aPIV1MeProfilePhotoDeleteRes()      {}
-func (*UnauthorizedError) aPIV1MeProfilePhotoPutRes()         {}
-func (*UnauthorizedError) aPIV1MeProfilePutRes()              {}
-func (*UnauthorizedError) aPIV1MeWorkspaceLeavePostRes()      {}
-func (*UnauthorizedError) aPIV1MembersGetRes()                {}
-func (*UnauthorizedError) aPIV1MembersMemberIdDeleteRes()     {}
-func (*UnauthorizedError) aPIV1MembersMemberIdRolePutRes()    {}
-func (*UnauthorizedError) aPIV1WorkspacesGetRes()             {}
-func (*UnauthorizedError) aPIV1WorkspacesPostRes()            {}
-func (*UnauthorizedError) aPIV1WorkspacesWorkspaceIdPutRes()  {}
-func (*UnauthorizedError) acceptInvitationRes()               {}
-func (*UnauthorizedError) inviteMultipleUsersToWorkspaceRes() {}
-func (*UnauthorizedError) resendInvitationRes()               {}
-func (*UnauthorizedError) revokeInvitationRes()               {}
+func (*UnauthorizedError) aPIV1AcceptInvitationRes()      {}
+func (*UnauthorizedError) aPIV1AuthByOAuthRes()           {}
+func (*UnauthorizedError) aPIV1CreateWorkspaceRes()       {}
+func (*UnauthorizedError) aPIV1GetInvitationsRes()        {}
+func (*UnauthorizedError) aPIV1GetMeRes()                 {}
+func (*UnauthorizedError) aPIV1GetMembersRes()            {}
+func (*UnauthorizedError) aPIV1GetWorkspacesRes()         {}
+func (*UnauthorizedError) aPIV1InviteMultipleUsersRes()   {}
+func (*UnauthorizedError) aPIV1LeaveWorkspaceRes()        {}
+func (*UnauthorizedError) aPIV1RemoveMemberRes()          {}
+func (*UnauthorizedError) aPIV1RemoveProfilePhotoRes()    {}
+func (*UnauthorizedError) aPIV1ResendInvitationRes()      {}
+func (*UnauthorizedError) aPIV1RevokeInvitationRes()      {}
+func (*UnauthorizedError) aPIV1UpdateMeMemberProfileRes() {}
+func (*UnauthorizedError) aPIV1UpdateMemberRoleRes()      {}
+func (*UnauthorizedError) aPIV1UpdateProfilePhotoRes()    {}
+func (*UnauthorizedError) aPIV1UpdateProfileRes()         {}
+func (*UnauthorizedError) aPIV1UpdateWorkspaceRes()       {}
+func (*UnauthorizedError) aPIV1VerifyOTPRes()             {}
 
 type UpdateMeMemberProfileResponse struct {
 	Me Me `json:"me"`
@@ -1797,7 +1797,7 @@ func (s *UpdateMeMemberProfileResponse) SetMe(val Me) {
 	s.Me = val
 }
 
-func (*UpdateMeMemberProfileResponse) aPIV1MeMemberProfilePutRes() {}
+func (*UpdateMeMemberProfileResponse) aPIV1UpdateMeMemberProfileRes() {}
 
 type UpdateMemberRoleResponse struct {
 	Member Member `json:"member"`
@@ -1813,7 +1813,7 @@ func (s *UpdateMemberRoleResponse) SetMember(val Member) {
 	s.Member = val
 }
 
-func (*UpdateMemberRoleResponse) aPIV1MembersMemberIdRolePutRes() {}
+func (*UpdateMemberRoleResponse) aPIV1UpdateMemberRoleRes() {}
 
 type UpdateProfilePhotoResponse struct {
 	Me Me `json:"me"`
@@ -1829,7 +1829,7 @@ func (s *UpdateProfilePhotoResponse) SetMe(val Me) {
 	s.Me = val
 }
 
-func (*UpdateProfilePhotoResponse) aPIV1MeProfilePhotoPutRes() {}
+func (*UpdateProfilePhotoResponse) aPIV1UpdateProfilePhotoRes() {}
 
 type UpdateProfileResponse struct {
 	Me Me `json:"me"`
@@ -1845,7 +1845,7 @@ func (s *UpdateProfileResponse) SetMe(val Me) {
 	s.Me = val
 }
 
-func (*UpdateProfileResponse) aPIV1MeProfilePutRes() {}
+func (*UpdateProfileResponse) aPIV1UpdateProfileRes() {}
 
 type UpdateWorkspaceResponse struct {
 	Workspace Workspace `json:"workspace"`
@@ -1861,7 +1861,7 @@ func (s *UpdateWorkspaceResponse) SetWorkspace(val Workspace) {
 	s.Workspace = val
 }
 
-func (*UpdateWorkspaceResponse) aPIV1WorkspacesWorkspaceIdPutRes() {}
+func (*UpdateWorkspaceResponse) aPIV1UpdateWorkspaceRes() {}
 
 // Ref: #/components/schemas/User
 type User struct {
@@ -1976,4 +1976,4 @@ func (s *WorkspacesResponse) SetWorkspaces(val []Workspace) {
 	s.Workspaces = val
 }
 
-func (*WorkspacesResponse) aPIV1WorkspacesGetRes() {}
+func (*WorkspacesResponse) aPIV1GetWorkspacesRes() {}

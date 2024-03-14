@@ -60,6 +60,20 @@ func (mr *MockRepositoryMockRecorder) AcceptInvitation(ctx, exec, id any) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AcceptInvitation", reflect.TypeOf((*MockRepository)(nil).AcceptInvitation), ctx, exec, id)
 }
 
+// ClearMe mocks base method.
+func (m *MockRepository) ClearMe(ctx context.Context) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ClearMe", ctx)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// ClearMe indicates an expected call of ClearMe.
+func (mr *MockRepositoryMockRecorder) ClearMe(ctx any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ClearMe", reflect.TypeOf((*MockRepository)(nil).ClearMe), ctx)
+}
+
 // Find mocks base method.
 func (m *MockRepository) Find(ctx context.Context, exec bun.IDB, mID member.ID) (*Me, error) {
 	m.ctrl.T.Helper()

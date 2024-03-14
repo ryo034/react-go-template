@@ -26,12 +26,12 @@ import (
 )
 
 type UseCase interface {
-	AuthByOTP(ctx context.Context, i ByOTPInput) (openapi.APIV1AuthOtpPostRes, error)
-	AuthByOAuth(ctx context.Context, i ByOAuthInput) (openapi.APIV1AuthOAuthPostRes, error)
-	VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error)
-	ProcessInvitationEmail(ctx context.Context, i ProcessInvitationEmailInput) (openapi.ProcessInvitationEmailRes, error)
-	ProcessInvitationOAuth(ctx context.Context, i ProcessInvitationOAuthInput) (openapi.ProcessInvitationOAuthRes, error)
-	InvitationByToken(ctx context.Context, i InvitationByTokenInput) (openapi.GetInvitationByTokenRes, error)
+	AuthByOTP(ctx context.Context, i ByOTPInput) (openapi.APIV1AuthByOtpRes, error)
+	AuthByOAuth(ctx context.Context, i ByOAuthInput) (openapi.APIV1AuthByOAuthRes, error)
+	VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV1VerifyOTPRes, error)
+	APIV1ProcessInvitationEmail(ctx context.Context, i APIV1ProcessInvitationEmailInput) (openapi.APIV1ProcessInvitationEmailRes, error)
+	APIV1ProcessInvitationOAuth(ctx context.Context, i APIV1ProcessInvitationOAuthInput) (openapi.APIV1ProcessInvitationOAuthRes, error)
+	InvitationByToken(ctx context.Context, i InvitationByTokenInput) (openapi.APIV1GetInvitationByTokenRes, error)
 }
 
 type useCase struct {
@@ -49,7 +49,7 @@ func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo auth.Rep
 	return &useCase{txp, dbp, acRepo, meRepo, invRepo, wRepo, notificationRepo, op}
 }
 
-func (u *useCase) AuthByOTP(ctx context.Context, i ByOTPInput) (openapi.APIV1AuthOtpPostRes, error) {
+func (u *useCase) AuthByOTP(ctx context.Context, i ByOTPInput) (openapi.APIV1AuthByOtpRes, error) {
 	code, err := u.repo.GenOTP(ctx, i.Email)
 	if err != nil {
 		return nil, err
@@ -57,7 +57,7 @@ func (u *useCase) AuthByOTP(ctx context.Context, i ByOTPInput) (openapi.APIV1Aut
 	if err = u.notificationRepo.NotifyOtpByEmail(ctx, i.Email, code); err != nil {
 		return nil, err
 	}
-	return &openapi.APIV1AuthOtpPostOK{}, nil
+	return &openapi.APIV1AuthByOtpOK{}, nil
 }
 
 func (u *useCase) createUser(ctx context.Context, p bun.IDB, ci CreateInfo) (*me.Me, error) {
@@ -77,7 +77,7 @@ func (u *useCase) createUser(ctx context.Context, p bun.IDB, ci CreateInfo) (*me
 	return res, nil
 }
 
-func (u *useCase) AuthByOAuth(ctx context.Context, i ByOAuthInput) (openapi.APIV1AuthOAuthPostRes, error) {
+func (u *useCase) AuthByOAuth(ctx context.Context, i ByOAuthInput) (openapi.APIV1AuthByOAuthRes, error) {
 	p := u.dbp.GetExecutor(ctx, false)
 
 	m, err := u.meRepo.FindLastLogin(ctx, p, i.AccountID)
@@ -93,7 +93,7 @@ func (u *useCase) AuthByOAuth(ctx context.Context, i ByOAuthInput) (openapi.APIV
 		return nil, err
 	}
 	if m.NotJoined() {
-		return u.op.AuthByAuth(m)
+		return u.op.AuthByOAuth(m)
 	}
 	if err = u.meRepo.SetMe(ctx, m); err != nil {
 		return nil, err
@@ -101,7 +101,7 @@ func (u *useCase) AuthByOAuth(ctx context.Context, i ByOAuthInput) (openapi.APIV
 	if err = u.meRepo.RecordLogin(ctx, p, m); err != nil {
 		return nil, err
 	}
-	return u.op.AuthByAuth(m)
+	return u.op.AuthByOAuth(m)
 }
 
 func (u *useCase) createAndSetupProvider(ctx context.Context, aID account.ID) (context.Context, *provider.Provider, error) {
@@ -137,7 +137,7 @@ func (u *useCase) setupProvider(ctx context.Context, p bun.IDB, usr *user.User) 
 
 // VerifyOTP User information cannot be retrieved/edited in Firebase on the backend side until VerifyOTP returns a token to the frontend and is authenticated
 // only Email provider
-func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV1AuthOtpVerifyPostRes, error) {
+func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV1VerifyOTPRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
 	usr, err := u.repo.FindByEmail(ctx, exec, i.Email)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
@@ -191,7 +191,7 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 	return u.op.JwtToken(tk), nil
 }
 
-func (u *useCase) ProcessInvitationEmail(ctx context.Context, i ProcessInvitationEmailInput) (openapi.ProcessInvitationEmailRes, error) {
+func (u *useCase) APIV1ProcessInvitationEmail(ctx context.Context, i APIV1ProcessInvitationEmailInput) (openapi.APIV1ProcessInvitationEmailRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
 	invRes, err := u.invRepo.FindActiveByEmail(ctx, exec, i.Email)
 	if err != nil {
@@ -216,10 +216,10 @@ func (u *useCase) ProcessInvitationEmail(ctx context.Context, i ProcessInvitatio
 		}
 		return u.notificationRepo.NotifyOtpByEmail(pr, i.Email, code)
 	}
-	return &openapi.ProcessInvitationEmailOK{}, pr.Transactional(fn)().Error()
+	return &openapi.APIV1ProcessInvitationEmailOK{}, pr.Transactional(fn)().Error()
 }
 
-func (u *useCase) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitationOAuthInput) (openapi.ProcessInvitationOAuthRes, error) {
+func (u *useCase) APIV1ProcessInvitationOAuth(ctx context.Context, i APIV1ProcessInvitationOAuthInput) (openapi.APIV1ProcessInvitationOAuthRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
 	invRes, err := u.invRepo.FindActiveByEmail(ctx, exec, i.Email)
 	if err != nil {
@@ -270,10 +270,10 @@ func (u *useCase) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitatio
 	if err = result.Error(); err != nil {
 		return nil, err
 	}
-	return u.op.ProcessInvitationOAuth(result.Value(0).(*me.Me))
+	return u.op.APIV1ProcessInvitationOAuth(result.Value(0).(*me.Me))
 }
 
-func (u *useCase) InvitationByToken(ctx context.Context, i InvitationByTokenInput) (openapi.GetInvitationByTokenRes, error) {
+func (u *useCase) InvitationByToken(ctx context.Context, i InvitationByTokenInput) (openapi.APIV1GetInvitationByTokenRes, error) {
 	p := u.dbp.GetExecutor(ctx, true)
 	res, err := u.invRepo.FindByToken(ctx, p, i.Token)
 	if err != nil {

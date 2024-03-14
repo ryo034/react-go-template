@@ -21,13 +21,13 @@ import (
 )
 
 type UseCase interface {
-	Find(ctx context.Context, aID account.ID) (openapi.APIV1MeGetRes, error)
-	AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error)
-	UpdateName(ctx context.Context, i UpdateNameInput) (openapi.APIV1MeProfilePutRes, error)
-	UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1MeMemberProfilePutRes, error)
-	UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoInput) (openapi.APIV1MeProfilePhotoPutRes, error)
-	RemoveProfilePhoto(ctx context.Context, i RemoveProfilePhotoInput) (openapi.APIV1MeProfilePhotoDeleteRes, error)
-	LeaveWorkspace(ctx context.Context, i LeaveWorkspaceInput) (openapi.APIV1MeWorkspaceLeavePostRes, error)
+	Find(ctx context.Context, aID account.ID) (openapi.APIV1GetMeRes, error)
+	AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.APIV1AcceptInvitationRes, error)
+	UpdateName(ctx context.Context, i UpdateNameInput) (openapi.APIV1UpdateProfileRes, error)
+	UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1UpdateMeMemberProfileRes, error)
+	UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoInput) (openapi.APIV1UpdateProfilePhotoRes, error)
+	RemoveProfilePhoto(ctx context.Context, i RemoveProfilePhotoInput) (openapi.APIV1RemoveProfilePhotoRes, error)
+	LeaveWorkspace(ctx context.Context, i LeaveWorkspaceInput) (openapi.APIV1LeaveWorkspaceRes, error)
 }
 
 type useCase struct {
@@ -42,7 +42,7 @@ func NewUseCase(txp core.TransactionProvider, dbp core.Provider, acRepo me.Repos
 	return &useCase{txp, dbp, acRepo, wRepo, op}
 }
 
-func (u *useCase) Find(ctx context.Context, aID account.ID) (openapi.APIV1MeGetRes, error) {
+func (u *useCase) Find(ctx context.Context, aID account.ID) (openapi.APIV1GetMeRes, error) {
 	exec := u.dbp.GetExecutor(ctx, false)
 	lastLoginRes, err := u.repo.FindLastLogin(ctx, exec, aID)
 	if err != nil {
@@ -54,7 +54,7 @@ func (u *useCase) Find(ctx context.Context, aID account.ID) (openapi.APIV1MeGetR
 	return u.op.Find(lastLoginRes)
 }
 
-func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.AcceptInvitationRes, error) {
+func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput) (openapi.APIV1AcceptInvitationRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
 
 	invRes, wRes, err := u.wRepo.FindActiveInvitation(ctx, exec, i.InvitationID)
@@ -103,7 +103,7 @@ func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput)
 	return u.op.AcceptInvitation(result.Value(0).(*me.Me))
 }
 
-func (u *useCase) UpdateName(ctx context.Context, i UpdateNameInput) (openapi.APIV1MeProfilePutRes, error) {
+func (u *useCase) UpdateName(ctx context.Context, i UpdateNameInput) (openapi.APIV1UpdateProfileRes, error) {
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
 		return nil, err
@@ -124,7 +124,7 @@ func (u *useCase) UpdateName(ctx context.Context, i UpdateNameInput) (openapi.AP
 	return u.op.UpdateProfile(result.Value(0).(*me.Me))
 }
 
-func (u *useCase) UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1MeMemberProfilePutRes, error) {
+func (u *useCase) UpdateMemberProfile(ctx context.Context, i UpdateMemberProfileInput) (openapi.APIV1UpdateMeMemberProfileRes, error) {
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
 		return nil, err
@@ -152,7 +152,7 @@ func (u *useCase) UpdateMemberProfile(ctx context.Context, i UpdateMemberProfile
 	return u.op.UpdateMemberProfile(result.Value(0).(*me.Me))
 }
 
-func (u *useCase) UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoInput) (openapi.APIV1MeProfilePhotoPutRes, error) {
+func (u *useCase) UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoInput) (openapi.APIV1UpdateProfilePhotoRes, error) {
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
 		return nil, err
@@ -177,7 +177,7 @@ func (u *useCase) UpdateProfilePhoto(ctx context.Context, i UpdateProfilePhotoIn
 	return u.op.UpdateProfilePhoto(result.Value(0).(*me.Me))
 }
 
-func (u *useCase) RemoveProfilePhoto(ctx context.Context, i RemoveProfilePhotoInput) (openapi.APIV1MeProfilePhotoDeleteRes, error) {
+func (u *useCase) RemoveProfilePhoto(ctx context.Context, i RemoveProfilePhotoInput) (openapi.APIV1RemoveProfilePhotoRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
 	m, err := u.repo.FindLastLogin(ctx, exec, i.AccountID)
 	if err != nil {
@@ -206,7 +206,7 @@ func (u *useCase) RemoveProfilePhoto(ctx context.Context, i RemoveProfilePhotoIn
 	return u.op.RemoveProfilePhoto(result.Value(0).(*me.Me))
 }
 
-func (u *useCase) LeaveWorkspace(ctx context.Context, i LeaveWorkspaceInput) (openapi.APIV1MeWorkspaceLeavePostRes, error) {
+func (u *useCase) LeaveWorkspace(ctx context.Context, i LeaveWorkspaceInput) (openapi.APIV1LeaveWorkspaceRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
 	m, err := u.repo.FindLastLogin(ctx, exec, i.AccountID)
 	if err != nil {

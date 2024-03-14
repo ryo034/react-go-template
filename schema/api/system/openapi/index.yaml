@@ -50,7 +50,7 @@ paths:
   /api/v1/members/invitations/{invitationId}/revoke:
     $ref: "./paths/member.yaml#/invitationsRevoke"
   /api/v1/members/invitations/{invitationId}/resend:
-    $ref: "./paths/member.yaml#/invitationsResend"
+    $ref: "./paths/member.yaml#/resendInvitations"
 
 components:
   securitySchemes:

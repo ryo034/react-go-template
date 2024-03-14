@@ -14,7 +14,7 @@ func NewPresenter(a Adapter) meUc.OutputPort {
 	return &presenter{a}
 }
 
-func (p *presenter) Find(m *me.Me) (openapi.APIV1MeGetRes, error) {
+func (p *presenter) Find(m *me.Me) (openapi.APIV1GetMeRes, error) {
 	am, err := p.a.Adapt(m)
 	if err != nil {
 		return nil, err
@@ -22,7 +22,7 @@ func (p *presenter) Find(m *me.Me) (openapi.APIV1MeGetRes, error) {
 	return &openapi.MeResponse{Me: am}, nil
 }
 
-func (p *presenter) AcceptInvitation(m *me.Me) (openapi.AcceptInvitationRes, error) {
+func (p *presenter) AcceptInvitation(m *me.Me) (openapi.APIV1AcceptInvitationRes, error) {
 	am, err := p.a.Adapt(m)
 	if err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func (p *presenter) AcceptInvitation(m *me.Me) (openapi.AcceptInvitationRes, err
 	return &openapi.InvitationsAcceptResponse{Me: am}, nil
 }
 
-func (p *presenter) UpdateProfile(m *me.Me) (openapi.APIV1MeProfilePutRes, error) {
+func (p *presenter) UpdateProfile(m *me.Me) (openapi.APIV1UpdateProfileRes, error) {
 	am, err := p.a.Adapt(m)
 	if err != nil {
 		return nil, err
@@ -38,7 +38,7 @@ func (p *presenter) UpdateProfile(m *me.Me) (openapi.APIV1MeProfilePutRes, error
 	return &openapi.UpdateProfileResponse{Me: am}, nil
 }
 
-func (p *presenter) UpdateMemberProfile(m *me.Me) (openapi.APIV1MeMemberProfilePutRes, error) {
+func (p *presenter) UpdateMemberProfile(m *me.Me) (openapi.APIV1UpdateMeMemberProfileRes, error) {
 	am, err := p.a.Adapt(m)
 	if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func (p *presenter) UpdateMemberProfile(m *me.Me) (openapi.APIV1MeMemberProfileP
 	return &openapi.UpdateMeMemberProfileResponse{Me: am}, nil
 }
 
-func (p *presenter) UpdateProfilePhoto(m *me.Me) (openapi.APIV1MeProfilePhotoPutRes, error) {
+func (p *presenter) UpdateProfilePhoto(m *me.Me) (openapi.APIV1UpdateProfilePhotoRes, error) {
 	am, err := p.a.Adapt(m)
 	if err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ func (p *presenter) UpdateProfilePhoto(m *me.Me) (openapi.APIV1MeProfilePhotoPut
 	return &openapi.UpdateProfilePhotoResponse{Me: am}, nil
 }
 
-func (p *presenter) RemoveProfilePhoto(m *me.Me) (openapi.APIV1MeProfilePhotoDeleteRes, error) {
+func (p *presenter) RemoveProfilePhoto(m *me.Me) (openapi.APIV1RemoveProfilePhotoRes, error) {
 	am, err := p.a.Adapt(m)
 	if err != nil {
 		return nil, err
@@ -62,6 +62,6 @@ func (p *presenter) RemoveProfilePhoto(m *me.Me) (openapi.APIV1MeProfilePhotoDel
 	return &openapi.RemoveProfilePhotoResponse{Me: am}, nil
 }
 
-func (p *presenter) LeaveWorkspace() (openapi.APIV1MeWorkspaceLeavePostRes, error) {
-	return &openapi.APIV1MeWorkspaceLeavePostNoContent{}, nil
+func (p *presenter) LeaveWorkspace() (openapi.APIV1LeaveWorkspaceRes, error) {
+	return &openapi.APIV1LeaveWorkspaceNoContent{}, nil
 }

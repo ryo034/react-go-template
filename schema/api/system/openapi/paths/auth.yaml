@@ -1,8 +1,9 @@
 authByOtp:
   post:
     summary: Send OTP
+    operationId: APIV1AuthByOtp
     tags:
-      - OTP
+      - Auth
     description: One Time Password (OTP) to user.
     requestBody:
       $ref: "#/components/requestBodies/AuthByOtpPost"
@@ -19,8 +20,9 @@ authByOtp:
 verify:
   post:
     summary: Verify OTP
+    operationId: APIV1VerifyOTP
     tags:
-      - OTP
+      - Auth
     description: Verify OTP sent by user.
     requestBody:
       $ref: "#/components/requestBodies/AuthVerifyPost"
@@ -39,8 +41,9 @@ verify:
 oauth:
   post:
     summary: Auth by OAuth
+    operationId: APIV1AuthByOAuth
     tags:
-      - OAuth
+      - Auth
     description: Auth by OAuth.
     security:
       - bearer: []
@@ -55,7 +58,9 @@ oauth:
 invitation:
   get:
     summary: Get Invitation by token
-    operationId: getInvitationByToken
+    operationId: APIV1GetInvitationByToken
+    tags:
+      - ProcessInvitation
     parameters:
       - name: token
         in: query
@@ -79,9 +84,9 @@ invitation:
 invitationProcessEmail:
   post:
     summary: Process an invitation by verifying token and email
-    operationId: processInvitationEmail
+    operationId: APIV1ProcessInvitationEmail
     tags:
-      - Invitations
+      - ProcessInvitation
     requestBody:
       $ref: "#/components/requestBodies/InvitationProcessEmail"
     responses:
@@ -95,9 +100,9 @@ invitationProcessEmail:
 invitationProcessOAuth:
   post:
     summary: Process an invitation by verifying token and OAuth, and register or add user to workspace.
-    operationId: processInvitationOAuth
+    operationId: APIV1ProcessInvitationOAuth
     tags:
-      - Invitations
+      - ProcessInvitation
     security:
       - bearer: []
     requestBody:
