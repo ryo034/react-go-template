@@ -224,7 +224,7 @@ func (UnimplementedHandler) APIV1VerifyOTP(ctx context.Context, req *APIV1Verify
 //
 // Checks if the server is running.
 //
-// GET /api/v1/ping
+// GET /ping
 func (UnimplementedHandler) Ping(ctx context.Context) (r PingRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

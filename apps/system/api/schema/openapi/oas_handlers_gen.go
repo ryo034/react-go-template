@@ -3238,12 +3238,12 @@ func (s *Server) handleAPIV1VerifyOTPRequest(args [0]string, argsEscaped bool, w
 //
 // Checks if the server is running.
 //
-// GET /api/v1/ping
+// GET /ping
 func (s *Server) handlePingRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("Ping"),
 		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/v1/ping"),
+		semconv.HTTPRouteKey.String("/ping"),
 	}
 
 	// Start a span for this request.

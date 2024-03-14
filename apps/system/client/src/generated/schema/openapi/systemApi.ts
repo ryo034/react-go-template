@@ -5,7 +5,7 @@
 
 
 export interface paths {
-  "/api/v1/ping": {
+  "/ping": {
     /** Checks if the server is running */
     get: operations["Ping"];
   };

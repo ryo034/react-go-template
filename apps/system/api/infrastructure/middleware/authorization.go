@@ -16,7 +16,7 @@ type authorization struct {
 }
 
 var UnauthorizedRoutes = []string{
-	"/api/v1/ping",
+	"/ping",
 	"/api/v1/auth/otp",
 	"/api/v1/auth/otp/verify",
 	"/api/v1/auth/invitations/process/email",

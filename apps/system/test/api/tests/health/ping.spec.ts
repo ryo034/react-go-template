@@ -6,7 +6,7 @@ const client = genAPIClient()
 
 test.describe("Otp API", () => {
   test("Create Account OK", async () => {
-    const res = await client.GET("/api/v1/ping", {
+    const res = await client.GET("/ping", {
       headers: defaultPostHeaders
     })
     expect(res.response.status).toBe(200)

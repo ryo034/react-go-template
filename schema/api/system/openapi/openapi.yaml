@@ -4,7 +4,7 @@ info:
   description: System API
   version: 1.0.0
 paths:
-  /api/v1/ping:
+  /ping:
     get:
       summary: Checks if the server is running
       operationId: Ping

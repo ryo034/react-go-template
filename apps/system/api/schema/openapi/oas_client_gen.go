@@ -166,7 +166,7 @@ type Invoker interface {
 	//
 	// Checks if the server is running.
 	//
-	// GET /api/v1/ping
+	// GET /ping
 	Ping(ctx context.Context) (PingRes, error)
 }
 
@@ -2691,7 +2691,7 @@ func (c *Client) sendAPIV1VerifyOTP(ctx context.Context, request *APIV1VerifyOTP
 //
 // Checks if the server is running.
 //
-// GET /api/v1/ping
+// GET /ping
 func (c *Client) Ping(ctx context.Context) (PingRes, error) {
 	res, err := c.sendPing(ctx)
 	return res, err
@@ -2701,7 +2701,7 @@ func (c *Client) sendPing(ctx context.Context) (res PingRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("Ping"),
 		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/api/v1/ping"),
+		semconv.HTTPRouteKey.String("/ping"),
 	}
 
 	// Run stopwatch.
@@ -2734,7 +2734,7 @@ func (c *Client) sendPing(ctx context.Context) (res PingRes, err error) {
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
-	pathParts[0] = "/api/v1/ping"
+	pathParts[0] = "/ping"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"

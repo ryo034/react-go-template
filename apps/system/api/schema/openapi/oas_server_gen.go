@@ -150,7 +150,7 @@ type Handler interface {
 	//
 	// Checks if the server is running.
 	//
-	// GET /api/v1/ping
+	// GET /ping
 	Ping(ctx context.Context) (PingRes, error)
 }
 

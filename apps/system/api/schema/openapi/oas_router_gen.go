@@ -49,9 +49,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/api/v1/"
+		case '/': // Prefix: "/"
 			origElem := elem
-			if l := len("/api/v1/"); len(elem) >= l && elem[0:l] == "/api/v1/" {
+			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -61,9 +61,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
-			case 'a': // Prefix: "auth/"
+			case 'a': // Prefix: "api/v1/"
 				origElem := elem
-				if l := len("auth/"); len(elem) >= l && elem[0:l] == "auth/" {
+				if l := len("api/v1/"); len(elem) >= l && elem[0:l] == "api/v1/" {
 					elem = elem[l:]
 				} else {
 					break
@@ -73,6 +73,179 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
+				case 'a': // Prefix: "auth/"
+					origElem := elem
+					if l := len("auth/"); len(elem) >= l && elem[0:l] == "auth/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'i': // Prefix: "invitations"
+						origElem := elem
+						if l := len("invitations"); len(elem) >= l && elem[0:l] == "invitations" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch r.Method {
+							case "GET":
+								s.handleAPIV1GetInvitationByTokenRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/process/"
+							origElem := elem
+							if l := len("/process/"); len(elem) >= l && elem[0:l] == "/process/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case 'e': // Prefix: "email"
+								origElem := elem
+								if l := len("email"); len(elem) >= l && elem[0:l] == "email" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "POST":
+										s.handleAPIV1ProcessInvitationEmailRequest([0]string{}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "POST")
+									}
+
+									return
+								}
+
+								elem = origElem
+							case 'o': // Prefix: "oauth"
+								origElem := elem
+								if l := len("oauth"); len(elem) >= l && elem[0:l] == "oauth" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "POST":
+										s.handleAPIV1ProcessInvitationOAuthRequest([0]string{}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "POST")
+									}
+
+									return
+								}
+
+								elem = origElem
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 'o': // Prefix: "o"
+						origElem := elem
+						if l := len("o"); len(elem) >= l && elem[0:l] == "o" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'a': // Prefix: "auth"
+							origElem := elem
+							if l := len("auth"); len(elem) >= l && elem[0:l] == "auth" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleAPIV1AuthByOAuthRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 't': // Prefix: "tp"
+							origElem := elem
+							if l := len("tp"); len(elem) >= l && elem[0:l] == "tp" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch r.Method {
+								case "POST":
+									s.handleAPIV1AuthByOtpRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+							switch elem[0] {
+							case '/': // Prefix: "/verify"
+								origElem := elem
+								if l := len("/verify"); len(elem) >= l && elem[0:l] == "/verify" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "POST":
+										s.handleAPIV1VerifyOTPRequest([0]string{}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "POST")
+									}
+
+									return
+								}
+
+								elem = origElem
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
 				case 'i': // Prefix: "invitations"
 					origElem := elem
 					if l := len("invitations"); len(elem) >= l && elem[0:l] == "invitations" {
@@ -82,303 +255,21 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					if len(elem) == 0 {
+						// Leaf node.
 						switch r.Method {
 						case "GET":
-							s.handleAPIV1GetInvitationByTokenRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleAPIV1GetInvitationsRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "GET")
 						}
 
 						return
 					}
-					switch elem[0] {
-					case '/': // Prefix: "/process/"
-						origElem := elem
-						if l := len("/process/"); len(elem) >= l && elem[0:l] == "/process/" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							break
-						}
-						switch elem[0] {
-						case 'e': // Prefix: "email"
-							origElem := elem
-							if l := len("email"); len(elem) >= l && elem[0:l] == "email" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleAPIV1ProcessInvitationEmailRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
-
-								return
-							}
-
-							elem = origElem
-						case 'o': // Prefix: "oauth"
-							origElem := elem
-							if l := len("oauth"); len(elem) >= l && elem[0:l] == "oauth" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleAPIV1ProcessInvitationOAuthRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
-
-								return
-							}
-
-							elem = origElem
-						}
-
-						elem = origElem
-					}
 
 					elem = origElem
-				case 'o': // Prefix: "o"
+				case 'm': // Prefix: "me"
 					origElem := elem
-					if l := len("o"); len(elem) >= l && elem[0:l] == "o" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'a': // Prefix: "auth"
-						origElem := elem
-						if l := len("auth"); len(elem) >= l && elem[0:l] == "auth" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleAPIV1AuthByOAuthRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
-							}
-
-							return
-						}
-
-						elem = origElem
-					case 't': // Prefix: "tp"
-						origElem := elem
-						if l := len("tp"); len(elem) >= l && elem[0:l] == "tp" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							switch r.Method {
-							case "POST":
-								s.handleAPIV1AuthByOtpRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
-							}
-
-							return
-						}
-						switch elem[0] {
-						case '/': // Prefix: "/verify"
-							origElem := elem
-							if l := len("/verify"); len(elem) >= l && elem[0:l] == "/verify" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleAPIV1VerifyOTPRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
-
-								return
-							}
-
-							elem = origElem
-						}
-
-						elem = origElem
-					}
-
-					elem = origElem
-				}
-
-				elem = origElem
-			case 'i': // Prefix: "invitations"
-				origElem := elem
-				if l := len("invitations"); len(elem) >= l && elem[0:l] == "invitations" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "GET":
-						s.handleAPIV1GetInvitationsRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "GET")
-					}
-
-					return
-				}
-
-				elem = origElem
-			case 'm': // Prefix: "me"
-				origElem := elem
-				if l := len("me"); len(elem) >= l && elem[0:l] == "me" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					switch r.Method {
-					case "GET":
-						s.handleAPIV1GetMeRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "GET")
-					}
-
-					return
-				}
-				switch elem[0] {
-				case '/': // Prefix: "/"
-					origElem := elem
-					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'm': // Prefix: "member/profile"
-						origElem := elem
-						if l := len("member/profile"); len(elem) >= l && elem[0:l] == "member/profile" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "PUT":
-								s.handleAPIV1UpdateMeMemberProfileRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "PUT")
-							}
-
-							return
-						}
-
-						elem = origElem
-					case 'p': // Prefix: "profile"
-						origElem := elem
-						if l := len("profile"); len(elem) >= l && elem[0:l] == "profile" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							switch r.Method {
-							case "PUT":
-								s.handleAPIV1UpdateProfileRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "PUT")
-							}
-
-							return
-						}
-						switch elem[0] {
-						case '/': // Prefix: "/photo"
-							origElem := elem
-							if l := len("/photo"); len(elem) >= l && elem[0:l] == "/photo" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "DELETE":
-									s.handleAPIV1RemoveProfilePhotoRequest([0]string{}, elemIsEscaped, w, r)
-								case "PUT":
-									s.handleAPIV1UpdateProfilePhotoRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "DELETE,PUT")
-								}
-
-								return
-							}
-
-							elem = origElem
-						}
-
-						elem = origElem
-					case 'w': // Prefix: "workspace/leave"
-						origElem := elem
-						if l := len("workspace/leave"); len(elem) >= l && elem[0:l] == "workspace/leave" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleAPIV1LeaveWorkspaceRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
-							}
-
-							return
-						}
-
-						elem = origElem
-					}
-
-					elem = origElem
-				case 'm': // Prefix: "mbers"
-					origElem := elem
-					if l := len("mbers"); len(elem) >= l && elem[0:l] == "mbers" {
+					if l := len("me"); len(elem) >= l && elem[0:l] == "me" {
 						elem = elem[l:]
 					} else {
 						break
@@ -387,7 +278,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					if len(elem) == 0 {
 						switch r.Method {
 						case "GET":
-							s.handleAPIV1GetMembersRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleAPIV1GetMeRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "GET")
 						}
@@ -407,181 +298,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							break
 						}
 						switch elem[0] {
-						case 'i': // Prefix: "invitations/"
+						case 'm': // Prefix: "member/profile"
 							origElem := elem
-							if l := len("invitations/"); len(elem) >= l && elem[0:l] == "invitations/" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								break
-							}
-							switch elem[0] {
-							case 'b': // Prefix: "bulk"
-								origElem := elem
-								if l := len("bulk"); len(elem) >= l && elem[0:l] == "bulk" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									// Leaf node.
-									switch r.Method {
-									case "POST":
-										s.handleAPIV1InviteMultipleUsersRequest([0]string{}, elemIsEscaped, w, r)
-									default:
-										s.notAllowed(w, r, "POST")
-									}
-
-									return
-								}
-
-								elem = origElem
-							}
-							// Param: "invitationId"
-							// Match until "/"
-							idx := strings.IndexByte(elem, '/')
-							if idx < 0 {
-								idx = len(elem)
-							}
-							args[0] = elem[:idx]
-							elem = elem[idx:]
-
-							if len(elem) == 0 {
-								break
-							}
-							switch elem[0] {
-							case '/': // Prefix: "/"
-								origElem := elem
-								if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									break
-								}
-								switch elem[0] {
-								case 'a': // Prefix: "accept"
-									origElem := elem
-									if l := len("accept"); len(elem) >= l && elem[0:l] == "accept" {
-										elem = elem[l:]
-									} else {
-										break
-									}
-
-									if len(elem) == 0 {
-										// Leaf node.
-										switch r.Method {
-										case "POST":
-											s.handleAPIV1AcceptInvitationRequest([1]string{
-												args[0],
-											}, elemIsEscaped, w, r)
-										default:
-											s.notAllowed(w, r, "POST")
-										}
-
-										return
-									}
-
-									elem = origElem
-								case 'r': // Prefix: "re"
-									origElem := elem
-									if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
-										elem = elem[l:]
-									} else {
-										break
-									}
-
-									if len(elem) == 0 {
-										break
-									}
-									switch elem[0] {
-									case 's': // Prefix: "send"
-										origElem := elem
-										if l := len("send"); len(elem) >= l && elem[0:l] == "send" {
-											elem = elem[l:]
-										} else {
-											break
-										}
-
-										if len(elem) == 0 {
-											// Leaf node.
-											switch r.Method {
-											case "POST":
-												s.handleAPIV1ResendInvitationRequest([1]string{
-													args[0],
-												}, elemIsEscaped, w, r)
-											default:
-												s.notAllowed(w, r, "POST")
-											}
-
-											return
-										}
-
-										elem = origElem
-									case 'v': // Prefix: "voke"
-										origElem := elem
-										if l := len("voke"); len(elem) >= l && elem[0:l] == "voke" {
-											elem = elem[l:]
-										} else {
-											break
-										}
-
-										if len(elem) == 0 {
-											// Leaf node.
-											switch r.Method {
-											case "POST":
-												s.handleAPIV1RevokeInvitationRequest([1]string{
-													args[0],
-												}, elemIsEscaped, w, r)
-											default:
-												s.notAllowed(w, r, "POST")
-											}
-
-											return
-										}
-
-										elem = origElem
-									}
-
-									elem = origElem
-								}
-
-								elem = origElem
-							}
-
-							elem = origElem
-						}
-						// Param: "memberId"
-						// Match until "/"
-						idx := strings.IndexByte(elem, '/')
-						if idx < 0 {
-							idx = len(elem)
-						}
-						args[0] = elem[:idx]
-						elem = elem[idx:]
-
-						if len(elem) == 0 {
-							switch r.Method {
-							case "DELETE":
-								s.handleAPIV1RemoveMemberRequest([1]string{
-									args[0],
-								}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "DELETE")
-							}
-
-							return
-						}
-						switch elem[0] {
-						case '/': // Prefix: "/role"
-							origElem := elem
-							if l := len("/role"); len(elem) >= l && elem[0:l] == "/role" {
+							if l := len("member/profile"); len(elem) >= l && elem[0:l] == "member/profile" {
 								elem = elem[l:]
 							} else {
 								break
@@ -591,9 +310,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								// Leaf node.
 								switch r.Method {
 								case "PUT":
-									s.handleAPIV1UpdateMemberRoleRequest([1]string{
-										args[0],
-									}, elemIsEscaped, w, r)
+									s.handleAPIV1UpdateMeMemberProfileRequest([0]string{}, elemIsEscaped, w, r)
 								default:
 									s.notAllowed(w, r, "PUT")
 								}
@@ -602,6 +319,356 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							elem = origElem
+						case 'p': // Prefix: "profile"
+							origElem := elem
+							if l := len("profile"); len(elem) >= l && elem[0:l] == "profile" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch r.Method {
+								case "PUT":
+									s.handleAPIV1UpdateProfileRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "PUT")
+								}
+
+								return
+							}
+							switch elem[0] {
+							case '/': // Prefix: "/photo"
+								origElem := elem
+								if l := len("/photo"); len(elem) >= l && elem[0:l] == "/photo" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "DELETE":
+										s.handleAPIV1RemoveProfilePhotoRequest([0]string{}, elemIsEscaped, w, r)
+									case "PUT":
+										s.handleAPIV1UpdateProfilePhotoRequest([0]string{}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "DELETE,PUT")
+									}
+
+									return
+								}
+
+								elem = origElem
+							}
+
+							elem = origElem
+						case 'w': // Prefix: "workspace/leave"
+							origElem := elem
+							if l := len("workspace/leave"); len(elem) >= l && elem[0:l] == "workspace/leave" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleAPIV1LeaveWorkspaceRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 'm': // Prefix: "mbers"
+						origElem := elem
+						if l := len("mbers"); len(elem) >= l && elem[0:l] == "mbers" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch r.Method {
+							case "GET":
+								s.handleAPIV1GetMembersRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+							origElem := elem
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case 'i': // Prefix: "invitations/"
+								origElem := elem
+								if l := len("invitations/"); len(elem) >= l && elem[0:l] == "invitations/" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									break
+								}
+								switch elem[0] {
+								case 'b': // Prefix: "bulk"
+									origElem := elem
+									if l := len("bulk"); len(elem) >= l && elem[0:l] == "bulk" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									if len(elem) == 0 {
+										// Leaf node.
+										switch r.Method {
+										case "POST":
+											s.handleAPIV1InviteMultipleUsersRequest([0]string{}, elemIsEscaped, w, r)
+										default:
+											s.notAllowed(w, r, "POST")
+										}
+
+										return
+									}
+
+									elem = origElem
+								}
+								// Param: "invitationId"
+								// Match until "/"
+								idx := strings.IndexByte(elem, '/')
+								if idx < 0 {
+									idx = len(elem)
+								}
+								args[0] = elem[:idx]
+								elem = elem[idx:]
+
+								if len(elem) == 0 {
+									break
+								}
+								switch elem[0] {
+								case '/': // Prefix: "/"
+									origElem := elem
+									if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									if len(elem) == 0 {
+										break
+									}
+									switch elem[0] {
+									case 'a': // Prefix: "accept"
+										origElem := elem
+										if l := len("accept"); len(elem) >= l && elem[0:l] == "accept" {
+											elem = elem[l:]
+										} else {
+											break
+										}
+
+										if len(elem) == 0 {
+											// Leaf node.
+											switch r.Method {
+											case "POST":
+												s.handleAPIV1AcceptInvitationRequest([1]string{
+													args[0],
+												}, elemIsEscaped, w, r)
+											default:
+												s.notAllowed(w, r, "POST")
+											}
+
+											return
+										}
+
+										elem = origElem
+									case 'r': // Prefix: "re"
+										origElem := elem
+										if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
+											elem = elem[l:]
+										} else {
+											break
+										}
+
+										if len(elem) == 0 {
+											break
+										}
+										switch elem[0] {
+										case 's': // Prefix: "send"
+											origElem := elem
+											if l := len("send"); len(elem) >= l && elem[0:l] == "send" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch r.Method {
+												case "POST":
+													s.handleAPIV1ResendInvitationRequest([1]string{
+														args[0],
+													}, elemIsEscaped, w, r)
+												default:
+													s.notAllowed(w, r, "POST")
+												}
+
+												return
+											}
+
+											elem = origElem
+										case 'v': // Prefix: "voke"
+											origElem := elem
+											if l := len("voke"); len(elem) >= l && elem[0:l] == "voke" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch r.Method {
+												case "POST":
+													s.handleAPIV1RevokeInvitationRequest([1]string{
+														args[0],
+													}, elemIsEscaped, w, r)
+												default:
+													s.notAllowed(w, r, "POST")
+												}
+
+												return
+											}
+
+											elem = origElem
+										}
+
+										elem = origElem
+									}
+
+									elem = origElem
+								}
+
+								elem = origElem
+							}
+							// Param: "memberId"
+							// Match until "/"
+							idx := strings.IndexByte(elem, '/')
+							if idx < 0 {
+								idx = len(elem)
+							}
+							args[0] = elem[:idx]
+							elem = elem[idx:]
+
+							if len(elem) == 0 {
+								switch r.Method {
+								case "DELETE":
+									s.handleAPIV1RemoveMemberRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "DELETE")
+								}
+
+								return
+							}
+							switch elem[0] {
+							case '/': // Prefix: "/role"
+								origElem := elem
+								if l := len("/role"); len(elem) >= l && elem[0:l] == "/role" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "PUT":
+										s.handleAPIV1UpdateMemberRoleRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "PUT")
+									}
+
+									return
+								}
+
+								elem = origElem
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
+				case 'w': // Prefix: "workspaces"
+					origElem := elem
+					if l := len("workspaces"); len(elem) >= l && elem[0:l] == "workspaces" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch r.Method {
+						case "GET":
+							s.handleAPIV1GetWorkspacesRequest([0]string{}, elemIsEscaped, w, r)
+						case "POST":
+							s.handleAPIV1CreateWorkspaceRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET,POST")
+						}
+
+						return
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+						origElem := elem
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "workspaceId"
+						// Leaf parameter
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "PUT":
+								s.handleAPIV1UpdateWorkspaceRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "PUT")
+							}
+
+							return
 						}
 
 						elem = origElem
@@ -629,58 +696,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					return
-				}
-
-				elem = origElem
-			case 'w': // Prefix: "workspaces"
-				origElem := elem
-				if l := len("workspaces"); len(elem) >= l && elem[0:l] == "workspaces" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					switch r.Method {
-					case "GET":
-						s.handleAPIV1GetWorkspacesRequest([0]string{}, elemIsEscaped, w, r)
-					case "POST":
-						s.handleAPIV1CreateWorkspaceRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "GET,POST")
-					}
-
-					return
-				}
-				switch elem[0] {
-				case '/': // Prefix: "/"
-					origElem := elem
-					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					// Param: "workspaceId"
-					// Leaf parameter
-					args[0] = elem
-					elem = ""
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "PUT":
-							s.handleAPIV1UpdateWorkspaceRequest([1]string{
-								args[0],
-							}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "PUT")
-						}
-
-						return
-					}
-
-					elem = origElem
 				}
 
 				elem = origElem
@@ -767,9 +782,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/api/v1/"
+		case '/': // Prefix: "/"
 			origElem := elem
-			if l := len("/api/v1/"); len(elem) >= l && elem[0:l] == "/api/v1/" {
+			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -779,9 +794,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
-			case 'a': // Prefix: "auth/"
+			case 'a': // Prefix: "api/v1/"
 				origElem := elem
-				if l := len("auth/"); len(elem) >= l && elem[0:l] == "auth/" {
+				if l := len("api/v1/"); len(elem) >= l && elem[0:l] == "api/v1/" {
 					elem = elem[l:]
 				} else {
 					break
@@ -791,6 +806,203 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
+				case 'a': // Prefix: "auth/"
+					origElem := elem
+					if l := len("auth/"); len(elem) >= l && elem[0:l] == "auth/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'i': // Prefix: "invitations"
+						origElem := elem
+						if l := len("invitations"); len(elem) >= l && elem[0:l] == "invitations" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch method {
+							case "GET":
+								r.name = "APIV1GetInvitationByToken"
+								r.summary = "Get Invitation by token"
+								r.operationID = "APIV1GetInvitationByToken"
+								r.pathPattern = "/api/v1/auth/invitations"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/process/"
+							origElem := elem
+							if l := len("/process/"); len(elem) >= l && elem[0:l] == "/process/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case 'e': // Prefix: "email"
+								origElem := elem
+								if l := len("email"); len(elem) >= l && elem[0:l] == "email" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									switch method {
+									case "POST":
+										// Leaf: APIV1ProcessInvitationEmail
+										r.name = "APIV1ProcessInvitationEmail"
+										r.summary = "Process an invitation by verifying token and email"
+										r.operationID = "APIV1ProcessInvitationEmail"
+										r.pathPattern = "/api/v1/auth/invitations/process/email"
+										r.args = args
+										r.count = 0
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							case 'o': // Prefix: "oauth"
+								origElem := elem
+								if l := len("oauth"); len(elem) >= l && elem[0:l] == "oauth" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									switch method {
+									case "POST":
+										// Leaf: APIV1ProcessInvitationOAuth
+										r.name = "APIV1ProcessInvitationOAuth"
+										r.summary = "Process an invitation by verifying token and OAuth, and register or add user to workspace."
+										r.operationID = "APIV1ProcessInvitationOAuth"
+										r.pathPattern = "/api/v1/auth/invitations/process/oauth"
+										r.args = args
+										r.count = 0
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 'o': // Prefix: "o"
+						origElem := elem
+						if l := len("o"); len(elem) >= l && elem[0:l] == "o" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'a': // Prefix: "auth"
+							origElem := elem
+							if l := len("auth"); len(elem) >= l && elem[0:l] == "auth" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch method {
+								case "POST":
+									// Leaf: APIV1AuthByOAuth
+									r.name = "APIV1AuthByOAuth"
+									r.summary = "Auth by OAuth"
+									r.operationID = "APIV1AuthByOAuth"
+									r.pathPattern = "/api/v1/auth/oauth"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 't': // Prefix: "tp"
+							origElem := elem
+							if l := len("tp"); len(elem) >= l && elem[0:l] == "tp" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch method {
+								case "POST":
+									r.name = "APIV1AuthByOtp"
+									r.summary = "Send OTP"
+									r.operationID = "APIV1AuthByOtp"
+									r.pathPattern = "/api/v1/auth/otp"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+							switch elem[0] {
+							case '/': // Prefix: "/verify"
+								origElem := elem
+								if l := len("/verify"); len(elem) >= l && elem[0:l] == "/verify" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									switch method {
+									case "POST":
+										// Leaf: APIV1VerifyOTP
+										r.name = "APIV1VerifyOTP"
+										r.summary = "Verify OTP"
+										r.operationID = "APIV1VerifyOTP"
+										r.pathPattern = "/api/v1/auth/otp/verify"
+										r.args = args
+										r.count = 0
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
 				case 'i': // Prefix: "invitations"
 					origElem := elem
 					if l := len("invitations"); len(elem) >= l && elem[0:l] == "invitations" {
@@ -802,10 +1014,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "GET":
-							r.name = "APIV1GetInvitationByToken"
-							r.summary = "Get Invitation by token"
-							r.operationID = "APIV1GetInvitationByToken"
-							r.pathPattern = "/api/v1/auth/invitations"
+							// Leaf: APIV1GetInvitations
+							r.name = "APIV1GetInvitations"
+							r.summary = "Get pending invitations"
+							r.operationID = "APIV1GetInvitations"
+							r.pathPattern = "/api/v1/invitations"
 							r.args = args
 							r.count = 0
 							return r, true
@@ -813,345 +1026,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							return
 						}
 					}
-					switch elem[0] {
-					case '/': // Prefix: "/process/"
-						origElem := elem
-						if l := len("/process/"); len(elem) >= l && elem[0:l] == "/process/" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							break
-						}
-						switch elem[0] {
-						case 'e': // Prefix: "email"
-							origElem := elem
-							if l := len("email"); len(elem) >= l && elem[0:l] == "email" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								switch method {
-								case "POST":
-									// Leaf: APIV1ProcessInvitationEmail
-									r.name = "APIV1ProcessInvitationEmail"
-									r.summary = "Process an invitation by verifying token and email"
-									r.operationID = "APIV1ProcessInvitationEmail"
-									r.pathPattern = "/api/v1/auth/invitations/process/email"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
-						case 'o': // Prefix: "oauth"
-							origElem := elem
-							if l := len("oauth"); len(elem) >= l && elem[0:l] == "oauth" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								switch method {
-								case "POST":
-									// Leaf: APIV1ProcessInvitationOAuth
-									r.name = "APIV1ProcessInvitationOAuth"
-									r.summary = "Process an invitation by verifying token and OAuth, and register or add user to workspace."
-									r.operationID = "APIV1ProcessInvitationOAuth"
-									r.pathPattern = "/api/v1/auth/invitations/process/oauth"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
-						}
-
-						elem = origElem
-					}
 
 					elem = origElem
-				case 'o': // Prefix: "o"
+				case 'm': // Prefix: "me"
 					origElem := elem
-					if l := len("o"); len(elem) >= l && elem[0:l] == "o" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'a': // Prefix: "auth"
-						origElem := elem
-						if l := len("auth"); len(elem) >= l && elem[0:l] == "auth" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							switch method {
-							case "POST":
-								// Leaf: APIV1AuthByOAuth
-								r.name = "APIV1AuthByOAuth"
-								r.summary = "Auth by OAuth"
-								r.operationID = "APIV1AuthByOAuth"
-								r.pathPattern = "/api/v1/auth/oauth"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-						elem = origElem
-					case 't': // Prefix: "tp"
-						origElem := elem
-						if l := len("tp"); len(elem) >= l && elem[0:l] == "tp" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							switch method {
-							case "POST":
-								r.name = "APIV1AuthByOtp"
-								r.summary = "Send OTP"
-								r.operationID = "APIV1AuthByOtp"
-								r.pathPattern = "/api/v1/auth/otp"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-						switch elem[0] {
-						case '/': // Prefix: "/verify"
-							origElem := elem
-							if l := len("/verify"); len(elem) >= l && elem[0:l] == "/verify" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								switch method {
-								case "POST":
-									// Leaf: APIV1VerifyOTP
-									r.name = "APIV1VerifyOTP"
-									r.summary = "Verify OTP"
-									r.operationID = "APIV1VerifyOTP"
-									r.pathPattern = "/api/v1/auth/otp/verify"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
-						}
-
-						elem = origElem
-					}
-
-					elem = origElem
-				}
-
-				elem = origElem
-			case 'i': // Prefix: "invitations"
-				origElem := elem
-				if l := len("invitations"); len(elem) >= l && elem[0:l] == "invitations" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					switch method {
-					case "GET":
-						// Leaf: APIV1GetInvitations
-						r.name = "APIV1GetInvitations"
-						r.summary = "Get pending invitations"
-						r.operationID = "APIV1GetInvitations"
-						r.pathPattern = "/api/v1/invitations"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
-					}
-				}
-
-				elem = origElem
-			case 'm': // Prefix: "me"
-				origElem := elem
-				if l := len("me"); len(elem) >= l && elem[0:l] == "me" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					switch method {
-					case "GET":
-						r.name = "APIV1GetMe"
-						r.summary = "Get Admin User"
-						r.operationID = "APIV1GetMe"
-						r.pathPattern = "/api/v1/me"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
-					}
-				}
-				switch elem[0] {
-				case '/': // Prefix: "/"
-					origElem := elem
-					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'm': // Prefix: "member/profile"
-						origElem := elem
-						if l := len("member/profile"); len(elem) >= l && elem[0:l] == "member/profile" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							switch method {
-							case "PUT":
-								// Leaf: APIV1UpdateMeMemberProfile
-								r.name = "APIV1UpdateMeMemberProfile"
-								r.summary = "Update Me Member Profile"
-								r.operationID = "APIV1UpdateMeMemberProfile"
-								r.pathPattern = "/api/v1/me/member/profile"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-						elem = origElem
-					case 'p': // Prefix: "profile"
-						origElem := elem
-						if l := len("profile"); len(elem) >= l && elem[0:l] == "profile" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							switch method {
-							case "PUT":
-								r.name = "APIV1UpdateProfile"
-								r.summary = "Update Profile"
-								r.operationID = "APIV1UpdateProfile"
-								r.pathPattern = "/api/v1/me/profile"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-						switch elem[0] {
-						case '/': // Prefix: "/photo"
-							origElem := elem
-							if l := len("/photo"); len(elem) >= l && elem[0:l] == "/photo" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								switch method {
-								case "DELETE":
-									// Leaf: APIV1RemoveProfilePhoto
-									r.name = "APIV1RemoveProfilePhoto"
-									r.summary = "Delete Profile Photo"
-									r.operationID = "APIV1RemoveProfilePhoto"
-									r.pathPattern = "/api/v1/me/profile/photo"
-									r.args = args
-									r.count = 0
-									return r, true
-								case "PUT":
-									// Leaf: APIV1UpdateProfilePhoto
-									r.name = "APIV1UpdateProfilePhoto"
-									r.summary = "Update Profile Photo"
-									r.operationID = "APIV1UpdateProfilePhoto"
-									r.pathPattern = "/api/v1/me/profile/photo"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
-						}
-
-						elem = origElem
-					case 'w': // Prefix: "workspace/leave"
-						origElem := elem
-						if l := len("workspace/leave"); len(elem) >= l && elem[0:l] == "workspace/leave" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							switch method {
-							case "POST":
-								// Leaf: APIV1LeaveWorkspace
-								r.name = "APIV1LeaveWorkspace"
-								r.summary = "Leave Workspace"
-								r.operationID = "APIV1LeaveWorkspace"
-								r.pathPattern = "/api/v1/me/workspace/leave"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-						elem = origElem
-					}
-
-					elem = origElem
-				case 'm': // Prefix: "mbers"
-					origElem := elem
-					if l := len("mbers"); len(elem) >= l && elem[0:l] == "mbers" {
+					if l := len("me"); len(elem) >= l && elem[0:l] == "me" {
 						elem = elem[l:]
 					} else {
 						break
@@ -1160,10 +1039,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "GET":
-							r.name = "APIV1GetMembers"
-							r.summary = "Get Members"
-							r.operationID = "APIV1GetMembers"
-							r.pathPattern = "/api/v1/members"
+							r.name = "APIV1GetMe"
+							r.summary = "Get Admin User"
+							r.operationID = "APIV1GetMe"
+							r.pathPattern = "/api/v1/me"
 							r.args = args
 							r.count = 0
 							return r, true
@@ -1184,21 +1063,57 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							break
 						}
 						switch elem[0] {
-						case 'i': // Prefix: "invitations/"
+						case 'm': // Prefix: "member/profile"
 							origElem := elem
-							if l := len("invitations/"); len(elem) >= l && elem[0:l] == "invitations/" {
+							if l := len("member/profile"); len(elem) >= l && elem[0:l] == "member/profile" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
 							if len(elem) == 0 {
+								switch method {
+								case "PUT":
+									// Leaf: APIV1UpdateMeMemberProfile
+									r.name = "APIV1UpdateMeMemberProfile"
+									r.summary = "Update Me Member Profile"
+									r.operationID = "APIV1UpdateMeMemberProfile"
+									r.pathPattern = "/api/v1/me/member/profile"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'p': // Prefix: "profile"
+							origElem := elem
+							if l := len("profile"); len(elem) >= l && elem[0:l] == "profile" {
+								elem = elem[l:]
+							} else {
 								break
 							}
+
+							if len(elem) == 0 {
+								switch method {
+								case "PUT":
+									r.name = "APIV1UpdateProfile"
+									r.summary = "Update Profile"
+									r.operationID = "APIV1UpdateProfile"
+									r.pathPattern = "/api/v1/me/profile"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
 							switch elem[0] {
-							case 'b': // Prefix: "bulk"
+							case '/': // Prefix: "/photo"
 								origElem := elem
-								if l := len("bulk"); len(elem) >= l && elem[0:l] == "bulk" {
+								if l := len("/photo"); len(elem) >= l && elem[0:l] == "/photo" {
 									elem = elem[l:]
 								} else {
 									break
@@ -1206,12 +1121,21 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 								if len(elem) == 0 {
 									switch method {
-									case "POST":
-										// Leaf: APIV1InviteMultipleUsers
-										r.name = "APIV1InviteMultipleUsers"
-										r.summary = "Invite multiple users to the workspace by email"
-										r.operationID = "APIV1InviteMultipleUsers"
-										r.pathPattern = "/api/v1/members/invitations/bulk"
+									case "DELETE":
+										// Leaf: APIV1RemoveProfilePhoto
+										r.name = "APIV1RemoveProfilePhoto"
+										r.summary = "Delete Profile Photo"
+										r.operationID = "APIV1RemoveProfilePhoto"
+										r.pathPattern = "/api/v1/me/profile/photo"
+										r.args = args
+										r.count = 0
+										return r, true
+									case "PUT":
+										// Leaf: APIV1UpdateProfilePhoto
+										r.name = "APIV1UpdateProfilePhoto"
+										r.summary = "Update Profile Photo"
+										r.operationID = "APIV1UpdateProfilePhoto"
+										r.pathPattern = "/api/v1/me/profile/photo"
 										r.args = args
 										r.count = 0
 										return r, true
@@ -1222,22 +1146,74 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 								elem = origElem
 							}
-							// Param: "invitationId"
-							// Match until "/"
-							idx := strings.IndexByte(elem, '/')
-							if idx < 0 {
-								idx = len(elem)
+
+							elem = origElem
+						case 'w': // Prefix: "workspace/leave"
+							origElem := elem
+							if l := len("workspace/leave"); len(elem) >= l && elem[0:l] == "workspace/leave" {
+								elem = elem[l:]
+							} else {
+								break
 							}
-							args[0] = elem[:idx]
-							elem = elem[idx:]
+
+							if len(elem) == 0 {
+								switch method {
+								case "POST":
+									// Leaf: APIV1LeaveWorkspace
+									r.name = "APIV1LeaveWorkspace"
+									r.summary = "Leave Workspace"
+									r.operationID = "APIV1LeaveWorkspace"
+									r.pathPattern = "/api/v1/me/workspace/leave"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 'm': // Prefix: "mbers"
+						origElem := elem
+						if l := len("mbers"); len(elem) >= l && elem[0:l] == "mbers" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch method {
+							case "GET":
+								r.name = "APIV1GetMembers"
+								r.summary = "Get Members"
+								r.operationID = "APIV1GetMembers"
+								r.pathPattern = "/api/v1/members"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+							origElem := elem
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
 
 							if len(elem) == 0 {
 								break
 							}
 							switch elem[0] {
-							case '/': // Prefix: "/"
+							case 'i': // Prefix: "invitations/"
 								origElem := elem
-								if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								if l := len("invitations/"); len(elem) >= l && elem[0:l] == "invitations/" {
 									elem = elem[l:]
 								} else {
 									break
@@ -1247,9 +1223,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									break
 								}
 								switch elem[0] {
-								case 'a': // Prefix: "accept"
+								case 'b': // Prefix: "bulk"
 									origElem := elem
-									if l := len("accept"); len(elem) >= l && elem[0:l] == "accept" {
+									if l := len("bulk"); len(elem) >= l && elem[0:l] == "bulk" {
 										elem = elem[l:]
 									} else {
 										break
@@ -1258,13 +1234,13 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									if len(elem) == 0 {
 										switch method {
 										case "POST":
-											// Leaf: APIV1AcceptInvitation
-											r.name = "APIV1AcceptInvitation"
-											r.summary = "Accept an invitation to join a workspace"
-											r.operationID = "APIV1AcceptInvitation"
-											r.pathPattern = "/api/v1/members/invitations/{invitationId}/accept"
+											// Leaf: APIV1InviteMultipleUsers
+											r.name = "APIV1InviteMultipleUsers"
+											r.summary = "Invite multiple users to the workspace by email"
+											r.operationID = "APIV1InviteMultipleUsers"
+											r.pathPattern = "/api/v1/members/invitations/bulk"
 											r.args = args
-											r.count = 1
+											r.count = 0
 											return r, true
 										default:
 											return
@@ -1272,9 +1248,23 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									}
 
 									elem = origElem
-								case 'r': // Prefix: "re"
+								}
+								// Param: "invitationId"
+								// Match until "/"
+								idx := strings.IndexByte(elem, '/')
+								if idx < 0 {
+									idx = len(elem)
+								}
+								args[0] = elem[:idx]
+								elem = elem[idx:]
+
+								if len(elem) == 0 {
+									break
+								}
+								switch elem[0] {
+								case '/': // Prefix: "/"
 									origElem := elem
-									if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
+									if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 										elem = elem[l:]
 									} else {
 										break
@@ -1284,9 +1274,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										break
 									}
 									switch elem[0] {
-									case 's': // Prefix: "send"
+									case 'a': // Prefix: "accept"
 										origElem := elem
-										if l := len("send"); len(elem) >= l && elem[0:l] == "send" {
+										if l := len("accept"); len(elem) >= l && elem[0:l] == "accept" {
 											elem = elem[l:]
 										} else {
 											break
@@ -1295,11 +1285,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										if len(elem) == 0 {
 											switch method {
 											case "POST":
-												// Leaf: APIV1ResendInvitation
-												r.name = "APIV1ResendInvitation"
-												r.summary = "Resend invitation"
-												r.operationID = "APIV1ResendInvitation"
-												r.pathPattern = "/api/v1/members/invitations/{invitationId}/resend"
+												// Leaf: APIV1AcceptInvitation
+												r.name = "APIV1AcceptInvitation"
+												r.summary = "Accept an invitation to join a workspace"
+												r.operationID = "APIV1AcceptInvitation"
+												r.pathPattern = "/api/v1/members/invitations/{invitationId}/accept"
 												r.args = args
 												r.count = 1
 												return r, true
@@ -1309,28 +1299,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										}
 
 										elem = origElem
-									case 'v': // Prefix: "voke"
+									case 'r': // Prefix: "re"
 										origElem := elem
-										if l := len("voke"); len(elem) >= l && elem[0:l] == "voke" {
+										if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
 											elem = elem[l:]
 										} else {
 											break
 										}
 
 										if len(elem) == 0 {
-											switch method {
-											case "POST":
-												// Leaf: APIV1RevokeInvitation
-												r.name = "APIV1RevokeInvitation"
-												r.summary = "Revoke invitation"
-												r.operationID = "APIV1RevokeInvitation"
-												r.pathPattern = "/api/v1/members/invitations/{invitationId}/revoke"
-												r.args = args
-												r.count = 1
-												return r, true
-											default:
-												return
+											break
+										}
+										switch elem[0] {
+										case 's': // Prefix: "send"
+											origElem := elem
+											if l := len("send"); len(elem) >= l && elem[0:l] == "send" {
+												elem = elem[l:]
+											} else {
+												break
 											}
+
+											if len(elem) == 0 {
+												switch method {
+												case "POST":
+													// Leaf: APIV1ResendInvitation
+													r.name = "APIV1ResendInvitation"
+													r.summary = "Resend invitation"
+													r.operationID = "APIV1ResendInvitation"
+													r.pathPattern = "/api/v1/members/invitations/{invitationId}/resend"
+													r.args = args
+													r.count = 1
+													return r, true
+												default:
+													return
+												}
+											}
+
+											elem = origElem
+										case 'v': // Prefix: "voke"
+											origElem := elem
+											if l := len("voke"); len(elem) >= l && elem[0:l] == "voke" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											if len(elem) == 0 {
+												switch method {
+												case "POST":
+													// Leaf: APIV1RevokeInvitation
+													r.name = "APIV1RevokeInvitation"
+													r.summary = "Revoke invitation"
+													r.operationID = "APIV1RevokeInvitation"
+													r.pathPattern = "/api/v1/members/invitations/{invitationId}/revoke"
+													r.args = args
+													r.count = 1
+													return r, true
+												default:
+													return
+												}
+											}
+
+											elem = origElem
 										}
 
 										elem = origElem
@@ -1341,49 +1371,22 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 								elem = origElem
 							}
-
-							elem = origElem
-						}
-						// Param: "memberId"
-						// Match until "/"
-						idx := strings.IndexByte(elem, '/')
-						if idx < 0 {
-							idx = len(elem)
-						}
-						args[0] = elem[:idx]
-						elem = elem[idx:]
-
-						if len(elem) == 0 {
-							switch method {
-							case "DELETE":
-								r.name = "APIV1RemoveMember"
-								r.summary = "Remove Member"
-								r.operationID = "APIV1RemoveMember"
-								r.pathPattern = "/api/v1/members/{memberId}"
-								r.args = args
-								r.count = 1
-								return r, true
-							default:
-								return
+							// Param: "memberId"
+							// Match until "/"
+							idx := strings.IndexByte(elem, '/')
+							if idx < 0 {
+								idx = len(elem)
 							}
-						}
-						switch elem[0] {
-						case '/': // Prefix: "/role"
-							origElem := elem
-							if l := len("/role"); len(elem) >= l && elem[0:l] == "/role" {
-								elem = elem[l:]
-							} else {
-								break
-							}
+							args[0] = elem[:idx]
+							elem = elem[idx:]
 
 							if len(elem) == 0 {
 								switch method {
-								case "PUT":
-									// Leaf: APIV1UpdateMemberRole
-									r.name = "APIV1UpdateMemberRole"
-									r.summary = "Update Member Role"
-									r.operationID = "APIV1UpdateMemberRole"
-									r.pathPattern = "/api/v1/members/{memberId}/role"
+								case "DELETE":
+									r.name = "APIV1RemoveMember"
+									r.summary = "Remove Member"
+									r.operationID = "APIV1RemoveMember"
+									r.pathPattern = "/api/v1/members/{memberId}"
 									r.args = args
 									r.count = 1
 									return r, true
@@ -1391,8 +1394,99 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									return
 								}
 							}
+							switch elem[0] {
+							case '/': // Prefix: "/role"
+								origElem := elem
+								if l := len("/role"); len(elem) >= l && elem[0:l] == "/role" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									switch method {
+									case "PUT":
+										// Leaf: APIV1UpdateMemberRole
+										r.name = "APIV1UpdateMemberRole"
+										r.summary = "Update Member Role"
+										r.operationID = "APIV1UpdateMemberRole"
+										r.pathPattern = "/api/v1/members/{memberId}/role"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							}
 
 							elem = origElem
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
+				case 'w': // Prefix: "workspaces"
+					origElem := elem
+					if l := len("workspaces"); len(elem) >= l && elem[0:l] == "workspaces" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch method {
+						case "GET":
+							r.name = "APIV1GetWorkspaces"
+							r.summary = "Get Joined Workspaces"
+							r.operationID = "APIV1GetWorkspaces"
+							r.pathPattern = "/api/v1/workspaces"
+							r.args = args
+							r.count = 0
+							return r, true
+						case "POST":
+							r.name = "APIV1CreateWorkspace"
+							r.summary = "Create Workspace"
+							r.operationID = "APIV1CreateWorkspace"
+							r.pathPattern = "/api/v1/workspaces"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+						origElem := elem
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "workspaceId"
+						// Leaf parameter
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							switch method {
+							case "PUT":
+								// Leaf: APIV1UpdateWorkspace
+								r.name = "APIV1UpdateWorkspace"
+								r.summary = "Update Workspace"
+								r.operationID = "APIV1UpdateWorkspace"
+								r.pathPattern = "/api/v1/workspaces/{workspaceId}"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
 						}
 
 						elem = origElem
@@ -1417,77 +1511,13 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.name = "Ping"
 						r.summary = "Checks if the server is running"
 						r.operationID = "Ping"
-						r.pathPattern = "/api/v1/ping"
+						r.pathPattern = "/ping"
 						r.args = args
 						r.count = 0
 						return r, true
 					default:
 						return
 					}
-				}
-
-				elem = origElem
-			case 'w': // Prefix: "workspaces"
-				origElem := elem
-				if l := len("workspaces"); len(elem) >= l && elem[0:l] == "workspaces" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					switch method {
-					case "GET":
-						r.name = "APIV1GetWorkspaces"
-						r.summary = "Get Joined Workspaces"
-						r.operationID = "APIV1GetWorkspaces"
-						r.pathPattern = "/api/v1/workspaces"
-						r.args = args
-						r.count = 0
-						return r, true
-					case "POST":
-						r.name = "APIV1CreateWorkspace"
-						r.summary = "Create Workspace"
-						r.operationID = "APIV1CreateWorkspace"
-						r.pathPattern = "/api/v1/workspaces"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
-					}
-				}
-				switch elem[0] {
-				case '/': // Prefix: "/"
-					origElem := elem
-					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					// Param: "workspaceId"
-					// Leaf parameter
-					args[0] = elem
-					elem = ""
-
-					if len(elem) == 0 {
-						switch method {
-						case "PUT":
-							// Leaf: APIV1UpdateWorkspace
-							r.name = "APIV1UpdateWorkspace"
-							r.summary = "Update Workspace"
-							r.operationID = "APIV1UpdateWorkspace"
-							r.pathPattern = "/api/v1/workspaces/{workspaceId}"
-							r.args = args
-							r.count = 1
-							return r, true
-						default:
-							return
-						}
-					}
-
-					elem = origElem
 				}
 
 				elem = origElem
