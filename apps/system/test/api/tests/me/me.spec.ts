@@ -20,8 +20,8 @@ test.describe("Me success", () => {
   })
 })
 
-systemTest("Workspace", () => {
-  systemTest("Success Leave Workspace", async ({ stateful }) => {
-    const authInfo = await getAuthInfo("unfinished_onboarding@example.com")
-  })
-})
+// systemTest("Workspace", () => {
+//   systemTest("Success Leave Workspace", async ({ stateful }) => {
+//     const authInfo = await getAuthInfo("unfinished_onboarding@example.com")
+//   })
+// })

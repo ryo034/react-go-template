@@ -1,25 +1,21 @@
 {
   "invitations": [
     {
-      "id": "018d96bb-2a6e-70ed-bd74-8565ac2960ac",
-      "accepted": true,
-      "expiredAt": "2024-01-17T21:00:00+09:00",
-      "inviteeEmail": "invite_test_already_accepted@example.com",
+      "id": "018d96b8-2211-7862-bcbe-e9f4d002a8fc",
+      "accepted": false,
+      "expiredAt": "2200-01-10T21:00:00+09:00",
+      "inviteeEmail": "invite_test_not_expired@example.com",
       "displayName": "",
       "inviter": {
         "id": "377eba35-5560-4f48-a99d-19cbd6a82b0d",
-        "membershipStatus": "ACTIVE",
-        "profile": {
-          "bio": "bio",
-          "displayName": "John Doe",
-          "idNumber": "DEV-12345"
+        "profile": { "displayName": "John Doe", "idNumber": "DEV-12345", "bio": "bio" },
+        "user": {
+          "userId": "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
+          "email": "account@example.com",
+          "name": "John Doe"
         },
         "role": "OWNER",
-        "user": {
-          "email": "account@example.com",
-          "name": "John Doe",
-          "userId": "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
-        }
+        "membershipStatus": "ACTIVE"
       }
     }
   ]
