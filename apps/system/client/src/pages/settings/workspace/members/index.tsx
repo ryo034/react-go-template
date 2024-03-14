@@ -8,10 +8,10 @@ import {
   CardHeader,
   CardTitle,
   Command,
-  CommandEmpty,
   CommandGroup,
   CommandItem,
   CommandList,
+  CommandShortcut,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -114,19 +114,20 @@ export const SettingsWorkspaceMembersPage = () => {
                     <PopoverContent className="p-0" align="end">
                       <Command>
                         <CommandList data-testid="selectMemberRole">
-                          <CommandEmpty>No roles found.</CommandEmpty>
                           <CommandGroup>
                             {SelectableRoleList.map((role) => {
                               return (
                                 <CommandItem
-                                  className="space-y-1 flex flex-col items-start px-4 py-2 cursor-pointer"
+                                  className="px-4 py-2 cursor-pointer"
                                   onSelect={(v) => onSelectRole(m, role)}
                                   key={`${m.id.value.asString}-selectRole-${role}`}
                                 >
-                                  <p className="flex items-center">
-                                    <span className="pr-2">{translateRole(role)}</span>
-                                    {role !== m.role ? null : <CheckIcon size={16} />}
-                                  </p>
+                                  <span className="pr-2">{translateRole(role)}</span>
+                                  {role !== m.role ? null : (
+                                    <CommandShortcut>
+                                      <CheckIcon size={16} />
+                                    </CommandShortcut>
+                                  )}
                                 </CommandItem>
                               )
                             })}
