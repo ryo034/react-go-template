@@ -8,49 +8,49 @@ paths:
   /ping:
     $ref: "./paths/ping.yaml#/ping"
   /api/v1/auth/otp:
-    $ref: "./paths/auth.yaml#/authByOtp"
+    $ref: "./paths/v1/auth.yaml#/authByOtp"
   /api/v1/auth/otp/verify:
-    $ref: "./paths/auth.yaml#/verify"
+    $ref: "./paths/v1/auth.yaml#/verify"
   /api/v1/auth/invitations/process/email:
-    $ref: "./paths/auth.yaml#/invitationProcessEmail"
+    $ref: "./paths/v1/auth.yaml#/invitationProcessEmail"
   /api/v1/auth/invitations/process/oauth:
-    $ref: "./paths/auth.yaml#/invitationProcessOAuth"
+    $ref: "./paths/v1/auth.yaml#/invitationProcessOAuth"
   /api/v1/auth/invitations:
-    $ref: "./paths/auth.yaml#/invitation"
+    $ref: "./paths/v1/auth.yaml#/invitation"
   /api/v1/auth/oauth:
-    $ref: "./paths/auth.yaml#/oauth"
+    $ref: "./paths/v1/auth.yaml#/oauth"
   # Me
   /api/v1/me:
-    $ref: "./paths/me.yaml#/me"
+    $ref: "./paths/v1/me.yaml#/me"
   /api/v1/me/profile:
-    $ref: "./paths/me.yaml#/profile"
+    $ref: "./paths/v1/me.yaml#/profile"
   /api/v1/me/profile/photo:
-    $ref: "./paths/me.yaml#/profilePhoto"
+    $ref: "./paths/v1/me.yaml#/profilePhoto"
   /api/v1/me/member/profile:
-    $ref: "./paths/me.yaml#/memberProfile"
+    $ref: "./paths/v1/me.yaml#/memberProfile"
   /api/v1/me/workspace/leave:
-    $ref: "./paths/me.yaml#/leaveWorkspace"
+    $ref: "./paths/v1/me.yaml#/leaveWorkspace"
   # Workspaces
   /api/v1/workspaces:
-    $ref: "./paths/workspace.yaml#/workspaces"
+    $ref: "./paths/v1/workspace.yaml#/workspaces"
   /api/v1/workspaces/{workspaceId}:
-    $ref: "./paths/workspace.yaml#/workspace"
+    $ref: "./paths/v1/workspace.yaml#/workspace"
   /api/v1/members:
-    $ref: "./paths/member.yaml#/members"
+    $ref: "./paths/v1/member.yaml#/members"
   /api/v1/members/{memberId}:
-    $ref: "./paths/member.yaml#/member"
+    $ref: "./paths/v1/member.yaml#/member"
   /api/v1/members/{memberId}/role:
-    $ref: "./paths/member.yaml#/memberRole"
+    $ref: "./paths/v1/member.yaml#/memberRole"
   /api/v1/invitations:
-    $ref: "./paths/member.yaml#/invitations"
+    $ref: "./paths/v1/member.yaml#/invitations"
   /api/v1/members/invitations/bulk:
-    $ref: "./paths/member.yaml#/invitationsBulk"
+    $ref: "./paths/v1/member.yaml#/invitationsBulk"
   /api/v1/members/invitations/{invitationId}/accept:
-    $ref: "./paths/me.yaml#/invitationsAccept"
+    $ref: "./paths/v1/me.yaml#/invitationsAccept"
   /api/v1/members/invitations/{invitationId}/revoke:
-    $ref: "./paths/member.yaml#/invitationsRevoke"
+    $ref: "./paths/v1/member.yaml#/invitationsRevoke"
   /api/v1/members/invitations/{invitationId}/resend:
-    $ref: "./paths/member.yaml#/resendInvitations"
+    $ref: "./paths/v1/member.yaml#/resendInvitations"
 
 components:
   securitySchemes:
@@ -94,27 +94,27 @@ components:
       $ref: "./components/schemas/me.yaml#/ReceivedInvitation"
   requestBodies:
     AuthByOtpPost:
-      $ref: "./components/requestBodies/auth.yaml#/AuthByOtpPost"
+      $ref: "./components/requestBodies/v1/auth.yaml#/AuthByOtpPost"
     AuthVerifyPost:
-      $ref: "./components/requestBodies/auth.yaml#/AuthVerifyPost"
+      $ref: "./components/requestBodies/v1/auth.yaml#/AuthVerifyPost"
     CreateWorkspace:
-      $ref: "./components/requestBodies/workspace.yaml#/CreateWorkspace"
+      $ref: "./components/requestBodies/v1/workspace.yaml#/CreateWorkspace"
     UpdateMeProfile:
-      $ref: "./components/requestBodies/me.yaml#/UpdateMeProfile"
+      $ref: "./components/requestBodies/v1/me.yaml#/UpdateMeProfile"
     UpdateMeProfilePhoto:
-      $ref: "./components/requestBodies/me.yaml#/UpdateMeProfilePhoto"
+      $ref: "./components/requestBodies/v1/me.yaml#/UpdateMeProfilePhoto"
     InvitationProcessEmail:
-      $ref: "./components/requestBodies/auth.yaml#/InvitationProcessEmail"
+      $ref: "./components/requestBodies/v1/auth.yaml#/InvitationProcessEmail"
     InvitationProcessOAuth:
-      $ref: "./components/requestBodies/auth.yaml#/InvitationProcessOAuth"
+      $ref: "./components/requestBodies/v1/auth.yaml#/InvitationProcessOAuth"
     InvitationsBulk:
-      $ref: "./components/requestBodies/member.yaml#/InvitationsBulk"
+      $ref: "./components/requestBodies/v1/member.yaml#/InvitationsBulk"
     UpdateMeMemberProfile:
-      $ref: "./components/requestBodies/me.yaml#/UpdateMeMemberProfile"
+      $ref: "./components/requestBodies/v1/me.yaml#/UpdateMeMemberProfile"
     UpdateMemberRole:
-      $ref: "./components/requestBodies/member.yaml#/UpdateMemberRole"
+      $ref: "./components/requestBodies/v1/member.yaml#/UpdateMemberRole"
     UpdateWorkspace:
-      $ref: "./components/requestBodies/workspace.yaml#/UpdateWorkspace"
+      $ref: "./components/requestBodies/v1/workspace.yaml#/UpdateWorkspace"
   responses:
     GeneralError:
       $ref: "./components/responses/error.yaml#/components/responses/GeneralError"
@@ -135,42 +135,42 @@ components:
     InternalServerError:
       $ref: "./components/responses/error.yaml#/components/responses/InternalServerError"
     GetInvitationByTokenResponse:
-      $ref: "./components/responses/auth.yaml#/GetInvitationByTokenResponse"
+      $ref: "./components/responses/v1/auth.yaml#/GetInvitationByTokenResponse"
     InvitationsBulkResponse:
-      $ref: "./components/responses/member.yaml#/InvitationsBulkResponse"
+      $ref: "./components/responses/v1/member.yaml#/InvitationsBulkResponse"
     RevokeInvitationResponse:
-      $ref: "./components/responses/member.yaml#/RevokeInvitationResponse"
+      $ref: "./components/responses/v1/member.yaml#/RevokeInvitationResponse"
     ResendInvitationResponse:
-      $ref: "./components/responses/member.yaml#/ResendInvitationResponse"
+      $ref: "./components/responses/v1/member.yaml#/ResendInvitationResponse"
     WorkspacesResponse:
-      $ref: "./components/responses/workspace.yaml#/WorkspacesResponse"
+      $ref: "./components/responses/v1/workspace.yaml#/WorkspacesResponse"
     InvitationsResponse:
-      $ref: "./components/responses/member.yaml#/InvitationsResponse"
+      $ref: "./components/responses/v1/member.yaml#/InvitationsResponse"
     MembersResponse:
-      $ref: "./components/responses/member.yaml#/MembersResponse"
+      $ref: "./components/responses/v1/member.yaml#/MembersResponse"
     MeResponse:
-      $ref: "./components/responses/me.yaml#/MeResponse"
+      $ref: "./components/responses/v1/me.yaml#/MeResponse"
     UpdateProfileResponse:
-      $ref: "./components/responses/me.yaml#/UpdateProfileResponse"
+      $ref: "./components/responses/v1/me.yaml#/UpdateProfileResponse"
     UpdateProfilePhotoResponse:
-      $ref: "./components/responses/me.yaml#/UpdateProfilePhotoResponse"
+      $ref: "./components/responses/v1/me.yaml#/UpdateProfilePhotoResponse"
     RemoveProfilePhotoResponse:
-      $ref: "./components/responses/me.yaml#/RemoveProfilePhotoResponse"
+      $ref: "./components/responses/v1/me.yaml#/RemoveProfilePhotoResponse"
     UpdateMeMemberProfileResponse:
-      $ref: "./components/responses/me.yaml#/UpdateMeMemberProfileResponse"
+      $ref: "./components/responses/v1/me.yaml#/UpdateMeMemberProfileResponse"
     InvitationsAcceptResponse:
-      $ref: "./components/responses/me.yaml#/InvitationsAcceptResponse"
+      $ref: "./components/responses/v1/me.yaml#/InvitationsAcceptResponse"
     CreateWorkspaceResponse:
-      $ref: "./components/responses/workspace.yaml#/CreateWorkspaceResponse"
+      $ref: "./components/responses/v1/workspace.yaml#/CreateWorkspaceResponse"
     LoginResponse:
-      $ref: "./components/responses/auth.yaml#/LoginResponse"
+      $ref: "./components/responses/v1/auth.yaml#/LoginResponse"
     AuthVerifyOTPResponse:
-      $ref: "./components/responses/auth.yaml#/AuthVerifyOTPResponse"
+      $ref: "./components/responses/v1/auth.yaml#/AuthVerifyOTPResponse"
     AuthByOAuthResponse:
-      $ref: "./components/responses/auth.yaml#/AuthByOAuthResponse"
+      $ref: "./components/responses/v1/auth.yaml#/AuthByOAuthResponse"
     InvitationProcessOAuthResponse:
-      $ref: "./components/responses/auth.yaml#/InvitationProcessOAuthResponse"
+      $ref: "./components/responses/v1/auth.yaml#/InvitationProcessOAuthResponse"
     UpdateMemberRoleResponse:
-      $ref: "./components/responses/member.yaml#/UpdateMemberRoleResponse"
+      $ref: "./components/responses/v1/member.yaml#/UpdateMemberRoleResponse"
     UpdateWorkspaceResponse:
-      $ref: "./components/responses/workspace.yaml#/UpdateWorkspaceResponse"
+      $ref: "./components/responses/v1/workspace.yaml#/UpdateWorkspaceResponse"
