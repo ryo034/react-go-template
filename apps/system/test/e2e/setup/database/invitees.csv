@@ -16,5 +16,6 @@ invitation_id,email
 018e0eae-44a6-732d-ab12-54e5a1f3f27d,invite_test_has_photo_by_google_accept_with_email@example.com
 018e0ec0-bc20-7a22-9ffd-db6e0dccec25,invite_test_has_photo_by_google_accept_with_has_photo_google@example.com
 018e0ec1-cb17-777b-8e4a-3149194401b4,invite_test_no_account_accept_with_has_photo_google@example.com
+018e4421-aba7-7a6a-8a8f-9c2ba26e69dd,once_leave_workspace_accept_receive_from_already_left_member@example.com
 018e4062-05ec-7a6f-8ad9-812f3f2c33f9,once_leave_workspace_check_receive_from_already_left_member@example.com
 018e3f69-4a17-72f3-88a2-d05923a89ce4,once_leave_workspace_invited_after_left@example.com

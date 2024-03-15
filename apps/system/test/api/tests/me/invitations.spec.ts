@@ -183,18 +183,20 @@ systemTest.describe("Me Invitations", () => {
 })
 
 test.describe("receive invitation from already left workspace member", () => {
-  test("if received invitation from already left workspace, user accept invitation and join workspace", async ({ page }) => {
+  test("check invitation if received masked inviter details invitation from already left workspace", async ({ page }) => {
     const email = "once_leave_workspace_check_receive_from_already_left_member@example.com"
     const inviteToken = await getInviteToken(email)
-
     const invitationRes = await client.GET("/api/v1/auth/invitations", {
       headers: defaultPostHeaders,
       params: { query: { token: inviteToken } }
     })
     expect(invitationRes.response.status).toBe(200)
-    // mask left member details in invitation response
-    expect(invitationRes.data).toStrictEqual((await import("./success_get_invitation_received_from_left_member.json")).default)
+    expect(invitationRes.data).toStrictEqual((await import("./success_get_masked_inviter_invitation_received_from_left_member.json")).default)
+  })
 
+  test("if received invitation from already left workspace, user accept invitation and join workspace", async ({ page }) => {
+    const email = "once_leave_workspace_accept_receive_from_already_left_member@example.com"
+    const inviteToken = await getInviteToken(email)
     const authInfo = await getAuthInfo(email)
     const meRes = await client.GET("/api/v1/me", { headers: authHeaders(authInfo.token) })
     expect(meRes.response.status).toBe(200)
@@ -244,14 +246,14 @@ test.describe("receive invitation from already left workspace member", () => {
             },
             role: "MEMBER",
             user: {
-              email: "once_leave_workspace_check_receive_from_already_left_member@example.com",
+              email: "once_leave_workspace_accept_receive_from_already_left_member@example.com",
               name: "ReceivedInvitation FromLeftMember",
               userId: meRes.data.me?.self.userId
             }
           },
           providers: ["email"],
           self: {
-            email: "once_leave_workspace_check_receive_from_already_left_member@example.com",
+            email: "once_leave_workspace_accept_receive_from_already_left_member@example.com",
             name: "ReceivedInvitation FromLeftMember",
             userId: meRes.data.me?.self.userId
           }

@@ -155,15 +155,18 @@ VALUES
 
 INSERT INTO invitations (invitation_id, invitation_unit_id)
 VALUES
+('018e4421-aba7-7a6a-8a8f-9c2ba26e69dd', '018e4062-05ec-76a8-a7c5-c4d975bf2778'),
 ('018e4062-05ec-7a6f-8ad9-812f3f2c33f9', '018e4062-05ec-76a8-a7c5-c4d975bf2778'),
 ('018e3f69-4a17-72f3-88a2-d05923a89ce4', '018e3f69-4a17-7808-9b14-c0286a7a8156');
 
 INSERT INTO invitation_tokens (invitation_id, token, expired_at, created_at)
 VALUES
+('018e4421-aba7-7a6a-8a8f-9c2ba26e69dd', '018e4421-aba7-7de4-9bc7-ca0f93355a28', '2500-01-20 12:00:00', '2023-01-13 12:00:00'),
 ('018e4062-05ec-7a6f-8ad9-812f3f2c33f9', '018e4062-05ec-7af4-a2fa-a48e4294deeb', '2500-01-20 12:00:00', '2023-01-13 12:00:00'),
 ('018e3f69-4a17-72f3-88a2-d05923a89ce4', '018e3f69-4a17-7f13-a74d-0fc58ba18a32', '2500-01-20 12:00:00', '2023-01-13 12:00:00');
 
 INSERT INTO invitees (invitation_id, email)
 VALUES
+('018e4421-aba7-7a6a-8a8f-9c2ba26e69dd', 'once_leave_workspace_accept_receive_from_already_left_member@example.com'),
 ('018e4062-05ec-7a6f-8ad9-812f3f2c33f9', 'once_leave_workspace_check_receive_from_already_left_member@example.com'),
 ('018e3f69-4a17-72f3-88a2-d05923a89ce4', 'once_leave_workspace_invited_after_left@example.com');
