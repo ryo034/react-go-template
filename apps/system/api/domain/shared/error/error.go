@@ -8,14 +8,16 @@ const (
 	InvalidEmailMessageKey            MessageKey = "InvalidEmail"
 	EmailNotVerifiedMessageKey        MessageKey = "EmailNotVerified"
 	InvalidAddressMessageKey          MessageKey = "InvalidAddress"
-	ConflictedMessageKey              MessageKey = "Conflicted"
-	ForbiddenMessageKey               MessageKey = "Forbidden"
-	BadRequestMessageKey              MessageKey = "BadRequest"
 	ConflictVersionMessageKey         MessageKey = "ConflictVersion"
-	NoSuchDataMessageKey              MessageKey = "NoSuchData"
-	UnauthenticatedMessageKey         MessageKey = "Unauthenticated"
 	NotBelongMessageKey               MessageKey = "NotBelong"
-	InternalServerErrorMessageKey     MessageKey = "InternalServerError"
+
+	BadRequestMessageKey          MessageKey = "BadRequest"
+	UnauthenticatedMessageKey     MessageKey = "Unauthenticated"
+	ForbiddenMessageKey           MessageKey = "Forbidden"
+	NoSuchDataMessageKey          MessageKey = "NoSuchData"
+	ConflictedMessageKey          MessageKey = "Conflicted"
+	GoneMessageKey                MessageKey = "Gone"
+	InternalServerErrorMessageKey MessageKey = "InternalServerError"
 )
 
 type Error interface {

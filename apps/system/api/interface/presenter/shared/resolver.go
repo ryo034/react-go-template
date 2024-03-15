@@ -45,6 +45,7 @@ func (r *resolver) errTitle(tag language.Tag, err error, msgArgs ...interface{})
 	var forbidden *domainErr.Forbidden
 	var noSuchData *domainErr.NoSuchData
 	var conflict *domainErr.Conflicted
+	var gone *domainErr.Gone
 
 	var invalidInviteToken *invitation.InvalidInvitationToken
 	var expiredInvitationToken *invitation.ExpiredInvitationToken
@@ -66,6 +67,8 @@ func (r *resolver) errTitle(tag language.Tag, err error, msgArgs ...interface{})
 		msg = r.mr.TitleMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
 	case errors.As(err, &conflict):
 		msg = r.mr.TitleMessage(string(domainErr.ConflictedMessageKey)).WithLang(tag)
+	case errors.As(err, &gone):
+		msg = r.mr.TitleMessage(string(domainErr.GoneMessageKey)).WithLang(tag)
 	case errors.As(err, &invalidInviteToken):
 		msg = r.mr.TitleMessage(string(invitation.InvalidInviteTokenMessageKey)).WithLang(tag)
 	case errors.As(err, &expiredInvitationToken):
@@ -90,6 +93,7 @@ func (r *resolver) errDetail(tag language.Tag, err error, msgArgs ...interface{}
 	var forbidden *domainErr.Forbidden
 	var noSuchData *domainErr.NoSuchData
 	var conflict *domainErr.Conflicted
+	var gone *domainErr.Gone
 
 	var invalidInviteToken *invitation.InvalidInvitationToken
 	var expiredInvitationToken *invitation.ExpiredInvitationToken
@@ -111,6 +115,8 @@ func (r *resolver) errDetail(tag language.Tag, err error, msgArgs ...interface{}
 		msg = r.mr.DetailMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
 	case errors.As(err, &conflict):
 		msg = r.mr.DetailMessage(string(domainErr.ConflictedMessageKey)).WithLang(tag)
+	case errors.As(err, &gone):
+		msg = r.mr.DetailMessage(string(domainErr.GoneMessageKey)).WithLang(tag)
 	case errors.As(err, &invalidInviteToken):
 		msg = r.mr.DetailMessage(string(invitation.InvalidInviteTokenMessageKey)).WithLang(tag)
 	case errors.As(err, &expiredInvitationToken):
@@ -135,6 +141,7 @@ func (r *resolver) errCode(err error) string {
 	var forbidden *domainErr.Forbidden
 	var noSuchData *domainErr.NoSuchData
 	var conflict *domainErr.Conflicted
+	var gone *domainErr.Gone
 
 	var invalidInviteToken *invitation.InvalidInvitationToken
 	var expiredInvitationToken *invitation.ExpiredInvitationToken
@@ -156,6 +163,8 @@ func (r *resolver) errCode(err error) string {
 		code = "404-000"
 	case errors.As(err, &conflict):
 		code = "409-000"
+	case errors.As(err, &gone):
+		code = "410-000"
 	case errors.As(err, &expiredInvitationToken):
 		code = "400-000"
 	case errors.As(err, &invalidInviteToken):
@@ -179,8 +188,8 @@ func (r *resolver) Error(c context.Context, err error) interface{} {
 	var badRequest *domainErr.BadRequest
 	var unauthenticated *domainErr.Unauthenticated
 	var forbidden *domainErr.Forbidden
-	//var noSuchData *domainErr.NoSuchData
 	var conflict *domainErr.Conflicted
+	var gone *domainErr.Gone
 
 	var invalidInviteToken *invitation.InvalidInvitationToken
 	var expiredInvitationToken *invitation.ExpiredInvitationToken
@@ -208,29 +217,20 @@ func (r *resolver) Error(c context.Context, err error) interface{} {
 			Detail: openapi.OptString{Value: er.Detail, Set: true},
 			Code:   openapi.OptString{Value: er.Code, Set: true},
 		}
-	//case errors.As(err, &noSuchData):
-	//	return &openapi.NotFoundError{
-	//		Type:   openapi.OptString{Value: er.Type, Set: true},
-	//		Title:  openapi.OptString{Value: er.Title, Set: true},
-	//		Detail: openapi.OptString{Value: er.Detail, Set: true},
-	//		Code:   openapi.OptString{Value: er.Code, Set: true},
-	//	}
 	case errors.As(err, &conflict), errors.As(err, &alreadyVerifiedInvitation):
 		return &openapi.ConflictError{
 			Title:  openapi.OptString{Value: er.Title, Set: true},
 			Detail: openapi.OptString{Value: er.Detail, Set: true},
 			Code:   openapi.OptString{Value: er.Code, Set: true},
 		}
-	case errors.As(err, &alreadyExpiredInvitation), errors.As(err, &alreadyRevokedInvitation), errors.As(err, &alreadyAcceptedInvitation):
+	case errors.As(err, &gone), errors.As(err, &alreadyExpiredInvitation), errors.As(err, &alreadyRevokedInvitation), errors.As(err, &alreadyAcceptedInvitation):
 		return &openapi.GoneError{
 			Title:  openapi.OptString{Value: er.Title, Set: true},
 			Detail: openapi.OptString{Value: er.Detail, Set: true},
 			Code:   openapi.OptString{Value: er.Code, Set: true},
 		}
 	}
-
 	return &openapi.InternalServerError{
-		//Type:   openapi.OptString{Value: er.Type, Set: true},
 		Title:  openapi.OptString{Value: er.Title, Set: true},
 		Detail: openapi.OptString{Value: er.Detail, Set: true},
 		Code:   openapi.OptString{Value: er.Code, Set: true},
@@ -280,6 +280,7 @@ func (r *resolver) detail(tag language.Tag, err error) errDetail {
 	var forbidden *domainErr.Forbidden
 	var noSuchData *domainErr.NoSuchData
 	var conflict *domainErr.Conflicted
+	var gone *domainErr.Gone
 
 	var invalidInviteToken *invitation.InvalidInvitationToken
 	var expiredInvitationToken *invitation.ExpiredInvitationToken
@@ -301,6 +302,8 @@ func (r *resolver) detail(tag language.Tag, err error) errDetail {
 		msg = r.mr.ErrorMessage(string(domainErr.NoSuchDataMessageKey)).WithLang(tag)
 	case errors.As(err, &conflict):
 		msg = r.mr.ErrorMessage(string(domainErr.ConflictedMessageKey)).WithLang(tag)
+	case errors.As(err, &gone):
+		msg = r.mr.ErrorMessage(string(domainErr.GoneMessageKey)).WithLang(tag)
 	case errors.As(err, &invalidInviteToken):
 		msg = r.mr.ErrorMessage(string(invitation.InvalidInviteTokenMessageKey)).WithLang(tag)
 	case errors.As(err, &expiredInvitationToken):

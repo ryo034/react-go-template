@@ -2,6 +2,46 @@
   "kind": "identitytoolkit#DownloadAccountResponse",
   "users": [
     {
+      "localId": "018e3f69-4a17-72e4-988d-ae46efe64359",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "LeaveWorkspace Invite",
+      "validSince": "1709725349",
+      "email": "once_leave_workspace_invited_after_left@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "018e3f69-4a17-7a84-b472-23d0a97aa6f7",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "LeaveWorkspace InviteOwner",
+      "validSince": "1709725349",
+      "email": "once_leave_workspace_invite_owner@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "018e3f69-4a17-717f-9956-61752f39ef5e",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "LeaveWorkspace MultipleJoined",
+      "validSince": "1709725349",
+      "email": "once_leave_workspace_multiple_joined@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "018e3f69-4a17-7ff5-bbb6-7534f034b0a4",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "LeaveWorkspaceOne Owner",
+      "validSince": "1709725349",
+      "email": "once_leave_workspace_1_multiple_joined_owner@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
       "localId": "018e3642-86c6-77f0-82ea-e29a22f67431",
       "createdAt": "1706825570522",
       "lastLoginAt": "1706825570547",

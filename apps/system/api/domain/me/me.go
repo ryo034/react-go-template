@@ -73,7 +73,8 @@ func (m *Me) UpdateName(name account.Name) *Me {
 	if m.member == nil {
 		return updated
 	}
-	return m.UpdateMember(m.member.UpdateUser(tmpSelf))
+	m.member = m.member.UpdateUser(tmpSelf)
+	return m
 }
 
 func (m *Me) Providers() provider.Providers {

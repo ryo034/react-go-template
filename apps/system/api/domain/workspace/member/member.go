@@ -1,6 +1,8 @@
 package member
 
 import (
+	"fmt"
+
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/user"
 )
@@ -38,57 +40,64 @@ func GenerateAsWorkspaceOwner(u *user.User, dn *DisplayName) (*Member, error) {
 	return NewMember(id, u, NewProfile(dn, nil, NewAsEmptyBio()), RoleOwner, MembershipStatusActive), nil
 }
 
-func (w *Member) ID() ID {
-	return w.id
+func (m *Member) ID() ID {
+	return m.id
 }
 
-func (w *Member) User() *user.User {
-	return w.u
+func (m *Member) User() *user.User {
+	return m.u
 }
 
-func (w *Member) Profile() Profile {
-	return w.profile
+func (m *Member) Profile() Profile {
+	return m.profile
 }
 
-func (w *Member) Role() Role {
-	return w.role
+func (m *Member) Role() Role {
+	return m.role
 }
 
-func (w *Member) MembershipStatus() MembershipStatus {
-	return w.membershipStatus
+func (m *Member) MembershipStatus() MembershipStatus {
+	return m.membershipStatus
 }
 
 // UpdateProfile updates the profile of the member
 // if the displayName is nil, it will be set to the user's name
-func (w *Member) UpdateProfile(profile Profile) *Member {
-	if profile.DisplayName() == nil {
-		profile.displayName = NewDisplayName(w.u.Name().ToString())
+func (m *Member) UpdateProfile(profile Profile) (*Member, error) {
+	if m == nil {
+		return nil, domainErr.NewUnauthenticated("Not joined")
 	}
-	w.profile = profile
-	return w
+	if m.membershipStatus.IsLeft() {
+		return nil, domainErr.NewGone(fmt.Sprintf("MemberID %s", m.ID().ToString()))
+	}
+
+	if profile.DisplayName() == nil {
+		profile.displayName = NewDisplayName(m.u.Name().ToString())
+	}
+	m.profile = profile
+	return m, nil
 }
 
-func (w *Member) UpdateUser(u *user.User) *Member {
-	w.u = u
-	return w
+func (m *Member) UpdateUser(u *user.User) *Member {
+	m.u = u
+	return m
 }
 
-func (w *Member) UpdateRole(role Role) (*Member, error) {
+func (m *Member) UpdateRole(role Role) (*Member, error) {
 	if role == RoleOwner {
 		return nil, domainErr.NewForbidden("cannot change the role to owner")
 	}
-	if role == w.role {
+	if role == m.role {
 		return nil, domainErr.NewBadRequest("the role is already the same")
 	}
-	if w.role.IsOwner() {
+	if m.role.IsOwner() {
 		return nil, domainErr.NewForbidden("cannot change the role")
 	}
-	w.role = role
-	return w, nil
+	m.role = role
+	return m, nil
 }
 
-func (w *Member) ValidateCanLeave() error {
-	if w.MembershipStatus().IsLeft() {
+func (m *Member) ValidateCanLeave() error {
+	if m.MembershipStatus().IsLeft() {
 		return domainErr.NewForbidden("already left")
 	}
 	return nil

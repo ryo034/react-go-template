@@ -8,6 +8,7 @@ import (
 
 type Adapter interface {
 	Adapt(u *user.User) openapi.User
+	AdaptForLeft(u *user.User) openapi.User
 }
 
 type adapter struct {
@@ -44,6 +45,22 @@ func (a *adapter) Adapt(u *user.User) openapi.User {
 		}
 	}
 
+	return openapi.User{
+		UserId:      u.AccountID().Value(),
+		Email:       u.Email().ToString(),
+		Name:        na,
+		PhoneNumber: ph,
+		Photo:       photo,
+	}
+}
+
+// AdaptForLeft is a method to adapt user for left user
+// show only email
+// mask name, phone number, photo
+func (a *adapter) AdaptForLeft(u *user.User) openapi.User {
+	var na = openapi.OptString{Set: true, Value: "Removed User"}
+	var ph = openapi.OptString{Set: false}
+	var photo = openapi.OptURI{Set: false}
 	return openapi.User{
 		UserId:      u.AccountID().Value(),
 		Email:       u.Email().ToString(),

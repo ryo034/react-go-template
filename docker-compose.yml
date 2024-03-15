@@ -96,6 +96,7 @@ services:
       - ./container/database/postgresql/sql/107_setup_login_logout_retry.sql:/docker-entrypoint-initdb.d/107_setup_login_logout_retry.sql:Z
       - ./container/database/postgresql/sql/108_setup_invite.sql:/docker-entrypoint-initdb.d/108_setup_invite.sql:Z
       - ./container/database/postgresql/sql/109_setup_leave_workspace.sql:/docker-entrypoint-initdb.d/109_setup_leave_workspace.sql:Z
+      - ./container/database/postgresql/sql/110_setup_once_leave_workspace.sql:/docker-entrypoint-initdb.d/110_setup_once_leave_workspace.sql:Z
 
     healthcheck:
       test: pg_isready -d main

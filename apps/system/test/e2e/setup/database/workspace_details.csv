@@ -9,3 +9,6 @@ workspace_detail_id,workspace_id,name,subdomain,created_at
 018e200b-9d01-7efb-b0e7-51fb5333300e,018d96b9-c920-7434-b5c3-02e5e920ae9d,InviteTest 1,invite-test-1,2024-01-10 12:00:00.000000 +00:00
 018e200b-9d01-7f75-a427-59b82d6acc97,018d9b4d-e340-74f7-914c-2476eff949bb,InviteTest 2,invite-test-2,2024-01-10 12:00:00.000000 +00:00
 018e3642-86c6-7776-978e-027dd444016a,018e3642-86c6-7e74-b874-9c2835b2ce50,Leave Workspace,leave-workspace,2024-01-10 12:00:00.000000 +00:00
+018e3f69-4a17-7eab-b206-660b3060eeac,018e3f69-4a17-7b45-b658-d6208e80d52a,Once Leave Workspace MultipleJoined 1,once-leave-workspace-1,2024-01-10 12:00:00.000000 +00:00
+018e3f69-4a17-7a5a-a603-1936173c1c7d,018e3f69-4a17-7141-bf9b-d2844560ec1b,Once Leave Workspace MultipleJoined 2,once-leave-workspace-2,2024-01-10 12:00:00.000000 +00:00
+018e3f69-4a17-75af-974d-ba03e1b18478,018e3f69-4a17-7af9-bdcb-ae05aadf429c,Once Leave Workspace Invite,once-leave-workspace-invite,2024-01-10 12:00:00.000000 +00:00

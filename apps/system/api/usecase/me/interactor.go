@@ -135,10 +135,11 @@ func (u *useCase) UpdateMemberProfile(ctx context.Context, i UpdateMemberProfile
 		if err != nil {
 			return nil, err
 		}
-		if m.NotJoined() {
-			return nil, domainErr.NewUnauthenticated("Not joined")
+		updated, err := m.Member().UpdateProfile(i.Profile)
+		if err != nil {
+			return nil, err
 		}
-		m = m.UpdateMember(m.Member().UpdateProfile(i.Profile))
+		m = m.UpdateMember(updated)
 		if _, err = u.repo.UpdateMemberProfile(pr, exec, m.Member()); err != nil {
 			return nil, err
 		}

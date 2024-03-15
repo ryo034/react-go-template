@@ -2,9 +2,9 @@ import type { ApiErrorHandler } from "shared-network"
 import { Result } from "true-myth"
 import { type AccountFullName, type InvitationId, type MemberProfile, User, type WorkspaceId } from "~/domain"
 import type { components } from "~/generated/schema/openapi/systemApi"
-import { type SystemAPIClient } from "~/infrastructure/openapi/client"
+import type { SystemAPIClient } from "~/infrastructure/openapi/client"
 import type { PromiseResult } from "~/infrastructure/shared/result"
-import { FirebaseDriver } from "../firebase/driver"
+import type { FirebaseDriver } from "../firebase/driver"
 
 export class MeDriver {
   constructor(

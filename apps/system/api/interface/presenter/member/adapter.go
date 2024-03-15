@@ -37,32 +37,40 @@ func (a *adapter) Adapt(m *member.Member) openapi.Member {
 		return openapi.Member{}
 	}
 
-	p := m.Profile()
-	dn := ""
-	if p.HasDisplayName() {
-		dn = p.DisplayName().ToString()
-	}
-
-	var memIDNum = openapi.OptString{Set: false}
-	if p.HasIDNumber() {
-		memIDNum.Set = true
-		memIDNum.Value = p.IDNumber().ToString()
-	}
-
-	var memBio = openapi.OptString{Set: false}
-	if p.HasBio() {
-		memBio.Set = true
-		memBio.Value = p.Bio().ToString()
-	}
-
 	var memStatus = openapi.MemberMembershipStatusLEFT
 	if m.MembershipStatus().IsActive() {
 		memStatus = openapi.MemberMembershipStatusACTIVE
 	}
 
+	p := m.Profile()
+
+	var memIDNum = openapi.OptString{Set: false}
+	var memBio = openapi.OptString{Set: false}
+
+	dn := ""
+
+	var usr openapi.User
+	if m.MembershipStatus().IsLeft() {
+		usr = a.ua.AdaptForLeft(m.User())
+		dn = "Removed User"
+	} else {
+		usr = a.ua.Adapt(m.User())
+		if p.HasDisplayName() {
+			dn = p.DisplayName().ToString()
+		}
+		if p.HasBio() {
+			memBio.Set = true
+			memBio.Value = p.Bio().ToString()
+		}
+		if p.HasIDNumber() {
+			memIDNum.Set = true
+			memIDNum.Value = p.IDNumber().ToString()
+		}
+	}
+
 	return openapi.Member{
 		ID:               m.ID().Value(),
-		User:             a.ua.Adapt(m.User()),
+		User:             usr,
 		Role:             a.adaptRole(m.Role()),
 		MembershipStatus: memStatus,
 		Profile: openapi.MemberProfile{

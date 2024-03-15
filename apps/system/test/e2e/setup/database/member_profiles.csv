@@ -27,3 +27,9 @@ member_profile_id,member_id,member_id_number,display_name,bio,created_at
 018e3642-86c6-7d2c-8489-cb1f680c25f9,018e3642-86c6-7abd-97ba-5dcc27392b88,DEV-54321,LeaveWorkspace MemberAdmin,bio,2024-01-10 12:00:00.000000 +00:00
 018e3642-86c6-745f-afa1-4f43ad79f256,018e3642-86c6-732a-b15a-8d2ee2641391,DEV-54322,LeaveWorkspace MemberMember,bio,2024-01-10 12:00:00.000000 +00:00
 018e3642-86c6-7a1a-9722-49017328ae29,018e3642-86c6-74fa-826d-c23a9e910e0e,DEV-54323,LeaveWorkspace MemberGuest,bio,2024-01-10 12:00:00.000000 +00:00
+018e3f69-4a17-7b5b-a040-73cbbdb8c2e0,018e3f69-4a17-7800-82d7-67ef8cf57a3b,DEV-54321,OnceLeaveWorkspaceOne MultipleJoinedOwner,bio,2024-01-10 12:00:00.000000 +00:00
+018e3f69-4a17-7543-907e-401909345d5f,018e3f69-4a17-7757-9edc-321b783f173a,DEV-54321,OnceLeaveWorkspace MultipleJoinedAdmin,bio,2024-01-10 12:00:00.000000 +00:00
+018e3f69-4a17-7a3a-bd9e-eeac9e7c64da,018e3f69-4a17-7d02-a98a-8d76b70a148a,DEV-54321,OnceLeaveWorkspace MultipleJoinedOwner,bio,2024-01-10 12:00:00.000000 +00:00
+018e3f69-4a17-7aef-b4c8-acb9e3e4e0a7,018e3f69-4a17-730a-87ee-b53eb2bc4886,DEV-54321,OnceLeaveWorkspace InviteOwner,bio,2024-01-10 12:00:00.000000 +00:00
+018e4062-05ec-7310-a1f1-680481a44adc,018e4062-05ec-78c7-8ebd-a6a693b5d246,DEV-54321,OnceLeaveWorkspace AlreadyLeft,bio,2024-01-10 12:00:00.000000 +00:00
+018e3f69-4a17-7965-a9f5-3551282fcbfb,018e3f69-4a17-78c6-8f60-153dd462291e,DEV-54321,OnceLeaveWorkspace Invite,bio,2024-01-10 12:00:00.000000 +00:00

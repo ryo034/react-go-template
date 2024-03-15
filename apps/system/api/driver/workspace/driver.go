@@ -304,6 +304,7 @@ func (d *driver) FindMember(ctx context.Context, exec bun.IDB, memID member.ID) 
 		Relation("Account.PhotoEvent.AccountPhotoEvent.Photo").
 		Relation("Workspace").
 		Where("ms.member_id = ?", memID.Value()).
+		Where("lmshi__mshi.event_type = ?", "join").
 		Scan(ctx)
 	if err != nil {
 		return nil, err
@@ -335,6 +336,7 @@ func (d *driver) FindAllMembers(ctx context.Context, exec bun.IDB, wID workspace
 		Relation("Account.PhotoEvent.AccountPhotoEvent.Photo").
 		Relation("Workspace").
 		Where("ms.workspace_id = ?", wID.Value()).
+		Where("lmshi__mshi.event_type = ?", "join").
 		Scan(ctx)
 	if err != nil {
 		return nil, err
