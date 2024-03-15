@@ -21,8 +21,8 @@ type Controller interface {
 	AuthByOTP(ctx context.Context, req *openapi.APIV1AuthByOtpReq) (openapi.APIV1AuthByOtpRes, error)
 	VerifyOTP(ctx context.Context, req *openapi.APIV1VerifyOTPReq) (openapi.APIV1VerifyOTPRes, error)
 	AuthByOAuth(ctx context.Context) (openapi.APIV1AuthByOAuthRes, error)
-	APIV1ProcessInvitationEmail(ctx context.Context, i ProcessInvitationInput) (openapi.APIV1ProcessInvitationEmailRes, error)
-	APIV1ProcessInvitationOAuth(ctx context.Context, i APIV1ProcessInvitationOAuth) (openapi.APIV1ProcessInvitationOAuthRes, error)
+	ProcessInvitationEmail(ctx context.Context, i ProcessInvitationInput) (openapi.APIV1ProcessInvitationEmailRes, error)
+	ProcessInvitationOAuth(ctx context.Context, i ProcessInvitationOAuth) (openapi.APIV1ProcessInvitationOAuthRes, error)
 	InvitationByToken(ctx context.Context, i InvitationByTokenInput) (openapi.APIV1GetInvitationByTokenRes, error)
 }
 
@@ -38,7 +38,7 @@ type ProcessInvitationInput struct {
 	Email string
 }
 
-type APIV1ProcessInvitationOAuth struct {
+type ProcessInvitationOAuth struct {
 	Token uuid.UUID
 }
 
@@ -89,13 +89,13 @@ func (c *controller) AuthByOAuth(ctx context.Context) (openapi.APIV1AuthByOAuthR
 	return res, nil
 }
 
-func (c *controller) APIV1ProcessInvitationEmail(ctx context.Context, i ProcessInvitationInput) (openapi.APIV1ProcessInvitationEmailRes, error) {
+func (c *controller) ProcessInvitationEmail(ctx context.Context, i ProcessInvitationInput) (openapi.APIV1ProcessInvitationEmailRes, error) {
 	em, err := account.NewEmail(i.Email)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1ProcessInvitationEmailRes), nil
 	}
-	inp := authUc.APIV1ProcessInvitationEmailInput{Token: invitation.NewToken(i.Token), Email: em}
-	res, err := c.auc.APIV1ProcessInvitationEmail(ctx, inp)
+	inp := authUc.ProcessInvitationEmailInput{Token: invitation.NewToken(i.Token), Email: em}
+	res, err := c.auc.ProcessInvitationEmail(ctx, inp)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1ProcessInvitationEmailRes), nil
 	}
@@ -141,7 +141,7 @@ func (c *controller) createUser(ctx context.Context, aID account.ID) (authUc.Cre
 	return authUc.CreateInfo{User: user.NewUser(aID, em, na, pi.UserInfo.PhoneNumber, pho), Provider: prov}, nil
 }
 
-func (c *controller) APIV1ProcessInvitationOAuth(ctx context.Context, i APIV1ProcessInvitationOAuth) (openapi.APIV1ProcessInvitationOAuthRes, error) {
+func (c *controller) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitationOAuth) (openapi.APIV1ProcessInvitationOAuthRes, error) {
 	pi, err := c.fbDr.GetProviderInfo(ctx, firebase.GetProviderInfoRequiredOption{CurrentWorkspaceID: false})
 	if err != nil {
 		return nil, err
@@ -158,12 +158,12 @@ func (c *controller) APIV1ProcessInvitationOAuth(ctx context.Context, i APIV1Pro
 	if pi.UserInfo.Email == nil {
 		return c.resl.Error(ctx, fmt.Errorf("email is required")).(openapi.APIV1ProcessInvitationOAuthRes), nil
 	}
-	inp := authUc.APIV1ProcessInvitationOAuthInput{
+	inp := authUc.ProcessInvitationOAuthInput{
 		Token:      invitation.NewToken(i.Token),
 		Email:      *pi.UserInfo.Email,
 		CreateInfo: ci,
 	}
-	res, err := c.auc.APIV1ProcessInvitationOAuth(ctx, inp)
+	res, err := c.auc.ProcessInvitationOAuth(ctx, inp)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1ProcessInvitationOAuthRes), nil
 	}

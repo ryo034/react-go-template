@@ -29,8 +29,8 @@ type UseCase interface {
 	AuthByOTP(ctx context.Context, i ByOTPInput) (openapi.APIV1AuthByOtpRes, error)
 	AuthByOAuth(ctx context.Context, i ByOAuthInput) (openapi.APIV1AuthByOAuthRes, error)
 	VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV1VerifyOTPRes, error)
-	APIV1ProcessInvitationEmail(ctx context.Context, i APIV1ProcessInvitationEmailInput) (openapi.APIV1ProcessInvitationEmailRes, error)
-	APIV1ProcessInvitationOAuth(ctx context.Context, i APIV1ProcessInvitationOAuthInput) (openapi.APIV1ProcessInvitationOAuthRes, error)
+	ProcessInvitationEmail(ctx context.Context, i ProcessInvitationEmailInput) (openapi.APIV1ProcessInvitationEmailRes, error)
+	ProcessInvitationOAuth(ctx context.Context, i ProcessInvitationOAuthInput) (openapi.APIV1ProcessInvitationOAuthRes, error)
 	InvitationByToken(ctx context.Context, i InvitationByTokenInput) (openapi.APIV1GetInvitationByTokenRes, error)
 }
 
@@ -191,7 +191,7 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 	return u.op.JwtToken(tk), nil
 }
 
-func (u *useCase) APIV1ProcessInvitationEmail(ctx context.Context, i APIV1ProcessInvitationEmailInput) (openapi.APIV1ProcessInvitationEmailRes, error) {
+func (u *useCase) ProcessInvitationEmail(ctx context.Context, i ProcessInvitationEmailInput) (openapi.APIV1ProcessInvitationEmailRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
 	invRes, err := u.invRepo.FindActiveByEmail(ctx, exec, i.Email)
 	if err != nil {
@@ -219,7 +219,7 @@ func (u *useCase) APIV1ProcessInvitationEmail(ctx context.Context, i APIV1Proces
 	return &openapi.APIV1ProcessInvitationEmailOK{}, pr.Transactional(fn)().Error()
 }
 
-func (u *useCase) APIV1ProcessInvitationOAuth(ctx context.Context, i APIV1ProcessInvitationOAuthInput) (openapi.APIV1ProcessInvitationOAuthRes, error) {
+func (u *useCase) ProcessInvitationOAuth(ctx context.Context, i ProcessInvitationOAuthInput) (openapi.APIV1ProcessInvitationOAuthRes, error) {
 	exec := u.dbp.GetExecutor(ctx, true)
 	invRes, err := u.invRepo.FindActiveByEmail(ctx, exec, i.Email)
 	if err != nil {

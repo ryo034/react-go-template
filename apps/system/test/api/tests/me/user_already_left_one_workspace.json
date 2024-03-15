@@ -1,0 +1,37 @@
+{
+  "me": {
+    "currentWorkspace": {
+      "name": "Once Leave Workspace MultipleJoined 2",
+      "subdomain": "once-leave-workspace-2",
+      "workspaceId": "018e3f69-4a17-7141-bf9b-d2844560ec1b"
+    },
+    "joinedWorkspaces": [
+      {
+        "name": "Once Leave Workspace MultipleJoined 2",
+        "subdomain": "once-leave-workspace-2",
+        "workspaceId": "018e3f69-4a17-7141-bf9b-d2844560ec1b"
+      }
+    ],
+    "member": {
+      "id": "018e3f69-4a17-7d02-a98a-8d76b70a148a",
+      "membershipStatus": "ACTIVE",
+      "profile": {
+        "bio": "bio",
+        "displayName": "OnceLeaveWorkspace MultipleJoinedOwner",
+        "idNumber": "DEV-54321"
+      },
+      "role": "OWNER",
+      "user": {
+        "email": "once_leave_workspace_multiple_joined@example.com",
+        "name": "LeaveWorkspace MultipleJoined",
+        "userId": "018e3f69-4a17-717f-9956-61752f39ef5e"
+      }
+    },
+    "providers": ["email"],
+    "self": {
+      "email": "once_leave_workspace_multiple_joined@example.com",
+      "name": "LeaveWorkspace MultipleJoined",
+      "userId": "018e3f69-4a17-717f-9956-61752f39ef5e"
+    }
+  }
+}

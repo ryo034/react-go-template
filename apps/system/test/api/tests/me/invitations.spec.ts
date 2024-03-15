@@ -1,4 +1,4 @@
-import { expect } from "@playwright/test"
+import test, { expect } from "@playwright/test"
 import type { components } from "schema/openapi/systemApi"
 import { authHeaders, defaultPostHeaders } from "../../config/config"
 import { genAPIClient, getAuthInfo, getInvitationIdByToken, getInviteToken, systemTest } from "../../scripts"
@@ -179,5 +179,84 @@ systemTest.describe("Me Invitations", () => {
       params: { path: { invitationId: await getInvitationIdByToken(inviteToken) } }
     })
     expect(res.response.status).toBe(410)
+  })
+})
+
+test.describe("receive invitation from already left workspace member", () => {
+  test("if received invitation from already left workspace, user accept invitation and join workspace", async ({ page }) => {
+    const email = "once_leave_workspace_check_receive_from_already_left_member@example.com"
+    const inviteToken = await getInviteToken(email)
+
+    const invitationRes = await client.GET("/api/v1/auth/invitations", {
+      headers: defaultPostHeaders,
+      params: { query: { token: inviteToken } }
+    })
+    expect(invitationRes.response.status).toBe(200)
+    // mask left member details in invitation response
+    expect(invitationRes.data).toStrictEqual((await import("./success_get_invitation_received_from_left_member.json")).default)
+
+    const authInfo = await getAuthInfo(email)
+    const meRes = await client.GET("/api/v1/me", { headers: authHeaders(authInfo.token) })
+    expect(meRes.response.status).toBe(200)
+    if (meRes.data === undefined) {
+      throw new Error("meRes.data is undefined")
+    }
+
+    // set account name
+    const data: components["schemas"]["User"] = {
+      userId: meRes.data.me?.self.userId,
+      email: meRes.data.me?.self.email,
+      name: "ReceivedInvitation FromLeftMember",
+      phoneNumber: ""
+    }
+    const updateProfileRes = await client.PUT("/api/v1/me/profile", {
+      headers: authHeaders(authInfo.token),
+      body: { profile: data }
+    })
+    expect(updateProfileRes.response.status).toBe(200)
+
+    const res = await client.POST("/api/v1/members/invitations/{invitationId}/accept", {
+      headers: authHeaders(authInfo.token),
+      params: { path: { invitationId: await getInvitationIdByToken(inviteToken) } }
+    })
+    expect(res.response.status).toBe(200)
+    expect(res.data).toStrictEqual(
+      {
+        me: {
+          currentWorkspace: {
+            name: "Once Leave Workspace Invite",
+            subdomain: "once-leave-workspace-invite",
+            workspaceId: "018e3f69-4a17-7af9-bdcb-ae05aadf429c"
+          },
+          joinedWorkspaces: [
+            {
+              name: "Once Leave Workspace Invite",
+              subdomain: "once-leave-workspace-invite",
+              workspaceId: "018e3f69-4a17-7af9-bdcb-ae05aadf429c"
+            }
+          ],
+          member: {
+            id: res.data?.me.member?.id, // member id is created dynamically
+            membershipStatus: "ACTIVE",
+            profile: {
+              displayName: "ReceivedInvitation FromLeftMember",
+              idNumber: ""
+            },
+            role: "MEMBER",
+            user: {
+              email: "once_leave_workspace_check_receive_from_already_left_member@example.com",
+              name: "ReceivedInvitation FromLeftMember",
+              userId: meRes.data.me?.self.userId
+            }
+          },
+          providers: ["email"],
+          self: {
+            email: "once_leave_workspace_check_receive_from_already_left_member@example.com",
+            name: "ReceivedInvitation FromLeftMember",
+            userId: meRes.data.me?.self.userId
+          }
+        }
+      }
+    )
   })
 })
