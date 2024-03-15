@@ -144,3 +144,15 @@ tags: stateful
 * 選択中のワークスペース名が"InviteTest 2"である
 * 所属中の表示名が"InviteTest HasNotPhotoAcceptWithGoogle"である
 * サイドバーのアカウント情報にプロフィール画像"https://github.com/ryo034/image/assets/55078625/8db77a30-17d4-4c78-8a3a-a88ba016dcfb"が設定されている
+
+## すでに退出済みのメンバーから招待を受けた未登録ユーザーはメールアドレスでアカウントを登録することができる
+* トークン"018e4421-aba7-7de4-9bc7-ca0f93355a28"の招待画面を開く
+* "メールアドレスで始める"ボタンをクリック
+* メールアドレス"once_leave_workspace_accept_receive_from_already_left_member@example.com"に送信されたワンタイムパスワードを取得
+* ワンタイムパスワード確認画面にワンタイムパスワードを入力する
+* オンボーディングの名前入力画面が表示されている
+* 入力欄"名前"に"test"と入力する
+* "送信"ボタンをクリック
+* 招待受諾画面でワークスペース"Once Leave Workspace Invite"招待者"Removed User"の参加ボタンをクリック
+* 選択中のワークスペース名が"Once Leave Workspace Invite"である
+* 所属中の表示名が"test"である
