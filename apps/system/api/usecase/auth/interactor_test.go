@@ -150,7 +150,7 @@ func Test_useCase_APIV1ProcessInvitationEmail_OK(t *testing.T) {
 		mockDbProvider.EXPECT().GetExecutor(gomock.Any(), gomock.Any()).Return(nil)
 		mockInvRepo.EXPECT().FindActiveByEmail(gomock.Any(), gomock.Any(), gomock.Any()).Return(mockFindActiveByEmail, nil)
 
-		res, err := uc.APIV1ProcessInvitationEmail(ctx, APIV1ProcessInvitationEmailInput{Token: mockInputToken, Email: mockEmail})
+		res, err := uc.ProcessInvitationEmail(ctx, ProcessInvitationEmailInput{Token: mockInputToken, Email: mockEmail})
 
 		assert.Nil(t, res)
 		assert.Error(t, err)
@@ -169,7 +169,7 @@ func Test_useCase_APIV1ProcessInvitationEmail_OK(t *testing.T) {
 		mockDbProvider.EXPECT().GetExecutor(gomock.Any(), gomock.Any()).Return(nil)
 		mockInvRepo.EXPECT().FindActiveByEmail(gomock.Any(), gomock.Any(), gomock.Any()).Return(mockFindActiveByEmail, nil)
 
-		res, err := uc.APIV1ProcessInvitationEmail(ctx, APIV1ProcessInvitationEmailInput{Token: mockInputToken, Email: mockEmail})
+		res, err := uc.ProcessInvitationEmail(ctx, ProcessInvitationEmailInput{Token: mockInputToken, Email: mockEmail})
 
 		assert.Nil(t, res)
 		assert.Error(t, err)
