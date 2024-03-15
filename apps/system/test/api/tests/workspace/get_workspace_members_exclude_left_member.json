@@ -1,0 +1,19 @@
+{
+  "members": [
+    {
+      "id": "018e3f69-4a17-730a-87ee-b53eb2bc4886",
+      "membershipStatus": "ACTIVE",
+      "profile": {
+        "bio": "bio",
+        "displayName": "OnceLeaveWorkspace InviteOwner",
+        "idNumber": "DEV-54321"
+      },
+      "role": "OWNER",
+      "user": {
+        "email": "once_leave_workspace_invite_owner@example.com",
+        "name": "LeaveWorkspace InviteOwner",
+        "userId": "018e3f69-4a17-7a84-b472-23d0a97aa6f7"
+      }
+    }
+  ]
+}

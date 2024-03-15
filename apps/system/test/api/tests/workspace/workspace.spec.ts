@@ -58,3 +58,13 @@ test.describe("Update workspace", () => {
     expect(res.response.status).toBe(403)
   })
 })
+
+test.describe("Leave workspace", () => {
+  test("get workspace members exclude left member", async () => {
+    const authInfo = await getAuthInfo("once_leave_workspace_invite_owner@example.com")
+    const hs = authHeaders(authInfo.token)
+    const res = await client.GET("/api/v1/members", { headers: hs })
+    expect(res.response.status).toBe(200)
+    expect(res.data).toStrictEqual((await import("./get_workspace_members_exclude_left_member.json")).default)
+  })
+})
