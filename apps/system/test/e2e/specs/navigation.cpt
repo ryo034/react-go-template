@@ -13,5 +13,8 @@
 # 設定のメンバー設定を開く
 * "/settings/workspace/members"を開く
 
+# 設定のワークスペース設定を開く
+* "/settings/workspace/setting"を開く
+
 # 設定ページが表示されている
 * ページタイトルが"Settings"である

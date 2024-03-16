@@ -76,9 +76,16 @@ test.describe("Workspace", () => {
   test.describe("Multiple workspaces", () => {
     test("if user already left one workspace, user can login to another workspace", async () => {
       const authInfo = await getAuthInfo("once_leave_workspace_multiple_joined@example.com")
-      const res = await client.GET('/api/v1/me', { headers: authHeaders(authInfo.token) })
-      expect(res.response.status).toBe(200)
-      expect(res.data).toStrictEqual((await import("./user_already_left_one_workspace.json")).default)
+      const meRes1 = await client.GET('/api/v1/me', { headers: authHeaders(authInfo.token) })
+      expect(meRes1.data?.me.currentWorkspace?.workspaceId).toBe('018e3f69-4a17-7b45-b658-d6208e80d52a')
+
+      const leaveRes = await client.POST('/api/v1/me/workspace/leave', { headers: authHeaders(authInfo.token) })
+      expect(leaveRes.response.status).toBe(204)
+
+      const authInfo2 = await getAuthInfo("once_leave_workspace_multiple_joined@example.com")
+      const meRes2 = await client.GET('/api/v1/me', { headers: authHeaders(authInfo2.token) })
+      expect(meRes2.response.status).toBe(200)
+      expect(meRes2.data).toStrictEqual((await import("./user_already_left_one_workspace.json")).default)
     })
   })
 })

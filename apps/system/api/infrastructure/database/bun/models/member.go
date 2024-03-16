@@ -15,11 +15,12 @@ type Member struct {
 	AccountID   uuid.UUID `bun:"account_id,notnull"`
 	CreatedAt   time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	Account         *Account               `bun:"sa,rel:belongs-to"`
-	Profile         *MemberLatestProfile   `bun:"mlp,rel:has-one"`
-	Workspace       *Workspace             `bun:"ws,rel:belongs-to"`
-	Role            *MemberLatestRole      `bun:"mlr,rel:has-one"`
-	MembershipEvent *LatestMembershipEvent `bun:"lmshi,rel:has-one"`
+	Account          *Account               `bun:"sa,rel:belongs-to"`
+	Profile          *MemberLatestProfile   `bun:"mlp,rel:has-one"`
+	Workspace        *Workspace             `bun:"ws,rel:belongs-to"`
+	Role             *MemberLatestRole      `bun:"mlr,rel:has-one"`
+	MembershipEvent  *LatestMembershipEvent `bun:"lmshi,rel:has-one"`
+	MembershipEvents []*MembershipEvent     `bun:"mshi,rel:has-many"`
 }
 
 type Members []*Member

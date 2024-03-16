@@ -136,8 +136,7 @@ VALUES
 ('018e4062-05ec-7bba-aa58-6bb8a19d52c1', '018e4062-05ec-78c7-8ebd-a6a693b5d246', 'join', '018e4062-05ec-78c7-8ebd-a6a693b5d246', '2024-01-10 12:00:00'),
 ('018e4062-05ec-7a50-a3b8-b8baa0fd353b', '018e4062-05ec-78c7-8ebd-a6a693b5d246', 'leave', '018e4062-05ec-78c7-8ebd-a6a693b5d246', '2024-01-12 12:00:00'),
 ('018e3f69-4a17-7250-a25a-516606613000', '018e3f69-4a17-78c6-8f60-153dd462291e', 'join', '018e3f69-4a17-78c6-8f60-153dd462291e', '2024-01-10 12:00:00'),
-('018e3f69-4a17-7c90-993b-b01f93ebbaf9', '018e3f69-4a17-78c6-8f60-153dd462291e', 'leave', '018e3f69-4a17-78c6-8f60-153dd462291e', '2024-01-12 12:00:00'),
-('018e3f69-4a17-7d0c-8fb7-17aaa1daea9f', '018e3f69-4a17-7757-9edc-321b783f173a', 'leave', '018e3f69-4a17-7757-9edc-321b783f173a', '2024-01-12 12:00:00');
+('018e3f69-4a17-7c90-993b-b01f93ebbaf9', '018e3f69-4a17-78c6-8f60-153dd462291e', 'leave', '018e3f69-4a17-78c6-8f60-153dd462291e', '2024-01-12 12:00:00');
 
 INSERT INTO latest_membership_events (membership_event_id, member_id)
 VALUES
@@ -146,7 +145,7 @@ VALUES
 ('018e3f69-4a17-7bf6-9bba-decaf3bd7f65', '018e3f69-4a17-730a-87ee-b53eb2bc4886'),
 ('018e4062-05ec-7a50-a3b8-b8baa0fd353b', '018e4062-05ec-78c7-8ebd-a6a693b5d246'),
 ('018e3f69-4a17-7c90-993b-b01f93ebbaf9', '018e3f69-4a17-78c6-8f60-153dd462291e'),
-('018e3f69-4a17-7d0c-8fb7-17aaa1daea9f', '018e3f69-4a17-7757-9edc-321b783f173a');
+('018e3f69-4a17-7d87-8018-86d2b0360df6', '018e3f69-4a17-7757-9edc-321b783f173a');
 
 INSERT INTO invitation_units (invitation_unit_id, workspace_id, invited_by, created_at)
 VALUES

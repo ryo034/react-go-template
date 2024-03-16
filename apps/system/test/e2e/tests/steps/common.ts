@@ -50,6 +50,11 @@ export default class PagesStep {
     await page.locator("button").getByText(buttonName).click()
   }
 
+  @Step("ダイアログ上の<buttonName>ボタンをクリック")
+  async clickButtonByNameOnAlertDialog(buttonName: string) {
+    await page.getByTestId('dialog').locator("button").getByText(buttonName).click()
+  }
+
   @Step("入力フォームの<buttonName>ボタンをクリック")
   async clickButtonByNameOnForm(buttonName: string) {
     await page.locator("form").locator("button").getByText(buttonName).click()
