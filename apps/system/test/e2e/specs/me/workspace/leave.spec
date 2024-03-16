@@ -31,4 +31,13 @@
 * 選択中のワークスペース名が"Once Leave Workspace MultipleJoined 2"である
 * 所属中の表示名が"OnceLeaveWorkspace MultipleJoinedOwner"である
 
-// ## 1度退出したメンバーは、退出したワークスペースから受け取った招待から再度参加することができる
+## 1度退出したメンバーは、退出したワークスペースから受け取った招待から再度参加することができる
+* トークン"018e4421-aba7-7de4-9bc7-ca0f93355a28"の招待画面を開く
+* "メールアドレスで始める"ボタンをクリック
+* メールアドレス"once_leave_workspace_accept_receive_from_already_left_member@example.com"に送信されたワンタイムパスワードを取得
+* ワンタイムパスワード確認画面にワンタイムパスワードを入力する
+* オンボーディングの名前入力画面が表示されている
+* 入力欄"名前"に"test name"と入力する
+* "送信"ボタンをクリック
+* 招待受諾画面でワークスペース"Once Leave Workspace Invite"招待者"Removed User"の参加ボタンをクリック
+* 選択中のワークスペース名が"Once Leave Workspace Invite"である
