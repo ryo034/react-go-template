@@ -2,6 +2,26 @@
   "kind": "identitytoolkit#DownloadAccountResponse",
   "users": [
     {
+      "localId": "018e4661-e0d1-7c47-a07e-1f9db4a03524",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "LeaveWorkspace HasOneAdmin",
+      "validSince": "1709725349",
+      "email": "once_leave_has_one_workspace_admin@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "018e4661-e0d1-7f45-845a-266b30e95dd4",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "LeaveWorkspace HasOneOwner",
+      "validSince": "1709725349",
+      "email": "once_leave_has_one_workspace_owner@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
       "localId": "018e3f69-4a17-72e4-988d-ae46efe64359",
       "createdAt": "1706825570522",
       "lastLoginAt": "1706825570547",

@@ -35,3 +35,5 @@ account_email_id,account_id,email,created_at
 018e3f69-4a17-7ab6-a925-1e1e8a2dfcd1,018e3f69-4a17-7a84-b472-23d0a97aa6f7,once_leave_workspace_invite_owner@example.com,2024-01-10 12:00:00.000000 +00:00
 018e4062-05ec-76bc-b664-dad7ecf4f4b2,018e4062-05ec-73b6-9082-e836e445739e,once_leave_workspace_already_left@example.com,2024-01-10 12:00:00.000000 +00:00
 018e3f69-4a17-7603-ae69-89e3d0d8e9ff,018e3f69-4a17-72e4-988d-ae46efe64359,once_leave_workspace_invited_after_left@example.com,2024-01-10 12:00:00.000000 +00:00
+018e4661-e0d1-7640-a7e8-b6d1bd6cff6b,018e4661-e0d1-7f45-845a-266b30e95dd4,once_leave_has_one_workspace_owner@example.com,2024-01-10 12:00:00.000000 +00:00
+018e4661-e0d1-73b0-815b-974425b24dd7,018e4661-e0d1-7c47-a07e-1f9db4a03524,once_leave_has_one_workspace_admin@example.com,2024-01-10 12:00:00.000000 +00:00
