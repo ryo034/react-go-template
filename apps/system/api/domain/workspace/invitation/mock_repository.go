@@ -103,7 +103,7 @@ func (mr *MockRepositoryMockRecorder) FindActiveByEmail(ctx, exec, email any) *g
 // FindActiveByToken mocks base method.
 func (m *MockRepository) FindActiveByToken(ctx context.Context, exec bun.IDB, token Token) (*Invitation, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindActiveByToken", ctx, exec, token)
+	ret := m.ctrl.Call(m, "FindDetailByToken", ctx, exec, token)
 	ret0, _ := ret[0].(*Invitation)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
@@ -112,7 +112,7 @@ func (m *MockRepository) FindActiveByToken(ctx context.Context, exec bun.IDB, to
 // FindActiveByToken indicates an expected call of FindActiveByToken.
 func (mr *MockRepositoryMockRecorder) FindActiveByToken(ctx, exec, token any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindActiveByToken", reflect.TypeOf((*MockRepository)(nil).FindActiveByToken), ctx, exec, token)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindDetailByToken", reflect.TypeOf((*MockRepository)(nil).FindActiveByToken), ctx, exec, token)
 }
 
 // FindByToken mocks base method.

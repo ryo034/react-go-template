@@ -34,14 +34,6 @@ func (g *gateway) FindByToken(ctx context.Context, exec bun.IDB, token invitatio
 	return g.ia.Adapt(res)
 }
 
-func (g *gateway) FindActiveByToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*invitation.Invitation, error) {
-	res, err := g.d.FindActiveByToken(ctx, exec, token)
-	if err != nil {
-		return nil, err
-	}
-	return g.ia.Adapt(res)
-}
-
 func (g *gateway) VerifyByToken(ctx context.Context, exec bun.IDB, token invitation.Token) error {
 	return g.d.VerifyByToken(ctx, exec, token)
 }

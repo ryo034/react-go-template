@@ -23,8 +23,8 @@ type Controller interface {
 	Create(ctx context.Context, i CreateInput) (openapi.APIV1CreateWorkspaceRes, error)
 	FindAllMembers(ctx context.Context) (openapi.APIV1GetMembersRes, error)
 	InviteMembers(ctx context.Context, i InviteesInput) (openapi.APIV1InviteMultipleUsersRes, error)
-	APIV1RevokeInvitation(ctx context.Context, i APIV1RevokeInvitationInput) (openapi.APIV1RevokeInvitationRes, error)
-	APIV1ResendInvitation(ctx context.Context, i APIV1ResendInvitationInput) (openapi.APIV1ResendInvitationRes, error)
+	RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.APIV1RevokeInvitationRes, error)
+	ResendInvitation(ctx context.Context, i ResendInvitationInput) (openapi.APIV1ResendInvitationRes, error)
 	FindAllInvitation(ctx context.Context, i FindAllInvitationInput) (openapi.APIV1GetInvitationsRes, error)
 	UpdateMemberRole(ctx context.Context, i UpdateMemberRoleInput) (openapi.APIV1UpdateMemberRoleRes, error)
 	UpdateWorkspace(ctx context.Context, i UpdateWorkspaceInput) (openapi.APIV1UpdateWorkspaceRes, error)
@@ -55,11 +55,11 @@ type InviteesInput struct {
 	InvitedMembers []Invitee
 }
 
-type APIV1RevokeInvitationInput struct {
+type RevokeInvitationInput struct {
 	InvitationID uuid.UUID
 }
 
-type APIV1ResendInvitationInput struct {
+type ResendInvitationInput struct {
 	InvitationID uuid.UUID
 }
 
@@ -146,7 +146,7 @@ func (c *controller) InviteMembers(ctx context.Context, i InviteesInput) (openap
 	return res, nil
 }
 
-func (c *controller) APIV1RevokeInvitation(ctx context.Context, i APIV1RevokeInvitationInput) (openapi.APIV1RevokeInvitationRes, error) {
+func (c *controller) RevokeInvitation(ctx context.Context, i RevokeInvitationInput) (openapi.APIV1RevokeInvitationRes, error) {
 	aID, err := c.co.GetUID(ctx)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1RevokeInvitationRes), nil
@@ -167,7 +167,7 @@ func (c *controller) APIV1RevokeInvitation(ctx context.Context, i APIV1RevokeInv
 	return res, nil
 }
 
-func (c *controller) APIV1ResendInvitation(ctx context.Context, i APIV1ResendInvitationInput) (openapi.APIV1ResendInvitationRes, error) {
+func (c *controller) ResendInvitation(ctx context.Context, i ResendInvitationInput) (openapi.APIV1ResendInvitationRes, error) {
 	aID, err := c.co.GetUID(ctx)
 	if err != nil {
 		return c.resl.Error(ctx, err).(openapi.APIV1ResendInvitationRes), nil

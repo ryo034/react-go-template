@@ -30,13 +30,13 @@ func (s *service) APIV1InviteMultipleUsers(ctx context.Context, req *openapi.API
 }
 
 func (s *service) APIV1RevokeInvitation(ctx context.Context, params openapi.APIV1RevokeInvitationParams) (openapi.APIV1RevokeInvitationRes, error) {
-	return s.ctrl.Workspace.APIV1RevokeInvitation(ctx, workspace.APIV1RevokeInvitationInput{
+	return s.ctrl.Workspace.RevokeInvitation(ctx, workspace.RevokeInvitationInput{
 		InvitationID: params.InvitationId,
 	})
 }
 
 func (s *service) APIV1ResendInvitation(ctx context.Context, params openapi.APIV1ResendInvitationParams) (openapi.APIV1ResendInvitationRes, error) {
-	return s.ctrl.Workspace.APIV1ResendInvitation(ctx, workspace.APIV1ResendInvitationInput{
+	return s.ctrl.Workspace.ResendInvitation(ctx, workspace.ResendInvitationInput{
 		InvitationID: params.InvitationId,
 	})
 }

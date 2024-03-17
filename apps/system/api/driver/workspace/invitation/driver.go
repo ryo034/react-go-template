@@ -21,7 +21,7 @@ type Driver interface {
 	FindByToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*models.Invitation, error)
 	FindActiveByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.Invitation, error)
 	FindAllReceivedByEmail(ctx context.Context, exec bun.IDB, email account.Email) ([]*models.Invitation, error)
-	FindActiveByToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*models.Invitation, error)
+	FindDetailByToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*models.Invitation, error)
 	FindAllByWorkspace(ctx context.Context, exec bun.IDB, wID workspace.ID) ([]*models.Invitation, error)
 	VerifyByToken(ctx context.Context, exec bun.IDB, token invitation.Token) error
 	Accept(ctx context.Context, exec bun.IDB, id invitation.ID) error
@@ -185,7 +185,7 @@ func (d *driver) FindAllReceivedByEmail(ctx context.Context, exec bun.IDB, email
 		WhereGroup(" AND ", func(q *bun.SelectQuery) *bun.SelectQuery {
 			return q.
 				Where("linve__inve.event_type = ?", "verified").
-				Where("linve__inve.event_type = ?", "reissued").
+				WhereOr("linve__inve.event_type = ?", "reissued").
 				WhereOr("linve__inve.event_type IS NULL")
 		}).
 		Scan(ctx)
@@ -198,16 +198,17 @@ func (d *driver) FindAllReceivedByEmail(ctx context.Context, exec bun.IDB, email
 	return invs, nil
 }
 
-func (d *driver) FindActiveByToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*models.Invitation, error) {
+func (d *driver) FindDetailByToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*models.Invitation, error) {
 	inv := &models.Invitation{}
 	err := exec.
 		NewSelect().
 		Model(inv).
-		Relation("InviteeName").
 		Relation("Event").
 		Relation("Event.InvitationEvent").
 		Relation("Token").
 		Relation("Token.InvitationToken").
+		Relation("Invitee").
+		Relation("InviteeName").
 		Relation("InvitationUnit").
 		Relation("InvitationUnit.Workspace").
 		Relation("InvitationUnit.Workspace.Detail").
@@ -230,10 +231,6 @@ func (d *driver) FindActiveByToken(ctx context.Context, exec bun.IDB, token invi
 		Relation("InvitationUnit.Member.Account.PhotoEvent").
 		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent").
 		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent.Photo").
-		Relation("Invitee").
-		WhereGroup(" AND ", func(q *bun.SelectQuery) *bun.SelectQuery {
-			return q.Where("linve__inve.event_type != ?", "verified").WhereOr("linve__inve.event_type IS NULL")
-		}).
 		Where("linvt__invt.token = ?", token.String()).
 		Where("linvt__invt.expired_at > ?", time.Now()).
 		Limit(1).
@@ -289,20 +286,28 @@ func (d *driver) FindAllByWorkspace(ctx context.Context, exec bun.IDB, wID works
 }
 
 func (d *driver) VerifyByToken(ctx context.Context, exec bun.IDB, token invitation.Token) error {
-	res, err := d.FindActiveByToken(ctx, exec, token)
+	res, err := d.FindByToken(ctx, exec, token)
 	if err != nil {
 		return err
 	}
-	eid, err := uuid.NewV7()
-	if err != nil {
+	if _, err = exec.NewDelete().Model(&models.LatestInvitationEvent{}).Where("invitation_id = ?", res.InvitationID).Exec(ctx); err != nil {
 		return err
 	}
-	_, err = exec.NewInsert().Model(&models.InvitationEvent{
+	eid, _ := uuid.NewV7()
+	if _, err = exec.NewInsert().Model(&models.InvitationEvent{
 		InvitationEventID: eid,
 		InvitationID:      res.InvitationID,
 		EventType:         "verified",
-	}).Exec(ctx)
-	return err
+	}).Exec(ctx); err != nil {
+		return err
+	}
+	if _, err = exec.NewInsert().Model(&models.LatestInvitationEvent{
+		InvitationEventID: eid,
+		InvitationID:      res.InvitationID,
+	}).Exec(ctx); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d *driver) Accept(ctx context.Context, exec bun.IDB, id invitation.ID) error {

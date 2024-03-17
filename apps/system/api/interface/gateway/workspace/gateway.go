@@ -85,7 +85,7 @@ func (g *gateway) InviteMembers(ctx context.Context, exec bun.IDB, inviter works
 }
 
 func (g *gateway) FindInviterFromToken(ctx context.Context, exec bun.IDB, token invitation.Token) (workspace.Inviter, error) {
-	res, err := g.invd.FindActiveByToken(ctx, exec, token)
+	res, err := g.invd.FindDetailByToken(ctx, exec, token)
 	if err != nil {
 		return workspace.Inviter{}, err
 	}

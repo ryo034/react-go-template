@@ -141,11 +141,10 @@ func Test_useCase_APIV1ProcessInvitationEmail_OK(t *testing.T) {
 		ctx := context.Background()
 		invID := invitation.NewID(uuid.MustParse("018e062e-b742-706e-be1f-2827a5d73fbb"))
 		mockToken := invitation.NewToken(uuid.MustParse("018e062f-334d-78c6-b008-6a66f553c67f"))
-		events := invitation.NewEvents(make([]invitation.Event, 0))
 		expiredAt := invitation.NewExpiredAt(datetime.Now())
 		inviteeEmail, _ := account.NewEmail("test_invitee@exampel.com")
 		displayName := member.NewDisplayName("test")
-		mockFindActiveByEmail := invitation.NewInvitation(invID, mockToken, events, expiredAt, inviteeEmail, displayName, nil)
+		mockFindActiveByEmail := invitation.NewInvitation(invID, mockToken, nil, expiredAt, inviteeEmail, displayName, nil)
 
 		mockDbProvider.EXPECT().GetExecutor(gomock.Any(), gomock.Any()).Return(nil)
 		mockInvRepo.EXPECT().FindActiveByEmail(gomock.Any(), gomock.Any(), gomock.Any()).Return(mockFindActiveByEmail, nil)
@@ -160,11 +159,11 @@ func Test_useCase_APIV1ProcessInvitationEmail_OK(t *testing.T) {
 	t.Run("Invalid input token can not verify", func(t *testing.T) {
 		ctx := context.Background()
 		invID := invitation.NewID(uuid.MustParse("018e062e-b742-706e-be1f-2827a5d73fbb"))
-		events := invitation.NewEvents([]invitation.Event{invitation.NewEvent(invitation.Accepted, datetime.Now())})
+		event := invitation.NewEvent(invitation.Accepted, datetime.Now())
 		expiredAt := invitation.NewExpiredAt(datetime.Now())
 		inviteeEmail, _ := account.NewEmail("test_invitee@exampel.com")
 		displayName := member.NewDisplayName("test")
-		mockFindActiveByEmail := invitation.NewInvitation(invID, mockInputToken, events, expiredAt, inviteeEmail, displayName, nil)
+		mockFindActiveByEmail := invitation.NewInvitation(invID, mockInputToken, &event, expiredAt, inviteeEmail, displayName, nil)
 
 		mockDbProvider.EXPECT().GetExecutor(gomock.Any(), gomock.Any()).Return(nil)
 		mockInvRepo.EXPECT().FindActiveByEmail(gomock.Any(), gomock.Any(), gomock.Any()).Return(mockFindActiveByEmail, nil)

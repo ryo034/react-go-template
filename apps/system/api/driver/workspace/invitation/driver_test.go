@@ -20,7 +20,7 @@ import (
 	"github.com/uptrace/bun/extra/bundebug"
 )
 
-func Test_driver_FindByToken_OK(t *testing.T) {
+func Test_driver_FindDetailByToken_OK(t *testing.T) {
 	defaultTime := test.GetDefaultTime()
 	wantErr := false
 
@@ -179,13 +179,13 @@ func Test_driver_FindByToken_OK(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	t.Run("FindActiveByToken", func(t *testing.T) {
+	t.Run("FindDetailByToken", func(t *testing.T) {
 		db := bun.NewDB(test.SetupTestDB(t, ctx).DB, pgdialect.New())
 		db.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
 		pr := core.NewDatabaseProvider(db, db)
-		got, err := NewDriver().FindActiveByToken(ctx, pr.GetExecutor(ctx, true), invitation.NewToken(token))
+		got, err := NewDriver().FindDetailByToken(ctx, pr.GetExecutor(ctx, true), invitation.NewToken(token))
 		if (err != nil) != wantErr {
-			t.Errorf("FindActiveByToken() error = %v, wantErr %v", err, wantErr)
+			t.Errorf("FindDetailByToken() error = %v, wantErr %v", err, wantErr)
 			return
 		}
 		if !reflect.DeepEqual(got, want) {

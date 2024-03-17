@@ -8,6 +8,8 @@ import (
 	"testing"
 	"time"
 
+	workspaceDr "github.com/ryo034/react-go-template/apps/system/api/driver/workspace"
+
 	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	"github.com/ryo034/react-go-template/apps/system/api/domain/workspace"
@@ -136,7 +138,7 @@ func Test_driver_Find_OK(t *testing.T) {
 	t.Run("Find", func(t *testing.T) {
 		db := bun.NewDB(test.SetupTestDB(t, ctx).DB, pgdialect.New())
 		pr := core.NewDatabaseProvider(db, db)
-		got, err := NewDriver(invitationDr.NewDriver()).Find(ctx, pr.GetExecutor(ctx, true), member.NewIDFromUUID(memberID))
+		got, err := NewDriver(invitationDr.NewDriver(), workspaceDr.NewDriver()).Find(ctx, pr.GetExecutor(ctx, true), member.NewIDFromUUID(memberID))
 		if (err != nil) != wantErr {
 			t.Errorf("Find() error = %v, wantErr %v", err, wantErr)
 			return
