@@ -78,21 +78,19 @@ func (d *driver) FindAllJoinedMembers(ctx context.Context, exec bun.IDB, aID acc
 }
 
 func (d *driver) FindAll(ctx context.Context, exec bun.IDB, aID account.ID) (models.Workspaces, error) {
-	joinedWorkspaceIDs, err := d.FindAllJoinedWorkspaces(ctx, exec, aID)
-	if err != nil {
-		return nil, err
-	}
-
 	var ws models.Workspaces
-	if err = exec.
+	err := exec.
 		NewSelect().
 		Model(&ws).
 		Relation("Detail").
 		Relation("Detail.WorkspaceDetail").
-		Join("JOIN members ms ON ms.workspace_id = ws.workspace_id").
+		Join("LEFT JOIN members ms ON ms.workspace_id = ws.workspace_id").
+		Join("LEFT JOIN latest_membership_events lme ON lme.member_id = ms.member_id").
+		Join("LEFT JOIN membership_events me ON me.membership_event_id = lme.membership_event_id").
 		Where("ms.account_id = ?", aID.ToString()).
-		Where("ms.workspace_id IN (?)", bun.In(joinedWorkspaceIDs)).
-		Scan(ctx); err != nil {
+		Where("me.event_type = ?", "join").
+		Scan(ctx)
+	if err != nil {
 		return nil, err
 	}
 	return ws, nil
