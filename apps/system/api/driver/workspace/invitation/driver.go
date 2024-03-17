@@ -185,8 +185,7 @@ func (d *driver) FindAllReceivedByEmail(ctx context.Context, exec bun.IDB, email
 		WhereGroup(" AND ", func(q *bun.SelectQuery) *bun.SelectQuery {
 			return q.
 				Where("linve__inve.event_type = ?", "verified").
-				WhereOr("linve__inve.event_type = ?", "reissued").
-				WhereOr("linve__inve.event_type IS NULL")
+				WhereOr("linve__inve.event_type = ?", "reissued")
 		}).
 		Scan(ctx)
 	if err != nil {
