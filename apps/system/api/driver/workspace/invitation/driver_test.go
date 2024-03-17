@@ -24,25 +24,25 @@ func Test_driver_FindByToken_OK(t *testing.T) {
 	defaultTime := test.GetDefaultTime()
 	wantErr := false
 
-	wID := uuid.MustParse("c1bd2603-b9cd-4f84-8b83-3548f6ae150b")
-	invitationID := uuid.MustParse("018d96b8-2211-7862-bcbe-e9f4d002a8fc")
-	mID := uuid.MustParse("377eba35-5560-4f48-a99d-19cbd6a82b0d")
-	inviteeAccountID := uuid.MustParse("394e67b6-2850-4ddf-a4c9-c2a619d5bf70")
-	token := uuid.MustParse("018d96b7-df68-792f-97d0-d6a044c2b4a2")
+	wID := uuid.MustParse("018e4922-563a-7731-b389-c2a9ac0d97e9")
+	invitationID := uuid.MustParse("018e4922-563a-7566-bc5e-65dc2f8faefe")
+	mID := uuid.MustParse("018e4922-563a-7807-b01f-2e630e4d22e9")
+	inviterAccountID := uuid.MustParse("018e4922-563a-7097-bbdb-ffa9f74da283")
+	token := uuid.MustParse("018e4922-563a-735c-a715-2fe940d327cf")
 
-	anID := uuid.MustParse("018e088e-fd36-722d-a927-8cfd34a642bd")
-	aeID := uuid.MustParse("018e09c2-9924-7048-9f08-afa2f3ea5b53")
+	anID := uuid.MustParse("018e4922-563a-7cff-bc38-66e095586aa0")
+	aeID := uuid.MustParse("018e4922-563a-7f98-b31e-e42efc811159")
 
-	mpID := uuid.MustParse("018e2216-64a3-7438-9300-1cdc4354d1de")
-	mrID := uuid.MustParse("018df76b-260d-759f-9b47-fb5f611f5da6")
-	wdID := uuid.MustParse("018e200b-9d01-70ed-8c5a-5a5df2a98f11")
+	mpID := uuid.MustParse("018e4922-563a-71f9-a7a1-25455276884f")
+	mrID := uuid.MustParse("018e4922-563a-7abc-a66a-24ea32938e9c")
+	wdID := uuid.MustParse("018e4922-563a-736e-b632-b32b7df08c67")
 
-	msheID := uuid.MustParse("018e2ff9-c432-7093-b091-943915c59284")
+	msheID := uuid.MustParse("018e4922-563a-7b08-8fb3-955ae030f5d1")
 
 	invitedBy := &models.Member{
 		MemberID:    mID,
 		WorkspaceID: wID,
-		AccountID:   inviteeAccountID,
+		AccountID:   inviterAccountID,
 		CreatedAt:   defaultTime,
 		Role: &models.MemberLatestRole{
 			MemberRoleID: mrID,
@@ -56,33 +56,33 @@ func Test_driver_FindByToken_OK(t *testing.T) {
 			},
 		},
 		Account: &models.Account{
-			AccountID: inviteeAccountID,
+			AccountID: inviterAccountID,
 			CreatedAt: defaultTime,
 			Name: &models.AccountLatestName{
 				AccountNameID: anID,
-				AccountID:     inviteeAccountID,
+				AccountID:     inviterAccountID,
 				AccountName: &models.AccountName{
 					AccountNameID: anID,
-					AccountID:     inviteeAccountID,
-					Name:          "John Doe",
+					AccountID:     inviterAccountID,
+					Name:          "Invite TestHasEvent",
 					CreatedAt:     defaultTime,
 				},
 			},
 			Email: &models.AccountLatestEmail{
 				AccountEmailID: aeID,
-				AccountID:      inviteeAccountID,
+				AccountID:      inviterAccountID,
 				AccountEmail: &models.AccountEmail{
 					AccountEmailID: aeID,
-					AccountID:      inviteeAccountID,
-					Email:          "account@example.com",
+					AccountID:      inviterAccountID,
+					Email:          "invite_test_has_event_inviter@example.com",
 					CreatedAt:      defaultTime,
 				},
 			},
 			AuthProviders: []*models.AuthProvider{
 				{
-					AuthProviderID: uuid.MustParse("018de2f6-968d-7458-9c67-69ae5698a143"),
-					ProviderUID:    "394e67b6-2850-4ddf-a4c9-c2a619d5bf70",
-					AccountID:      inviteeAccountID,
+					AuthProviderID: uuid.MustParse("018e4922-563a-71b5-bdb4-ba06511f2590"),
+					ProviderUID:    "018e4922-563a-7097-bbdb-ffa9f74da283",
+					AccountID:      inviterAccountID,
 					Provider:       "email",
 					ProvidedBy:     "firebase",
 					RegisteredAt:   defaultTime,
@@ -96,7 +96,7 @@ func Test_driver_FindByToken_OK(t *testing.T) {
 				MemberProfileID: mpID,
 				MemberID:        mID,
 				MemberIDNumber:  "DEV-12345",
-				DisplayName:     "John Doe",
+				DisplayName:     "Invite TestHasEvent",
 				Bio:             "bio",
 				CreatedAt:       defaultTime,
 			},
@@ -116,7 +116,7 @@ func Test_driver_FindByToken_OK(t *testing.T) {
 	}
 
 	invUnit := &models.InvitationUnit{
-		InvitationUnitID: uuid.MustParse("018db4a4-c350-747b-8c4f-bd827e08174b"),
+		InvitationUnitID: uuid.MustParse("018e4922-563a-7c76-8ea0-815441c038cb"),
 		WorkspaceID:      wID,
 		InvitedBy:        invitedBy.MemberID,
 		CreatedAt:        defaultTime,
@@ -129,8 +129,8 @@ func Test_driver_FindByToken_OK(t *testing.T) {
 				WorkspaceDetail: &models.WorkspaceDetail{
 					WorkspaceID:       wID,
 					WorkspaceDetailID: wdID,
-					Name:              "Example",
-					Subdomain:         "example",
+					Name:              "Invite TestHasEvent",
+					Subdomain:         "invite-test-has-event",
 					CreatedAt:         defaultTime,
 				},
 			},
@@ -156,14 +156,26 @@ func Test_driver_FindByToken_OK(t *testing.T) {
 		Invitation:   nil,
 	}
 
+	invtID := uuid.MustParse("018e493a-1b7f-79f3-83f9-c2ee307ce23d")
+
 	want := &models.Invitation{
 		InvitationID:     invitationID,
 		InvitationUnitID: invUnit.InvitationUnitID,
 		InvitationUnit:   invUnit,
 		InviteeName:      nil,
 		Invitee:          invitee,
-		Events:           nil,
-		Tokens:           tokens,
+		Event:            nil,
+		Token: &models.LatestInvitationToken{
+			InvitationTokenID: invtID,
+			InvitationID:      invitationID,
+			InvitationToken: &models.InvitationToken{
+				InvitationTokenID: invtID,
+				InvitationID:      invitationID,
+				Token:             token,
+				ExpiredAt:         expTime,
+				CreatedAt:         defaultTime,
+			},
+		},
 	}
 
 	ctx := context.Background()

@@ -2,6 +2,36 @@
   "kind": "identitytoolkit#DownloadAccountResponse",
   "users": [
     {
+      "localId": "018e4b25-0ad3-7c81-b301-751f04016c94",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "LeaveWorkspace CheckLeftWorkspaceAdmin",
+      "validSince": "1709725349",
+      "email": "once_leave_check_left_workspace_admin@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "018e4b25-0ad3-7d48-915f-4889ca40f1d5",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "LeaveWorkspace CheckLeftWorkspaceOwner",
+      "validSince": "1709725349",
+      "email": "once_leave_check_left_workspace_owner@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
+      "localId": "018e4922-563a-7097-bbdb-ffa9f74da283",
+      "createdAt": "1706825570522",
+      "lastLoginAt": "1706825570547",
+      "displayName": "Invite TestHasEvent",
+      "validSince": "1709725349",
+      "email": "invite_test_has_event_inviter@example.com",
+      "emailVerified": true,
+      "disabled": false
+    },
+    {
       "localId": "018e4661-e0d1-7c47-a07e-1f9db4a03524",
       "createdAt": "1706825570522",
       "lastLoginAt": "1706825570547",

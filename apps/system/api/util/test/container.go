@@ -4,6 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
+	"path/filepath"
+	"runtime"
+	"testing"
+	"time"
+
 	rds "github.com/redis/go-redis/v9"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
@@ -12,11 +18,6 @@ import (
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/extra/bundebug"
-	"log"
-	"path/filepath"
-	"runtime"
-	"testing"
-	"time"
 )
 
 const testContainerPort = "65432"
@@ -50,8 +51,23 @@ func createSystemTablesPath() string {
 	return filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/sql/001_create_tables.sql")
 }
 
-func createSystemBaseDataPath() string {
-	return filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/sql/099_initialize_data.sql")
+func createSystemBaseDataPath() []string {
+	return []string{
+		createSystemTablesPath(),
+		filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/sql/099_setup_base_data.sql"),
+		filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/sql/100_setup_update_workspace_detail.sql"),
+		filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/sql/101_setup_update_role.sql"),
+		filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/sql/102_setup_update_account_profile.sql"),
+		filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/sql/103_setup_update_account_photo.sql"),
+		filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/sql/104_setup_onboarding.sql"),
+		filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/sql/105_setup_google_auth_name.sql"),
+		filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/sql/106_setup_long_bio.sql"),
+		filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/sql/107_setup_login_logout_retry.sql"),
+		filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/sql/108_setup_invite.sql"),
+		filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/sql/109_setup_invitation_has_event.sql"),
+		filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/sql/110_setup_leave_workspace.sql"),
+		filepath.Join(getProjectRoot(), "../../../../../container/database/postgresql/sql/111_setup_once_leave_workspace.sql"),
+	}
 }
 
 func psqlTestContainerConfPath() string {
@@ -86,7 +102,7 @@ func PSQLTestContainer(ctx context.Context, scripts ...string) (*PostgresContain
 }
 
 func SetupTestDB(t *testing.T, ctx context.Context) *bun.DB {
-	pgContainer, err := PSQLTestContainer(ctx, createSystemTablesPath(), createSystemBaseDataPath())
+	pgContainer, err := PSQLTestContainer(ctx, createSystemBaseDataPath()...)
 	if err != nil {
 		t.Fatalf("failed to PSQLContainer creation: %v", err)
 	}

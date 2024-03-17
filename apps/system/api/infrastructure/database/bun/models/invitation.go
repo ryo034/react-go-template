@@ -1,23 +1,15 @@
 package models
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"time"
 )
 
 const (
-	InvitationUnitTableName       = "invitation_units"
-	InvitationUnitTableAliasName  = "invus"
-	InvitationTableName           = "invitations"
-	InvitationTableAliasName      = "invs"
-	InviteeNameTableName          = "invitee_names"
-	InviteeNameTableAliasName     = "invns"
-	InviteeTableName              = "invitees"
-	InvitationEventTableName      = "invitation_events"
-	InvitationEventTableAliasName = "inves"
-	InvitationTokenTableName      = "invitation_tokens"
-	InvitationTokenTableAliasName = "invts"
+	InvitationUnitTableAliasName = "invus"
+	InvitationTableAliasName     = "invs"
 )
 
 type InvitationUnit struct {
@@ -39,11 +31,11 @@ type Invitation struct {
 	InvitationID     uuid.UUID `bun:"invitation_id,pk"`
 	InvitationUnitID uuid.UUID `bun:"invitation_unit_id,notnull"`
 
-	InvitationUnit *InvitationUnit    `bun:"invus,rel:belongs-to"`
-	InviteeName    *InviteeName       `bun:"invns,rel:has-one"`
-	Invitee        *Invitee           `bun:"rel:has-one"`
-	Events         []*InvitationEvent `bun:"inves,rel:has-many"`
-	Tokens         []*InvitationToken `bun:"invts,rel:has-many"`
+	InvitationUnit *InvitationUnit        `bun:"invus,rel:belongs-to"`
+	InviteeName    *InviteeName           `bun:"invns,rel:has-one"`
+	Invitee        *Invitee               `bun:"invte,rel:has-one"`
+	Event          *LatestInvitationEvent `bun:"linve,rel:has-one"`
+	Token          *LatestInvitationToken `bun:"linvt,rel:has-one"`
 }
 
 type Invitations []*Invitation
@@ -58,7 +50,7 @@ type InviteeName struct {
 }
 
 type Invitee struct {
-	bun.BaseModel `bun:"table:invitees"`
+	bun.BaseModel `bun:"table:invitees,alias:invte"`
 
 	InvitationID uuid.UUID `bun:"invitation_id,pk"`
 	Email        string    `bun:"email,notnull"`
@@ -67,23 +59,46 @@ type Invitee struct {
 }
 
 type InvitationEvent struct {
-	bun.BaseModel `bun:"table:invitation_events,alias:inves"`
+	bun.BaseModel `bun:"table:invitation_events,alias:inve"`
 
 	InvitationEventID uuid.UUID `bun:"invitation_event_id,pk"`
 	InvitationID      uuid.UUID `bun:"invitation_id,notnull"`
 	EventType         string    `bun:"event_type,notnull"`
 	CreatedAt         time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	Invitation *Invitation `bun:"invs,rel:belongs-to"`
+	Invitation            *Invitation            `bun:"invs,rel:belongs-to"`
+	LatestInvitationEvent *LatestInvitationEvent `bun:"linve,rel:has-one"`
+}
+
+type LatestInvitationEvent struct {
+	bun.BaseModel `bun:"table:latest_invitation_events,alias:linve"`
+
+	InvitationEventID uuid.UUID `bun:"invitation_event_id,pk"`
+	InvitationID      uuid.UUID `bun:"invitation_id,notnull"`
+
+	Invitation      *Invitation      `bun:"invs,rel:belongs-to"`
+	InvitationEvent *InvitationEvent `bun:"inve,rel:has-one"`
 }
 
 type InvitationToken struct {
-	bun.BaseModel `bun:"table:invitation_tokens,alias:invts"`
+	bun.BaseModel `bun:"table:invitation_tokens,alias:invt"`
 
-	InvitationID uuid.UUID `bun:"invitation_id,pk"`
-	Token        uuid.UUID `bun:"token,pk"`
-	ExpiredAt    time.Time `bun:"expired_at,notnull"`
-	CreatedAt    time.Time `bun:"created_at,notnull,default:current_timestamp"`
+	InvitationTokenID uuid.UUID `bun:"invitation_token_id,pk"`
+	InvitationID      uuid.UUID `bun:"invitation_id,notnull"`
+	Token             uuid.UUID `bun:"token,notnull"`
+	ExpiredAt         time.Time `bun:"expired_at,notnull"`
+	CreatedAt         time.Time `bun:"created_at,notnull,default:current_timestamp"`
 
-	Invitation *Invitation `bun:"invs,rel:belongs-to"`
+	Invitation *Invitation            `bun:"invs,rel:belongs-to"`
+	Latest     *LatestInvitationToken `bun:"linvt,rel:has-one"`
+}
+
+type LatestInvitationToken struct {
+	bun.BaseModel `bun:"table:latest_invitation_tokens,alias:linvt"`
+
+	InvitationTokenID uuid.UUID `bun:"invitation_token_id,pk"`
+	InvitationID      uuid.UUID `bun:"invitation_id,notnull"`
+
+	InvitationToken *InvitationToken `bun:"invt,rel:has-one"`
+	Invitation      *Invitation      `bun:"invs,rel:belongs-to"`
 }

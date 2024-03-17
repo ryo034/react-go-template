@@ -29,42 +29,46 @@ systemTest.describe("Me Invitations", () => {
           invitation: {
             displayName: "",
             expiredAt: "2200-01-10T21:00:00+09:00",
-            id: "018d96b8-2211-7862-bcbe-e9f4d002a8fc",
+            id: "018e4922-563a-7566-bc5e-65dc2f8faefe",
             inviteeEmail: "invite_test_not_expired@example.com",
             accepted: false,
             inviter: {
-              id: "377eba35-5560-4f48-a99d-19cbd6a82b0d",
+              id: "018e4922-563a-7807-b01f-2e630e4d22e9",
               membershipStatus: "ACTIVE",
               profile: {
                 bio: "bio",
-                displayName: "John Doe",
+                displayName: "Invite TestHasEvent",
                 idNumber: "DEV-12345"
               },
               role: "OWNER",
               user: {
-                email: "account@example.com",
-                name: "John Doe",
-                userId: "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
+                email: "invite_test_has_event_inviter@example.com",
+                name: "Invite TestHasEvent",
+                userId: "018e4922-563a-7097-bbdb-ffa9f74da283",
               }
             }
           },
           inviter: {
             member: {
-              id: "377eba35-5560-4f48-a99d-19cbd6a82b0d",
+              id: "018e4922-563a-7807-b01f-2e630e4d22e9",
               membershipStatus: "ACTIVE",
               profile: {
-                displayName: "John Doe",
+                displayName: "Invite TestHasEvent",
                 idNumber: "DEV-12345",
                 bio: "bio"
               },
               role: "OWNER",
               user: {
-                email: "account@example.com",
-                name: "John Doe",
-                userId: "394e67b6-2850-4ddf-a4c9-c2a619d5bf70"
+                email: "invite_test_has_event_inviter@example.com",
+                name: "Invite TestHasEvent",
+                userId: "018e4922-563a-7097-bbdb-ffa9f74da283",
               }
             },
-            workspace: { name: "Example", subdomain: "example", workspaceId: "c1bd2603-b9cd-4f84-8b83-3548f6ae150b" }
+            workspace: {
+              name: "Invite TestHasEvent",
+              subdomain: "invite-test-has-event",
+              workspaceId: "018e4922-563a-7731-b389-c2a9ac0d97e9",
+            }
           }
         }
       ])
@@ -94,12 +98,12 @@ systemTest.describe("Me Invitations", () => {
       }
       expect(acceptInvitationRes.data.me.joinedWorkspaces).toEqual([
         {
-          workspaceId: "c1bd2603-b9cd-4f84-8b83-3548f6ae150b",
-          name: "Example",
-          subdomain: "example"
+          name: "Invite TestHasEvent",
+          subdomain: "invite-test-has-event",
+          workspaceId: "018e4922-563a-7731-b389-c2a9ac0d97e9",
         }
       ])
-      expect(acceptInvitationRes.data.me.currentWorkspace?.workspaceId).toBe("c1bd2603-b9cd-4f84-8b83-3548f6ae150b")
+      expect(acceptInvitationRes.data.me.currentWorkspace?.workspaceId).toBe("018e4922-563a-7731-b389-c2a9ac0d97e9")
     }
   )
   // already used user accept invitation

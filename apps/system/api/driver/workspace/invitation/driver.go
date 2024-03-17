@@ -37,13 +37,15 @@ func NewDriver() Driver {
 }
 
 func (d *driver) Find(ctx context.Context, exec bun.IDB, id invitation.ID) (*models.Invitation, error) {
-	inv := &models.Invitation{
-		InvitationID: id.Value(),
-	}
+	inv := &models.Invitation{InvitationID: id.Value()}
 	err := exec.
 		NewSelect().
 		Model(inv).
 		Relation("InviteeName").
+		Relation("Event").
+		Relation("Event.InvitationEvent").
+		Relation("Token").
+		Relation("Token.InvitationToken").
 		Relation("InvitationUnit").
 		Relation("InvitationUnit.Workspace").
 		Relation("InvitationUnit.Workspace.Detail").
@@ -67,10 +69,7 @@ func (d *driver) Find(ctx context.Context, exec bun.IDB, id invitation.ID) (*mod
 		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent").
 		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent.Photo").
 		Relation("Invitee").
-		Relation("Tokens").
-		Relation("Events").
 		Where(fmt.Sprintf("%s.invitation_id = ?", models.InvitationTableAliasName), id.Value()).
-		//WherePK().
 		Scan(ctx)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -101,22 +100,16 @@ func (d *driver) FindByToken(ctx context.Context, exec bun.IDB, token invitation
 }
 
 func (d *driver) FindActiveByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.Invitation, error) {
-	invt, err := d.findTokenByEmail(ctx, exec, email)
-	if err != nil {
-		return nil, err
-	}
-
-	inve, err := d.findEvent(ctx, exec, invt.InvitationID)
-	if err != nil {
-		return nil, err
-	}
-
-	//has-manyかつWhereを使う場合うまくいかないので独自で実装する
 	inv := &models.Invitation{}
-	err = exec.
+	err := exec.
 		NewSelect().
 		Model(inv).
 		Relation("InviteeName").
+		Relation("Event").
+		Relation("Event.InvitationEvent").
+		Relation("Token").
+		Relation("Token.InvitationToken").
+		Relation("Invitee").
 		Relation("InvitationUnit").
 		Relation("InvitationUnit.Workspace").
 		Relation("InvitationUnit.Workspace.Detail").
@@ -139,8 +132,10 @@ func (d *driver) FindActiveByEmail(ctx context.Context, exec bun.IDB, email acco
 		Relation("InvitationUnit.Member.Account.PhotoEvent").
 		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent").
 		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent.Photo").
-		Relation("Invitee").
-		Where(fmt.Sprintf("%s.invitation_id = ?", models.InvitationTableAliasName), invt.InvitationID).
+		Where("invte.email = ?", email.ToString()).
+		WhereGroup(" AND ", func(q *bun.SelectQuery) *bun.SelectQuery {
+			return q.Where("linve__inve.event_type != ?", "verified").WhereOr("linve__inve.event_type IS NULL")
+		}).
 		Limit(1).
 		Scan(ctx)
 	if err != nil {
@@ -148,114 +143,21 @@ func (d *driver) FindActiveByEmail(ctx context.Context, exec bun.IDB, email acco
 			return nil, domainErr.NewNoSuchData(fmt.Sprintf("invitation not found. email: %s", email.ToString()))
 		}
 		return nil, err
-	}
-	inv.Tokens = append(make([]*models.InvitationToken, 0, 1), invt)
-	if inve != nil {
-		inv.Events = []*models.InvitationEvent{inve}
 	}
 	return inv, nil
 }
 
-func (d *driver) findActiveToken(ctx context.Context, exec bun.IDB, token uuid.UUID) (*models.InvitationToken, error) {
-	invt := &models.InvitationToken{}
-	err := exec.
-		NewSelect().
-		Model(invt).
-		Where("token = ?", token.String()).
-		Where("expired_at > ?", time.Now()).
-		Order("expired_at DESC").
-		Limit(1).
-		Scan(ctx)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, domainErr.NewNoSuchData(fmt.Sprintf("active invitation not found. token: %s", token.String()))
-		}
-		return nil, err
-	}
-	return invt, nil
-}
-
-func (d *driver) findTokenByEmail(ctx context.Context, exec bun.IDB, email account.Email) (*models.InvitationToken, error) {
-	invitee := &models.Invitee{}
-	if err := exec.
-		NewSelect().
-		Model(invitee).
-		Column("invitation_id").
-		Where("email = ?", email.ToString()).
-		Scan(ctx); err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, domainErr.NewNoSuchData(fmt.Sprintf("invitation not found. email: %s", email.ToString()))
-		}
-		return nil, err
-	}
-
-	invt := &models.InvitationToken{}
-	err := exec.
-		NewSelect().
-		Model(invt).
-		Where("invitation_id = ?", invitee.InvitationID).
-		Where("expired_at > ?", time.Now()).
-		Order("expired_at DESC").
-		Limit(1).
-		Scan(ctx)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, domainErr.NewNoSuchData(fmt.Sprintf("active invitation not found. email: %s", email.ToString()))
-		}
-		return nil, err
-	}
-	return invt, nil
-}
-
 func (d *driver) FindAllReceivedByEmail(ctx context.Context, exec bun.IDB, email account.Email) ([]*models.Invitation, error) {
-	var invitees []*models.Invitee = nil
-	if err := exec.
-		NewSelect().
-		Model(&invitees).
-		Column("invitation_id").
-		Where("email = ?", email.ToString()).
-		Scan(ctx); err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, domainErr.NewNoSuchData(fmt.Sprintf("invitation not found. email: %s", email.ToString()))
-		}
-		return nil, err
-	}
-	if invitees == nil {
-		return nil, nil
-	}
-
-	inviteeInvIDs := make([]uuid.UUID, 0, len(invitees))
-	for _, inv := range invitees {
-		inviteeInvIDs = append(inviteeInvIDs, inv.InvitationID)
-	}
-
-	// get not expired tokens
-	var ts []*models.InvitationToken = nil
-	if err := exec.
-		NewSelect().
-		Model(&ts).
-		Where("expired_at > ?", time.Now()).
-		Where("invitation_id IN (?)", bun.In(inviteeInvIDs)).
-		Scan(ctx); err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, domainErr.NewNoSuchData(fmt.Sprintf("active invitation not found. email: %s", email.ToString()))
-		}
-		return nil, err
-	}
-	if ts == nil {
-		return nil, nil
-	}
-
-	invtInvIDs := make([]uuid.UUID, 0, len(ts))
-	for _, t := range ts {
-		invtInvIDs = append(invtInvIDs, t.InvitationID)
-	}
-
 	var invs []*models.Invitation
-	if err := exec.
+	err := exec.
 		NewSelect().
 		Model(&invs).
 		Relation("InviteeName").
+		Relation("Event").
+		Relation("Event.InvitationEvent").
+		Relation("Token").
+		Relation("Token.InvitationToken").
+		Relation("Invitee").
 		Relation("InvitationUnit").
 		Relation("InvitationUnit.Workspace").
 		Relation("InvitationUnit.Workspace.Detail").
@@ -278,67 +180,34 @@ func (d *driver) FindAllReceivedByEmail(ctx context.Context, exec bun.IDB, email
 		Relation("InvitationUnit.Member.Account.PhotoEvent").
 		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent").
 		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent.Photo").
-		Relation("Invitee").
-		Relation("Tokens", func(query *bun.SelectQuery) *bun.SelectQuery {
-			return query.Order("expired_at DESC").Limit(1)
+		Where("invte.email = ?", email.ToString()).
+		Where("linvt__invt.expired_at > ?", time.Now()).
+		WhereGroup(" AND ", func(q *bun.SelectQuery) *bun.SelectQuery {
+			return q.
+				Where("linve__inve.event_type = ?", "verified").
+				Where("linve__inve.event_type = ?", "reissued").
+				WhereOr("linve__inve.event_type IS NULL")
 		}).
-		Relation("Events", func(query *bun.SelectQuery) *bun.SelectQuery {
-			return query.Order("created_at DESC")
-		}).
-		Where(fmt.Sprintf("%s.invitation_id IN (?)", models.InvitationTableAliasName), bun.In(invtInvIDs)).
-		Scan(ctx); err != nil {
+		Scan(ctx)
+	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, domainErr.NewNoSuchData(fmt.Sprintf("invitation not found. email: %s", email.ToString()))
 		}
 		return nil, err
 	}
-
-	result := make([]*models.Invitation, 0)
-	for _, inv := range invs {
-		if inv.Tokens[0].ExpiredAt.After(time.Now()) && inv.Events != nil && inv.Events[0].EventType == "verified" {
-			result = append(result, inv)
-		}
-	}
-	return result, nil
-}
-
-func (d *driver) findEvent(ctx context.Context, exec bun.IDB, id uuid.UUID) (*models.InvitationEvent, error) {
-	inve := &models.InvitationEvent{}
-	err := exec.
-		NewSelect().
-		Model(inve).
-		Where("invitation_id = ?", id).
-		Where("event_type != ?", "verified").
-		Order("created_at DESC").
-		Limit(1).
-		Scan(ctx)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			inve = nil
-		} else {
-			return nil, err
-		}
-	}
-	return inve, nil
+	return invs, nil
 }
 
 func (d *driver) FindActiveByToken(ctx context.Context, exec bun.IDB, token invitation.Token) (*models.Invitation, error) {
-	invt, err := d.findActiveToken(ctx, exec, token.Value())
-	if err != nil {
-		return nil, err
-	}
-
-	inve, err := d.findEvent(ctx, exec, invt.InvitationID)
-	if err != nil {
-		return nil, err
-	}
-
-	//has-manyかつWhereを使う場合うまくいかないので独自で実装する
 	inv := &models.Invitation{}
-	err = exec.
+	err := exec.
 		NewSelect().
 		Model(inv).
 		Relation("InviteeName").
+		Relation("Event").
+		Relation("Event.InvitationEvent").
+		Relation("Token").
+		Relation("Token.InvitationToken").
 		Relation("InvitationUnit").
 		Relation("InvitationUnit.Workspace").
 		Relation("InvitationUnit.Workspace.Detail").
@@ -362,7 +231,11 @@ func (d *driver) FindActiveByToken(ctx context.Context, exec bun.IDB, token invi
 		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent").
 		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent.Photo").
 		Relation("Invitee").
-		Where(fmt.Sprintf("%s.invitation_id = ?", models.InvitationTableAliasName), invt.InvitationID).
+		WhereGroup(" AND ", func(q *bun.SelectQuery) *bun.SelectQuery {
+			return q.Where("linve__inve.event_type != ?", "verified").WhereOr("linve__inve.event_type IS NULL")
+		}).
+		Where("linvt__invt.token = ?", token.String()).
+		Where("linvt__invt.expired_at > ?", time.Now()).
 		Limit(1).
 		Scan(ctx)
 	if err != nil {
@@ -370,10 +243,6 @@ func (d *driver) FindActiveByToken(ctx context.Context, exec bun.IDB, token invi
 			return nil, domainErr.NewNoSuchData(fmt.Sprintf("invitation not found. token: %s", token.String()))
 		}
 		return nil, err
-	}
-	inv.Tokens = append(make([]*models.InvitationToken, 0, 1), invt)
-	if inve != nil {
-		inv.Events = []*models.InvitationEvent{inve}
 	}
 	return inv, nil
 }
@@ -384,6 +253,10 @@ func (d *driver) FindAllByWorkspace(ctx context.Context, exec bun.IDB, wID works
 		NewSelect().
 		Model(&invs).
 		Relation("InviteeName").
+		Relation("Event").
+		Relation("Event.InvitationEvent").
+		Relation("Token").
+		Relation("Token.InvitationToken").
 		Relation("InvitationUnit").
 		Relation("InvitationUnit.Workspace").
 		Relation("InvitationUnit.Workspace.Detail").
@@ -407,8 +280,6 @@ func (d *driver) FindAllByWorkspace(ctx context.Context, exec bun.IDB, wID works
 		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent").
 		Relation("InvitationUnit.Member.Account.PhotoEvent.AccountPhotoEvent.Photo").
 		Relation("Invitee").
-		Relation("Tokens").
-		Relation("Events").
 		Where(fmt.Sprintf("%s.workspace_id = ?", models.InvitationUnitTableAliasName), wID.Value()).
 		Scan(ctx)
 	if err != nil {
@@ -435,49 +306,68 @@ func (d *driver) VerifyByToken(ctx context.Context, exec bun.IDB, token invitati
 }
 
 func (d *driver) Accept(ctx context.Context, exec bun.IDB, id invitation.ID) error {
-	eid, err := uuid.NewV7()
-	if err != nil {
+	if _, err := exec.NewDelete().Model(&models.LatestInvitationEvent{}).Where("invitation_id = ?", id.Value()).Exec(ctx); err != nil {
 		return err
 	}
-	_, err = exec.NewInsert().Model(&models.InvitationEvent{
+	eid, _ := uuid.NewV7()
+	if _, err := exec.NewInsert().Model(&models.InvitationEvent{
 		InvitationEventID: eid,
 		InvitationID:      id.Value(),
 		EventType:         "accepted",
-	}).Exec(ctx)
-	return err
+	}).Exec(ctx); err != nil {
+		return err
+	}
+	if _, err := exec.NewInsert().Model(&models.LatestInvitationEvent{
+		InvitationEventID: eid,
+		InvitationID:      id.Value(),
+	}).Exec(ctx); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d *driver) Revoke(ctx context.Context, exec bun.IDB, id invitation.ID) error {
-	eid, err := uuid.NewV7()
-	if err != nil {
+	if _, err := exec.NewDelete().Model(&models.LatestInvitationEvent{}).Where("invitation_id = ?", id.Value()).Exec(ctx); err != nil {
 		return err
 	}
-	_, err = exec.NewInsert().Model(&models.InvitationEvent{
+	eid, _ := uuid.NewV7()
+	if _, err := exec.NewInsert().Model(&models.InvitationEvent{
 		InvitationEventID: eid,
 		InvitationID:      id.Value(),
 		EventType:         "revoked",
-	}).Exec(ctx)
-	return err
+	}).Exec(ctx); err != nil {
+		return err
+	}
+	if _, err := exec.NewInsert().Model(&models.LatestInvitationEvent{
+		InvitationEventID: eid,
+		InvitationID:      id.Value(),
+	}).Exec(ctx); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d *driver) Resend(ctx context.Context, exec bun.IDB, id invitation.ID) (*models.Invitation, error) {
+	if _, err := exec.NewDelete().Model(&models.LatestInvitationEvent{}).Where("invitation_id = ?", id.Value()).Exec(ctx); err != nil {
+		return nil, err
+	}
+	eid, _ := uuid.NewV7()
+	if _, err := exec.NewInsert().Model(&models.InvitationEvent{
+		InvitationEventID: eid,
+		InvitationID:      id.Value(),
+		EventType:         "reissued",
+	}).Exec(ctx); err != nil {
+		return nil, err
+	}
+	if _, err := exec.NewInsert().Model(&models.LatestInvitationEvent{
+		InvitationEventID: eid,
+		InvitationID:      id.Value(),
+	}).Exec(ctx); err != nil {
+		return nil, err
+	}
 	inv, err := d.Find(ctx, exec, id)
 	if err != nil {
 		return nil, err
 	}
-	eid, err := uuid.NewV7()
-	if err != nil {
-		return nil, err
-	}
-	ev := &models.InvitationEvent{
-		InvitationEventID: eid,
-		InvitationID:      id.Value(),
-		EventType:         "reissued",
-	}
-	_, err = exec.NewInsert().Model(ev).Exec(ctx)
-	if err != nil {
-		return nil, err
-	}
-	inv.Events = append(inv.Events, ev)
 	return inv, nil
 }

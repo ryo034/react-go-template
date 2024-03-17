@@ -63,7 +63,7 @@ systemTest.describe("invite members", () => {
 
 systemTest.describe("get invitations", () => {
   systemTest("success to get invitations without revoked and already registered", async () => {
-    const email = "account@example.com"
+    const email = "invite_test_has_event_inviter@example.com"
     const authInfo = await getAuthInfo(email)
     const res = await client.GET("/api/v1/invitations", { headers: authHeaders(authInfo.token) })
     expect(res.response.status).toBe(200)
@@ -72,7 +72,7 @@ systemTest.describe("get invitations", () => {
   })
 
   systemTest("success to get accepted invitations without revoked", { tag: ["@stateful"] }, async ({ stateful }) => {
-    const email = "account@example.com"
+    const email = "invite_test_has_event_inviter@example.com"
     const authInfo = await getAuthInfo(email)
     const res = await client.GET("/api/v1/invitations", {
       headers: authHeaders(authInfo.token),

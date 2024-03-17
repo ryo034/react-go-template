@@ -1,17 +1,17 @@
 {
   "member": {
-    "id": "018e1398-3d80-79dc-9459-c7a3f1609124",
+    "id": "018e18ba-dc87-740c-9aeb-ba7f8f7d490e",
     "membershipStatus": "ACTIVE",
     "profile": {
-      "bio": "Long Bio is a passionate software engineer with 8 years of experience specializing in web development, particularly with React and Node.js. A graduate from MIT with a strong focus on clean architecture and Agile methodologies, John has successfully led multiple projects, from innovative startups to established tech giants. He's a firm believer in continuous learning, contributing regularly to open-source projects, and sharing insights through tech blogs and meetups. Outside of work, John enjoys hiking 🚶‍♂️, drone photography 📸, and playing the guitar 🎸. He's committed to using technology to drive positive social change.",
-      "displayName": "Login Bio",
-      "idNumber": "DEV-12346"
+      "bio": "bio",
+      "displayName": "UpdateRole Admin",
+      "idNumber": "DEV-54322"
     },
     "role": "MEMBER",
     "user": {
-      "email": "long_bio@example.com",
-      "name": "Long Bio",
-      "userId": "018e15d1-0ba6-78d9-b255-63bb854e9817"
+      "email": "update_role_admin@example.com",
+      "name": "UpdateRole Admin",
+      "userId": "018e18ba-dc87-7e16-83a6-e8ffccf96552"
     }
   }
 }

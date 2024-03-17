@@ -9,15 +9,15 @@ import (
 type Invitation struct {
 	id           ID
 	token        Token
-	events       Events
+	latestEvent  *Event
 	expiredAt    ExpiredAt
 	inviteeEmail account.Email
 	displayName  *member.DisplayName
 	inviter      *member.Member
 }
 
-func NewInvitation(id ID, token Token, events Events, expiredAt ExpiredAt, inviteeEmail account.Email, displayName *member.DisplayName, inviter *member.Member) *Invitation {
-	return &Invitation{id, token, events, expiredAt, inviteeEmail, displayName, inviter}
+func NewInvitation(id ID, token Token, latestEvent *Event, expiredAt ExpiredAt, inviteeEmail account.Email, displayName *member.DisplayName, inviter *member.Member) *Invitation {
+	return &Invitation{id, token, latestEvent, expiredAt, inviteeEmail, displayName, inviter}
 }
 
 func GenInvitation(inviteeEmail string, displayName string, inviter *member.Member) (*Invitation, error) {
@@ -45,8 +45,8 @@ func (i *Invitation) Token() Token {
 	return i.token
 }
 
-func (i *Invitation) Events() Events {
-	return i.events
+func (i *Invitation) LatestEvent() *Event {
+	return i.latestEvent
 }
 
 func (i *Invitation) ExpiredAt() ExpiredAt {
@@ -146,10 +146,7 @@ func (i *Invitation) ValidateCanGetByToken() error {
 }
 
 func (i *Invitation) IsVerified() bool {
-	return i.Events() != nil &&
-		i.Events().IsNotEmpty() &&
-		i.Events().Latest() != nil &&
-		i.Events().Latest().IsVerified()
+	return i.latestEvent != nil && i.latestEvent.IsVerified()
 }
 
 func (i *Invitation) IsExpired() bool {
@@ -161,15 +158,9 @@ func (i *Invitation) IsNotExpired() bool {
 }
 
 func (i *Invitation) IsRevoked() bool {
-	return i.Events() != nil &&
-		i.Events().IsNotEmpty() &&
-		i.Events().Latest() != nil &&
-		i.Events().Latest().IsRevoked()
+	return i.latestEvent != nil && i.latestEvent.IsRevoked()
 }
 
 func (i *Invitation) IsAccepted() bool {
-	return i.Events() != nil &&
-		i.Events().IsNotEmpty() &&
-		i.Events().Latest() != nil &&
-		i.Events().Latest().IsAccepted()
+	return i.latestEvent != nil && i.latestEvent.IsAccepted()
 }

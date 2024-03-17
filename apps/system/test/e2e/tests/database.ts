@@ -53,9 +53,11 @@ export const targetTables = [
   "invitation_units",
   "invitations",
   "invitation_tokens",
+  "latest_invitation_tokens",
   "invitees",
   "invitee_names",
-  "invitation_events"
+  "invitation_events",
+  "latest_invitation_events",
 ]
 
 export class MainDb implements Database {

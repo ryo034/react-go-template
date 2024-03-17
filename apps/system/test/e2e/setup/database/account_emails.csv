@@ -23,6 +23,7 @@ account_email_id,account_id,email,created_at
 018e09c2-d3f3-787a-94e6-adfc83e2c457,018df551-4339-730c-8031-618eb8ef66b5,invite_test_already_joined_any_workspace_by_google@example.com,2024-01-10 12:00:00.000000 +00:00
 018e0eaa-8b25-7a21-a221-f85f8a85d149,018e0ea9-6b88-71d3-a887-0cf22ede3e0c,invite_test_has_photo_by_google_accept_with_email@example.com,2024-01-10 12:00:00.000000 +00:00
 018e0ebe-185a-75fb-8096-b6ad5b02a9fb,018e0ebc-e842-7bdb-bf50-05177e07a1c7,invite_test_has_photo_by_google_accept_with_has_photo_google@example.com,2024-01-10 12:00:00.000000 +00:00
+018e4922-563a-7f98-b31e-e42efc811159,018e4922-563a-7097-bbdb-ffa9f74da283,invite_test_has_event_inviter@example.com,2024-01-10 12:00:00.000000 +00:00
 018e3642-86c6-7505-b799-c25099c0ff22,018e3642-86c6-77f0-82ea-e29a22f67431,me_owner_leave_workspace@example.com,2024-01-10 12:00:00.000000 +00:00
 018e3642-86c6-7e50-a483-25029b6bc5dd,018e3642-86c6-7c6c-8b1a-59fa0d0613e6,me_admin_leave_workspace@example.com,2024-01-10 12:00:00.000000 +00:00
 018e3642-86c6-7876-ae82-0d893a62761d,018e3642-86c6-73c3-bec3-96f1a69a0278,me_member_leave_workspace@example.com,2024-01-10 12:00:00.000000 +00:00
@@ -37,3 +38,5 @@ account_email_id,account_id,email,created_at
 018e3f69-4a17-7603-ae69-89e3d0d8e9ff,018e3f69-4a17-72e4-988d-ae46efe64359,once_leave_workspace_invited_after_left@example.com,2024-01-10 12:00:00.000000 +00:00
 018e4661-e0d1-7640-a7e8-b6d1bd6cff6b,018e4661-e0d1-7f45-845a-266b30e95dd4,once_leave_has_one_workspace_owner@example.com,2024-01-10 12:00:00.000000 +00:00
 018e4661-e0d1-73b0-815b-974425b24dd7,018e4661-e0d1-7c47-a07e-1f9db4a03524,once_leave_has_one_workspace_admin@example.com,2024-01-10 12:00:00.000000 +00:00
+018e4b25-0ad3-741d-bd09-03afd52352cf,018e4b25-0ad3-7d48-915f-4889ca40f1d5,once_leave_check_left_workspace_owner@example.com,2024-01-10 12:00:00.000000 +00:00
+018e4b25-0ad3-7e13-87b1-c0d2a8643c1e,018e4b25-0ad3-7c81-b301-751f04016c94,once_leave_check_left_workspace_admin@example.com,2024-01-10 12:00:00.000000 +00:00

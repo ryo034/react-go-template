@@ -2,6 +2,7 @@ package invitation
 
 import (
 	"fmt"
+
 	memberGw "github.com/ryo034/react-go-template/apps/system/api/interface/gateway/member"
 
 	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
@@ -26,8 +27,8 @@ func NewAdapter(ma memberGw.Adapter) Adapter {
 
 func (a *adapter) Adapt(i *models.Invitation) (*invitation.Invitation, error) {
 	id := invitation.NewID(i.InvitationID)
-	token := invitation.NewToken(i.Tokens[0].Token)
-	ex := invitation.NewExpiredAt(datetime.NewDatetime(i.Tokens[0].ExpiredAt))
+	token := invitation.NewToken(i.Token.InvitationToken.Token)
+	ex := invitation.NewExpiredAt(datetime.NewDatetime(i.Token.InvitationToken.ExpiredAt))
 	ema, err := account.NewEmail(i.Invitee.Email)
 	if err != nil {
 		return nil, err
@@ -36,25 +37,33 @@ func (a *adapter) Adapt(i *models.Invitation) (*invitation.Invitation, error) {
 	if i.InviteeName != nil {
 		dn = member.NewDisplayName(i.InviteeName.DisplayName)
 	}
-	evs := make([]invitation.Event, 0, len(i.Events))
-	for _, ev := range i.Events {
-		if ev.EventType == "verified" {
-			evs = append(evs, invitation.NewAsVerified(datetime.NewDatetime(ev.CreatedAt)))
-		} else if ev.EventType == "revoked" {
-			evs = append(evs, invitation.NewAsRevoked(datetime.NewDatetime(ev.CreatedAt)))
-		} else if ev.EventType == "accepted" {
-			evs = append(evs, invitation.NewAsAccepted(datetime.NewDatetime(ev.CreatedAt)))
-		} else if ev.EventType == "reissued" {
-			evs = append(evs, invitation.NewAsReissued(datetime.NewDatetime(ev.CreatedAt)))
-		} else {
-			return nil, fmt.Errorf("unknown event type: %s", ev.EventType)
-		}
-	}
 	inviter, err := a.ma.Adapt(i.InvitationUnit.Member)
 	if err != nil {
 		return nil, err
 	}
-	return invitation.NewInvitation(id, token, invitation.NewEvents(evs), ex, ema, dn, inviter), nil
+
+	if i.Event == nil {
+		return invitation.NewInvitation(id, token, nil, ex, ema, dn, inviter), nil
+	}
+
+	var evt *invitation.Event = nil
+	switch i.Event.InvitationEvent.EventType {
+	case "verified":
+		tmpEvt := invitation.NewAsVerified(datetime.NewDatetime(i.Event.InvitationEvent.CreatedAt))
+		evt = &tmpEvt
+	case "revoked":
+		tmpEvt := invitation.NewAsRevoked(datetime.NewDatetime(i.Event.InvitationEvent.CreatedAt))
+		evt = &tmpEvt
+	case "accepted":
+		tmpEvt := invitation.NewAsAccepted(datetime.NewDatetime(i.Event.InvitationEvent.CreatedAt))
+		evt = &tmpEvt
+	case "reissued":
+		tmpEvt := invitation.NewAsReissued(datetime.NewDatetime(i.Event.InvitationEvent.CreatedAt))
+		evt = &tmpEvt
+	default:
+		return nil, fmt.Errorf("unknown event type: %s", i.Event.InvitationEvent.EventType)
+	}
+	return invitation.NewInvitation(id, token, evt, ex, ema, dn, inviter), nil
 }
 
 func (a *adapter) AdaptAll(is []*models.Invitation) (invitation.Invitations, error) {

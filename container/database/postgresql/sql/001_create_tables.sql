@@ -264,14 +264,23 @@ CREATE TABLE invitations (
 );
 
 CREATE TABLE invitation_tokens (
+  invitation_token_id uuid NOT NULL,
   invitation_id uuid NOT NULL,
   token uuid NOT NULL UNIQUE,
   expired_at TIMESTAMP WITH TIME ZONE NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (invitation_id, token),
+  PRIMARY KEY (invitation_token_id),
   CONSTRAINT fk_invitations_invitation_tokens_invitation_id FOREIGN KEY (invitation_id) REFERENCES invitations(invitation_id)
 );
 CREATE INDEX invitation_tokens_expired_at_index ON invitation_tokens(expired_at);
+
+CREATE TABLE latest_invitation_tokens (
+  invitation_token_id uuid NOT NULL,
+  invitation_id uuid NOT NULL,
+  PRIMARY KEY (invitation_token_id),
+  CONSTRAINT fk_lit_invitation_tokens_invitation_tokens_invitation_token_id FOREIGN KEY (invitation_token_id) REFERENCES invitation_tokens(invitation_token_id),
+  CONSTRAINT fk_lit_invitations_invitation_id FOREIGN KEY (invitation_id) REFERENCES invitations(invitation_id)
+);
 
 CREATE TABLE invitees (
   invitation_id uuid NOT NULL,
@@ -298,3 +307,11 @@ CREATE TABLE invitation_events (
   CONSTRAINT fk_invitation_events_invitations_invitation_id FOREIGN KEY (invitation_id) REFERENCES invitations(invitation_id)
 );
 CREATE INDEX invitation_events_created_at_index ON invitation_events(created_at);
+
+CREATE TABLE latest_invitation_events (
+  invitation_event_id uuid NOT NULL,
+  invitation_id uuid NOT NULL UNIQUE,
+  PRIMARY KEY (invitation_event_id),
+  CONSTRAINT fk_lievs_invitation_events_invitation_event_id FOREIGN KEY (invitation_event_id) REFERENCES invitation_events(invitation_event_id),
+  CONSTRAINT fk_lievs_invitations_invitation_id FOREIGN KEY (invitation_id) REFERENCES invitations(invitation_id)
+);

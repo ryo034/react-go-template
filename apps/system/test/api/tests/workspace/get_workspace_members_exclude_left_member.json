@@ -1,18 +1,18 @@
 {
   "members": [
     {
-      "id": "018e3f69-4a17-730a-87ee-b53eb2bc4886",
+      "id": "018e4b25-0ad3-7e85-bb15-6c82a00877e6",
       "membershipStatus": "ACTIVE",
       "profile": {
         "bio": "bio",
-        "displayName": "OnceLeaveWorkspace InviteOwner",
-        "idNumber": "DEV-54321"
+        "displayName": "OnceLeaveWorkspace CheckLeftOwner",
+        "idNumber": "DEV-54322"
       },
       "role": "OWNER",
       "user": {
-        "email": "once_leave_workspace_invite_owner@example.com",
-        "name": "LeaveWorkspace InviteOwner",
-        "userId": "018e3f69-4a17-7a84-b472-23d0a97aa6f7"
+        "email": "once_leave_check_left_workspace_owner@example.com",
+        "name": "LeaveWorkspace CheckLeftWorkspaceOwner",
+        "userId": "018e4b25-0ad3-7d48-915f-4889ca40f1d5"
       }
     }
   ]
