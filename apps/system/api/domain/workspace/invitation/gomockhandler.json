@@ -1,8 +1,8 @@
 {
 	"mocks": {
 		"mock_repository.go": {
-			"checksum": "3tQg/dQ/3h8/IO7CCq+qRQ==",
-			"source_checksum": "AM1Hl1LyG4D1Ql/UyxgDVA==",
+			"checksum": "U8vOIuciZy7k/cUWs395Uw==",
+			"source_checksum": "w2rlORDReo1VT9uHHA7pfA==",
 			"mode": "SOURCE_MODE",
 			"source_mode_runner": {
 				"source": "repository.go",
