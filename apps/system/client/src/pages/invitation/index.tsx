@@ -51,7 +51,6 @@ const InvitationSection = ({
   const { controller, store, driver } = useContext(ContainerContext)
   const navigate = useNavigate()
   const { toast } = useToast()
-  const [errorMessage, setErrorMessage] = useState("")
   const me = store.me((state) => state.me)
   const meRef = useRef(me)
   const [_, loading] = useAuthState(driver.firebase.getClient)
