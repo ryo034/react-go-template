@@ -1,4 +1,4 @@
-import { type MouseEventHandler, useEffect } from "react"
+import type { MouseEventHandler } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { Button, FormResultErrorMessage, LoadingButton, SeparatorWithTitle } from "shared-ui"
 import { useAuthPageFormMessage } from "~/components/auth/message"
@@ -22,7 +22,6 @@ export const AuthPageForm = ({ onSubmit, onClickGoogleLoginButton, errorMessage,
   const {
     register,
     handleSubmit,
-    setFocus,
     formState: { errors }
   } = useForm<LoginFormValues>()
 
@@ -40,10 +39,6 @@ export const AuthPageForm = ({ onSubmit, onClickGoogleLoginButton, errorMessage,
     }
   })
 
-  useEffect(() => {
-    setFocus("email")
-  }, [])
-
   return (
     <form className="space-y-6" id={authFormId} onSubmit={handleSubmit(onSubmit)}>
       <div>
@@ -59,6 +54,7 @@ export const AuthPageForm = ({ onSubmit, onClickGoogleLoginButton, errorMessage,
         title={message.word.email}
         id="email"
         type="email"
+        showLabel={false}
         placeholder="name@company.com"
         autoComplete="email"
         reactHookForm={emailInputField}
