@@ -1,11 +1,11 @@
-import redis, { Redis } from "ioredis"
+import redis, { type Redis } from "ioredis"
 
 interface InMemoryClient {
   get(key: string): Promise<string | null>
 }
 
 export class RedisClient implements InMemoryClient {
-  constructor(readonly client: Redis) {}
+  constructor(readonly client: Redis) { }
 
   static async create() {
     const client = await redis.createClient()

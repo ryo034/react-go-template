@@ -1,6 +1,6 @@
 import { readFileSync } from "fs"
 import { getApp, getApps, initializeApp } from "firebase-admin/app"
-import { MultiFactorCreateSettings, UserProvider, UserProviderRequest, getAuth } from "firebase-admin/auth"
+import { type MultiFactorCreateSettings, type UserProvider, type UserProviderRequest, getAuth } from "firebase-admin/auth"
 import * as fba from "firebase/app"
 import * as fb from "firebase/auth"
 import { firebaseClientConfig } from "./config"

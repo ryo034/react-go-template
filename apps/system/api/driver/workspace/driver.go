@@ -16,7 +16,6 @@ import (
 
 type Driver interface {
 	FindAllJoinedWorkspaces(ctx context.Context, exec bun.IDB, aID account.ID) ([]uuid.UUID, error)
-	FindAllJoinedMembers(ctx context.Context, exec bun.IDB, aID account.ID) ([]uuid.UUID, error)
 	FindAll(ctx context.Context, exec bun.IDB, aID account.ID) (models.Workspaces, error)
 	Create(ctx context.Context, exec bun.IDB, w *workspace.Workspace) (*models.Workspace, error)
 	Update(ctx context.Context, exec bun.IDB, w *workspace.Workspace) error
@@ -54,27 +53,6 @@ func (d *driver) FindAllJoinedWorkspaces(ctx context.Context, exec bun.IDB, aID 
 		}
 	}
 	return joinedWorkspaceIDs, nil
-}
-
-func (d *driver) FindAllJoinedMembers(ctx context.Context, exec bun.IDB, aID account.ID) ([]uuid.UUID, error) {
-	var members []*models.Member
-	if err := exec.
-		NewSelect().
-		Model(&members).
-		Relation("MembershipEvent").
-		Relation("MembershipEvent.MembershipEvent").
-		Where("ms.account_id = ?", aID.ToString()).
-		Where("lmshi__mshi.event_type = ?", "join").
-		Scan(ctx); err != nil {
-		return nil, err
-	}
-	var joinedMemberIDs []uuid.UUID
-	for _, m := range members {
-		if m.MembershipEvent != nil && m.MembershipEvent.MembershipEvent != nil {
-			joinedMemberIDs = append(joinedMemberIDs, m.MemberID)
-		}
-	}
-	return joinedMemberIDs, nil
 }
 
 func (d *driver) FindAll(ctx context.Context, exec bun.IDB, aID account.ID) (models.Workspaces, error) {

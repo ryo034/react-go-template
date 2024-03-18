@@ -83,32 +83,35 @@ func (d *driver) LastLogin(ctx context.Context, exec bun.IDB, mID member.ID) err
 	if err != nil {
 		return err
 	}
-	_, err = exec.NewDelete().Model(&models.MemberLatestLoginHistory{}).Where("member_id = ?", mID.Value()).Exec(ctx)
-	_, err = exec.NewInsert().Model(&models.MemberLoginHistory{
+	if _, err = exec.NewDelete().Model(&models.MemberLatestLoginHistory{}).Where("member_id = ?", mID.Value()).
+		Exec(ctx); err != nil {
+		return err
+	}
+	if _, err = exec.NewInsert().Model(&models.MemberLoginHistory{
 		MemberLoginHistoryID: pkID.Value(),
 		MemberID:             mID.Value(),
-	}).Exec(ctx)
-	_, err = exec.NewInsert().Model(&models.MemberLatestLoginHistory{
+	}).Exec(ctx); err != nil {
+		return err
+	}
+	if _, err = exec.NewInsert().Model(&models.MemberLatestLoginHistory{
 		MemberLoginHistoryID: pkID.Value(),
 		MemberID:             mID.Value(),
-	}).Exec(ctx)
-
-	return err
+	}).Exec(ctx); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d *driver) FindLastLogin(ctx context.Context, exec bun.IDB, aID account.ID) (*models.MemberLoginHistory, error) {
-	// get all joined member ids related to the account
-	joinedMemberIDs, err := d.wd.FindAllJoinedMembers(ctx, exec, aID)
-	if err != nil {
-		return nil, err
-	}
-
 	m := &models.MemberLoginHistory{}
-	err = exec.
+	err := exec.
 		NewSelect().
 		Model(m).
 		Relation("Member").
-		Where("mllhs.member_id IN (?)", bun.In(joinedMemberIDs)).
+		Relation("Member.MembershipEvent").
+		Relation("Member.MembershipEvent.MembershipEvent").
+		Where("ms.account_id = ?", aID.ToString()).
+		Where("ms__lmshi__mshi.event_type = ?", "join").
 		Order("mllhs.login_at DESC").
 		Limit(1).
 		Scan(ctx)
@@ -224,14 +227,28 @@ func (d *driver) UpdateMemberProfile(ctx context.Context, exec bun.IDB, m *membe
 	if p.IDNumber() != nil {
 		idNum = p.IDNumber().ToString()
 	}
+	mpID, _ := uuid.NewV7()
 	mem := &models.MemberProfile{
-		MemberID:       m.ID().Value(),
-		MemberIDNumber: idNum,
-		DisplayName:    p.DisplayName().ToString(),
-		Bio:            p.Bio().ToString(),
+		MemberProfileID: mpID,
+		MemberID:        m.ID().Value(),
+		MemberIDNumber:  idNum,
+		DisplayName:     p.DisplayName().ToString(),
+		Bio:             p.Bio().ToString(),
 	}
-	_, err := exec.NewUpdate().Model(mem).WherePK().Exec(ctx)
-	return m, err
+	if _, err := exec.NewDelete().Model(&models.MemberLatestProfile{}).Where("member_id = ?", m.ID().Value()).
+		Exec(ctx); err != nil {
+		return nil, err
+	}
+	if _, err := exec.NewInsert().Model(mem).Exec(ctx); err != nil {
+		return nil, err
+	}
+	if _, err := exec.NewInsert().Model(&models.MemberLatestProfile{
+		MemberProfileID: mpID,
+		MemberID:        m.ID().Value(),
+	}).Exec(ctx); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (d *driver) UpdateProfilePhoto(ctx context.Context, exec bun.IDB, aID account.ID, photo *media.UploadPhoto) error {
@@ -239,22 +256,31 @@ func (d *driver) UpdateProfilePhoto(ctx context.Context, exec bun.IDB, aID accou
 	if err != nil {
 		return err
 	}
-	_, err = exec.NewDelete().Model(&models.AccountLatestPhotoEvent{}).Where("account_id = ?", aID.ToString()).Exec(ctx)
-	_, err = exec.NewInsert().Model(&models.AccountPhotoEvent{
+	if _, err = exec.NewDelete().Model(&models.AccountLatestPhotoEvent{}).Where("account_id = ?", aID.ToString()).
+		Exec(ctx); err != nil {
+		return err
+	}
+	if _, err = exec.NewInsert().Model(&models.AccountPhotoEvent{
 		AccountPhotoEventID: peID.Value(),
 		AccountID:           aID.Value(),
 		EventType:           "upload",
-	}).Exec(ctx)
-	_, err = exec.NewInsert().Model(&models.AccountLatestPhotoEvent{
+	}).Exec(ctx); err != nil {
+		return err
+	}
+	if _, err = exec.NewInsert().Model(&models.AccountLatestPhotoEvent{
 		AccountPhotoEventID: peID.Value(),
 		AccountID:           aID.Value(),
-	}).Exec(ctx)
-	_, err = exec.NewInsert().Model(&models.AccountPhoto{
+	}).Exec(ctx); err != nil {
+		return err
+	}
+	if _, err = exec.NewInsert().Model(&models.AccountPhoto{
 		AccountPhotoEventID: peID.Value(),
 		PhotoID:             photo.ID().Value(),
 		HostingTo:           photo.HostingTo().String(),
-	}).Exec(ctx)
-	return err
+	}).Exec(ctx); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d *driver) RemoveProfilePhoto(ctx context.Context, exec bun.IDB, aID account.ID) error {
@@ -262,15 +288,22 @@ func (d *driver) RemoveProfilePhoto(ctx context.Context, exec bun.IDB, aID accou
 	if err != nil {
 		return err
 	}
-	_, err = exec.NewDelete().Model(&models.AccountLatestPhotoEvent{}).Where("account_id = ?", aID.ToString()).Exec(ctx)
-	_, err = exec.NewInsert().Model(&models.AccountPhotoEvent{
+	if _, err = exec.NewDelete().Model(&models.AccountLatestPhotoEvent{}).Where("account_id = ?", aID.ToString()).
+		Exec(ctx); err != nil {
+		return err
+	}
+	if _, err = exec.NewInsert().Model(&models.AccountPhotoEvent{
 		AccountPhotoEventID: peID.Value(),
 		AccountID:           aID.Value(),
 		EventType:           "remove",
-	}).Exec(ctx)
-	_, err = exec.NewInsert().Model(&models.AccountLatestPhotoEvent{
+	}).Exec(ctx); err != nil {
+		return err
+	}
+	if _, err = exec.NewInsert().Model(&models.AccountLatestPhotoEvent{
 		AccountPhotoEventID: peID.Value(),
 		AccountID:           aID.Value(),
-	}).Exec(ctx)
+	}).Exec(ctx); err != nil {
+		return err
+	}
 	return err
 }

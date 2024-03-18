@@ -1,4 +1,4 @@
-import { APIRequestContext, APIResponse } from "@playwright/test"
+import type { APIRequestContext, APIResponse } from "@playwright/test"
 
 export const systemApiHost = process.env.SYSTEM_API_HOST || "http://localhost:19004"
 

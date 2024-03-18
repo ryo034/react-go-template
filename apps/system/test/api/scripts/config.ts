@@ -29,7 +29,7 @@ export const firebaseClientConfig = {
 
 export const dbConfig = {
   host: process.env.DB_HOST || "localhost",
-  port: parseInt(process.env.DB_PORT || "15432"),
+  port: Number.parseInt(process.env.DB_PORT || "15432"),
   user: process.env.DB_USER || "root",
   password: process.env.DB_PASSWORD || "password",
   database: process.env.DB_DATABASE || "main"
