@@ -18,7 +18,6 @@ import { StartInvitationPage } from "~/pages/invitation"
 import { MembersPage } from "~/pages/members"
 import { OnboardingSettingNamePage } from "~/pages/onboarding/name"
 import { OnboardingSettingWorkspacePage } from "~/pages/onboarding/workspace"
-import { VerifyOtpPage } from "~/pages/otp"
 import { ReceivedInvitationsPage } from "~/pages/receivedInvitation"
 import { SettingsAppearancePage } from "~/pages/settings/appearance"
 import { SettingsProfilePage } from "~/pages/settings/profile"
@@ -26,6 +25,7 @@ import { SettingsWorkspaceAccountPage } from "~/pages/settings/workspace/account
 import { SettingsWorkspaceInvitationsPage } from "~/pages/settings/workspace/invitations"
 import { SettingsWorkspaceMembersPage } from "~/pages/settings/workspace/members"
 import { SettingsWorkspaceSettingPage } from "~/pages/settings/workspace/setting"
+import { VerifyOtpPage } from "~/pages/verifyOtp"
 
 export const accountInitialPagePath = routeMap.home
 

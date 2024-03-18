@@ -4,7 +4,6 @@ import { startInvitationPageRoute } from "~/pages/invitation"
 import { membersPageRoute } from "~/pages/members"
 import { onboardingSettingNamePageRoute } from "~/pages/onboarding/name"
 import { onboardingSettingWorkspacePageRoute } from "~/pages/onboarding/workspace"
-import { verifyOtpPageRoute } from "~/pages/otp"
 import { receivedInvitationsPageRoute } from "~/pages/receivedInvitation"
 import { settingsAppearancePageRoute } from "~/pages/settings/appearance"
 import { settingsProfilePageRoute } from "~/pages/settings/profile"
@@ -12,6 +11,7 @@ import { settingsWorkspaceAccountPageRoute } from "~/pages/settings/workspace/ac
 import { settingsWorkspaceInvitationsPageRoute } from "~/pages/settings/workspace/invitations"
 import { settingsWorkspaceMembersPageRoute } from "~/pages/settings/workspace/members"
 import { settingsWorkspaceSettingPageRoute } from "~/pages/settings/workspace/setting"
+import { verifyOtpPageRoute } from "~/pages/verifyOtp"
 
 export const routeMap = {
   auth: authPageRoute,
