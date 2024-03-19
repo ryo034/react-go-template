@@ -1,8 +1,11 @@
 package member
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/ryo034/react-go-template/apps/system/api/domain/shared/account"
 
 	domainErr "github.com/ryo034/react-go-template/apps/system/api/domain/shared/error"
 
@@ -68,6 +71,11 @@ func TestMember_UpdateRole_OK(t *testing.T) {
 }
 
 func TestMember_UpdateRole_Validate(t *testing.T) {
+	uID, _ := account.NewID("018e5650-c7e5-7702-8a0a-ee9e7365fda6")
+	email, _ := account.NewEmail("test@example.com")
+	name, _ := account.NewName("test")
+	mID, _ := NewID("018e5650-c7e5-7d58-985c-234da258296a")
+
 	type fields struct {
 		id               ID
 		u                *user.User
@@ -82,6 +90,11 @@ func TestMember_UpdateRole_Validate(t *testing.T) {
 		value   Role
 		wantErr error
 	}{
+		{"Can not update if already left, return Gone error",
+			fields{id: mID, u: user.NewUser(uID, email, &name, nil, nil), profile: NewProfile(NewDisplayName("test"), nil, NewAsEmptyBio()), role: RoleMember, membershipStatus: MembershipStatusLeave},
+			RoleAdmin,
+			domainErr.NewGone(fmt.Sprintf("MemberID %s", mID.ToString())),
+		},
 		{"Can not update to Same Role",
 			fields{id: ID{}, u: &user.User{}, profile: Profile{}, role: RoleAdmin, membershipStatus: MembershipStatusActive},
 			RoleAdmin,
@@ -122,6 +135,53 @@ func TestMember_UpdateRole_Validate(t *testing.T) {
 			} else {
 				if !reflect.DeepEqual(err, tt.wantErr) {
 					t.Errorf("UpdateRole() got = %v, want %v", err, tt.wantErr)
+				}
+			}
+		})
+	}
+}
+
+func TestMember_UpdateProfile_Error(t *testing.T) {
+	uID, _ := account.NewID("018e5650-c7e5-7702-8a0a-ee9e7365fda6")
+	email, _ := account.NewEmail("test@example.com")
+	name, _ := account.NewName("test")
+	usr := user.NewUser(uID, email, &name, nil, nil)
+	mID, _ := NewID("018e5650-c7e5-7d58-985c-234da258296a")
+	mp := NewProfile(NewDisplayName("test"), nil, NewAsEmptyBio())
+
+	type fields struct {
+		id               ID
+		u                *user.User
+		profile          Profile
+		role             Role
+		membershipStatus MembershipStatus
+	}
+	type args struct {
+		profile Profile
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr error
+	}{
+		{
+			"Can not update if already left, return Gone error",
+			fields{id: mID, u: usr, profile: mp, role: RoleMember, membershipStatus: MembershipStatusLeave},
+			args{Profile{}},
+			domainErr.NewGone(fmt.Sprintf("MemberID %s", mID.ToString())),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			m := &Member{tt.fields.id, tt.fields.u, tt.fields.profile, tt.fields.role, tt.fields.membershipStatus}
+			_, err := m.UpdateProfile(tt.args.profile)
+			if err == nil {
+				t.Errorf("UpdateProfile() got = %v, want %v", err, tt.wantErr)
+				return
+			} else {
+				if !reflect.DeepEqual(err, tt.wantErr) {
+					t.Errorf("UpdateProfile() error = %v, wantErr %v", err, tt.wantErr)
 				}
 			}
 		})

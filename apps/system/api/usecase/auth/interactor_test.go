@@ -120,7 +120,7 @@ func Test_useCase_AuthByOAuth_OK(t *testing.T) {
 	}
 }
 
-func Test_useCase_APIV1ProcessInvitationEmail_OK(t *testing.T) {
+func Test_useCase_ProcessInvitationEmail_OK(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	mockTxProvider := core.NewMockTransactionProvider(ctrl)
@@ -175,3 +175,45 @@ func Test_useCase_APIV1ProcessInvitationEmail_OK(t *testing.T) {
 		assert.Equal(t, invitation.NewAlreadyAcceptedInvitation(invID, mockInputToken.Value()), err)
 	})
 }
+
+//Cannot mock Transactional
+//func Test_useCase_VerifyOTP_OK(t *testing.T) {
+//	ctrl := gomock.NewController(t)
+//	defer ctrl.Finish()
+//	mockTxProvider := core.NewMockTransactionProvider(ctrl)
+//	mockTxResult := core.NewMockTransactionResult(ctrl)
+//	mockDbProvider := core.NewMockProvider(ctrl)
+//	mockAuthRepo := auth.NewMockRepository(ctrl)
+//	mockMeRepo := me.NewMockRepository(ctrl)
+//	mockInvRepo := invitation.NewMockRepository(ctrl)
+//	mockWRepo := workspace.NewMockRepository(ctrl)
+//	mockNotificationRepo := notification.NewMockRepository(ctrl)
+//	mockOutputPort := NewMockOutputPort(ctrl)
+//
+//	uc := NewUseCase(mockTxProvider, mockDbProvider, mockAuthRepo, mockMeRepo, mockInvRepo, mockWRepo, mockNotificationRepo, mockOutputPort)
+//
+//	mockEmail, _ := account.NewEmail("test@example.com")
+//
+//	t.Run("If not found user by email, setup new provider and create user", func(t *testing.T) {
+//		ctx := context.Background()
+//		mockDbProvider.EXPECT().GetExecutor(gomock.Any(), gomock.Any()).Return(nil)
+//		mockAuthRepo.EXPECT().FindByEmail(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil, nil)
+//		mockMeRepo.EXPECT().SetCurrentProvider(gomock.Any(), gomock.Any()).Return(ctx)
+//		mockTxResult.EXPECT().Value(0).Return("jwt")
+//		mockTxResult.EXPECT().Err().Return(nil)
+//		mockTxResult.EXPECT().Transactional(gomock.Any()).DoAndReturn(func(f func() (string, error)) (core.TransactionResult, error) {
+//			_, err := f()
+//			return mockTxResult, err
+//		})
+//		mockTxProvider.EXPECT().Provide(ctx).Return(mockTxResult, nil)
+//		mockDbProvider.EXPECT().GetExecutor(gomock.Any(), gomock.Any()).Return(nil)
+//		mockAuthRepo.EXPECT().Create(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil, nil)
+//		mockAuthRepo.EXPECT().VerifyOTP(gomock.Any(), gomock.Any(), gomock.Any()).Return("test", nil)
+//		mockOutputPort.EXPECT().JwtToken(openapi.JwtToken{Token: "jwt"})
+//
+//		res, err := uc.VerifyOTP(ctx, VerifyOTPInput{Email: mockEmail, Otp: "test"})
+//
+//		assert.Nil(t, err)
+//		assert.Equal(t, openapi.JwtToken{Token: "jwt"}, res)
+//	})
+//}

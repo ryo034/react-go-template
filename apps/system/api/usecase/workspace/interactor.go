@@ -272,11 +272,10 @@ func (u *useCase) UpdateWorkspace(ctx context.Context, i UpdateWorkspaceInput) (
 		return nil, err
 	}
 
-	if err = meRes.ValidateCanUpdateWorkspace(i.WorkspaceID); err != nil {
+	w, err := meRes.UpdateWorkspace(i.WorkspaceID, i.Name, i.Subdomain)
+	if err != nil {
 		return nil, err
 	}
-
-	w := workspace.NewWorkspace(i.WorkspaceID, workspace.NewDetail(i.Name, i.Subdomain))
 
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {

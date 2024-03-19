@@ -65,6 +65,10 @@ func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput)
 	if err = invRes.ValidateCanAccept(); err != nil {
 		return nil, err
 	}
+	m, err := u.repo.FindByEmail(ctx, exec, invRes.InviteeEmail())
+	if err != nil {
+		return nil, err
+	}
 
 	pr, err := u.txp.Provide(ctx)
 	if err != nil {
@@ -72,10 +76,6 @@ func (u *useCase) AcceptInvitation(ctx context.Context, i AcceptInvitationInput)
 	}
 	exec = u.dbp.GetExecutor(pr, false)
 	fn := func() (*me.Me, error) {
-		m, err := u.repo.FindByEmail(pr, exec, invRes.InviteeEmail())
-		if err != nil {
-			return nil, err
-		}
 		mem, err := member.GenerateMember(m.Self())
 		if err != nil {
 			return nil, err

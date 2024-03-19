@@ -69,7 +69,6 @@ func (m *Member) UpdateProfile(profile Profile) (*Member, error) {
 	if m.membershipStatus.IsLeft() {
 		return nil, domainErr.NewGone(fmt.Sprintf("MemberID %s", m.ID().ToString()))
 	}
-
 	if profile.DisplayName() == nil {
 		profile.displayName = NewDisplayName(m.u.Name().ToString())
 	}
@@ -83,6 +82,9 @@ func (m *Member) UpdateUser(u *user.User) *Member {
 }
 
 func (m *Member) UpdateRole(role Role) (*Member, error) {
+	if m.membershipStatus.IsLeft() {
+		return nil, domainErr.NewGone(fmt.Sprintf("MemberID %s", m.ID().ToString()))
+	}
 	if role == RoleOwner {
 		return nil, domainErr.NewForbidden("cannot change the role to owner")
 	}

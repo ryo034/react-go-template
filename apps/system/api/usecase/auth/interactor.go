@@ -166,9 +166,8 @@ func (u *useCase) VerifyOTP(ctx context.Context, i VerifyOTPInput) (openapi.APIV
 		return nil, err
 	}
 
-	exec = u.dbp.GetExecutor(pr, false)
-
 	fn := func() (string, error) {
+		exec = u.dbp.GetExecutor(pr, false)
 		if usr == nil {
 			_, err = u.repo.Create(pr, exec, user.NewUser(newAccountID, i.Email, nil, nil, nil), ap)
 			if err != nil {
@@ -286,11 +285,7 @@ func (u *useCase) InvitationByToken(ctx context.Context, i InvitationByTokenInpu
 	if err != nil {
 		return nil, err
 	}
-	invRes, err := u.invRepo.FindByToken(ctx, p, i.Token)
-	if err != nil {
-		return nil, err
-	}
-	ri, err := me.NewReceivedInvitation(invRes, w)
+	ri, err := me.NewReceivedInvitation(res, w)
 	if err != nil {
 		return nil, err
 	}
