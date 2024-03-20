@@ -2,8 +2,6 @@
 
 ## Platform
 
-* GCP
-
 ## Analytics
 
 * [Google Analytics](https://analytics.google.com/analytics/web)
@@ -21,8 +19,3 @@
 ## Database
 
 # Setup
-
-# TODO
-
-* Accelerate Firebase Authentication's verifyIDToken
-* API Error Handling
