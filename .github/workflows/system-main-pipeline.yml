@@ -1,5 +1,7 @@
 name: System main pipeline
 
+run-name: System main pipeline - ${{ github.sha }}
+
 on:
   push:
     branches: [main]
