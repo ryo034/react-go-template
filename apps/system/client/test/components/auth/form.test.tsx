@@ -79,7 +79,7 @@ describe("LoginForm", () => {
     await validationCheckTest("email", emailPatterns)
   })
 
-  test("focuses on email field when opened", async () => {
+  test("not focus any input when rendered", () => {
     render(
       <AuthPageForm
         onSubmit={mockOnSubmit}
@@ -88,7 +88,7 @@ describe("LoginForm", () => {
         isLoading={false}
       />
     )
-    expect(screen.getByTestId("email")).toEqual(document.activeElement)
+    expect(screen.getByTestId("email")).not.toEqual(document.activeElement)
   })
 
   test("submits correct values when form is filled out and submit is clicked", async () => {
