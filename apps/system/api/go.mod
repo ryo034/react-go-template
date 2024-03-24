@@ -6,7 +6,7 @@ toolchain go1.22.0
 
 require (
 	firebase.google.com/go/v4 v4.13.0
-	github.com/casbin/casbin/v2 v2.84.1
+	github.com/casbin/casbin/v2 v2.85.0
 	github.com/go-faster/errors v0.7.1
 	github.com/go-faster/jx v1.1.0
 	github.com/go-playground/locales v0.14.1
