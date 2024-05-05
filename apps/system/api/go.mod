@@ -6,12 +6,12 @@ toolchain go1.22.0
 
 require (
 	firebase.google.com/go/v4 v4.14.0
-	github.com/casbin/casbin/v2 v2.87.1
+	github.com/casbin/casbin/v2 v2.88.0
 	github.com/go-faster/errors v0.7.1
 	github.com/go-faster/jx v1.1.0
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1
-	github.com/go-playground/validator/v10 v10.19.0
+	github.com/go-playground/validator/v10 v10.20.0
 	github.com/go-redis/redis_rate/v10 v10.0.1
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/google/uuid v1.6.0
@@ -41,7 +41,7 @@ require (
 	go.uber.org/mock v0.4.0
 	go.uber.org/multierr v1.11.0
 	golang.org/x/net v0.24.0
-	golang.org/x/text v0.14.0
+	golang.org/x/text v0.15.0
 	google.golang.org/grpc v1.63.2
 	gotest.tools/v3 v3.5.1
 )
