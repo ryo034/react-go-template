@@ -19,13 +19,13 @@ require (
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/lib/pq v1.10.9
 	github.com/minio/minio-go/v7 v7.0.70
-	github.com/ogen-go/ogen v1.1.0
+	github.com/ogen-go/ogen v1.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/redis/go-redis/v9 v9.5.1
 	github.com/resend/resend-go/v2 v2.6.0
 	github.com/rs/cors v1.11.0
 	github.com/rs/xid v1.5.0
-	github.com/rs/zerolog v1.32.0
+	github.com/rs/zerolog v1.33.0
 	github.com/spf13/cast v1.6.0
 	github.com/stretchr/testify v1.9.0
 	github.com/testcontainers/testcontainers-go v0.31.0
@@ -35,9 +35,9 @@ require (
 	github.com/uptrace/bun v1.2.1
 	github.com/uptrace/bun/dialect/pgdialect v1.2.1
 	github.com/uptrace/bun/extra/bundebug v1.2.1
-	go.opentelemetry.io/otel v1.26.0
-	go.opentelemetry.io/otel/metric v1.26.0
-	go.opentelemetry.io/otel/trace v1.26.0
+	go.opentelemetry.io/otel v1.27.0
+	go.opentelemetry.io/otel/metric v1.27.0
+	go.opentelemetry.io/otel/trace v1.27.0
 	go.uber.org/mock v0.4.0
 	go.uber.org/multierr v1.11.0
 	golang.org/x/net v0.25.0
@@ -74,7 +74,7 @@ require (
 	github.com/docker/go-connections v0.5.0 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
-	github.com/fatih/color v1.16.0 // indirect
+	github.com/fatih/color v1.17.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
@@ -137,7 +137,7 @@ require (
 	golang.org/x/sync v0.7.0 // indirect
 	golang.org/x/sys v0.20.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
-	golang.org/x/tools v0.20.0 // indirect
+	golang.org/x/tools v0.21.0 // indirect
 	google.golang.org/api v0.170.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/appengine/v2 v2.0.5 // indirect
