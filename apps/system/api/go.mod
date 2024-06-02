@@ -5,13 +5,13 @@ go 1.22
 toolchain go1.22.0
 
 require (
-	firebase.google.com/go/v4 v4.14.0
+	firebase.google.com/go/v4 v4.14.1
 	github.com/casbin/casbin/v2 v2.89.0
 	github.com/go-faster/errors v0.7.1
 	github.com/go-faster/jx v1.1.0
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1
-	github.com/go-playground/validator/v10 v10.20.0
+	github.com/go-playground/validator/v10 v10.21.0
 	github.com/go-redis/redis_rate/v10 v10.0.1
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/google/uuid v1.6.0
@@ -19,9 +19,9 @@ require (
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/lib/pq v1.10.9
 	github.com/minio/minio-go/v7 v7.0.70
-	github.com/ogen-go/ogen v1.2.0
+	github.com/ogen-go/ogen v1.2.1
 	github.com/pkg/errors v0.9.1
-	github.com/redis/go-redis/v9 v9.5.1
+	github.com/redis/go-redis/v9 v9.5.2
 	github.com/resend/resend-go/v2 v2.6.0
 	github.com/rs/cors v1.11.0
 	github.com/rs/xid v1.5.0
