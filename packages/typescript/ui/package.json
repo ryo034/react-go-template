@@ -35,7 +35,7 @@
     "clsx": "^2.1.0",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
-    "lucide-react": "^0.401.0",
+    "lucide-react": "^0.408.0",
     "react": "^18.2.0",
     "react-day-picker": "^8.10.0",
     "react-dom": "^18.2.0",
@@ -63,7 +63,7 @@
     "tsc-alias": "^1.8.8",
     "vite": "^5.1.6",
     "vite-plugin-compression": "^0.5.1",
-    "vitest": "^1.4.0"
+    "vitest": "^2.0.2"
   },
   "files": [
     "/dist"
