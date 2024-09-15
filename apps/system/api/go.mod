@@ -1,8 +1,7 @@
 module github.com/ryo034/react-go-template/apps/system/api
 
 go 1.22
-
-toolchain go1.22.0
+toolchain go1.23.1
 
 require (
 	firebase.google.com/go/v4 v4.14.1
@@ -11,7 +10,7 @@ require (
 	github.com/go-faster/jx v1.1.0
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1
-	github.com/go-playground/validator/v10 v10.22.0
+	github.com/go-playground/validator/v10 v10.22.1
 	github.com/go-redis/redis_rate/v10 v10.0.1
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/google/uuid v1.6.0
@@ -19,10 +18,10 @@ require (
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/lib/pq v1.10.9
 	github.com/minio/minio-go/v7 v7.0.76
-	github.com/ogen-go/ogen v1.4.0
+	github.com/ogen-go/ogen v1.4.1
 	github.com/pkg/errors v0.9.1
 	github.com/redis/go-redis/v9 v9.6.1
-	github.com/resend/resend-go/v2 v2.11.0
+	github.com/resend/resend-go/v2 v2.12.0
 	github.com/rs/cors v1.11.1
 	github.com/rs/xid v1.6.0
 	github.com/rs/zerolog v1.33.0
@@ -35,14 +34,14 @@ require (
 	github.com/uptrace/bun v1.2.3
 	github.com/uptrace/bun/dialect/pgdialect v1.2.3
 	github.com/uptrace/bun/extra/bundebug v1.2.3
-	go.opentelemetry.io/otel v1.29.0
-	go.opentelemetry.io/otel/metric v1.29.0
-	go.opentelemetry.io/otel/trace v1.29.0
+	go.opentelemetry.io/otel v1.30.0
+	go.opentelemetry.io/otel/metric v1.30.0
+	go.opentelemetry.io/otel/trace v1.30.0
 	go.uber.org/mock v0.4.0
 	go.uber.org/multierr v1.11.0
 	golang.org/x/net v0.29.0
 	golang.org/x/text v0.18.0
-	google.golang.org/grpc v1.66.0
+	google.golang.org/grpc v1.66.2
 	gotest.tools/v3 v3.5.1
 )
 
