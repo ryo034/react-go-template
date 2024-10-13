@@ -17,7 +17,7 @@ require (
 	github.com/jackc/pgconn v1.14.3
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/lib/pq v1.10.9
-	github.com/minio/minio-go/v7 v7.0.77
+	github.com/minio/minio-go/v7 v7.0.78
 	github.com/ogen-go/ogen v1.4.1
 	github.com/pkg/errors v0.9.1
 	github.com/redis/go-redis/v9 v9.6.1
@@ -34,9 +34,9 @@ require (
 	github.com/uptrace/bun v1.2.3
 	github.com/uptrace/bun/dialect/pgdialect v1.2.3
 	github.com/uptrace/bun/extra/bundebug v1.2.3
-	go.opentelemetry.io/otel v1.30.0
-	go.opentelemetry.io/otel/metric v1.30.0
-	go.opentelemetry.io/otel/trace v1.30.0
+	go.opentelemetry.io/otel v1.31.0
+	go.opentelemetry.io/otel/metric v1.31.0
+	go.opentelemetry.io/otel/trace v1.31.0
 	go.uber.org/mock v0.4.0
 	go.uber.org/multierr v1.11.0
 	golang.org/x/net v0.30.0
@@ -98,7 +98,7 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20231201235250-de7065d80cb9 // indirect
 	github.com/jackc/pgtype v1.14.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/klauspost/compress v1.17.9 // indirect
+	github.com/klauspost/compress v1.17.11 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20240226150601-1dcf7310316a // indirect
