@@ -18,10 +18,10 @@ require (
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/lib/pq v1.10.9
 	github.com/minio/minio-go/v7 v7.0.78
-	github.com/ogen-go/ogen v1.4.1
+	github.com/ogen-go/ogen v1.5.0
 	github.com/pkg/errors v0.9.1
-	github.com/redis/go-redis/v9 v9.6.1
-	github.com/resend/resend-go/v2 v2.12.0
+	github.com/redis/go-redis/v9 v9.7.0
+	github.com/resend/resend-go/v2 v2.13.0
 	github.com/rs/cors v1.11.1
 	github.com/rs/xid v1.6.0
 	github.com/rs/zerolog v1.33.0
@@ -37,7 +37,7 @@ require (
 	go.opentelemetry.io/otel v1.31.0
 	go.opentelemetry.io/otel/metric v1.31.0
 	go.opentelemetry.io/otel/trace v1.31.0
-	go.uber.org/mock v0.4.0
+	go.uber.org/mock v0.5.0
 	go.uber.org/multierr v1.11.0
 	golang.org/x/net v0.30.0
 	golang.org/x/text v0.19.0
