@@ -17,8 +17,8 @@ require (
 	github.com/jackc/pgconn v1.14.3
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/lib/pq v1.10.9
-	github.com/minio/minio-go/v7 v7.0.79
-	github.com/ogen-go/ogen v1.5.0
+	github.com/minio/minio-go/v7 v7.0.80
+	github.com/ogen-go/ogen v1.6.0
 	github.com/pkg/errors v0.9.1
 	github.com/redis/go-redis/v9 v9.7.0
 	github.com/resend/resend-go/v2 v2.13.0
