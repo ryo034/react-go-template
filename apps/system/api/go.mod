@@ -5,12 +5,12 @@ toolchain go1.23.1
 
 require (
 	firebase.google.com/go/v4 v4.15.0
-	github.com/casbin/casbin/v2 v2.100.0
+	github.com/casbin/casbin/v2 v2.101.0
 	github.com/go-faster/errors v0.7.1
 	github.com/go-faster/jx v1.1.0
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1
-	github.com/go-playground/validator/v10 v10.22.1
+	github.com/go-playground/validator/v10 v10.23.0
 	github.com/go-redis/redis_rate/v10 v10.0.1
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/google/uuid v1.6.0
