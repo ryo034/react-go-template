@@ -4,7 +4,7 @@ go 1.22
 toolchain go1.23.1
 
 require (
-	firebase.google.com/go/v4 v4.15.0
+	firebase.google.com/go/v4 v4.15.1
 	github.com/casbin/casbin/v2 v2.102.0
 	github.com/go-faster/errors v0.7.1
 	github.com/go-faster/jx v1.1.0
@@ -18,7 +18,7 @@ require (
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/lib/pq v1.10.9
 	github.com/minio/minio-go/v7 v7.0.81
-	github.com/ogen-go/ogen v1.8.0
+	github.com/ogen-go/ogen v1.8.1
 	github.com/pkg/errors v0.9.1
 	github.com/redis/go-redis/v9 v9.7.0
 	github.com/resend/resend-go/v2 v2.13.0
@@ -39,9 +39,9 @@ require (
 	go.opentelemetry.io/otel/trace v1.32.0
 	go.uber.org/mock v0.5.0
 	go.uber.org/multierr v1.11.0
-	golang.org/x/net v0.31.0
-	golang.org/x/text v0.20.0
-	google.golang.org/grpc v1.68.0
+	golang.org/x/net v0.32.0
+	golang.org/x/text v0.21.0
+	google.golang.org/grpc v1.68.1
 	gotest.tools/v3 v3.5.1
 )
 
@@ -86,7 +86,7 @@ require (
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/goccy/go-json v0.10.3 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
+	github.com/golang-jwt/jwt/v4 v4.5.1 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
@@ -136,11 +136,11 @@ require (
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.49.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.49.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
-	golang.org/x/crypto v0.29.0 // indirect
+	golang.org/x/crypto v0.30.0 // indirect
 	golang.org/x/exp v0.0.0-20240222234643-814bf88cf225 // indirect
 	golang.org/x/oauth2 v0.23.0 // indirect
-	golang.org/x/sync v0.9.0 // indirect
-	golang.org/x/sys v0.27.0 // indirect
+	golang.org/x/sync v0.10.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	google.golang.org/api v0.170.0 // indirect
 	google.golang.org/appengine/v2 v2.0.5 // indirect
