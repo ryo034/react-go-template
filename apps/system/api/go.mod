@@ -5,14 +5,14 @@ toolchain go1.24.1
 
 require (
 	firebase.google.com/go/v4 v4.15.2
-	github.com/casbin/casbin/v2 v2.103.0
+	github.com/casbin/casbin/v2 v2.104.0
 	github.com/go-faster/errors v0.7.1
 	github.com/go-faster/jx v1.1.0
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1
 	github.com/go-playground/validator/v10 v10.25.0
 	github.com/go-redis/redis_rate/v10 v10.0.1
-	github.com/go-sql-driver/mysql v1.9.0
+	github.com/go-sql-driver/mysql v1.9.1
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgconn v1.14.3
 	github.com/jackc/pgx/v4 v4.18.3
@@ -20,11 +20,11 @@ require (
 	github.com/minio/minio-go/v7 v7.0.88
 	github.com/ogen-go/ogen v1.10.1
 	github.com/pkg/errors v0.9.1
-	github.com/redis/go-redis/v9 v9.7.1
-	github.com/resend/resend-go/v2 v2.15.0
+	github.com/redis/go-redis/v9 v9.7.3
+	github.com/resend/resend-go/v2 v2.16.0
 	github.com/rs/cors v1.11.1
 	github.com/rs/xid v1.6.0
-	github.com/rs/zerolog v1.33.0
+	github.com/rs/zerolog v1.34.0
 	github.com/spf13/cast v1.7.1
 	github.com/stretchr/testify v1.10.0
 	github.com/testcontainers/testcontainers-go v0.35.0
