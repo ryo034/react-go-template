@@ -20,12 +20,12 @@ require (
 	github.com/minio/minio-go/v7 v7.0.91
 	github.com/ogen-go/ogen v1.12.0
 	github.com/pkg/errors v0.9.1
-	github.com/redis/go-redis/v9 v9.7.3
-	github.com/resend/resend-go/v2 v2.17.0
+	github.com/redis/go-redis/v9 v9.8.0
+	github.com/resend/resend-go/v2 v2.18.0
 	github.com/rs/cors v1.11.1
 	github.com/rs/xid v1.6.0
 	github.com/rs/zerolog v1.34.0
-	github.com/spf13/cast v1.7.1
+	github.com/spf13/cast v1.8.0
 	github.com/stretchr/testify v1.10.0
 	github.com/testcontainers/testcontainers-go v0.37.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.37.0
@@ -37,7 +37,7 @@ require (
 	go.opentelemetry.io/otel v1.35.0
 	go.opentelemetry.io/otel/metric v1.35.0
 	go.opentelemetry.io/otel/trace v1.35.0
-	go.uber.org/mock v0.5.1
+	go.uber.org/mock v0.5.2
 	go.uber.org/multierr v1.11.0
 	golang.org/x/net v0.39.0
 	golang.org/x/text v0.24.0
