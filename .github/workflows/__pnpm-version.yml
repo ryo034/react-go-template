@@ -18,7 +18,7 @@ jobs:
     outputs:
       pnpm-version: ${{ steps.pnpm-version.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Read pnpm version from package.json
         id: pnpm-version
