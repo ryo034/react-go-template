@@ -6,7 +6,7 @@ toolchain go1.24.1
 
 require (
 	firebase.google.com/go/v4 v4.18.0
-	github.com/casbin/casbin/v2 v2.118.0
+	github.com/casbin/casbin/v2 v2.120.0
 	github.com/go-faster/errors v0.7.1
 	github.com/go-faster/jx v1.1.0
 	github.com/go-playground/locales v0.14.1
@@ -21,8 +21,8 @@ require (
 	github.com/minio/minio-go/v7 v7.0.95
 	github.com/ogen-go/ogen v1.14.0
 	github.com/pkg/errors v0.9.1
-	github.com/redis/go-redis/v9 v9.12.0
-	github.com/resend/resend-go/v2 v2.22.0
+	github.com/redis/go-redis/v9 v9.12.1
+	github.com/resend/resend-go/v2 v2.23.0
 	github.com/rs/cors v1.11.1
 	github.com/rs/xid v1.6.0
 	github.com/rs/zerolog v1.34.0
