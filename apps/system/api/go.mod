@@ -21,8 +21,8 @@ require (
 	github.com/minio/minio-go/v7 v7.0.95
 	github.com/ogen-go/ogen v1.16.0
 	github.com/pkg/errors v0.9.1
-	github.com/redis/go-redis/v9 v9.14.0
-	github.com/resend/resend-go/v2 v2.26.0
+	github.com/redis/go-redis/v9 v9.14.1
+	github.com/resend/resend-go/v2 v2.27.0
 	github.com/rs/cors v1.11.1
 	github.com/rs/xid v1.6.0
 	github.com/rs/zerolog v1.34.0
