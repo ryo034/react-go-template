@@ -19,9 +19,9 @@ require (
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/lib/pq v1.10.9
 	github.com/minio/minio-go/v7 v7.0.97
-	github.com/ogen-go/ogen v1.16.0
+	github.com/ogen-go/ogen v1.17.0
 	github.com/pkg/errors v0.9.1
-	github.com/redis/go-redis/v9 v9.17.0
+	github.com/redis/go-redis/v9 v9.17.1
 	github.com/resend/resend-go/v2 v2.28.0
 	github.com/rs/cors v1.11.1
 	github.com/rs/xid v1.6.0
@@ -110,7 +110,7 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20231201235250-de7065d80cb9 // indirect
 	github.com/jackc/pgtype v1.14.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/klauspost/compress v1.18.0 // indirect
+	github.com/klauspost/compress v1.18.1 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.11 // indirect
 	github.com/klauspost/crc32 v1.3.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
@@ -155,7 +155,7 @@ require (
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.60.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.38.0 // indirect
 	go.opentelemetry.io/otel/sdk/metric v1.38.0 // indirect
-	go.uber.org/zap v1.27.0 // indirect
+	go.uber.org/zap v1.27.1 // indirect
 	golang.org/x/crypto v0.44.0 // indirect
 	golang.org/x/exp v0.0.0-20240222234643-814bf88cf225 // indirect
 	golang.org/x/oauth2 v0.32.0 // indirect
