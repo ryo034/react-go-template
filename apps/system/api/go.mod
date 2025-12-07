@@ -19,9 +19,9 @@ require (
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/lib/pq v1.10.9
 	github.com/minio/minio-go/v7 v7.0.97
-	github.com/ogen-go/ogen v1.17.0
+	github.com/ogen-go/ogen v1.18.0
 	github.com/pkg/errors v0.9.1
-	github.com/redis/go-redis/v9 v9.17.1
+	github.com/redis/go-redis/v9 v9.17.2
 	github.com/resend/resend-go/v2 v2.28.0
 	github.com/rs/cors v1.11.1
 	github.com/rs/xid v1.6.0
