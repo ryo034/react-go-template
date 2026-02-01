@@ -17,7 +17,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgconn v1.14.3
 	github.com/jackc/pgx/v4 v4.18.3
-	github.com/lib/pq v1.10.9
+	github.com/lib/pq v1.11.1
 	github.com/minio/minio-go/v7 v7.0.98
 	github.com/ogen-go/ogen v1.18.0
 	github.com/pkg/errors v0.9.1
