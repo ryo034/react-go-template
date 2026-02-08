@@ -23,7 +23,7 @@ jobs:
       node-version: ${{ steps.node-version.outputs.version }}
       major-version: ${{ steps.node-major-version.outputs.major-version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Read Node.js version from package.json
         id: node-version
