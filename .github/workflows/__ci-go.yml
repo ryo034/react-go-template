@@ -52,7 +52,7 @@ jobs:
           args: '-no-fail -fmt html -out results.html ./...'
 
       - name: Upload Gosec results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: gosec-results
           path: results.html
