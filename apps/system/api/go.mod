@@ -1,8 +1,6 @@
 module github.com/ryo034/react-go-template/apps/system/api
 
-go 1.24.0
-
-toolchain go1.24.1
+go 1.25.0
 
 require (
 	firebase.google.com/go/v4 v4.19.0
@@ -19,7 +17,7 @@ require (
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/lib/pq v1.11.2
 	github.com/minio/minio-go/v7 v7.0.98
-	github.com/ogen-go/ogen v1.19.0
+	github.com/ogen-go/ogen v1.20.1
 	github.com/pkg/errors v0.9.1
 	github.com/redis/go-redis/v9 v9.18.0
 	github.com/resend/resend-go/v2 v2.28.0
@@ -32,15 +30,15 @@ require (
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.40.0
 	github.com/testcontainers/testcontainers-go/modules/redis v0.40.0
 	github.com/ttacon/libphonenumber v1.2.1
-	github.com/uptrace/bun v1.2.17
-	github.com/uptrace/bun/dialect/pgdialect v1.2.17
-	github.com/uptrace/bun/extra/bundebug v1.2.17
+	github.com/uptrace/bun v1.2.18
+	github.com/uptrace/bun/dialect/pgdialect v1.2.18
+	github.com/uptrace/bun/extra/bundebug v1.2.18
 	go.opentelemetry.io/otel v1.40.0
 	go.opentelemetry.io/otel/metric v1.40.0
 	go.opentelemetry.io/otel/trace v1.40.0
 	go.uber.org/mock v0.6.0
 	go.uber.org/multierr v1.11.0
-	golang.org/x/net v0.50.0
+	golang.org/x/net v0.51.0
 	golang.org/x/text v0.34.0
 	google.golang.org/grpc v1.79.1
 	gotest.tools/v3 v3.5.2
