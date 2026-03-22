@@ -15,7 +15,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgconn v1.14.3
 	github.com/jackc/pgx/v4 v4.18.3
-	github.com/lib/pq v1.11.2
+	github.com/lib/pq v1.12.0
 	github.com/minio/minio-go/v7 v7.0.99
 	github.com/ogen-go/ogen v1.20.1
 	github.com/pkg/errors v0.9.1
@@ -40,7 +40,7 @@ require (
 	go.uber.org/multierr v1.11.0
 	golang.org/x/net v0.52.0
 	golang.org/x/text v0.35.0
-	google.golang.org/grpc v1.79.2
+	google.golang.org/grpc v1.79.3
 	gotest.tools/v3 v3.5.2
 )
 
