@@ -16,10 +16,10 @@ require (
 	github.com/jackc/pgconn v1.14.3
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/lib/pq v1.12.3
-	github.com/minio/minio-go/v7 v7.2.0
+	github.com/minio/minio-go/v7 v7.2.1
 	github.com/ogen-go/ogen v1.22.0
 	github.com/pkg/errors v0.9.1
-	github.com/redis/go-redis/v9 v9.20.1
+	github.com/redis/go-redis/v9 v9.21.0
 	github.com/resend/resend-go/v2 v2.28.0
 	github.com/rs/cors v1.11.1
 	github.com/rs/xid v1.6.0
