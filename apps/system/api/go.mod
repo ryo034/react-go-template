@@ -3,7 +3,7 @@ module github.com/ryo034/react-go-template/apps/system/api
 go 1.25.0
 
 require (
-	firebase.google.com/go/v4 v4.20.0
+	firebase.google.com/go/v4 v4.21.0
 	github.com/casbin/casbin/v2 v2.135.0
 	github.com/go-faster/errors v0.7.1
 	github.com/go-faster/jx v1.2.0
@@ -17,7 +17,7 @@ require (
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/lib/pq v1.12.3
 	github.com/minio/minio-go/v7 v7.2.1
-	github.com/ogen-go/ogen v1.22.0
+	github.com/ogen-go/ogen v1.23.0
 	github.com/pkg/errors v0.9.1
 	github.com/redis/go-redis/v9 v9.21.0
 	github.com/resend/resend-go/v2 v2.28.0
@@ -38,8 +38,8 @@ require (
 	go.opentelemetry.io/otel/trace v1.44.0
 	go.uber.org/mock v0.6.0
 	go.uber.org/multierr v1.11.0
-	golang.org/x/net v0.56.0
-	golang.org/x/text v0.38.0
+	golang.org/x/net v0.57.0
+	golang.org/x/text v0.40.0
 	google.golang.org/grpc v1.82.0
 	gotest.tools/v3 v3.5.2
 )
@@ -154,11 +154,11 @@ require (
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/zap v1.28.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
-	golang.org/x/crypto v0.53.0 // indirect
+	golang.org/x/crypto v0.54.0 // indirect
 	golang.org/x/exp v0.0.0-20240222234643-814bf88cf225 // indirect
 	golang.org/x/oauth2 v0.36.0 // indirect
-	golang.org/x/sync v0.21.0 // indirect
-	golang.org/x/sys v0.46.0 // indirect
+	golang.org/x/sync v0.22.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
 	golang.org/x/time v0.15.0 // indirect
 	google.golang.org/api v0.279.0 // indirect
 	google.golang.org/appengine/v2 v2.0.6 // indirect
