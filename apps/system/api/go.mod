@@ -40,7 +40,7 @@ require (
 	go.uber.org/multierr v1.11.0
 	golang.org/x/net v0.57.0
 	golang.org/x/text v0.40.0
-	google.golang.org/grpc v1.82.0
+	google.golang.org/grpc v1.82.1
 	gotest.tools/v3 v3.5.2
 )
 
