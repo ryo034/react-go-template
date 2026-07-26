@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	firebase.google.com/go/v4 v4.21.0
 	github.com/casbin/casbin/v2 v2.135.0
-	github.com/go-faster/errors v0.7.1
+	github.com/go-faster/errors v0.8.0
 	github.com/go-faster/jx v1.2.0
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1
